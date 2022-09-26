@@ -4,6 +4,7 @@ plugins {
 	id 'org.asciidoctor.convert' version '1.5.8'
 	id 'java'
     id 'jacoco'
+    id "org.sonarqube" version "3.4.0.2513"
 }
 
 group = 'com.plzgraduate'
@@ -33,11 +34,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.testcontainers:jdbc:1.17.3'
+    runtimeOnly 'mysql:mysql-connector-java'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
 }
 
 dependencyManagement {
@@ -61,5 +65,13 @@ jacocoTestReport {
         html.enabled true
         xml.enabled true
         csv.enabled false
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Myongji-Graduate_MyongjiGraduate-BE"
+        property "sonar.organization", "mg-sc-gh-con-key"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
