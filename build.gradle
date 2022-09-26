@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'org.asciidoctor.convert' version '1.5.8'
 	id 'java'
+    id 'jacoco'
 }
 
 group = 'com.plzgraduate'
@@ -22,6 +23,10 @@ repositories {
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
 	set('testcontainersVersion', "1.17.3")
+}
+
+jacoco {
+    toolVersion = '0.8.8'
 }
 
 dependencies {
@@ -49,4 +54,12 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+    }
 }
