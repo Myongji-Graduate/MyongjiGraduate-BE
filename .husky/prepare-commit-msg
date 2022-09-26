@@ -1,0 +1,59 @@
+#!/bin/bash
+
+Font_RED='\033[91m'
+Font_CLEAR='\033[0m' # No Color
+
+TYPE_LIST=( 
+  feat
+  fix
+  refactor
+  style
+  chore
+  test
+  docs
+)
+
+if [ -z "$BRANCHES_TO_SKIP" ]; then
+  BRANCHES_TO_SKIP=("main" "develop")
+fi
+
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+echo "BRANCH_NAME = ${BRANCH_NAME}"
+BRANCH_NAME="${BRANCH_NAME##*/}"
+echo "BRANCH_NAME = ${BRANCH_NAME}"
+ISSUE_NUMBER=`echo $BRANCH_NAME | egrep -o '^\#[0-9]+'`
+echo "ISSUE_NUMBER = ${ISSUE_NUMBER}"
+
+
+
+COMMIT_MESSAGE="$(cat $1)"
+
+TYPE=`echo $COMMIT_MESSAGE | cut -d ':' -f1 | sed 's/ *$//g'`
+MESSAGE=`echo $COMMIT_MESSAGE | cut -d ':' -f2`
+
+BRANCH_EXCLUDED=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$BRANCH_NAME$")
+# BRANCH_IN_COMMIT=$(grep -c "$ISSUE_NUMBER" $1)
+
+TICKET=[$(git rev-parse --abbrev-ref HEAD | grep -Eo '^(\w+/)?(\w+[-_ ])?[0-9]+' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")]
+COMMIT_SOURCE=$2
+
+if [[ $BRANCH_EXCLUDED -eq 1 || "$COMMIT_MESSAGE" == "$TICKET"* || "${COMMIT_SOURCE}" = merge ]];then
+  exit 0;
+fi
+
+if ! [[ "$COMMIT_MESSAGE" =~ ":" ]];then
+    printf "${Font_RED}TYPE 구분을 위해 : (세미콜론)이 필요합니다.${Font_CLEAR}\n"
+    exit 1
+fi
+
+if !(printf '%s\n' "${TYPE_LIST[@]}" | grep -xq $TYPE); then
+    printf "${Font_RED}[${TYPE}] 는 존재 하지 않는 TYPE 입니다.${Font_CLEAR}\n"
+    echo  "사용가능한 TYPE 목록"
+    printf '%s\n' "${TYPE_LIST[@]}"
+    exit 1
+fi
+
+# if [ -n $ISSUE_NUMBER ] && ! [[ $BRANCH_IN_COMMIT -ge 1 ]]; then 
+if [ -n $ISSUE_NUMBER ] && ! [[ $BRANCH_IN_COMMIT -ge 1 ]]; then 
+  sed -i.bak -e "1s/^/[$ISSUE_NUMBER]/" $1
+fi
