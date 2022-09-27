@@ -18,11 +18,8 @@ if [ -z "$BRANCHES_TO_SKIP" ]; then
 fi
 
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
-echo "BRANCH_NAME = ${BRANCH_NAME}"
 BRANCH_NAME="${BRANCH_NAME##*/}"
-echo "BRANCH_NAME = ${BRANCH_NAME}"
 ISSUE_NUMBER=`echo $BRANCH_NAME | egrep -o '^\#[0-9]+'`
-echo "ISSUE_NUMBER = ${ISSUE_NUMBER}"
 
 
 
@@ -31,13 +28,12 @@ COMMIT_MESSAGE="$(cat $1)"
 TYPE=`echo $COMMIT_MESSAGE | cut -d ':' -f1 | sed 's/ *$//g'`
 MESSAGE=`echo $COMMIT_MESSAGE | cut -d ':' -f2`
 
-BRANCH_EXCLUDED=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$BRANCH_NAME$")
-# BRANCH_IN_COMMIT=$(grep -c "$ISSUE_NUMBER" $1)
+BRANCH_IN_COMMIT=$(grep -c "^\[" $1)
 
 TICKET=[$(git rev-parse --abbrev-ref HEAD | grep -Eo '^(\w+/)?(\w+[-_ ])?[0-9]+' | grep -Eo '(\w+[-])?[0-9]+' | tr "[:lower:]" "[:upper:]")]
 COMMIT_SOURCE=$2
 
-if [[ $BRANCH_EXCLUDED -eq 1 || "$COMMIT_MESSAGE" == "$TICKET"* || "${COMMIT_SOURCE}" = merge ]];then
+if [[ $BRANCH_IN_COMMIT -eq 1 || "$COMMIT_MESSAGE" == "$TICKET"* || "${COMMIT_SOURCE}" = merge ]];then
   exit 0;
 fi
 
