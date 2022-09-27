@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+docker ps --format "table {{.Names}}\t{{.Status}}"
