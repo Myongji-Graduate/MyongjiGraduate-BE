@@ -4,5 +4,9 @@ spring:
     url: jdbc:mysql://localhost:33066/myongji_graduate?serverTimezon=Asia/Seoul
     username: root
     password: mysql
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
 server:
   port: 8088
