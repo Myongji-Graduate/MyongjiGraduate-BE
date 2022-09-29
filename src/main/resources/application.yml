@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:33066/myongji_graduate?serverTimezon=Asia/Seoul
+    username: root
+    password: mysql
+server:
+  port: 8088
