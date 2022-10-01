@@ -5,4 +5,6 @@ import com.plzgraduate.myongjigraduatebe.department.service.dto.AllDepartmentsRe
 public interface DepartmentService {
 
   AllDepartmentsResponse findAll();
+
+  boolean isSupportedEntryYear(long id, int entryYear);
 }
