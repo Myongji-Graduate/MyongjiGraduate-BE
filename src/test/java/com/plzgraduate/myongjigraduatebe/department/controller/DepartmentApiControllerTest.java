@@ -35,8 +35,10 @@ class DepartmentApiControllerTest extends ControllerSetUp {
   private static final long departmentId1 = 1L;
   private static final long departmentId2 = 2L;
 
-  private static final Department department1 = new Department("test1");
-  private static final Department department2 = new Department("test2");
+  private static final int startedEntryYear = 15;
+
+  private static final Department department1 = new Department("test1", startedEntryYear);
+  private static final Department department2 = new Department("test2", startedEntryYear);
 
   private static AllDepartmentsResponse allDepartmentsResponse;
 
