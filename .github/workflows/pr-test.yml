@@ -30,7 +30,4 @@ jobs:
         
       # report 업로드하기
       - name: Upload coverage to Codecv
-        uses: codecov/codecov-action@v3.1.0
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./build/reports/jacoco/test/jacocoTestReport.xml
+        uses: codecov/codecov-action@v3.1.1
