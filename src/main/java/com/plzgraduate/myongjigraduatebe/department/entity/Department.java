@@ -2,8 +2,6 @@ package com.plzgraduate.myongjigraduatebe.department.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
 
@@ -17,17 +15,13 @@ import lombok.NoArgsConstructor;
 public class Department extends BaseEntity {
 
   public static final int DEFAULT_ENDED_ENTRY_YEAR = 99;
-  @NotNull
+
   @Column()
   private String name;
 
-  @NotNull
-  @Positive
   @Column(columnDefinition = "UNSIGNED TINYINT", nullable = false)
   private int startedEntryYear;
 
-  @NotNull
-  @Positive
   @Column(columnDefinition = "UNSIGNED TINYINT")
   private int endedEntryYear;
 
