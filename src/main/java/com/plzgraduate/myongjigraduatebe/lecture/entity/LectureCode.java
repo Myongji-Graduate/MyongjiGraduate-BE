@@ -16,7 +16,7 @@ public class LectureCode {
   private static final int CODE_LENGTH = 8;
   private static final String CODE_REGEX = "^[A-Z]{3}[0-9]{5}$";
 
-  @Column(columnDefinition = "CHAR", length = CODE_LENGTH, unique = true)
+  @Column(columnDefinition = "CHAR("+CODE_LENGTH+")", unique = true)
   private String code;
 
   protected LectureCode(String code) {
