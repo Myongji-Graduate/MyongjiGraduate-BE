@@ -19,10 +19,10 @@ public class Department extends BaseEntity {
   @Column()
   private String name;
 
-  @Column(columnDefinition = "UNSIGNED TINYINT", nullable = false)
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int startedEntryYear;
 
-  @Column(columnDefinition = "UNSIGNED TINYINT")
+  @Column(columnDefinition = "TINYINT UNSIGNED")
   private int endedEntryYear;
 
   public Department(

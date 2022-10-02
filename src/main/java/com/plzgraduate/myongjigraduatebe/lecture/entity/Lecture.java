@@ -18,7 +18,7 @@ public class Lecture extends BaseEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(columnDefinition = "UNSIGNED TINYINT", nullable = false)
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int credit;
 
   @Embedded
