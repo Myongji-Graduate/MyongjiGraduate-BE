@@ -33,4 +33,8 @@ public class Lecture extends BaseEntity {
     this.credit = credit;
     this.lectureCode = new LectureCode(lectureCode);
   }
+
+  public String getCode() {
+    return lectureCode.getCode();
+  }
 }
