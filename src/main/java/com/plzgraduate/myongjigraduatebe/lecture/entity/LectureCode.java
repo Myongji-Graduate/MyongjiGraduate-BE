@@ -16,10 +16,10 @@ public class LectureCode {
   private static final int CODE_LENGTH = 8;
   private static final String CODE_REGEX = "^[A-Z]{3}[0-9]{5}$";
 
-  @Column(columnDefinition = "CHAR("+CODE_LENGTH+")", unique = true)
+  @Column(columnDefinition = "CHAR(" + CODE_LENGTH + ")", unique = true)
   private String code;
 
-  protected LectureCode(String code) {
+  public LectureCode(String code) {
     validate(code);
     this.code = code;
   }
@@ -35,9 +35,38 @@ public class LectureCode {
     }
   }
 
-  private static void validateLength(String code) {
+  private void validateLength(String code) {
     if (code.length() != CODE_LENGTH) {
       throw new IllegalArgumentException(ERROR_MESSAGE);
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
+    }
+
+    if (o == this) {
+      return true;
+    }
+
+    if (o.getClass() != getClass()) {
+      return false;
+    }
+
+    LectureCode lc = (LectureCode)o;
+    return this
+        .getCode()
+        .equals(lc.getCode());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+
+    hash = 31 * hash + code.hashCode();
+
+    return hash;
   }
 }
