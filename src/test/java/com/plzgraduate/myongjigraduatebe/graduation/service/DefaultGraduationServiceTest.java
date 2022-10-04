@@ -126,27 +126,5 @@ class DefaultGraduationServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
       }
     }
-
-    @Nested
-    @DisplayName("졸업 요건 정보가 존재하지 않으면")
-    class ContextWithNotExistRequirement {
-
-      @Test
-      @DisplayName("졸업 과목을 조회할 수 없다")
-      void ItThrowsIllegalArgumentException() {
-        // given
-        // String parsingText = PdfParser.getSampleString();
-        // given(departmentRepository.findByName(anyString())).willReturn(Optional.of(department));
-        // given(graduationRepository.findRequirementByDepartmentAndEntryYear(any(), anyInt()))
-        //     .willReturn(Optional.empty());
-
-        Optional<GraduationRequirement> opRequirement = Optional.of(null);
-
-        // when
-
-        // then
-       assertThat(graduationRepository.findAllGraduationLecture(opRequirement.get())).isEqualTo(Optional.empty());
-      }
-    }
   }
 }
