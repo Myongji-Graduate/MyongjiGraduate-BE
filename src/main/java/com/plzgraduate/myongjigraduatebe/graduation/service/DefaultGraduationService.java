@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import com.plzgraduate.myongjigraduatebe.department.repository.DepartmentRepository;
+import com.plzgraduate.myongjigraduatebe.graduation.dto.BasicInfo;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.DetailGraduationResult;
@@ -152,10 +153,18 @@ public class DefaultGraduationService implements GraduationService {
         freeElectiveResult
     );
 
+    BasicInfo basicInfo = BasicInfo
+        .builder()
+        .name(transcript.getStudentName())
+        .studentNumber(transcript.getStudentNumber())
+        .totalCredit(requirement.getTotalCredit())
+        .takenCredit((int)(transcript.getTakenCredit() - (0.5 * chapelResult.getTakenCount())))
+        .department(department)
+        .build();
+
     return GraduationResult
         .builder()
-        .entryYear(transcript.getEntryYear())
-        .department(department.getName())
+        .basicInfo(basicInfo)
         .isGraduated(graduated)
         .chapelResult(chapelResult)
         .commonCulture(commonCultureResult)
@@ -286,7 +295,7 @@ public class DefaultGraduationService implements GraduationService {
 
       String[] studentInfo = header[1].split("\\(");
       String studentName = studentInfo[0];
-      String studentId = studentInfo[1].substring(0, 8);
+      String studentNumber = studentInfo[1].substring(0, 8);
 
       EnglishLevel englishLevel = EnglishLevel.parse(splitText[1]);
 
@@ -297,22 +306,22 @@ public class DefaultGraduationService implements GraduationService {
       int normalCultureCredit = Integer.parseInt(creditInfo[3].split(" ")[2]);
       int majorCredit = Integer.parseInt(creditInfo[4].split(" ")[2]);
       int freeElectiveCredit = Integer.parseInt(creditInfo[9].split(" ")[2]);
-      double totalCredit = Double.parseDouble(splitText[5].split(",")[0].split(" ")[3]);
+      double takenCredit = Double.parseDouble(splitText[5].split(",")[0].split(" ")[3]);
       List<LectureCode> takenLectureCodes = getTakenLectureCodes(splitText);
 
       return Transcript
           .builder()
           .departmentName(departmentName)
           .studentName(studentName)
-          .studentId(studentId)
+          .studentNumber(studentNumber)
           .englishLevel(englishLevel)
-          .commonCultureCredit((int)commonCultureCredit)
+          .commonCultureCredit(commonCultureCredit)
           .coreCultureCredit(coreCultureCredit)
           .basicAcademicalCultureCredit(basicAcademicalCultureCredit)
           .normalCultureCredit(normalCultureCredit)
           .majorCredit(majorCredit)
           .freeElectiveCredit(freeElectiveCredit)
-          .totalCredit((int)totalCredit)
+          .takenCredit(takenCredit)
           .takenLectureCodes(takenLectureCodes)
           .build();
 
