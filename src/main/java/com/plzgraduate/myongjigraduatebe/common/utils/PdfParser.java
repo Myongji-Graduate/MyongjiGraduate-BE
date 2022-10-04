@@ -5,8 +5,37 @@ import java.io.IOException;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.GraduationRequest;
 
 public class PdfParser {
-  public static String parseString(GraduationRequest request) throws IOException {
-    return null;
+  public static String parseString(GraduationRequest request) {
+    try {
+      return formatParsing(request);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("PDF 형식이 잘못되었습니다");
+    }
+  }
+
+  private static String formatParsing(GraduationRequest request) throws IOException {
+    com.aspose.pdf.Document pdfDocument = new com.aspose.pdf.Document(request
+                                                                          .getFile()
+                                                                          .getInputStream());
+    com.aspose.pdf.TableAbsorber absorber = new com.aspose.pdf.TableAbsorber();
+    StringBuilder sb = new StringBuilder();
+    for (com.aspose.pdf.Page page : pdfDocument.getPages()) {
+      absorber.visit(page);
+      for (com.aspose.pdf.AbsorbedTable table : absorber.getTableList()) {
+        for (com.aspose.pdf.AbsorbedRow row : table.getRowList()) {
+          for (com.aspose.pdf.AbsorbedCell cell : row.getCellList()) {
+            for (com.aspose.pdf.TextFragment fragment : cell.getTextFragments()) {
+              for (com.aspose.pdf.TextSegment seg : fragment.getSegments()) {
+                sb.append(seg.getText());
+              }
+              sb.append("|");
+            }
+
+          }
+        }
+      }
+    }
+    return sb.toString();
   }
 
   public static String getSampleString() {
