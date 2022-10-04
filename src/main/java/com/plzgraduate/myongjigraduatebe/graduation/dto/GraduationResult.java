@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class GraduationResult {
-  private final int entryYear;
-  private final String department;
+
+  private final BasicInfo basicInfo;
   private final boolean isGraduated;
   private final ChapelResult chapelResult;
   private final DetailGraduationResult commonCulture;
@@ -18,8 +18,7 @@ public class GraduationResult {
 
   @Builder
   private GraduationResult(
-      int entryYear,
-      String department,
+      BasicInfo basicInfo,
       boolean isGraduated,
       ChapelResult chapelResult,
       DetailGraduationResult commonCulture,
@@ -29,8 +28,7 @@ public class GraduationResult {
       DetailGraduationResult normalCulture,
       DetailGraduationResult freeElective
   ) {
-    this.entryYear = entryYear;
-    this.department = department;
+    this.basicInfo = basicInfo;
     this.isGraduated = isGraduated;
     this.chapelResult = chapelResult;
     this.commonCulture = commonCulture;

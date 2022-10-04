@@ -73,7 +73,7 @@ public class GraduationRequirement extends BaseEntity {
   }
 
   public boolean checkCredit(Transcript transcript) {
-    if (transcript.getTotalCredit() < totalCredit) {
+    if (transcript.getTakenCredit() < totalCredit) {
       return false;
     }
 

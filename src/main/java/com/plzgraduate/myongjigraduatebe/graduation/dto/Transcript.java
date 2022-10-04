@@ -10,24 +10,24 @@ import lombok.Getter;
 @Getter
 public class Transcript {
 
-  private final String departmentName;
   private final String studentName;
-  private final String studentId;
+  private final String studentNumber;
+  private final String departmentName;
   private final EnglishLevel englishLevel;
+  private final double takenCredit;
   private final double commonCultureCredit;
   private final int coreCultureCredit;
   private final int basicAcademicalCultureCredit;
   private final int normalCultureCredit;
   private final int majorCredit;
   private final int freeElectiveCredit;
-  private final double totalCredit;
   private final List<LectureCode> takenLectureCodes;
 
   @Builder
   private Transcript(
       String departmentName,
       String studentName,
-      String studentId,
+      String studentNumber,
       EnglishLevel englishLevel,
       double commonCultureCredit,
       int coreCultureCredit,
@@ -35,12 +35,12 @@ public class Transcript {
       int normalCultureCredit,
       int majorCredit,
       int freeElectiveCredit,
-      double totalCredit,
+      double takenCredit,
       List<LectureCode> takenLectureCodes
   ) {
     this.departmentName = departmentName;
     this.studentName = studentName;
-    this.studentId = studentId;
+    this.studentNumber = studentNumber;
     this.englishLevel = englishLevel;
     this.commonCultureCredit = commonCultureCredit;
     this.coreCultureCredit = coreCultureCredit;
@@ -48,11 +48,11 @@ public class Transcript {
     this.normalCultureCredit = normalCultureCredit;
     this.majorCredit = majorCredit;
     this.freeElectiveCredit = freeElectiveCredit;
-    this.totalCredit = totalCredit;
+    this.takenCredit = takenCredit;
     this.takenLectureCodes = takenLectureCodes;
   }
 
   public int getEntryYear() {
-    return Integer.parseInt(studentId.substring(2, 4));
+    return Integer.parseInt(studentNumber.substring(2, 4));
   }
 }
