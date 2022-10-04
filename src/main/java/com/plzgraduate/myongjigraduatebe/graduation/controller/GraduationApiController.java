@@ -24,12 +24,13 @@ public class GraduationApiController {
 
   @PostMapping("result")
   @ResponseStatus(HttpStatus.OK)
-  public String access(
+  public GraduationResult access(
       @RequestParam String entryYear,
       @RequestParam String department,
       @RequestParam MultipartFile file
   ) {
     GraduationRequest request = new GraduationRequest(entryYear, department, file);
-    return PdfParser.parseString(request);
+    String parsingText = PdfParser.parseString(request);
+    return graduationService.assess(parsingText);
   }
 }
