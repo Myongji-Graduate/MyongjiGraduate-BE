@@ -27,7 +27,7 @@ jobs:
           spring.datasource.url: ${{secrets.DB_URL}}
           spring.datasource.username: ${{secrets.DB_USERNAME}}
           spring.datasource.password: ${{secrets.DB_PASSWORD}}
-          server.port: ${{PORT}}
+          server.port: ${{secrets.PORT}}
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
