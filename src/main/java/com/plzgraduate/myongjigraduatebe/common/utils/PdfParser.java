@@ -19,10 +19,17 @@ public class PdfParser {
                                                                           .getInputStream());
     com.aspose.pdf.TableAbsorber absorber = new com.aspose.pdf.TableAbsorber();
     StringBuilder sb = new StringBuilder();
+    int blankedIdx = 0;
     for (com.aspose.pdf.Page page : pdfDocument.getPages()) {
       absorber.visit(page);
       for (com.aspose.pdf.AbsorbedTable table : absorber.getTableList()) {
         for (com.aspose.pdf.AbsorbedRow row : table.getRowList()) {
+          if(row.getCellList().size() == 1 && blankedIdx>5){
+            return sb.toString();
+          }
+          if(row.getCellList().size() == 1 && blankedIdx<=5){
+            blankedIdx++;
+          }
           for (com.aspose.pdf.AbsorbedCell cell : row.getCellList()) {
             for (com.aspose.pdf.TextFragment fragment : cell.getTextFragments()) {
               for (com.aspose.pdf.TextSegment seg : fragment.getSegments()) {
