@@ -337,7 +337,7 @@ public class DefaultGraduationService implements GraduationService {
     List<LectureCode> takenLectureCods = new ArrayList<>(countTakenLecture);
     for (int i = 14; i < splitText.length; i += 7) {
       String code = splitText[i + 3];
-      if (i + 7 < splitText.length && splitText[i + 7].equals("1")) {
+      if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
         i++;
       }
 
