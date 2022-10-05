@@ -3,17 +3,17 @@ os: linux
 
 files:
   - source:  /
-    destination: /home/ubuntu/plz_graduation
+    destination: /home/ec2-user/plz_graduation
     overwrite: yes
 
 permissions:
   - object: /
     pattern: "**"
-    owner: ubuntu
-    group: ubuntu
+    owner: ec2-user
+    group: ec2-user
 
 hooks:
   ApplicationStart:
     - location: scripts/deploy.sh
       timeout: 60
-      runas: ubuntu
+      runas: ec2-user
