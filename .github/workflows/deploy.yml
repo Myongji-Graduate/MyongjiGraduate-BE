@@ -6,7 +6,7 @@ on:
       - release
 
 env:
-  S3_BUCKET_NAME: bid-market-deploy-bucket
+  S3_BUCKET_NAME: gitaction-s3-bucket
   RESOURCE_PATH: ./src/main/resources/application.yml
   CODE_DEPLOY_APPLICATION_NAME: pg-webservice-codeploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: pg-webservice-codedeploy-prod-group
