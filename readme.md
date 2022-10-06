@@ -1,5 +1,6 @@
 # 간편한 명지대 졸업 요건 확인 서비스, 졸업을 부탁해
 
+[졸부서비스 바로가기](http://mju-graudate.com)
 
 ## 졸부팀 소개
 
@@ -94,15 +95,16 @@
 ### 프로젝트 기간
 
 - 기획 및 설계 : 22.09.18 ~ 22.09.25
-- 프로젝트 개발 : 22.09.25 ~ (진행중)
+- 프로젝트 개발
+  - 1차 스프린트 - 22.09.25 ~ 10.05
 
 ### 프로젝트 기획, 설명
 - 명지대하교 재학생을 위한 간편 졸업 요건 확인 서비스
-    - 자신의 수강과목 정보를 업로드 한다.
+    - 학교 홈페이지에서 얻은 PDF 성적표를 업로드 한다.
     - 졸업 요건의 충족 여부를 확인한다.
-    - 필수 과목의 충족 여부 및 과목 정보를 확인한다.
+    - 필수 과목의 충족 여부 및 미 이수 과목 정보를 확인한다.
 
-##  <img height="25px" src="https://user-images.githubusercontent.com/50071076/184506573-ed624123-2e8f-430c-9165-0bce79d1e13d.png" /> 기술 스택
+## 기술 스택
 <div align=left>
 <img src="https://img.shields.io/badge/java 11-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/springboot 2.7.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
