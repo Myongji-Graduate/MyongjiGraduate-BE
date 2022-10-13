@@ -12,6 +12,7 @@ public enum EnglishLevel {
   MIDDLE(List.of(new LectureCode("KMA02123"), new LectureCode("KMA02124"), new LectureCode("KMA02125"), new LectureCode("KMA02126"))),
   HIGH(List.of());
 
+  public static final int STANDARD_SCORE = 600;
   private final List<LectureCode> lectureCodeList;
 
   EnglishLevel(List<LectureCode> lectureCodeList) {
@@ -27,7 +28,7 @@ public enum EnglishLevel {
       return HIGH;
     }
 
-    return score <= 500 ? LOW : MIDDLE;
+    return score <= STANDARD_SCORE ? LOW : MIDDLE;
   }
 
 }
