@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.entity;
 
+import java.util.Objects;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +29,22 @@ public class StudentNumber {
     }
   }
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    StudentNumber that = (StudentNumber)o;
+    return value.equals(that.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
+  }
 }
