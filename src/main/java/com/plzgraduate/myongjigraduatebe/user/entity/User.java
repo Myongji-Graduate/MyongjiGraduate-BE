@@ -24,8 +24,9 @@ public class User extends BaseEntity {
   @Column(columnDefinition = "char(8)", unique = true, nullable = false)
   private StudentNumber studentNumber;
 
+  @Convert(converter = EntryYearConverter.class)
   @Column(columnDefinition = "TINYINT UNSIGNED")
-  private int entryYear;
+  private EntryYear entryYear;
 
   private String name;
 
