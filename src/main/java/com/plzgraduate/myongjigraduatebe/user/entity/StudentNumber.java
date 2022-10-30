@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.entity;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class StudentNumber {
 
   private static final int LENGTH = 8;
+  private static final String REG = "^[0-9]{" + LENGTH + "}";
 
   private String value;
 
@@ -24,11 +26,10 @@ public class StudentNumber {
   }
 
   private static void validate(String value) {
-    if (value.length() != LENGTH) {
-      throw new IllegalArgumentException("학번의 길이 값이 올바르지 않습니다.");
+    if (value == null || !Pattern.matches(REG, value)) {
+      throw new IllegalArgumentException("학번이 올바르지 않습니다.");
     }
   }
-
 
   @Override
   public boolean equals(Object o) {
