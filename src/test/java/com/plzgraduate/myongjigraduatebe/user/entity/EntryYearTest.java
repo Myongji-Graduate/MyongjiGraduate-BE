@@ -59,7 +59,7 @@ class EntryYearTest {
 
       @ParameterizedTest
       @ArgumentsSource(ValidValueArgumentsProvider.class)
-      @DisplayName("객체를 qksghks한다.")
+      @DisplayName("객체를 생성한다.")
       void ItReturnInstance(int value) {
         // given
         // when

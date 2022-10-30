@@ -55,7 +55,7 @@ class StudentNumberTest {
 
       @ParameterizedTest
       @ValueSource(strings = {"60191667", "12345678"})
-      @DisplayName("객체를 생선한다.")
+      @DisplayName("객체를 생성한다.")
       void ItReturnInstance(String value) {
         // given
         // when
