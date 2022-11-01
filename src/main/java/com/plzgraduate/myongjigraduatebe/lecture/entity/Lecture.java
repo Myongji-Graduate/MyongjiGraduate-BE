@@ -25,12 +25,11 @@ public class Lecture extends BaseEntity {
   private int credit;
 
   @Convert(converter = LectureCodeConverter.class)
-  @Column(name = "lecture_code", unique = true, updatable = false,
-      columnDefinition = "VARCHAR(255)")
+  @Column(unique = true, updatable = false, columnDefinition = "VARCHAR(255)")
   private LectureCode lectureCode;
 
   @Convert(converter = LectureCodeConverter.class)
-  @Column(name = "duplicated_lecture_code", columnDefinition = "VARCHAR(255)")
+  @Column(columnDefinition = "VARCHAR(255)")
   private LectureCode duplicatedLectureCode;
 
   public Lecture(

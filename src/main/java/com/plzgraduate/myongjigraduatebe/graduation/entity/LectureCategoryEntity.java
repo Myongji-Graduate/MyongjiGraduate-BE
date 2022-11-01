@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.department.entity;
+package com.plzgraduate.myongjigraduatebe.graduation.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,15 +9,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "department")
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Department extends BaseEntity {
+public class LectureCategoryEntity extends BaseEntity {
 
-  @Column()
-  private String name;
+  private String category;
 
-  public Department(String name) {
-    this.name = name;
-  }
+  private String detailCategory;
+
+  @Column(columnDefinition = "TINYINT UNSIGNED")
+  private int totalCredit;
+
 }

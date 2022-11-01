@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.entity;
+package com.plzgraduate.myongjigraduatebe.common;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -13,6 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+
+import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
 
 class EntryYearTest {
 
@@ -70,6 +72,7 @@ class EntryYearTest {
       }
     }
   }
+
   @Nested
   @DisplayName("equals 메소드는")
   class DescribeEqualsMethod {

@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -8,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
+import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
+import com.plzgraduate.myongjigraduatebe.common.entity.EntryYearConverter;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.Transcript;
 
@@ -21,28 +24,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GraduationRequirement extends BaseEntity {
 
+  @Convert(converter = EntryYearConverter.class)
   @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
-  private int entryYear;
+  private EntryYear entryYear;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int totalCredit;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int majorCredit;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int commonCultureCredit;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int coreCultureCredit;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int basicAcademicalCultureCredit;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int normalCultureCredit;
 
-  @Column(columnDefinition = "TINYINT UNSIGNED")
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int freeElectiveCredit;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -61,7 +65,7 @@ public class GraduationRequirement extends BaseEntity {
       int freeElectiveCredit,
       Department department
   ) {
-    this.entryYear = entryYear;
+    this.entryYear = EntryYear.of(entryYear);
     this.totalCredit = totalCredit;
     this.majorCredit = majorCredit;
     this.commonCultureCredit = commonCultureCredit;
