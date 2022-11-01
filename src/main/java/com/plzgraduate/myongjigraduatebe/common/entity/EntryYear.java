@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.entity;
+package com.plzgraduate.myongjigraduatebe.common.entity;
 
 import java.util.Objects;
 
