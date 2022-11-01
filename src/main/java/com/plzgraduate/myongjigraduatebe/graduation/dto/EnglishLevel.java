@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 public enum EnglishLevel {
-  LOW(List.of(new LectureCode("KMA02106"), new LectureCode("KMA02107"), new LectureCode("KMA02108"), new LectureCode("KMA02109"))),
-  MIDDLE(List.of(new LectureCode("KMA02123"), new LectureCode("KMA02124"), new LectureCode("KMA02125"), new LectureCode("KMA02126"))),
+  LOW(List.of(LectureCode.of("KMA02106"), LectureCode.of("KMA02107"), LectureCode.of("KMA02108"), LectureCode.of("KMA02109"))),
+  MIDDLE(List.of(LectureCode.of("KMA02123"), LectureCode.of("KMA02124"), LectureCode.of("KMA02125"), LectureCode.of("KMA02126"))),
   HIGH(List.of());
 
   public static final int STANDARD_SCORE = 600;

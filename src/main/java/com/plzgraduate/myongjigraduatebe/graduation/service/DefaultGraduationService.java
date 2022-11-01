@@ -341,7 +341,7 @@ public class DefaultGraduationService implements GraduationService {
         i++;
       }
 
-      takenLectureCods.add(new LectureCode(code));
+      takenLectureCods.add(LectureCode.of(code));
     }
 
     return takenLectureCods;

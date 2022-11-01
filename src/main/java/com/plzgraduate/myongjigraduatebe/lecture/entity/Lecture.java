@@ -1,12 +1,15 @@
 package com.plzgraduate.myongjigraduatebe.lecture.entity;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 
 import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,8 +24,14 @@ public class Lecture extends BaseEntity {
   @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int credit;
 
-  @Embedded
+  @Convert(converter = LectureCodeConverter.class)
+  @Column(name = "lecture_code", unique = true, updatable = false,
+      columnDefinition = "VARCHAR(255)")
   private LectureCode lectureCode;
+
+  @Convert(converter = LectureCodeConverter.class)
+  @Column(name = "duplicated_lecture_code", columnDefinition = "VARCHAR(255)")
+  private LectureCode duplicatedLectureCode;
 
   public Lecture(
       String name,
@@ -31,10 +40,27 @@ public class Lecture extends BaseEntity {
   ) {
     this.name = name;
     this.credit = credit;
-    this.lectureCode = new LectureCode(lectureCode);
+    this.lectureCode = LectureCode.of(lectureCode);
+  }
+
+  @Builder()
+  private Lecture(
+      String name,
+      int credit,
+      String lectureCode,
+      String duplicatedLectureCode
+  ) {
+    this.name = name;
+    this.credit = credit;
+    this.lectureCode = LectureCode.of(lectureCode);
+    this.duplicatedLectureCode = LectureCode.of(duplicatedLectureCode);
   }
 
   public String getCode() {
     return lectureCode.getCode();
+  }
+
+  public Optional<String> getDuplicatedCode() {
+    return duplicatedLectureCode == null ? Optional.empty() : Optional.of(duplicatedLectureCode.getCode());
   }
 }
