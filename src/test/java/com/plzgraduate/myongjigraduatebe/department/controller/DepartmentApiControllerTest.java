@@ -35,10 +35,8 @@ class DepartmentApiControllerTest extends ControllerSetUp {
   private static final long departmentId1 = 1L;
   private static final long departmentId2 = 2L;
 
-  private static final int startedEntryYear = 15;
-
-  private static final Department department1 = new Department("test1", startedEntryYear);
-  private static final Department department2 = new Department("test2", startedEntryYear);
+  private static final Department department1 = new Department("test1");
+  private static final Department department2 = new Department("test2");
 
   private static AllDepartmentsResponse allDepartmentsResponse;
 
@@ -70,14 +68,20 @@ class DepartmentApiControllerTest extends ControllerSetUp {
         response
             .andExpect(status().isOk())
             .andDo(document(
-              "findAll Departments",
-              preprocessRequest(prettyPrint()),
-              preprocessResponse(prettyPrint()),
-              responseFields(
-                fieldWithPath("departments[]").type(JsonFieldType.ARRAY).description("학과 정보 배열"),
-                fieldWithPath("departments[].id").type(JsonFieldType.NUMBER).description("학과 식별자"),
-                fieldWithPath("departments[].name").type(JsonFieldType.STRING).description("학과명")
-              )
+                "findAll Departments",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("departments[]")
+                        .type(JsonFieldType.ARRAY)
+                        .description("학과 정보 배열"),
+                    fieldWithPath("departments[].id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("학과 식별자"),
+                    fieldWithPath("departments[].name")
+                        .type(JsonFieldType.STRING)
+                        .description("학과명")
+                )
             ));
       }
     }

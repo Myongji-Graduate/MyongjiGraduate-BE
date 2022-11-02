@@ -38,9 +38,7 @@ class DefaultGraduationServiceTest {
   private LectureRepository lectureRepository;
 
   private static final long departmentId = 1L;
-  private static final int startedEntryYear = 15;
-  private static final int endedEntryYear = 20;
-  private static final Department department = new Department("test1", startedEntryYear, endedEntryYear);
+  private static final Department department = new Department("test1");
 
   private static final int totalCredit = 20;
   private static final int majorCredit = 20;
@@ -61,7 +59,6 @@ class DefaultGraduationServiceTest {
       .normalCultureCredit(normalCultureCredit)
       .freeElectiveCredit(freeElectiveCredit)
       .build();
-
 
   @BeforeAll
   static void setUp() {
