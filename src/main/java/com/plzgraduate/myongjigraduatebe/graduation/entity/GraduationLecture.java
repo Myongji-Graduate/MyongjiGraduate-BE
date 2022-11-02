@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.graduation.entity;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
@@ -33,6 +35,9 @@ public class GraduationLecture extends BaseEntity {
   @Column(nullable = false)
   private boolean mandatory;
 
+  @Enumerated(EnumType.STRING)
+  private LectureCategory lectureCategory;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_LECTURE_GRADUATION_LECTURE"))
   private Lecture lecture;
@@ -43,5 +48,5 @@ public class GraduationLecture extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_LECTURE_CATEGORY_GRADUATION_LECTURE"))
-  private LectureCategoryEntity lectureCategory;
+  private LectureCategoryEntity lectureCategoryEntity;
 }
