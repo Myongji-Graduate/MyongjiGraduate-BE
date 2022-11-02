@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
+import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
+import com.plzgraduate.myongjigraduatebe.common.entity.EntryYearConverter;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
 
 import lombok.AccessLevel;
@@ -21,10 +24,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GraduationLecture extends BaseEntity {
 
+  @Convert(converter = EntryYearConverter.class)
+  @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
+  private EntryYear startedEntryYear;
+
+  @Convert(converter = EntryYearConverter.class)
+  @Column(columnDefinition = "TINYINT UNSIGNED")
+  private EntryYear endedEntryYear;
+
   @Column(nullable = false)
   private boolean mandatory;
 
-  @Enumerated(value = EnumType.STRING)
+  @Enumerated(EnumType.STRING)
   private LectureCategory lectureCategory;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -34,4 +45,8 @@ public class GraduationLecture extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_GRADUATION_REQUIREMENT_GRADUATION_LECTURE"))
   private GraduationRequirement graduationRequirement;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(foreignKey = @ForeignKey(name = "FK_LECTURE_CATEGORY_GRADUATION_LECTURE"))
+  private LectureCategoryEntity lectureCategoryEntity;
 }

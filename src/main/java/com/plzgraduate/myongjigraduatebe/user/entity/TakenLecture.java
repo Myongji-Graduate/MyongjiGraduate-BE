@@ -14,12 +14,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class TakenLecture extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(foreignKey =  @ForeignKey(name = "FK_USER_TAKEN_LECTURE"))
+  @JoinColumn(foreignKey = @ForeignKey(name = "FK_USER_TAKEN_LECTURE"))
+  
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -63,4 +64,5 @@ public class TakenLecture extends BaseEntity {
 
     return hash;
   }
+  
 }
