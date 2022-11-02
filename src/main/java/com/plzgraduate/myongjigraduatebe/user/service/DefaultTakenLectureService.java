@@ -20,13 +20,16 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultTakenLectureService implements TakenLectureService{
+public class DefaultTakenLectureService implements TakenLectureService {
   private final LectureRepository lectureRepository;
   private final TakenLectureRepository takenLectureRepository;
   private final UserRepository userRepository;
 
   @Override
-  public void saveTakenLecture(Long userId, String[] lectureText) {
+  public void saveTakenLecture(
+      Long userId,
+      String[] lectureText
+  ) {
     User user = userRepository.findUserById(userId);
     List<LectureCode> takenLectureCodes = getTakenLectureCodes(lectureText);
     List<Lecture> lectures = lectureRepository.findAllByLectureCodeIsIn(takenLectureCodes);
@@ -40,7 +43,7 @@ public class DefaultTakenLectureService implements TakenLectureService{
     List<LectureCode> takenLectureCods = new ArrayList<>(countTakenLecture);
     for (int i = 9; i < splitText.length; i += 7) {
       String code = splitText[i + 3];
-      if (i + 7 < splitText.length && !splitText[i+7].isBlank() && Character.isDigit(splitText[i + 7].charAt(0))) {
+      if (i + 7 < splitText.length && !splitText[i + 7].isBlank() && Character.isDigit(splitText[i + 7].charAt(0))) {
         i++;
       }
       takenLectureCods.add(new LectureCode(code));
