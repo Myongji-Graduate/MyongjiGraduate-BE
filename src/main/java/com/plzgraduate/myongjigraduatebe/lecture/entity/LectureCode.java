@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.entity;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ public class LectureCode {
   private static final int CODE_LENGTH = 8;
   private static final String CODE_REGEX = "^[A-Z]{3}[0-9]{5}$";
 
+  @JsonValue
   private String code;
 
   public static LectureCode of(String code) {
