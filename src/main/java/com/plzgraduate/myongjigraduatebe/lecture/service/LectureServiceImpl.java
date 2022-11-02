@@ -1,9 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.lecture.service;
 
+import static com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType.*;
+
 import org.springframework.stereotype.Service;
 
-import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureCustomRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.dto.AllSearchedLecturesResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureCustomRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,18 +15,15 @@ public class LectureServiceImpl implements LectureService {
 
   private final LectureCustomRepository lectureCustomRepository;
 
-  private static final String QUERY_TYPE1 = "과목명";
-  private static final String QUERY_TYPE2 = "과목코드";
-
   @Override
   public AllSearchedLecturesResponse searchLecture(
       String keyword,
       String qType
   ) {
-    if (qType.equals(QUERY_TYPE1)) {
+    if (qType.equals(LECTURE_NAME.getQType())) {
       return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureName(keyword));
     }
-    if (qType.equals(QUERY_TYPE2)) {
+    if (qType.equals(LECTURE_CODE.getQType())) {
       return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureCode(keyword));
     }
     return null;
