@@ -26,4 +26,11 @@ public class TakenLecture extends BaseEntity {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_LECTURE_TAKEN_LECTURE"))
   private Lecture lecture;
 
+  public TakenLecture(
+      User user,
+      Lecture lecture
+  ) {
+    this.user = user;
+    this.lecture = lecture;
+  }
 }
