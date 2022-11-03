@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchLectureModelAttribute;
+import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchLectureInfo;
 import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchedLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.service.LectureService;
 
@@ -22,11 +22,11 @@ public class LectureApiController {
 
   public
   @GetMapping() List<SearchedLecture> searchLectures(
-      @ModelAttribute SearchLectureModelAttribute searchLectureModelAttribute
+      @ModelAttribute SearchLectureInfo searchLectureInfo
   ) {
     return lectureService.searchLecture(
-        searchLectureModelAttribute.getKeyword(),
-        searchLectureModelAttribute.getQtype()
+        searchLectureInfo.getKeyword(),
+        searchLectureInfo.getQtype()
     );
   }
 

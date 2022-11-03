@@ -5,12 +5,12 @@ import java.util.Locale;
 import lombok.Getter;
 
 @Getter
-public class SearchLectureModelAttribute {
+public class SearchLectureInfo {
 
   private final String keyword;
   private final QueryType qtype;
 
-  public SearchLectureModelAttribute(
+  public SearchLectureInfo(
       String keyword,
       String qtype
   ) {
