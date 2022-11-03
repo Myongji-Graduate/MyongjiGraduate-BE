@@ -22,10 +22,10 @@ public class LectureServiceImpl implements LectureService {
       QueryType qType
   ) {
     if (qType.equals(NAME)) {
-      return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureName(keyword));
+      return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureNameBy(keyword));
     }
     if (qType.equals(CODE)) {
-      return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureCode(keyword));
+      return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureCodeLike(keyword));
     }
     throw new IllegalStateException("검색어 타입이 잘못되었습니다.");
   }

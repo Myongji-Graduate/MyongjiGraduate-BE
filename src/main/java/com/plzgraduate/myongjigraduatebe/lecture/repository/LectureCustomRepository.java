@@ -6,7 +6,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchedLecture;
 
 public interface LectureCustomRepository {
 
-  List<SearchedLecture> searchByLectureCode(String lectureCode);
+  List<SearchedLecture> findByLectureCodeLike(String lectureCode);
 
-  List<SearchedLecture> searchByLectureName(String lectureName);
+  List<SearchedLecture> findByLectureNameBy(String lectureName);
 }

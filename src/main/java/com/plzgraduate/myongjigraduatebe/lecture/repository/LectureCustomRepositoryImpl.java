@@ -22,7 +22,7 @@ public class LectureCustomRepositoryImpl implements LectureCustomRepository {
   private final JPAQueryFactory jpaQueryFactory;
 
   @Override
-  public List<SearchedLecture> searchByLectureCode(String lectureCode) {
+  public List<SearchedLecture> findByLectureCodeLike(String lectureCode) {
 
     return jpaQueryFactory
         .select(new QSearchedLecture(lecture.id, lecture.lectureCode, lecture.name, lecture.credit))
@@ -32,7 +32,7 @@ public class LectureCustomRepositoryImpl implements LectureCustomRepository {
   }
 
   @Override
-  public List<SearchedLecture> searchByLectureName(String lectureName) {
+  public List<SearchedLecture> findByLectureNameBy(String lectureName) {
 
     return jpaQueryFactory
         .select(new QSearchedLecture(lecture.id, lecture.lectureCode, lecture.name, lecture.credit))
