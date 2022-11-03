@@ -2,10 +2,12 @@ package com.plzgraduate.myongjigraduatebe.lecture.service;
 
 import static com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.plzgraduate.myongjigraduatebe.lecture.dto.AllSearchedLecturesResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType;
+import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchedLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureCustomRepository;
 
@@ -18,15 +20,15 @@ public class LectureServiceImpl implements LectureService {
   private final LectureCustomRepository lectureCustomRepository;
 
   @Override
-  public AllSearchedLecturesResponse searchLecture(
+  public List<SearchedLecture> searchLecture(
       String keyword,
       QueryType qType
   ) {
     if (qType.equals(NAME)) {
-      return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureNameBy(keyword));
+      return lectureCustomRepository.findByLectureNameBy(keyword);
     }
     if (qType.equals(CODE)) {
-      return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureCodeLike(LectureCode.of(keyword)));
+      return lectureCustomRepository.findByLectureCodeLike(LectureCode.of(keyword));
     }
     throw new IllegalStateException("검색어 타입이 잘못되었습니다.");
   }
