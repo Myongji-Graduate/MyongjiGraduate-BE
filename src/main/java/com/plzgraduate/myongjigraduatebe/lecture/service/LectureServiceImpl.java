@@ -5,6 +5,7 @@ import static com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType.*;
 import org.springframework.stereotype.Service;
 
 import com.plzgraduate.myongjigraduatebe.lecture.dto.AllSearchedLecturesResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureCustomRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,12 @@ public class LectureServiceImpl implements LectureService {
   @Override
   public AllSearchedLecturesResponse searchLecture(
       String keyword,
-      String qType
+      QueryType qType
   ) {
-    if (qType.equals(LECTURE_NAME.getQType())) {
+    if (qType.equals(NAME)) {
       return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureName(keyword));
     }
-    if (qType.equals(LECTURE_CODE.getQType())) {
+    if (qType.equals(CODE)) {
       return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureCode(keyword));
     }
     return null;

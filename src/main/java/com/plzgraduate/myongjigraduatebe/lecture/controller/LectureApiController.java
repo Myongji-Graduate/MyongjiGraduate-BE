@@ -1,12 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.lecture.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.plzgraduate.myongjigraduatebe.lecture.service.LectureService;
 import com.plzgraduate.myongjigraduatebe.lecture.dto.AllSearchedLecturesResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchLectureModelAttribute;
+import com.plzgraduate.myongjigraduatebe.lecture.service.LectureService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,12 +18,14 @@ public class LectureApiController {
 
   private final LectureService lectureService;
 
-  @GetMapping()
-  public AllSearchedLecturesResponse searchedLectures(
-      @RequestParam(name = "qtype") String qType,
-      @RequestParam(name = "keyword") String keyword
+  public
+  @GetMapping() AllSearchedLecturesResponse searchLectures(
+      @ModelAttribute SearchLectureModelAttribute searchLectureModelAttribute
   ) {
-    return lectureService.searchLecture(keyword, qType);
+    return lectureService.searchLecture(
+        searchLectureModelAttribute.getKeyword(),
+        searchLectureModelAttribute.getQtype()
+    );
   }
 
 }
