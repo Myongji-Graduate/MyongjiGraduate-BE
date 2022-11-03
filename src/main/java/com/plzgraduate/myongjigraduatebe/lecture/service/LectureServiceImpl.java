@@ -27,6 +27,6 @@ public class LectureServiceImpl implements LectureService {
     if (qType.equals(CODE)) {
       return AllSearchedLecturesResponse.from(lectureCustomRepository.searchByLectureCode(keyword));
     }
-    return null;
+    throw new IllegalStateException("검색어 타입이 잘못되었습니다.");
   }
 }
