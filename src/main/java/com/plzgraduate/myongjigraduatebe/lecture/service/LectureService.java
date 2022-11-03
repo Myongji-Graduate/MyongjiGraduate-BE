@@ -1,10 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.lecture.service;
 
-import com.plzgraduate.myongjigraduatebe.lecture.dto.AllSearchedLecturesResponse;
+import java.util.List;
+
 import com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType;
+import com.plzgraduate.myongjigraduatebe.lecture.dto.SearchedLecture;
 
 public interface LectureService {
-  AllSearchedLecturesResponse searchLecture(
+  List<SearchedLecture> searchLecture(
       String keyword,
       QueryType qType
   );
