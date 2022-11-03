@@ -13,6 +13,6 @@ public class LectureCodeConverter implements AttributeConverter<LectureCode, Str
 
   @Override
   public LectureCode convertToEntityAttribute(String dbData) {
-    return LectureCode.of(dbData);
+    return dbData==null ? null : LectureCode.of(dbData) ;
   }
 }
