@@ -25,7 +25,7 @@ public class LectureCustomRepositoryImpl implements LectureCustomRepository {
   public List<SearchedLecture> searchByLectureCode(String lectureCode) {
 
     return jpaQueryFactory
-        .select(new QSearchedLecture(lecture.lectureCode, lecture.name, lecture.credit))
+        .select(new QSearchedLecture(lecture.id, lecture.lectureCode, lecture.name, lecture.credit))
         .from(lecture)
         .where(likeLectureCode(lectureCode))
         .fetch();
@@ -35,7 +35,7 @@ public class LectureCustomRepositoryImpl implements LectureCustomRepository {
   public List<SearchedLecture> searchByLectureName(String lectureName) {
 
     return jpaQueryFactory
-        .select(new QSearchedLecture(lecture.lectureCode, lecture.name, lecture.credit))
+        .select(new QSearchedLecture(lecture.id, lecture.lectureCode, lecture.name, lecture.credit))
         .from(lecture)
         .where(likeLectureName(lectureName))
         .fetch();

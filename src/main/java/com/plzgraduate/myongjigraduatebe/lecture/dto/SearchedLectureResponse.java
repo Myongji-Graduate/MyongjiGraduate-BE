@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class SearchedLectureResponse {
 
+  private final long id;
+
   private final LectureCode lectureCode;
 
   private final String name;
@@ -17,6 +19,6 @@ public class SearchedLectureResponse {
   private final int credit;
 
   public static SearchedLectureResponse from(SearchedLecture entity) {
-    return new SearchedLectureResponse(entity.getLectureCode(), entity.getName(), entity.getCredit());
+    return new SearchedLectureResponse(entity.getId(), entity.getLectureCode(), entity.getName(), entity.getCredit());
   }
 }
