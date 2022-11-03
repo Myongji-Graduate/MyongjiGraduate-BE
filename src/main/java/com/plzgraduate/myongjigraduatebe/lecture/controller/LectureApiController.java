@@ -24,10 +24,7 @@ public class LectureApiController {
   @GetMapping() List<SearchedLecture> searchLectures(
       @ModelAttribute SearchLectureInfo searchLectureInfo
   ) {
-    return lectureService.searchLecture(
-        searchLectureInfo.getKeyword(),
-        searchLectureInfo.getQtype()
-    );
+    return lectureService.searchLecture(searchLectureInfo);
   }
 
 }
