@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.plzgraduate.myongjigraduatebe.lecture.dto.AllSearchedLecturesResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.dto.QueryType;
+import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureCustomRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class LectureServiceImpl implements LectureService {
       return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureNameBy(keyword));
     }
     if (qType.equals(CODE)) {
-      return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureCodeLike(keyword));
+      return AllSearchedLecturesResponse.from(lectureCustomRepository.findByLectureCodeLike(LectureCode.of(keyword)));
     }
     throw new IllegalStateException("검색어 타입이 잘못되었습니다.");
   }
