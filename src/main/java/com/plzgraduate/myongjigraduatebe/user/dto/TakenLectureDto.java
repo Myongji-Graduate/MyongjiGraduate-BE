@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.dto;
 
+import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,8 +11,7 @@ public class TakenLectureDto {
   private final String name;
   private final int credit;
 
-  @Builder
-  public TakenLectureDto(
+  private TakenLectureDto(
       String code,
       String name,
       int credit
@@ -18,5 +19,9 @@ public class TakenLectureDto {
     this.code = code;
     this.name = name;
     this.credit = credit;
+  }
+
+  public static TakenLectureDto from(Lecture lecture) {
+    return new TakenLectureDto(lecture.getCode(), lecture.getName(), lecture.getCredit());
   }
 }
