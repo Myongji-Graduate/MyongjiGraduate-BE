@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
+import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.user.entity.TakenLecture;
@@ -27,51 +29,63 @@ public class DefaultTakenLectureService implements TakenLectureService {
 
   @Override
   public void saveTakenLecture(
-      Long id,
-      String[] lectureText
+      long id,
+      ParsingTextDto parsingTextDto
   ) {
-    User user = userRepository.findUserById(id);
-    List<LectureCode> takenLectureCodes = getTakenLectureCodes(lectureText);
+
+    validateUser(id);
+    User user = userRepository
+        .findUserById(id)
+        .get();
+
+    if (!(user
+        .getStudentNumber()
+        .equals(parsingTextDto.getStudentNumber()))) {
+      throw new IllegalArgumentException("해당 학번이 이미 존재합니다");
+    }
+    List<LectureCode> takenLectureCodes = parsingTextDto.getTakenLectureCods();
     List<Lecture> lectures = lectureRepository.findAllByLectureCodeIsIn(takenLectureCodes);
-    lectures.forEach(lecture -> takenLectureRepository.save(new TakenLecture(user, lecture)));
+    List<Lecture> previousLectures =
+        takenLectureRepository
+            .findAllByUserWithFetchJoin(user)
+            .stream()
+            .map(TakenLecture::getLecture)
+            .collect(Collectors.toList());
+    List<Lecture> updatedLectures = lectures
+        .stream()
+        .filter(lecture -> !previousLectures.contains(lecture))
+        .collect(Collectors.toList());
+    List<TakenLecture> updatedTakenLectures = updatedLectures
+        .stream().
+        map(updatedLecture -> new TakenLecture(user, updatedLecture))
+        .collect(Collectors.toList());
+    takenLectureRepository.saveAll(updatedTakenLectures);
   }
 
   @Override
-  public TakenLectureResponse showTakenLecture(Long id) {
-    User user = userRepository.findUserById(id);
+  public TakenLectureResponse showTakenLecture(long id) {
+    validateUser(id);
+    User user = userRepository
+        .findUserById(id)
+        .get();
     List<Lecture> lectures =
-        takenLectureRepository.findAllByUserWithFetchJoin(user)
+        takenLectureRepository
+            .findAllByUserWithFetchJoin(user)
+            .stream()
+            .map(takenLecture -> takenLecture.getLecture())
+            .collect(Collectors.toList());
+    List<TakenLectureDto> takenLectureDtoList = lectures
         .stream()
-        .map(takenLecture -> takenLecture.getLecture())
+        .map(lecture -> TakenLectureDto.from(lecture))
         .collect(Collectors.toList());
-    List<TakenLectureDto> takenLectureDtoList = new ArrayList<>();
-    lectures
-        .forEach(lecture -> takenLectureDtoList.add(TakenLectureDto
-                                                        .builder()
-                                                        .code(lecture.getCode())
-                                                        .name(lecture.getName())
-                                                        .credit(lecture.getCredit())
-                                                        .build()));
-    return new TakenLectureResponse(takenLectureDtoList);
+    return TakenLectureResponse.of(takenLectureDtoList);
   }
 
-  private List<LectureCode> getTakenLectureCodes(
-      String[] splitText
-  ) {
-    List<LectureCode> takenLectureCods = new ArrayList<>();
-    for (int i = 9; i < splitText.length; i += 7) {
-      if(Character.isDigit(splitText[i+3].charAt(0))){
-        String code = splitText[i + 3];
-        return takenLectureCods;
-      }
-      String code = splitText[i + 3];
-      System.out.println(code);
-      if (i + 7 < splitText.length && !splitText[i + 7].isBlank() && Character.isDigit(splitText[i + 7].charAt(0))) {
-        i++;
-      }
-      takenLectureCods.add(LectureCode.of(code));
+  private void validateUser(long id) {
+    if (userRepository
+        .findUserById(id)
+        .isEmpty()) {
+      throw new IllegalArgumentException("해당 유저가 없습니다");
     }
-    return takenLectureCods;
   }
-
 }
