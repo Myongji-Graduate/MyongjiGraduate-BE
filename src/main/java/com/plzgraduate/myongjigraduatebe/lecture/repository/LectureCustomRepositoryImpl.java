@@ -32,7 +32,7 @@ public class LectureCustomRepositoryImpl implements LectureCustomRepository {
   }
 
   @Override
-  public List<SearchedLecture> findByLectureNameBy(String lectureName) {
+  public List<SearchedLecture> findByLectureNameLike(String lectureName) {
 
     return jpaQueryFactory
         .select(new QSearchedLecture(lecture.id, lecture.lectureCode, lecture.name, lecture.credit))
