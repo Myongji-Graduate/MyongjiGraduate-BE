@@ -1,8 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -81,11 +79,67 @@ public class DefaultTakenLectureService implements TakenLectureService {
     return TakenLectureResponse.of(takenLectureDtoList);
   }
 
+  @Override
+  public void editTakenLecture(
+      long id,
+      List<Long> deletedTakenLectures,
+      List<Long> addedTakenLectures
+  ) {
+    validateUser(id);
+    User editUser = userRepository
+        .findUserById(id)
+        .get();
+    deleteTakenLecture(editUser, deletedTakenLectures);
+    addTakenLecture(editUser, addedTakenLectures);
+  }
+
+  public void deleteTakenLecture(
+      User user,
+      List<Long> deletedTakenLectures
+  ) {
+    List<Lecture> deleteTakenLectures = deletedTakenLectures
+        .stream()
+        .map(lectureId -> getEditedLecture(lectureId))
+        .collect(Collectors.toList());
+    deleteTakenLectures.forEach(lecture -> takenLectureRepository.deleteTakenLectureByUserAndLecture(user, lecture));
+  }
+
+  public void addTakenLecture(
+      User user,
+      List<Long> addedTakenLecture
+  ) {
+    List<Lecture> addedLectures = addedTakenLecture
+        .stream()
+        .map(lectureId -> getEditedLecture(lectureId))
+        .collect(Collectors.toList());
+    List<Lecture> previousLectures =
+        takenLectureRepository
+            .findAllByUserWithFetchJoin(user)
+            .stream()
+            .map(takenLecture -> takenLecture.getLecture())
+            .collect(Collectors.toList());
+    addedLectures
+        .stream()
+        .filter(addedLecture -> !previousLectures.contains(addedLecture))
+        .forEach(filteredLecture -> takenLectureRepository.save(new TakenLecture(user, filteredLecture)));
+  }
+
   private void validateUser(long id) {
     if (userRepository
         .findUserById(id)
         .isEmpty()) {
       throw new IllegalArgumentException("해당 유저가 없습니다");
     }
+  }
+
+  private Lecture getEditedLecture(long lectureId) {
+    if (lectureRepository
+        .findById(lectureId)
+        .isEmpty()) {
+      throw new IllegalArgumentException("추가하고자 하는 과목이 존재하지 않습니다");
+    }
+    return lectureRepository
+        .findById(lectureId)
+        .get();
   }
 }
