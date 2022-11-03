@@ -25,7 +25,7 @@ public class LectureServiceImpl implements LectureService {
       QueryType qType
   ) {
     if (qType.equals(NAME)) {
-      return lectureCustomRepository.findByLectureNameBy(keyword);
+      return lectureCustomRepository.findByLectureNameLike(keyword);
     }
     if (qType.equals(CODE)) {
       return lectureCustomRepository.findByLectureCodeLike(LectureCode.of(keyword));

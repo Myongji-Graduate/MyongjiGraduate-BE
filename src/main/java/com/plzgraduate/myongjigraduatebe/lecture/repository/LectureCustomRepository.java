@@ -9,5 +9,5 @@ public interface LectureCustomRepository {
 
   List<SearchedLecture> findByLectureCodeLike(LectureCode lectureCode);
 
-  List<SearchedLecture> findByLectureNameBy(String lectureName);
+  List<SearchedLecture> findByLectureNameLike(String lectureName);
 }
