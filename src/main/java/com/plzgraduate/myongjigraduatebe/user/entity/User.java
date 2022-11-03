@@ -14,7 +14,6 @@ import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
 import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
 import com.plzgraduate.myongjigraduatebe.common.entity.EntryYearConverter;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
-import com.plzgraduate.myongjigraduatebe.graduation.dto.EnglishLevel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
