@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.dto;
 
-import java.util.Locale;
 
 import lombok.Getter;
 
@@ -8,13 +7,13 @@ import lombok.Getter;
 public class SearchLectureInfo {
 
   private final String keyword;
-  private final QueryType qtype;
+  private final String qtype;
 
   public SearchLectureInfo(
       String keyword,
       String qtype
   ) {
     this.keyword = keyword;
-    this.qtype = QueryType.valueOf(qtype.toUpperCase(Locale.ROOT));
+    this.qtype = qtype;
   }
 }
