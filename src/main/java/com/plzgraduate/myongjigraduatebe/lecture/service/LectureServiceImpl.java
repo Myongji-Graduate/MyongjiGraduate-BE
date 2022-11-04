@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -23,9 +24,12 @@ public class LectureServiceImpl implements LectureService {
     QueryType searchedKeyWord = QueryType.from(searchLectureInfo.getQtype());
     switch (searchedKeyWord) {
       case NAME:
-        return lectureCustomRepository.findByLectureNameLike(searchLectureInfo
-                                                                 .getKeyword()
-                                                                 .replaceAll(" ", ""));
+        List<SearchedLecture> byLectureNameLike = lectureCustomRepository
+            .findByLectureNameLike(searchLectureInfo
+                                       .getKeyword()
+                                       .replaceAll(" ", ""));
+        byLectureNameLike.sort(Comparator.comparingInt(s -> s.getName().length()));
+        return byLectureNameLike;
       case CODE:
         return lectureCustomRepository.findByLectureCodeLike(LectureCode.of(searchLectureInfo.getKeyword()));
       default:
