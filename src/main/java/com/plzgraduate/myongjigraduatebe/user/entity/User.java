@@ -1,5 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.user.entity;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -18,6 +21,7 @@ import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
@@ -48,4 +52,23 @@ public class User extends BaseEntity {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_DEPARTMENT_USER"))
   private Department department;
 
+  @Enumerated(value = EnumType.STRING)
+  private Role role;
+
+  public List<String> getRoles() {
+    return role.getRoleList();
+  }
+
+  @RequiredArgsConstructor
+  public enum Role {
+    USER("USER"),
+    MANAGER("MANAGER,USER"),
+    ADMIN("ADMIN,MANAGER,USER");
+
+    private final String roles;
+
+    public List<String> getRoleList() {
+      return Arrays.asList(roles.split(","));
+    }
+  }
 }
