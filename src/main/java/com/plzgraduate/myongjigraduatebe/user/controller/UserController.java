@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
+import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
+import com.plzgraduate.myongjigraduatebe.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
   private final TakenLectureService takenLectureService;
+  private final UserService userService;
 
   @GetMapping("/{id}/taken-lectures")
   @ResponseStatus(HttpStatus.OK)
@@ -36,6 +40,14 @@ public class UserController {
       @RequestBody String parsingText
   ) {
     takenLectureService.saveTakenLecture(id, new ParsingTextDto(parsingText));
+  }
+
+  @PostMapping("/userid-validity-checks")
+  @ResponseStatus(HttpStatus.OK)
+  public UserIdValidityResponse checkValidityUserId(
+      @RequestBody UserId userId
+  ) {
+    return userService.checkValidityUserId(userId);
   }
 
 }

@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.user.entity;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,10 +17,11 @@ public class UserId {
   private static final int MIN_LENGTH = 6;
   private static final int MAX_LENGTH = 20;
 
+  @JsonValue
   private final String id;
 
   @JsonCreator
-  public static UserId valueOf(String id) {
+  public static UserId valueOf(@JsonProperty("userId") String id) {
     validate(id);
     return new UserId(id);
   }
