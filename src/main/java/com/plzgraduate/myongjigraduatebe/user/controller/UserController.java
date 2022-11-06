@@ -52,8 +52,7 @@ public class UserController {
   ) {
     takenLectureService.editTakenLecture(
         id,
-        editedTakenLecture.getDeletedTakenLectures(),
-        editedTakenLecture.getAddedTakenLectures()
+        editedTakenLecture
     );
   }
 
