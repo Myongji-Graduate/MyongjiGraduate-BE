@@ -17,5 +17,5 @@ jwt:
   header: "Authorization"
   prefix: "Bearer"
   issuer: "plzgraduate"
-  client-secret: ${JWT-SECRET}
+  client-secret: ${JWT_SECRET}
   expiry-seconds: 600
