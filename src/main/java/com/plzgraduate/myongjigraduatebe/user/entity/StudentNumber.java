@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.user.entity;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,8 @@ public class StudentNumber {
     this.value = value;
   }
 
-  public static StudentNumber of(String value) {
+  @JsonCreator
+  public static StudentNumber valueOf(String value) {
     validate(value);
     return new StudentNumber(value);
   }

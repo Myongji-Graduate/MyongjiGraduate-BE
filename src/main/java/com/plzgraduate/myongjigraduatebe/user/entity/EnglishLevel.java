@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.user.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 
 import lombok.Getter;
@@ -19,6 +20,7 @@ public enum EnglishLevel {
     this.lectureCodeList = lectureCodeList;
   }
 
+  @JsonCreator
   public static EnglishLevel of(int ordinal) {
     for (EnglishLevel engLv : values()) {
       if (engLv.ordinal() == ordinal) {

@@ -12,6 +12,6 @@ public class StudentNumberConverter implements AttributeConverter<StudentNumber,
 
   @Override
   public StudentNumber convertToEntityAttribute(String dbData) {
-    return StudentNumber.of(dbData);
+    return StudentNumber.valueOf(dbData);
   }
 }

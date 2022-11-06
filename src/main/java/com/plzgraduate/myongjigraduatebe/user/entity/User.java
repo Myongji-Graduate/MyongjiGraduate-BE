@@ -32,7 +32,7 @@ public class User extends BaseEntity {
   @Column(columnDefinition = "varchar(255)", unique = true, nullable = false)
   private UserId userId;
 
-  @Column(columnDefinition = "char(60)")
+  @Column(columnDefinition = "char(60)", nullable = false)
   private String password;
 
   @Convert(converter = StudentNumberConverter.class)
@@ -53,10 +53,26 @@ public class User extends BaseEntity {
   private Department department;
 
   @Enumerated(value = EnumType.STRING)
-  private Role role;
+  private Role role = Role.USER;
 
   public List<String> getRoles() {
     return role.getRoleList();
+  }
+
+  public User(
+      UserId userId,
+      String password,
+      StudentNumber studentNumber,
+      EnglishLevel engLv
+  ) {
+    this.userId = userId;
+    this.password = password;
+    this.studentNumber = studentNumber;
+    this.engLv = engLv;
+  }
+
+  public void updateRole(Role role) {
+    this.role = role;
   }
 
   @RequiredArgsConstructor
