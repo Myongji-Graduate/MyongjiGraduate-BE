@@ -1,5 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.entity;
 
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +17,8 @@ public class UserId {
 
   private final String id;
 
-  public static UserId of(String id) {
+  @JsonCreator
+  public static UserId valueOf(String id) {
     validate(id);
     return new UserId(id);
   }
@@ -22,5 +27,22 @@ public class UserId {
     if (id.length() < MIN_LENGTH || MAX_LENGTH < id.length()) {
       throw new IllegalArgumentException("사용자의 아이디가 올바른 형식이 아닙니다");
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    UserId userId = (UserId)o;
+    return Objects.equals(id, userId.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }

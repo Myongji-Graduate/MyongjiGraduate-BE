@@ -8,11 +8,11 @@ public class UserIdConverter implements AttributeConverter<UserId, String> {
 
   @Override
   public String convertToDatabaseColumn(UserId userId) {
-    return null;
+    return userId.getId();
   }
 
   @Override
   public UserId convertToEntityAttribute(String dbData) {
-    return null;
+    return UserId.valueOf(dbData);
   }
 }

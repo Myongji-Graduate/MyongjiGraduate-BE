@@ -27,7 +27,7 @@ class StudentNumberTest {
         // given
         // when
         // then
-        assertThatThrownBy(() -> StudentNumber.of(value))
+        assertThatThrownBy(() -> StudentNumber.valueOf(value))
             .isInstanceOf(IllegalArgumentException.class);
 
       }
@@ -44,7 +44,7 @@ class StudentNumberTest {
         // given
         // when
         // then
-        assertThatThrownBy(() -> StudentNumber.of(value))
+        assertThatThrownBy(() -> StudentNumber.valueOf(value))
             .isInstanceOf(IllegalArgumentException.class);
       }
     }
@@ -59,7 +59,7 @@ class StudentNumberTest {
       void ItReturnInstance(String value) {
         // given
         // when
-        StudentNumber studentNumber = StudentNumber.of(value);
+        StudentNumber studentNumber = StudentNumber.valueOf(value);
 
         // then
         assertThat(studentNumber).isNotNull();
@@ -81,8 +81,8 @@ class StudentNumberTest {
       void ItReturnTrue(String value) {
         // given
         // when
-        StudentNumber studentNumber1 = StudentNumber.of(value);
-        StudentNumber studentNumber2 = StudentNumber.of(value);
+        StudentNumber studentNumber1 = StudentNumber.valueOf(value);
+        StudentNumber studentNumber2 = StudentNumber.valueOf(value);
 
         // then
         assertThat(studentNumber1.equals(studentNumber2)).isTrue();
@@ -98,8 +98,8 @@ class StudentNumberTest {
       void ItReturnFalse() {
         // given
         // when
-        StudentNumber studentNumber1 = StudentNumber.of("60191667");
-        StudentNumber studentNumber2 = StudentNumber.of("12345678");
+        StudentNumber studentNumber1 = StudentNumber.valueOf("60191667");
+        StudentNumber studentNumber2 = StudentNumber.valueOf("12345678");
 
         // then
         assertThat(studentNumber1.equals(studentNumber2)).isFalse();

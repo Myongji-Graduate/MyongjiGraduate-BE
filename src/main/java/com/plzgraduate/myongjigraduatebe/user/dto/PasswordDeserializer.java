@@ -12,6 +12,6 @@ public class PasswordDeserializer extends JsonDeserializer<Password> {
       JsonParser p,
       DeserializationContext ctxt
   ) throws IOException {
-    return Password.of(p.getText());
+    return Password.valueOf(p.getText());
   }
 }

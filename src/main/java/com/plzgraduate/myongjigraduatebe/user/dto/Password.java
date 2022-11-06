@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.user.dto;
 
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import lombok.AccessLevel;
@@ -25,7 +26,8 @@ public class Password {
     }
   }
 
-  public static Password of(String value) {
+  @JsonCreator
+  public static Password valueOf(String value) {
     validate(value);
     return new Password(value);
   }

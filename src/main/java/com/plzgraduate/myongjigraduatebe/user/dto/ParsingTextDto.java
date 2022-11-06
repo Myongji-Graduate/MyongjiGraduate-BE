@@ -22,7 +22,7 @@ public class ParsingTextDto {
   }
 
   private StudentNumber getStudentNumber(String parsingText) {
-    return StudentNumber.of(parsingText.split(", ")[1].substring(4, 12));
+    return StudentNumber.valueOf(parsingText.split(", ")[1].substring(4, 12));
   }
 
   private List<LectureCode> getTakenLectureCodes(
