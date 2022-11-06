@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe;
+package com.plzgraduate.myongjigraduatebe.common.config;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
