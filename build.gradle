@@ -58,6 +58,7 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mysql'
 
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 }
 

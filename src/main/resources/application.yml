@@ -11,3 +11,11 @@ spring:
     open-in-view: false
 server:
   port: ${PORT}
+
+
+jwt:
+  header: "Authorization"
+  prefix: "Bearer"
+  issuer: "plzgraduate"
+  client-secret: ${JWT-SECRET}
+  expiry-seconds: 600
