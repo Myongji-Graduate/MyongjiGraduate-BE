@@ -12,6 +12,6 @@ public class EntryYearConverter implements AttributeConverter<EntryYear, Integer
 
   @Override
   public EntryYear convertToEntityAttribute(Integer dbData) {
-    return EntryYear.of(dbData);
+    return dbData != null ? EntryYear.of(dbData) : null;
   }
 }
