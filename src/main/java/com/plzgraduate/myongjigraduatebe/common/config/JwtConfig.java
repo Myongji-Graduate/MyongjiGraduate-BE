@@ -3,14 +3,19 @@ package com.plzgraduate.myongjigraduatebe.common.config;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.RequiredArgsConstructor;
+import com.auth0.jwt.algorithms.Algorithm;
 
 @Configuration
 @EnableConfigurationProperties(value = {JwtProperties.class})
-@RequiredArgsConstructor
 public class JwtConfig {
 
   private final JwtProperties properties;
+  private final Algorithm algorithm;
+
+  public JwtConfig(JwtProperties properties) {
+    this.properties = properties;
+    this.algorithm = Algorithm.HMAC512(properties.getClientSecret());
+  }
 
   public String getHeader() {
     return properties.getHeader();
@@ -30,5 +35,9 @@ public class JwtConfig {
 
   public int getExpirySeconds() {
     return properties.getExpirySeconds();
+  }
+
+  public Algorithm getAlgorithm() {
+    return algorithm;
   }
 }

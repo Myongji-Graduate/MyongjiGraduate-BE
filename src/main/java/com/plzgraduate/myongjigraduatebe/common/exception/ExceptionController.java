@@ -23,7 +23,13 @@ public class ExceptionController {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ExceptionResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
     logger.warn("HttpMessageNotReadableException: ", e);
-    return ExceptionResponse.of(HttpStatus.BAD_REQUEST, e.getCause().getCause().getMessage());
+    return ExceptionResponse.of(
+        HttpStatus.BAD_REQUEST,
+        e
+            .getCause()
+            .getCause()
+            .getMessage()
+    );
   }
 
   @ExceptionHandler(RuntimeException.class)
