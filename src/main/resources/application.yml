@@ -8,5 +8,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    open-in-view: false
 server:
   port: ${PORT}
