@@ -128,13 +128,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
   }
 
   private Lecture getEditedLecture(long lectureId) {
-    if (lectureRepository
-        .findById(lectureId)
-        .isEmpty()) {
-      throw new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다.");
-    }
-    return lectureRepository
-        .findById(lectureId)
-        .get();
+    return lectureRepository.findById(lectureId).orElseThrow(()->new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다."));
   }
+
 }
