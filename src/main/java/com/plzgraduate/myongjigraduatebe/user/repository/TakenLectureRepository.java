@@ -17,7 +17,7 @@ public interface TakenLectureRepository extends JpaRepository<TakenLecture, Long
   List<TakenLecture> findAllByUserWithFetchJoin(@Param("user") User user);
 
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from TakenLecture t where t.user = :user and t.lecture in :lectures")
   void deleteAllByUserAndLectureIsIn(
       @Param("user") User user,
