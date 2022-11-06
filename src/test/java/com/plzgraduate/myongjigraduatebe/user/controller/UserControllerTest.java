@@ -1,0 +1,152 @@
+package com.plzgraduate.myongjigraduatebe.user.controller;
+
+import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.ResultActions;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plzgraduate.myongjigraduatebe.common.ControllerSetUp;
+import com.plzgraduate.myongjigraduatebe.department.entity.Department;
+import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
+import com.plzgraduate.myongjigraduatebe.user.entity.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
+import com.plzgraduate.myongjigraduatebe.user.entity.User;
+import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
+import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
+import com.plzgraduate.myongjigraduatebe.user.service.UserService;
+
+@WebMvcTest(UserController.class)
+class UserControllerTest extends ControllerSetUp {
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  @MockBean
+  private UserService userService;
+
+  @MockBean
+  private TakenLectureService takenLectureServiceo;
+
+  private static final String BASE_URL = "/api/v1/users";
+
+  private static final long departmentId = 1L;
+
+  private static final Department department = new Department("testDepartment");
+
+  private static final long id = 1L;
+  private static final String userId = "userId";
+  private static final String password = "testpassword";
+  private static final String studentNumber = "60191667";
+  private static final EnglishLevel engLv = EnglishLevel.MIDDLE;
+  private static final User user = new User(UserId.valueOf(userId), password, StudentNumber.valueOf(studentNumber), engLv);
+
+  @BeforeAll
+  static void setUp() {
+    ReflectionTestUtils.setField(department, "id", departmentId);
+    ReflectionTestUtils.setField(user, "id", id);
+    ReflectionTestUtils.setField(user, "department", department);
+  }
+
+  @Nested
+  @DisplayName("CheckValidityUserId 메서드는")
+  class DescribeCheckValidityUserId {
+
+    private final String PATH = "/userid-validity-checks";
+
+    @Nested
+    @DisplayName("이미 있는 UserId라면")
+    class ContextWithExistUserId {
+
+      @Test
+      @DisplayName("중복되지 않았다는 값을 false로 응답한다")
+      void ItResponseWithIsNotDuplicatedValueOfFalse() throws Exception {
+
+        //given
+        UserId existUserId = UserId.valueOf(userId);
+        given(userService.checkValidityUserId(existUserId)).willReturn(new UserIdValidityResponse(existUserId, true));
+
+        String requestBody = objectMapper.writeValueAsString(existUserId);
+
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
+                                                     .post(BASE_URL + PATH)
+                                                     .contentType(MediaType.APPLICATION_JSON)
+                                                     .content(requestBody));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "check duplicated userid",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("userId")
+                        .type(JsonFieldType.STRING)
+                        .description("사용자가 입력한 유저아이디"),
+                    fieldWithPath("isNotDuplicated")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("중복이 아닌 지 여부")
+                )
+            ));
+
+      }
+    }
+    
+    @Nested
+    @DisplayName("존재하지 않는 UserId라면")
+    class ContextWithNotExistUserId {
+
+      @Test
+      @DisplayName("중복되지 않았다는 값을 true로 응답한다")
+      void ItResponseWithIsNotDuplicatedValueOfTrue() throws Exception {
+
+        //given
+        UserId notExistUserId = UserId.valueOf(userId);
+        given(userService.checkValidityUserId(notExistUserId)).willReturn(new UserIdValidityResponse(notExistUserId, false));
+
+        String requestBody = objectMapper.writeValueAsString(notExistUserId);
+
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
+                                                     .post(BASE_URL + PATH)
+                                                     .contentType(MediaType.APPLICATION_JSON)
+                                                     .content(requestBody));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "check duplicated userid",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("userId")
+                        .type(JsonFieldType.STRING)
+                        .description("사용자가 입력한 유저아이디"),
+                    fieldWithPath("isNotDuplicated")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("중복이 아닌 지 여부")
+                )
+            ));
+
+      }
+    }
+  }
+
+}
