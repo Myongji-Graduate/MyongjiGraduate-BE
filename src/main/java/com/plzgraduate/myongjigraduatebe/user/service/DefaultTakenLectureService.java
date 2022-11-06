@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
+import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
@@ -31,15 +32,14 @@ public class DefaultTakenLectureService implements TakenLectureService {
       ParsingTextDto parsingTextDto
   ) {
 
-    validateUser(id);
     User user = userRepository
         .findUserById(id)
-        .get();
+        .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
     if (!(user
         .getStudentNumber()
         .equals(parsingTextDto.getStudentNumber()))) {
-      throw new IllegalArgumentException("해당 학번이 이미 존재합니다");
+      throw new IllegalArgumentException("해당 학번이 이미 존재합니다.");
     }
     List<LectureCode> takenLectureCodes = parsingTextDto.getTakenLectureCods();
     List<Lecture> lectures = lectureRepository.findAllByLectureCodeIsIn(takenLectureCodes);
@@ -62,10 +62,10 @@ public class DefaultTakenLectureService implements TakenLectureService {
 
   @Override
   public TakenLectureResponse showTakenLecture(long id) {
-    validateUser(id);
     User user = userRepository
         .findUserById(id)
-        .get();
+        .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+
     List<Lecture> lectures =
         takenLectureRepository
             .findAllByUserWithFetchJoin(user)
@@ -82,15 +82,14 @@ public class DefaultTakenLectureService implements TakenLectureService {
   @Override
   public void editTakenLecture(
       long id,
-      List<Long> deletedTakenLectures,
-      List<Long> addedTakenLectures
+      EditedTakenLecture editedTakenLecture
   ) {
-    validateUser(id);
     User editUser = userRepository
         .findUserById(id)
-        .get();
-    deleteTakenLecture(editUser, deletedTakenLectures);
-    addTakenLecture(editUser, addedTakenLectures);
+        .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+
+    deleteTakenLecture(editUser, editedTakenLecture.getDeletedTakenLectures());
+    addTakenLecture(editUser, editedTakenLecture.getAddedTakenLectures());
   }
 
   public void deleteTakenLecture(
@@ -101,7 +100,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
         .stream()
         .map(lectureId -> getEditedLecture(lectureId))
         .collect(Collectors.toList());
-    deleteTakenLectures.forEach(lecture -> takenLectureRepository.deleteTakenLectureByUserAndLecture(user, lecture));
+    takenLectureRepository.deleteAllByUserAndLectureIsIn(user, deleteTakenLectures);
   }
 
   public void addTakenLecture(
@@ -118,25 +117,21 @@ public class DefaultTakenLectureService implements TakenLectureService {
             .stream()
             .map(takenLecture -> takenLecture.getLecture())
             .collect(Collectors.toList());
-    addedLectures
+    List<TakenLecture> addedTakenLectures = addedLectures
         .stream()
         .filter(addedLecture -> !previousLectures.contains(addedLecture))
-        .forEach(filteredLecture -> takenLectureRepository.save(new TakenLecture(user, filteredLecture)));
-  }
-
-  private void validateUser(long id) {
-    if (userRepository
-        .findUserById(id)
-        .isEmpty()) {
-      throw new IllegalArgumentException("해당 유저가 없습니다");
-    }
+        .collect(Collectors.toList())
+        .stream()
+        .map(addedLecture -> new TakenLecture(user, addedLecture))
+        .collect(Collectors.toList());
+    takenLectureRepository.saveAll(addedTakenLectures);
   }
 
   private Lecture getEditedLecture(long lectureId) {
     if (lectureRepository
         .findById(lectureId)
         .isEmpty()) {
-      throw new IllegalArgumentException("추가하고자 하는 과목이 존재하지 않습니다");
+      throw new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다.");
     }
     return lectureRepository
         .findById(lectureId)
