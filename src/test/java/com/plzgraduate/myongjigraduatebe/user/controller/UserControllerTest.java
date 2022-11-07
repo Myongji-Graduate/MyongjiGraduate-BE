@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plzgraduate.myongjigraduatebe.common.ControllerSetUp;
+import com.plzgraduate.myongjigraduatebe.common.WithMockUserIsInitialized;
+import com.plzgraduate.myongjigraduatebe.common.WithMockUserIsNotInitialized;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
@@ -241,6 +243,72 @@ class UserControllerTest extends ControllerSetUp {
 
       }
     }
+  }
+
+  @Nested
+  @DisplayName("checkInit 메서드는")
+  class DescribeCheckInit {
+
+    private final String PATH = "/me/init";
+
+    @Nested
+    @WithMockUserIsInitialized
+    @DisplayName("초기화를 이미 진행한 사용자라면")
+    class ContextWithUserIsInitialized {
+
+      @Test
+      @DisplayName("init의 값을 true로 응답한다")
+      void ItResponseWithInitValueTrue() throws Exception {
+
+        //given
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders.get(BASE_URL + PATH));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "is initialization for user",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("init")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("초기화되었다면 ture, 아니라면 false를 반환")
+                )
+            ));
+
+      }
+    }
+
+    @Nested
+    @WithMockUserIsNotInitialized
+    @DisplayName("초기화를 하지 않은 사용자라면")
+    class ContextWithUserIsNotInitialized {
+
+      @Test
+      @DisplayName("init의 값을 false로 응답한다")
+      void ItResponseWithInitValueFalse() throws Exception {
+
+        //given
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders.get(BASE_URL + PATH));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "is initialization for user",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("init")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("초기화되었다면 ture, 아니라면 false를 반환")
+                )
+            ));
+
+      }
+    }
+
   }
 
 }
