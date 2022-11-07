@@ -20,6 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.common.ControllerSetUp;
+import com.plzgraduate.myongjigraduatebe.common.WithMockUserIsInitialized;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import com.plzgraduate.myongjigraduatebe.department.service.DepartmentService;
 import com.plzgraduate.myongjigraduatebe.department.service.dto.AllDepartmentsResponse;
@@ -48,6 +49,7 @@ class DepartmentApiControllerTest extends ControllerSetUp {
   }
 
   @Nested
+  @WithMockUserIsInitialized
   @DisplayName("findAll 메소드는")
   class DescribeFindAll {
 
