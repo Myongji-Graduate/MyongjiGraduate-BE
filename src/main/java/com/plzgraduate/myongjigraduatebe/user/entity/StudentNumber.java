@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,6 +18,7 @@ public class StudentNumber {
   private static final int LENGTH = 8;
   private static final String REG = "^[0-9]{" + LENGTH + "}";
 
+  @JsonValue
   private String value;
 
   private StudentNumber(String value) {
@@ -23,7 +26,7 @@ public class StudentNumber {
   }
 
   @JsonCreator
-  public static StudentNumber valueOf(String value) {
+  public static StudentNumber valueOf(@JsonProperty("studentNumber") String value) {
     validate(value);
     return new StudentNumber(value);
   }
