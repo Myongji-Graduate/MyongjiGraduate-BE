@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.plzgraduate.myongjigraduatebe.auth.PrincipalDetails;
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.entity.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.User;
@@ -28,7 +29,7 @@ public class MockUserNotIsInitializedSecurityContextFactory implements WithSecur
 
     ReflectionTestUtils.setField(user, "id", id);
 
-    PrincipalDetails principalDetails = new PrincipalDetails(user);
+    PrincipalDetails principalDetails = new PrincipalDetails(AuthenticatedUser.from(user));
     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
     securityContext.setAuthentication(authentication);

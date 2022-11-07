@@ -16,9 +16,9 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.plzgraduate.myongjigraduatebe.auth.PrincipalDetails;
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.auth.service.JwtAuthService;
 import com.plzgraduate.myongjigraduatebe.common.config.JwtConfig;
-import com.plzgraduate.myongjigraduatebe.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     HttpServletRequest request = (HttpServletRequest)req;
     HttpServletResponse response = (HttpServletResponse)res;
     try {
-      verifyJwt(request, response);
+      verifyJwt(request);
     } catch (JWTDecodeException ignored) {
     }
 
@@ -46,8 +46,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   }
 
   private void verifyJwt(
-      HttpServletRequest request,
-      HttpServletResponse response
+      HttpServletRequest request
   ) {
     if (SecurityContextHolder
         .getContext()
@@ -65,7 +64,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         .replace(config.getPrefix(), "")
         .trim();
 
-    User user = authService.verify(token);
+    AuthenticatedUser user = authService.verify(token);
 
     if (user == null) {
       return;
