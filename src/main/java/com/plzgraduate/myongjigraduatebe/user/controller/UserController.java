@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
+import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 import com.plzgraduate.myongjigraduatebe.user.service.UserService;
@@ -62,6 +64,14 @@ public class UserController {
       @RequestBody UserId userId
   ) {
     return userService.checkValidityUserId(userId);
+  }
+
+  @PostMapping("/studentNumber-validity-checks")
+  @ResponseStatus(HttpStatus.OK)
+  public StudentNumberValidityResponse checkValidityStudentNumber(
+      @RequestBody StudentNumber studentNumber
+  ) {
+    return userService.checkValidityStudentNumber(studentNumber);
   }
 
 }
