@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plzgraduate.myongjigraduatebe.auth.CurrentUser;
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
@@ -18,7 +19,6 @@ import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserInitCheckResponse;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
-import com.plzgraduate.myongjigraduatebe.user.entity.User;
 import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 import com.plzgraduate.myongjigraduatebe.user.service.UserService;
@@ -80,7 +80,7 @@ public class UserController {
   @GetMapping("/me/init")
   @ResponseStatus(HttpStatus.OK)
   public UserInitCheckResponse checkInit(
-      @CurrentUser User user
+      @CurrentUser AuthenticatedUser user
   ) {
     boolean isInit = user.getName() != null;
     return new UserInitCheckResponse(isInit);

@@ -6,21 +6,22 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.plzgraduate.myongjigraduatebe.user.entity.User;
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class PrincipalDetails implements UserDetails {
 
-  private final User user;
+  private final AuthenticatedUser user;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
 
     Collection<GrantedAuthority> authorities = new ArrayList<>();
     user
-        .getRoles()
+        .getRole()
+        .getRoleList()
         .forEach(role -> authorities.add(() -> role));
 
     return authorities;
@@ -56,7 +57,7 @@ public class PrincipalDetails implements UserDetails {
     return true;
   }
 
-  public User getUser() {
+  public AuthenticatedUser getUser() {
     return user;
   }
 }

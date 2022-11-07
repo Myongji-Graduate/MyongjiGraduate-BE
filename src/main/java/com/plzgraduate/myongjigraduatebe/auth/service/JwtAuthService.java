@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.auth.dto.SignInRequest;
 import com.plzgraduate.myongjigraduatebe.auth.dto.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.common.config.JwtConfig;
@@ -79,7 +80,7 @@ public class JwtAuthService implements AuthService {
         .sign(algorithm);
   }
 
-  public User verify(String token) {
+  public AuthenticatedUser verify(String token) {
     JWTVerifier verifier = JWT
         .require(jwtConfig.getAlgorithm())
         .build();
@@ -89,8 +90,10 @@ public class JwtAuthService implements AuthService {
         .getClaim("id")
         .asLong();
 
-    return userRepository
+    User user = userRepository
         .findById(id)
         .orElse(null);
+
+    return user != null ? AuthenticatedUser.from(user) : null;
   }
 }
