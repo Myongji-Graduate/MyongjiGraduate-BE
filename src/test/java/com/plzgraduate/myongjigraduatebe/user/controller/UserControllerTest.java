@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plzgraduate.myongjigraduatebe.common.ControllerSetUp;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.entity.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
@@ -107,7 +108,7 @@ class UserControllerTest extends ControllerSetUp {
 
       }
     }
-    
+
     @Nested
     @DisplayName("존재하지 않는 UserId라면")
     class ContextWithNotExistUserId {
@@ -142,6 +143,99 @@ class UserControllerTest extends ControllerSetUp {
                     fieldWithPath("isNotDuplicated")
                         .type(JsonFieldType.BOOLEAN)
                         .description("중복이 아닌 지 여부")
+                )
+            ));
+
+      }
+    }
+  }
+
+  @Nested
+  @DisplayName("CheckValidityStudentNumber 메서드는")
+  class DescribeCheckValidityStudentNumber {
+
+    private final String PATH = "/studentNumber-validity-checks";
+
+    @Nested
+    @DisplayName("이미 있는 학번이라면")
+    class ContextWithExistStudentNumber {
+
+      @Test
+      @DisplayName("중복되지 않았다는 값을 false로 응답한다")
+      void ItResponseWithIsNotDuplicatedValueOfFalse() throws Exception {
+
+        //given
+        StudentNumber existStudentNumber = StudentNumber.valueOf(studentNumber);
+        given(userService.checkValidityStudentNumber(existStudentNumber)).willReturn(new StudentNumberValidityResponse(
+            existStudentNumber,
+            true
+        ));
+
+        String requestBody = objectMapper.writeValueAsString(existStudentNumber);
+
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
+                                                     .post(BASE_URL + PATH)
+                                                     .contentType(MediaType.APPLICATION_JSON)
+                                                     .content(requestBody));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "check duplicated student number",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("studentNumber")
+                        .type(JsonFieldType.STRING)
+                        .description("사용자가 입력한 학번"),
+                    fieldWithPath("isNotDuplicated")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("중복되지 않았다면 true, 중복이라면 false를 반환")
+                )
+            ));
+
+      }
+    }
+
+    @Nested
+    @DisplayName("존재하지 않는 학번이라면")
+    class ContextWithNotExistStudentNumber {
+
+      @Test
+      @DisplayName("중복되지 않았다는 값을 true로 응답한다")
+      void ItResponseWithIsNotDuplicatedValueOfTrue() throws Exception {
+
+        //given
+        StudentNumber notExistStudentNumber = StudentNumber.valueOf(studentNumber);
+        given(userService.checkValidityStudentNumber(notExistStudentNumber)).willReturn(new StudentNumberValidityResponse(
+            notExistStudentNumber,
+            false
+        ));
+
+        String requestBody = objectMapper.writeValueAsString(notExistStudentNumber);
+
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
+                                                     .post(BASE_URL + PATH)
+                                                     .contentType(MediaType.APPLICATION_JSON)
+                                                     .content(requestBody));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "check duplicated student number",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("studentNumber")
+                        .type(JsonFieldType.STRING)
+                        .description("사용자가 입력한 학번"),
+                    fieldWithPath("isNotDuplicated")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("중복되지 않았다면 true, 중복이라면 false를 반환")
                 )
             ));
 
