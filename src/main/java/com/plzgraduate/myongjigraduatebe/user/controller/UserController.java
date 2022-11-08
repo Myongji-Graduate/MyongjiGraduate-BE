@@ -45,7 +45,9 @@ public class UserController {
       @CurrentUser AuthenticatedUser user,
       @RequestBody String parsingText
   ) {
-    takenLectureService.saveTakenLecture(user, new ParsingTextDto(parsingText));
+    ParsingTextDto parsingTextDto = new ParsingTextDto(parsingText);
+    takenLectureService.saveTakenLecture(user, parsingTextDto);
+    userService.saveStudentInfo(user, parsingTextDto);
   }
 
   @PatchMapping("/me/taken-lectures")
@@ -84,6 +86,14 @@ public class UserController {
   ) {
     boolean isInit = user.getName() != null;
     return new UserInitCheckResponse(isInit);
+  }
+
+  @GetMapping("/me/information")
+  @ResponseStatus(HttpStatus.OK)
+  public void showUserInfo(
+      @CurrentUser AuthenticatedUser user
+  ){
+
   }
 
 }

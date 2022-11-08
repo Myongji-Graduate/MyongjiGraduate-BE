@@ -71,6 +71,11 @@ public class User extends BaseEntity {
     this.engLv = engLv;
   }
 
+  public void updateStudentInfo(String name, Department department){
+    this.name = name;
+    this.department = department;
+  }
+
   public void updateRole(Role role) {
     this.role = role;
   }
