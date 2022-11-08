@@ -6,19 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class TakenLectureResponse {
-  private final List<TakenLectureDto> takenLectureDtoList;
+  private final List<TakenLectureDto> takenLectures;
 
   private TakenLectureResponse(List<TakenLectureDto> takenLectureDtoList) {
-    this.takenLectureDtoList = takenLectureDtoList;
+    this.takenLectures = takenLectureDtoList;
   }
 
-  public static TakenLectureResponse of(List<TakenLectureDto> takenLectureDtoList){
-    return new TakenLectureResponse(takenLectureDtoList);
+  public static TakenLectureResponse of(List<TakenLectureDto> takenLectureList){
+    return new TakenLectureResponse(takenLectureList);
   }
-
-  public void addTakenLectureDto(TakenLectureDto takenLectureDto){
-    takenLectureDtoList.add(takenLectureDto);
-  }
-
-
 }

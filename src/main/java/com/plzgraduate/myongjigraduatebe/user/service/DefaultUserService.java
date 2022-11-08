@@ -1,10 +1,18 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
+import com.plzgraduate.myongjigraduatebe.department.entity.Department;
+import com.plzgraduate.myongjigraduatebe.department.repository.DepartmentRepository;
+import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentPageInfoResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
+import com.plzgraduate.myongjigraduatebe.user.entity.User;
 import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import com.plzgraduate.myongjigraduatebe.user.repository.UserRepository;
 
@@ -15,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class DefaultUserService implements UserService {
 
   private final UserRepository userRepository;
+  private final DepartmentRepository departmentRepository;
 
   @Override
   public UserIdValidityResponse checkValidityUserId(UserId userId) {
@@ -27,4 +36,19 @@ public class DefaultUserService implements UserService {
     boolean isDuplicated = userRepository.existsByStudentNumber(studentNumber);
     return new StudentNumberValidityResponse(studentNumber, isDuplicated);
   }
+
+  @Override
+  public void saveStudentInfo(
+      AuthenticatedUser authUser,
+      ParsingTextDto parsingTextDto
+  ) {
+    User user = userRepository
+        .findUserById(authUser.getId())
+        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+    Department department = departmentRepository
+        .findByName(parsingTextDto.getStudentDepartment())
+        .orElseThrow(() -> new IllegalArgumentException("해당 과목이 없습니다."));
+    user.updateStudentInfo(parsingTextDto.getStudentName(), department);
+  }
+
 }
