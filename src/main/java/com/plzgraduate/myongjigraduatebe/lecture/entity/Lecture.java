@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.entity;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.persistence.Column;
@@ -61,5 +62,25 @@ public class Lecture extends BaseEntity {
 
   public Optional<String> getDuplicatedCode() {
     return duplicatedLectureCode == null ? Optional.empty() : Optional.of(duplicatedLectureCode.getCode());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Lecture lecture = (Lecture)o;
+    return Objects.equals(lectureCode.getCode(), lecture.lectureCode.getCode());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+
+    hash = 31 * hash + lectureCode.getCode().hashCode();
+    return hash;
   }
 }
