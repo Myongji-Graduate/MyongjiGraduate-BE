@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
@@ -28,18 +29,18 @@ public class DefaultTakenLectureService implements TakenLectureService {
 
   @Override
   public void saveTakenLecture(
-      long id,
+      AuthenticatedUser authUser,
       ParsingTextDto parsingTextDto
   ) {
 
     User user = userRepository
-        .findUserById(id)
-        .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        .findUserById(authUser.getId())
+        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
     if (!(user
         .getStudentNumber()
         .equals(parsingTextDto.getStudentNumber()))) {
-      throw new IllegalArgumentException("해당 학번이 이미 존재합니다.");
+      throw new IllegalArgumentException("본인의 PDF 파일을 올려주세요. ");
     }
     List<LectureCode> takenLectureCodes = parsingTextDto.getTakenLectureCods();
     List<Lecture> lectures = lectureRepository.findAllByLectureCodeIsIn(takenLectureCodes);
@@ -61,10 +62,10 @@ public class DefaultTakenLectureService implements TakenLectureService {
   }
 
   @Override
-  public TakenLectureResponse showTakenLecture(long id) {
+  public TakenLectureResponse showTakenLecture(AuthenticatedUser authUser) {
     User user = userRepository
-        .findUserById(id)
-        .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        .findUserById(authUser.getId())
+        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
     List<Lecture> lectures =
         takenLectureRepository
@@ -81,12 +82,12 @@ public class DefaultTakenLectureService implements TakenLectureService {
 
   @Override
   public void editTakenLecture(
-      long id,
+      AuthenticatedUser authUser,
       EditedTakenLecture editedTakenLecture
   ) {
     User editUser = userRepository
-        .findUserById(id)
-        .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        .findUserById(authUser.getId())
+        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
     deleteTakenLecture(editUser, editedTakenLecture.getDeletedTakenLectures());
     addTakenLecture(editUser, editedTakenLecture.getAddedTakenLectures());
@@ -128,7 +129,9 @@ public class DefaultTakenLectureService implements TakenLectureService {
   }
 
   private Lecture getEditedLecture(long lectureId) {
-    return lectureRepository.findById(lectureId).orElseThrow(()->new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다."));
+    return lectureRepository
+        .findById(lectureId)
+        .orElseThrow(() -> new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다."));
   }
 
 }
