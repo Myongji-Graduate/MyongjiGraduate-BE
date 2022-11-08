@@ -2,20 +2,21 @@ package com.plzgraduate.myongjigraduatebe.user.service;
 
 import java.util.List;
 
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 
 public interface TakenLectureService {
   void saveTakenLecture(
-      long userId,
+      AuthenticatedUser user,
       ParsingTextDto parsingTextDto
   );
 
-  TakenLectureResponse showTakenLecture(long userId);
+  TakenLectureResponse showTakenLecture(AuthenticatedUser user);
 
   void editTakenLecture(
-      long id,
+      AuthenticatedUser user,
       EditedTakenLecture editedTakenLecture
   );
 }

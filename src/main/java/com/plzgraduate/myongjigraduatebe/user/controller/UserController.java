@@ -33,30 +33,30 @@ public class UserController {
   private final TakenLectureService takenLectureService;
   private final UserService userService;
 
-  @GetMapping("/{id}/taken-lectures")
+  @GetMapping("/me/taken-lectures")
   @ResponseStatus(HttpStatus.OK)
-  public TakenLectureResponse show(@PathVariable("id") long id) {
-    return takenLectureService.showTakenLecture(id);
+  public TakenLectureResponse show(@CurrentUser AuthenticatedUser user) {
+    return takenLectureService.showTakenLecture(user);
   }
 
-  @PostMapping("/{id}/taken-lectures")
+  @PostMapping("/me/taken-lectures")
   @ResponseStatus(HttpStatus.OK)
   public void save(
-      @PathVariable("id") long id,
+      @CurrentUser AuthenticatedUser user,
       @RequestBody String parsingText
   ) {
-    takenLectureService.saveTakenLecture(id, new ParsingTextDto(parsingText));
+    takenLectureService.saveTakenLecture(user, new ParsingTextDto(parsingText));
   }
 
-  @PatchMapping("/{id}/taken-lectures")
+  @PatchMapping("/me/taken-lectures")
   @ResponseStatus(HttpStatus.OK)
   public void edit(
-      @PathVariable("id") long id,
+      @CurrentUser AuthenticatedUser user,
       @RequestBody
       EditedTakenLecture editedTakenLecture
   ) {
     takenLectureService.editTakenLecture(
-        id,
+        user,
         editedTakenLecture
     );
   }
