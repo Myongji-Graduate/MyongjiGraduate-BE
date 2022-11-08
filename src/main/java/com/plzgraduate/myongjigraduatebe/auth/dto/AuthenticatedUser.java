@@ -1,7 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.auth.dto;
 
+import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
+import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import com.plzgraduate.myongjigraduatebe.user.entity.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.User;
+import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,40 +15,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class AuthenticatedUser {
   private final long id;
-  private final String userId;
+  private final UserId userId;
   private final String password;
-  private final String studentNumber;
-  private final int entryYear;
+  private final StudentNumber studentNumber;
+  private final EntryYear entryYear;
   private final String name;
   private final EnglishLevel engLv;
-  private final String departmentName;
+  private final Department department;
   private final User.Role role;
 
   public static AuthenticatedUser from(User user) {
-    long id = user.getId();
-    String userId = user
-        .getUserId()
-        .getId();
-    String password = user.getPassword();
-    String studentNumber = user.getStudentNumber() == null
-        ? null
-        : user
-        .getStudentNumber()
-        .getValue();
-    int entryYear = user
-        .getEntryYear() == null
-        ? -1
-        : user
-        .getEntryYear()
-        .getValue();
-    String name = user.getName();
-    EnglishLevel engLv = user.getEngLv();
-    String departmentName = user.getDepartment() == null
-        ? null
-        : user
-        .getDepartment()
-        .getName();
-    User.Role role = user.getRole();
-    return new AuthenticatedUser(id, userId, password, studentNumber, entryYear, name, engLv, departmentName, role);
+    return new AuthenticatedUser(
+        user.getId(),
+        user.getUserId(),
+        user.getPassword(),
+        user.getStudentNumber(),
+        user.getEntryYear(),
+        user.getName(),
+        user.getEngLv(),
+        user.getDepartment(),
+        user.getRole()
+    );
   }
 }
