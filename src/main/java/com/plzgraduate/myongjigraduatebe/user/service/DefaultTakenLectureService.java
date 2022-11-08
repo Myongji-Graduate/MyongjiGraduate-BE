@@ -40,9 +40,10 @@ public class DefaultTakenLectureService implements TakenLectureService {
     if (!(user
         .getStudentNumber()
         .equals(parsingTextDto.getStudentNumber()))) {
-      throw new IllegalArgumentException("본인의 PDF 파일을 올려주세요. ");
+      throw new IllegalArgumentException("본인의 PDF 파일을 올려주세요.");
     }
-    List<LectureCode> takenLectureCodes = parsingTextDto.getTakenLectureCods();
+
+    List<LectureCode> takenLectureCodes = parsingTextDto.getTakenLectureCodes();
     List<Lecture> lectures = lectureRepository.findAllByLectureCodeIsIn(takenLectureCodes);
     List<Lecture> previousLectures =
         takenLectureRepository
