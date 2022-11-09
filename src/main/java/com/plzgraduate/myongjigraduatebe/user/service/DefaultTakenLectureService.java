@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
@@ -21,6 +22,7 @@ import com.plzgraduate.myongjigraduatebe.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DefaultTakenLectureService implements TakenLectureService {
   private final LectureRepository lectureRepository;
