@@ -6,14 +6,12 @@ import lombok.Getter;
 public class ChapelResult {
 
   private final boolean isCompleted;
-  private final int totalCount;
+  private final int totalCount = 4;
   private final int takenCount;
 
   public ChapelResult(
-      int totalCount,
       int takenCount
   ) {
-    this.totalCount = totalCount;
     this.takenCount = takenCount;
     this.isCompleted = totalCount <= takenCount;
   }

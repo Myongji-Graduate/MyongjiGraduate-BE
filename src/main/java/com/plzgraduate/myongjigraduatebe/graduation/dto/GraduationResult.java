@@ -1,41 +1,70 @@
 package com.plzgraduate.myongjigraduatebe.graduation.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class GraduationResult {
 
   private final BasicInfo basicInfo;
-  private final boolean isGraduated;
+  private boolean isGraduated;
   private final ChapelResult chapelResult;
-  private final DetailGraduationResult commonCulture;
-  private final DetailGraduationResult coreCulture;
-  private final DetailGraduationResult basicAcademicalCulture;
-  private final DetailGraduationResult major;
-  private final DetailGraduationResult normalCulture;
-  private final DetailGraduationResult freeElective;
+  private DetailGraduationResult commonCulture;
+  private DetailGraduationResult coreCulture;
+  private DetailGraduationResult basicAcademicalCulture;
+  private DetailGraduationResult major;
+  private DetailGraduationResult normalCulture;
+  private DetailGraduationResult freeElective;
 
-  @Builder
-  private GraduationResult(
+  public GraduationResult(
       BasicInfo basicInfo,
-      boolean isGraduated,
-      ChapelResult chapelResult,
-      DetailGraduationResult commonCulture,
-      DetailGraduationResult coreCulture,
-      DetailGraduationResult basicAcademicalCulture,
-      DetailGraduationResult major,
-      DetailGraduationResult normalCulture,
-      DetailGraduationResult freeElective
+      ChapelResult chapelResult
   ) {
     this.basicInfo = basicInfo;
-    this.isGraduated = isGraduated;
     this.chapelResult = chapelResult;
-    this.commonCulture = commonCulture;
-    this.coreCulture = coreCulture;
-    this.basicAcademicalCulture = basicAcademicalCulture;
-    this.major = major;
-    this.normalCulture = normalCulture;
-    this.freeElective = freeElective;
+  }
+
+  public void setCommonCultureResult(DetailGraduationResult result) {
+    this.commonCulture = result;
+  }
+
+  public void setCoreCultureResult(DetailGraduationResult result) {
+    this.coreCulture = result;
+  }
+
+  public void setBasicAcademicalCultureResult(DetailGraduationResult result) {
+    this.basicAcademicalCulture = result;
+  }
+
+  public void setMajorResult(DetailGraduationResult result) {
+    this.major = result;
+  }
+
+  public void setNormalResult(DetailGraduationResult result) {
+    this.normalCulture = result;
+  }
+
+  public void setFreeElectiveResult(DetailGraduationResult result) {
+    this.freeElective = result;
+  }
+
+  public void checkGraduation() {
+    updateLeftCredit();
+
+    this.isGraduated = commonCulture.isCompleted() &&
+        coreCulture.isCompleted() &&
+        basicAcademicalCulture.isCompleted() &&
+        major.isCompleted() &&
+        normalCulture.isCompleted() &&
+        freeElective.isCompleted();
+  }
+
+  private void updateLeftCredit() {
+    int leftCultureCredit =
+        commonCulture.updateTakenCredit() + coreCulture.updateTakenCredit() + basicAcademicalCulture.updateTakenCredit();
+    normalCulture.addTakenCredit(leftCultureCredit);
+
+    int leftFreeCredit = major.updateTakenCredit() + normalCulture.updateTakenCredit();
+    freeElective.addTakenCredit(leftFreeCredit);
+    freeElective.updateTakenCredit();
   }
 }
