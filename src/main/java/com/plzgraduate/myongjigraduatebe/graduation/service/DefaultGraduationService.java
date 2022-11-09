@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.plzgraduate.myongjigraduatebe.department.entity.Department;
-import com.plzgraduate.myongjigraduatebe.department.repository.DepartmentRepository;
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.BasicInfo;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.dto.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.GraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.dto.Transcript;
+import com.plzgraduate.myongjigraduatebe.graduation.entity.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.entity.GraduationLecture;
 import com.plzgraduate.myongjigraduatebe.graduation.entity.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.entity.LectureCategory;
-import com.plzgraduate.myongjigraduatebe.graduation.repository.GraduationRepository;
+import com.plzgraduate.myongjigraduatebe.graduation.repository.GraduationLectureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
-import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
+import com.plzgraduate.myongjigraduatebe.user.entity.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,319 +31,215 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DefaultGraduationService implements GraduationService {
 
-  private final GraduationRepository graduationRepository;
-  private final DepartmentRepository departmentRepository;
+  private final GraduationLectureRepository graduationLectureRepository;
   private final LectureRepository lectureRepository;
+  private final TakenLectureService takenLectureService;
 
-  @Transactional(readOnly = true)
   @Override
-  public GraduationResult assess(String parsingText) {
-    // String parsingText = PdfParser.parseString(request);
-    // String parsingText = PdfParser.getSampleString();
-    Transcript transcript = textToTranscript(parsingText); // PDF Parsing String -> 객체 변환코드
-
-    Department department = departmentRepository
-        .findByName(transcript.getDepartmentName())
-        .orElseThrow(() -> new IllegalArgumentException(transcript.getDepartmentName() + " 이름의 학과를 찾을 수 없습니다."));
-
-    return assessGraduation(transcript, department);
-  }
-
-  private GraduationResult assessGraduation(
-      Transcript transcript,
-      Department department
-  ) {
-    GraduationRequirement requirement = graduationRepository
-        .findRequirementByDepartmentAndEntryYear(
-            department,
-            transcript.getEntryYear()
-        )
-        .orElseThrow(() -> new IllegalArgumentException("졸업 요건을 조회할 수 없습니다."));
-    Map<LectureCategory, List<GraduationLecture>> categoryToLectures = new HashMap<>(LectureCategory.values().length);
-    List<GraduationLecture> graduationLectures = graduationRepository.findAllGraduationLecture(requirement);
-    List<Lecture> takenLectures = lectureRepository.findAllByLectureCodeIsIn(transcript.getTakenLectureCodes());
-    List<GraduationLecture> takenGraduationLectures = graduationRepository.findAllByGraduationRequirementAndLectureIsIn(
-        requirement,
-        takenLectures
+  public GraduationResult getResult(AuthenticatedUser user) {
+    List<TakenLecture> takenLectures = takenLectureService.findAllByUserId(user.getId());
+    List<GraduationLecture> graduationLectures = graduationLectureRepository.findAllByDepartmentAndEntryYearWithFetchJoin(
+        user.getDepartment(),
+        user.getEntryYear()
     );
 
-    for (GraduationLecture graduationLecture : graduationLectures) {
-      LectureCategory category = graduationLecture.getLectureCategory();
-      if (!categoryToLectures.containsKey(category)) {
-        categoryToLectures.put(category, new ArrayList<>());
-      }
-      if (graduationLecture.getLectureCategory() == LectureCategory.COMMON_CULTURE_ENGLISH &&
-          !transcript
-              .getEnglishLevel()
-              .getLectureCodeList()
-              .contains(graduationLecture
-                            .getLecture()
-                            .getLectureCode())) {
-        continue;
-      }
-      List<GraduationLecture> lectures = categoryToLectures.get(category);
-      lectures.add(graduationLecture);
-    }
+    return createResult(user, takenLectures, graduationLectures);
+  }
 
-    boolean creditResult = requirement.checkCredit(transcript);
-    Lecture chapelLecture = categoryToLectures
-        .get(LectureCategory.COMMON_CULTURE_CHAPEL)
+  private GraduationResult createResult(
+      AuthenticatedUser user,
+      List<TakenLecture> takenLectures,
+      List<GraduationLecture> graduationLectures
+  ) {
+    GraduationRequirement requirement = graduationLectures
         .get(0)
-        .getLecture();
-    long countChapel = transcript
-        .getTakenLectureCodes()
-        .stream()
-        .filter(lc -> lc
-            .getCode()
-            .equals(chapelLecture.getCode()))
-        .count();
-    ChapelResult chapelResult = new ChapelResult(LectureCategory.COMMON_CULTURE_CHAPEL.getTotalCredit(), (int)countChapel);
+        .getGraduationRequirement();
 
-    DetailGraduationResult commonCultureResult = assessByLectureCategories(
-        requirement,
-        categoryToLectures,
-        takenGraduationLectures,
-        LectureCategory.findAllCommonCategory()
-    );
-
-    DetailGraduationResult coreCultureResult = assessByLectureCategories(
-        requirement,
-        categoryToLectures,
-        takenGraduationLectures,
-        LectureCategory.findAllCoreCategory()
-    );
-    DetailGraduationResult basicAcademicalCultureResult = assessByLectureCategories(
-        requirement,
-        categoryToLectures,
-        takenGraduationLectures,
-        List.of(LectureCategory.BASIC_ACADEMICAL_CULTURE)
-    );
-    DetailGraduationResult majorResult = assessByLectureCategories(
-        requirement,
-        categoryToLectures,
-        takenGraduationLectures,
-        List.of(LectureCategory.MAJOR)
-    );
-    DetailGraduationResult normalCultureResult = assessNormalCulture(
-        requirement,
-        transcript,
-        List.of(
-            commonCultureResult,
-            coreCultureResult,
-            basicAcademicalCultureResult
-        )
-    );
-    DetailGraduationResult freeElectiveResult = assessFreeElective(
-        requirement,
-        transcript,
-        List.of(
-            majorResult,
-            normalCultureResult
-        )
-    );
-
-    boolean graduated = checkGraduated(
-        creditResult,
-        chapelResult,
-        commonCultureResult,
-        coreCultureResult,
-        basicAcademicalCultureResult,
-        majorResult,
-        normalCultureResult,
-        freeElectiveResult
-    );
-
-    BasicInfo basicInfo = BasicInfo
-        .builder()
-        .name(transcript.getStudentName())
-        .studentNumber(transcript.getStudentNumber())
-        .totalCredit(requirement.getTotalCredit())
-        .takenCredit((int)(transcript.getTakenCredit() - (0.5 * chapelResult.getTakenCount())))
-        .department(department)
-        .build();
-
-    return GraduationResult
-        .builder()
-        .basicInfo(basicInfo)
-        .isGraduated(graduated)
-        .chapelResult(chapelResult)
-        .commonCulture(commonCultureResult)
-        .coreCulture(coreCultureResult)
-        .basicAcademicalCulture(basicAcademicalCultureResult)
-        .major(majorResult)
-        .normalCulture(normalCultureResult)
-        .freeElective(freeElectiveResult)
-        .build();
-  }
-
-  private boolean checkGraduated(
-      boolean creditResult,
-      ChapelResult chapelResult,
-      DetailGraduationResult commonCultureResult,
-      DetailGraduationResult coreCultureResult,
-      DetailGraduationResult basicAcademicalCultureResult,
-      DetailGraduationResult majorResult,
-      DetailGraduationResult normalCultureResult,
-      DetailGraduationResult freeElectiveResult
-  ) {
-    return creditResult &&
-        chapelResult.isCompleted() &&
-        commonCultureResult.isCompleted() &&
-        coreCultureResult.isCompleted() &&
-        basicAcademicalCultureResult.isCompleted() &&
-        majorResult.isCompleted() &&
-        normalCultureResult.isCompleted() &&
-        freeElectiveResult.isCompleted();
-  }
-
-  private DetailGraduationResult assessFreeElective(
-      GraduationRequirement requirement,
-      Transcript transcript,
-      List<DetailGraduationResult> graduationResults
-  ) {
-    int takenCredit = transcript.getFreeElectiveCredit();
-
-    for (DetailGraduationResult result : graduationResults) {
-      if (result.getTotalCredit() < result.getTakenCredit()) {
-        takenCredit += result.getTakenCredit() - result.getTotalCredit();
-      }
-    }
-
-    return DetailGraduationResult
-        .builder()
-        .totalCredit(requirement.getFreeElectiveCredit())
-        .takenCredit(takenCredit)
-        .detailCategory(List.of())
-        .build();
-  }
-
-  private DetailGraduationResult assessNormalCulture(
-      GraduationRequirement requirement,
-      Transcript transcript,
-      List<DetailGraduationResult> graduationResults
-  ) {
-    int takenNormalCredit = transcript.getNormalCultureCredit();
-
-    for (DetailGraduationResult result : graduationResults) {
-      if (result.getTotalCredit() < result.getTakenCredit()) {
-        takenNormalCredit += result.getTakenCredit() - result.getTotalCredit();
-      }
-    }
-
-    return DetailGraduationResult
-        .builder()
-        .totalCredit(requirement.getNormalCultureCredit())
-        .takenCredit(takenNormalCredit)
-        .detailCategory(List.of())
-        .build();
-  }
-
-  private DetailGraduationResult assessByLectureCategories(
-      GraduationRequirement requirement,
-      Map<LectureCategory, List<GraduationLecture>> categoryToLectures,
-      List<GraduationLecture> takenGraduationLectures,
-      List<LectureCategory> categories
-  ) {
     int takenCredit = 0;
-    List<DetailCategoryResult> detailCategory = new ArrayList<>();
+    int takenChapelCount = 0;
 
-    for (LectureCategory category : categories) {
-      int totalCredit = categories.size() != 1 ? category.getTotalCredit() : requirement.getTotalCategoryCredit(category);
-      DetailCategoryResult categoryResult = new DetailCategoryResult(category, totalCredit);
-      List<GraduationLecture> graduationLectures = categoryToLectures.get(category);
-      categoryResult.addAllRequiredLectures(graduationLectures);
+    for (TakenLecture tl : takenLectures) {
+      Lecture lecture = tl.getLecture();
+      takenCredit += lecture.getCredit();
 
-      takenGraduationLectures.forEach(graduationLecture -> {
-        if (category != graduationLecture.getLectureCategory()) {
-          return;
-        }
-
-        categoryResult.addTakenLecture(graduationLecture);
-      });
-
-      categoryResult.checkCompleted();
-      takenCredit += categoryResult.getTakenCredits();
-      detailCategory.add(categoryResult);
+      if (lecture
+          .getName()
+          .equals("채플")) {
+        takenChapelCount++;
+      }
     }
-    LectureCategory category;
-    if (categories.size() == 1) {
-      category = categories.get(0);
-    } else if (categories.get(0) == LectureCategory
-        .findAllCommonCategory()
-        .get(0)) {
-      category = LectureCategory.COMMON_CULTURE;
-    } else {
-      category = LectureCategory.CORE_CULTURE;
+
+    ChapelResult chapelResult = new ChapelResult(takenChapelCount);
+
+    BasicInfo basicInfo = getBasicInfo(user, requirement.getTotalCredit(), takenCredit);
+
+    GraduationResult graduationResult = new GraduationResult(basicInfo, chapelResult);
+
+    Set<Lecture> takenLectureSet = takenLectures
+        .stream()
+        .map(TakenLecture::getLecture)
+        .collect(Collectors.toSet());
+
+    updateGraduationCategoricalLectures(graduationLectures, graduationResult, takenLectureSet);
+
+    DetailGraduationResult normalGraduationResult = DetailGraduationResult.createNormalCulture(requirement);
+    DetailGraduationResult freeGraduationResult = DetailGraduationResult.createFreeElective(requirement);
+    updateLeftLectures(takenLectureSet, normalGraduationResult, freeGraduationResult);
+
+    graduationResult.setNormalResult(normalGraduationResult);
+    graduationResult.setFreeElectiveResult(freeGraduationResult);
+
+    graduationResult.checkGraduation();
+
+    return graduationResult;
+  }
+
+  private void updateGraduationCategoricalLectures(
+      List<GraduationLecture> graduationLectures,
+      GraduationResult graduationResult,
+      Set<Lecture> takenLectureSet
+  ) {
+    Map<GraduationCategory, List<GraduationLecture>> categoryToGraduationLecture = makeCategoryMap(graduationLectures);
+
+    for (Map.Entry<GraduationCategory, List<GraduationLecture>> entry : categoryToGraduationLecture.entrySet()) {
+
+      DetailGraduationResult detailGraduationResult = getGraduationResult(takenLectureSet, entry);
+
+      setGraduationResult(graduationResult, entry, detailGraduationResult);
+    }
+  }
+
+  private void updateLeftLectures(
+      Set<Lecture> takenLectureSet,
+      DetailGraduationResult normalGraduationResult,
+      DetailGraduationResult freeGraduationResult
+  ) {
+    for (Lecture leftLecture : takenLectureSet) {
+      if (leftLecture.isMajor()) {
+        freeGraduationResult.addTakenCredit(leftLecture.getCredit());
+      } else {
+        normalGraduationResult.addTakenCredit(leftLecture.getCredit());
+      }
+    }
+  }
+
+  private void setGraduationResult(
+      GraduationResult graduationResult,
+      Map.Entry<GraduationCategory, List<GraduationLecture>> entry,
+      DetailGraduationResult detailGraduationResult
+  ) {
+
+    switch (entry.getKey()) {
+      case COMMON_CULTURE:
+        graduationResult.setCommonCultureResult(detailGraduationResult);
+        return;
+      case CORE_CULTURE:
+        graduationResult.setCoreCultureResult(detailGraduationResult);
+        return;
+      case BASIC_ACADEMICAL_CULTURE:
+        graduationResult.setBasicAcademicalCultureResult(detailGraduationResult);
+        return;
+      case MAJOR:
+        graduationResult.setMajorResult(detailGraduationResult);
+    }
+  }
+
+  private BasicInfo getBasicInfo(
+      AuthenticatedUser user,
+      int totalCredit,
+      int takenCredit
+  ) {
+    return BasicInfo
+        .builder()
+        .name(
+            user.getName())
+        .studentNumber(user
+                           .getStudentNumber()
+                           .getValue())
+        .department(user.getDepartment())
+        .totalCredit(totalCredit)
+        .takenCredit(takenCredit)
+        .build();
+  }
+
+  private DetailGraduationResult getGraduationResult(
+      Set<Lecture> takenLectures,
+      Map.Entry<GraduationCategory, List<GraduationLecture>> entry
+  ) {
+    GraduationCategory category = entry.getKey();
+    List<GraduationLecture> categoryGraduationLectures = entry.getValue();
+
+    int totalCredit = 0;
+    int takenCredit = 0;
+    Map<LectureCategory, DetailCategoryResult> categoryToResult = new HashMap<>(categoryGraduationLectures.size());
+
+    for (GraduationLecture gl : categoryGraduationLectures) {
+      Lecture lecture = gl.getLecture();
+      LectureCategory lectureCategory = gl.getLectureCategory();
+      DetailCategoryResult detailCategoryResult = categoryToResult.getOrDefault(
+          lectureCategory,
+          new DetailCategoryResult(lectureCategory)
+      );
+
+      int credit = lecture.getCredit();
+      boolean taken = isTaken(takenLectures, lecture);
+
+      if (taken) {
+        takenLectures.remove(lecture);
+        takenCredit += lecture.getCredit();
+      }
+
+      detailCategoryResult.add(gl, taken);
+      detailCategoryResult.checkCompleted();
+
+      totalCredit += credit;
     }
 
     return DetailGraduationResult
         .builder()
-        .totalCredit(requirement.getTotalCategoryCredit(category))
+        .categoryName(category.name())
+        .totalCredit(totalCredit)
         .takenCredit(takenCredit)
-        .detailCategory(detailCategory)
+        .detailCategory(categoryToResult.values())
         .build();
   }
 
-  private Transcript textToTranscript(String parsingText) {
-    try {
-      String[] splitText = parsingText.split("\\|");
-
-      String[] header = splitText[0].split(",");
-
-      String[] departmentInfo = header[0].split(" ");
-      String departmentName = departmentInfo[departmentInfo.length - 1];
-
-      String[] studentInfo = header[1].split("\\(");
-      String studentName = studentInfo[0];
-      String studentNumber = studentInfo[1].substring(0, 8);
-
-      EnglishLevel englishLevel = EnglishLevel.parse(splitText[1]);
-
-      String[] creditInfo = splitText[4].split(",");
-      double commonCultureCredit = Double.parseDouble(creditInfo[0].split(" ")[1]);
-      int coreCultureCredit = Integer.parseInt(creditInfo[1].split(" ")[2]);
-      int basicAcademicalCultureCredit = Integer.parseInt(creditInfo[2].split(" ")[2]);
-      int normalCultureCredit = Integer.parseInt(creditInfo[3].split(" ")[2]);
-      int majorCredit = Integer.parseInt(creditInfo[4].split(" ")[2]);
-      int freeElectiveCredit = Integer.parseInt(creditInfo[9].split(" ")[2]);
-      double takenCredit = Double.parseDouble(splitText[5].split(",")[0].split(" ")[3]);
-      List<LectureCode> takenLectureCodes = getTakenLectureCodes(splitText);
-
-      return Transcript
-          .builder()
-          .departmentName(departmentName)
-          .studentName(studentName)
-          .studentNumber(studentNumber)
-          .englishLevel(englishLevel)
-          .commonCultureCredit(commonCultureCredit)
-          .coreCultureCredit(coreCultureCredit)
-          .basicAcademicalCultureCredit(basicAcademicalCultureCredit)
-          .normalCultureCredit(normalCultureCredit)
-          .majorCredit(majorCredit)
-          .freeElectiveCredit(freeElectiveCredit)
-          .takenCredit(takenCredit)
-          .takenLectureCodes(takenLectureCodes)
-          .build();
-
-    } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-      throw new IllegalArgumentException("PDF 형식이 잘못 되었습니다.");
+  private boolean isTaken(
+      Set<Lecture> takenLectures,
+      Lecture lecture
+  ) {
+    boolean taken = takenLectures.contains(lecture);
+    
+    while (!taken) {
+      Lecture duplicatedLecture = lectureRepository
+          .findByLectureCode(lecture.getDuplicatedLectureCode())
+          .orElse(null);
+      if (duplicatedLecture == null) {
+        break;
+      }
+      taken = takenLectures.contains(duplicatedLecture);
     }
+
+    return taken;
   }
 
-  private List<LectureCode> getTakenLectureCodes(
-      String[] splitText
-  ) {
-    int countTakenLecture = (splitText.length - 14) / 8;
-    List<LectureCode> takenLectureCods = new ArrayList<>(countTakenLecture);
-    for (int i = 14; i < splitText.length; i += 7) {
-      String code = splitText[i + 3];
-      if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
-        i++;
+  private Map<GraduationCategory, List<GraduationLecture>> makeCategoryMap(List<GraduationLecture> graduationLectures) {
+    Map<GraduationCategory, List<GraduationLecture>> map = new HashMap<>(graduationLectures.size());
+
+    graduationLectures.forEach(gl -> {
+      GraduationCategory category = gl
+          .getLectureCategory()
+          .getCategory();
+
+      if (map.containsKey(category)) {
+        map.put(category, new ArrayList<>());
       }
 
-      takenLectureCods.add(LectureCode.of(code));
-    }
+      map
+          .get(category)
+          .add(gl);
+    });
 
-    return takenLectureCods;
+    return map;
   }
 }
