@@ -1,8 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
@@ -19,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DefaultUserService implements UserService {
 
@@ -49,6 +49,17 @@ public class DefaultUserService implements UserService {
         .findByName(parsingTextDto.getStudentDepartment())
         .orElseThrow(() -> new IllegalArgumentException("해당 과목이 없습니다."));
     user.updateStudentInfo(parsingTextDto.getStudentName(), department);
+  }
+
+  @Override
+  public StudentPageInfoResponse showStudentInfo(AuthenticatedUser user) {
+
+    return StudentPageInfoResponse
+        .builder()
+        .studentNumber(user.getStudentNumber().getValue())
+        .studentName(user.getName())
+        .department(user.getDepartment().getName())
+        .build();
   }
 
 }

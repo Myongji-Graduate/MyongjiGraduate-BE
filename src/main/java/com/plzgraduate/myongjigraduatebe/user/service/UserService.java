@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentPageInfoResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
@@ -17,4 +18,6 @@ public interface UserService {
   StudentNumberValidityResponse checkValidityStudentNumber(StudentNumber studentNumber);
 
   void saveStudentInfo(AuthenticatedUser user, ParsingTextDto parsingTextDto);
+
+  StudentPageInfoResponse showStudentInfo(AuthenticatedUser user);
 }
