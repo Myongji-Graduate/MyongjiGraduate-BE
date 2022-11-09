@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   boolean existsByStudentNumber(StudentNumber studentNumber);
 
-  @Query("select u from User u join fetch u.department where u.id = :id")
+  @Query("select u from User u left join fetch u.department where u.id = :id")
   Optional<User> findByIdWithFetchJoin(@Param("id") long id);
 
 }
