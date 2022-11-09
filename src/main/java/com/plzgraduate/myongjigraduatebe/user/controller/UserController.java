@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.controller;
 
+import java.util.HashMap;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,6 +17,7 @@ import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentPageInfoResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserInitCheckResponse;
@@ -43,9 +46,9 @@ public class UserController {
   @ResponseStatus(HttpStatus.OK)
   public void save(
       @CurrentUser AuthenticatedUser user,
-      @RequestBody String parsingText
+      @RequestBody HashMap<String, Object> param
   ) {
-    ParsingTextDto parsingTextDto = new ParsingTextDto(parsingText);
+    ParsingTextDto parsingTextDto = new ParsingTextDto(param.get("parsingText").toString());
     takenLectureService.saveTakenLecture(user, parsingTextDto);
     userService.saveStudentInfo(user, parsingTextDto);
   }
@@ -90,10 +93,10 @@ public class UserController {
 
   @GetMapping("/me/information")
   @ResponseStatus(HttpStatus.OK)
-  public void showUserInfo(
+  public StudentPageInfoResponse showUserInfo(
       @CurrentUser AuthenticatedUser user
   ){
-
+    return userService.showStudentInfo(user);
   }
 
 }
