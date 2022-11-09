@@ -12,7 +12,6 @@ import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
 import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
 import com.plzgraduate.myongjigraduatebe.common.entity.EntryYearConverter;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
-import com.plzgraduate.myongjigraduatebe.graduation.dto.Transcript;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -74,55 +73,5 @@ public class GraduationRequirement extends BaseEntity {
     this.normalCultureCredit = normalCultureCredit;
     this.freeElectiveCredit = freeElectiveCredit;
     this.department = department;
-  }
-
-  public boolean checkCredit(Transcript transcript) {
-    if (transcript.getTakenCredit() < totalCredit) {
-      return false;
-    }
-
-    if (transcript.getMajorCredit() < majorCredit) {
-      return false;
-    }
-
-    if (transcript.getCommonCultureCredit() < commonCultureCredit) {
-      return false;
-    }
-
-    if (transcript.getCoreCultureCredit() < coreCultureCredit) {
-      return false;
-    }
-
-    if (transcript.getBasicAcademicalCultureCredit() < basicAcademicalCultureCredit) {
-      return false;
-    }
-    int normalCultureCredit = transcript.getNormalCultureCredit();
-    normalCultureCredit += commonCultureCredit - transcript.getCommonCultureCredit();
-    normalCultureCredit += coreCultureCredit - transcript.getCoreCultureCredit();
-    normalCultureCredit += basicAcademicalCultureCredit - transcript.getBasicAcademicalCultureCredit();
-    if (normalCultureCredit < this.normalCultureCredit) {
-      return false;
-    }
-
-    int freeElectiveCredit = transcript.getFreeElectiveCredit();
-    freeElectiveCredit += normalCultureCredit - this.normalCultureCredit;
-    freeElectiveCredit += transcript.getMajorCredit() - majorCredit;
-
-    return freeElectiveCredit >= this.freeElectiveCredit;
-  }
-
-  public int getTotalCategoryCredit(LectureCategory category) {
-    switch (category) {
-      case MAJOR:
-        return getMajorCredit();
-      case CORE_CULTURE:
-        return getCoreCultureCredit();
-      case COMMON_CULTURE:
-        return getCommonCultureCredit();
-      case BASIC_ACADEMICAL_CULTURE:
-        return getBasicAcademicalCultureCredit();
-      default:
-        return category.getTotalCredit();
-    }
   }
 }

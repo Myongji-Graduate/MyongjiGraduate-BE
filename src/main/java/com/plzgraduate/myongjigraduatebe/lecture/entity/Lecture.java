@@ -33,6 +33,12 @@ public class Lecture extends BaseEntity {
   @Column(columnDefinition = "VARCHAR(255)")
   private LectureCode duplicatedLectureCode;
 
+  @Column(columnDefinition = "BOOLEAN")
+  private boolean isRevoked = false;
+
+  @Column(columnDefinition = "BOOLEAN")
+  private boolean isMajor = false;
+
   public Lecture(
       String name,
       int credit,
@@ -54,6 +60,14 @@ public class Lecture extends BaseEntity {
     this.credit = credit;
     this.lectureCode = LectureCode.of(lectureCode);
     this.duplicatedLectureCode = LectureCode.of(duplicatedLectureCode);
+  }
+
+  public void revoked() {
+    this.isRevoked = true;
+  }
+
+  public void setMajor() {
+    this.isMajor = true;
   }
 
   public String getCode() {
@@ -80,7 +94,9 @@ public class Lecture extends BaseEntity {
   public int hashCode() {
     int hash = 7;
 
-    hash = 31 * hash + lectureCode.getCode().hashCode();
+    hash = 31 * hash + lectureCode
+        .getCode()
+        .hashCode();
     return hash;
   }
 }

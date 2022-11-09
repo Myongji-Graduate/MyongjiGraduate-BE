@@ -74,11 +74,11 @@ public class DefaultTakenLectureService implements TakenLectureService {
         takenLectureRepository
             .findAllByUserWithFetchJoin(user)
             .stream()
-            .map(takenLecture -> takenLecture.getLecture())
+            .map(TakenLecture::getLecture)
             .collect(Collectors.toList());
     List<TakenLectureDto> takenLectureDtoList = lectures
         .stream()
-        .map(lecture -> TakenLectureDto.from(lecture))
+        .map(TakenLectureDto::from)
         .collect(Collectors.toList());
     return TakenLectureResponse.of(takenLectureDtoList);
   }
@@ -96,13 +96,18 @@ public class DefaultTakenLectureService implements TakenLectureService {
     addTakenLecture(editUser, editedTakenLecture.getAddedTakenLectures());
   }
 
+  @Override
+  public List<TakenLecture> findAllByUserId(long id) {
+    return takenLectureRepository.findAllByUserIdWithFetchJoin(id);
+  }
+
   public void deleteTakenLecture(
       User user,
       List<Long> deletedTakenLectures
   ) {
     List<Lecture> deleteTakenLectures = deletedTakenLectures
         .stream()
-        .map(lectureId -> getEditedLecture(lectureId))
+        .map(this::getEditedLecture)
         .collect(Collectors.toList());
     takenLectureRepository.deleteAllByUserAndLectureIsIn(user, deleteTakenLectures);
   }
@@ -113,13 +118,13 @@ public class DefaultTakenLectureService implements TakenLectureService {
   ) {
     List<Lecture> addedLectures = addedTakenLecture
         .stream()
-        .map(lectureId -> getEditedLecture(lectureId))
+        .map(this::getEditedLecture)
         .collect(Collectors.toList());
     List<Lecture> previousLectures =
         takenLectureRepository
             .findAllByUserWithFetchJoin(user)
             .stream()
-            .map(takenLecture -> takenLecture.getLecture())
+            .map(TakenLecture::getLecture)
             .collect(Collectors.toList());
     List<TakenLecture> addedTakenLectures = addedLectures
         .stream()
