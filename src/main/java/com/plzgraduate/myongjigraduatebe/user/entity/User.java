@@ -69,6 +69,11 @@ public class User extends BaseEntity {
     this.password = password;
     this.studentNumber = studentNumber;
     this.engLv = engLv;
+
+    int entryYear = Integer.parseInt(studentNumber
+                                         .getValue()
+                                         .substring(2, 4));
+    this.entryYear = EntryYear.of(entryYear);
   }
 
   public void updateStudentInfo(String name, Department department){
