@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.plzgraduate.myongjigraduatebe.auth.dto.SignInRequest;
 import com.plzgraduate.myongjigraduatebe.auth.dto.SignUpRequest;
-import com.plzgraduate.myongjigraduatebe.auth.service.JwtAuthService;
+import com.plzgraduate.myongjigraduatebe.auth.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private final JwtAuthService authService;
+  private final AuthService authService;
 
   @PostMapping(value = "sign-up")
   @ResponseStatus(HttpStatus.CREATED)
