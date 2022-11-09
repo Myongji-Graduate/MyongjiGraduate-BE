@@ -91,7 +91,7 @@ public class JwtAuthService implements AuthService {
         .asLong();
 
     User user = userRepository
-        .findById(id)
+        .findByIdWithFetchJoin(id)
         .orElse(null);
 
     return user != null ? AuthenticatedUser.from(user) : null;

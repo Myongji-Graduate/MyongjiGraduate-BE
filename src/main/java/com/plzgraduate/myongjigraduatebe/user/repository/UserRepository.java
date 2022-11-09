@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.user.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.User;
@@ -21,4 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   boolean existsByUserId(UserId userId);
 
   boolean existsByStudentNumber(StudentNumber studentNumber);
+
+  @Query(value = "select u from User u join fetch u.department where u.id = :id")
+  Optional<User> findByIdWithFetchJoin(@Param("id") Long id);
 }
