@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.BasicInfo;
@@ -36,6 +37,7 @@ public class DefaultGraduationService implements GraduationService {
   private final TakenLectureService takenLectureService;
 
   @Override
+  @Transactional(readOnly = true)
   public GraduationResult getResult(AuthenticatedUser user) {
     List<TakenLecture> takenLectures = takenLectureService.findAllByUserId(user.getId());
     List<GraduationLecture> graduationLectures = graduationLectureRepository.findAllByDepartmentAndEntryYearWithFetchJoin(
@@ -191,8 +193,8 @@ public class DefaultGraduationService implements GraduationService {
 
       detailCategoryResult.add(gl, taken);
       detailCategoryResult.checkCompleted();
-
       totalCredit += credit;
+      categoryToResult.put(lectureCategory, detailCategoryResult);
     }
 
     return DetailGraduationResult
@@ -231,7 +233,7 @@ public class DefaultGraduationService implements GraduationService {
           .getLectureCategory()
           .getCategory();
 
-      if (map.containsKey(category)) {
+      if (!map.containsKey(category)) {
         map.put(category, new ArrayList<>());
       }
 

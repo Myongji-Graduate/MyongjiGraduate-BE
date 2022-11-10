@@ -39,13 +39,21 @@ public class DetailGraduationResult {
   }
 
   private boolean checkComplete() {
-    boolean isCompleted = true;
+    boolean isCompleted = totalCredit <= takenCredit;
 
+    if (detailCategory == null) {
+      return isCompleted;
+    }
+
+    return isCompleted && checkDetailCategoryComplete();
+  }
+
+  private boolean checkDetailCategoryComplete() {
+    boolean isCompleted = true;
     for (DetailCategoryResult categoryResult : detailCategory) {
       isCompleted = isCompleted && categoryResult.isCompleted();
     }
-
-    return isCompleted && totalCredit <= takenCredit;
+    return isCompleted;
   }
 
   public int updateTakenCredit() {
