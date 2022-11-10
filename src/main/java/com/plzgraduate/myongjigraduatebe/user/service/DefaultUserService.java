@@ -47,7 +47,7 @@ public class DefaultUserService implements UserService {
         .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
     Department department = departmentRepository
         .findByName(parsingTextDto.getStudentDepartment())
-        .orElseThrow(() -> new IllegalArgumentException("해당 과목이 없습니다."));
+        .orElseThrow(() -> new IllegalArgumentException("해당 학과가 없습니다."));
     user.updateStudentInfo(parsingTextDto.getStudentName(), department);
   }
 
