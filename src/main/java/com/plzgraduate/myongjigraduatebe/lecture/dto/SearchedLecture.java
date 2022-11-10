@@ -12,17 +12,20 @@ public class SearchedLecture {
   private final LectureCode lectureCode;
   private final String name;
   private final int credit;
+  private final boolean isRevoked;
 
   @QueryProjection
   public SearchedLecture(
       long id,
       LectureCode lectureCode,
       String name,
-      int credit
+      int credit,
+      boolean isRevoked
   ) {
     this.id = id;
     this.lectureCode = lectureCode;
     this.name = name;
     this.credit = credit;
+    this.isRevoked = isRevoked;
   }
 }
