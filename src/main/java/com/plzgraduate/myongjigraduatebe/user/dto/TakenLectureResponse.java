@@ -6,13 +6,17 @@ import lombok.Getter;
 
 @Getter
 public class TakenLectureResponse {
-  private final List<TakenLectureDto> takenLectures;
 
-  private TakenLectureResponse(List<TakenLectureDto> takenLectureDtoList) {
-    this.takenLectures = takenLectureDtoList;
+  private final int totalCredit;
+  private final List<ShownTakenLectureDto> takenLectures;
+
+  private TakenLectureResponse(int totalCredit, List<ShownTakenLectureDto> shownTakenLectureDtoList) {
+    this.totalCredit = totalCredit;
+    this.takenLectures = shownTakenLectureDtoList;
   }
 
-  public static TakenLectureResponse of(List<TakenLectureDto> takenLectureList){
-    return new TakenLectureResponse(takenLectureList);
+  public static TakenLectureResponse of(List<ShownTakenLectureDto> takenLectureList){
+    int totalCredit = takenLectureList.stream().mapToInt(takenLecture -> takenLecture.getCredit()).sum();
+    return new TakenLectureResponse(totalCredit, takenLectureList);
   }
 }
