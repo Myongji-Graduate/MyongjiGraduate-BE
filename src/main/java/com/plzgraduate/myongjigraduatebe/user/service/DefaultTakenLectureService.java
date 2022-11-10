@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -12,7 +13,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
-import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureDto;
+import com.plzgraduate.myongjigraduatebe.user.dto.SavedTakenLectureDto;
+import com.plzgraduate.myongjigraduatebe.user.dto.ShownTakenLectureDto;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.user.entity.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.entity.User;
@@ -45,21 +47,19 @@ public class DefaultTakenLectureService implements TakenLectureService {
       throw new IllegalArgumentException("본인의 PDF 파일을 올려주세요.");
     }
 
-    List<LectureCode> takenLectureCodes = parsingTextDto.getTakenLectureCodes();
-    List<Lecture> lectures = lectureRepository.findAllByLectureCodeIsIn(takenLectureCodes);
-    List<Lecture> previousLectures =
+    List<SavedTakenLectureDto> savedTakenLectureDtoList = parsingTextDto.getTakenLectureDto();
+    Set<TakenLecture> previousLectures =
         takenLectureRepository
-            .findAllByUserWithFetchJoin(user)
-            .stream()
-            .map(TakenLecture::getLecture)
-            .collect(Collectors.toList());
-    List<Lecture> updatedLectures = lectures
-        .stream()
-        .filter(lecture -> !previousLectures.contains(lecture))
-        .collect(Collectors.toList());
-    List<TakenLecture> updatedTakenLectures = updatedLectures
+            .findAllByUserWithFetchJoin(user);
+    List<TakenLecture> updatedTakenLectures = savedTakenLectureDtoList
         .stream().
-        map(updatedLecture -> new TakenLecture(user, updatedLecture))
+        map(savedTakenLectureDto -> new TakenLecture(
+            user,
+            getLectureToLectureCode(savedTakenLectureDto.getLectureCode()),
+            savedTakenLectureDto.getYear(),
+            savedTakenLectureDto.getSemester()
+        ))
+        .filter(takenLecture -> !previousLectures.contains(takenLecture))
         .collect(Collectors.toList());
     takenLectureRepository.saveAll(updatedTakenLectures);
   }
@@ -70,17 +70,13 @@ public class DefaultTakenLectureService implements TakenLectureService {
         .findUserById(authUser.getId())
         .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
-    List<Lecture> lectures =
+    List<ShownTakenLectureDto> shownTakenLectureDtoList =
         takenLectureRepository
             .findAllByUserWithFetchJoin(user)
             .stream()
-            .map(TakenLecture::getLecture)
+            .map(ShownTakenLectureDto::from)
             .collect(Collectors.toList());
-    List<TakenLectureDto> takenLectureDtoList = lectures
-        .stream()
-        .map(TakenLectureDto::from)
-        .collect(Collectors.toList());
-    return TakenLectureResponse.of(takenLectureDtoList);
+    return TakenLectureResponse.of(shownTakenLectureDtoList);
   }
 
   @Override
@@ -131,7 +127,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
         .filter(addedLecture -> !previousLectures.contains(addedLecture))
         .collect(Collectors.toList())
         .stream()
-        .map(addedLecture -> new TakenLecture(user, addedLecture))
+        .map(addedLecture -> new TakenLecture(user, addedLecture, "커스텀", "커스텀"))
         .collect(Collectors.toList());
     takenLectureRepository.saveAll(addedTakenLectures);
   }
@@ -140,6 +136,10 @@ public class DefaultTakenLectureService implements TakenLectureService {
     return lectureRepository
         .findById(lectureId)
         .orElseThrow(() -> new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다."));
+  }
+
+  private Lecture getLectureToLectureCode(LectureCode lectureCode){
+    return lectureRepository.findByLectureCode(lectureCode).orElseThrow(()-> new IllegalArgumentException("해당과목이 데이터에 존재하지 않습니다."));
   }
 
 }
