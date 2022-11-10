@@ -53,11 +53,15 @@ public class TakenLecture extends BaseEntity {
       return false;
     }
     TakenLecture that = (TakenLecture)o;
-    return user.equals(that.user) && lecture.equals(that.lecture);
+    return Objects.equals(user, that.user) && Objects.equals(lecture, that.lecture)
+        && Objects.equals(takenYear, that.takenYear) && Objects.equals(
+        takenSemester,
+        that.takenSemester
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(user, lecture);
+    return Objects.hash(user, lecture, takenYear, takenSemester);
   }
 }

@@ -5,14 +5,14 @@ import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import lombok.Getter;
 
 @Getter
-public class SavedTakenLectureDto {
+public class TakenLectureDto {
   private final String year;
 
   private final String semester;
 
   private final LectureCode lectureCode;
 
-  private SavedTakenLectureDto(
+  private TakenLectureDto(
       String year,
       String semester,
       LectureCode lectureCode
@@ -22,7 +22,7 @@ public class SavedTakenLectureDto {
     this.lectureCode = lectureCode;
   }
 
-  public static SavedTakenLectureDto from(String year, String semester, LectureCode lectureCode){
-    return new SavedTakenLectureDto(year, semester, lectureCode);
+  public static TakenLectureDto from(String year, String semester, LectureCode lectureCode){
+    return new TakenLectureDto(year, semester, lectureCode);
   }
 }
