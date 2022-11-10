@@ -35,23 +35,23 @@ public class ParsingTextDto {
     return detailDepartment[detailDepartment.length - 1];
   }
 
-  public List<SavedTakenLectureDto> getTakenLectureDto() {
-    List<SavedTakenLectureDto> savedTakenLectureDto = new ArrayList<>();
+  public List<TakenLectureDto> getTakenLectureDto() {
+    List<TakenLectureDto> takenLectureDto = new ArrayList<>();
     for (int i = 16; i < splitText.length; i += 7) {
       if (i + 3 < splitText.length && !Pattern.matches("^[A-Z]+$", splitText[i + 3].substring(0, 1))) {
-        return savedTakenLectureDto;
+        return takenLectureDto;
       }
       String year = splitText[i + 1].split(" ")[0];
-      String semester = splitText[i + 2].split(" ")[1];
+      String semester = splitText[i + 1].split(" ")[1];
       String code = splitText[i + 3];
       char grade = splitText[i + 6].charAt(0);
       if (grade != 'F' && grade != 'N' && grade != 'R') {
-        savedTakenLectureDto.add(SavedTakenLectureDto.from(year, semester, LectureCode.of(code)));
+        takenLectureDto.add(TakenLectureDto.from(year, semester, LectureCode.of(code)));
       }
       if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
         i++;
       }
     }
-    return savedTakenLectureDto;
+    return takenLectureDto;
   }
 }
