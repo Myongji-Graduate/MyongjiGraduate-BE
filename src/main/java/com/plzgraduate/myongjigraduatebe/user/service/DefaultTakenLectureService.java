@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -34,6 +35,11 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private final UserRepository userRepository;
 
   private long chapelCount = 0;
+  private static final long chapelMaxCount = 4;
+  private static final String chapelCode = "KMA02101";
+  private static final String custom = "커스텀";
+
+  private final SecureRandom ran = new SecureRandom();
 
   @Override
   public void saveTakenLecture(
@@ -126,11 +132,9 @@ public class DefaultTakenLectureService implements TakenLectureService {
             .stream()
             .map(TakenLecture::getLecture)
             .collect(Collectors.toList());
-    Lecture chapel = lectureRepository.findByLectureCode(LectureCode.of("KMA02101")).orElseThrow(()->new IllegalArgumentException("데이터베이스 에러"));
-    long addChapelCount = addedLectures
-        .stream()
-        .filter(addedLecture -> addedLecture.equals(chapel))
-        .count();
+    Lecture chapel = lectureRepository
+        .findByLectureCode(LectureCode.of(chapelCode))
+        .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
     this.chapelCount = previousLectures
         .stream()
         .filter(previousLecture -> previousLecture.equals(chapel))
@@ -157,25 +161,31 @@ public class DefaultTakenLectureService implements TakenLectureService {
         .orElseThrow(() -> new IllegalArgumentException("해당과목이 데이터에 존재하지 않습니다."));
   }
 
-  private boolean containLectures(Lecture addTakenLecture, List<Lecture> previousLectures, Lecture chapel){
+  private boolean containLectures(
+      Lecture addTakenLecture,
+      List<Lecture> previousLectures,
+      Lecture chapel
+  ) {
     Set<Lecture> previousLectureSet = new HashSet<>(previousLectures);
-    if(addTakenLecture.equals(chapel) && this.chapelCount <4){
+    if (addTakenLecture.equals(chapel) && this.chapelCount < chapelMaxCount) {
       this.chapelCount++;
       return true;
     }
-    if(!previousLectureSet.contains(addTakenLecture)) {
+    if (!previousLectureSet.contains(addTakenLecture)) {
       return true;
     }
     return false;
   }
 
-  private TakenLecture convertCustomTakenLecture(User user, Lecture addLecture, Lecture chapel){
-    if(addLecture.equals(chapel)){
-      Random random = new Random();
-      return new TakenLecture(user, addLecture, "커스텀", Integer.toString(random.nextInt()));
+  private TakenLecture convertCustomTakenLecture(
+      User user,
+      Lecture addLecture,
+      Lecture chapel
+  ) {
+    if (addLecture.equals(chapel)) {
+      return new TakenLecture(user, addLecture, custom, Integer.toString(ran.nextInt()));
     }
-    return new TakenLecture(user, addLecture,"커스텀", "커스텀");
+    return new TakenLecture(user, addLecture, custom, custom);
   }
-
 
 }
