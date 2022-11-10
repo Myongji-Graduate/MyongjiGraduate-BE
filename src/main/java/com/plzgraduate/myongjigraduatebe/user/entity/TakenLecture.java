@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -26,11 +28,36 @@ public class TakenLecture extends BaseEntity {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_LECTURE_TAKEN_LECTURE"))
   private Lecture lecture;
 
+  private String takenYear;
+
+  private String takenSemester;
+
   public TakenLecture(
       User user,
-      Lecture lecture
+      Lecture lecture,
+      String takenYear,
+      String takenSemester
   ) {
     this.user = user;
     this.lecture = lecture;
+    this.takenYear = takenYear;
+    this.takenSemester = takenSemester;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    TakenLecture that = (TakenLecture)o;
+    return user.equals(that.user) && lecture.equals(that.lecture);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(user, lecture);
   }
 }
