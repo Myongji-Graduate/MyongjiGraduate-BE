@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GraduationLecture extends BaseEntity {
 
-  @Column(nullable = false)
+  @Column(nullable = false, columnDefinition = "TINYINT")
   private boolean mandatory;
 
   @ManyToOne(fetch = FetchType.LAZY)

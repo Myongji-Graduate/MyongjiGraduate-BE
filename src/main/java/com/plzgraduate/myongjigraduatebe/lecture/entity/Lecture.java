@@ -33,10 +33,10 @@ public class Lecture extends BaseEntity {
   @Column(columnDefinition = "VARCHAR(255)")
   private LectureCode duplicatedLectureCode;
 
-  @Column(columnDefinition = "BOOLEAN")
+  @Column(columnDefinition = "TINYINT")
   private boolean isRevoked = false;
 
-  @Column(columnDefinition = "BOOLEAN")
+  @Column(columnDefinition = "TINYINT")
   private boolean isMajor = false;
 
   public Lecture(

@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 public class LectureCode {
 
   private static final String ERROR_MESSAGE = "Lecture Code가 올바르지 않습니다.";
-  private static final int CODE_LENGTH = 8;
-  private static final String CODE_REGEX = "^[A-Z]{3}[0-9]{5}$";
+  private static final int MIN_CODE_LENGTH = 5;
+  private static final int MAX_CODE_LENGTH = 8;
+  private static final String CODE_REGEX = "^[A-Z]{2,3}[0-9]{3,5}$";
 
   @JsonValue
   private String code;
@@ -38,7 +39,7 @@ public class LectureCode {
   }
 
   private void validateLength(String code) {
-    if (code.length() != CODE_LENGTH) {
+    if (code.length() < MIN_CODE_LENGTH || MAX_CODE_LENGTH < code.length()) {
       throw new IllegalArgumentException(ERROR_MESSAGE);
     }
   }
