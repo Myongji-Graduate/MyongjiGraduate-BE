@@ -88,7 +88,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
         .findUserById(authUser.getId())
         .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
-    deleteTakenLecture(editUser, editedTakenLecture.getDeletedTakenLectures());
+    deleteTakenLecture(editedTakenLecture.getDeletedTakenLectures());
     addTakenLecture(editUser, editedTakenLecture.getAddedTakenLectures());
   }
 
@@ -98,14 +98,11 @@ public class DefaultTakenLectureService implements TakenLectureService {
   }
 
   public void deleteTakenLecture(
-      User user,
       List<Long> deletedTakenLectures
   ) {
-    List<Lecture> deleteTakenLectures = deletedTakenLectures
-        .stream()
-        .map(this::getEditedLecture)
-        .collect(Collectors.toList());
-    takenLectureRepository.deleteAllByUserAndLectureIsIn(user, deleteTakenLectures);
+    if(deletedTakenLectures.size()!=0){
+      takenLectureRepository.deleteAllByIdIsIn(deletedTakenLectures);
+    }
   }
 
   public void addTakenLecture(
@@ -125,8 +122,6 @@ public class DefaultTakenLectureService implements TakenLectureService {
     List<TakenLecture> addedTakenLectures = addedLectures
         .stream()
         .filter(addedLecture -> !previousLectures.contains(addedLecture))
-        .collect(Collectors.toList())
-        .stream()
         .map(addedLecture -> new TakenLecture(user, addedLecture, "커스텀", "커스텀"))
         .collect(Collectors.toList());
     takenLectureRepository.saveAll(addedTakenLectures);

@@ -25,4 +25,6 @@ public interface TakenLectureRepository extends JpaRepository<TakenLecture, Long
 
   @Query(value = "select t from TakenLecture t join fetch t.lecture where t.user.id = :id")
   List<TakenLecture> findAllByUserIdWithFetchJoin(@Param("id") long id);
+
+  void deleteAllByIdIsIn(List<Long> id);
 }
