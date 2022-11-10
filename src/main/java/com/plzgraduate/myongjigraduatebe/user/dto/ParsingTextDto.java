@@ -8,10 +8,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class ParsingTextDto {
   private final String[] splitText;
 
