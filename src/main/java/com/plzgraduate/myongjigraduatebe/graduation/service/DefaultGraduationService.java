@@ -210,19 +210,20 @@ public class DefaultGraduationService implements GraduationService {
       Set<Lecture> takenLectures,
       Lecture lecture
   ) {
-    boolean taken = takenLectures.contains(lecture);
-    
-    while (!taken) {
-      Lecture duplicatedLecture = lectureRepository
-          .findByLectureCode(lecture.getDuplicatedLectureCode())
-          .orElse(null);
-      if (duplicatedLecture == null) {
-        break;
-      }
-      taken = takenLectures.contains(duplicatedLecture);
-    }
+    return takenLectures.contains(lecture);
 
-    return taken;
+    // 중복 검사 개선 필요
+    // while (!taken) {
+    //   Lecture duplicatedLecture = lectureRepository
+    //       .findByLectureCode(lecture.getDuplicatedLectureCode())
+    //       .orElse(null);
+    //   if (duplicatedLecture == null) {
+    //     break;
+    //   }
+    //   taken = takenLectures.contains(duplicatedLecture);
+    // }
+    //
+    // return taken;
   }
 
   private Map<GraduationCategory, List<GraduationLecture>> makeCategoryMap(List<GraduationLecture> graduationLectures) {
