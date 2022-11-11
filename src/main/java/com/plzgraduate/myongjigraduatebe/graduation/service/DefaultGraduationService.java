@@ -22,6 +22,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.entity.GraduationRequirement
 import com.plzgraduate.myongjigraduatebe.graduation.entity.LectureCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.repository.GraduationLectureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
+import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.user.entity.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
@@ -103,9 +104,13 @@ public class DefaultGraduationService implements GraduationService {
   ) {
     Map<GraduationCategory, List<GraduationLecture>> categoryToGraduationLecture = makeCategoryMap(graduationLectures);
 
+    List<Lecture> duplicatedLectures = lectureRepository.findAllByDuplicatedLectureCodeNotNull();
+    Map<LectureCode, Lecture> duplicatedLectureCodeToLecture = new HashMap<>(duplicatedLectures.size());
+    duplicatedLectures.forEach(lecture -> duplicatedLectureCodeToLecture.put(lecture.getLectureCode(), lecture));
+
     for (Map.Entry<GraduationCategory, List<GraduationLecture>> entry : categoryToGraduationLecture.entrySet()) {
 
-      DetailGraduationResult detailGraduationResult = getGraduationResult(takenLectureSet, entry);
+      DetailGraduationResult detailGraduationResult = getGraduationResult(duplicatedLectureCodeToLecture, takenLectureSet, entry);
 
       setGraduationResult(graduationResult, entry, detailGraduationResult);
     }
@@ -165,6 +170,7 @@ public class DefaultGraduationService implements GraduationService {
   }
 
   private DetailGraduationResult getGraduationResult(
+      Map<LectureCode, Lecture> duplicatedLectures,
       Set<Lecture> takenLectures,
       Map.Entry<GraduationCategory, List<GraduationLecture>> entry
   ) {
@@ -184,7 +190,7 @@ public class DefaultGraduationService implements GraduationService {
       );
 
       int credit = lecture.getCredit();
-      boolean taken = isTaken(takenLectures, lecture);
+      boolean taken = isTaken(duplicatedLectures, takenLectures, lecture);
 
       if (taken) {
         takenLectures.remove(lecture);
@@ -207,23 +213,37 @@ public class DefaultGraduationService implements GraduationService {
   }
 
   private boolean isTaken(
+      Map<LectureCode, Lecture> lectureCodeToLecture,
       Set<Lecture> takenLectures,
       Lecture lecture
   ) {
-    return takenLectures.contains(lecture);
+    boolean isTaken = takenLectures.contains(lecture);
 
-    // 중복 검사 개선 필요
-    // while (!taken) {
-    //   Lecture duplicatedLecture = lectureRepository
-    //       .findByLectureCode(lecture.getDuplicatedLectureCode())
-    //       .orElse(null);
-    //   if (duplicatedLecture == null) {
-    //     break;
-    //   }
-    //   taken = takenLectures.contains(duplicatedLecture);
-    // }
-    //
-    // return taken;
+    if (isTaken) {
+      return true;
+    }
+
+    LectureCode duplicatedLectureCode = lecture.getDuplicatedLectureCode();
+
+    while (!isTaken && duplicatedLectureCode != null) {
+      Lecture duplicatedLecture = lectureCodeToLecture.get(duplicatedLectureCode);
+
+      if (duplicatedLecture != null) {
+        isTaken = duplicatedLecture.equals(lecture);
+        continue;
+      }
+
+      Lecture lastDuplicatedLecture = lectureRepository
+          .findByLectureCode(duplicatedLectureCode)
+          .orElse(null);
+
+      if (lastDuplicatedLecture != null) {
+        isTaken = lastDuplicatedLecture.equals(lecture);
+      }
+      break;
+    }
+
+    return isTaken;
   }
 
   private Map<GraduationCategory, List<GraduationLecture>> makeCategoryMap(List<GraduationLecture> graduationLectures) {

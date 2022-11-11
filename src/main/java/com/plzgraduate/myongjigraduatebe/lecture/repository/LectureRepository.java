@@ -16,4 +16,7 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
   Optional<Lecture> findById(long lectureId);
 
   Optional<Lecture> findByLectureCode(LectureCode duplicatedCode);
+
+  List<Lecture> findAllByDuplicatedLectureCodeNotNull();
+
 }
