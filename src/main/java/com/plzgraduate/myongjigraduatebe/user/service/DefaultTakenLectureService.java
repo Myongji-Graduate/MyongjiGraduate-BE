@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.user.service;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,9 +34,9 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private final UserRepository userRepository;
 
   private long chapelCount = 0;
-  private static final long chapelMaxCount = 4;
-  private static final String chapelCode = "KMA02101";
-  private static final String custom = "커스텀";
+  private static final long CHAPEL_MAX_COUNT= 4;
+  private static final String CHAPEL_CODE = "KMA02101";
+  private static final String CUSTOM = "커스텀";
 
   private final SecureRandom ran = new SecureRandom();
 
@@ -61,8 +60,10 @@ public class DefaultTakenLectureService implements TakenLectureService {
     Set<TakenLecture> previousLectures =
         takenLectureRepository
             .findAllByUserWithFetchJoin(user);
+
     List<TakenLecture> updatedTakenLectures = takenLectureDtoList
         .stream()
+        .filter(takenLectureDto -> checkNormalLectureToLectureCode(takenLectureDto.getLectureCode()))
         .map(takenLectureDto -> new TakenLecture(
             user,
             getLectureToLectureCode(takenLectureDto.getLectureCode()),
@@ -124,6 +125,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
     }
     List<Lecture> addedLectures = addedTakenLecture
         .stream()
+        .filter(id -> checkNormalLectureToId(id))
         .map(this::getEditedLecture)
         .collect(Collectors.toList());
     List<Lecture> previousLectures =
@@ -133,7 +135,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
             .map(TakenLecture::getLecture)
             .collect(Collectors.toList());
     Lecture chapel = lectureRepository
-        .findByLectureCode(LectureCode.of(chapelCode))
+        .findByLectureCode(LectureCode.of(CHAPEL_CODE))
         .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
     this.chapelCount = previousLectures
         .stream()
@@ -149,6 +151,16 @@ public class DefaultTakenLectureService implements TakenLectureService {
     takenLectureRepository.saveAll(addedTakenLectures);
   }
 
+  private boolean checkNormalLectureToLectureCode(LectureCode lectureCode){
+    return (lectureRepository.findByLectureCode(lectureCode).isPresent());
+  }
+
+  private boolean checkNormalLectureToId(long id){
+    return (lectureRepository.findById(id).isPresent());
+  }
+
+
+
   private Lecture getEditedLecture(long lectureId) {
     return lectureRepository
         .findById(lectureId)
@@ -158,7 +170,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private Lecture getLectureToLectureCode(LectureCode lectureCode) {
     return lectureRepository
         .findByLectureCode(lectureCode)
-        .orElseThrow(() -> new IllegalArgumentException("해당과목이 데이터에 존재하지 않습니다."));
+        .orElseThrow(() -> new IllegalArgumentException("해당 과목이 데이터에 존재하지 않습니다."));
   }
 
   private boolean containLectures(
@@ -167,7 +179,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
       Lecture chapel
   ) {
     Set<Lecture> previousLectureSet = new HashSet<>(previousLectures);
-    if (addTakenLecture.equals(chapel) && this.chapelCount < chapelMaxCount) {
+    if (addTakenLecture.equals(chapel) && this.chapelCount < CHAPEL_MAX_COUNT) {
       this.chapelCount++;
       return true;
     }
@@ -183,9 +195,9 @@ public class DefaultTakenLectureService implements TakenLectureService {
       Lecture chapel
   ) {
     if (addLecture.equals(chapel)) {
-      return new TakenLecture(user, addLecture, custom, Integer.toString(ran.nextInt()));
+      return new TakenLecture(user, addLecture, CUSTOM, Integer.toString(ran.nextInt()));
     }
-    return new TakenLecture(user, addLecture, custom, custom);
+    return new TakenLecture(user, addLecture, CUSTOM, CUSTOM);
   }
 
 }
