@@ -23,7 +23,7 @@ public class MockUserNotIsInitializedSecurityContextFactory implements WithSecur
     final UserId userId = UserId.valueOf("testUser");
     final String password = "testUserPassword";
     final StudentNumber studentNumber = StudentNumber.valueOf("12345678");
-    final EnglishLevel engLv = EnglishLevel.MIDDLE;
+    final EnglishLevel engLv = EnglishLevel.ENG34;
 
     User user = new User(userId, password, studentNumber, engLv);
 

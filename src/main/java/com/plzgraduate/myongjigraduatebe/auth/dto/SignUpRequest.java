@@ -29,12 +29,12 @@ public class SignUpRequest {
       @JsonProperty("studentNumber")
       StudentNumber studentNumber,
       @JsonProperty("engLv")
-      EnglishLevel engLv
+      String engLv
   ) {
     this.userId = userId;
     this.password = password;
     this.studentNumber = studentNumber;
-    this.engLv = engLv;
+    this.engLv = EnglishLevel.valueOf(engLv);
   }
 
   public User toEntity(PasswordEncoder passwordEncoder) {
