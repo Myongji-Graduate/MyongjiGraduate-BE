@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
 import java.security.SecureRandom;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,8 +32,6 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private final TakenLectureRepository takenLectureRepository;
   private final UserRepository userRepository;
 
-  private long chapelCount = 0;
-  private static final long CHAPEL_MAX_COUNT= 4;
   private static final String CHAPEL_CODE = "KMA02101";
   private static final String CUSTOM = "커스텀";
 
@@ -128,19 +125,15 @@ public class DefaultTakenLectureService implements TakenLectureService {
         .filter(id -> checkNormalLectureToId(id))
         .map(this::getEditedLecture)
         .collect(Collectors.toList());
-    List<Lecture> previousLectures =
+    Set<Lecture> previousLectures =
         takenLectureRepository
             .findAllByUserWithFetchJoin(user)
             .stream()
             .map(TakenLecture::getLecture)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
     Lecture chapel = lectureRepository
         .findByLectureCode(LectureCode.of(CHAPEL_CODE))
         .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
-    this.chapelCount = previousLectures
-        .stream()
-        .filter(previousLecture -> previousLecture.equals(chapel))
-        .count();
 
     List<TakenLecture> addedTakenLectures = addedLectures
         .stream()
@@ -175,15 +168,13 @@ public class DefaultTakenLectureService implements TakenLectureService {
 
   private boolean containLectures(
       Lecture addTakenLecture,
-      List<Lecture> previousLectures,
+      Set<Lecture> previousLectures,
       Lecture chapel
   ) {
-    Set<Lecture> previousLectureSet = new HashSet<>(previousLectures);
-    if (addTakenLecture.equals(chapel) && this.chapelCount < CHAPEL_MAX_COUNT) {
-      this.chapelCount++;
+    if (addTakenLecture.equals(chapel)){
       return true;
     }
-    if (!previousLectureSet.contains(addTakenLecture)) {
+    if (!previousLectures.contains(addTakenLecture)) {
       return true;
     }
     return false;
