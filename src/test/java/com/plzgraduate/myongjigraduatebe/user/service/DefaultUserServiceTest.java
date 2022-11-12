@@ -39,7 +39,7 @@ class DefaultUserServiceTest {
   private static final String userId = "userId";
   private static final String password = "testpassword";
   private static final String studentNumber = "60191667";
-  private static final EnglishLevel engLv = EnglishLevel.MIDDLE;
+  private static final EnglishLevel engLv = EnglishLevel.ENG34;
   private static final User user = new User(UserId.valueOf(userId), password, StudentNumber.valueOf(studentNumber), engLv);
 
   @BeforeAll
