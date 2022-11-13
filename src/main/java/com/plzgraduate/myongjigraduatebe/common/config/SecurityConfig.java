@@ -39,7 +39,8 @@ public class SecurityConfig {
             API_V1_PREFIX + "/users/userid-validity-checks", // 유저아이디 중복 체크
             API_V1_PREFIX + "/users/studentNumber-validity-checks", // 학번 중복 체크
             API_V1_PREFIX + "/users/by/student-number/**", // 유저아이디 찾기
-            API_V1_PREFIX + "/users/reset-pw" // 비밀번호 재설정
+            API_V1_PREFIX + "/users/reset-pw", // 비밀번호 재설정
+            API_V1_PREFIX + "/users/me/init"  // 토큰 유효성 및 유저 초기화 체크
         )
         .permitAll()
         .anyRequest()
