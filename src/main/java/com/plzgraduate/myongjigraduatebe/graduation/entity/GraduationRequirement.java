@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.graduation.entity;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
@@ -12,6 +14,7 @@ import com.plzgraduate.myongjigraduatebe.common.entity.BaseEntity;
 import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
 import com.plzgraduate.myongjigraduatebe.common.entity.EntryYearConverter;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
+import com.plzgraduate.myongjigraduatebe.user.entity.EnglishLevel;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,6 +51,9 @@ public class GraduationRequirement extends BaseEntity {
   @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
   private int freeElectiveCredit;
 
+  @Enumerated(EnumType.STRING)
+  private EnglishLevel engLv;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_DEPARTMENT_GRADUATION_REQUIREMENT"))
   private Department department;
@@ -62,6 +68,7 @@ public class GraduationRequirement extends BaseEntity {
       int basicAcademicalCultureCredit,
       int normalCultureCredit,
       int freeElectiveCredit,
+      EnglishLevel engLv,
       Department department
   ) {
     this.entryYear = EntryYear.of(entryYear);
@@ -72,6 +79,7 @@ public class GraduationRequirement extends BaseEntity {
     this.basicAcademicalCultureCredit = basicAcademicalCultureCredit;
     this.normalCultureCredit = normalCultureCredit;
     this.freeElectiveCredit = freeElectiveCredit;
+    this.engLv = engLv;
     this.department = department;
   }
 
