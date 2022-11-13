@@ -83,7 +83,7 @@ public class DefaultGraduationService implements GraduationService {
         .map(TakenLecture::getLecture)
         .collect(Collectors.toSet());
 
-    updateGraduationCategoricalLectures(graduationLectures, graduationResult, takenLectureSet);
+    updateGraduationCategoricalLectures(requirement, graduationLectures, graduationResult, takenLectureSet);
 
     DetailGraduationResult normalGraduationResult = DetailGraduationResult.createNormalCulture(requirement);
     DetailGraduationResult freeGraduationResult = DetailGraduationResult.createFreeElective(requirement);
@@ -98,6 +98,7 @@ public class DefaultGraduationService implements GraduationService {
   }
 
   private void updateGraduationCategoricalLectures(
+      GraduationRequirement requirement,
       List<GraduationLecture> graduationLectures,
       GraduationResult graduationResult,
       Set<Lecture> takenLectureSet
@@ -110,7 +111,12 @@ public class DefaultGraduationService implements GraduationService {
 
     for (Map.Entry<GraduationCategory, List<GraduationLecture>> entry : categoryToGraduationLecture.entrySet()) {
 
-      DetailGraduationResult detailGraduationResult = getGraduationResult(duplicatedLectureCodeToLecture, takenLectureSet, entry);
+      DetailGraduationResult detailGraduationResult = getGraduationResult(
+          requirement,
+          duplicatedLectureCodeToLecture,
+          takenLectureSet,
+          entry
+      );
 
       setGraduationResult(graduationResult, entry, detailGraduationResult);
     }
@@ -170,6 +176,7 @@ public class DefaultGraduationService implements GraduationService {
   }
 
   private DetailGraduationResult getGraduationResult(
+      GraduationRequirement requirement,
       Map<LectureCode, Lecture> duplicatedLectures,
       Set<Lecture> takenLectures,
       Map.Entry<GraduationCategory, List<GraduationLecture>> entry
@@ -177,7 +184,6 @@ public class DefaultGraduationService implements GraduationService {
     GraduationCategory category = entry.getKey();
     List<GraduationLecture> categoryGraduationLectures = entry.getValue();
 
-    int totalCredit = 0;
     int takenCredit = 0;
     Map<LectureCategory, DetailCategoryResult> categoryToResult = new HashMap<>(categoryGraduationLectures.size());
 
@@ -189,7 +195,6 @@ public class DefaultGraduationService implements GraduationService {
           new DetailCategoryResult(lectureCategory)
       );
 
-      int credit = lecture.getCredit();
       boolean taken = isTaken(duplicatedLectures, takenLectures, lecture);
 
       if (taken) {
@@ -199,14 +204,13 @@ public class DefaultGraduationService implements GraduationService {
 
       detailCategoryResult.add(gl, taken);
       detailCategoryResult.checkCompleted();
-      totalCredit += credit;
       categoryToResult.put(lectureCategory, detailCategoryResult);
     }
 
     return DetailGraduationResult
         .builder()
         .categoryName(category.name())
-        .totalCredit(totalCredit)
+        .totalCredit(requirement.getCategoricalTotalCredit(category))
         .takenCredit(takenCredit)
         .detailCategory(categoryToResult.values())
         .build();
