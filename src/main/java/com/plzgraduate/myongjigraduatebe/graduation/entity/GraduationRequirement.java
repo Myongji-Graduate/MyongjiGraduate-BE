@@ -74,4 +74,23 @@ public class GraduationRequirement extends BaseEntity {
     this.freeElectiveCredit = freeElectiveCredit;
     this.department = department;
   }
+
+  public int getCategoricalTotalCredit(GraduationCategory category) {
+    switch (category) {
+      case COMMON_CULTURE:
+        return commonCultureCredit;
+      case CORE_CULTURE:
+        return coreCultureCredit;
+      case BASIC_ACADEMICAL_CULTURE:
+        return basicAcademicalCultureCredit;
+      case MAJOR:
+        return majorCredit;
+      case NORMAL_CULTURE:
+        return normalCultureCredit;
+      case FREE_ELECTIVE:
+        return freeElectiveCredit;
+      default:
+        return totalCredit;
+    }
+  }
 }
