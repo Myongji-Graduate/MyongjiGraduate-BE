@@ -36,7 +36,9 @@ public class DetailCategoryResult {
   ) {
     LectureResponse lectureResponse = LectureResponse.from(graduationLecture.getLecture());
 
-    takenCredits += lectureResponse.getCredit();
+    if (taken) {
+      takenCredits += lectureResponse.getCredit();
+    }
 
     if (taken && graduationLecture.isMandatory()) {
       takenMandatoryLectures.add(lectureResponse);
@@ -57,7 +59,7 @@ public class DetailCategoryResult {
   }
 
   public void checkCompleted() {
-    isCompleted = haveToMandatoryLectures.isEmpty() && totalCredits == takenCredits;
+    isCompleted = haveToMandatoryLectures.isEmpty() && totalCredits <= takenCredits;
   }
 
   @Override
