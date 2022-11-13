@@ -43,7 +43,8 @@ public class DefaultGraduationService implements GraduationService {
     List<TakenLecture> takenLectures = takenLectureService.findAllByUserId(user.getId());
     List<GraduationLecture> graduationLectures = graduationLectureRepository.findAllByDepartmentAndEntryYearWithFetchJoin(
         user.getDepartment(),
-        user.getEntryYear()
+        user.getEntryYear(),
+        user.getEngLv()
     );
 
     return createResult(user, takenLectures, graduationLectures);
