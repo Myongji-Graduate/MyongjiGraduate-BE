@@ -252,6 +252,37 @@ class UserControllerTest extends ControllerSetUp {
     private final String PATH = "/me/init";
 
     @Nested
+    @DisplayName("토큰이 인증되지 않았다며")
+    class ContextWithTokenIsInvalid {
+
+      @Test
+      @DisplayName("토큰 인증과 초기화의 값을 false로 응답한다")
+      void ItResponseWithValidTokenAndInitValueFalse() throws Exception {
+
+        //given
+        // when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders.get(BASE_URL + PATH));
+
+        // then
+        response
+            .andExpect(status().isOk())
+            .andDo(document(
+                "is invalid token",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("validToken")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("인증되었다면 true, 아니라면 false를 반환"),
+                    fieldWithPath("init")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("초기화되었다면 ture, 아니라면 false를 반환")
+                )
+            ));
+
+      }
+    }
+
+    @Nested
     @WithMockUserIsInitialized
     @DisplayName("초기화를 이미 진행한 사용자라면")
     class ContextWithUserIsInitialized {
@@ -271,6 +302,9 @@ class UserControllerTest extends ControllerSetUp {
                 "is initialization for user",
                 preprocessResponse(prettyPrint()),
                 responseFields(
+                    fieldWithPath("validToken")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("인증되었다면 true, 아니라면 false를 반환"),
                     fieldWithPath("init")
                         .type(JsonFieldType.BOOLEAN)
                         .description("초기화되었다면 ture, 아니라면 false를 반환")
@@ -300,6 +334,9 @@ class UserControllerTest extends ControllerSetUp {
                 "is initialization for user",
                 preprocessResponse(prettyPrint()),
                 responseFields(
+                    fieldWithPath("validToken")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("인증되었다면 true, 아니라면 false를 반환"),
                     fieldWithPath("init")
                         .type(JsonFieldType.BOOLEAN)
                         .description("초기화되었다면 ture, 아니라면 false를 반환")
