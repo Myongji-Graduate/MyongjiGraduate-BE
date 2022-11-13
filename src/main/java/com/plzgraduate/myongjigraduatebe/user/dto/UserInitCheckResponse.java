@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserInitCheckResponse {
 
+  private final boolean isValidToken;
+
   private final boolean isInit;
 
 }

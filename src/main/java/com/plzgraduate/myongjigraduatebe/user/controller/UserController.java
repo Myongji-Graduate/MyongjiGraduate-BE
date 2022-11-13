@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +47,9 @@ public class UserController {
       @CurrentUser AuthenticatedUser user,
       @RequestBody HashMap<String, Object> param
   ) {
-    ParsingTextDto parsingTextDto = new ParsingTextDto(param.get("parsingText").toString());
+    ParsingTextDto parsingTextDto = new ParsingTextDto(param
+                                                           .get("parsingText")
+                                                           .toString());
     takenLectureService.saveTakenLecture(user, parsingTextDto);
     userService.saveStudentInfo(user, parsingTextDto);
   }
@@ -87,15 +88,16 @@ public class UserController {
   public UserInitCheckResponse checkInit(
       @CurrentUser AuthenticatedUser user
   ) {
-    boolean isInit = user.getName() != null;
-    return new UserInitCheckResponse(isInit);
+    boolean isValidToken = user != null;
+    boolean isInit = isValidToken && user.getName() != null;
+    return new UserInitCheckResponse(isValidToken, isInit);
   }
 
   @GetMapping("/me/information")
   @ResponseStatus(HttpStatus.OK)
   public StudentPageInfoResponse showUserInfo(
       @CurrentUser AuthenticatedUser user
-  ){
+  ) {
     return userService.showStudentInfo(user);
   }
 
