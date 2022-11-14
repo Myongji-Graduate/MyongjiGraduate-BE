@@ -106,7 +106,7 @@ public class DefaultGraduationService implements GraduationService {
   ) {
     Map<GraduationCategory, List<GraduationLecture>> categoryToGraduationLecture = makeCategoryMap(graduationLectures);
 
-    List<Lecture> duplicatedLectures = lectureRepository.findAllByDuplicatedLectureCodeNotNull();
+    List<Lecture> duplicatedLectures = lectureRepository.findAllDuplicatedLectures();
     Map<LectureCode, Lecture> duplicatedLectureCodeToLecture = new HashMap<>(duplicatedLectures.size());
     duplicatedLectures.forEach(lecture -> duplicatedLectureCodeToLecture.put(lecture.getLectureCode(), lecture));
 
@@ -165,8 +165,7 @@ public class DefaultGraduationService implements GraduationService {
   ) {
     return BasicInfo
         .builder()
-        .name(
-            user.getName())
+        .name(user.getName())
         .studentNumber(user
                            .getStudentNumber()
                            .getValue())
@@ -235,6 +234,7 @@ public class DefaultGraduationService implements GraduationService {
 
       if (duplicatedLecture != null) {
         isTaken = takenLectures.contains(duplicatedLecture);
+        duplicatedLectureCode = duplicatedLecture.getDuplicatedLectureCode();
         continue;
       }
 
