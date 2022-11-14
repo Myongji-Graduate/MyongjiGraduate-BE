@@ -38,14 +38,15 @@ public class DetailGraduationResult {
     return new DetailGraduationResult(GraduationCategory.NORMAL_CULTURE.name(), requirement.getNormalCultureCredit(), 0, null);
   }
 
-  public boolean checkComplete() {
+  public void checkComplete() {
     boolean isCompleted = totalCredit <= takenCredit;
 
     if (detailCategory == null) {
-      return isCompleted;
+      this.isCompleted = isCompleted;
+      return;
     }
 
-    return isCompleted && checkDetailCategoryComplete();
+    this.isCompleted = isCompleted && checkDetailCategoryComplete();
   }
 
   private boolean checkDetailCategoryComplete() {
@@ -73,6 +74,5 @@ public class DetailGraduationResult {
 
   public void addTakenCredit(int takenCredit) {
     this.takenCredit += takenCredit;
-    this.isCompleted = checkComplete();
   }
 }
