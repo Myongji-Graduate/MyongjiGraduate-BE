@@ -2,7 +2,11 @@ package com.plzgraduate.myongjigraduatebe.user.entity;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
@@ -28,20 +32,23 @@ public class TakenLecture extends BaseEntity {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_LECTURE_TAKEN_LECTURE"))
   private Lecture lecture;
 
-  private String takenYear;
+  @Convert(converter = YearConverter.class)
+  @Column(columnDefinition = "char(8)")
+  private Year year;
 
-  private String takenSemester;
+  @Enumerated(value = EnumType.STRING)
+  private Semester semester;
 
   public TakenLecture(
       User user,
       Lecture lecture,
-      String takenYear,
-      String takenSemester
+      Year year,
+      Semester semester
   ) {
     this.user = user;
     this.lecture = lecture;
-    this.takenYear = takenYear;
-    this.takenSemester = takenSemester;
+    this.year = year;
+    this.semester = semester;
   }
 
   @Override
@@ -53,15 +60,11 @@ public class TakenLecture extends BaseEntity {
       return false;
     }
     TakenLecture that = (TakenLecture)o;
-    return Objects.equals(user, that.user) && Objects.equals(lecture, that.lecture)
-        && Objects.equals(takenYear, that.takenYear) && Objects.equals(
-        takenSemester,
-        that.takenSemester
-    );
+    return Objects.equals(user, that.user) && Objects.equals(lecture, that.lecture);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(user, lecture, takenYear, takenSemester);
+    return Objects.hash(user, lecture);
   }
 }

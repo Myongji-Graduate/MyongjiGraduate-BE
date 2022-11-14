@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
+import com.plzgraduate.myongjigraduatebe.user.entity.Semester;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
+import com.plzgraduate.myongjigraduatebe.user.entity.Year;
 
 import lombok.Getter;
 
@@ -44,7 +46,7 @@ public class ParsingTextDto {
       String code = splitText[i + 3];
       char grade = splitText[i + 6].charAt(0);
       if (grade != 'F' && grade != 'N' && grade != 'R') {
-        takenLectureDto.add(TakenLectureDto.from(year, semester, LectureCode.of(code)));
+        takenLectureDto.add(TakenLectureDto.from(Year.of(year), Semester.of(semester), LectureCode.of(code)));
       }
       if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
         i++;
