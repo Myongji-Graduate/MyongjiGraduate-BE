@@ -1,20 +1,22 @@
 package com.plzgraduate.myongjigraduatebe.user.dto;
 
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
+import com.plzgraduate.myongjigraduatebe.user.entity.Semester;
+import com.plzgraduate.myongjigraduatebe.user.entity.Year;
 
 import lombok.Getter;
 
 @Getter
 public class TakenLectureDto {
-  private final String year;
+  private final Year year;
 
-  private final String semester;
+  private final Semester semester;
 
   private final LectureCode lectureCode;
 
   private TakenLectureDto(
-      String year,
-      String semester,
+      Year year,
+      Semester semester,
       LectureCode lectureCode
   ) {
     this.year = year;
@@ -22,7 +24,7 @@ public class TakenLectureDto {
     this.lectureCode = lectureCode;
   }
 
-  public static TakenLectureDto from(String year, String semester, LectureCode lectureCode){
+  public static TakenLectureDto from(Year year, Semester semester, LectureCode lectureCode){
     return new TakenLectureDto(year, semester, lectureCode);
   }
 }

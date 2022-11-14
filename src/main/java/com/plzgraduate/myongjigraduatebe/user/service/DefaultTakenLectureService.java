@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
-import java.security.SecureRandom;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,9 +33,6 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private final UserRepository userRepository;
 
   private static final String CHAPEL_CODE = "KMA02101";
-  private static final String CUSTOM = "커스텀";
-
-  private final SecureRandom ran = new SecureRandom();
 
   @Override
   public void saveTakenLecture(
@@ -55,8 +52,8 @@ public class DefaultTakenLectureService implements TakenLectureService {
 
     List<TakenLectureDto> takenLectureDtoList = parsingTextDto.getTakenLectureDto();
     Set<TakenLecture> previousLectures =
-        takenLectureRepository
-            .findAllByUserWithFetchJoin(user);
+        new HashSet<>(takenLectureRepository
+            .findAllByUserWithFetchJoin(user));
 
     List<TakenLecture> updatedTakenLectures = takenLectureDtoList
         .stream()
@@ -67,7 +64,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
             takenLectureDto.getYear(),
             takenLectureDto.getSemester()
         ))
-        .filter(takenLecture -> !previousLectures.contains(takenLecture))
+        .filter(takenLecture -> containTakenLectures(previousLectures, takenLecture))
         .collect(Collectors.toList());
     takenLectureRepository.saveAll(updatedTakenLectures);
   }
@@ -138,7 +135,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
     List<TakenLecture> addedTakenLectures = addedLectures
         .stream()
         .filter(addedLecture -> containLectures(addedLecture, previousLectures, chapel))
-        .map(addedLecture -> convertCustomTakenLecture(user, addedLecture, chapel))
+        .map(addedLecture -> convertCustomTakenLecture(user, addedLecture))
         .collect(Collectors.toList());
 
     takenLectureRepository.saveAll(addedTakenLectures);
@@ -151,8 +148,6 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private boolean checkNormalLectureToId(long id){
     return (lectureRepository.findById(id).isPresent());
   }
-
-
 
   private Lecture getEditedLecture(long lectureId) {
     return lectureRepository
@@ -174,21 +169,28 @@ public class DefaultTakenLectureService implements TakenLectureService {
     if (addTakenLecture.equals(chapel)){
       return true;
     }
-    if (!previousLectures.contains(addTakenLecture)) {
+    return !previousLectures.contains(addTakenLecture);
+  }
+
+  private boolean containTakenLectures(
+      Set<TakenLecture> previousLectures,
+      TakenLecture takenLecture
+  ){
+    Lecture chapel = lectureRepository
+        .findByLectureCode(LectureCode.of(CHAPEL_CODE))
+        .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
+
+    if(takenLecture.getLecture().equals(chapel)){
       return true;
     }
-    return false;
+    return !previousLectures.contains(takenLecture);
   }
 
   private TakenLecture convertCustomTakenLecture(
       User user,
-      Lecture addLecture,
-      Lecture chapel
+      Lecture addLecture
   ) {
-    if (addLecture.equals(chapel)) {
-      return new TakenLecture(user, addLecture, CUSTOM, Integer.toString(ran.nextInt()));
-    }
-    return new TakenLecture(user, addLecture, CUSTOM, CUSTOM);
+    return new TakenLecture(user, addLecture, null, null);
   }
 
 }

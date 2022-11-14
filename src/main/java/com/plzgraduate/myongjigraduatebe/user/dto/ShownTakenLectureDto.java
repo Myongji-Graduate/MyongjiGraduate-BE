@@ -35,8 +35,8 @@ public class ShownTakenLectureDto {
     Lecture lecture = takenLecture.getLecture();
     return new ShownTakenLectureDto(
         takenLecture.getId(),
-        takenLecture.getTakenYear(),
-        takenLecture.getTakenSemester(),
+        takenLecture.getYear()==null ? null : takenLecture.getYear().getValue(),
+        takenLecture.getSemester()==null ? null : takenLecture.getSemester().getSemesterName(),
         lecture.getCode(),
         lecture.getName(),
         lecture.getCredit()
