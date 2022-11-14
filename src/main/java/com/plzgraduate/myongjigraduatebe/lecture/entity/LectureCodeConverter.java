@@ -8,7 +8,7 @@ import javax.persistence.Converter;
 public class LectureCodeConverter implements AttributeConverter<LectureCode, String> {
   @Override
   public String convertToDatabaseColumn(LectureCode lectureCode) {
-    return lectureCode.getCode();
+    return lectureCode!=null ? lectureCode.getCode() : null;
   }
 
   @Override

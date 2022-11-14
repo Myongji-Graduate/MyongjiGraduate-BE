@@ -28,11 +28,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class DefaultTakenLectureService implements TakenLectureService {
+
+  private static final String CHAPEL_CODE = "KMA02101";
+  private static final String NORMAL_LECTURE_NAME = "일반교양";
   private final LectureRepository lectureRepository;
   private final TakenLectureRepository takenLectureRepository;
   private final UserRepository userRepository;
-
-  private static final String CHAPEL_CODE = "KMA02101";
 
   @Override
   public void saveTakenLecture(
@@ -55,17 +56,16 @@ public class DefaultTakenLectureService implements TakenLectureService {
         new HashSet<>(takenLectureRepository
                           .findAllByUserWithFetchJoin(user));
 
-    List<TakenLecture> updatedTakenLectures = takenLectureDtoList
-        .stream()
-        .filter(takenLectureDto -> checkNormalLectureToLectureCode(takenLectureDto.getLectureCode()))
-        .map(takenLectureDto -> new TakenLecture(
-            user,
-            getLectureToLectureCode(takenLectureDto.getLectureCode()),
-            takenLectureDto.getYear(),
-            takenLectureDto.getSemester()
-        ))
-        .filter(takenLecture -> containTakenLectures(previousLectures, takenLecture))
-        .collect(Collectors.toList());
+    List<Lecture> notUpdatedRevokedNormalLecture = getNotUpdatedRevokedNormalLecture(
+        takenLectureDtoList);
+
+    lectureRepository.saveAll(notUpdatedRevokedNormalLecture);
+
+    List<TakenLecture> updatedTakenLectures = getUpdatedTakenLectures(
+        user,
+        takenLectureDtoList,
+        previousLectures
+    );
     takenLectureRepository.saveAll(updatedTakenLectures);
   }
 
@@ -119,7 +119,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
     }
     List<Lecture> addedLectures = addedTakenLecture
         .stream()
-        .filter(id -> checkNormalLectureToId(id))
+        .filter(id -> !checkNormalLectureToId(id))
         .map(this::getEditedLecture)
         .collect(Collectors.toList());
     Set<Lecture> previousLectures =
@@ -128,6 +128,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
             .stream()
             .map(TakenLecture::getLecture)
             .collect(Collectors.toSet());
+
     Lecture chapel = lectureRepository
         .findByLectureCode(LectureCode.of(CHAPEL_CODE))
         .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
@@ -141,16 +142,51 @@ public class DefaultTakenLectureService implements TakenLectureService {
     takenLectureRepository.saveAll(addedTakenLectures);
   }
 
-  private boolean checkNormalLectureToLectureCode(LectureCode lectureCode) {
-    return (lectureRepository
+  private List<TakenLecture> getUpdatedTakenLectures(
+      User user,
+      List<TakenLectureDto> takenLectureDtoList,
+      Set<TakenLecture> previousLectures
+  ) {
+    return takenLectureDtoList
+        .stream()
+        .map(takenLectureDto -> new TakenLecture(
+            user,
+            getLectureToLectureCode(takenLectureDto.getLectureCode()),
+            takenLectureDto.getYear(),
+            takenLectureDto.getSemester()
+        ))
+        .filter(takenLecture -> containTakenLectures(previousLectures, takenLecture))
+        .collect(Collectors.toList());
+  }
+
+  private List<Lecture> getNotUpdatedRevokedNormalLecture(List<TakenLectureDto> takenLectureDtoList) {
+    return takenLectureDtoList
+        .stream()
+        .filter(takenLectureDto -> checkNormalLectureToLectureCode(takenLectureDto.getCategory(),
+                                                                   takenLectureDto.getLectureCode()))
+        .map(takenLectureDto -> new Lecture(
+            takenLectureDto.getName(),
+            takenLectureDto.getCredit(),
+            takenLectureDto.getLectureCode(),
+            null,
+            false,
+            true
+        )).collect(Collectors.toList());
+  }
+
+  private boolean checkNormalLectureToLectureCode(
+      String category,
+      LectureCode lectureCode
+  ) {
+    return (category.startsWith(NORMAL_LECTURE_NAME) && lectureRepository
         .findByLectureCode(lectureCode)
-        .isPresent());
+        .isEmpty());
   }
 
   private boolean checkNormalLectureToId(long id) {
     return (lectureRepository
         .findById(id)
-        .isPresent());
+        .isEmpty());
   }
 
   private Lecture getEditedLecture(long lectureId) {

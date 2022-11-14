@@ -62,6 +62,22 @@ public class Lecture extends BaseEntity {
     this.duplicatedLectureCode = LectureCode.of(duplicatedLectureCode);
   }
 
+  public Lecture(
+      String name,
+      int credit,
+      LectureCode lectureCode,
+      LectureCode duplicatedLectureCode,
+      boolean isMajor,
+      boolean isRevoked
+  ){
+    this.name = name;
+    this.credit = credit;
+    this.lectureCode = lectureCode;
+    this.duplicatedLectureCode = duplicatedLectureCode;
+    this.isMajor = isMajor;
+    this.isRevoked = isRevoked;
+  }
+
   public void revoked() {
     this.isRevoked = true;
   }
