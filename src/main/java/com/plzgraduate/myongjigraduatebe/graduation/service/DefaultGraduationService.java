@@ -202,7 +202,9 @@ public class DefaultGraduationService implements GraduationService {
         takenCredit += lecture.getCredit();
       }
 
-      detailCategoryResult.add(gl, taken);
+      if (taken || !lecture.isRevoked()) {
+        detailCategoryResult.add(gl, taken);
+      }
       detailCategoryResult.checkCompleted();
       categoryToResult.put(lectureCategory, detailCategoryResult);
     }
