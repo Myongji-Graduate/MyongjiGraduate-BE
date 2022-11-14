@@ -229,7 +229,7 @@ public class DefaultGraduationService implements GraduationService {
 
     LectureCode duplicatedLectureCode = lecture.getDuplicatedLectureCode();
 
-    while (duplicatedLectureCode != null) {
+    while (duplicatedLectureCode != null && lectureCodeToLecture.containsKey(duplicatedLectureCode)) {
       Lecture duplicatedLecture = lectureCodeToLecture.get(duplicatedLectureCode);
       duplicatedLectureCode = duplicatedLecture.getDuplicatedLectureCode();
 
