@@ -78,4 +78,8 @@ public class DetailCategoryResult {
   public int hashCode() {
     return Objects.hash(detailCategoryName);
   }
+
+  public int getLeftCredit() {
+    return Math.max(0, takenCredits - totalCredits);
+  }
 }

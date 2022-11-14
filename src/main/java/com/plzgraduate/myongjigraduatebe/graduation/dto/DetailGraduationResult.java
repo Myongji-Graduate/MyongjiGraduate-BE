@@ -38,7 +38,7 @@ public class DetailGraduationResult {
     return new DetailGraduationResult(GraduationCategory.NORMAL_CULTURE.name(), requirement.getNormalCultureCredit(), 0, null);
   }
 
-  private boolean checkComplete() {
+  public boolean checkComplete() {
     boolean isCompleted = totalCredit <= takenCredit;
 
     if (detailCategory == null) {
@@ -56,16 +56,18 @@ public class DetailGraduationResult {
     return isCompleted;
   }
 
-  public int updateTakenCredit() {
-    this.isCompleted = checkComplete();
-
+  public int getLeftCredit() {
     int leftCredit = 0;
 
-    if (totalCredit < takenCredit) {
-      leftCredit = takenCredit - totalCredit;
-      takenCredit = totalCredit;
+    if (detailCategory == null) {
+      leftCredit = Math.max(0, takenCredit - totalCredit);
+    } else {
+      for (DetailCategoryResult result : detailCategory) {
+        leftCredit += result.getLeftCredit();
+      }
     }
 
+    takenCredit -= leftCredit;
     return leftCredit;
   }
 

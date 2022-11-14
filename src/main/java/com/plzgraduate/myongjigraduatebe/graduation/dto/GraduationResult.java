@@ -49,8 +49,13 @@ public class GraduationResult {
 
   public void checkGraduation() {
     updateLeftCredit();
+    checkAllCompete();
 
-    this.isGraduated = commonCulture.isCompleted() &&
+    this.isGraduated = checkGraduate();
+  }
+
+  private boolean checkGraduate() {
+    return commonCulture.isCompleted() &&
         coreCulture.isCompleted() &&
         basicAcademicalCulture.isCompleted() &&
         major.isCompleted() &&
@@ -58,13 +63,21 @@ public class GraduationResult {
         freeElective.isCompleted();
   }
 
+  private void checkAllCompete() {
+    commonCulture.checkComplete();
+    coreCulture.checkComplete();
+    basicAcademicalCulture.checkComplete();
+    major.checkComplete();
+    normalCulture.checkComplete();
+    freeElective.checkComplete();
+  }
+
   private void updateLeftCredit() {
     int leftCultureCredit =
-        commonCulture.updateTakenCredit() + coreCulture.updateTakenCredit() + basicAcademicalCulture.updateTakenCredit();
+        commonCulture.getLeftCredit() + coreCulture.getLeftCredit() + basicAcademicalCulture.getLeftCredit();
     normalCulture.addTakenCredit(leftCultureCredit);
 
-    int leftFreeCredit = major.updateTakenCredit() + normalCulture.updateTakenCredit();
+    int leftFreeCredit = major.getLeftCredit() + normalCulture.getLeftCredit();
     freeElective.addTakenCredit(leftFreeCredit);
-    freeElective.updateTakenCredit();
   }
 }
