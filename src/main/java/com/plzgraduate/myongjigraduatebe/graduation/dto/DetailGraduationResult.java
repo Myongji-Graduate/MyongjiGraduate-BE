@@ -38,14 +38,15 @@ public class DetailGraduationResult {
     return new DetailGraduationResult(GraduationCategory.NORMAL_CULTURE.name(), requirement.getNormalCultureCredit(), 0, null);
   }
 
-  private boolean checkComplete() {
+  public void checkComplete() {
     boolean isCompleted = totalCredit <= takenCredit;
 
     if (detailCategory == null) {
-      return isCompleted;
+      this.isCompleted = isCompleted;
+      return;
     }
 
-    return isCompleted && checkDetailCategoryComplete();
+    this.isCompleted = isCompleted && checkDetailCategoryComplete();
   }
 
   private boolean checkDetailCategoryComplete() {
@@ -56,21 +57,22 @@ public class DetailGraduationResult {
     return isCompleted;
   }
 
-  public int updateTakenCredit() {
-    this.isCompleted = checkComplete();
-
+  public int getLeftCredit() {
     int leftCredit = 0;
 
-    if (totalCredit < takenCredit) {
-      leftCredit = takenCredit - totalCredit;
-      takenCredit = totalCredit;
+    if (detailCategory == null) {
+      leftCredit = Math.max(0, takenCredit - totalCredit);
+    } else {
+      for (DetailCategoryResult result : detailCategory) {
+        leftCredit += result.getLeftCredit();
+      }
     }
 
+    takenCredit -= leftCredit;
     return leftCredit;
   }
 
   public void addTakenCredit(int takenCredit) {
     this.takenCredit += takenCredit;
-    this.isCompleted = checkComplete();
   }
 }

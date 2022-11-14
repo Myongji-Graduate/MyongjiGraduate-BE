@@ -198,7 +198,6 @@ public class DefaultGraduationService implements GraduationService {
       boolean taken = isTaken(duplicatedLectures, takenLectures, lecture);
 
       if (taken) {
-        takenLectures.remove(lecture);
         takenCredit += lecture.getCredit();
       }
 
@@ -223,34 +222,25 @@ public class DefaultGraduationService implements GraduationService {
       Set<Lecture> takenLectures,
       Lecture lecture
   ) {
-    boolean isTaken = takenLectures.contains(lecture);
-
-    if (isTaken) {
+    if (takenLectures.contains(lecture)) {
+      takenLectures.remove(lecture);
       return true;
     }
 
     LectureCode duplicatedLectureCode = lecture.getDuplicatedLectureCode();
 
-    while (!isTaken && duplicatedLectureCode != null) {
+    while (duplicatedLectureCode != null && lectureCodeToLecture.containsKey(duplicatedLectureCode)) {
       Lecture duplicatedLecture = lectureCodeToLecture.get(duplicatedLectureCode);
+      duplicatedLectureCode = duplicatedLecture.getDuplicatedLectureCode();
 
-      if (duplicatedLecture != null) {
-        isTaken = takenLectures.contains(duplicatedLecture);
-        duplicatedLectureCode = duplicatedLecture.getDuplicatedLectureCode();
-        continue;
+      if (takenLectures.contains(duplicatedLecture)) {
+        takenLectures.remove(duplicatedLecture);
+        return true;
       }
 
-      Lecture lastDuplicatedLecture = lectureRepository
-          .findByLectureCode(duplicatedLectureCode)
-          .orElse(null);
-
-      if (lastDuplicatedLecture != null) {
-        isTaken = lastDuplicatedLecture.equals(lecture);
-      }
-      break;
     }
 
-    return isTaken;
+    return false;
   }
 
   private Map<GraduationCategory, List<GraduationLecture>> makeCategoryMap(List<GraduationLecture> graduationLectures) {
