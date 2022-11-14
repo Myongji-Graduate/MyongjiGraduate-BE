@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.user.entity.Semester;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
@@ -41,12 +43,18 @@ public class ParsingTextDto {
       if (i + 3 < splitText.length && !Pattern.matches("^[A-Z]+$", splitText[i + 3].substring(0, 1))) {
         return takenLectureDto;
       }
+      String category = splitText[i];
       String year = splitText[i + 1].split(" ")[0];
       String semester = splitText[i + 1].split(" ")[1];
       String code = splitText[i + 3];
+      String name = splitText[i + 4];
+      int credit = splitText[i + 5].equals("0.5") ? 0 : Integer.parseInt(splitText[i + 5]);
       char grade = splitText[i + 6].charAt(0);
+      System.out.println(category);
+      System.out.println(name);
+      System.out.println(credit);
       if (grade != 'F' && grade != 'N' && grade != 'R') {
-        takenLectureDto.add(TakenLectureDto.of(Year.of(year), Semester.of(semester), LectureCode.of(code)));
+        takenLectureDto.add(TakenLectureDto.of(category, Year.of(year), Semester.of(semester), LectureCode.of(code), name, credit));
       }
       if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
         i++;
