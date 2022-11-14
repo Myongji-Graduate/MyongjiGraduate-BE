@@ -19,13 +19,13 @@ public class Year {
     this.value = value;
   }
 
-  public static Year of(String value){
+  public static Year of(String value) {
     validateYear(value);
     return new Year(value);
   }
 
   private static void validateYear(String value) {
-    if (!Pattern.matches(YEAR_REG, value.substring(0,4))) {
+    if (!Pattern.matches(YEAR_REG, value.substring(0, 4))) {
       throw new IllegalArgumentException("수강년도가 올바르지 않습니다.");
     }
   }
