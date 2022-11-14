@@ -234,7 +234,7 @@ public class DefaultGraduationService implements GraduationService {
       Lecture duplicatedLecture = lectureCodeToLecture.get(duplicatedLectureCode);
 
       if (duplicatedLecture != null) {
-        isTaken = duplicatedLecture.equals(lecture);
+        isTaken = takenLectures.contains(duplicatedLecture);
         continue;
       }
 
