@@ -13,6 +13,6 @@ public class YearConverter implements AttributeConverter<Year, String> {
 
   @Override
   public Year convertToEntityAttribute(String dbData) {
-    return dbData == null ? null : Year.of(dbData) ;
+    return dbData == null ? null : Year.of(dbData);
   }
 }

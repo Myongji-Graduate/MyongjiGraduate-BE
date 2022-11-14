@@ -53,7 +53,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
     List<TakenLectureDto> takenLectureDtoList = parsingTextDto.getTakenLectureDto();
     Set<TakenLecture> previousLectures =
         new HashSet<>(takenLectureRepository
-            .findAllByUserWithFetchJoin(user));
+                          .findAllByUserWithFetchJoin(user));
 
     List<TakenLecture> updatedTakenLectures = takenLectureDtoList
         .stream()
@@ -141,12 +141,16 @@ public class DefaultTakenLectureService implements TakenLectureService {
     takenLectureRepository.saveAll(addedTakenLectures);
   }
 
-  private boolean checkNormalLectureToLectureCode(LectureCode lectureCode){
-    return (lectureRepository.findByLectureCode(lectureCode).isPresent());
+  private boolean checkNormalLectureToLectureCode(LectureCode lectureCode) {
+    return (lectureRepository
+        .findByLectureCode(lectureCode)
+        .isPresent());
   }
 
-  private boolean checkNormalLectureToId(long id){
-    return (lectureRepository.findById(id).isPresent());
+  private boolean checkNormalLectureToId(long id) {
+    return (lectureRepository
+        .findById(id)
+        .isPresent());
   }
 
   private Lecture getEditedLecture(long lectureId) {
@@ -166,7 +170,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
       Set<Lecture> previousLectures,
       Lecture chapel
   ) {
-    if (addTakenLecture.equals(chapel)){
+    if (addTakenLecture.equals(chapel)) {
       return true;
     }
     return !previousLectures.contains(addTakenLecture);
@@ -175,12 +179,14 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private boolean containTakenLectures(
       Set<TakenLecture> previousLectures,
       TakenLecture takenLecture
-  ){
+  ) {
     Lecture chapel = lectureRepository
         .findByLectureCode(LectureCode.of(CHAPEL_CODE))
         .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
 
-    if(takenLecture.getLecture().equals(chapel)){
+    if (takenLecture
+        .getLecture()
+        .equals(chapel)) {
       return true;
     }
     return !previousLectures.contains(takenLecture);

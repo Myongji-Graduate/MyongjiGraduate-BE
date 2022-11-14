@@ -24,7 +24,11 @@ public class TakenLectureDto {
     this.lectureCode = lectureCode;
   }
 
-  public static TakenLectureDto from(Year year, Semester semester, LectureCode lectureCode){
+  public static TakenLectureDto from(
+      Year year,
+      Semester semester,
+      LectureCode lectureCode
+  ) {
     return new TakenLectureDto(year, semester, lectureCode);
   }
 }

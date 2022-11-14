@@ -32,10 +32,11 @@ public class TakenLectureResponse {
 
   private static void sortTakenLecture(List<ShownTakenLectureDto> takenLectureList) {
     takenLectureList
-        .sort(Comparator.comparing(ShownTakenLectureDto::getYear, Comparator.nullsFirst(Comparator.reverseOrder()))
-                          .thenComparing(
-            ShownTakenLectureDto::getSemester,
-            Comparator.nullsFirst(Comparator.reverseOrder())
-        ));
+        .sort(Comparator
+                  .comparing(ShownTakenLectureDto::getYear, Comparator.nullsFirst(Comparator.reverseOrder()))
+                  .thenComparing(
+                      ShownTakenLectureDto::getSemester,
+                      Comparator.nullsFirst(Comparator.reverseOrder())
+                  ));
   }
 }
