@@ -52,9 +52,9 @@ public class DefaultTakenLectureService implements TakenLectureService {
     }
 
     List<TakenLectureDto> takenLectureDtoList = parsingTextDto.getTakenLectureDto();
-    Set<TakenLecture> previousLectures =
-        new HashSet<>(takenLectureRepository
-                          .findAllByUserWithFetchJoin(user));
+    List<TakenLecture> previousLectures =
+        takenLectureRepository
+            .findAllByUserWithFetchJoin(user);
 
     List<Lecture> notUpdatedRevokedNormalLecture = getNotUpdatedRevokedNormalLecture(
         takenLectureDtoList);
@@ -145,7 +145,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private List<TakenLecture> getUpdatedTakenLectures(
       User user,
       List<TakenLectureDto> takenLectureDtoList,
-      Set<TakenLecture> previousLectures
+      List<TakenLecture> previousLectures
   ) {
     return takenLectureDtoList
         .stream()
@@ -162,8 +162,10 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private List<Lecture> getNotUpdatedRevokedNormalLecture(List<TakenLectureDto> takenLectureDtoList) {
     return takenLectureDtoList
         .stream()
-        .filter(takenLectureDto -> checkNormalLectureToLectureCode(takenLectureDto.getCategory(),
-                                                                   takenLectureDto.getLectureCode()))
+        .filter(takenLectureDto -> checkNormalLectureToLectureCode(
+            takenLectureDto.getCategory(),
+            takenLectureDto.getLectureCode()
+        ))
         .map(takenLectureDto -> new Lecture(
             takenLectureDto.getName(),
             takenLectureDto.getCredit(),
@@ -171,7 +173,8 @@ public class DefaultTakenLectureService implements TakenLectureService {
             null,
             false,
             true
-        )).collect(Collectors.toList());
+        ))
+        .collect(Collectors.toList());
   }
 
   private boolean checkNormalLectureToLectureCode(
@@ -213,19 +216,28 @@ public class DefaultTakenLectureService implements TakenLectureService {
   }
 
   private boolean containTakenLectures(
-      Set<TakenLecture> previousLectures,
+      List<TakenLecture> previousLectures,
       TakenLecture takenLecture
   ) {
     Lecture chapel = lectureRepository
         .findByLectureCode(LectureCode.of(CHAPEL_CODE))
         .orElseThrow(() -> new IllegalArgumentException("데이터베이스 에러"));
-
-    if (takenLecture
-        .getLecture()
-        .equals(chapel)) {
-      return true;
+    List<TakenLecture> chapelTakenLectures = previousLectures
+        .stream()
+        .filter(previousLecture -> previousLecture
+            .getLecture()
+            .equals(chapel))
+        .collect(Collectors.toList());
+    if (takenLecture.getLecture().equals(chapel)) {
+      long countTakenChapel  = chapelTakenLectures.stream()
+          .filter(chapelTakenLecture -> takenLecture.getYear()
+                          .equals(chapelTakenLecture.getYear()) &&
+                          takenLecture.getSemester().equals(chapelTakenLecture.getSemester()) &&
+                          takenLecture.equals(chapelTakenLecture)).count();
+      return countTakenChapel == 0;
     }
-    return !previousLectures.contains(takenLecture);
+    Set<TakenLecture> previousLecturesSet = new HashSet<>(previousLectures);
+    return !previousLecturesSet.contains(takenLecture);
   }
 
   private TakenLecture convertCustomTakenLecture(
