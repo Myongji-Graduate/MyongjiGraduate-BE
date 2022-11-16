@@ -20,8 +20,11 @@ import com.plzgraduate.myongjigraduatebe.user.dto.StudentPageInfoResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserInitCheckResponse;
+import com.plzgraduate.myongjigraduatebe.user.entity.ParsingResult;
+import com.plzgraduate.myongjigraduatebe.user.entity.RecodeParsingText;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
+import com.plzgraduate.myongjigraduatebe.user.repository.RecodeParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 import com.plzgraduate.myongjigraduatebe.user.service.UserService;
 
@@ -35,6 +38,8 @@ public class UserController {
   private final TakenLectureService takenLectureService;
   private final UserService userService;
 
+  private final RecodeParsingTextRepository recodeRepository;
+
   @GetMapping("/me/taken-lectures")
   @ResponseStatus(HttpStatus.OK)
   public TakenLectureResponse show(@CurrentUser AuthenticatedUser user) {
@@ -47,11 +52,27 @@ public class UserController {
       @CurrentUser AuthenticatedUser user,
       @RequestBody HashMap<String, Object> param
   ) {
-    ParsingTextDto parsingTextDto = new ParsingTextDto(param
-                                                           .get("parsingText")
-                                                           .toString());
-    takenLectureService.saveTakenLecture(user, parsingTextDto);
-    userService.saveStudentInfo(user, parsingTextDto);
+    String parsingText = param
+        .get("parsingText")
+        .toString();
+
+    RecodeParsingText recode = new RecodeParsingText(user.getId(), parsingText);
+
+    try {
+      ParsingTextDto parsingTextDto = new ParsingTextDto(parsingText);
+      takenLectureService.saveTakenLecture(user, parsingTextDto);
+      userService.saveStudentInfo(user, parsingTextDto);
+
+      recode.setParsingResult(ParsingResult.SUCCESS);
+      recodeRepository.save(recode);
+
+    } catch (Exception e) {
+
+      recode.setParsingResult(ParsingResult.FAIL);
+      recodeRepository.save(recode);
+
+      throw new IllegalArgumentException(e);
+    }
   }
 
   @PatchMapping("/me/taken-lectures")

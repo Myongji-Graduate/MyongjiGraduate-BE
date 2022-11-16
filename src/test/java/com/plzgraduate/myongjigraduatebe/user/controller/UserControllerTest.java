@@ -30,6 +30,7 @@ import com.plzgraduate.myongjigraduatebe.user.entity.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
 import com.plzgraduate.myongjigraduatebe.user.entity.User;
 import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
+import com.plzgraduate.myongjigraduatebe.user.repository.RecodeParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 import com.plzgraduate.myongjigraduatebe.user.service.UserService;
 
@@ -44,6 +45,9 @@ class UserControllerTest extends ControllerSetUp {
 
   @MockBean
   private TakenLectureService takenLectureServiceo;
+
+  @MockBean
+  private RecodeParsingTextRepository recodeRepository;
 
   private static final String BASE_URL = "/api/v1/users";
 
