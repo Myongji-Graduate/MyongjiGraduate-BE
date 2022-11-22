@@ -5,9 +5,11 @@ import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +17,7 @@ import com.plzgraduate.myongjigraduatebe.auth.CurrentUser;
 import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.dto.EditedTakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentPageInfoResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.TakenLectureResponse;
@@ -37,7 +40,6 @@ public class UserController {
 
   private final TakenLectureService takenLectureService;
   private final UserService userService;
-
   private final RecodeParsingTextRepository recodeRepository;
 
   @GetMapping("/me/taken-lectures")
@@ -122,4 +124,9 @@ public class UserController {
     return userService.showStudentInfo(user);
   }
 
+  @GetMapping("/by/student-number/{studentNumber}")
+  @ResponseStatus(HttpStatus.OK)
+  public StudentFindIdResponse showUserId(@PathVariable String studentNumber){
+    return userService.findStudentId(studentNumber);
+  }
 }

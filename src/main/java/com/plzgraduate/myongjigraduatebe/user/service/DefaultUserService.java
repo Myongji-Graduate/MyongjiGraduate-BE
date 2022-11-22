@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
 import com.plzgraduate.myongjigraduatebe.department.repository.DepartmentRepository;
 import com.plzgraduate.myongjigraduatebe.user.dto.ParsingTextDto;
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentNumberValidityResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentPageInfoResponse;
 import com.plzgraduate.myongjigraduatebe.user.dto.UserIdValidityResponse;
@@ -56,10 +57,24 @@ public class DefaultUserService implements UserService {
 
     return StudentPageInfoResponse
         .builder()
-        .studentNumber(user.getStudentNumber().getValue())
+        .studentNumber(user
+                           .getStudentNumber()
+                           .getValue())
         .studentName(user.getName())
-        .department(user.getDepartment().getName())
+        .department(user
+                        .getDepartment()
+                        .getName())
         .build();
+  }
+
+  @Override
+  public StudentFindIdResponse findStudentId(String studentNumber) {
+    User user = userRepository
+        .findUserByStudentNumber(StudentNumber.valueOf(studentNumber))
+        .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다"));
+    return new StudentFindIdResponse(user.getUserId().getId(),
+                                     user.getStudentNumber().getValue()
+    );
   }
 
 }
