@@ -82,4 +82,26 @@ public class DetailCategoryResult {
   public int getLeftCredit() {
     return Math.max(0, takenCredits - totalCredits);
   }
+
+  public LectureResponse shiftLecture(int leftCredit) {
+    LectureResponse shiftLecture = null;
+
+    for (LectureResponse lectureResponse : takenElectiveLectures) {
+      if (lectureResponse.getCredit() <= leftCredit) {
+        takenCredits -= lectureResponse.getCredit();
+        shiftLecture = lectureResponse;
+        break;
+      }
+    }
+
+    return shiftLecture;
+  }
+
+  public void shift(List<LectureResponse> shiftLectures) {
+    for (LectureResponse shiftLecture : shiftLectures) {
+      takenElectiveLectures.add(shiftLecture);
+      takenCredits += shiftLecture.getCredit();
+    }
+  }
+
 }
