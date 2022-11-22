@@ -18,10 +18,29 @@ public class DetailGraduationResult {
 
   private static final String MAJOR_CATEGORY_NAME = GraduationCategory.MAJOR.name();
   private static final Set<String> MAJOR_DETAIL_CATEGORY_NAME = new HashSet<>() {{
-    add("BUSINESS");
+    add("APPLICATION_SOFTWARE");
+    add("DATA_THECHNOLOGY");
+    add("DIGITAL_CONTENTS_DESIGN");
+    add("LAW");
     add("MANAGEMENT_INFORMATION");
+    add("BUSINESS");
     add("INTERNATIONAL_TRADE");
+    add("JAPANESE");
+    add("CHINESE");
+    add("KOREAN");
+    add("CREATIVE_WRITIING");
+    add("LIBRARY_INFORMATION_SCIENCE");
+    add("ART_HISTORY");
+    add("HISTORY_AND_PHILOSOPHY");
+    add("ARABIC");
+    add("ENGLISH");
+    add("PHILOSOPHY");
+    add("ECONOMY");
     add("ADMINISTRATION");
+    add("POLITICAL_DIPLOMACY");
+    add("DIGITAL_MEDIA");
+    add("TENOLOGY");
+    add("YOUTH_GUDIANCE");
   }};
 
   private final String categoryName;
@@ -109,6 +128,7 @@ public class DetailGraduationResult {
       for (DetailCategoryResult result : detailCategory) {
         if (MAJOR_DETAIL_CATEGORY_NAME.contains(result.getDetailCategoryName())) {
           mainResult = result;
+          continue;
         }
 
         while (result.getLeftCredit() > 0) {
