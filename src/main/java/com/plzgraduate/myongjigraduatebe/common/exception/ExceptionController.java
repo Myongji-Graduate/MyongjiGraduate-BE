@@ -16,20 +16,29 @@ public class ExceptionController {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ExceptionResponse handleIllegalArgumentException(IllegalArgumentException e) {
     logger.warn("IllegalArgumentException: ", e);
-    return ExceptionResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    String message = getMessage(e);
+    return ExceptionResponse.of(HttpStatus.BAD_REQUEST, message);
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ExceptionResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
     logger.warn("HttpMessageNotReadableException: ", e);
+    String message = getMessage(e);
     return ExceptionResponse.of(
         HttpStatus.BAD_REQUEST,
-        e
-            .getCause()
-            .getCause()
-            .getMessage()
+        message
     );
+  }
+
+  private String getMessage(Exception e) {
+    String message = e.getMessage();
+    Throwable throwable = e.getCause();
+    while (throwable != null) {
+      message = throwable.getMessage();
+      throwable = throwable.getCause();
+    }
+    return message;
   }
 
   @ExceptionHandler(RuntimeException.class)

@@ -60,8 +60,8 @@ public class UserController {
 
     try {
       ParsingTextDto parsingTextDto = new ParsingTextDto(parsingText);
-      takenLectureService.saveTakenLecture(user, parsingTextDto);
       userService.saveStudentInfo(user, parsingTextDto);
+      takenLectureService.saveTakenLecture(user, parsingTextDto);
 
       recode.setParsingResult(ParsingResult.SUCCESS);
       recodeRepository.save(recode);
