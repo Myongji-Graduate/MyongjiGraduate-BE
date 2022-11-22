@@ -195,13 +195,13 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private Lecture getEditedLecture(long lectureId) {
     return lectureRepository
         .findById(lectureId)
-        .orElseThrow(() -> new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다."));
+        .orElseThrow(() -> new IllegalArgumentException("수정하고자 하는 과목이 존재하지 않습니다. 서비스 오류일 경우 채널톡으로 문의 부탁드립니다."));
   }
 
   private Lecture getLectureToLectureCode(LectureCode lectureCode) {
     return lectureRepository
         .findByLectureCode(lectureCode)
-        .orElseThrow(() -> new IllegalArgumentException("해당 과목이 데이터에 존재하지 않습니다."));
+        .orElseThrow(() -> new IllegalArgumentException("본 서비스는 자연캠퍼스 과목이 있을 경우 지원되지 않습니다. 서비스 오류일 경우 채널톡으로 문의 부탁드립니다."));
   }
 
   private boolean containLectures(

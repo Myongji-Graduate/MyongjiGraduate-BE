@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
 import com.plzgraduate.myongjigraduatebe.user.entity.Semester;
 import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
@@ -28,8 +26,11 @@ public class ParsingTextDto {
   }
 
   public StudentNumber getStudentNumber() {
-
-    return StudentNumber.valueOf(splitText[2].split(", ")[1].split("[(]")[1].substring(0, 8));
+    String studentNumber = splitText[2].split(", ")[1].split("[(]")[1].substring(0, 8);
+    if(Integer.parseInt(studentNumber.substring(2,4))<16){
+      throw new IllegalArgumentException("지원하지 않는 학번입니다. 서비스 오류일 경우 채널톡으로 문의 부탁드립니다.");
+    }
+    return StudentNumber.valueOf(studentNumber);
   }
 
   public String getStudentDepartment() {
