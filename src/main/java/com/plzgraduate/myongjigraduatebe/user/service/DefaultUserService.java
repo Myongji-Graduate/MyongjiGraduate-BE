@@ -43,12 +43,15 @@ public class DefaultUserService implements UserService {
       AuthenticatedUser authUser,
       ParsingTextDto parsingTextDto
   ) {
+    if(parsingTextDto.getSplitText()[2].split(", ").length>5){
+      throw new IllegalArgumentException("서비스 대상자가 맞는지 확인해 주세요. 서비스 오류일 경우 채널톡으로 문의 부탁드립니다.");
+    }
     User user = userRepository
         .findUserById(authUser.getId())
         .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
     Department department = departmentRepository
         .findByName(parsingTextDto.getStudentDepartment())
-        .orElseThrow(() -> new IllegalArgumentException("해당 학과가 없습니다."));
+        .orElseThrow(() -> new IllegalArgumentException("서비스 대상자가 맞는지 확인해 주세요. 서비스 오류일 경우 채널톡으로 문의 부탁드립니다."));
     user.updateStudentInfo(parsingTextDto.getStudentName(), department);
   }
 
