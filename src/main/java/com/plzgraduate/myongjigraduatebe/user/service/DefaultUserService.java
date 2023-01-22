@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,16 @@ public class DefaultUserService implements UserService {
         .studentName(user.getName())
         .department(user.getDepartment().getName())
         .build();
+  }
+
+  @Override
+  public StudentFindIdResponse findStudentId(StudentNumber studentNumber) {
+    User user = userRepository
+            .findUserByStudentNumber(studentNumber)
+            .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다."));
+    return StudentFindIdResponse.of(user.getUserId().getId(),
+            user.getStudentNumber().getValue()
+    );
   }
 
 }
