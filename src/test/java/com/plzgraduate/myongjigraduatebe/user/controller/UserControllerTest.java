@@ -4,8 +4,10 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,6 +35,7 @@ import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import com.plzgraduate.myongjigraduatebe.user.repository.RecodeParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 import com.plzgraduate.myongjigraduatebe.user.service.UserService;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest extends ControllerSetUp {
@@ -44,7 +47,7 @@ class UserControllerTest extends ControllerSetUp {
   private UserService userService;
 
   @MockBean
-  private TakenLectureService takenLectureServiceo;
+  private TakenLectureService takenLectureService;
 
   @MockBean
   private RecodeParsingTextRepository recodeRepository;
@@ -350,6 +353,49 @@ class UserControllerTest extends ControllerSetUp {
       }
     }
 
+  }
+
+  @Nested
+  @DisplayName("showStudentId 메서드는")
+  class DescribeShowStudent {
+    private final String PATH = "/by/student-number/{studentNumber}";
+    @Nested
+    @DisplayName("해당 학번이 존재할 경우")
+    class ContextWithExistsStudentNumber {
+      @Test
+      @DisplayName("해당 id를 반환한다.")
+      void ItResponseWithUserId() throws Exception {
+        //given
+        given(userService.findStudentId(any(StudentNumber.class))).willReturn(StudentFindIdResponse.of(userId, studentNumber));
+        //when
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders
+                .get(BASE_URL + PATH, user.getStudentNumber().getValue()));
+        //then
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+      }
+
+    }
+
+    @Nested
+    @DisplayName("해당 학번이 존재하지 않을 경우")
+    class ContextWithNotExistsStudentNumber {
+      @Test
+      @DisplayName("BadRequest를 응답한다.")
+      void ItThrowsBadRequest() throws Exception {
+        //given
+        String notExistStudentNumber = "60181666";
+        given(userService.findStudentId(any(StudentNumber.class))).willThrow(IllegalArgumentException.class);
+        //when
+        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders.get(BASE_URL + PATH, notExistStudentNumber));
+        //then
+        response
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+      }
+
+    }
   }
 
 }
