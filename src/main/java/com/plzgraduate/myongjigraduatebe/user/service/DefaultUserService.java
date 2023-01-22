@@ -71,11 +71,11 @@ public class DefaultUserService implements UserService {
   }
 
   @Override
-  public StudentFindIdResponse findStudentId(String studentNumber) {
+  public StudentFindIdResponse findStudentId(StudentNumber studentNumber) {
     User user = userRepository
-        .findUserByStudentNumber(StudentNumber.valueOf(studentNumber))
-        .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다"));
-    return new StudentFindIdResponse(user.getUserId().getId(),
+        .findUserByStudentNumber(studentNumber)
+        .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다."));
+    return StudentFindIdResponse.of(user.getUserId().getId(),
                                      user.getStudentNumber().getValue()
     );
   }

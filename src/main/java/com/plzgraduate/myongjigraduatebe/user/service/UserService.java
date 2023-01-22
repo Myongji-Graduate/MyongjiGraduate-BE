@@ -22,5 +22,5 @@ public interface UserService {
 
   StudentPageInfoResponse showStudentInfo(AuthenticatedUser user);
 
-  StudentFindIdResponse findStudentId(String studentNumber);
+  StudentFindIdResponse findStudentId(StudentNumber studentNumber);
 }
