@@ -3,6 +3,9 @@ package com.plzgraduate.myongjigraduatebe.user.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.Password;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.plzgraduate.myongjigraduatebe.department.entity.Department;
@@ -30,6 +34,8 @@ class DefaultUserServiceTest {
 
   @Mock
   private UserRepository userRepository;
+  @Mock
+  private PasswordEncoder passwordEncoder;
 
   private static final long departmentId = 1L;
 
@@ -37,7 +43,7 @@ class DefaultUserServiceTest {
 
   private static final long id = 1L;
   private static final String userId = "userId";
-  private static final String password = "testpassword";
+  private static final String password = "testpassword!";
   private static final String studentNumber = "60191667";
   private static final EnglishLevel engLv = EnglishLevel.ENG34;
   private static final User user = new User(UserId.valueOf(userId), password, StudentNumber.valueOf(studentNumber), engLv);
@@ -145,6 +151,35 @@ class DefaultUserServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getStudentNumber()).isEqualTo(notExistStudentNumber);
         assertThat(response.getIsNotDuplicated()).isTrue();
+      }
+    }
+  }
+
+  @Nested
+  @DisplayName("resetNewPassword는")
+  class DescribeResetNewPassword {
+    @Nested
+    @DisplayName("validate가 끝난 아이디와 비밀번호라면")
+    class ContextWithValidatedUserIdAndPassword {
+      @Test
+      @DisplayName("비밀번호가 변경된다.")
+      void ItResetToNewPassword() {
+        //given
+        String newPassword = "testNewPassword!";
+        String changedPassword = "";
+        given(userRepository.findByUserId(UserId.valueOf(userId))).willReturn(Optional.of(user));
+        given(passwordEncoder.encode(any(CharSequence.class))).willReturn("encodedPassword");
+
+        //when
+        defaultUserService.resetNewPassword(UserId.valueOf(userId), Password.valueOf(newPassword));
+
+        //then
+        verify(passwordEncoder, times(1)).encode(anyString());
+        Optional<User> byUserId = userRepository.findByUserId(UserId.valueOf(userId));
+        if(byUserId.isPresent()){
+          changedPassword = byUserId.get().getPassword();
+        }
+        Assertions.assertEquals("encodedPassword", changedPassword);
       }
     }
   }
