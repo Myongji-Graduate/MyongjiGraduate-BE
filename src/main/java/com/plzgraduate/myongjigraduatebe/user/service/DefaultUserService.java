@@ -1,6 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.Password;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
+import java.util.Optional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class DefaultUserService implements UserService {
 
   private final UserRepository userRepository;
   private final DepartmentRepository departmentRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public UserIdValidityResponse checkValidityUserId(UserId userId) {
@@ -74,6 +78,12 @@ public class DefaultUserService implements UserService {
     return StudentFindIdResponse.of(user.getUserId().getId(),
             user.getStudentNumber().getValue()
     );
+  }
+
+  @Override
+  public void resetNewPassword(UserId userId, Password password){
+    Optional<User> byUserId = userRepository.findByUserId(userId);
+    byUserId.ifPresent(user -> user.updatePassword(passwordEncoder.encode(password.getValue())));
   }
 
 }

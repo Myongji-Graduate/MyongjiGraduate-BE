@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.service;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.Password;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +24,7 @@ public interface UserService {
   StudentPageInfoResponse showStudentInfo(AuthenticatedUser user);
 
   StudentFindIdResponse findStudentId(StudentNumber studentNumber);
+
+  void resetNewPassword(UserId userId, Password password);
+
 }
