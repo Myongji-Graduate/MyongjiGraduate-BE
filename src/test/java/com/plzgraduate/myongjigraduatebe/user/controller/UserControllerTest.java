@@ -2,12 +2,17 @@ package com.plzgraduate.myongjigraduatebe.user.controller;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.PasswordResetRequest;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
+import com.plzgraduate.myongjigraduatebe.user.repository.UserRepository;
+import com.plzgraduate.myongjigraduatebe.user.validator.PasswordResetRequestValidator;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -35,9 +41,11 @@ import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import com.plzgraduate.myongjigraduatebe.user.repository.RecodeParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.service.TakenLectureService;
 import com.plzgraduate.myongjigraduatebe.user.service.UserService;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
+@Import(PasswordResetRequestValidator.class)
 class UserControllerTest extends ControllerSetUp {
 
   @Autowired
@@ -45,6 +53,9 @@ class UserControllerTest extends ControllerSetUp {
 
   @MockBean
   private UserService userService;
+
+  @MockBean
+  private UserRepository userRepository;
 
   @MockBean
   private TakenLectureService takenLectureService;
@@ -60,7 +71,7 @@ class UserControllerTest extends ControllerSetUp {
 
   private static final long id = 1L;
   private static final String userId = "userId";
-  private static final String password = "testpassword";
+  private static final String password = "testpassword!";
   private static final String studentNumber = "60191667";
   private static final EnglishLevel engLv = EnglishLevel.ENG34;
   private static final User user = new User(UserId.valueOf(userId), password, StudentNumber.valueOf(studentNumber), engLv);
@@ -93,8 +104,7 @@ class UserControllerTest extends ControllerSetUp {
         String requestBody = objectMapper.writeValueAsString(existUserId);
 
         // when
-        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
-                                                     .post(BASE_URL + PATH)
+        ResultActions response = mockMvc.perform(post(BASE_URL + PATH)
                                                      .contentType(MediaType.APPLICATION_JSON)
                                                      .content(requestBody));
 
@@ -133,8 +143,7 @@ class UserControllerTest extends ControllerSetUp {
         String requestBody = objectMapper.writeValueAsString(notExistUserId);
 
         // when
-        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
-                                                     .post(BASE_URL + PATH)
+        ResultActions response = mockMvc.perform(post(BASE_URL + PATH)
                                                      .contentType(MediaType.APPLICATION_JSON)
                                                      .content(requestBody));
 
@@ -183,8 +192,7 @@ class UserControllerTest extends ControllerSetUp {
         String requestBody = objectMapper.writeValueAsString(existStudentNumber);
 
         // when
-        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
-                                                     .post(BASE_URL + PATH)
+        ResultActions response = mockMvc.perform(post(BASE_URL + PATH)
                                                      .contentType(MediaType.APPLICATION_JSON)
                                                      .content(requestBody));
 
@@ -226,8 +234,7 @@ class UserControllerTest extends ControllerSetUp {
         String requestBody = objectMapper.writeValueAsString(notExistStudentNumber);
 
         // when
-        ResultActions response = mockMvc.perform(RestDocumentationRequestBuilders
-                                                     .post(BASE_URL + PATH)
+        ResultActions response = mockMvc.perform(post(BASE_URL + PATH)
                                                      .contentType(MediaType.APPLICATION_JSON)
                                                      .content(requestBody));
 
@@ -396,6 +403,143 @@ class UserControllerTest extends ControllerSetUp {
                 .andExpect(status().isBadRequest());
       }
 
+    }
+  }
+
+  @Nested
+  @DisplayName("resetPassword메서드는")
+  class DescribeResetPassword {
+
+    private final String PATH = "/reset-pw";
+
+    @Nested
+    @DisplayName("올바른 passwordResetRequest가 요청될경우")
+    class ContextWithRightPasswordResetRequest{
+      final String newPassword = "testPassword!!";
+      @Test
+      @DisplayName("성공 후 OK를 반환된다.")
+      void ItReturns200Ok() throws Exception {
+        //given
+        PasswordResetRequest requestDto = new PasswordResetRequest(userId, studentNumber, newPassword, newPassword);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
+        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(true);
+        given(userRepository.findByUserId(UserId.valueOf(userId))).willReturn(Optional.of(user));
+
+        //when
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andDo(print())
+                .andExpect(status().isOk());
+      }
+    }
+
+    @Nested
+    @DisplayName("비밀번호 확인이 일치하지 않을 경우")
+    class ContextWithInvalidPasswordCheck {
+      String notMatingPasswordCheck = "testpassword@@";
+      @Test
+      @DisplayName("BadRequest를 반환한다.")
+      void ItReturnsBadRequest() throws Exception {
+        //given
+        PasswordResetRequest requestDto = new PasswordResetRequest(userId, studentNumber, password, notMatingPasswordCheck);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+        //when
+
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+      }
+    }
+
+    @Nested
+    @DisplayName("해당 아이디의 사용자를 찾을 수 없는 경우")
+    class ContextWithNotExistsUserId {
+      final String notExistUserId = "testingid";
+      @Test
+      @DisplayName("BadRequest를 반환한다.")
+      void ItReturnsBadRequest() throws Exception {
+        //given
+        PasswordResetRequest requestDto = new PasswordResetRequest(notExistUserId, studentNumber, password, password);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(false);
+
+        //when
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+      }
+    }
+
+    @Nested
+    @DisplayName("해당 학번의 사용자를 찾을 수 없는 경우")
+    class ContextWithNotExistsStudentNumber {
+      final String notExistStudentNumber = "60171444";
+      @Test
+      @DisplayName("BadRequest를 반환한다.")
+      void ItReturnsBadRequest() throws Exception {
+        //given
+        PasswordResetRequest requestDto = new PasswordResetRequest(userId, notExistStudentNumber, password, password);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
+        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(false);
+
+        //when
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+      }
+    }
+
+    @Nested
+    @DisplayName("해당 아이디와 일치하는 학번이 없을 경우")
+    class ContextWithUserIdNotCorrespondStudentId {
+      final String notMatchingStudentNumber = "60171444";
+      @Test
+      @DisplayName("BadRequest를 반환한다.")
+      void ItReturnsBadRequest() throws Exception {
+        //given
+        PasswordResetRequest requestDto = new PasswordResetRequest(userId, notMatchingStudentNumber, password, password);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
+        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(true);
+        given(userRepository.findByUserId(UserId.valueOf(userId))).willReturn(Optional.of(user));
+
+        //when
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+      }
     }
   }
 
