@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class GraduationRequirementServiceImpl implements GraduationRequirementService{
 
-  private final static EnglishLevel DEFAULT_ENGLISH_LV = EnglishLevel.ENG12;
+  private static final EnglishLevel DEFAULT_ENGLISH_LV = EnglishLevel.ENG12;
 
   private final GraduationRequirementRepository graduationRequirementRepository;
 
