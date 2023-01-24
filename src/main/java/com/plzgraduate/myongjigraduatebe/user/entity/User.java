@@ -81,6 +81,10 @@ public class User extends BaseEntity {
     this.department = department;
   }
 
+  public void updatePassword(String encodePw){
+    this.password = encodePw;
+  }
+
   public void updateRole(Role role) {
     this.role = role;
   }

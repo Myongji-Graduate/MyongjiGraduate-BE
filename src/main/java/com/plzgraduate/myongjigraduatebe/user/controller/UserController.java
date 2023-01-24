@@ -1,10 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.user.controller;
 
+import com.plzgraduate.myongjigraduatebe.user.dto.Password;
+import com.plzgraduate.myongjigraduatebe.user.validator.PasswordResetRequestValidator;
+import com.plzgraduate.myongjigraduatebe.user.dto.PasswordResetRequest;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import java.util.HashMap;
 
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,8 +45,13 @@ public class UserController {
 
   private final TakenLectureService takenLectureService;
   private final UserService userService;
-
   private final RecodeParsingTextRepository recodeRepository;
+  private final PasswordResetRequestValidator passwordResetRequestValidator;
+
+  @InitBinder("passwordResetRequest")
+  public void passwordResetRequestInitBinder(WebDataBinder webDataBinder){
+    webDataBinder.addValidators(passwordResetRequestValidator);
+  }
 
   @GetMapping("/me/taken-lectures")
   @ResponseStatus(HttpStatus.OK)
@@ -128,6 +139,14 @@ public class UserController {
   @ResponseStatus(HttpStatus.OK)
   public StudentFindIdResponse showUserId(@PathVariable String studentNumber){
     return userService.findStudentId(StudentNumber.valueOf(studentNumber));
+  }
+
+  @PostMapping("/reset-pw")
+  @ResponseStatus(HttpStatus.OK)
+  public void resetPassword(@RequestBody @Valid PasswordResetRequest passwordResetRequest){
+    userService.resetNewPassword(
+            UserId.valueOf(passwordResetRequest.getUserId()),
+            Password.valueOf(passwordResetRequest.getNewPassword()));
   }
 
 }

@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.dto;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,4 +33,20 @@ public class Password {
     return new Password(value);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Password password = (Password) o;
+    return Objects.equals(value, password.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
+  }
 }
