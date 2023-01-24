@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.plzgraduate.myongjigraduatebe.common.entity.EntryYear;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoRequest;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoRequirementResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.entity.GraduationRequirement;
@@ -14,18 +13,20 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GraduationRequirementServiceImpl implements GraduationRequirementService{
+
+  private final static EnglishLevel DEFAULT_ENGLISH_LV = EnglishLevel.ENG12;
 
   private final GraduationRequirementRepository graduationRequirementRepository;
 
   @Override
-  @Transactional(readOnly = true)
-  public BachelorInfoRequirementResponse find(BachelorInfoRequest bachelorInfoRequest) {
-    GraduationRequirement findGraduationRequirement = graduationRequirementRepository.findByNameAndEntryYear(
-        EntryYear.of(bachelorInfoRequest.getEntryYear()),
+  public BachelorInfoRequirementResponse getBachelorInfoRequirement(BachelorInfoRequest bachelorInfoRequest) {
+    GraduationRequirement foundGraduationRequirement = graduationRequirementRepository.findByNameAndEntryYear(
+        bachelorInfoRequest.getEntryYear(),
         bachelorInfoRequest.getDepartment(),
-        EnglishLevel.ENG12
+        DEFAULT_ENGLISH_LV
     );
-    return BachelorInfoRequirementResponse.from(findGraduationRequirement);
+    return BachelorInfoRequirementResponse.from(foundGraduationRequirement);
   }
 }

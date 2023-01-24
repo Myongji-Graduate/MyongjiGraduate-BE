@@ -26,6 +26,6 @@ public class GraduationRequirementApiController {
       @RequestBody
       BachelorInfoRequest bachelorInfoRequest
   ) {
-    return graduationRequirementService.find(bachelorInfoRequest);
+    return graduationRequirementService.getBachelorInfoRequirement(bachelorInfoRequest);
   }
 }
