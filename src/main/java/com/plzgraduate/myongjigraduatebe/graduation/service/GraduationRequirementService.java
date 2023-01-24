@@ -5,5 +5,5 @@ import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoRequirementR
 
 public interface GraduationRequirementService {
 
-  BachelorInfoRequirementResponse find(BachelorInfoRequest bachelorInfoRequest);
+  BachelorInfoRequirementResponse getBachelorInfoRequirement(BachelorInfoRequest bachelorInfoRequest);
 }
