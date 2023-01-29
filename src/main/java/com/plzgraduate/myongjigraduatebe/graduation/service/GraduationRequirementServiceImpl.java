@@ -102,6 +102,9 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
             divideMajorByMandatory(majorMap, graduationLecture, lectureCategory, lecture);
             break;
           case "COMMON_CULTURE":
+            if(lecture.getLectureCode().getCode().equals("KMA00101") && graduationLecture.isMandatory()){
+              lecture.setName(lecture.getName() + "(필수)");
+            }
             commonCultureMap.computeIfAbsent(lectureCategory.getDetailCategory(), k -> new ArrayList<>())
                     .add(LectureResponse.from(lecture));
             break;
