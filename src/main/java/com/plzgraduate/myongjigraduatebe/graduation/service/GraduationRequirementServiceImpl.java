@@ -99,7 +99,7 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
       if(!lecture.isRevoked()){
         switch (lectureCategory.getCategory().name()) {
           case "MAJOR":
-            divideMajorByMandatory(majorMap, graduationLecture, lecture);
+            divideMajorByMandatory(majorMap, graduationLecture, lectureCategory, lecture);
             break;
           case "COMMON_CULTURE":
             commonCultureMap.computeIfAbsent(lectureCategory.getDetailCategory(), k -> new ArrayList<>())
@@ -117,11 +117,16 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
   }
 
   private void divideMajorByMandatory(Map<String, List<LectureResponse>> majorMap, GraduationLecture graduationLecture,
-                                Lecture lecture) {
+                                      LectureCategory lectureCategory, Lecture lecture) {
     if(graduationLecture.isMandatory()){
       majorMap.get("전공필수").add(LectureResponse.from(lecture));
     }
     else{
+      String detailCategory = lectureCategory.getDetailCategory();
+      if(detailCategory.charAt(detailCategory.length()-1)=='A') {
+        String addedLectureName = lecture.getName() + "(선택필수)";
+        lecture.setName(addedLectureName);
+      }
       majorMap.get("전공선택").add(LectureResponse.from(lecture));
     }
   }
