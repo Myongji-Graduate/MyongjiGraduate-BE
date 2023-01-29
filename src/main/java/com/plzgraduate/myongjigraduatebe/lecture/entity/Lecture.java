@@ -86,6 +86,8 @@ public class Lecture extends BaseEntity {
     this.isMajor = true;
   }
 
+  public void setName(String name) {this.name = name;}
+
   public String getCode() {
     return lectureCode.getCode();
   }
