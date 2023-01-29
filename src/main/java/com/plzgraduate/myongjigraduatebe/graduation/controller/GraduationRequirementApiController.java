@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.controller;
 
+import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoLecturesResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,5 +28,14 @@ public class GraduationRequirementApiController {
       BachelorInfoRequest bachelorInfoRequest
   ) {
     return graduationRequirementService.getBachelorInfoRequirement(bachelorInfoRequest);
+  }
+
+  @GetMapping("/lectures")
+  @ResponseStatus(HttpStatus.OK)
+  public BachelorInfoLecturesResponse getBachelorInfoLectures(
+          @RequestBody
+          BachelorInfoRequest bachelorInfoRequest
+  ){
+    return graduationRequirementService.getBachelorInfoLectures(bachelorInfoRequest);
   }
 }
