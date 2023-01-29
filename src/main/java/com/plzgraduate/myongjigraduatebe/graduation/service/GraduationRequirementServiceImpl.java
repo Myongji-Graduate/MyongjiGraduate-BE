@@ -9,6 +9,8 @@ import com.plzgraduate.myongjigraduatebe.graduation.entity.LectureCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.repository.GraduationLectureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.dto.LectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.entity.Lecture;
+import com.plzgraduate.myongjigraduatebe.lecture.entity.LectureCode;
+import com.plzgraduate.myongjigraduatebe.lecture.repository.LectureRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
   private final GraduationRequirementRepository graduationRequirementRepository;
   private final GraduationLectureRepository graduationLectureRepository;
   private final DepartmentRepository departmentRepository;
+  private final LectureRepository lectureRepository;
 
   @Override
   public BachelorInfoRequirementResponse getBachelorInfoRequirement(BachelorInfoRequest bachelorInfoRequest) {
@@ -69,6 +72,9 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
     }};
 
     classifyGraduationLectures(graduationLectures, majorMap, commonCultureMap, coreCultureMap, basicAcademicalCultureMap);
+
+    addChapelToCommonCultureMap(commonCultureMap);
+    addEnglishLevelOverThreeToCommonCultureMap(commonCultureMap);
 
     return BachelorInfoLecturesResponse.of(
             createBachelorInfoCategory(majorMap),
@@ -132,5 +138,27 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
       }
       majorMap.get("전공선택").add(LectureResponse.from(lecture));
     }
+  }
+
+  private void addChapelToCommonCultureMap(Map<String, List<LectureResponse>> commonCultureMap) {
+    Optional<Lecture> byLectureCode = lectureRepository.findByLectureCode(LectureCode.of("KMA02101"));
+    byLectureCode.ifPresent(lecture -> {
+      lecture.setName(lecture.getName() + ("(4회 필수 이수)"));
+      commonCultureMap.get("CHRISTIAN").add(LectureResponse.from(lecture));
+    });
+  }
+
+  private void addEnglishLevelOverThreeToCommonCultureMap(Map<String, List<LectureResponse>> commonCultureMap) {
+    List<String> englishThreeFourCode = new ArrayList<>(){{
+      add("KMA02123");
+      add("KMA02124");
+      add("KMA02125");
+      add("KMA02126");
+    }};
+
+    englishThreeFourCode.forEach( lectureCode -> {
+      Optional<Lecture> byLectureCode = lectureRepository.findByLectureCode(LectureCode.of(lectureCode));
+      byLectureCode.ifPresent(lecture -> commonCultureMap.get("ENGLISH").add(LectureResponse.from(lecture)));
+    });
   }
 }
