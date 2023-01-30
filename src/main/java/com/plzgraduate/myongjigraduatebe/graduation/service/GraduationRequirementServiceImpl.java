@@ -61,15 +61,12 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
             DEFAULT_ENGLISH_LV
     );
 
-    Map<String, List<LectureResponse>> majorMap = new HashMap<>(){{
-      put("전공필수", new ArrayList<>());
-      put("전공선택", new ArrayList<>());
-    }};
+    Map<String, List<LectureResponse>> majorMap = new HashMap<>(){};
     Map<String, List<LectureResponse>> commonCultureMap = new HashMap<>();
     Map<String, List<LectureResponse>> coreCultureMap = new HashMap<>();
-    Map<String, List<LectureResponse>> basicAcademicalCultureMap = new HashMap<>(){{
-      put("학문기초교양", new ArrayList<>());
-    }};
+    Map<String, List<LectureResponse>> basicAcademicalCultureMap = new HashMap<>(){};
+
+    initializeMap(majorMap, basicAcademicalCultureMap);
 
     classifyGraduationLectures(graduationLectures, majorMap, commonCultureMap, coreCultureMap, basicAcademicalCultureMap);
 
@@ -161,4 +158,12 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
       byLectureCode.ifPresent(lecture -> commonCultureMap.get("ENGLISH").add(LectureResponse.from(lecture)));
     });
   }
+
+  private void initializeMap(Map<String, List<LectureResponse>> majorMap,
+                             Map<String, List<LectureResponse>> basicAcademicalCultureMap) {
+    majorMap.put("전공필수", new ArrayList<>());
+    majorMap.put("전공선택", new ArrayList<>());
+    basicAcademicalCultureMap.put("학문기초교양", new ArrayList<>());
+  }
+
 }
