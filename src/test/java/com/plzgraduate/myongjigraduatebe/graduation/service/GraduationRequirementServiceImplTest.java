@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.service;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoRequirementResponse.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -54,7 +55,8 @@ class GraduationRequirementServiceImplTest {
 
     //then
     assertThat(bachelorInfoRequirementResponse).isNotNull();
-    assertThat(bachelorInfoRequirementResponse.getTotalCredit()).isEqualTo(graduationRequirement.getTotalCredit());
+    assertThat(bachelorInfoRequirementResponse.getTotalCredit()).isEqualTo(
+        graduationRequirement.getTotalCredit() + CHAPEL_CREDIT);
   }
 
 }
