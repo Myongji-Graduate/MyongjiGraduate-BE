@@ -146,12 +146,11 @@ public class GraduationRequirementServiceImpl implements GraduationRequirementSe
   }
 
   private void addEnglishLevelOverThreeToCommonCultureMap(Map<String, List<LectureResponse>> commonCultureMap) {
-    List<String> englishThreeFourCode = new ArrayList<>(){{
-      add("KMA02123");
-      add("KMA02124");
-      add("KMA02125");
-      add("KMA02126");
-    }};
+    List<String> englishThreeFourCode = new ArrayList<>(){};
+    englishThreeFourCode.add("KMA02123");
+    englishThreeFourCode.add("KMA02124");
+    englishThreeFourCode.add("KMA02125");
+    englishThreeFourCode.add("KMA02126");
 
     englishThreeFourCode.forEach( lectureCode -> {
       Optional<Lecture> byLectureCode = lectureRepository.findByLectureCode(LectureCode.of(lectureCode));
