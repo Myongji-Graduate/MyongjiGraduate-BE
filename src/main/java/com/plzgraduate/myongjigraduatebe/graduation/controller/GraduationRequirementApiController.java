@@ -1,13 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.controller;
 
-import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoLecturesResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoLecturesResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoRequest;
 import com.plzgraduate.myongjigraduatebe.graduation.dto.BachelorInfoRequirementResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.service.GraduationRequirementService;
@@ -24,7 +24,7 @@ public class GraduationRequirementApiController {
   @GetMapping("/requirement")
   @ResponseStatus(HttpStatus.OK)
   public BachelorInfoRequirementResponse getBachelorInfoRequirement(
-      @RequestBody
+      @ModelAttribute
       BachelorInfoRequest bachelorInfoRequest
   ) {
     return graduationRequirementService.getBachelorInfoRequirement(bachelorInfoRequest);
@@ -33,9 +33,9 @@ public class GraduationRequirementApiController {
   @GetMapping("/lectures")
   @ResponseStatus(HttpStatus.OK)
   public BachelorInfoLecturesResponse getBachelorInfoLectures(
-          @RequestBody
-          BachelorInfoRequest bachelorInfoRequest
-  ){
+      @ModelAttribute
+      BachelorInfoRequest bachelorInfoRequest
+  ) {
     return graduationRequirementService.getBachelorInfoLectures(bachelorInfoRequest);
   }
 }

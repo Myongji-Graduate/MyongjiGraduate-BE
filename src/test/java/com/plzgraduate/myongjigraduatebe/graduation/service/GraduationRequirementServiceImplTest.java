@@ -28,7 +28,7 @@ class GraduationRequirementServiceImplTest {
   @Mock
   private GraduationRequirementRepository graduationRequirementRepository;
 
-  private final BachelorInfoRequest bachelorInfoRequest = new BachelorInfoRequest(EntryYear.of(19), "법학과");
+  private final BachelorInfoRequest bachelorInfoRequest = new BachelorInfoRequest(19, "법학과");
 
   @Test
   @DisplayName("입학년도와 학과로 졸업요건학점을 조회한다.")
@@ -46,7 +46,7 @@ class GraduationRequirementServiceImplTest {
         .totalCredit(60)
         .build();
 
-    given(graduationRequirementRepository.findByNameAndEntryYear(bachelorInfoRequest.getEntryYear()
+    given(graduationRequirementRepository.findByNameAndEntryYear(EntryYear.of(bachelorInfoRequest.getEntryYear())
         , bachelorInfoRequest.getDepartment(), EnglishLevel.ENG12)).willReturn(graduationRequirement);
 
     //when
