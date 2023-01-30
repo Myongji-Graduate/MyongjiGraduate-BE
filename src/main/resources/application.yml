@@ -6,9 +6,10 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-    open-in-view: false
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
 server:
   port: ${PORT}
 
