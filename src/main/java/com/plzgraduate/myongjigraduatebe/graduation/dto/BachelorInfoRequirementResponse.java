@@ -10,23 +10,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class BachelorInfoRequirementResponse {
 
+  public static final int CHAPEL_CREDIT = 2;
+
   private final int commonCultureCredit;
   private final int coreCultureCredit;
   private final int basicAcademicalCultureCredit;
-  private final int normalCulture;
-  private final int major;
-  private final int freeElective;
+  private final int normalCultureCredit;
+  private final int majorCredit;
+  private final int freeElectiveCredit;
   private final int totalCredit;
 
   public static BachelorInfoRequirementResponse from(GraduationRequirement entity) {
     return new BachelorInfoRequirementResponse(
-        entity.getCommonCultureCredit(),
+        entity.getCommonCultureCredit() + CHAPEL_CREDIT,
         entity.getCoreCultureCredit(),
         entity.getBasicAcademicalCultureCredit(),
         entity.getNormalCultureCredit(),
         entity.getMajorCredit(),
         entity.getFreeElectiveCredit(),
-        entity.getTotalCredit()
+        entity.getTotalCredit() + CHAPEL_CREDIT
     );
   }
 }
