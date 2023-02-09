@@ -88,7 +88,7 @@ public class DefaultUserService implements UserService {
     if(!passwordEncoder.matches(password, user.getPassword())){
       throw new IllegalArgumentException("입력하신 비밀번호가 일치하지 않습니다.");
     }
-    takenLectureRepository.deleteAllByUser_Id(user.getId());
+    takenLectureRepository.deleteAllByUserId(user.getId());
     userRepository.deleteById(user.getId());
     SecurityContextHolder.clearContext();
   }

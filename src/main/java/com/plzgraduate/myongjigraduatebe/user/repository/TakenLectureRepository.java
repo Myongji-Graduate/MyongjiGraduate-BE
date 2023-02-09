@@ -27,5 +27,5 @@ public interface TakenLectureRepository extends JpaRepository<TakenLecture, Long
 
   void deleteAllByIdIsIn(List<Long> id);
 
-  void deleteAllByUser_Id(@Param("userId") long userid);
+  void deleteAllByUserId(@Param("userId") long userid);
 }
