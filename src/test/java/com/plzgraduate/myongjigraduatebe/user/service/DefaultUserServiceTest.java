@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.*;
 import com.plzgraduate.myongjigraduatebe.user.dto.Password;
 import com.plzgraduate.myongjigraduatebe.user.repository.TakenLectureRepository;
 import java.util.Optional;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -155,6 +156,48 @@ class DefaultUserServiceTest {
         assertThat(response.getStudentNumber()).isEqualTo(notExistStudentNumber);
         assertThat(response.getIsNotDuplicated()).isTrue();
       }
+    }
+  }
+
+  @Nested
+  @DisplayName("checkPasswordChangingUser는")
+  class DescribeCheckPasswordChangingUser {
+    @Nested
+    @DisplayName("올바르지 않은 학번이면")
+    class ContextWithNotExistId {
+      @Test
+      @DisplayName("예외를 반환한다.")
+      void ItReturnsException() {
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(false);
+        Assert.assertThrows(IllegalArgumentException.class, () -> defaultUserService.checkPasswordChangingUser(UserId.valueOf(userId),StudentNumber.valueOf(studentNumber)));
+      }
+
+    }
+    @Nested
+    @DisplayName("올바르지 않은 학번이면")
+    class ContextWithNotExistStudentNumber {
+      @Test
+      @DisplayName("예외를 반환한다.")
+      void ItReturnsException() {
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
+        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(false);
+        Assert.assertThrows(IllegalArgumentException.class, () -> defaultUserService.checkPasswordChangingUser(UserId.valueOf(userId),StudentNumber.valueOf(studentNumber)));
+      }
+
+    }
+    @Nested
+    @DisplayName("아이디와 학번이 일치하지 않을 경우")
+    class ContextWithNotMatingIdAndNumber {
+      @Test
+      @DisplayName("예외를 반환한다.")
+      void ItReturnsException() {
+        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
+        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(true);
+        given(userRepository.findByUserId(any(UserId.class))).willReturn(Optional.of(user));
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> defaultUserService.checkPasswordChangingUser(UserId.valueOf(userId),StudentNumber.valueOf("60181666")));
+      }
+
     }
   }
 

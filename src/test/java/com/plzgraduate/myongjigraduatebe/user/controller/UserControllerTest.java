@@ -15,7 +15,6 @@ import com.plzgraduate.myongjigraduatebe.user.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.validator.PasswordResetRequestValidator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -423,11 +422,10 @@ class UserControllerTest extends ControllerSetUp {
       @DisplayName("성공 후 OK를 반환된다.")
       void ItReturns200Ok() throws Exception {
         //given
-        PasswordResetRequest requestDto = new PasswordResetRequest(userId, studentNumber, newPassword, newPassword);
+        PasswordResetRequest requestDto = new PasswordResetRequest(userId, newPassword, newPassword);
         String requestBody = objectMapper.writeValueAsString(requestDto);
         given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
         given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(true);
-        given(userRepository.findByUserId(UserId.valueOf(userId))).willReturn(Optional.of(user));
 
         //when
         MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
@@ -450,7 +448,7 @@ class UserControllerTest extends ControllerSetUp {
       @DisplayName("BadRequest를 반환한다.")
       void ItReturnsBadRequest() throws Exception {
         //given
-        PasswordResetRequest requestDto = new PasswordResetRequest(userId, studentNumber, password, notMatingPasswordCheck);
+        PasswordResetRequest requestDto = new PasswordResetRequest(userId, password, notMatingPasswordCheck);
         String requestBody = objectMapper.writeValueAsString(requestDto);
 
         //when
@@ -475,62 +473,9 @@ class UserControllerTest extends ControllerSetUp {
       @DisplayName("BadRequest를 반환한다.")
       void ItReturnsBadRequest() throws Exception {
         //given
-        PasswordResetRequest requestDto = new PasswordResetRequest(notExistUserId, studentNumber, password, password);
+        PasswordResetRequest requestDto = new PasswordResetRequest(notExistUserId, password, password);
         String requestBody = objectMapper.writeValueAsString(requestDto);
         given(userRepository.existsByUserId(any(UserId.class))).willReturn(false);
-
-        //when
-        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody);
-
-        ResultActions response = mockMvc.perform(request);
-
-        //then
-        response.andDo(print())
-                .andExpect(status().isBadRequest());
-      }
-    }
-
-    @Nested
-    @DisplayName("해당 학번의 사용자를 찾을 수 없는 경우")
-    class ContextWithNotExistsStudentNumber {
-      final String notExistStudentNumber = "60171444";
-      @Test
-      @DisplayName("BadRequest를 반환한다.")
-      void ItReturnsBadRequest() throws Exception {
-        //given
-        PasswordResetRequest requestDto = new PasswordResetRequest(userId, notExistStudentNumber, password, password);
-        String requestBody = objectMapper.writeValueAsString(requestDto);
-        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
-        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(false);
-
-        //when
-        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody);
-
-        ResultActions response = mockMvc.perform(request);
-
-        //then
-        response.andDo(print())
-                .andExpect(status().isBadRequest());
-      }
-    }
-
-    @Nested
-    @DisplayName("해당 아이디와 일치하는 학번이 없을 경우")
-    class ContextWithUserIdNotCorrespondStudentId {
-      final String notMatchingStudentNumber = "60171444";
-      @Test
-      @DisplayName("BadRequest를 반환한다.")
-      void ItReturnsBadRequest() throws Exception {
-        //given
-        PasswordResetRequest requestDto = new PasswordResetRequest(userId, notMatchingStudentNumber, password, password);
-        String requestBody = objectMapper.writeValueAsString(requestDto);
-        given(userRepository.existsByUserId(any(UserId.class))).willReturn(true);
-        given(userRepository.existsByStudentNumber(any(StudentNumber.class))).willReturn(true);
-        given(userRepository.findByUserId(UserId.valueOf(userId))).willReturn(Optional.of(user));
 
         //when
         MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
