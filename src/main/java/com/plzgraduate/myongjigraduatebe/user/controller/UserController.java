@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.controller;
 
 import com.plzgraduate.myongjigraduatebe.user.dto.Password;
+import com.plzgraduate.myongjigraduatebe.user.dto.PasswordCheckRequest;
 import com.plzgraduate.myongjigraduatebe.user.validator.PasswordResetRequestValidator;
 import com.plzgraduate.myongjigraduatebe.user.dto.PasswordResetRequest;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
@@ -140,6 +141,14 @@ public class UserController {
   @ResponseStatus(HttpStatus.OK)
   public StudentFindIdResponse showUserId(@PathVariable String studentNumber){
     return userService.findStudentId(StudentNumber.valueOf(studentNumber));
+  }
+
+  @PostMapping ("/pwinquiry")
+  @ResponseStatus(HttpStatus.OK)
+  public void checkPasswordChangingUser(@RequestBody PasswordCheckRequest passwordCheckRequest) {
+    userService.checkPasswordChangingUser(
+            UserId.valueOf(passwordCheckRequest.getUserId()),
+            StudentNumber.valueOf(passwordCheckRequest.getStudentNumber()));
   }
 
   @PostMapping("/reset-pw")

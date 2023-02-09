@@ -28,4 +28,6 @@ public interface UserService {
   void resetNewPassword(UserId userId, Password password);
 
   void deleteUser(AuthenticatedUser user, String password);
+
+  void checkPasswordChangingUser(UserId userId, StudentNumber studentNumber);
 }

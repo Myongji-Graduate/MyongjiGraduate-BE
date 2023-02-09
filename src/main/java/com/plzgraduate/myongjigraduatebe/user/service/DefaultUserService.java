@@ -94,6 +94,20 @@ public class DefaultUserService implements UserService {
   }
 
   @Override
+  public void checkPasswordChangingUser(UserId userId, StudentNumber studentNumber) {
+    Optional<User> byUserId = userRepository.findByUserId(userId);
+    if(!userRepository.existsByUserId(userId)) {
+      throw new IllegalArgumentException("해당 아이디의 사용자가 존재하지 않습니다.");
+    }
+    if(!userRepository.existsByStudentNumber(studentNumber)){
+      throw new IllegalArgumentException("해당 학번의 사용자가 존재하지 않습니다.");
+    }
+    if(byUserId.isPresent() && !byUserId.get().getStudentNumber().equals(studentNumber)){
+      throw new IllegalArgumentException("해당 아이디와 일치하는 학번이 없습니다.");
+    }
+  }
+
+  @Override
   public void resetNewPassword(UserId userId, Password password){
     Optional<User> byUserId = userRepository.findByUserId(userId);
     byUserId.ifPresent(user -> user.updatePassword(passwordEncoder.encode(password.getValue())));
