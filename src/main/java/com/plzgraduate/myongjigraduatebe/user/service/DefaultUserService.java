@@ -2,7 +2,9 @@ package com.plzgraduate.myongjigraduatebe.user.service;
 
 import com.plzgraduate.myongjigraduatebe.user.dto.Password;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
+import com.plzgraduate.myongjigraduatebe.user.repository.TakenLectureRepository;
 import java.util.Optional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,7 @@ public class DefaultUserService implements UserService {
   private final UserRepository userRepository;
   private final DepartmentRepository departmentRepository;
   private final PasswordEncoder passwordEncoder;
+  private final TakenLectureRepository takenLectureRepository;
 
   @Override
   public UserIdValidityResponse checkValidityUserId(UserId userId) {
@@ -78,6 +81,16 @@ public class DefaultUserService implements UserService {
     return StudentFindIdResponse.of(user.getUserId().getId(),
             user.getStudentNumber().getValue()
     );
+  }
+
+  @Override
+  public void deleteUser(AuthenticatedUser user, String password){
+    if(!passwordEncoder.matches(password, user.getPassword())){
+      throw new IllegalArgumentException("입력하신 비밀번호가 일치하지 않습니다.");
+    }
+    takenLectureRepository.deleteAllByUser_Id(user.getId());
+    userRepository.deleteById(user.getId());
+    SecurityContextHolder.clearContext();
   }
 
   @Override

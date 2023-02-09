@@ -8,10 +8,13 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.plzgraduate.myongjigraduatebe.auth.dto.AuthenticatedUser;
 import com.plzgraduate.myongjigraduatebe.user.dto.PasswordResetRequest;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import com.plzgraduate.myongjigraduatebe.user.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.validator.PasswordResetRequestValidator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -543,4 +546,51 @@ class UserControllerTest extends ControllerSetUp {
     }
   }
 
+  @Nested
+  @DisplayName("deleteUser메서드를 실행하면")
+  class DescribeDeleteUser {
+    private final String PATH = "/leave";
+    @Nested
+    @DisplayName("올바른 비밀번호를 입력받을 경우")
+    class ContextWithRightPassword {
+      @Test
+      @WithMockUserIsInitialized
+      @DisplayName("회원 탈퇴 성공")
+      void ItReturns200OK() throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("password", "wrong");
+        String requestBody = objectMapper.writeValueAsString(map);
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+        response.andDo(print())
+                .andExpect(status().isOk());
+      }
+    }
+
+    @Nested
+    @DisplayName("잘못된 비밀번호를 입력받을 경우")
+    class ContextWithWrongPassword {
+      @Test
+      @WithMockUserIsInitialized
+      @DisplayName("회원 탈퇴 실패")
+      void ItReturnsBadRequest() throws Exception {
+        doThrow(new IllegalArgumentException()).when(userService)
+                .deleteUser(any(AuthenticatedUser.class), anyString());
+        Map<String, String> map = new HashMap<>();
+        map.put("password", "wrong");
+        String requestBody = objectMapper.writeValueAsString(map);
+        MockHttpServletRequestBuilder request = post(BASE_URL + PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        ResultActions response = mockMvc.perform(request);
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+
+      }
+    }
+  }
 }

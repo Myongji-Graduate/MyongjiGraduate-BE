@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import com.plzgraduate.myongjigraduatebe.user.dto.Password;
+import com.plzgraduate.myongjigraduatebe.user.repository.TakenLectureRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,6 +35,8 @@ class DefaultUserServiceTest {
 
   @Mock
   private UserRepository userRepository;
+  @Mock
+  TakenLectureRepository takenLectureRepository;
   @Mock
   private PasswordEncoder passwordEncoder;
 
@@ -183,5 +186,4 @@ class DefaultUserServiceTest {
       }
     }
   }
-
 }
