@@ -27,4 +27,5 @@ public interface UserService {
 
   void resetNewPassword(UserId userId, Password password);
 
+  void deleteUser(AuthenticatedUser user, String password);
 }

@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.repository;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,4 +26,6 @@ public interface TakenLectureRepository extends JpaRepository<TakenLecture, Long
   List<TakenLecture> findAllByUserIdWithFetchJoin(@Param("id") long id);
 
   void deleteAllByIdIsIn(List<Long> id);
+
+  void deleteAllByUser_Id(@Param("userId") long userid);
 }

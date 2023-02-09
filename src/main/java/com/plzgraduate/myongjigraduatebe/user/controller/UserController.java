@@ -6,6 +6,7 @@ import com.plzgraduate.myongjigraduatebe.user.dto.PasswordResetRequest;
 import com.plzgraduate.myongjigraduatebe.user.dto.StudentFindIdResponse;
 import java.util.HashMap;
 
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
@@ -147,6 +148,12 @@ public class UserController {
     userService.resetNewPassword(
             UserId.valueOf(passwordResetRequest.getUserId()),
             Password.valueOf(passwordResetRequest.getNewPassword()));
+  }
+
+  @PostMapping("/leave")
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteUser(@CurrentUser AuthenticatedUser user, @RequestBody Map<String ,String> passwordMap) {
+    userService.deleteUser(user, passwordMap.get("password"));
   }
 
 }
