@@ -1,11 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.user.dto;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudentFindIdResponse {
 
     private final String userId;
@@ -16,9 +16,10 @@ public class StudentFindIdResponse {
             String userId,
             String studentNumber
     ) {
-        return StudentFindIdResponse.builder()
-                .userId(userId)
-                .studentNumber(studentNumber)
-                .build();
+        return new StudentFindIdResponse(encodeUserId(userId), studentNumber);
+    }
+
+    private static String encodeUserId(String userId){
+        return userId.substring(0, userId.length()-3) + "***";
     }
 }
