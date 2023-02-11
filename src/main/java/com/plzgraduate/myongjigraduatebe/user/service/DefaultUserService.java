@@ -96,8 +96,9 @@ public class DefaultUserService implements UserService {
 
   @Override
   public void existUserByIdAndStudentNumber(UserId userId, StudentNumber studentNumber) {
-    userRepository.findByUserIdAndStudentNumber(userId, studentNumber)
-            .orElseThrow(() -> new IllegalArgumentException("아이디나 학번이 일치하지 않습니다."));
+    if(userRepository.findByUserIdAndStudentNumber(userId, studentNumber).isEmpty()){
+      throw new IllegalArgumentException("아이디나 학번이 일치하지 않습니다.");
+    }
   }
 
   @Override
