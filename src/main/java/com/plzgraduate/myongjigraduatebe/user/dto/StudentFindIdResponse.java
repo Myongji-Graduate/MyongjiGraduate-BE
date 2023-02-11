@@ -16,10 +16,6 @@ public class StudentFindIdResponse {
             String userId,
             String studentNumber
     ) {
-        return new StudentFindIdResponse(encodeUserId(userId), studentNumber);
-    }
-
-    private static String encodeUserId(String userId){
-        return userId.substring(0, userId.length()-3) + "***";
+        return new StudentFindIdResponse(userId, studentNumber);
     }
 }

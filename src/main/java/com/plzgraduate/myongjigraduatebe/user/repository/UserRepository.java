@@ -28,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByIdWithFetchJoin(@Param("id") long id);
 
   Optional<User> findUserByStudentNumber(StudentNumber studentNumber);
+
+  Optional<User> findByUserIdAndStudentNumber(UserId userId, StudentNumber studentNumber);
 }
