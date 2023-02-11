@@ -29,5 +29,5 @@ public interface UserService {
 
   void deleteUser(AuthenticatedUser user, String password);
 
-  void checkPasswordChangingUser(UserId userId, StudentNumber studentNumber);
+  void existUserByIdAndStudentNumber(UserId userId, StudentNumber studentNumber);
 }

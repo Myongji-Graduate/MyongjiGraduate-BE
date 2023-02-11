@@ -145,10 +145,10 @@ public class UserController {
 
   @PostMapping ("/pwinquiry")
   @ResponseStatus(HttpStatus.OK)
-  public void checkPasswordChangingUser(@RequestBody PasswordCheckRequest passwordCheckRequest) {
-    userService.checkPasswordChangingUser(
-            UserId.valueOf(passwordCheckRequest.getUserId()),
-            StudentNumber.valueOf(passwordCheckRequest.getStudentNumber()));
+  public void existUserByIdAndStudentNumber(@RequestBody PasswordCheckRequest passwordCheckRequest) {
+    userService.existUserByIdAndStudentNumber(
+            passwordCheckRequest.getUserId(),
+            passwordCheckRequest.getStudentNumber());
   }
 
   @PostMapping("/reset-pw")

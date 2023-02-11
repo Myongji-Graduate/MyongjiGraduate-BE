@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.dto;
 
+import com.plzgraduate.myongjigraduatebe.user.entity.StudentNumber;
+import com.plzgraduate.myongjigraduatebe.user.entity.UserId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordCheckRequest {
-    private String userId;
-    private String studentNumber;
+    private UserId userId;
+    private StudentNumber studentNumber;
 }

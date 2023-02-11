@@ -78,7 +78,8 @@ public class DefaultUserService implements UserService {
     User user = userRepository
             .findUserByStudentNumber(studentNumber)
             .orElseThrow(() -> new IllegalArgumentException("해당 학번이 존재하지 않습니다."));
-    return StudentFindIdResponse.of(user.getUserId().getId(),
+    return StudentFindIdResponse.of(
+            encodeUserId(user.getUserId().getId()),
             user.getStudentNumber().getValue()
     );
   }
@@ -94,23 +95,23 @@ public class DefaultUserService implements UserService {
   }
 
   @Override
-  public void checkPasswordChangingUser(UserId userId, StudentNumber studentNumber) {
-    Optional<User> byUserId = userRepository.findByUserId(userId);
-    if(!userRepository.existsByUserId(userId)) {
-      throw new IllegalArgumentException("해당 아이디의 사용자가 존재하지 않습니다.");
-    }
-    if(!userRepository.existsByStudentNumber(studentNumber)){
-      throw new IllegalArgumentException("해당 학번의 사용자가 존재하지 않습니다.");
-    }
-    if(byUserId.isPresent() && !byUserId.get().getStudentNumber().equals(studentNumber)){
-      throw new IllegalArgumentException("해당 아이디와 일치하는 학번이 없습니다.");
-    }
+  public void existUserByIdAndStudentNumber(UserId userId, StudentNumber studentNumber) {
+    userRepository.findByUserIdAndStudentNumber(userId, studentNumber)
+            .orElseThrow(() -> new IllegalArgumentException("아이디나 학번이 일치하지 않습니다."));
   }
 
   @Override
   public void resetNewPassword(UserId userId, Password password){
     Optional<User> byUserId = userRepository.findByUserId(userId);
     byUserId.ifPresent(user -> user.updatePassword(passwordEncoder.encode(password.getValue())));
+  }
+
+  private String encodeUserId(String userId){
+    StringBuilder sb = new StringBuilder(userId);
+    for(int i=3; i<sb.length(); i++) {
+      sb.setCharAt(i, '*');
+    }
+    return sb.toString();
   }
 
 }
