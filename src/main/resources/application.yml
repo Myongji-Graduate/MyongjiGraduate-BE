@@ -10,6 +10,10 @@ spring:
     properties:
       hibernate:
         show_sql: true
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+
 server:
   port: ${PORT}
 
