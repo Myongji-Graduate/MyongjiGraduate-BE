@@ -48,6 +48,8 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    implementation('org.flywaydb:flyway-core:6.4.2')
+
 //    implementation 'org.testcontainers:jdbc:1.17.3'
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
@@ -59,6 +61,7 @@ dependencies {
     testImplementation 'org.testcontainers:mysql'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 
 }
 
