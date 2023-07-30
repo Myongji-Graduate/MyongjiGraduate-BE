@@ -2,9 +2,9 @@ name: Test & Jacoco Code Coverage
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ] # master branch에 PR을 보낼 때 실행
+    branches: [ main, develop ] # master branch에 PR을 보낼 때 실행
 
 jobs:
   test:
