@@ -38,5 +38,5 @@ jobs:
         run: ./gradlew build jacocoTestReport
         
       # report 업로드하기
-      - name: Upload coverage to Codecv
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.1.1
