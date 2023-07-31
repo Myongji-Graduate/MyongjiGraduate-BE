@@ -22,7 +22,7 @@ public class TimeBaseEntity {
   private LocalDateTime createdAt;
 
   @LastModifiedDate
-  @Column(columnDefinition = "TIMESTAMP")
+  @Column(columnDefinition = "TIMESTAMP", nullable = false)
   private LocalDateTime updatedAt;
 
 }
