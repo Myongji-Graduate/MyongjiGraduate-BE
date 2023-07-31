@@ -11,13 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.plzgraduate.myongjigraduatebe.auth.service.JwtAuthService;
-import com.plzgraduate.myongjigraduatebe.common.filter.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,9 +23,7 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(
-      HttpSecurity http,
-      JwtAuthService authService,
-      JwtConfig config
+      HttpSecurity http
   ) throws Exception {
     http
         .authorizeRequests()
@@ -78,12 +72,7 @@ public class SecurityConfig {
          */
         .exceptionHandling()
         .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-        .accessDeniedHandler(accessDeniedHandler())
-        .and()
-        /*
-          Jwt 필터
-         */
-        .addFilterBefore(authenticationFilter(authService, config), UsernamePasswordAuthenticationFilter.class);
+        .accessDeniedHandler(accessDeniedHandler());
 
     return http.build();
   }
@@ -112,11 +101,4 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean
-  public JwtAuthenticationFilter authenticationFilter(
-      JwtAuthService authService,
-      JwtConfig config
-  ) {
-    return new JwtAuthenticationFilter(authService, config);
-  }
 }
