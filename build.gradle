@@ -5,10 +5,10 @@ buildscript {
 }
 
 plugins {
+    id 'java'
     id 'org.springframework.boot' version '2.7.4'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
-    id 'java'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'jacoco'
     id "org.sonarqube" version "3.4.0.2513"
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
@@ -22,6 +22,8 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom compileClasspath
+    asciidoctorExt
 }
 
 repositories {
@@ -60,6 +62,8 @@ dependencies {
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
 }
 
 dependencyManagement {
@@ -94,6 +98,16 @@ sonarqube {
     }
 }
 
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    sources {
+        include("**/index.adoc")
+    }
+    baseDirFollowsSourceFile()
+    dependsOn test
+}
+
 jar {
     enabled = false
 }
@@ -114,9 +128,9 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
     }
-    querydsl.extendsFrom compileClasspath
 }
