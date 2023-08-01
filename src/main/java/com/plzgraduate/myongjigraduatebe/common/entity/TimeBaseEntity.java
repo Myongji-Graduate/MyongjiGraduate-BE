@@ -17,12 +17,12 @@ import lombok.Getter;
 @EntityListeners(AuditingEntityListener.class)
 public class TimeBaseEntity {
 
-  @CreatedDate
-  @Column(columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+	@CreatedDate
+	@Column(columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  @Column(columnDefinition = "TIMESTAMP", nullable = false)
-  private LocalDateTime updatedAt;
+	@LastModifiedDate
+	@Column(columnDefinition = "TIMESTAMP", nullable = false)
+	private LocalDateTime updatedAt;
 
 }
