@@ -1,9 +1,3 @@
-buildscript {
-    ext {
-        queryDslVersion = "5.0.0"
-    }
-}
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.4'
@@ -33,6 +27,7 @@ repositories {
 ext {
     set('snippetsDir', file("build/generated-snippets"))
     set('testcontainersVersion', "1.17.3")
+    set('queryDslVersion', "5.0.0")
 }
 
 jacoco {
