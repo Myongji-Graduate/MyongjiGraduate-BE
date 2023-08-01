@@ -1,14 +1,8 @@
-buildscript {
-    ext {
-        queryDslVersion = "5.0.0"
-    }
-}
-
 plugins {
+    id 'java'
     id 'org.springframework.boot' version '2.7.4'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
-    id 'java'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'jacoco'
     id "org.sonarqube" version "3.4.0.2513"
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
@@ -22,6 +16,8 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom compileClasspath
+    asciidoctorExt
 }
 
 repositories {
@@ -31,6 +27,7 @@ repositories {
 ext {
     set('snippetsDir', file("build/generated-snippets"))
     set('testcontainersVersion', "1.17.3")
+    set('queryDslVersion', "5.0.0")
 }
 
 jacoco {
@@ -41,7 +38,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.luhuiguo:aspose-pdf:22.4'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.auth0:java-jwt:4.2.1'
 
@@ -50,7 +46,6 @@ dependencies {
 
     implementation('org.flywaydb:flyway-core:6.4.2')
 
-//    implementation 'org.testcontainers:jdbc:1.17.3'
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -62,6 +57,7 @@ dependencies {
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
 }
 
@@ -97,6 +93,16 @@ sonarqube {
     }
 }
 
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    sources {
+        include("**/index.adoc")
+    }
+    baseDirFollowsSourceFile()
+    dependsOn test
+}
+
 jar {
     enabled = false
 }
@@ -117,9 +123,9 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
     }
-    querydsl.extendsFrom compileClasspath
 }
