@@ -12,11 +12,8 @@ import lombok.Getter;
 public class TakenLecture {
 
 	private final User user;
-
 	private final Lecture lecture;
-
 	private final int year;
-
 	private final Semester semester;
 
 	@Builder

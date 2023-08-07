@@ -9,13 +9,9 @@ import lombok.Getter;
 public class Lecture {
 
 	private final String lectureCode;
-
 	private final String name;
-
 	private final int credit;
-
 	private final String duplicateCode;
-
 	private final int isRevoked;
 
 	@Builder

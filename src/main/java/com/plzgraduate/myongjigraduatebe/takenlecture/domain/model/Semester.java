@@ -3,9 +3,12 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 import java.util.Arrays;
 import java.util.Objects;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Semester {
 	FIRST("1학기"),
 	SUMMER("하계계절"),
@@ -13,10 +16,6 @@ public enum Semester {
 	WINTER("동계계절");
 
 	private final String name;
-
-	Semester(String name) {
-		this.name = name;
-	}
 
 	public static Semester of(String name) {
 		return Arrays.stream(Semester.values())

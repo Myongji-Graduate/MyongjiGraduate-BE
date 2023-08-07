@@ -7,7 +7,6 @@ import lombok.Getter;
 public class BasicAcademicalCulture {
 
 	private Lecture lecture;
-
 	private String department;
 
 	@Builder

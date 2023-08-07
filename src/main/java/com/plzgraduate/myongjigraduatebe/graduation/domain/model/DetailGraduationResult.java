@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class DetailGraduationResult {
+
 	private final String categoryName;
 	private final boolean isCompleted;
 	private final int totalCredit;

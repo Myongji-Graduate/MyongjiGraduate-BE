@@ -11,6 +11,7 @@ import lombok.Getter;
 
 @Getter
 public class DetailCategoryResult {
+
 	private final String detailCategoryName;
 	private boolean isCompleted;
 	private final int totalCredits;

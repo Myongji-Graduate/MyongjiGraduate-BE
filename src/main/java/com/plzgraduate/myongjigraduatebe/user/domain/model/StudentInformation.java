@@ -5,10 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class StudentInformation {
+
 	private final int entryYear;
-
 	private String department;
-
 	private StudentCategory studentCategory;
 
 	@Builder

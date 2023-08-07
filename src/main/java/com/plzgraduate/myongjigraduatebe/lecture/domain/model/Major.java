@@ -7,11 +7,8 @@ import lombok.Getter;
 public class Major {
 
 	private final Lecture lecture;
-
 	private final String department;
-
 	private final int isMandatory;
-
 	private final int startYear;
 
 	@Builder
