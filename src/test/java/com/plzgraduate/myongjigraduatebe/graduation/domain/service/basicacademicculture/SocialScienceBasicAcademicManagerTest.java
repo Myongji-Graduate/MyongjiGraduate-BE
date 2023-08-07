@@ -62,7 +62,7 @@ class SocialScienceBasicAcademicManagerTest {
 				.contains("BASIC_ACADEMICAL_CULTURE", true, 12, 12);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(4);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(0);
+			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
 		}
 
 		@DisplayName("2023년도 이전에 들었을 경우 통과하지 못한다.")

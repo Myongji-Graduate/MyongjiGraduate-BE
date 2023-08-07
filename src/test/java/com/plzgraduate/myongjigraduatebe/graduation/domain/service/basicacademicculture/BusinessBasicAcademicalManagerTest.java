@@ -66,7 +66,7 @@ class BusinessBasicAcademicalManagerTest {
 				.contains("BASIC_ACADEMICAL_CULTURE", true, 6, 6);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(2);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(0);
+			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
 		}
 
 		@DisplayName("경영대 22학번이 18학번의 필수 학문 기초교양을 들었을 경우 통과하지 다한다.")

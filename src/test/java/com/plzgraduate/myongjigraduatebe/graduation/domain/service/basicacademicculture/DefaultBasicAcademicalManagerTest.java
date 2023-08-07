@@ -63,7 +63,7 @@ class DefaultBasicAcademicalManagerTest {
 				.contains("BASIC_ACADEMICAL_CULTURE", true, 12, 15);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(5);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(0);
+			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
 		}
 
 		@DisplayName("학문기초교양을 다 듣지 못한 경우 통과하지 못한다.")
