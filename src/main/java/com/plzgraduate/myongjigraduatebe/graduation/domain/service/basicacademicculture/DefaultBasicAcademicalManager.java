@@ -1,12 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicculture;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.BASIC_ACADEMICAL_CULTURE;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -27,7 +28,7 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			GraduationCategory.BASIC_ACADEMICAL_CULTURE.name(), basicAcademicalCredit);
+			BASIC_ACADEMICAL_CULTURE.name(), basicAcademicalCredit);
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
@@ -44,7 +45,7 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 		detailCategoryResult.calculateBasicAcademicCulture(taken, basicAcademicalLectures);
 		takenLectures.removeAll(removedTakenLecture);
 
-		return DetailGraduationResult.create(GraduationCategory.BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
+		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
 			List.of(detailCategoryResult));
 	}
 }
