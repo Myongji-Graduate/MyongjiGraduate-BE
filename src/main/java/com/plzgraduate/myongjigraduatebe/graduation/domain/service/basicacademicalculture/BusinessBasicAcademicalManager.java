@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicculture;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.BASIC_ACADEMICAL_CULTURE;
 

@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicculture;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
 import java.util.Set;
 import java.util.stream.Collectors;
