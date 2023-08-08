@@ -14,6 +14,7 @@ public class DetailCategoryResult {
 
 	private final String detailCategoryName;
 	private boolean isCompleted;
+	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
 	private int takenCredits;
 	private final List<Lecture> takenMandatoryLectures = new ArrayList<>();
@@ -22,17 +23,21 @@ public class DetailCategoryResult {
 	private final List<Lecture> haveToElectiveLectures = new ArrayList<>();
 
 	@Builder
-	private DetailCategoryResult(String detailCategoryName, boolean isCompleted, int totalCredits, int takenCredits) {
+	private DetailCategoryResult(String detailCategoryName, boolean isCompleted, boolean isSatisfiedMandatory,
+		int totalCredits, int takenCredits) {
 		this.detailCategoryName = detailCategoryName;
 		this.isCompleted = isCompleted;
+		this.isSatisfiedMandatory = isSatisfiedMandatory;
 		this.totalCredits = totalCredits;
 		this.takenCredits = takenCredits;
 	}
 
-	public static DetailCategoryResult create(String detailCategoryName, int totalCredits) {
+	public static DetailCategoryResult create(String detailCategoryName, boolean isSatisfiedMandatory,
+		int totalCredits) {
 		return DetailCategoryResult.builder()
 			.detailCategoryName(detailCategoryName)
 			.isCompleted(false)
+			.isSatisfiedMandatory(isSatisfiedMandatory)
 			.totalCredits(totalCredits)
 			.takenCredits(0)
 			.build();
@@ -44,6 +49,7 @@ public class DetailCategoryResult {
 			addMandatoryLectures(taken, basicAcademicalLectures);
 		}
 	}
+
 	private void addTakenLectures(Set<Lecture> taken) {
 		taken.forEach(lecture -> {
 			takenMandatoryLectures.add(lecture);
@@ -57,7 +63,7 @@ public class DetailCategoryResult {
 	}
 
 	private boolean checkCompleted() {
-		isCompleted = totalCredits <= takenCredits;
+		isCompleted = totalCredits <= takenCredits && isSatisfiedMandatory;
 		return isCompleted;
 	}
 }

@@ -28,7 +28,7 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.getName(), basicAcademicalCredit);
+			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
