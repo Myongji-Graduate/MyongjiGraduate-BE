@@ -26,7 +26,7 @@ public class DetailGraduationResult {
 
 	public static DetailGraduationResult create(GraduationCategory graduationCategory, int totalCredit, List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
-			.categoryName(graduationCategory.name())
+			.categoryName(graduationCategory.getName())
 			.isCompleted(checkIsCompleted(detailCategoryResults))
 			.totalCredit(totalCredit)
 			.takenCredit(calculateTakenCredit(detailCategoryResults))
@@ -47,6 +47,8 @@ public class DetailGraduationResult {
 	}
 
 	private static int calculateTakenCredit(List<DetailCategoryResult> detailCategoryResults) {
-		return detailCategoryResults.stream().mapToInt(DetailCategoryResult::getTakenCredits).sum();
+		return detailCategoryResults.stream()
+			.mapToInt(DetailCategoryResult::getTakenCredits)
+			.sum();
 	}
 }

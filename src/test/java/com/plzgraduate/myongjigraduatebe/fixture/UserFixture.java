@@ -7,6 +7,11 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public class UserFixture {
 
+	public static User 영문학과_16학번() {
+		StudentInformation studentInformation = StudentInformation.of(16, "영어영문학과", StudentCategory.NORMAL);
+		return User.create("mj01", "1234", EnglishLevel.ENG12, "김영문", 60161001, studentInformation);
+	}
+
 	public static User 영문학과_18학번() {
 		StudentInformation studentInformation = StudentInformation.of(18, "영어영문학과", StudentCategory.NORMAL);
 		return User.create("mj01", "1234", EnglishLevel.ENG12, "김영문", 60181001, studentInformation);
@@ -30,6 +35,11 @@ public class UserFixture {
 	public static User 경영학과_22학번() {
 		StudentInformation studentInformation = StudentInformation.of(22, "경영학과", StudentCategory.NORMAL);
 		return User.create("mj22", "1234", EnglishLevel.ENG34, "김경영", 60221022, studentInformation);
+	}
+
+	public static User 경영학과_23학번() {
+		StudentInformation studentInformation = StudentInformation.of(23, "경영학과", StudentCategory.NORMAL);
+		return User.create("mj22", "1234", EnglishLevel.ENG34, "김경영", 60231022, studentInformation);
 	}
 
 }

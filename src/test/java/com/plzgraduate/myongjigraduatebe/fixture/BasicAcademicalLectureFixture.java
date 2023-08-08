@@ -1,13 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.fixture;
 
-import static org.assertj.core.api.Assertions.*;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;

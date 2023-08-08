@@ -1,14 +1,12 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicculture;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.filter;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -59,11 +57,11 @@ class BusinessBasicAcademicalManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("BASIC_ACADEMICAL_CULTURE", true, 6, 6);
+				.contains("학문기초교양", true, 6, 6);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("BASIC_ACADEMICAL_CULTURE", true, 6, 6);
+				.contains("학문기초교양", true, 6, 6);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(2);
 			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
@@ -92,11 +90,11 @@ class BusinessBasicAcademicalManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("BASIC_ACADEMICAL_CULTURE", false, 3, 6);
+				.contains("학문기초교양", false, 3, 6);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("BASIC_ACADEMICAL_CULTURE", false, 3, 6);
+				.contains("학문기초교양", false, 3, 6);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(1);
 			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(1);

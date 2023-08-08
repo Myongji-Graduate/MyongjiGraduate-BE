@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.fixture;
 
-import static org.assertj.core.api.Assertions.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,10 +44,8 @@ public class LectureFixture {
 				Lecture lecture = Lecture.of(lectureCode, name, credit, isRevoked, duplicateCode);
 				mockLectureMap.put(lectureCode, lecture);
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 }
