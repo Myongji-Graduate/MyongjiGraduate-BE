@@ -47,6 +47,8 @@ public class DetailGraduationResult {
 	}
 
 	private static int calculateTakenCredit(List<DetailCategoryResult> detailCategoryResults) {
-		return detailCategoryResults.stream().mapToInt(DetailCategoryResult::getTakenCredits).sum();
+		return detailCategoryResults.stream()
+			.mapToInt(DetailCategoryResult::getTakenCredits)
+			.sum();
 	}
 }
