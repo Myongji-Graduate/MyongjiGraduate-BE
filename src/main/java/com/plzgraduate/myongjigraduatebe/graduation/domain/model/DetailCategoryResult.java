@@ -38,7 +38,7 @@ public class DetailCategoryResult {
 			.build();
 	}
 
-	public void calculateBasicAcademicCulture(Set<Lecture> taken, Set<Lecture> basicAcademicalLectures) {
+	public void calculate(Set<Lecture> taken, Set<Lecture> basicAcademicalLectures) {
 		addTakenLectures(taken);
 		if(!checkCompleted()) {
 			addMandatoryLectures(taken, basicAcademicalLectures);

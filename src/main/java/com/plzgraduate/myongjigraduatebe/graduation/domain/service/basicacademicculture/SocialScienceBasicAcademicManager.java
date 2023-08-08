@@ -52,7 +52,7 @@ public class SocialScienceBasicAcademicManager implements BasicAcademicalManager
 				taken.add(takenLecture.getLecture());
 			});
 
-		detailCategoryResult.calculateBasicAcademicCulture(taken, basicAcademicalLectures);
+		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 		takenLectures.removeAll(removedTakenLecture);
 
 		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, 12, List.of(detailCategoryResult));
