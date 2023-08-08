@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,10 +13,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 
 class CommonCultureDetailCategoryManager {
 
+	private static final List<String> MANDATORY_LECTURE_CODE_LIST = List.of("KMA02100", "KMA00100", "KMA00101");
+
 	public DetailCategoryResult generate(Set<TakenLecture> takenLectures,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), category.getTotalCredit());
+			category.getName(), checkMandatorySatisfaction(takenLectures, category), category.getTotalCredit());
 		Set<Lecture> taken = new HashSet<>();
 
 		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
@@ -30,7 +33,17 @@ class CommonCultureDetailCategoryManager {
 		return commonCultureDetailCategoryResult;
 	}
 
-	private Set<Lecture> categorizeCommonCultures(Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
+	private boolean checkMandatorySatisfaction(Set<TakenLecture> takenLectures, CommonCultureCategory category) {
+		if (category == CommonCultureCategory.CHRISTIAN_A) {
+			return takenLectures.stream()
+				.anyMatch(
+					takenLecture -> MANDATORY_LECTURE_CODE_LIST.contains(takenLecture.getLecture().getLectureCode()));
+		}
+		return true;
+	}
+
+	private Set<Lecture> categorizeCommonCultures(Set<CommonCulture> graduationLectures,
+		CommonCultureCategory category) {
 		return graduationLectures.stream()
 			.filter(commonCulture -> commonCulture.getCommonCultureCategory() == category)
 			.map(CommonCulture::getLecture)
