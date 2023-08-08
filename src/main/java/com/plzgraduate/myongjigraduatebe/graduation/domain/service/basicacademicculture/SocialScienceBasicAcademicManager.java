@@ -39,7 +39,7 @@ public class SocialScienceBasicAcademicManager implements BasicAcademicalManager
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.name(), basicAcademicalCredit);
+			BASIC_ACADEMICAL_CULTURE.getName(), basicAcademicalCredit);
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 

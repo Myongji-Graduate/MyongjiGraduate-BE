@@ -59,11 +59,11 @@ class BusinessBasicAcademicalManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("BASIC_ACADEMICAL_CULTURE", true, 6, 6);
+				.contains("학문기초교양", true, 6, 6);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("BASIC_ACADEMICAL_CULTURE", true, 6, 6);
+				.contains("학문기초교양", true, 6, 6);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(2);
 			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
@@ -92,11 +92,11 @@ class BusinessBasicAcademicalManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("BASIC_ACADEMICAL_CULTURE", false, 3, 6);
+				.contains("학문기초교양", false, 3, 6);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("BASIC_ACADEMICAL_CULTURE", false, 3, 6);
+				.contains("학문기초교양", false, 3, 6);
 
 			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(1);
 			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(1);
