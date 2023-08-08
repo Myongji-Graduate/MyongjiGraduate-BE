@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+
 class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(Set<TakenLecture> takenLectures,

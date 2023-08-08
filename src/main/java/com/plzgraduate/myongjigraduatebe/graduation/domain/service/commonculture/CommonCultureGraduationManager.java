@@ -16,6 +16,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 public class CommonCultureGraduationManager implements GraduationManager<CommonCulture> {
+
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
 		Set<TakenLecture> takenLectures,
