@@ -1,0 +1,75 @@
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
+
+
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+
+import com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture;
+import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+
+@DisplayName("각 공통교양 세부 카테고리 졸업 결과를 포함한 공통교양 전체 졸업 결과를 생성한다.")
+class CommonCultureGraduationManagerTest {
+
+	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
+	GraduationManager<CommonCulture> graduationManager = new CommonCultureGraduationManager();
+
+	@DisplayName("모든 공통교양 세부 카테고리가 이수 완료일 경우 이수 완료 공통교양 전체 졸업 결과를 생성한다.")
+	@ParameterizedTest
+	@ArgumentsSource(CommonCultureFixture.class)
+	void generateCompletedDetailGraduationResult(User user, Set<CommonCulture> graduationLectures) {
+	    //given
+		StudentInformation studentInformation = user.getStudentInformation();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
+		)));
+
+		//when
+		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
+			studentInformation, takenLectures, graduationLectures, 17);
+		//then
+		assertThat(detailGraduationResult)
+			.extracting("categoryName", "isCompleted")
+			.contains("공통교양", true);
+	}
+
+	@DisplayName("모든 공통교양 세부 카테고리가 이수 완료가 아닐 경우 이수 미 완료 공통교양 전체 졸업 결과를 생성한다.")
+	@ParameterizedTest
+	@ArgumentsSource(CommonCultureFixture.class)
+	void generateUnCompletedDetailGraduationResult(User user, Set<CommonCulture> graduationLectures) {
+		//given
+		StudentInformation studentInformation = user.getStudentInformation();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
+		)));
+
+		//when
+		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
+			studentInformation, takenLectures, graduationLectures, 17);
+		//then
+		assertThat(detailGraduationResult)
+			.extracting("categoryName", "isCompleted")
+			.contains("공통교양", false);
+	}
+
+}

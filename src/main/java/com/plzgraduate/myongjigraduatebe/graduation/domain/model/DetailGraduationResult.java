@@ -26,7 +26,7 @@ public class DetailGraduationResult {
 
 	public static DetailGraduationResult create(GraduationCategory graduationCategory, int totalCredit, List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
-			.categoryName(graduationCategory.name())
+			.categoryName(graduationCategory.getName())
 			.isCompleted(checkIsCompleted(detailCategoryResults))
 			.totalCredit(totalCredit)
 			.takenCredit(calculateTakenCredit(detailCategoryResults))
