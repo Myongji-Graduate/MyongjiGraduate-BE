@@ -39,7 +39,15 @@ class CommonCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
-			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
+			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02106"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02107"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02123"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02124"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02108"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02109"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
 
 		//when
