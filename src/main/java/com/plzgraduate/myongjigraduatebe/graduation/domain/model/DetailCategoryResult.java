@@ -17,6 +17,8 @@ public class DetailCategoryResult {
 	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
 	private int takenCredits;
+	private final int normalLeftCredit;
+	private final int freeElectiveLeftCredit;
 	private final List<Lecture> takenMandatoryLectures = new ArrayList<>();
 	private final List<Lecture> haveToMandatoryLectures = new ArrayList<>();
 	private final List<Lecture> takenElectiveLectures = new ArrayList<>();
@@ -24,22 +26,26 @@ public class DetailCategoryResult {
 
 	@Builder
 	private DetailCategoryResult(String detailCategoryName, boolean isCompleted, boolean isSatisfiedMandatory,
-		int totalCredits, int takenCredits) {
+		int totalCredits, int takenCredits, int normalLeftCredit, int freeElectiveLeftCredit) {
 		this.detailCategoryName = detailCategoryName;
 		this.isCompleted = isCompleted;
 		this.isSatisfiedMandatory = isSatisfiedMandatory;
 		this.totalCredits = totalCredits;
 		this.takenCredits = takenCredits;
+		this.normalLeftCredit = normalLeftCredit;
+		this.freeElectiveLeftCredit = freeElectiveLeftCredit;
 	}
 
 	public static DetailCategoryResult create(String detailCategoryName, boolean isSatisfiedMandatory,
-		int totalCredits) {
+		int totalCredits, int normalLeftCredit, int freeElectiveLeftCredit) {
 		return DetailCategoryResult.builder()
 			.detailCategoryName(detailCategoryName)
 			.isCompleted(false)
 			.isSatisfiedMandatory(isSatisfiedMandatory)
 			.totalCredits(totalCredits)
 			.takenCredits(0)
+			.normalLeftCredit(normalLeftCredit)
+			.freeElectiveLeftCredit(freeElectiveLeftCredit)
 			.build();
 	}
 

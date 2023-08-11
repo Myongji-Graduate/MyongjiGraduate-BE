@@ -24,11 +24,9 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 	}
 
 	@Override
-	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation, Set<TakenLecture> takenLectures,
+	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
+		Set<TakenLecture> takenLectures,
 		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
-
-		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
@@ -41,11 +39,22 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 				removedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-
-		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 		takenLectures.removeAll(removedTakenLecture);
+
+		int normalLeftCredit = getNormalLeftCredit(taken, basicAcademicalCredit);
+		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
+			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit, normalLeftCredit, 0);
+		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
 		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
 			List.of(detailCategoryResult));
+	}
+
+	private int getNormalLeftCredit(Set<Lecture> taken, int categoryTotalCredit) {
+		int totalTakenCredit = taken.stream()
+			.mapToInt(Lecture::getCredit)
+			.sum();
+		int normalLeftCredit = totalTakenCredit - categoryTotalCredit;
+		return Math.max(normalLeftCredit, 0);
 	}
 }

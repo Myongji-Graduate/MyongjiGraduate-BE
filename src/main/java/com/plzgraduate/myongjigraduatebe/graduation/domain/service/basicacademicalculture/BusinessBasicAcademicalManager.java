@@ -38,8 +38,6 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		Set<TakenLecture> takenLectures,
 		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
-		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
 
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
@@ -52,9 +50,12 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 				removedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-
-		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 		takenLectures.removeAll(removedTakenLecture);
+
+		int normalLeftCredit = getNormalLeftCredit(taken, basicAcademicalCredit);
+		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
+			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit, normalLeftCredit, 0);
+		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
 		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
 			List.of(detailCategoryResult));
@@ -73,5 +74,13 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 			return new HashSet<>(internationBefore20);
 		}
 		return basicAcademicalLectures;
+	}
+
+	private int getNormalLeftCredit(Set<Lecture> taken, int categoryTotalCredit) {
+		int totalTakenCredit = taken.stream()
+			.mapToInt(Lecture::getCredit)
+			.sum();
+		int normalLeftCredit = totalTakenCredit - categoryTotalCredit;
+		return Math.max(normalLeftCredit, 0);
 	}
 }

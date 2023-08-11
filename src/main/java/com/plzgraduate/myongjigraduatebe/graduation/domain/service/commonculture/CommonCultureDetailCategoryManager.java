@@ -17,9 +17,6 @@ class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(Set<TakenLecture> takenLectures,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
-		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), checkMandatorySatisfaction(takenLectures, category), category.getTotalCredit());
-
 		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
 			graduationLectures, category);
 
@@ -33,7 +30,12 @@ class CommonCultureDetailCategoryManager {
 				taken.add(takenLecture.getLecture());
 			});
 
+		int leftCredit = getLeftCredit(taken, category.getTotalCredit());
+		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
+			category.getName(), checkMandatorySatisfaction(takenLectures, category), category.getTotalCredit(),
+			leftCredit, 0);
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
+
 		takenLectures.removeAll(removedTakenLecture);
 
 		return commonCultureDetailCategoryResult;
@@ -54,5 +56,13 @@ class CommonCultureDetailCategoryManager {
 			.filter(commonCulture -> commonCulture.getCommonCultureCategory() == category)
 			.map(CommonCulture::getLecture)
 			.collect(Collectors.toSet());
+	}
+
+	private int getLeftCredit(Set<Lecture> taken, int categoryTotalCredit) {
+		int totalTakenCredit = taken.stream()
+			.mapToInt(Lecture::getCredit)
+			.sum();
+		int normalLeftCredit = totalTakenCredit - categoryTotalCredit;
+		return Math.max(normalLeftCredit, 0);
 	}
 }
