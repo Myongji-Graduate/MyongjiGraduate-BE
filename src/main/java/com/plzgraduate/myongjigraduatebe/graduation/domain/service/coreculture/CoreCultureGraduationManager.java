@@ -21,8 +21,8 @@ public class CoreCultureGraduationManager implements GraduationManager<CoreCultu
 		Set<TakenLecture> takenLectures, Set<CoreCulture> graduationLectures, int coreCultureGraduationTotalCredit) {
 		CoreCultureDetailCategoryManager coreCultureDetailCategoryManager = new CoreCultureDetailCategoryManager();
 		List<DetailCategoryResult> coreCultureDetailCategoryResults = Arrays.stream(CoreCultureCategory.values())
-			.map(coreCultureCategory -> coreCultureDetailCategoryManager.generate(takenLectures, graduationLectures,
-				coreCultureCategory))
+			.map(coreCultureCategory -> coreCultureDetailCategoryManager.generate(studentInformation, takenLectures,
+				graduationLectures, coreCultureCategory))
 			.collect(Collectors.toList());
 
 		return DetailGraduationResult.create(CORE_CULTURE, coreCultureGraduationTotalCredit,
