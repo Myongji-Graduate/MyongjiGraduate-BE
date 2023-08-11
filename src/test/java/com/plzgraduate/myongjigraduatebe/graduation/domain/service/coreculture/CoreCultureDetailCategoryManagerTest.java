@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -129,5 +130,29 @@ class CoreCultureDetailCategoryManagerTest {
 			Arguments.arguments(UserFixture.데이터테크놀로지학과_19학번()),
 			Arguments.arguments(UserFixture.디지털콘텐츠디자인학과_19학번())
 		);
+	}
+
+	@DisplayName("4차산업혁명시대의예술, 문화리터러시와창의적스토리텔링 과목은 2022년 1학기에 수강한 경우에는 핵심교양이 아닌 일반교양으로 인정된다.")
+	@Test
+	void generateUnCompletedCultureArtDetailCategoryResultWith_2022_First() {
+	    //given
+		User user = UserFixture.경영학과_19학번();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA02155"), 2022, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02156"), 2022, Semester.FIRST)
+		)));
+		Set<CoreCulture> graduationLectures = 핵심교양_문화와예술();
+		CoreCultureCategory coreCultureCategory = CULTURE_ART;
+		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
+
+	    //when
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+			graduationLectures, coreCultureCategory);
+
+	    //then
+		assertThat(detailCategoryResult)
+			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
+				"freeElectiveLeftCredit")
+			.contains(coreCultureCategory.getName(), false, categoryTotalCredit, 6, 0);
 	}
 }
