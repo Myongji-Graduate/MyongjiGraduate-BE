@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-import com.plzgraduate.myongjigraduatebe.fixture.CoreCultureFixture;
+import com.plzgraduate.myongjigraduatebe.fixture.CoreCultureCategoryFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
@@ -29,7 +29,7 @@ class CoreCultureDetailCategoryManagerTest {
 
 	@DisplayName("각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
-	@ArgumentsSource(CoreCultureFixture.class)
+	@ArgumentsSource(CoreCultureCategoryFixture.class)
 	void generateCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
 		Set<CoreCulture> graduationLectures) {
 		//given
@@ -74,7 +74,7 @@ class CoreCultureDetailCategoryManagerTest {
 
 	@DisplayName("각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
-	@ArgumentsSource(CoreCultureFixture.class)
+	@ArgumentsSource(CoreCultureCategoryFixture.class)
 	void generateUnCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
 		Set<CoreCulture> graduationLectures) {
 		//given
