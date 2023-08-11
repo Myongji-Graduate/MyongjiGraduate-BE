@@ -1,14 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.fixture;
 
-import static com.plzgraduate.myongjigraduatebe.fixture.UserFixture.경영학과_23학번;
-import static com.plzgraduate.myongjigraduatebe.fixture.UserFixture.영문학과_16학번;
-import static com.plzgraduate.myongjigraduatebe.fixture.UserFixture.영문학과_18학번;
-import static com.plzgraduate.myongjigraduatebe.fixture.UserFixture.행정학과_21학번;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CAREER;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_B;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.EXPRESSION;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.*;
 
 import java.util.HashSet;
