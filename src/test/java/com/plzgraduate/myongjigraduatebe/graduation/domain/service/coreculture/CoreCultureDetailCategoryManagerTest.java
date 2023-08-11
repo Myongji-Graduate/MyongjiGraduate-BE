@@ -1,14 +1,19 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture;
 
+import static com.plzgraduate.myongjigraduatebe.fixture.CoreCultureFixture.*;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.plzgraduate.myongjigraduatebe.fixture.CoreCultureCategoryFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
@@ -63,7 +68,8 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(takenLectures, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+			graduationLectures,
 			coreCultureCategory);
 
 		//then
@@ -78,13 +84,14 @@ class CoreCultureDetailCategoryManagerTest {
 	void generateUnCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
 		Set<CoreCulture> graduationLectures) {
 		//given
+		User user = UserFixture.경영학과_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>();
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(takenLectures, graduationLectures,
-			coreCultureCategory);
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+			graduationLectures, coreCultureCategory);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -92,4 +99,35 @@ class CoreCultureDetailCategoryManagerTest {
 			.contains(coreCultureCategoryName, false, categoryTotalCredit);
 	}
 
+	@DisplayName("ICT학부 전공 학생은 핵심교양 세부 카테고리 '과학과기술' 중 SW프로그래밍입문을 수강했을 경우 카테고리 수강 학점이 아닌 자유학점으로 인정된다.")
+	@ParameterizedTest
+	@MethodSource("ictUsers")
+	void generateUnCompletedScienceTechnologyDetailCategoryResultWithICT(User user) {
+		//given
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA02135"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02136"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2019, Semester.FIRST)
+		)));
+		Set<CoreCulture> graduationLectures = 핵심교양_과학과기술();
+		CoreCultureCategory coreCultureCategory = SCIENCE_TECHNOLOGY;
+		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
+
+		//when
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+			graduationLectures, coreCultureCategory);
+
+		//then
+		assertThat(detailCategoryResult)
+			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
+				"freeElectiveLeftCredit")
+			.contains(coreCultureCategory.getName(), true, categoryTotalCredit, 3, 3);
+	}
+	static Stream<Arguments> ictUsers() {
+		return Stream.of(
+			Arguments.arguments(UserFixture.응용소프트웨어학과_19학번()),
+			Arguments.arguments(UserFixture.데이터테크놀로지학과_19학번()),
+			Arguments.arguments(UserFixture.디지털콘텐츠디자인학과_19학번())
+		);
+	}
 }

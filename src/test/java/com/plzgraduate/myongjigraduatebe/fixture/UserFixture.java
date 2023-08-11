@@ -42,4 +42,19 @@ public class UserFixture {
 		return User.create("mj22", "1234", EnglishLevel.ENG34, "김경영", 60231022, studentInformation);
 	}
 
+	public static User 응용소프트웨어학과_19학번() {
+		StudentInformation studentInformation = StudentInformation.of(19, "응용소프트웨어학과", StudentCategory.NORMAL);
+		return User.create("mj22", "1234", EnglishLevel.ENG34, "김응용", 60191022, studentInformation);
+	}
+
+	public static User 데이터테크놀로지학과_19학번() {
+		StudentInformation studentInformation = StudentInformation.of(19, "응용소프트웨어학과", StudentCategory.NORMAL);
+		return User.create("mj22", "1234", EnglishLevel.ENG34, "김응용", 60191022, studentInformation);
+	}
+
+	public static User 디지털콘텐츠디자인학과_19학번() {
+		StudentInformation studentInformation = StudentInformation.of(19, "응용소프트웨어학과", StudentCategory.NORMAL);
+		return User.create("mj22", "1234", EnglishLevel.ENG34, "김응용", 60191022, studentInformation);
+	}
+
 }
