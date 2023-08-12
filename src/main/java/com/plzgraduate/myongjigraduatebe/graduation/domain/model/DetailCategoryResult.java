@@ -17,8 +17,8 @@ public class DetailCategoryResult {
 	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
 	private int takenCredits;
-	private final int normalLeftCredit;
-	private final int freeElectiveLeftCredit;
+	private int normalLeftCredit;
+	private int freeElectiveLeftCredit;
 	private final List<Lecture> takenMandatoryLectures = new ArrayList<>();
 	private final List<Lecture> haveToMandatoryLectures = new ArrayList<>();
 	private final List<Lecture> takenElectiveLectures = new ArrayList<>();
@@ -37,23 +37,32 @@ public class DetailCategoryResult {
 	}
 
 	public static DetailCategoryResult create(String detailCategoryName, boolean isSatisfiedMandatory,
-		int totalCredits, int normalLeftCredit, int freeElectiveLeftCredit) {
+		int totalCredits) {
 		return DetailCategoryResult.builder()
 			.detailCategoryName(detailCategoryName)
 			.isCompleted(false)
 			.isSatisfiedMandatory(isSatisfiedMandatory)
 			.totalCredits(totalCredits)
 			.takenCredits(0)
-			.normalLeftCredit(normalLeftCredit)
-			.freeElectiveLeftCredit(freeElectiveLeftCredit)
+			.normalLeftCredit(0)
+			.freeElectiveLeftCredit(0)
 			.build();
 	}
 
-	public void calculate(Set<Lecture> taken, Set<Lecture> basicAcademicalLectures) {
+	public void calculate(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		addTakenLectures(taken);
+		calculateLeftCredit();
 		if(!checkCompleted()) {
-			addMandatoryLectures(taken, basicAcademicalLectures);
+			addMandatoryLectures(taken, graduationLectures);
 		}
+	}
+
+	public void addNormalLeftCredit(int normalLeftCredit) {
+		this.normalLeftCredit += normalLeftCredit;
+	}
+
+	public void addFreeElectiveLeftCredit(int freeElectiveLeftCredit) {
+		this.freeElectiveLeftCredit += freeElectiveLeftCredit;
 	}
 
 	private void addTakenLectures(Set<Lecture> taken) {
@@ -63,9 +72,19 @@ public class DetailCategoryResult {
 		});
 	}
 
-	private void addMandatoryLectures(Set<Lecture> taken, Set<Lecture> basicAcademicalLectures) {
-		basicAcademicalLectures.removeAll(taken);
-		haveToMandatoryLectures.addAll(basicAcademicalLectures);
+	private void calculateLeftCredit() {
+		int leftCredit = takenCredits - totalCredits;
+		if (leftCredit > 0) {
+			if (detailCategoryName.equals("전공")) {
+				freeElectiveLeftCredit = leftCredit;
+			}
+			normalLeftCredit = leftCredit;
+		}
+	}
+
+	private void addMandatoryLectures(Set<Lecture> taken, Set<Lecture> graduationLectures) {
+		graduationLectures.removeAll(taken);
+		haveToMandatoryLectures.addAll(graduationLectures);
 	}
 
 	private boolean checkCompleted() {

@@ -39,10 +39,10 @@ public class CoreCultureDetailCategoryManager {
 			});
 		takenLectures.removeAll(finishedTakenLecture);
 
-		int freeElectiveLeftCredit = calculateFreeElectiveLeftCredit(studentInformation, taken);
-		int normalLeftCredit = calculateNormalLeftCredit(taken, finishedTakenLecture, category.getTotalCredit());
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), true, category.getTotalCredit(), normalLeftCredit, freeElectiveLeftCredit);
+			category.getName(), true, category.getTotalCredit());
+		calculateFreeElectiveLeftCredit(studentInformation, taken, commonCultureDetailCategoryResult);
+		calculateNormalLeftCredit(taken, finishedTakenLecture, commonCultureDetailCategoryResult);
 		commonCultureDetailCategoryResult.calculate(taken, graduationCoreCultureLectures);
 
 		return commonCultureDetailCategoryResult;
@@ -56,16 +56,17 @@ public class CoreCultureDetailCategoryManager {
 			.collect(Collectors.toSet());
 	}
 
-	private int calculateFreeElectiveLeftCredit(StudentInformation studentInformation, Set<Lecture> taken) {
+	private void calculateFreeElectiveLeftCredit(StudentInformation studentInformation, Set<Lecture> taken,
+		DetailCategoryResult commonCultureDetailCategoryResult) {
 		if (ICT_DEPARTMENTS.contains(studentInformation.getDepartment()) && (taken.contains(과학과기술_예외_과목))) {
 			taken.remove(과학과기술_예외_과목);
-			return 3;
+			int exceptionLectureCredit = 3;
+			commonCultureDetailCategoryResult.addFreeElectiveLeftCredit(exceptionLectureCredit);
 		}
-		return 0;
 	}
 
-	private int calculateNormalLeftCredit(Set<Lecture> taken, Set<TakenLecture> finishedTakenLecture,
-		int categoryTotalCredit) {
+	private void calculateNormalLeftCredit(Set<Lecture> taken, Set<TakenLecture> finishedTakenLecture,
+		DetailCategoryResult commonCultureDetailCategoryResult) {
 		int normalLeftCredit = finishedTakenLecture.stream()
 			.filter(takenLecture -> 문화와예술_예외_과목.contains(takenLecture.getLecture())
 				&& takenLecture.getYear() == 2022
@@ -73,13 +74,6 @@ public class CoreCultureDetailCategoryManager {
 			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
 			.sum();
 		taken.removeAll(문화와예술_예외_과목);
-
-		int totalTakenCredit = taken.stream()
-			.mapToInt(Lecture::getCredit)
-			.sum();
-		if (totalTakenCredit > categoryTotalCredit) {
-			normalLeftCredit += totalTakenCredit - categoryTotalCredit;
-		}
-		return normalLeftCredit;
+		commonCultureDetailCategoryResult.addNormalLeftCredit(normalLeftCredit);
 	}
 }

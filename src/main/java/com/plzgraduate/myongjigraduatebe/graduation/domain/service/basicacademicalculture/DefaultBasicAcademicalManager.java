@@ -41,20 +41,11 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 			});
 		takenLectures.removeAll(removedTakenLecture);
 
-		int normalLeftCredit = getNormalLeftCredit(taken, basicAcademicalCredit);
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit, normalLeftCredit, 0);
+			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
 		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
 			List.of(detailCategoryResult));
-	}
-
-	private int getNormalLeftCredit(Set<Lecture> taken, int categoryTotalCredit) {
-		int totalTakenCredit = taken.stream()
-			.mapToInt(Lecture::getCredit)
-			.sum();
-		int normalLeftCredit = totalTakenCredit - categoryTotalCredit;
-		return Math.max(normalLeftCredit, 0);
 	}
 }
