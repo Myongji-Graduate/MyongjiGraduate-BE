@@ -23,6 +23,12 @@ public class Lecture {
 		this.duplicateCode = duplicateCode;
 	}
 
+	public static Lecture from(String lectureCode) {
+		return Lecture.builder().
+			lectureCode(lectureCode)
+			.build();
+	}
+
 	public static Lecture of(String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
 		return Lecture.builder()
 			.lectureCode(lectureCode)
