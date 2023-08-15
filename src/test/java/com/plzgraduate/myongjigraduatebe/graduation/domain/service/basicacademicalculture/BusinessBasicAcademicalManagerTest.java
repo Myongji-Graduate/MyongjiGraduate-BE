@@ -63,8 +63,8 @@ class BusinessBasicAcademicalManagerTest {
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
 				.contains("학문기초교양", true, 6, 6);
 
-			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(2);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
+			assertThat(detailCategoryResult.getTakenLectures()).hasSize(2);
+			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();
 		}
 
 		@DisplayName("경영대 22학번이 18학번의 필수 학문 기초교양을 들었을 경우 통과하지 다한다.")
@@ -96,8 +96,8 @@ class BusinessBasicAcademicalManagerTest {
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
 				.contains("학문기초교양", false, 3, 6);
 
-			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(1);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(1);
+			assertThat(detailCategoryResult.getTakenLectures()).hasSize(1);
+			assertThat(detailCategoryResult.getHaveToLectures()).hasSize(1);
 		}
 
 	}
