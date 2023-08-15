@@ -39,7 +39,7 @@ public class LectureFixture {
 				String name = columns[1];
 				int credit = Integer.parseInt(columns[2]);
 				int isRevoked = Integer.parseInt(columns[3]);
-				String duplicateCode = columns[4];
+				String duplicateCode = columns[4].equalsIgnoreCase("null") ? null : columns[4];
 
 				Lecture lecture = Lecture.of(lectureCode, name, credit, isRevoked, duplicateCode);
 				mockLectureMap.put(lectureCode, lecture);

@@ -19,10 +19,8 @@ public class DetailCategoryResult {
 	private int takenCredits;
 	private int normalLeftCredit;
 	private int freeElectiveLeftCredit;
-	private final List<Lecture> takenMandatoryLectures = new ArrayList<>();
-	private final List<Lecture> haveToMandatoryLectures = new ArrayList<>();
-	private final List<Lecture> takenElectiveLectures = new ArrayList<>();
-	private final List<Lecture> haveToElectiveLectures = new ArrayList<>();
+	private final List<Lecture> takenLectures = new ArrayList<>();
+	private final List<Lecture> haveToLectures = new ArrayList<>();
 
 	@Builder
 	private DetailCategoryResult(String detailCategoryName, boolean isCompleted, boolean isSatisfiedMandatory,
@@ -67,7 +65,7 @@ public class DetailCategoryResult {
 
 	private void addTakenLectures(Set<Lecture> taken) {
 		taken.forEach(lecture -> {
-			takenMandatoryLectures.add(lecture);
+			takenLectures.add(lecture);
 			takenCredits += lecture.getCredit();
 		});
 	}
@@ -84,7 +82,10 @@ public class DetailCategoryResult {
 
 	private void addMandatoryLectures(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		graduationLectures.removeAll(taken);
-		haveToMandatoryLectures.addAll(graduationLectures);
+		graduationLectures.stream()
+			.filter(graduationLecture -> graduationLecture.getIsRevoked() == 0)
+			.forEach(haveToLectures::add);
+
 	}
 
 	private boolean checkCompleted() {

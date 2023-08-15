@@ -17,6 +17,11 @@ public class UserFixture {
 		return User.create("mj01", "1234", EnglishLevel.ENG12, "김영문", 60181001, studentInformation);
 	}
 
+	public static User 철학과_20학번() {
+		StudentInformation studentInformation = StudentInformation.of(20, "철학과", StudentCategory.NORMAL);
+		return User.create("mj51", "1234", EnglishLevel.ENG34, "김철학", 60201011, studentInformation);
+	}
+
 	public static User 행정학과_18학번() {
 		StudentInformation studentInformation = StudentInformation.of(18, "행정학과", StudentCategory.NORMAL);
 		return User.create("mj11", "1234", EnglishLevel.ENG34, "김행정", 60181011, studentInformation);
@@ -42,6 +47,20 @@ public class UserFixture {
 		return User.create("mj22", "1234", EnglishLevel.ENG34, "김경영", 60231022, studentInformation);
 	}
 
+	public static User 국제통상학과_19학번() {
+		StudentInformation studentInformation = StudentInformation.of(19, "국제통상학과", StudentCategory.NORMAL);
+		return User.create("mj31", "1234", EnglishLevel.ENG34, "김국통", 60192021, studentInformation);
+	}
+
+	public static User 데이테크놀로지학과_16학번() {
+		StudentInformation studentInformation = StudentInformation.of(16, "데이터테크놀로지학과", StudentCategory.NORMAL);
+		return User.create("mj1001", "1234", EnglishLevel.ENG12, "정데테", 60161666, studentInformation);
+	}
+
+	public static User 데이테크놀로지학과_18학번() {
+		StudentInformation studentInformation = StudentInformation.of(18, "데이터테크놀로지학과", StudentCategory.NORMAL);
+		return User.create("mj1003", "1234", EnglishLevel.ENG12, "정데테", 60181666, studentInformation);
+	}
 	public static User 응용소프트웨어학과_19학번() {
 		StudentInformation studentInformation = StudentInformation.of(19, "응용소프트웨어학과", StudentCategory.NORMAL);
 		return User.create("mj22", "1234", EnglishLevel.ENG34, "김응용", 60191022, studentInformation);

@@ -61,8 +61,8 @@ class SocialScienceBasicAcademicManagerTest {
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
 				.contains("학문기초교양", true, 12, 12);
 
-			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(4);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
+			assertThat(detailCategoryResult.getTakenLectures()).hasSize(4);
+			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();
 		}
 
 		@DisplayName("2023년도 이전에 들었을 경우 통과하지 못한다.")
@@ -93,8 +93,8 @@ class SocialScienceBasicAcademicManagerTest {
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
 				.contains("학문기초교양", false, 12, 6);
 
-			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(2);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(17);
+			assertThat(detailCategoryResult.getTakenLectures()).hasSize(2);
+			assertThat(detailCategoryResult.getHaveToLectures()).hasSize(17);
 		}
 
 	}

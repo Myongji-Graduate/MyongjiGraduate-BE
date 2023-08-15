@@ -62,8 +62,8 @@ class DefaultBasicAcademicalManagerTest {
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
 				.contains("학문기초교양", true, 12, 15);
 
-			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(5);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).isEmpty();
+			assertThat(detailCategoryResult.getTakenLectures()).hasSize(5);
+			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();
 		}
 
 		@DisplayName("학문기초교양을 다 듣지 못한 경우 통과하지 못한다.")
@@ -93,8 +93,8 @@ class DefaultBasicAcademicalManagerTest {
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
 				.contains("학문기초교양", false, 12, 9);
 
-			assertThat(detailCategoryResult.getTakenMandatoryLectures()).hasSize(3);
-			assertThat(detailCategoryResult.getHaveToMandatoryLectures()).hasSize(10);
+			assertThat(detailCategoryResult.getTakenLectures()).hasSize(3);
+			assertThat(detailCategoryResult.getHaveToLectures()).hasSize(10);
 		}
 	}
 }
