@@ -76,12 +76,12 @@ class InternationTradeMajorTest {
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(true, true, 21, 21);
 		assertThat(mandatoryDetailCategory.getTakenLectures()).hasSize(7);
-		assertThat(mandatoryDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(mandatoryDetailCategory.getHaveToLectures()).isEmpty();
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
 			.contains(true, 42, 42);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(14);
-		assertThat(electiveDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
 
 	@DisplayName("전공 기준학점을 넘겼으나 전공 필수를 다 듣지 않은 경우 충족하지 못한다.")
@@ -137,7 +137,7 @@ class InternationTradeMajorTest {
 			.extracting("isCompleted", "totalCredits", "takenCredits")
 			.contains(true, 42, 45);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(15);
-		assertThat(electiveDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
 
 	@DisplayName("전공선택필수를 다 듣지 않은 경우 충족하지 못한다.")
@@ -192,7 +192,7 @@ class InternationTradeMajorTest {
 			.extracting("isCompleted", "totalCredits", "takenCredits")
 			.contains(true, 42, 45);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(15);
-		assertThat(electiveDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
 
 	@DisplayName("전공선택학점을 다 채우지 못한 경우 전공 카테고리를 충족 못한다.")
@@ -240,7 +240,7 @@ class InternationTradeMajorTest {
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(true, true, 21, 21);
 		assertThat(mandatoryDetailCategory.getTakenLectures()).hasSize(7);
-		assertThat(mandatoryDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(mandatoryDetailCategory.getHaveToLectures()).isEmpty();
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
 			.contains(false, 42, 33);

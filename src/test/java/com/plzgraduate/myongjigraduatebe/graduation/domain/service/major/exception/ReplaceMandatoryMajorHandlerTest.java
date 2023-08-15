@@ -51,7 +51,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
 		//then
 		assertThat(checkMandatoryCondition).isTrue();
-		assertThat(removedMandatoryTotalCredit).isEqualTo(0);
+		assertThat(removedMandatoryTotalCredit).isZero();
 		assertThat(mandatoryLectures).hasSize(4);
 		assertThat(electiveLectures).hasSize(2);
 	}
@@ -81,7 +81,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
 		//then
 		assertThat(checkMandatoryCondition).isTrue();
-		assertThat(removedMandatoryTotalCredit).isEqualTo(0);
+		assertThat(removedMandatoryTotalCredit).isZero();
 		assertThat(mandatoryLectures).hasSize(5).contains(mockLectureMap.get("HAI01348"));
 		assertThat(electiveLectures).hasSize(1).contains(mockLectureMap.get("HAI01247"));
 	}
@@ -111,7 +111,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		assertThat(checkMandatoryCondition).isFalse();
 		assertThat(removedMandatoryTotalCredit).isEqualTo(3);
 		assertThat(mandatoryLectures).hasSize(6);
-		assertThat(electiveLectures).hasSize(0);
+		assertThat(electiveLectures).isEmpty();
 
 	}
 }

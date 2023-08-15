@@ -23,7 +23,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("데이터테크놀로지학과의 전공 달성 여부를 계산한다.")
-public class DataTechnologyMajorTest {
+class DataTechnologyMajorTest {
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 	@DisplayName("(16학번 해당학번 전공필수과목 적용 확인) 전공 필수과목을 다 듣고, 전공 기준 학점을 넘었을 경우 전공 카테고리를 충족한다.")
@@ -83,12 +83,12 @@ public class DataTechnologyMajorTest {
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(true, true, 36, 36);
 		assertThat(mandatoryDetailCategory.getTakenLectures()).hasSize(12);
-		assertThat(mandatoryDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(mandatoryDetailCategory.getHaveToLectures()).isEmpty();
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
 			.contains(true, 34, 35);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(12);
-		assertThat(electiveDetailCategory.getHaveToLectures()).hasSize(0);
+		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
 
 	@DisplayName("(18학번) 전공 필수과목을 다 듣지 않고, 전공 기준 학점을 넘지 못했을 경우 경우 전공 카테고리를 충족하지 못한다.")
