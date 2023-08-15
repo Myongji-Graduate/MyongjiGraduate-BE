@@ -38,8 +38,6 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		Set<TakenLecture> takenLectures,
 		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
-		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
 
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
@@ -52,9 +50,11 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 				removedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-
-		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 		takenLectures.removeAll(removedTakenLecture);
+
+		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
+			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
+		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
 		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
 			List.of(detailCategoryResult));

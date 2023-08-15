@@ -17,18 +17,24 @@ class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(Set<TakenLecture> takenLectures,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
-		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), checkMandatorySatisfaction(takenLectures, category), category.getTotalCredit());
-		Set<Lecture> taken = new HashSet<>();
-
 		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
 			graduationLectures, category);
 
+		Set<TakenLecture> removedTakenLecture = new HashSet<>();
+		Set<Lecture> taken = new HashSet<>();
+
 		takenLectures.stream()
 			.filter(takenLecture -> graduationCommonCultureLectures.contains(takenLecture.getLecture()))
-			.forEach(takenLecture -> taken.add(takenLecture.getLecture()));
+			.forEach(takenLecture -> {
+				removedTakenLecture.add(takenLecture);
+				taken.add(takenLecture.getLecture());
+			});
 
+		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
+			category.getName(), checkMandatorySatisfaction(takenLectures, category), category.getTotalCredit());
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
+
+		takenLectures.removeAll(removedTakenLecture);
 
 		return commonCultureDetailCategoryResult;
 	}
