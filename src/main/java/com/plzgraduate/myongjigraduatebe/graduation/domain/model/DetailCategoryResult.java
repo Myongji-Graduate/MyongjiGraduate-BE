@@ -17,19 +17,21 @@ public class DetailCategoryResult {
 	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
 	private int takenCredits;
-	private final List<Lecture> takenMandatoryLectures = new ArrayList<>();
-	private final List<Lecture> haveToMandatoryLectures = new ArrayList<>();
-	private final List<Lecture> takenElectiveLectures = new ArrayList<>();
-	private final List<Lecture> haveToElectiveLectures = new ArrayList<>();
+	private int normalLeftCredit;
+	private int freeElectiveLeftCredit;
+	private final List<Lecture> takenLectures = new ArrayList<>();
+	private final List<Lecture> haveToLectures = new ArrayList<>();
 
 	@Builder
 	private DetailCategoryResult(String detailCategoryName, boolean isCompleted, boolean isSatisfiedMandatory,
-		int totalCredits, int takenCredits) {
+		int totalCredits, int takenCredits, int normalLeftCredit, int freeElectiveLeftCredit) {
 		this.detailCategoryName = detailCategoryName;
 		this.isCompleted = isCompleted;
 		this.isSatisfiedMandatory = isSatisfiedMandatory;
 		this.totalCredits = totalCredits;
 		this.takenCredits = takenCredits;
+		this.normalLeftCredit = normalLeftCredit;
+		this.freeElectiveLeftCredit = freeElectiveLeftCredit;
 	}
 
 	public static DetailCategoryResult create(String detailCategoryName, boolean isSatisfiedMandatory,
@@ -40,26 +42,50 @@ public class DetailCategoryResult {
 			.isSatisfiedMandatory(isSatisfiedMandatory)
 			.totalCredits(totalCredits)
 			.takenCredits(0)
+			.normalLeftCredit(0)
+			.freeElectiveLeftCredit(0)
 			.build();
 	}
 
-	public void calculate(Set<Lecture> taken, Set<Lecture> basicAcademicalLectures) {
+	public void calculate(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		addTakenLectures(taken);
+		calculateLeftCredit();
 		if(!checkCompleted()) {
-			addMandatoryLectures(taken, basicAcademicalLectures);
+			addMandatoryLectures(taken, graduationLectures);
 		}
+	}
+
+	public void addNormalLeftCredit(int normalLeftCredit) {
+		this.normalLeftCredit += normalLeftCredit;
+	}
+
+	public void addFreeElectiveLeftCredit(int freeElectiveLeftCredit) {
+		this.freeElectiveLeftCredit += freeElectiveLeftCredit;
 	}
 
 	private void addTakenLectures(Set<Lecture> taken) {
 		taken.forEach(lecture -> {
-			takenMandatoryLectures.add(lecture);
+			takenLectures.add(lecture);
 			takenCredits += lecture.getCredit();
 		});
 	}
 
-	private void addMandatoryLectures(Set<Lecture> taken, Set<Lecture> basicAcademicalLectures) {
-		basicAcademicalLectures.removeAll(taken);
-		haveToMandatoryLectures.addAll(basicAcademicalLectures);
+	private void calculateLeftCredit() {
+		int leftCredit = takenCredits - totalCredits;
+		if (leftCredit > 0) {
+			if (detailCategoryName.equals("전공")) {
+				freeElectiveLeftCredit = leftCredit;
+			}
+			normalLeftCredit = leftCredit;
+		}
+	}
+
+	private void addMandatoryLectures(Set<Lecture> taken, Set<Lecture> graduationLectures) {
+		graduationLectures.removeAll(taken);
+		graduationLectures.stream()
+			.filter(graduationLecture -> graduationLecture.getIsRevoked() == 0)
+			.forEach(haveToLectures::add);
+
 	}
 
 	private boolean checkCompleted() {
