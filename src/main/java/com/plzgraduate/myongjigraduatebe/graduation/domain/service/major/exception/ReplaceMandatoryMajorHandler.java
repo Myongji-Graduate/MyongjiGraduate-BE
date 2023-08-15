@@ -48,7 +48,7 @@ public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 			return true;
 		}
 		List<TakenLecture> replacingLectures = filterTakenLecturesContainsReplacingLectures(takenLectures);
-		if(replacingLectures.size() > 0) {
+		if(!replacingLectures.isEmpty()) {
 			mandatoryLectures.add(replacingLectures.get(0).getLecture());
 			electiveLectures.remove(replacingLectures.get(0).getLecture());
 			return true;
