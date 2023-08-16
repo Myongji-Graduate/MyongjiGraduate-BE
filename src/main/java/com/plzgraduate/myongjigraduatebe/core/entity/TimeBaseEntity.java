@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.common.entity;
+package com.plzgraduate.myongjigraduatebe.core.entity;
 
 import java.time.LocalDateTime;
 

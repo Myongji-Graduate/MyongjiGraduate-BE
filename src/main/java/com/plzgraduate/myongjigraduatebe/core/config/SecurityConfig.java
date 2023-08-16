@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.common.config;
+package com.plzgraduate.myongjigraduatebe.core.config;
 
 import javax.servlet.http.HttpServletResponse;
 
