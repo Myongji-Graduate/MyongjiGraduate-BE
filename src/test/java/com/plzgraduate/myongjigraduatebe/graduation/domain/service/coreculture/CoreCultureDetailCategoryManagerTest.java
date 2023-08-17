@@ -25,6 +25,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategor
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("각 핵심교양 세부 카테고리 별 카테고리 이름, 총 학점, 이수 여부를 포함한 카테고리 졸업 결과를 생성한다.")
@@ -65,13 +66,13 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02139"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
-			graduationLectures,
-			coreCultureCategory);
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -86,13 +87,13 @@ class CoreCultureDetailCategoryManagerTest {
 		Set<CoreCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번();
-		Set<TakenLecture> takenLectures = new HashSet<>();
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
-			graduationLectures, coreCultureCategory);
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -110,13 +111,14 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02136"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2019, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<CoreCulture> graduationLectures = 핵심교양_과학과기술();
 		CoreCultureCategory coreCultureCategory = SCIENCE_TECHNOLOGY;
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
-			graduationLectures, coreCultureCategory);
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -124,6 +126,7 @@ class CoreCultureDetailCategoryManagerTest {
 				"freeElectiveLeftCredit")
 			.contains(coreCultureCategory.getName(), true, categoryTotalCredit, 3, 3);
 	}
+
 	static Stream<Arguments> ictUsers() {
 		return Stream.of(
 			Arguments.arguments(UserFixture.응용소프트웨어학과_19학번()),
@@ -135,21 +138,22 @@ class CoreCultureDetailCategoryManagerTest {
 	@DisplayName("4차산업혁명시대의예술, 문화리터러시와창의적스토리텔링 과목은 2022년 1학기에 수강한 경우에는 핵심교양이 아닌 일반교양으로 인정된다.")
 	@Test
 	void generateUnCompletedCultureArtDetailCategoryResultWith_2022_First() {
-	    //given
+		//given
 		User user = UserFixture.경영학과_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02155"), 2022, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02156"), 2022, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<CoreCulture> graduationLectures = 핵심교양_문화와예술();
 		CoreCultureCategory coreCultureCategory = CULTURE_ART;
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
-	    //when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
-			graduationLectures, coreCultureCategory);
+		//when
+		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+			takenLectureInventory, graduationLectures, coreCultureCategory);
 
-	    //then
+		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
 				"freeElectiveLeftCredit")

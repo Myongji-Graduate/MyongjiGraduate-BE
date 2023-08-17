@@ -18,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -57,12 +58,13 @@ class CoreCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02139"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		StudentInformation studentInformation = user.getStudentInformation();
 		Set<CoreCulture> graduationLectures = CoreCultureFixture.getAllCoreCulture();
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			studentInformation, takenLectures, graduationLectures, 12);
+			studentInformation, takenLectureInventory, graduationLectures, 12);
 
 		//then
 		assertThat(detailGraduationResult)
@@ -88,12 +90,13 @@ class CoreCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02142"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02160"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 
 		Set<CoreCulture> graduationLectures = CoreCultureFixture.getAllCoreCulture();
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			studentInformation, takenLectures, graduationLectures, 12);
+			studentInformation, takenLectureInventory, graduationLectures, 12);
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("categoryName", "isCompleted")

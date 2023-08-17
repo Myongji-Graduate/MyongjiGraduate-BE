@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.filter;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -21,6 +20,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -45,12 +45,12 @@ class BusinessBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMD02107"), 2019, Semester.FIRST)
 			)));
-
+			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 			BasicAcademicalManager manager = new BusinessBasicAcademicalManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
-				takenLectures, basicAcademicalLectures, 6);
+				takenLectureInventory, basicAcademicalLectures, 6);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
 
@@ -79,11 +79,12 @@ class BusinessBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMD02107"), 2019, Semester.FIRST)
 			)));
+			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 			BasicAcademicalManager manager = new BusinessBasicAcademicalManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
-				takenLectures, basicAcademicalLectures, 6);
+				takenLectureInventory, basicAcademicalLectures, 6);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
 

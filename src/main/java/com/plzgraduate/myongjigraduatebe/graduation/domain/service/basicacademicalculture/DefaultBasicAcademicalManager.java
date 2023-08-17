@@ -11,6 +11,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 import lombok.NoArgsConstructor;
@@ -25,21 +26,21 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
-		Set<TakenLecture> takenLectures,
-		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
+		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCulture> graduationLectures,
+		int basicAcademicalCredit) {
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
-		takenLectures.stream()
+		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> basicAcademicalLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
 				removedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-		takenLectures.removeAll(removedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
