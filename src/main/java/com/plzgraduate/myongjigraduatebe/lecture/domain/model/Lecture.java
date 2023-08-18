@@ -8,6 +8,8 @@ import lombok.Getter;
 @Getter
 public class Lecture {
 
+	private static final String CULTURE_CODE_START_PREFIX = "KM";
+
 	private final String lectureCode;
 	private final String name;
 	private final int credit;
@@ -37,6 +39,10 @@ public class Lecture {
 			.isRevoked(isRevoked)
 			.duplicateCode(duplicateCode)
 			.build();
+	}
+
+	public boolean isCulture() {
+		return lectureCode.startsWith(CULTURE_CODE_START_PREFIX);
 	}
 
 	@Override

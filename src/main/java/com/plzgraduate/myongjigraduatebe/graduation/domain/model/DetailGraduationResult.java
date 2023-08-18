@@ -24,7 +24,8 @@ public class DetailGraduationResult {
 		this.detailCategory = detailCategory;
 	}
 
-	public static DetailGraduationResult create(GraduationCategory graduationCategory, int totalCredit, List<DetailCategoryResult> detailCategoryResults) {
+	public static DetailGraduationResult create(GraduationCategory graduationCategory, int totalCredit,
+		List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
 			.categoryName(graduationCategory.getName())
 			.isCompleted(checkIsCompleted(detailCategoryResults))
@@ -34,11 +35,16 @@ public class DetailGraduationResult {
 			.build();
 	}
 
-	public int getLeftCredit() {
-		if(totalCredit>=takenCredit) {
-			return 0;
-		}
-		return takenCredit - totalCredit;
+	public int getNormalLeftCredit() {
+		return detailCategory.stream()
+			.mapToInt(DetailCategoryResult::getNormalLeftCredit)
+			.sum();
+	}
+
+	public int getFreeElectiveLeftCredit() {
+		return detailCategory.stream()
+			.mapToInt(DetailCategoryResult::getFreeElectiveLeftCredit)
+			.sum();
 	}
 
 	private static boolean checkIsCompleted(List<DetailCategoryResult> detailCategoryResults) {
