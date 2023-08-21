@@ -1,13 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
