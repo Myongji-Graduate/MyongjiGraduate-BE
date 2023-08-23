@@ -22,6 +22,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCateg
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("각 공통교양 세부 카테고리 별 카테고리 이름, 총 학점, 이수 여부를 포함한 카테고리 졸업 결과를 생성한다.")
@@ -52,11 +53,12 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		String commonCultureCategoryName = commonCultureCategory.getName();
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(takenLectures, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(takenLectureInventory, graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -71,12 +73,12 @@ class CommonCultureDetailCategoryManagerTest {
 	void generateUnCompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
-		Set<TakenLecture> takenLectures = new HashSet<>();
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
 		String commonCultureCategoryName = commonCultureCategory.getName();
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(takenLectures, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(takenLectureInventory, graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -97,10 +99,11 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(takenLectures, graduationLectures, CHRISTIAN_A);
+		DetailCategoryResult detailCategoryResult = manager.generate(takenLectureInventory, graduationLectures, CHRISTIAN_A);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -118,10 +121,11 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02103"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(takenLectures, graduationLectures, CHRISTIAN_A);
+		DetailCategoryResult detailCategoryResult = manager.generate(takenLectureInventory, graduationLectures, CHRISTIAN_A);
 
 		//then
 		assertThat(detailCategoryResult)

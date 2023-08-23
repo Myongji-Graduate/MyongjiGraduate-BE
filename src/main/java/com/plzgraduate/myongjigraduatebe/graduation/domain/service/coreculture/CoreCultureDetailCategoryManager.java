@@ -12,6 +12,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 public class CoreCultureDetailCategoryManager {
@@ -25,19 +26,20 @@ public class CoreCultureDetailCategoryManager {
 		Lecture.from("KMA02155"),
 		Lecture.from("KMA02156"));
 
-	public DetailCategoryResult generate(StudentInformation studentInformation, Set<TakenLecture> takenLectures,
-		Set<CoreCulture> graduationLectures, CoreCultureCategory category) {
+	public DetailCategoryResult generate(StudentInformation studentInformation,
+		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures,
+		CoreCultureCategory category) {
 		Set<Lecture> graduationCoreCultureLectures = categorizeCommonCultures(graduationLectures, category);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
-		takenLectures.stream()
+		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCoreCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
 				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-		takenLectures.removeAll(finishedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(), true, category.getTotalCredit());

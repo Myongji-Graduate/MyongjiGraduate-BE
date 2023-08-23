@@ -10,12 +10,13 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
 class CommonCultureDetailCategoryManager {
 
 	private static final List<String> MANDATORY_LECTURE_CODE_LIST = List.of("KMA02100", "KMA00100", "KMA00101");
 
-	public DetailCategoryResult generate(Set<TakenLecture> takenLectures,
+	public DetailCategoryResult generate(TakenLectureInventory takenLectureInventory,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
 		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
 			graduationLectures, category);
@@ -23,7 +24,7 @@ class CommonCultureDetailCategoryManager {
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
-		takenLectures.stream()
+		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCommonCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
 				removedTakenLecture.add(takenLecture);
@@ -31,17 +32,18 @@ class CommonCultureDetailCategoryManager {
 			});
 
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), checkMandatorySatisfaction(takenLectures, category), category.getTotalCredit());
+			category.getName(), checkMandatorySatisfaction(takenLectureInventory, category), category.getTotalCredit());
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
 
-		takenLectures.removeAll(removedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		return commonCultureDetailCategoryResult;
 	}
 
-	private boolean checkMandatorySatisfaction(Set<TakenLecture> takenLectures, CommonCultureCategory category) {
+	private boolean checkMandatorySatisfaction(TakenLectureInventory takenLectureInventory,
+		CommonCultureCategory category) {
 		if (category == CommonCultureCategory.CHRISTIAN_A) {
-			return takenLectures.stream()
+			return takenLectureInventory.getTakenLectures().stream()
 				.anyMatch(
 					takenLecture -> MANDATORY_LECTURE_CODE_LIST.contains(takenLecture.getLecture().getLectureCode()));
 		}

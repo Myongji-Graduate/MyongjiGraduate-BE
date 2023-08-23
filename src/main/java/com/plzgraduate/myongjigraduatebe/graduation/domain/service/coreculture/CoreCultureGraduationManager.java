@@ -12,16 +12,16 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
-import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 public class CoreCultureGraduationManager implements GraduationManager<CoreCulture> {
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
-		Set<TakenLecture> takenLectures, Set<CoreCulture> graduationLectures, int coreCultureGraduationTotalCredit) {
+		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures, int coreCultureGraduationTotalCredit) {
 		CoreCultureDetailCategoryManager coreCultureDetailCategoryManager = new CoreCultureDetailCategoryManager();
 		List<DetailCategoryResult> coreCultureDetailCategoryResults = Arrays.stream(CoreCultureCategory.values())
-			.map(coreCultureCategory -> coreCultureDetailCategoryManager.generate(studentInformation, takenLectures,
+			.map(coreCultureCategory -> coreCultureDetailCategoryManager.generate(studentInformation, takenLectureInventory,
 				graduationLectures, coreCultureCategory))
 			.collect(Collectors.toList());
 
