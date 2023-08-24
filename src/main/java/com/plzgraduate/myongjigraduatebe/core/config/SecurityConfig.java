@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
@@ -28,7 +29,7 @@ public class SecurityConfig {
 		http
 			.authorizeRequests()
 			.antMatchers(
-				API_V1_PREFIX + "/auth/sign-up", // 회원가입
+				API_V1_PREFIX + "/user/sign-up", // 회원가입
 				API_V1_PREFIX + "/auth/sign-in", // 로그인
 				API_V1_PREFIX + "/users/userid-validity-checks", // 유저아이디 중복 체크
 				API_V1_PREFIX + "/users/studentNumber-validity-checks", // 학번 중복 체크
@@ -97,7 +98,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 

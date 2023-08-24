@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
@@ -22,8 +22,6 @@ server:
   port: ${PORT}
 
 jwt:
-  header: "Authorization"
-  prefix: "Bearer"
   issuer: "plzgraduate"
-  client-secret: ${JWT_SECRET}
-  expiry-seconds: 600
+  secret-key: ${JWT_SECRET}
+  expiry-seconds: 86400

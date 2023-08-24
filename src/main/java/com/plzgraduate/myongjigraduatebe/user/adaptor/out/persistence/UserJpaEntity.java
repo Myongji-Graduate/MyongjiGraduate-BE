@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,7 +29,8 @@ public class UserJpaEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String authId;
+	@Column(unique = true)
+	private String userId;
 
 	private String password;
 
@@ -49,10 +51,10 @@ public class UserJpaEntity {
 	private StudentCategory studentCategory;
 
 	@Builder
-	private  UserJpaEntity(Long id, String authId, String password, EnglishLevel englishLevel, String name,
+	private  UserJpaEntity(Long id, String userId, String password, EnglishLevel englishLevel, String name,
 		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		this.id = id;
-		this.authId = authId;
+		this.userId = userId;
 		this.password = password;
 		this.englishLevel = englishLevel;
 		this.name = name;

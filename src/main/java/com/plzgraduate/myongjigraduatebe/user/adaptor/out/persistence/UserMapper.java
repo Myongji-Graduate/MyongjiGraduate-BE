@@ -11,7 +11,7 @@ public class UserMapper {
 
 		return User.builder()
 			.id(user.getId())
-			.userId(user.getAuthId())
+			.userId(user.getUserId())
 			.password(user.getPassword())
 			.name(user.getName())
 			.studentNumber(user.getStudentNumber())
@@ -26,7 +26,7 @@ public class UserMapper {
 
 		return UserJpaEntity.builder()
 			.id(user.getId())
-			.authId(user.getUserId())
+			.userId(user.getUserId())
 			.password(user.getPassword())
 			.englishLevel(user.getEnglishLevel())
 			.studentNumber(user.getStudentNumber())
