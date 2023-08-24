@@ -12,15 +12,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenAuthenticationFilter;
+import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
 
 	public static final String API_V1_PREFIX = "/api/v1";
+
+	private final LoadUserPort loadUserPort;
+	private final TokenProvider tokenProvider;
 
 	@Bean
 	public SecurityFilterChain filterChain(
@@ -44,24 +55,19 @@ public class SecurityConfig {
 			.anyRequest()
 			.authenticated()
 			.and()
+			.addFilterBefore(new TokenAuthenticationFilter(tokenProvider, loadUserPort), UsernamePasswordAuthenticationFilter.class)
 			.cors()
 			.configurationSource(corsConfigurationSource())
 			.and()
 			/*
 			  formLogin, csrf, headers, http-basic, rememberMe, logout filter 비활성화
 			 */
-			.formLogin()
-			.disable()
-			.csrf()
-			.disable()
-			.headers()
-			.disable()
-			.httpBasic()
-			.disable()
-			.rememberMe()
-			.disable()
-			.logout()
-			.disable()
+			.formLogin().disable()
+			.csrf().disable()
+			.headers().disable()
+			.httpBasic().disable()
+			.rememberMe().disable()
+			.logout().disable()
 			/*
 			  Session 사용하지 않음
 			 */
