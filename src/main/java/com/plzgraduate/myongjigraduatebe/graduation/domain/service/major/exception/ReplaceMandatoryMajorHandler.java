@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 	private int removedMandatoryTotalCredit = 0;
@@ -23,12 +23,12 @@ public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 	);
 
 	@Override
-	public boolean isSupport(StudentInformation studentInformation) {
-		return studentInformation.getDepartment().equals("철학과") && studentInformation.getEntryYear() <= 21;
+	public boolean isSupport(User user) {
+		return user.getMajor().equals("철학과") && user.getEntryYear() <= 21;
 	}
 
 	@Override
-	public boolean checkMandatoryCondition(StudentInformation studentInformation, Set<TakenLecture> takenLectures,
+	public boolean checkMandatoryCondition(User user, Set<TakenLecture> takenLectures,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		boolean checkCondition = checkCompleteReplaceMandatory(takenLectures, mandatoryLectures, electiveLectures);
 		if(!checkCondition) {

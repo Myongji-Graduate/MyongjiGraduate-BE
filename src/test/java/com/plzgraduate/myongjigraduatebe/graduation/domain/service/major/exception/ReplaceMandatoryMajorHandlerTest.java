@@ -15,13 +15,11 @@ import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("21학번 이전 철학과 학생의 경우 폐지된 전공필수의 대체 과목을 인정한다.")
 class ReplaceMandatoryMajorHandlerTest {
 	private static final User user = UserFixture.철학과_20학번();
-	private static final StudentInformation studentInformation = user.getStudentInformation();
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 
@@ -46,7 +44,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		);
 	    //when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(studentInformation, takenLectures,
+		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(user, takenLectures,
 			mandatoryLectures, electiveLectures);
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
 		//then
@@ -76,7 +74,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		);
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(studentInformation, takenLectures,
+		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(user, takenLectures,
 			mandatoryLectures, electiveLectures);
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
 		//then
@@ -104,7 +102,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		Set<TakenLecture> takenLectures = new HashSet<>();
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(studentInformation, takenLectures,
+		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(user, takenLectures,
 			mandatoryLectures, electiveLectures);
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
 		//then

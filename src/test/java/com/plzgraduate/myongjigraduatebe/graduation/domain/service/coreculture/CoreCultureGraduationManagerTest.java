@@ -18,7 +18,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("각 핵심교양 세부 카테고리 졸업 결과를 포함한 공통교양 전체 졸업 결과를 생성한다.")
@@ -57,12 +56,11 @@ class CoreCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02139"), 2023, Semester.FIRST)
 		)));
-		StudentInformation studentInformation = user.getStudentInformation();
 		Set<CoreCulture> graduationLectures = CoreCultureFixture.getAllCoreCulture();
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			studentInformation, takenLectures, graduationLectures, 12);
+			user, takenLectures, graduationLectures, 12);
 
 		//then
 		assertThat(detailGraduationResult)
@@ -75,7 +73,6 @@ class CoreCultureGraduationManagerTest {
 	void generateUnCompletedDetailGraduationResult() {
 		//given
 		User user = UserFixture.영문학과_16학번();
-		StudentInformation studentInformation = user.getStudentInformation();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02110"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02111"), 2019, Semester.FIRST),
@@ -93,7 +90,7 @@ class CoreCultureGraduationManagerTest {
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			studentInformation, takenLectures, graduationLectures, 12);
+			user, takenLectures, graduationLectures, 12);
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("categoryName", "isCompleted")

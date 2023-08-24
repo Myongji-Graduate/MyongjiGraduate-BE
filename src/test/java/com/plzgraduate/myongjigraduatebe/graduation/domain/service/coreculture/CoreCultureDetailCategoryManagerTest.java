@@ -69,7 +69,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectures,
 			graduationLectures,
 			coreCultureCategory);
 
@@ -91,7 +91,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectures,
 			graduationLectures, coreCultureCategory);
 
 		//then
@@ -115,7 +115,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectures,
 			graduationLectures, coreCultureCategory);
 
 		//then
@@ -146,7 +146,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 	    //when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(), takenLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectures,
 			graduationLectures, coreCultureCategory);
 
 	    //then

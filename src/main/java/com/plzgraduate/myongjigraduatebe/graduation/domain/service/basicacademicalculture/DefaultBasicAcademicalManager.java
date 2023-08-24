@@ -11,7 +11,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.NoArgsConstructor;
 
@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 
 	@Override
-	public boolean isSatisfied(StudentInformation studentInformation) {
+	public boolean isSatisfied(User user) {
 		return false;
 	}
 
 	@Override
-	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
+	public DetailGraduationResult createDetailGraduationResult(User user,
 		Set<TakenLecture> takenLectures,
 		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
 

@@ -13,18 +13,18 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationMan
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public class CommonCultureGraduationManager implements GraduationManager<CommonCulture> {
 
 	@Override
-	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
+	public DetailGraduationResult createDetailGraduationResult(User user,
 		Set<TakenLecture> takenLectures,
 		Set<CommonCulture> graduationLectures, int commonCultureGraduationTotalCredit) {
 		CommonCultureDetailCategoryManager commonCultureDetailCategoryManager = new CommonCultureDetailCategoryManager();
 		List<DetailCategoryResult> commonCultureDetailCategoryResults = Arrays.stream(CommonCultureCategory.values())
 			.filter(
-				commonCultureCategory -> commonCultureCategory.isContainsEntryYear(studentInformation.getEntryYear()))
+				commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
 			.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(takenLectures,
 				graduationLectures, commonCultureCategory))
 			.collect(Collectors.toList());

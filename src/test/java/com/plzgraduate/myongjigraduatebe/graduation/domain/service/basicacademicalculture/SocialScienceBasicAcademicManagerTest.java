@@ -19,7 +19,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("사회과학대의 학문기초교양 결과를 반환한다.")
@@ -29,7 +28,6 @@ class SocialScienceBasicAcademicManagerTest {
 	@Nested
 	class 이십삼년도_이후_교과목_포함 {
 		User user = UserFixture.행정학과_21학번();
-		StudentInformation studentInformation = user.getStudentInformation();
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 		Set<BasicAcademicalCulture> basicAcademicalLectures = BasicAcademicalLectureFixture.사회과학대_학문기초교양();
 
@@ -47,7 +45,7 @@ class SocialScienceBasicAcademicManagerTest {
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 				takenLectures, basicAcademicalLectures, 12);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
@@ -80,7 +78,7 @@ class SocialScienceBasicAcademicManagerTest {
 			BasicAcademicalManager manager = new SocialScienceBasicAcademicManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 				takenLectures, basicAcademicalLectures, 12);
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
 

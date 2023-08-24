@@ -19,7 +19,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("데이터테크놀로지학과의 전공 달성 여부를 계산한다.")
@@ -32,7 +31,6 @@ class DataTechnologyMajorTest {
 		//given
 
 		User user = UserFixture.데이테크놀로지학과_16학번();
-		StudentInformation studentInformation = user.getStudentInformation();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HEB01102"), 2016, Semester.FIRST), //기초프로그래밍
 			TakenLecture.of(user, mockLectureMap.get("HEB01103"), 2016, Semester.SECOND), //객체지향적사고와프로그래밍
@@ -69,7 +67,7 @@ class DataTechnologyMajorTest {
 		MajorManager manager = new MajorManager();
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			takenLectures, 데이터테크놀로지_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -96,7 +94,6 @@ class DataTechnologyMajorTest {
 	void 전공필수_기준학점_미충족 () {
 		//given
 		User user = UserFixture.데이테크놀로지학과_18학번();
-		StudentInformation studentInformation = user.getStudentInformation();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HEB01102"), 2018, Semester.FIRST), //기초프로그래밍
 			TakenLecture.of(user, mockLectureMap.get("HEB01104"), 2018, Semester.SECOND), //객체지향프로그래밍
@@ -126,7 +123,7 @@ class DataTechnologyMajorTest {
 		MajorManager manager = new MajorManager();
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			takenLectures, 데이터테크놀로지_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);

@@ -4,12 +4,12 @@ import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface MajorExceptionHandler {
-	boolean isSupport(StudentInformation studentInformation);
+	boolean isSupport(User user);
 
-	boolean checkMandatoryCondition(StudentInformation studentInformation, Set<TakenLecture> takenLectures,
+	boolean checkMandatoryCondition(User user, Set<TakenLecture> takenLectures,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures);
 
 	int getRemovedMandatoryTotalCredit();
