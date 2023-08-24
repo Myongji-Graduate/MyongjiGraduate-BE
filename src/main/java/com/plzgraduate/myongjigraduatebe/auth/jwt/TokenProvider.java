@@ -35,6 +35,12 @@ public class TokenProvider {
 		return makeToken(authentication, new Date(now.getTime() + jwtProperties.getExpirySeconds()));
 	}
 
+	public Authentication getAuthentication(String token) {
+		Claims claims = verifyToken(token);
+		return new UsernamePasswordAuthenticationToken(
+			claims.id, token, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+	}
+
 	private String makeToken(Authentication authentication, Date expiry) {
 		Date now = new Date();
 
@@ -49,13 +55,7 @@ public class TokenProvider {
 
 	private Long getId(Authentication authentication) {
 		CustomUserDetails principal = (CustomUserDetails)authentication.getPrincipal();
-		return principal.getUserKey();
-	}
-
-	public Authentication getAuthentication(String token) {
-		Claims claims = verifyToken(token);
-		return new UsernamePasswordAuthenticationToken(
-			claims.id, token, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+		return principal.getUserId();
 	}
 
 	private Claims verifyToken(String token) {
@@ -65,7 +65,6 @@ public class TokenProvider {
 
 	static public class Claims {
 		Long id;
-		String userId;
 		Date iat;
 		Date exp;
 
@@ -73,10 +72,6 @@ public class TokenProvider {
 			Claim id = decodedJWT.getClaim("id");
 			if (!id.isNull()) {
 				this.id = id.asLong();
-			}
-			Claim userId = decodedJWT.getClaim("userId");
-			if (!userId.isNull()) {
-				this.userId = userId.asString();
 			}
 			this.iat = decodedJWT.getIssuedAt();
 			this.exp = decodedJWT.getExpiresAt();

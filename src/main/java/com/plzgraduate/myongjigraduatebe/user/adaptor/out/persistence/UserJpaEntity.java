@@ -30,7 +30,7 @@ public class UserJpaEntity {
 	private Long id;
 
 	@Column(unique = true)
-	private String userId;
+	private String authId;
 
 	private String password;
 
@@ -51,10 +51,10 @@ public class UserJpaEntity {
 	private StudentCategory studentCategory;
 
 	@Builder
-	private  UserJpaEntity(Long id, String userId, String password, EnglishLevel englishLevel, String name,
+	private  UserJpaEntity(Long id, String authId, String password, EnglishLevel englishLevel, String name,
 		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		this.id = id;
-		this.userId = userId;
+		this.authId = authId;
 		this.password = password;
 		this.englishLevel = englishLevel;
 		this.name = name;

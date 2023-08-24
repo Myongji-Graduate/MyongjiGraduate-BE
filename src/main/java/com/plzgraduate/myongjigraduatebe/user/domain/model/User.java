@@ -7,7 +7,7 @@ import lombok.Getter;
 public class User {
 
 	private final Long id;
-	private String userId;
+	private String authId;
 	private String password;
 	private EnglishLevel englishLevel;
 	private final String name;
@@ -18,10 +18,10 @@ public class User {
 	private final StudentCategory studentCategory;
 
 	@Builder
-	private User(Long id, String userId, String password, EnglishLevel englishLevel, String name, String studentNumber, int entryYear,
+	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber, int entryYear,
 		String major, String subMajor, StudentCategory studentCategory) {
 		this.id = id;
-		this.userId = userId;
+		this.authId = authId;
 		this.password = password;
 		this.englishLevel = englishLevel;
 		this.name = name;
@@ -33,9 +33,9 @@ public class User {
 
 	}
 
-	public static User create(String userId, String password, EnglishLevel englishLevel, String studentNumber) {
+	public static User create(String authId, String password, EnglishLevel englishLevel, String studentNumber) {
 		return User.builder()
-			.userId(userId)
+			.authId(authId)
 			.password(password)
 			.englishLevel(englishLevel)
 			.studentNumber(studentNumber)

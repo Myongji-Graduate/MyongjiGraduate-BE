@@ -41,6 +41,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 		if (principal instanceof Long) {
 			return principal;
 		}
+		log.warn("userId is null");
 		return null;
 	}
 }

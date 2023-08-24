@@ -25,7 +25,7 @@ public class SignInService implements SignInUseCase {
 	@Override
 	public String signIn(SignInRequest signInRequest) {
 		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(signInRequest.getUserId(), signInRequest.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+			new UsernamePasswordAuthenticationToken(signInRequest.getAuthId(), signInRequest.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String accessToken = tokenProvider.generateToken(authentication);

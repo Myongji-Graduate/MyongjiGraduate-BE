@@ -62,10 +62,10 @@ public class UserFixture {
 		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "응용소프트웨어학과", null, StudentCategory.NORMAL);
 	}
 
-	public static User createUser(String userId, String password, EnglishLevel englishLevel, String name, String studentNumber,
+	public static User createUser(String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
 		int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		return User.builder()
-			.userId(userId)
+			.authId(authId)
 			.password(password)
 			.englishLevel(englishLevel)
 			.name(name)

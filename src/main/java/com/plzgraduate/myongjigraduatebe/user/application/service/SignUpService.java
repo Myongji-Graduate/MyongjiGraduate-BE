@@ -22,7 +22,7 @@ public class SignUpService implements SignUpUseCase {
 	public void signUp(SignUpRequest signUpRequest) {
 		String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
 		EnglishLevel englishLevel = EnglishLevel.valueOf(signUpRequest.getEngLv());
-		User newUser = User.create(signUpRequest.getUserId(), encodedPassword, englishLevel,
+		User newUser = User.create(signUpRequest.getAuthId(), encodedPassword, englishLevel,
 			signUpRequest.getStudentNumber());
 		userPersistenceAdaptor.saveUser(newUser);
 	}

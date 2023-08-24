@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SignUpRequest {
-	private String userId;
+	private String authId;
 
 	private String password;
 

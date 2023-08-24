@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
+
 	private final User user;
 
 	@Override
@@ -29,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getUserId();
+		return user.getAuthId();
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class CustomUserDetails implements UserDetails {
 		return true;
 	}
 
-	public Long getUserKey() {
+	public Long getUserId() {
 		return user.getId();
 	}
 
