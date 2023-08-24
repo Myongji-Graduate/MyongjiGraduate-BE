@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.core;
+package com.plzgraduate.myongjigraduatebe.core.meta;
 
 import java.lang.annotation.Annotation;
 
@@ -26,7 +26,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.hasParameterAnnotation(LoginUser.class)
-			&& User.class.isAssignableFrom(parameter.getParameterType());
+			&& Long.class.isAssignableFrom(parameter.getParameterType());
 	}
 
 	@Override
@@ -38,14 +38,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 			return null;
 		}
 		Object principal = authentication.getPrincipal();
-
-		if (principal instanceof CustomUserDetails) {
-			CustomUserDetails customUserDetails = (CustomUserDetails)principal;
-			User user = customUserDetails.getUser();
-			if (user == null) {
-				log.warn("user in principal is null");
-			}
-			return user;
+		if (principal instanceof Long) {
+			return principal;
 		}
 		return null;
 	}

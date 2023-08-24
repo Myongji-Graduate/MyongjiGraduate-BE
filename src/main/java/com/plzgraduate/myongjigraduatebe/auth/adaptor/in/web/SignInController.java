@@ -26,7 +26,7 @@ public class SignInController {
 	}
 
 	@GetMapping("/check-login")
-	String check(@LoginUser User user) {
-		return user.getUserId();
+	String check(@LoginUser Long userId) {
+		return String.valueOf(userId);
 	}
 }

@@ -27,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private final TokenProvider tokenProvider;
-	private final LoadUserPort loadUserPort;
 
 	private final static String HEADER_AUTHORIZATION = "Authorization";
 	private final static String TOKEN_PREFIX = "Bearer ";
@@ -35,19 +34,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-
-		String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
-		String token = getAccessToken(authorizationHeader);
-
-		try {
-			TokenProvider.Claims claims = tokenProvider.verifyToken(token);
-			User user = loadUserPort.loadUserByUserId(claims.userId);
-			Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
-			Authentication authentication = new UsernamePasswordAuthenticationToken(
-				new CustomUserDetails(user), token, authorities);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		} catch (Exception e) {
-			log.warn("Jwt processing failed: {}", e.getMessage());
+		if(SecurityContextHolder.getContext().getAuthentication() == null) {
+			String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
+			String token = getAccessToken(authorizationHeader);
+			if(authorizationHeader != null) {
+				try {
+					Authentication authentication = tokenProvider.getAuthentication(token);
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				} catch (Exception e) {
+					log.warn("Jwt processing failed: {}", e.getMessage());
+				}
+			}
+		} else {
+			log.debug("SecurityContextHolder not populated with security token, as it already contained: '{}'",
+				SecurityContextHolder.getContext().getAuthentication());
 		}
 		filterChain.doFilter(request, response);
 

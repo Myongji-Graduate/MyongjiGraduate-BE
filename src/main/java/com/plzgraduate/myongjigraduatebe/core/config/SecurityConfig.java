@@ -30,7 +30,6 @@ public class SecurityConfig {
 
 	public static final String API_V1_PREFIX = "/api/v1";
 
-	private final LoadUserPort loadUserPort;
 	private final TokenProvider tokenProvider;
 
 	@Bean
@@ -55,7 +54,7 @@ public class SecurityConfig {
 			.anyRequest()
 			.authenticated()
 			.and()
-			.addFilterBefore(new TokenAuthenticationFilter(tokenProvider, loadUserPort), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.cors()
 			.configurationSource(corsConfigurationSource())
 			.and()
