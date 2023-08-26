@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @Component
-public class UserMapper {
+class UserMapper {
 
 	User mapToDomainEntity(UserJpaEntity user) {
 
@@ -19,6 +19,7 @@ public class UserMapper {
 			.englishLevel(user.getEnglishLevel())
 			.major(user.getMajor())
 			.subMajor(user.getSubMajor())
+			.studentCategory(user.getStudentCategory())
 			.build();
 	}
 
@@ -28,6 +29,7 @@ public class UserMapper {
 			.id(user.getId())
 			.authId(user.getAuthId())
 			.password(user.getPassword())
+			.name(user.getName())
 			.englishLevel(user.getEnglishLevel())
 			.studentNumber(user.getStudentNumber())
 			.entryYear(user.getEntryYear())

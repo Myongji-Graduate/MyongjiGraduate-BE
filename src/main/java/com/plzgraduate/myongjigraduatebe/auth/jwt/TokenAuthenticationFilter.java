@@ -1,24 +1,15 @@
 package com.plzgraduate.myongjigraduatebe.auth.jwt;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Set;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.plzgraduate.myongjigraduatebe.auth.CustomUserDetails;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -19,7 +19,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenAuthenticationFilter;
 import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenProvider;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
 
 import lombok.RequiredArgsConstructor;
 

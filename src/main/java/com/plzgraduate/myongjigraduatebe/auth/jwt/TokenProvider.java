@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.auth.jwt;
 
-import java.time.Duration;
 import java.util.Collections;
 import java.util.Date;
 
@@ -8,17 +7,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.plzgraduate.myongjigraduatebe.auth.CustomUserDetails;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
-import lombok.RequiredArgsConstructor;
+import com.plzgraduate.myongjigraduatebe.auth.jwt.CustomUserDetails;
+import com.plzgraduate.myongjigraduatebe.auth.jwt.JwtProperties;
 
 @Component
 public class TokenProvider {
@@ -48,12 +44,12 @@ public class TokenProvider {
 			.withIssuer(jwtProperties.getIssuer())
 			.withIssuedAt(now)
 			.withExpiresAt(expiry)
-			.withClaim("id", getId(authentication))
+			.withClaim("id", getUserId(authentication))
 			.sign(Algorithm.HMAC256(jwtProperties.getSecretKey()));
 
 	}
 
-	private Long getId(Authentication authentication) {
+	private Long getUserId(Authentication authentication) {
 		CustomUserDetails principal = (CustomUserDetails)authentication.getPrincipal();
 		return principal.getUserId();
 	}

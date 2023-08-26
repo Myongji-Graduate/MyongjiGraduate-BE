@@ -1,21 +1,15 @@
-package com.plzgraduate.myongjigraduatebe.core.meta;
-
-import java.lang.annotation.Annotation;
+package com.plzgraduate.myongjigraduatebe.auth.jwt;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.plzgraduate.myongjigraduatebe.auth.CustomUserDetails;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth;
+package com.plzgraduate.myongjigraduatebe.auth.jwt;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+class CustomUserDetails implements UserDetails {
 
 	private final User user;
 
