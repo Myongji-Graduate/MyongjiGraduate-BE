@@ -28,7 +28,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 	    //when
 		userPersistenceAdaptor.saveUser(user);
 	    //then
-		assertThat(userRepository.findByAuthId("mju1001").isPresent()).isTrue();
+		assertThat(userRepository.findByAuthId("mju1001")).isPresent();
 	}
 
 	@DisplayName("아이디로 사용자를 조회한다.")

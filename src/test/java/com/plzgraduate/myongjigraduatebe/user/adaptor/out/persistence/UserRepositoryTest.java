@@ -28,7 +28,7 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		Optional<UserJpaEntity> user = userRepository.findByAuthId("mju1001");
 
 		//then
-		assertThat(user.isPresent()).isTrue();
+		assertThat(user).isPresent();
 		assertThat(user.get().getAuthId()).isEqualTo("mju1001");
 	}
 

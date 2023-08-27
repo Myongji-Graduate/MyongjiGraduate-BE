@@ -57,15 +57,15 @@ public class TokenProvider {
 		return new Claims(jwtverifier.verify(token));
 	}
 
-	static public class Claims {
+	static class Claims {
 		Long id;
 		Date iat;
 		Date exp;
 
 		Claims(DecodedJWT decodedJWT) {
-			Claim id = decodedJWT.getClaim("id");
-			if (!id.isNull()) {
-				this.id = id.asLong();
+			Claim claimId = decodedJWT.getClaim("id");
+			if (!claimId.isNull()) {
+				this.id = claimId.asLong();
 			}
 			this.iat = decodedJWT.getIssuedAt();
 			this.exp = decodedJWT.getExpiresAt();
