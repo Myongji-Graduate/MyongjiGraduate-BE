@@ -19,6 +19,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("기본 단과대에 대해 학문기초교양 결과를 반환한다.")
@@ -42,12 +43,12 @@ class DefaultBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMB02128"), 2020, Semester.SECOND),
 				TakenLecture.of(user, mockLectureMap.get("KMB02122"), 2021, Semester.FIRST)
 			)));
-
+			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-				takenLectures, basicAcademicalLectures, 12);
+				takenLectureInventory, basicAcademicalLectures, 12);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
 
@@ -73,12 +74,12 @@ class DefaultBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMB02119"), 2019, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMB02120"), 2020, Semester.FIRST)
 			));
-
+			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-				takenLectures, basicAcademicalLectures, 12);
+				takenLectureInventory, basicAcademicalLectures, 12);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
 

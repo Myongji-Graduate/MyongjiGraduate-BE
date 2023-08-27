@@ -12,6 +12,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
 public class SocialScienceBasicAcademicManager implements BasicAcademicalManager {
 
@@ -35,13 +36,14 @@ public class SocialScienceBasicAcademicManager implements BasicAcademicalManager
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		Set<TakenLecture> takenLectures,
-		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
+		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCulture> graduationLectures,
+		int basicAcademicalCredit) {
+    
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
-		takenLectures.stream()
+		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> basicAcademicalLectures.contains(takenLecture.getLecture()))
 			.filter(takenLecture -> lecturesAcceptTakenAfter2023.contains(takenLecture.getLecture())
 				&& !takenLecture.takenAfter(TWENTY_THREE_YEAR))
@@ -49,7 +51,7 @@ public class SocialScienceBasicAcademicManager implements BasicAcademicalManager
 				removedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-		takenLectures.removeAll(removedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);

@@ -19,6 +19,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("데이터테크놀로지학과의 전공 달성 여부를 계산한다.")
@@ -28,8 +29,8 @@ class DataTechnologyMajorTest {
 	@DisplayName("(16학번 해당학번 전공필수과목 적용 확인) 전공 필수과목을 다 듣고, 전공 기준 학점을 넘었을 경우 전공 카테고리를 충족한다.")
 	@Test
 	void 전공필수_기준학점_충족 () {
+    
 		//given
-
 		User user = UserFixture.데이테크놀로지학과_16학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HEB01102"), 2016, Semester.FIRST), //기초프로그래밍
@@ -62,13 +63,13 @@ class DataTechnologyMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HED01311"), 2021, Semester.SECOND) //자기주도학
 
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 데이터테크놀로지_전공, 70);
+			takenLectureInventory, 데이터테크놀로지_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -92,6 +93,7 @@ class DataTechnologyMajorTest {
 	@DisplayName("(18학번) 전공 필수과목을 다 듣지 않고, 전공 기준 학점을 넘지 못했을 경우 경우 전공 카테고리를 충족하지 못한다.")
 	@Test
 	void 전공필수_기준학점_미충족 () {
+    
 		//given
 		User user = UserFixture.데이테크놀로지학과_18학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -118,13 +120,13 @@ class DataTechnologyMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HED01404"), 2023, Semester.FIRST), //빅데이터프로그래밍1
 			TakenLecture.of(user, mockLectureMap.get("HED01407"), 2023, Semester.FIRST) //딥러닝
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 데이터테크놀로지_전공, 70);
+			takenLectureInventory, 데이터테크놀로지_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);

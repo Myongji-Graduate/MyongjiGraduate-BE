@@ -19,6 +19,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("각 공통교양 세부 카테고리 졸업 결과를 포함한 공통교양 전체 졸업 결과를 생성한다.")
@@ -47,10 +48,12 @@ class CommonCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			user, takenLectures, graduationLectures, 17);
+			user, takenLectureInventory, graduationLectures, 17);
+    
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("categoryName", "isCompleted")
@@ -67,10 +70,12 @@ class CommonCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
 		)));
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			user, takenLectures, graduationLectures, 17);
+			user, takenLectureInventory, graduationLectures, 17);
+    
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("categoryName", "isCompleted")

@@ -19,6 +19,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("국제통상학과의 전공 달성여부를 계산한다.")
@@ -29,6 +30,7 @@ class InternationTradeMajorTest {
 	@DisplayName("전공 필수과목을 다 듣고, 전공 기준 학점을 넘겼을 경우 전공 카테고리를 충족한다.")
 	@Test
 	void 전공필수_기준학점_충족() {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			//전공필수 -> 21학점
@@ -55,13 +57,13 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04343"), 2022, Semester.SECOND), //해외시장조사론
 			TakenLecture.of(user, mockLectureMap.get("HCC04496"), 2022, Semester.SECOND) //글로벌전략계획
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -85,6 +87,7 @@ class InternationTradeMajorTest {
 	@DisplayName("전공 기준학점을 넘겼으나 전공 필수를 다 듣지 않은 경우 충족하지 못한다.")
 	@Test
 	void 기준학점_충족_전공필수_미충족() {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2019, Semester.FIRST), //국제통상원론
@@ -110,13 +113,13 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04343"), 2022, Semester.SECOND), //해외시장조사론
 			TakenLecture.of(user, mockLectureMap.get("HCC04496"), 2022, Semester.SECOND) //글로벌전략계획
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -141,6 +144,7 @@ class InternationTradeMajorTest {
 	@DisplayName("전공선택필수를 다 듣지 않은 경우 충족하지 못한다.")
 	@Test
 	void 전공선택필수_미충족() {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2019, Semester.FIRST), //국제통상원론
@@ -166,13 +170,13 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04496"), 2022, Semester.SECOND), //글로벌전략계획
 			TakenLecture.of(user, mockLectureMap.get("HCC04426"), 2023, Semester.SECOND) //다국적기업론
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -196,6 +200,7 @@ class InternationTradeMajorTest {
 	@DisplayName("전공선택학점을 다 채우지 못한 경우 전공 카테고리를 충족 못한다.")
 	@Test
 	void 전공선택_기준학점_미충족() {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			//전공필수
@@ -219,13 +224,13 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04456"), 2022, Semester.SECOND), //미국경제론
 			TakenLecture.of(user, mockLectureMap.get("HCC04461"), 2022, Semester.SECOND) //국제통상세미나
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -249,6 +254,7 @@ class InternationTradeMajorTest {
 	@DisplayName("전공선택필수 과목을 만족하고 추가로 들었을 경우 전공선택으로 인정된다.")
 	@Test
 	void 전공필수_추가과목_전공선택인정() {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HBX01104"), 2019, Semester.FIRST), //회계원리
@@ -257,13 +263,13 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HBX01105"), 2020, Semester.SECOND), //재무관리원론
 			TakenLecture.of(user, mockLectureMap.get("HBX01143"), 2021, Semester.FIRST) //운영관리
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 국제통상_전공, 70);
+			takenLectureInventory, 국제통상_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -280,6 +286,7 @@ class InternationTradeMajorTest {
 	@DisplayName("전공선택필수에서 수강한 과목에 중복과목이 추천과목에 뜨지 않아야한다.")
 	@Test
 	void 중복과목_추천과목제외() {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HBX01104"), 2019, Semester.FIRST), //회계원리
@@ -287,15 +294,14 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HBX01105"), 2020, Semester.SECOND), //재무관리원리
 			TakenLecture.of(user, mockLectureMap.get("HBX01114"), 2021, Semester.FIRST) //생산운영관리
 		)));
-
+		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
 		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
-			takenLectures, 국제통상_전공, 70);
+			takenLectureInventory, 국제통상_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
-		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
 
 		//then

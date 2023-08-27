@@ -12,6 +12,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
 public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 
@@ -35,8 +36,8 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		Set<TakenLecture> takenLectures,
-		Set<BasicAcademicalCulture> graduationLectures, int basicAcademicalCredit) {
+		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCulture> graduationLectures,
+		int basicAcademicalCredit) {
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
@@ -44,13 +45,13 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		Set<Lecture> finalBasicAcademicalLectures = resetBasicAcademicalLectureSet(basicAcademicalLectures,
 			user);
 
-		takenLectures.stream()
+		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
 				removedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-		takenLectures.removeAll(removedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);

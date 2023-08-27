@@ -9,8 +9,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+
 public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	private int removedMandatoryTotalCredit = 0;
+
 	public boolean isSupport(User user) {
 		if (user.getMajor().equals("경영정보학과") && user.getEntryYear() >= 19) {
 			return true;
@@ -19,12 +22,14 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	}
 
 	@Override
-	public boolean checkMandatoryCondition(User user, Set<TakenLecture> takenLectures,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		boolean checkMandatoryCondition = checkCompleteOptionalMandatory(user, takenLectures, mandatoryLectures,
+	public boolean checkMandatoryCondition(User user,
+		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+    
+		boolean checkMandatoryCondition = checkCompleteOptionalMandatory(user, takenLectureInventory,
+			mandatoryLectures,
 			electiveLectures);
 
-		if(!checkMandatoryCondition) {
+		if (!checkMandatoryCondition) {
 			OptionalMandatory optionalMandatory = OptionalMandatory.from(user);
 			removedMandatoryTotalCredit = optionalMandatory.getTotalOptionalMandatoryCredit(optionalMandatory)
 				- optionalMandatory.getChooseLectureCredit(optionalMandatory);
@@ -37,21 +42,22 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 		return removedMandatoryTotalCredit;
 	}
 
-	public boolean checkCompleteOptionalMandatory(User user, Set<TakenLecture> takenLectures,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+	public boolean checkCompleteOptionalMandatory(User user,
+		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+    
 		OptionalMandatory optionalMandatory = OptionalMandatory.from(user);
 		int chooseNum = optionalMandatory.getChooseNUmber();
 		Set<Lecture> optionalMandatoryLectures = mandatoryLectures.stream().filter(
 			optionalMandatory.getOptionalMandatoryLectures()::contains).collect(Collectors.toSet());
 		Set<Lecture> remainingMandatoryLectures = new HashSet<>(optionalMandatoryLectures);
 		int count = 0;
-		for (TakenLecture takenLecture : takenLectures) {
+		for (TakenLecture takenLecture : takenLectureInventory.getTakenLectures()) {
 			if (optionalMandatoryLectures.contains(takenLecture.getLecture()) && count < chooseNum) {
 				count++;
 				remainingMandatoryLectures.remove(takenLecture.getLecture());
 			}
 		}
-		if(count >= chooseNum) {
+		if (count >= chooseNum) {
 			electiveLectures.addAll(remainingMandatoryLectures);
 			mandatoryLectures.removeAll(remainingMandatoryLectures);
 		}

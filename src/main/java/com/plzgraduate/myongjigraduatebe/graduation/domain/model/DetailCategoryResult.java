@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -73,8 +75,9 @@ public class DetailCategoryResult {
 	private void calculateLeftCredit() {
 		int leftCredit = takenCredits - totalCredits;
 		if (leftCredit > 0) {
-			if (detailCategoryName.equals("전공")) {
+			if (detailCategoryName.equals(MAJOR.getName())) {
 				freeElectiveLeftCredit = leftCredit;
+				return;
 			}
 			normalLeftCredit = leftCredit;
 		}
