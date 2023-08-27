@@ -39,6 +39,7 @@ class CoreCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CoreCultureCategoryFixture.class)
 	void generateCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
 		Set<CoreCulture> graduationLectures) {
+    
 		//given
 		User user = UserFixture.경영학과_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -71,7 +72,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+		DetailCategoryResult detailCategoryResult = manager.generate(user,
 			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then
@@ -85,6 +86,7 @@ class CoreCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CoreCultureCategoryFixture.class)
 	void generateUnCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
 		Set<CoreCulture> graduationLectures) {
+    
 		//given
 		User user = UserFixture.경영학과_19학번();
 		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
@@ -92,7 +94,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+		DetailCategoryResult detailCategoryResult = manager.generate(user,
 			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then
@@ -105,6 +107,7 @@ class CoreCultureDetailCategoryManagerTest {
 	@ParameterizedTest
 	@MethodSource("ictUsers")
 	void generateUnCompletedScienceTechnologyDetailCategoryResultWithICT(User user) {
+    
 		//given
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02135"), 2019, Semester.FIRST),
@@ -117,7 +120,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+		DetailCategoryResult detailCategoryResult = manager.generate(user,
 			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then
@@ -138,6 +141,7 @@ class CoreCultureDetailCategoryManagerTest {
 	@DisplayName("4차산업혁명시대의예술, 문화리터러시와창의적스토리텔링 과목은 2022년 1학기에 수강한 경우에는 핵심교양이 아닌 일반교양으로 인정된다.")
 	@Test
 	void generateUnCompletedCultureArtDetailCategoryResultWith_2022_First() {
+    
 		//given
 		User user = UserFixture.경영학과_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -150,7 +154,7 @@ class CoreCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user.getStudentInformation(),
+		DetailCategoryResult detailCategoryResult = manager.generate(user,
 			takenLectureInventory, graduationLectures, coreCultureCategory);
 
 		//then

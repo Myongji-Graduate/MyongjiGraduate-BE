@@ -12,8 +12,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 public class CoreCultureDetailCategoryManager {
 
@@ -26,9 +26,10 @@ public class CoreCultureDetailCategoryManager {
 		Lecture.from("KMA02155"),
 		Lecture.from("KMA02156"));
 
-	public DetailCategoryResult generate(StudentInformation studentInformation,
+	public DetailCategoryResult generate(User user,
 		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures,
 		CoreCultureCategory category) {
+    
 		Set<Lecture> graduationCoreCultureLectures = categorizeCommonCultures(graduationLectures, category);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
@@ -43,7 +44,7 @@ public class CoreCultureDetailCategoryManager {
 
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(), true, category.getTotalCredit());
-		calculateFreeElectiveLeftCredit(studentInformation, taken, commonCultureDetailCategoryResult);
+		calculateFreeElectiveLeftCredit(user, taken, commonCultureDetailCategoryResult);
 		calculateNormalLeftCredit(taken, finishedTakenLecture, commonCultureDetailCategoryResult);
 		commonCultureDetailCategoryResult.calculate(taken, graduationCoreCultureLectures);
 
@@ -58,9 +59,9 @@ public class CoreCultureDetailCategoryManager {
 			.collect(Collectors.toSet());
 	}
 
-	private void calculateFreeElectiveLeftCredit(StudentInformation studentInformation, Set<Lecture> taken,
+	private void calculateFreeElectiveLeftCredit(User user, Set<Lecture> taken,
 		DetailCategoryResult commonCultureDetailCategoryResult) {
-		if (ICT_DEPARTMENTS.contains(studentInformation.getDepartment()) && (taken.contains(과학과기술_예외_과목))) {
+		if (ICT_DEPARTMENTS.contains(user.getMajor()) && (taken.contains(과학과기술_예외_과목))) {
 			taken.remove(과학과기술_예외_과목);
 			int exceptionLectureCredit = 3;
 			commonCultureDetailCategoryResult.addFreeElectiveLeftCredit(exceptionLectureCredit);

@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +36,10 @@ public enum OptionalMandatory {
 	private final int chooseNUmber;
 	private final Set<Lecture> optionalMandatoryLectures;
 
-	public static OptionalMandatory from(StudentInformation studentInformation) {
+	public static OptionalMandatory from(User user) {
 		return Arrays.stream(OptionalMandatory.values())
 			.filter(optionalMandatory -> Objects.equals(optionalMandatory.getDepartment(),
-				studentInformation.getDepartment()))
+				user.getMajor()))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("해당 전공선택필수를 찾을 수 없습니다."));
 	}

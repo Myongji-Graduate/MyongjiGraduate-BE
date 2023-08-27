@@ -20,7 +20,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("각 공통교양 세부 카테고리 졸업 결과를 포함한 공통교양 전체 졸업 결과를 생성한다.")
@@ -34,7 +33,6 @@ class CommonCultureGraduationManagerTest {
 	@ArgumentsSource(CommonCultureFixture.class)
 	void generateCompletedDetailGraduationResult(User user, Set<CommonCulture> graduationLectures) {
 	    //given
-		StudentInformation studentInformation = user.getStudentInformation();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
@@ -54,7 +52,8 @@ class CommonCultureGraduationManagerTest {
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			studentInformation, takenLectureInventory, graduationLectures, 17);
+			user, takenLectureInventory, graduationLectures, 17);
+    
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("categoryName", "isCompleted")
@@ -66,7 +65,6 @@ class CommonCultureGraduationManagerTest {
 	@ArgumentsSource(CommonCultureFixture.class)
 	void generateUnCompletedDetailGraduationResult(User user, Set<CommonCulture> graduationLectures) {
 		//given
-		StudentInformation studentInformation = user.getStudentInformation();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
@@ -76,7 +74,8 @@ class CommonCultureGraduationManagerTest {
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
-			studentInformation, takenLectureInventory, graduationLectures, 17);
+			user, takenLectureInventory, graduationLectures, 17);
+    
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("categoryName", "isCompleted")

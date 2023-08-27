@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.common.exception;
+package com.plzgraduate.myongjigraduatebe.core.exception;
 
 import lombok.extern.slf4j.Slf4j;
 

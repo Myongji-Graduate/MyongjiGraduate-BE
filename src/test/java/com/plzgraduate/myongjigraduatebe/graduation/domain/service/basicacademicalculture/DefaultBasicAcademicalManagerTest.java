@@ -20,7 +20,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("기본 단과대에 대해 학문기초교양 결과를 반환한다.")
@@ -30,7 +29,6 @@ class DefaultBasicAcademicalManagerTest {
 	@Nested
 	class 인문대_학문기초교양 {
 		User user = UserFixture.영문학과_18학번();
-		StudentInformation studentInformation = user.getStudentInformation();
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 		Set<BasicAcademicalCulture> basicAcademicalLectures = BasicAcademicalLectureFixture.인문대_학문기초교양();
 
@@ -49,7 +47,7 @@ class DefaultBasicAcademicalManagerTest {
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 				takenLectureInventory, basicAcademicalLectures, 12);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
@@ -80,7 +78,7 @@ class DefaultBasicAcademicalManagerTest {
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(studentInformation,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 				takenLectureInventory, basicAcademicalLectures, 12);
 
 			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
