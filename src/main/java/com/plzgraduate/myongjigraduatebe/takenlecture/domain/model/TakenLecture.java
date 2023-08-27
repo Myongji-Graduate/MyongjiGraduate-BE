@@ -44,11 +44,12 @@ public class TakenLecture {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		TakenLecture that = (TakenLecture)o;
-		return Objects.equals(user, that.user) && Objects.equals(lecture, that.lecture);
+		return Objects.equals(user, that.user) && Objects.equals(lecture, that.lecture) &&
+			Objects.equals(year, that.year) && Objects.equals(semester, that.semester);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user, lecture);
+		return Objects.hash(user, lecture, year, semester);
 	}
 }
