@@ -14,13 +14,14 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Table(name = "user")
-@Getter
 @Entity
+@Getter
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 class UserJpaEntity extends TimeBaseEntity {
 
@@ -51,18 +52,4 @@ class UserJpaEntity extends TimeBaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	private StudentCategory studentCategory;
 
-	@Builder
-	private UserJpaEntity(Long id, String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
-		this.id = id;
-		this.authId = authId;
-		this.password = password;
-		this.englishLevel = englishLevel;
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.entryYear = entryYear;
-		this.major = major;
-		this.subMajor = subMajor;
-		this.studentCategory = studentCategory;
-	}
 }

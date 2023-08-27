@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.command.SignUpCommand;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class SignUpRequest {
 
 	@NotBlank(message = "아아디를 입력해주세요.")
-	@Size(min = 6, max = 20, message = "아이디는 8자에서 20자 사이여야합니다.")
+	@Size(min = 6, max = 20, message = "아이디는 6자에서 20자 사이여야합니다.")
 	private String authId;
 
 	@NotBlank(message = "비밀번호를 입력해주세요.")
@@ -29,6 +30,14 @@ public class SignUpRequest {
 
 	@NotBlank(message = "영어레벨을 입력해주세요.")
 	private String engLv;
+
+	@Builder
+	private SignUpRequest(String authId, String password, String studentNumber, String engLv) {
+		this.authId = authId;
+		this.password = password;
+		this.studentNumber = studentNumber;
+		this.engLv = engLv;
+	}
 
 	public SignUpCommand toCommand() {
 		return SignUpCommand.builder()

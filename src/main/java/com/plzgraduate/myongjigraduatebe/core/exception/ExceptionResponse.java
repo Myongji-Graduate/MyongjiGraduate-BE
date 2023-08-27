@@ -7,14 +7,14 @@ import lombok.Getter;
 @Getter
 public class ExceptionResponse {
 
-	private final int code;
+	private final int status;
 	private final String message;
 
 	private ExceptionResponse(
-		int code,
+		int status,
 		String message
 	) {
-		this.code = code;
+		this.status = status;
 		this.message = message;
 	}
 

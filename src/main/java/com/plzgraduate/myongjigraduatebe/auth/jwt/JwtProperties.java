@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Component
 @ConfigurationProperties("jwt")
-class JwtProperties {
+public class JwtProperties {
 	private String issuer;
 	private String secretKey;
 	private int expirySeconds;

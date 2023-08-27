@@ -1,13 +1,21 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
+
 @ActiveProfiles("test")
-@SpringBootTest
+@DataJpaTest
 @Testcontainers
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(JpaAuditingConfig.class)
 public abstract class PersistenceTestSupport {
-	public static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8").withDatabaseName("mju-graduate");
+	@Container
+	protected static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8").withDatabaseName("mju-graduate");
 }

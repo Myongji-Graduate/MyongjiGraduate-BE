@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
+import java.time.Instant;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,13 +15,15 @@ public class User {
 	private final String name;
 	private final String studentNumber;
 	private final int entryYear;
-	private final String major;
-	private final String subMajor;
-	private final StudentCategory studentCategory;
+	private String major;
+	private String subMajor;
+	private StudentCategory studentCategory;
+	private final Instant createdAt;
+	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber, int entryYear,
-		String major, String subMajor, StudentCategory studentCategory) {
+		String major, String subMajor, StudentCategory studentCategory, Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -30,6 +34,8 @@ public class User {
 		this.major = major;
 		this.subMajor = subMajor;
 		this.studentCategory = studentCategory;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 
 	}
 

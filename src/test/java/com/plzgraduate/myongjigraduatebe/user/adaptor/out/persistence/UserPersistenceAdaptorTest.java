@@ -3,25 +3,22 @@ package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
+import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+@Import({UserPersistenceAdaptor.class, UserMapper.class})
 class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 
 	@Autowired
 	private UserPersistenceAdaptor userPersistenceAdaptor;
 	@Autowired
 	private UserRepository userRepository;
-
-	@BeforeEach
-	void tearDown() {
-		userRepository.deleteAllInBatch();
-	}
 
 	@DisplayName("사용자를 저장한다.")
 	@Test

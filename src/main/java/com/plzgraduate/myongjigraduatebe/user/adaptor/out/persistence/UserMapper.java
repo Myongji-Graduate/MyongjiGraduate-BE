@@ -20,6 +20,8 @@ class UserMapper {
 			.major(user.getMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
+			.createdAt(user.getCreatedAt())
+			.updatedAt(user.getUpdatedAt())
 			.build();
 	}
 
@@ -36,6 +38,8 @@ class UserMapper {
 			.major(user.getMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
+			.createdAt(user.getCreatedAt())
+			.updatedAt(user.getUpdatedAt())
 			.build();
 	}
 

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SignInCommand {
-
 	private String authId;
 
 	private String password;
@@ -17,4 +16,5 @@ public class SignInCommand {
 		this.authId = authId;
 		this.password = password;
 	}
+
 }
