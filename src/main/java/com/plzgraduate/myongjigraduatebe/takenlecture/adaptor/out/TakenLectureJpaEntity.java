@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 
 import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserJpaEntity;
 
@@ -25,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 public class TakenLectureJpaEntity extends TimeBaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

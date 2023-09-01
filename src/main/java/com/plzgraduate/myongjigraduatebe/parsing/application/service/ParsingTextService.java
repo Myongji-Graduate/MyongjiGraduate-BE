@@ -66,7 +66,7 @@ class ParsingTextService implements ParsingTextUseCase {
 		List<ParsingTakenLectureDto> takenLectureInformation = parsingInformation.getTakenLectureInformation();
 		Map<String, Lecture> lectureMap = makeLectureMapByLectureCodes(takenLectureInformation);
 		List<TakenLecture> takenLectures = takenLectureInformation.stream().map(
-			parsingTakenLectureDto -> TakenLecture.create(user, lectureMap.get(parsingTakenLectureDto.getLectureCode()),
+			parsingTakenLectureDto -> TakenLecture.of(user, lectureMap.get(parsingTakenLectureDto.getLectureCode()),
 				parsingTakenLectureDto.getYear(), parsingTakenLectureDto.getSemester()))
 			.collect(Collectors.toList());
 		saveTakenLecturePort.saveTakenLectures(takenLectures);

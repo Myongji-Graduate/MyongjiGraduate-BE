@@ -26,7 +26,7 @@ public class TakenLecture {
 		this.semester = semester;
 	}
 
-	public static TakenLecture create(User user, Lecture lecture, int year, Semester semester) {
+	public static TakenLecture of(User user, Lecture lecture, int year, Semester semester) {
 		return TakenLecture.builder()
 			.user(user)
 			.lecture(lecture)

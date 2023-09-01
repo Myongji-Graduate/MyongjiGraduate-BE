@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class ParsingTextHistoryAdaptor implements SaveParsingTextHistoryPort {
+class ParsingTextHistoryAdaptor implements SaveParsingTextHistoryPort {
 
 	private final ParsingTextRepository parsingTextRepository;
 	private final ParsingTextHistoryMapper parsingTextHistoryMapper;

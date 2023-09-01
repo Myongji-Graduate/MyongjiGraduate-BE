@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command.ParsingTextCommand;
 
@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ParsingTextRequest {
+class ParsingTextRequest {
 
+	@NotNull(message = "parsingText는 null값이 될 수 없습니다.")
 	private String parsingText;
 
 	@Builder
