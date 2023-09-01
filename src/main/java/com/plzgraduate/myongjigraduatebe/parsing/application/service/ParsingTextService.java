@@ -39,7 +39,9 @@ class ParsingTextService implements ParsingTextUseCase {
 	public void enrollParsingText(ParsingTextCommand parsingTextCommand) {
 		User user = loadUserPort.loadUserById(parsingTextCommand.getUserId());
 		String parsingText = parsingTextCommand.getParsingText();
-
+		if(parsingText.isEmpty()) {
+			throw new PdfParsingException("PDF를 인식하지 못했습니다.");
+		}
 		try {
 			deleteTakenLecturesIfAlreadyEnrolled(user);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
@@ -52,6 +54,7 @@ class ParsingTextService implements ParsingTextUseCase {
 			saveParsingTextHistoryPort.saveParsingTextHistory(
 				ParsingTextHistory.fail(user, parsingText)
 			);
+			throw new PdfParsingException("PDF에서 정보를 읽어오는데 실패했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
 
