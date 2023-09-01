@@ -24,6 +24,13 @@ class UserPersistenceAdaptor implements LoadUserPort, SaveUserPort, CheckUserPor
 	}
 
 	@Override
+	public User loadUserById(Long id) {
+		UserJpaEntity userJpaEntity = userRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("해당 사용작 존재하지 않습니다."));
+		return userMapper.mapToDomainEntity(userJpaEntity);
+	}
+
+	@Override
 	public User loadUserByAuthId(String authId) {
 		UserJpaEntity userJpaEntity = userRepository.findByAuthId(authId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다."));
