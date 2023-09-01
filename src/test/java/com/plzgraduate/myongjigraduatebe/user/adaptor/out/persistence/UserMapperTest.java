@@ -42,7 +42,7 @@ class UserMapperTest extends PersistenceTestSupport {
 	@Test
 	void mapToJpaEntityTest() {
 		//given
-		User user = createUser(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
+		User user = createUser("mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
 
 		//when
@@ -52,14 +52,13 @@ class UserMapperTest extends PersistenceTestSupport {
 		assertThat(userJpaEntity)
 			.extracting("id", "authId", "password", "englishLevel", "name",
 				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
-			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
+			.contains(null, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
 	}
 
-	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel, String name,
+	private User createUser(String authId, String password, EnglishLevel englishLevel, String name,
 		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		return User.builder()
-			.id(id)
 			.authId(authId)
 			.password(password)
 			.name(name)
