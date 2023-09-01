@@ -12,7 +12,7 @@ public class User {
 	private String authId;
 	private String password;
 	private EnglishLevel englishLevel;
-	private final String name;
+	private String name;
 	private final String studentNumber;
 	private final int entryYear;
 	private String major;
@@ -47,6 +47,13 @@ public class User {
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
 			.build();
+	}
+
+	public void update(String name, String major, String subMajor, StudentCategory studentCategory) {
+		this.name = name;
+		this.major = major;
+		this.subMajor = subMajor;
+		this.studentCategory = studentCategory;
 	}
 
 	public boolean checkBeforeEntryYear(int entryYear) {
