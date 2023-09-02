@@ -6,5 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum StudentCategory {
-	NORMAL, CHANGE_MAJOR, DOUBLE_MAJOR
+	NORMAL,
+	CHANGE_MAJOR
 }

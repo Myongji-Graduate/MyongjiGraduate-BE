@@ -15,16 +15,16 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.excepti
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 public class MajorManager implements GraduationManager<Major> {
 
 	@Override
-	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
+	public DetailGraduationResult createDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, Set<Major> majorLectures, int graduationResultTotalCredit) {
 		removeDuplicateLecture(takenLectureInventory, majorLectures);
-		changeMandatoryToElectiveByMajorRange(studentInformation, majorLectures);
+		changeMandatoryToElectiveByMajorRange(user, majorLectures);
 
 		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
 		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
@@ -35,7 +35,7 @@ public class MajorManager implements GraduationManager<Major> {
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(
-			studentInformation, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, takenLectureInventory, mandatoryLectures, electiveLectures);
 
 		int electiveMajorTotalCredit = graduationResultTotalCredit - mandantoryDetailCategoryResult.getTotalCredits();
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
@@ -78,10 +78,10 @@ public class MajorManager implements GraduationManager<Major> {
 			.collect(Collectors.toSet());
 	}
 
-	private void changeMandatoryToElectiveByMajorRange(StudentInformation studentInformation,
+	private void changeMandatoryToElectiveByMajorRange(User user,
 		Set<Major> majorsLectures) {
 		majorsLectures.forEach(major ->
-			major.changeMandatoryToElectiveByEntryYearRange(studentInformation.getEntryYear()));
+			major.changeMandatoryToElectiveByEntryYearRange(user.getEntryYear()));
 	}
 
 }

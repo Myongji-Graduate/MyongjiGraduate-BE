@@ -11,8 +11,8 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 
@@ -30,12 +30,12 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 	);
 
 	@Override
-	public boolean isSatisfied(StudentInformation studentInformation) {
+	public boolean isSatisfied(User user) {
 		return false;
 	}
 
 	@Override
-	public DetailGraduationResult createDetailGraduationResult(StudentInformation studentInformation,
+	public DetailGraduationResult createDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCulture> graduationLectures,
 		int basicAcademicalCredit) {
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
@@ -43,7 +43,7 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		Set<TakenLecture> removedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 		Set<Lecture> finalBasicAcademicalLectures = resetBasicAcademicalLectureSet(basicAcademicalLectures,
-			studentInformation);
+			user);
 
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
@@ -62,15 +62,14 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 	}
 
 	private Set<Lecture> resetBasicAcademicalLectureSet(Set<Lecture> basicAcademicalLectures,
-		StudentInformation studentInformation) {
-		if (!studentInformation.checkBeforeEntryYear(TWENTY))
+		User user) {
+		if (!user.checkBeforeEntryYear(TWENTY))
 			return basicAcademicalLectures;
 
-		if (studentInformation.checkDepartment(BUSINESS_ADMINISTRATION) || studentInformation.checkDepartment(
-			MANAGEMENT_INFORMATION)) {
+		if (user.checkMajor(BUSINESS_ADMINISTRATION) || user.checkMajor(MANAGEMENT_INFORMATION)) {
 			return new HashSet<>(businessBefore20);
 		}
-		if (studentInformation.checkDepartment(INTERNATIONAL_TRADE)) {
+		if (user.checkMajor(INTERNATIONAL_TRADE)) {
 			return new HashSet<>(internationBefore20);
 		}
 		return basicAcademicalLectures;

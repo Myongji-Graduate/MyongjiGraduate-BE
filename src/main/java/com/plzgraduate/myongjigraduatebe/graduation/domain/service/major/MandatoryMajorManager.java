@@ -8,8 +8,8 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryR
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.MajorExceptionHandler;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentInformation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ public class MandatoryMajorManager {
 
 	private final List<MajorExceptionHandler> majorExceptionHandlers;
 
-	public DetailCategoryResult createDetailCategoryResult(StudentInformation studentInformation,
+	public DetailCategoryResult createDetailCategoryResult(User user,
 		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
@@ -26,8 +26,8 @@ public class MandatoryMajorManager {
 		int removeMandatoryTotalCredit = 0;
 
 		for (MajorExceptionHandler majorExceptionHandler : majorExceptionHandlers) {
-			if (majorExceptionHandler.isSupport(studentInformation)) {
-				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(studentInformation,
+			if (majorExceptionHandler.isSupport(user)) {
+				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(user,
 					takenLectureInventory, mandatoryLectures, electiveLectures);
 				removeMandatoryTotalCredit = majorExceptionHandler.getRemovedMandatoryTotalCredit();
 			}

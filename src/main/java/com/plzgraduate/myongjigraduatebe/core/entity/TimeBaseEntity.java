@@ -1,6 +1,6 @@
-package com.plzgraduate.myongjigraduatebe.common.entity;
+package com.plzgraduate.myongjigraduatebe.core.entity;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -11,18 +11,22 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
+@SuperBuilder
 @MappedSuperclass
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class TimeBaseEntity {
+public abstract class TimeBaseEntity {
 
 	@CreatedDate
-	@Column(columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	@Column(nullable = false, updatable = false)
+	private Instant createdAt;
 
 	@LastModifiedDate
-	@Column(columnDefinition = "TIMESTAMP", nullable = false)
-	private LocalDateTime updatedAt;
+	@Column(nullable = false)
+	private Instant updatedAt;
 
 }
