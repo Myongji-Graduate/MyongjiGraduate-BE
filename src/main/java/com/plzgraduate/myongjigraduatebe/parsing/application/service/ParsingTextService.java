@@ -23,7 +23,9 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @UseCase
 @RequiredArgsConstructor
 @Transactional
@@ -37,23 +39,23 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	@Override
 	public void enrollParsingText(ParsingTextCommand parsingTextCommand) {
-		User user = loadUserPort.loadUserById(parsingTextCommand.getUserId());
 		String parsingText = parsingTextCommand.getParsingText();
-		if(parsingText.isEmpty()) {
-			throw new PdfParsingException("PDF를 인식하지 못했습니다.");
-		}
+		User user = loadUserPort.loadUserById(parsingTextCommand.getUserId());
 		try {
-			deleteTakenLecturesIfAlreadyEnrolled(user);
+			validateParsingText(parsingText);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
+			validateStudentNumber(user, parsingInformation);
 			updateUser(user, parsingInformation);
+			deleteTakenLecturesIfAlreadyEnrolled(user);
 			saveTakenLectures(user, parsingInformation);
-			saveParsingTextHistoryPort.saveParsingTextHistory(
-				ParsingTextHistory.success(user, parsingText)
-			);
+			saveParsingTextHistory(ParsingTextHistory.success(user, parsingText));
+		} catch (InvalidPdfException e) {
+			log.warn("invalid pdf exception = {}", e.getMessage(), e);
+			saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
+			throw e;
 		} catch (Exception e) {
-			saveParsingTextHistoryPort.saveParsingTextHistory(
-				ParsingTextHistory.fail(user, parsingText)
-			);
+			log.warn("pdf parsing error = {}", e.getMessage(), e);
+			saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
 			throw new PdfParsingException("PDF에서 정보를 읽어오는데 실패했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
@@ -85,4 +87,22 @@ class ParsingTextService implements ParsingTextUseCase {
 		user.update(parsingInformation.getStudentName(), parsingInformation.getMajor(),
 			parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
 	}
+
+	private void validateParsingText(String parsingText) {
+		if (parsingText.trim().isEmpty()) {
+			throw new InvalidPdfException("PDF를 인식하지 못했습니다.");
+		}
+	}
+
+	private void validateStudentNumber(User user, ParsingInformation parsingInformation) {
+		if (!user.getStudentNumber().equals(parsingInformation.getStudentNumber())) {
+			throw new InvalidPdfException("본인의 PDF 학번이 일치하지 않습니다.");
+		}
+	}
+
+	private void saveParsingTextHistory(ParsingTextHistory history) {
+		saveParsingTextHistoryPort.saveParsingTextHistory(history);
+	}
+
+
 }
