@@ -90,7 +90,4 @@ class TakenLectureMapper {
 			.duplicateCode(lecture.getDuplicateCode())
 			.build();
 	}
-
-
-
 }

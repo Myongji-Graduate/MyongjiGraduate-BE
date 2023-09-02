@@ -38,7 +38,7 @@ class ParsingTextHistoryMapperTest extends PersistenceTestSupport {
 
 		//when
 		assertThat(parsingTextHistoryJpaEntity)
-			.extracting("id", "parsingText")
-			.contains(1L, "text");
+			.extracting("parsingText", "parsingResult")
+			.contains("text", ParsingResult.SUCCESS);
 	}
 }

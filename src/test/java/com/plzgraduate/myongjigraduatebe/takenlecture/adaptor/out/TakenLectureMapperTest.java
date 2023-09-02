@@ -77,7 +77,7 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 		assertThat(userJpaEntity)
 			.extracting("id", "authId", "password", "englishLevel", "name",
 				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
-			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
+			.contains(null, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
 	}
 
