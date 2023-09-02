@@ -32,14 +32,14 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthenticationException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ExceptionResponse handleUnAuthorizedException(Exception e) {
-		log.debug("Bad request exception occurred: {}", e.getMessage(), e);
+		log.debug("unauthorized exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.debug("Bad request exception occurred: {}", e.getMessage(), e);
+		log.debug("validation exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getBindingErrorMessage(e));
 	}
 

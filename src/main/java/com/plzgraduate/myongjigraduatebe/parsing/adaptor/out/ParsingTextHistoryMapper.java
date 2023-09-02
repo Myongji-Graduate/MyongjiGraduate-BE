@@ -13,6 +13,7 @@ class ParsingTextHistoryMapper {
 
 		return ParsingTextHistoryJpaEntity.builder()
 			.id(parsingTextHistory.getId())
+			.user(mapToUserJpaEntity(parsingTextHistory.getUser()))
 			.parsingText(parsingTextHistory.getParsingText())
 			.parsingResult(parsingTextHistory.getParsingResult())
 			.build();

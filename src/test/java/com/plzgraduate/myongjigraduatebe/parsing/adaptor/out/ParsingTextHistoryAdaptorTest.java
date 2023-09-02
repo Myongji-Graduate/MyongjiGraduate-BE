@@ -43,7 +43,7 @@ class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 		//then
 		Optional<ParsingTextHistoryJpaEntity> byId =
 			parsingTextRepository.findById(1L);
-		assertThat(byId.isPresent()).isTrue();
+		assertThat(byId).isPresent();
 		assertThat(byId.get())
 			.extracting("id", "parsingText", "parsingResult")
 			.contains(1L, "text", ParsingResult.SUCCESS);

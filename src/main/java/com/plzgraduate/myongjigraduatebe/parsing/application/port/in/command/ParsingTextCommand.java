@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command;
 
-import javax.validation.constraints.NotBlank;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
