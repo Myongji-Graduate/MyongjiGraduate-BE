@@ -10,11 +10,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
 public class MajorFixture {
 
 	public static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	private static final String 경영학과 = "경영학과";
-	private static final String 국제통상학과 = "국제통상학과";
-	private static final String 경영정보학과 = "경영정보학과";
-	private static final String 철학과 = "철학과";
-	private static final String 데이터테크놀로지확과 = "데이터테크놀로지학과";
+	private static final String 경영학과 = "경영";
+	private static final String 국제통상학과 = "국제통상";
+	private static final String 경영정보학과 = "경영정보";
+	private static final String 철학과 = "철학";
+	private static final String 데이터테크놀로지전공 = "데이터테크놀로지";
 
 	public static Set<Major> 경영학과_전공() {
 		Set<Major> lectureSet = new HashSet<>();
@@ -90,59 +90,59 @@ public class MajorFixture {
 
 	public static Set<Major> 데이터테크놀로지_전공() {
 		Set<Major> lectureSet = new HashSet<>();
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01102"), 데이터테크놀로지확과, 1, 16, 99)); //기초프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01104"), 데이터테크놀로지확과, 1, 16, 99)); //객체지향프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01105"), 데이터테크놀로지확과, 1, 16, 99)); //기초프로그래밍2
-		lectureSet.add(Major.of(mockLectureMap.get("HED01201"), 데이터테크놀로지확과, 1, 16, 99)); //자료구조
-		lectureSet.add(Major.of(mockLectureMap.get("HED01202"), 데이터테크놀로지확과, 1, 16, 99)); //R통계분석
-		lectureSet.add(Major.of(mockLectureMap.get("HED01203"), 데이터테크놀로지확과, 1, 16, 99)); //데이터베이스
-		lectureSet.add(Major.of(mockLectureMap.get("HED01206"), 데이터테크놀로지확과, 1, 16, 16)); //기초웹프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01202"), 데이터테크놀로지확과, 1, 16, 16)); //기초웹프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01201"), 데이터테크놀로지확과, 1, 16, 16)); //기초웹프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HED01307"), 데이터테크놀로지확과, 1, 16, 99)); //알고리즘
-		lectureSet.add(Major.of(mockLectureMap.get("HED01301"), 데이터테크놀로지확과, 1, 16, 99)); //소프트웨어공학
-		lectureSet.add(Major.of(mockLectureMap.get("HED01303"), 데이터테크놀로지확과, 1, 16, 99)); //운영체제
-		lectureSet.add(Major.of(mockLectureMap.get("HED01306"), 데이터테크놀로지확과, 1, 16, 99)); //빅데이터프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HED01308"), 데이터테크놀로지확과, 1, 16, 16)); //UX디자인
-		lectureSet.add(Major.of(mockLectureMap.get("HED01317"), 데이터테크놀로지확과, 1, 16, 16)); //데이터베이스프로젝트
-		lectureSet.add(Major.of(mockLectureMap.get("HED01302"), 데이터테크놀로지확과, 1, 16, 16)); //데이터베이스프로그래처
-		lectureSet.add(Major.of(mockLectureMap.get("HED01315"), 데이터테크놀로지확과, 1, 17, 99)); //인공지능
-		lectureSet.add(Major.of(mockLectureMap.get("HED01413"), 데이터테크놀로지확과, 1, 17, 99)); //캡스톤디자인
-		lectureSet.add(Major.of(mockLectureMap.get("HED01401"), 데이터테크놀로지확과, 1, 17, 99)); //캡스톤디자인1
-		lectureSet.add(Major.of(mockLectureMap.get("HED01402"), 데이터테크놀로지확과, 1, 17, 99)); //캡스톤디자인2
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01102"), 데이터테크놀로지전공, 1, 16, 99)); //기초프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01104"), 데이터테크놀로지전공, 1, 16, 99)); //객체지향프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01105"), 데이터테크놀로지전공, 1, 16, 99)); //기초프로그래밍2
+		lectureSet.add(Major.of(mockLectureMap.get("HED01201"), 데이터테크놀로지전공, 1, 16, 99)); //자료구조
+		lectureSet.add(Major.of(mockLectureMap.get("HED01202"), 데이터테크놀로지전공, 1, 16, 99)); //R통계분석
+		lectureSet.add(Major.of(mockLectureMap.get("HED01203"), 데이터테크놀로지전공, 1, 16, 99)); //데이터베이스
+		lectureSet.add(Major.of(mockLectureMap.get("HED01206"), 데이터테크놀로지전공, 1, 16, 16)); //기초웹프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01202"), 데이터테크놀로지전공, 1, 16, 16)); //기초웹프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01201"), 데이터테크놀로지전공, 1, 16, 16)); //기초웹프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HED01307"), 데이터테크놀로지전공, 1, 16, 99)); //알고리즘
+		lectureSet.add(Major.of(mockLectureMap.get("HED01301"), 데이터테크놀로지전공, 1, 16, 99)); //소프트웨어공학
+		lectureSet.add(Major.of(mockLectureMap.get("HED01303"), 데이터테크놀로지전공, 1, 16, 99)); //운영체제
+		lectureSet.add(Major.of(mockLectureMap.get("HED01306"), 데이터테크놀로지전공, 1, 16, 99)); //빅데이터프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HED01308"), 데이터테크놀로지전공, 1, 16, 16)); //UX디자인
+		lectureSet.add(Major.of(mockLectureMap.get("HED01317"), 데이터테크놀로지전공, 1, 16, 16)); //데이터베이스프로젝트
+		lectureSet.add(Major.of(mockLectureMap.get("HED01302"), 데이터테크놀로지전공, 1, 16, 16)); //데이터베이스프로그래처
+		lectureSet.add(Major.of(mockLectureMap.get("HED01315"), 데이터테크놀로지전공, 1, 17, 99)); //인공지능
+		lectureSet.add(Major.of(mockLectureMap.get("HED01413"), 데이터테크놀로지전공, 1, 17, 99)); //캡스톤디자인
+		lectureSet.add(Major.of(mockLectureMap.get("HED01401"), 데이터테크놀로지전공, 1, 17, 99)); //캡스톤디자인1
+		lectureSet.add(Major.of(mockLectureMap.get("HED01402"), 데이터테크놀로지전공, 1, 17, 99)); //캡스톤디자인2
 
-		lectureSet.add(Major.of(mockLectureMap.get("HED01102"), 데이터테크놀로지확과, 0, 16, 99)); //데이터사이언스개론
-		lectureSet.add(Major.of(mockLectureMap.get("HED01103"), 데이터테크놀로지확과, 0, 16, 99)); //소프트웨어인턴십
-		lectureSet.add(Major.of(mockLectureMap.get("HED01204"), 데이터테크놀로지확과, 0, 16, 99)); //객체지향디자인패턴
-		lectureSet.add(Major.of(mockLectureMap.get("HED01205"), 데이터테크놀로지확과, 0, 16, 99)); //통계적데이터분석
-		lectureSet.add(Major.of(mockLectureMap.get("HED01207"), 데이터테크놀로지확과, 0, 16, 99)); //융합심화R통계분석
-		lectureSet.add(Major.of(mockLectureMap.get("HED01208"), 데이터테크놀로지확과, 0, 16, 99)); //융합데이터베이스
-		lectureSet.add(Major.of(mockLectureMap.get("HED01304"), 데이터테크놀로지확과, 0, 16, 99)); //고급서버프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HED01305"), 데이터테크놀로지확과, 0, 16, 99)); //인터랙티브인포그래픽
-		lectureSet.add(Major.of(mockLectureMap.get("HED01309"), 데이터테크놀로지확과, 0, 16, 99)); //컴퓨터아키텍처
-		lectureSet.add(Major.of(mockLectureMap.get("HED01310"), 데이터테크놀로지확과, 0, 16, 99)); //모바일컴퓨팅
-		lectureSet.add(Major.of(mockLectureMap.get("HED01311"), 데이터테크놀로지확과, 0, 16, 99)); //자기주도학습
-		lectureSet.add(Major.of(mockLectureMap.get("HED01312"), 데이터테크놀로지확과, 0, 16, 99)); //소프트웨어세미나
-		lectureSet.add(Major.of(mockLectureMap.get("HED01313"), 데이터테크놀로지확과, 0, 16, 99)); //컴퓨터통신
-		lectureSet.add(Major.of(mockLectureMap.get("HED01314"), 데이터테크놀로지확과, 0, 16, 99)); //게임프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HED01315"), 데이터테크놀로지확과, 0, 16, 99)); //인공지능
-		lectureSet.add(Major.of(mockLectureMap.get("HED01316"), 데이터테크놀로지확과, 0, 16, 99)); //고급웹프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HED01318"), 데이터테크놀로지확과, 0, 16, 99)); //모바일컴퓨팅
-		lectureSet.add(Major.of(mockLectureMap.get("HED01403"), 데이터테크놀로지확과, 0, 16, 99)); //블록체인기초
-		lectureSet.add(Major.of(mockLectureMap.get("HED01404"), 데이터테크놀로지확과, 0, 16, 99)); //빅데이터기술특론1
-		lectureSet.add(Major.of(mockLectureMap.get("HED01405"), 데이터테크놀로지확과, 0, 16, 99)); //빅데이터기술특론2
-		lectureSet.add(Major.of(mockLectureMap.get("HED01406"), 데이터테크놀로지확과, 0, 16, 99)); //클라우드시스템
-		lectureSet.add(Major.of(mockLectureMap.get("HED01407"), 데이터테크놀로지확과, 0, 16, 99)); //딥러닝
-		lectureSet.add(Major.of(mockLectureMap.get("HED01408"), 데이터테크놀로지확과, 0, 16, 99)); //데이터사이언스
-		lectureSet.add(Major.of(mockLectureMap.get("HED01409"), 데이터테크놀로지확과, 0, 16, 99)); //현장실무교육
-		lectureSet.add(Major.of(mockLectureMap.get("HED01411"), 데이터테크놀로지확과, 0, 16, 99)); //인터랙션디자인
-		lectureSet.add(Major.of(mockLectureMap.get("HED01410"), 데이터테크놀로지확과, 0, 16, 99)); //빅데이터시스템특론(대학원)
-		lectureSet.add(Major.of(mockLectureMap.get("HED01412"), 데이터테크놀로지확과, 0, 16, 99)); //대용량데이터베이스특론(대학원)
-		lectureSet.add(Major.of(mockLectureMap.get("HED01414"), 데이터테크놀로지확과, 0, 16, 99)); //빅데이터컴퓨팅(대학원)
-		lectureSet.add(Major.of(mockLectureMap.get("HED01415"), 데이터테크놀로지확과, 0, 16, 99)); //논문연구(대학원)
-		lectureSet.add(Major.of(mockLectureMap.get("HED01416"), 데이터테크놀로지확과, 0, 16, 99)); //고급딥러닝(대학원)
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01101"), 데이터테크놀로지확과, 0, 16, 99)); //절차적사고와프로그래밍
-		lectureSet.add(Major.of(mockLectureMap.get("HEB01103"), 데이터테크놀로지확과, 0, 16, 99)); //객체지향적사고와프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HED01102"), 데이터테크놀로지전공, 0, 16, 99)); //데이터사이언스개론
+		lectureSet.add(Major.of(mockLectureMap.get("HED01103"), 데이터테크놀로지전공, 0, 16, 99)); //소프트웨어인턴십
+		lectureSet.add(Major.of(mockLectureMap.get("HED01204"), 데이터테크놀로지전공, 0, 16, 99)); //객체지향디자인패턴
+		lectureSet.add(Major.of(mockLectureMap.get("HED01205"), 데이터테크놀로지전공, 0, 16, 99)); //통계적데이터분석
+		lectureSet.add(Major.of(mockLectureMap.get("HED01207"), 데이터테크놀로지전공, 0, 16, 99)); //융합심화R통계분석
+		lectureSet.add(Major.of(mockLectureMap.get("HED01208"), 데이터테크놀로지전공, 0, 16, 99)); //융합데이터베이스
+		lectureSet.add(Major.of(mockLectureMap.get("HED01304"), 데이터테크놀로지전공, 0, 16, 99)); //고급서버프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HED01305"), 데이터테크놀로지전공, 0, 16, 99)); //인터랙티브인포그래픽
+		lectureSet.add(Major.of(mockLectureMap.get("HED01309"), 데이터테크놀로지전공, 0, 16, 99)); //컴퓨터아키텍처
+		lectureSet.add(Major.of(mockLectureMap.get("HED01310"), 데이터테크놀로지전공, 0, 16, 99)); //모바일컴퓨팅
+		lectureSet.add(Major.of(mockLectureMap.get("HED01311"), 데이터테크놀로지전공, 0, 16, 99)); //자기주도학습
+		lectureSet.add(Major.of(mockLectureMap.get("HED01312"), 데이터테크놀로지전공, 0, 16, 99)); //소프트웨어세미나
+		lectureSet.add(Major.of(mockLectureMap.get("HED01313"), 데이터테크놀로지전공, 0, 16, 99)); //컴퓨터통신
+		lectureSet.add(Major.of(mockLectureMap.get("HED01314"), 데이터테크놀로지전공, 0, 16, 99)); //게임프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HED01315"), 데이터테크놀로지전공, 0, 16, 99)); //인공지능
+		lectureSet.add(Major.of(mockLectureMap.get("HED01316"), 데이터테크놀로지전공, 0, 16, 99)); //고급웹프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HED01318"), 데이터테크놀로지전공, 0, 16, 99)); //모바일컴퓨팅
+		lectureSet.add(Major.of(mockLectureMap.get("HED01403"), 데이터테크놀로지전공, 0, 16, 99)); //블록체인기초
+		lectureSet.add(Major.of(mockLectureMap.get("HED01404"), 데이터테크놀로지전공, 0, 16, 99)); //빅데이터기술특론1
+		lectureSet.add(Major.of(mockLectureMap.get("HED01405"), 데이터테크놀로지전공, 0, 16, 99)); //빅데이터기술특론2
+		lectureSet.add(Major.of(mockLectureMap.get("HED01406"), 데이터테크놀로지전공, 0, 16, 99)); //클라우드시스템
+		lectureSet.add(Major.of(mockLectureMap.get("HED01407"), 데이터테크놀로지전공, 0, 16, 99)); //딥러닝
+		lectureSet.add(Major.of(mockLectureMap.get("HED01408"), 데이터테크놀로지전공, 0, 16, 99)); //데이터사이언스
+		lectureSet.add(Major.of(mockLectureMap.get("HED01409"), 데이터테크놀로지전공, 0, 16, 99)); //현장실무교육
+		lectureSet.add(Major.of(mockLectureMap.get("HED01411"), 데이터테크놀로지전공, 0, 16, 99)); //인터랙션디자인
+		lectureSet.add(Major.of(mockLectureMap.get("HED01410"), 데이터테크놀로지전공, 0, 16, 99)); //빅데이터시스템특론(대학원)
+		lectureSet.add(Major.of(mockLectureMap.get("HED01412"), 데이터테크놀로지전공, 0, 16, 99)); //대용량데이터베이스특론(대학원)
+		lectureSet.add(Major.of(mockLectureMap.get("HED01414"), 데이터테크놀로지전공, 0, 16, 99)); //빅데이터컴퓨팅(대학원)
+		lectureSet.add(Major.of(mockLectureMap.get("HED01415"), 데이터테크놀로지전공, 0, 16, 99)); //논문연구(대학원)
+		lectureSet.add(Major.of(mockLectureMap.get("HED01416"), 데이터테크놀로지전공, 0, 16, 99)); //고급딥러닝(대학원)
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01101"), 데이터테크놀로지전공, 0, 16, 99)); //절차적사고와프로그래밍
+		lectureSet.add(Major.of(mockLectureMap.get("HEB01103"), 데이터테크놀로지전공, 0, 16, 99)); //객체지향적사고와프로그래밍
 
 		return lectureSet;
 	}

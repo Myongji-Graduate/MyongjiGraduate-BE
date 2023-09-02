@@ -24,7 +24,7 @@ class UserMapperTest extends PersistenceTestSupport {
 	void mapToDomainEntityTest() {
 		//given
 		UserJpaEntity userJpaEntity = createUserJpaEntity(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+			"60211111", 21, "경영", null, StudentCategory.NORMAL);
 
 		//when
 
@@ -35,7 +35,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.extracting("id", "authId", "password", "englishLevel", "name",
 				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+				"60211111", 21, "경영", null, StudentCategory.NORMAL);
 	}
 
 	@DisplayName("도메인 엔티티를 JPA 엔티티 변환한다.")
@@ -43,7 +43,7 @@ class UserMapperTest extends PersistenceTestSupport {
 	void mapToJpaEntityTest() {
 		//given
 		User user = createUser(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+			"60211111", 21, "경영", null, StudentCategory.NORMAL);
 
 		//when
 		UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
@@ -53,7 +53,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.extracting("id", "authId", "password", "englishLevel", "name",
 				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+				"60211111", 21, "경영", null, StudentCategory.NORMAL);
 	}
 
 	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel, String name,

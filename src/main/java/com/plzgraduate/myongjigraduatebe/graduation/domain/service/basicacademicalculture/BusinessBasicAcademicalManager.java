@@ -17,9 +17,9 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 
 	private static final int TWENTY = 20;
-	private static final String BUSINESS_ADMINISTRATION = "경영학과";
-	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
-	private static final String INTERNATIONAL_TRADE = "국제통상확과";
+	private static final String BUSINESS_ADMINISTRATION = "경영";
+	private static final String MANAGEMENT_INFORMATION = "경영정보";
+	private static final String INTERNATIONAL_TRADE = "국제통상";
 	private static final Set<Lecture> businessBefore20 = Set.of(
 		Lecture.of("KMD02114", "미시경제학원론", 3, 0, null),
 		Lecture.of("KMD02107", "경상통계학", 3, 0, null)
