@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
-class SpringDataCommonCultureRepositoryTest extends PersistenceTestSupport {
+class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
 	@Autowired
-	private SpringDataCommonCultureRepository commonCultureRepository;
+	private CommonCultureRepository commonCultureRepository;
 
-	@DisplayName("유저의 입학년도가 적용 시작 년도, 적용 마감 년도 사이에 속하는 교양과목을 조회한다.")
+	@DisplayName("유저의 입학년도가 적용 시작 년도, 적용 마감 년도 사이에 속하는 공통 교양 과목을 조회한다.")
 	@ParameterizedTest
 	@ValueSource(ints = {16, 18, 20, 23})
 	void findAllByEntryYear(int entryYears) {
