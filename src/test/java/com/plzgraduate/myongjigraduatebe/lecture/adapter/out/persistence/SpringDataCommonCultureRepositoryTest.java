@@ -1,0 +1,52 @@
+package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
+
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+
+class SpringDataCommonCultureRepositoryTest extends PersistenceTestSupport {
+
+	@Autowired
+	private SpringDataCommonCultureRepository commonCultureRepository;
+
+	@DisplayName("유저의 입학년도가 적용 시작 년도, 적용 마감 년도 사이에 속하는 교양과목을 조회한다.")
+	@ParameterizedTest
+	@ValueSource(ints = {16, 18, 20, 23})
+	void findAllByEntryYear(int entryYears) {
+		//given
+		CommonCultureJpaEntity commonCultureJpaEntityA = CommonCultureJpaEntity.builder()
+			.startEntryYear(16)
+			.endEntryYear(17).build();
+		CommonCultureJpaEntity commonCultureJpaEntityB = CommonCultureJpaEntity.builder()
+			.startEntryYear(18)
+			.endEntryYear(19).build();
+		CommonCultureJpaEntity commonCultureJpaEntityC = CommonCultureJpaEntity.builder()
+			.startEntryYear(20)
+			.endEntryYear(22).build();
+		CommonCultureJpaEntity commonCultureJpaEntityD = CommonCultureJpaEntity.builder()
+			.startEntryYear(23)
+			.endEntryYear(99).build();
+
+		commonCultureRepository.saveAll(
+			List.of(commonCultureJpaEntityA, commonCultureJpaEntityB, commonCultureJpaEntityC,
+				commonCultureJpaEntityD));
+
+		//when
+		List<CommonCultureJpaEntity> commonCultureGraduationLectures = commonCultureRepository.findAllByEntryYear(
+			entryYears);
+
+		//then
+		assertThat(commonCultureGraduationLectures).hasSize(1)
+			.extracting("startEntryYear")
+			.contains(entryYears);
+
+	}
+}
