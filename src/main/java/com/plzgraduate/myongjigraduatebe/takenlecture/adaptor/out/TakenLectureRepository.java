@@ -13,6 +13,6 @@ public interface TakenLectureRepository extends JpaRepository<TakenLectureJpaEnt
 
 	void deleteAllByUser(UserJpaEntity user);
 
-	@Query("SELECT t from TakenLectureJpaEntity t join fetch t.lecture l WHERE t.user.id = :userId")
-	List<TakenLectureJpaEntity> findTakenLectureJpaEntityWithLectureByUser(@Param("userId") Long userId);
+	@Query("SELECT t from TakenLectureJpaEntity t join fetch t.lecture l WHERE t.user = :user")
+	List<TakenLectureJpaEntity> findTakenLectureJpaEntityWithLectureByUser(@Param("user") UserJpaEntity user);
 }

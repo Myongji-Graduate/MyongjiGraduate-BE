@@ -33,7 +33,7 @@ public class TakenLectureJpaEntity extends TimeBaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private LectureJpaEntity lecture;
 
-	private int year;
+	private Integer year;
 
 	private Semester semester;
 

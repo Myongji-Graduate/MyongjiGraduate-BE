@@ -19,6 +19,7 @@ class TakenLectureMapper {
 			.lecture(mapToLectureDomainEntity(takenLecture.getLecture()))
 			.year(takenLecture.getYear())
 			.semester(takenLecture.getSemester())
+			.createdAt(takenLecture.getCreatedAt())
 			.build();
 	}
 

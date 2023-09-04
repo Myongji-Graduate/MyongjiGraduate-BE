@@ -61,7 +61,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	}
 
 	private void deleteTakenLecturesIfAlreadyEnrolled(User user) {
-		deleteTakenLecturePort.deleteTakenLecturesByUser(user);
+		deleteTakenLecturePort.deleteAllTakenLecturesByUser(user);
 	}
 
 	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
