@@ -23,4 +23,12 @@ class LecturePersistenceAdaptor implements LoadLecturePort {
 			.map(lectureMapper::mapToLectureDomainEntity)
 			.collect(Collectors.toList());
 	}
+
+	@Override
+	public List<Lecture> loadLecturesByIds(List<Long> lectureIds) {
+		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByIdIn(lectureIds);
+		return lectureJpaEntities.stream()
+			.map(lectureMapper::mapToLectureDomainEntity)
+			.collect(Collectors.toList());
+	}
 }

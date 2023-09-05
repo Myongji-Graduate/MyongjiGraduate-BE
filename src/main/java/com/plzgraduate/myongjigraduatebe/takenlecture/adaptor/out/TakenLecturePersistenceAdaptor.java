@@ -42,7 +42,7 @@ class TakenLecturePersistenceAdaptor implements LoadTakenLecturePort, SaveTakenL
 	}
 
 	@Override
-	public void deleteTakenLecturesByIdAndUser(List<Long> deleteIds, User user) {
-
+	public void deleteTakenLecturesByIds(List<Long> deleteIds) {
+		takenLectureRepository.deleteAllByIdInBatch(deleteIds);
 	}
 }

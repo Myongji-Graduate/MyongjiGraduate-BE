@@ -7,4 +7,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 public interface LoadLecturePort {
 
 	List<Lecture> loadLecturesByLectureCodes(List<String> lectureCodes);
+
+	List<Lecture> loadLecturesByIds(List<Long> lectureIds);
 }
