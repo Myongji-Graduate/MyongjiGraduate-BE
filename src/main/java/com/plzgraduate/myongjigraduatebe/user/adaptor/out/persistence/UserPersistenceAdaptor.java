@@ -4,6 +4,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @PersistenceAdapter
 @Slf4j
 @RequiredArgsConstructor
-class UserPersistenceAdaptor implements LoadUserPort, SaveUserPort, CheckUserPort {
+class UserPersistenceAdaptor implements LoadUserPort, SaveUserPort, CheckUserPort, UpdateUserPort {
 
 	private final UserMapper userMapper;
 
@@ -45,5 +46,10 @@ class UserPersistenceAdaptor implements LoadUserPort, SaveUserPort, CheckUserPor
 	@Override
 	public boolean checkDuplicateStudentNumber(String studentNumber) {
 		return userRepository.existsByStudentNumber(studentNumber);
+	}
+
+	@Override
+	public void updateUser(User user) {
+		userRepository.save(userMapper.mapToJpaEntity(user));
 	}
 }

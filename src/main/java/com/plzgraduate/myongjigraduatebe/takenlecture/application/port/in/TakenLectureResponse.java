@@ -35,7 +35,7 @@ public class TakenLectureResponse {
 		return TakenLectureResponse.builder()
 			.id(takenLecture.getId())
 			.year(takenLecture.getYear() == 2099 ? "CUSTOM" : String.valueOf(takenLecture.getYear()))
-			.semester(takenLecture.getSemester() == null ? "CUSTOM" : String.valueOf(takenLecture.getYear()))
+			.semester(takenLecture.getSemester() == null ? "CUSTOM" : takenLecture.getSemester().getName())
 			.lectureCode(takenLecture.getLecture().getLectureCode())
 			.lectureName(takenLecture.getLecture().getName())
 			.credit(takenLecture.getLecture().getCredit())

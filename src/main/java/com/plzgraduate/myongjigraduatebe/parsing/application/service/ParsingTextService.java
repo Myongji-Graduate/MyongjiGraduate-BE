@@ -20,6 +20,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.Delet
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 class ParsingTextService implements ParsingTextUseCase {
 
 	private final LoadUserPort loadUserPort;
+	private final UpdateUserPort updateUserPort;
 	private final LoadLecturePort loadLecturePort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	private final DeleteTakenLecturePort deleteTakenLecturePort;
@@ -79,6 +81,7 @@ class ParsingTextService implements ParsingTextUseCase {
 			.map(ParsingTakenLectureDto::getLectureCode)
 			.collect(Collectors.toList());
 		List<Lecture> lectures = loadLecturePort.loadLecturesByLectureCodes(lectureCodes);
+		System.out.println(lectures.size());
 		return lectures.stream()
 			.collect(Collectors.toMap(Lecture::getLectureCode, Function.identity()));
 	}
@@ -86,6 +89,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	private void updateUser(User user, ParsingInformation parsingInformation) {
 		user.update(parsingInformation.getStudentName(), parsingInformation.getMajor(),
 			parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
+		updateUserPort.updateUser(user);
 	}
 
 	private void validateParsingText(String parsingText) {

@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.LectureJpaEntity;
@@ -17,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Table(name = "taken_lecture")
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
