@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.SignUpUseCase;
@@ -12,6 +13,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
+@Transactional
 @RequiredArgsConstructor
 class SignUpService implements SignUpUseCase {
 

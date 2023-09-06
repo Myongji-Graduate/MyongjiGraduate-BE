@@ -32,12 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 class ParsingTextService implements ParsingTextUseCase {
 
+	private final ParsingTextHistoryService parsingTextHistoryService;
 	private final LoadUserPort loadUserPort;
 	private final UpdateUserPort updateUserPort;
 	private final LoadLecturePort loadLecturePort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	private final DeleteTakenLecturePort deleteTakenLecturePort;
-	private final SaveParsingTextHistoryPort saveParsingTextHistoryPort;
 
 	@Override
 	public void enrollParsingText(ParsingTextCommand parsingTextCommand) {
@@ -50,14 +50,12 @@ class ParsingTextService implements ParsingTextUseCase {
 			updateUser(user, parsingInformation);
 			deleteTakenLecturesIfAlreadyEnrolled(user);
 			saveTakenLectures(user, parsingInformation);
-			saveParsingTextHistory(ParsingTextHistory.success(user, parsingText));
+			parsingTextHistoryService.saveParsingTextHistory(ParsingTextHistory.success(user, parsingText));
 		} catch (InvalidPdfException e) {
-			log.warn("invalid pdf exception = {}", e.getMessage(), e);
-			saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
+			parsingTextHistoryService.saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
 			throw e;
 		} catch (Exception e) {
-			log.warn("pdf parsing error = {}", e.getMessage(), e);
-			saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
+			parsingTextHistoryService.saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
 			throw new PdfParsingException("PDF에서 정보를 읽어오는데 실패했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
@@ -66,7 +64,7 @@ class ParsingTextService implements ParsingTextUseCase {
 		deleteTakenLecturePort.deleteAllTakenLecturesByUser(user);
 	}
 
-	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
+	private void saveTakenLectures(User user, ParsingInformation parsingInformation){
 		List<ParsingTakenLectureDto> takenLectureInformation = parsingInformation.getTakenLectureInformation();
 		Map<String, Lecture> lectureMap = makeLectureMapByLectureCodes(takenLectureInformation);
 		List<TakenLecture> takenLectures = takenLectureInformation.stream().map(
@@ -103,10 +101,5 @@ class ParsingTextService implements ParsingTextUseCase {
 			throw new InvalidPdfException("본인의 PDF 학번이 일치하지 않습니다.");
 		}
 	}
-
-	private void saveParsingTextHistory(ParsingTextHistory history) {
-		saveParsingTextHistoryPort.saveParsingTextHistory(history);
-	}
-
 
 }

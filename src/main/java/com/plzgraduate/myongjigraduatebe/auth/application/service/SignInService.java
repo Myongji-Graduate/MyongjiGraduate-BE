@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.auth.application.port.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.command.SignInCommand;
@@ -17,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 class SignInService implements SignInUseCase {
 
