@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
-public interface LoadLecturePort {
+public interface FindLecturePort {
 
-	List<Lecture> loadLecturesByLectureCodes(List<String> lectureCodes);
+	List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes);
 
-	List<Lecture> loadLecturesByIds(List<Long> lectureIds);
+	List<Lecture> findLecturesByIds(List<Long> lectureIds);
 }

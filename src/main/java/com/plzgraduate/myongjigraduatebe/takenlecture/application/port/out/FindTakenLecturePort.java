@@ -5,7 +5,7 @@ import java.util.List;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-public interface LoadTakenLecturePort {
+public interface FindTakenLecturePort {
 
-	List<TakenLecture> loadTakenLecturesByUser(User user);
+	List<TakenLecture> findTakenLecturesByUser(User user);
 }

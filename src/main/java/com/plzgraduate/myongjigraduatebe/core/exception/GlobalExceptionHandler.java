@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Optional;
 
+import com.plzgraduate.myongjigraduatebe.parsing.application.service.InvalidPdfException;
+import com.plzgraduate.myongjigraduatebe.parsing.application.service.PdfParsingException;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,6 +44,13 @@ public class GlobalExceptionHandler {
 	public ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.debug("validation exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getBindingErrorMessage(e));
+	}
+
+	@ExceptionHandler({PdfParsingException.class, InvalidPdfException.class})
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ExceptionResponse handlePdfException(Exception e) {
+		log.warn("pdf exception occurred: {}", e.getMessage(), e);
+		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
 	}
 
 	@ExceptionHandler({RuntimeException.class, Exception.class})

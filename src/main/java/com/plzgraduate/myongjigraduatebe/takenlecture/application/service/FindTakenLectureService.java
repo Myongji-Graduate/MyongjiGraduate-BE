@@ -8,12 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.GetTakenLecturePort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.GetTakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.FindTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.FindTakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.TakenLectureResponse;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.LoadTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -21,18 +20,18 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-class GetTakenLectureService implements GetTakenLecturePort {
+class FindTakenLectureService implements FindTakenLectureUseCase {
 
-	private final LoadUserPort loadUserPort;
+	private final FindUserUseCase findUserUseCase;
 
-	private final LoadTakenLecturePort loadTakenLecturePort;
+	private final com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort findTakenLecturePort;
 
 	@Override
-	public GetTakenLectureResponse getTakenLectures(Long userId) {
-		User user = loadUserPort.loadUserById(userId);
-		List<TakenLecture> takenLectures = loadTakenLecturePort.loadTakenLecturesByUser(user);
+	public FindTakenLectureResponse getTakenLectures(Long userId) {
+		User user = findUserUseCase.findUserById(userId);
+		List<TakenLecture> takenLectures = findTakenLecturePort.findTakenLecturesByUser(user);
 		sortTakenLectures(takenLectures);
-		return GetTakenLectureResponse.from(
+		return FindTakenLectureResponse.from(
 			takenLectures.stream()
 				.map(TakenLectureResponse::from)
 				.collect(Collectors.toList())

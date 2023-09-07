@@ -1,8 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
+import java.util.Optional;
+
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.out.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.SaveUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -13,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @PersistenceAdapter
 @Slf4j
 @RequiredArgsConstructor
-class UserPersistenceAdaptor implements LoadUserPort, SaveUserPort, CheckUserPort, UpdateUserPort {
+class UserPersistenceAdaptor implements FindUserPort, SaveUserPort, CheckUserPort, UpdateUserPort {
 
 	private final UserMapper userMapper;
 
@@ -25,17 +27,21 @@ class UserPersistenceAdaptor implements LoadUserPort, SaveUserPort, CheckUserPor
 	}
 
 	@Override
-	public User loadUserById(Long id) {
-		UserJpaEntity userJpaEntity = userRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당 사용작 존재하지 않습니다."));
-		return userMapper.mapToDomainEntity(userJpaEntity);
+	public Optional<User> findUserById(Long id) {
+		UserJpaEntity userJpaEntity = userRepository.findById(id).orElse(null);
+		if(userJpaEntity == null) {
+			return Optional.empty();
+		}
+		return Optional.of(userMapper.mapToDomainEntity(userJpaEntity));
 	}
 
 	@Override
-	public User loadUserByAuthId(String authId) {
-		UserJpaEntity userJpaEntity = userRepository.findByAuthId(authId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다."));
-		return userMapper.mapToDomainEntity(userJpaEntity);
+	public Optional<User> findUserByAuthId(String authId) {
+		UserJpaEntity userJpaEntity = userRepository.findByAuthId(authId).orElse(null);
+		if(userJpaEntity == null) {
+			return Optional.empty();
+		}
+		return Optional.of(userMapper.mapToDomainEntity(userJpaEntity));
 	}
 
 	@Override

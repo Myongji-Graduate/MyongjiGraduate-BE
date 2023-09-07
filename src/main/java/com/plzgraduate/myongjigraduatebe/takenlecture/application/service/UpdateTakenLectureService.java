@@ -6,14 +6,16 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.FindLecturesByIdUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.UpdateTakenLectureCommand;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.UpdateTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.out.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class UpdateTakenLectureService implements UpdateTakenLecturePort{
 
-	private final LoadUserPort loadUserPort;
+	private final FindUserUseCase findUserUseCase;
+	private final FindLecturesByIdUseCase findLecturesByIdUseCase;
 	private final DeleteTakenLecturePort deleteTakenLecturePort;
-	private final LoadLecturePort loadLecturePort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	@Override
 	public void updateTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand) {
 		Long userId = updateTakenLectureCommand.getUserId();
-		User user = loadUserPort.loadUserById(userId);
+		User user = findUserUseCase.findUserById(userId);
 		deleteTakenLectures(updateTakenLectureCommand);
 		List<Lecture> addedLectures = findAddedLecturesByIds(
 			updateTakenLectureCommand);
@@ -46,8 +48,7 @@ class UpdateTakenLectureService implements UpdateTakenLecturePort{
 
 	private List<Lecture> findAddedLecturesByIds(UpdateTakenLectureCommand updateTakenLectureCommand) {
 		List<Long> addedLectureIds = updateTakenLectureCommand.getAddedTakenLectures();
-		List<Lecture> addedLectures = loadLecturePort.loadLecturesByIds(addedLectureIds);
-		return addedLectures;
+		return findLecturesByIdUseCase.findLecturesByIds(addedLectureIds);
 	}
 
 	private void deleteTakenLectures(UpdateTakenLectureCommand updateTakenLectureCommand) {

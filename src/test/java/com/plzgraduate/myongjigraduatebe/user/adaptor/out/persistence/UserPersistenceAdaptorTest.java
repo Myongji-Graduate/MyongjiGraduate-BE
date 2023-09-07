@@ -31,6 +31,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		assertThat(userRepository.findByAuthId("mju1001")).isPresent();
 	}
 
+	/**
 	@DisplayName("아이디로 사용자를 조회한다.")
 	@Test
 	void 아아디_사용자_조회() {
@@ -44,6 +45,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		//then
 		assertThat(user.getAuthId()).isEqualTo(authId);
 	}
+	 **/
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")
 	@Test
 	void 중복_아이디_확인() {

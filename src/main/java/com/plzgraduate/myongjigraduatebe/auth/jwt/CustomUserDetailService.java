@@ -4,7 +4,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.LoadUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.FindUserUseCase;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +12,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CustomUserDetailService implements UserDetailsService {
 
-	private final LoadUserPort loadUserPort;
+	private final FindUserUseCase findUserUseCase;
 
 	@Override
 	public CustomUserDetails loadUserByUsername(String authId) throws UsernameNotFoundException {
-		return new CustomUserDetails(loadUserPort.loadUserByAuthId(authId));
+		return new CustomUserDetails(findUserUseCase.findUserByAuthId(authId));
 	}
 }

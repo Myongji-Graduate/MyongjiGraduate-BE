@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.GetTakenLecturePort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.GetTakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.FindTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.FindTakenLectureResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,10 +15,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetTakenLectureController {
 
-	private final GetTakenLecturePort getTakenLecturePort;
+	private final FindTakenLectureUseCase findTakenLectureUseCase;
 
 	@GetMapping
-	public GetTakenLectureResponse getTakenLectures(@LoginUser Long userId) {
-		return getTakenLecturePort.getTakenLectures(userId);
+	public FindTakenLectureResponse getTakenLectures(@LoginUser Long userId) {
+		return findTakenLectureUseCase.getTakenLectures(userId);
 	}
 }

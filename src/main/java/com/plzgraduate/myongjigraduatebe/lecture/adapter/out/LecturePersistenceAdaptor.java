@@ -4,20 +4,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class LecturePersistenceAdaptor implements LoadLecturePort {
+class LecturePersistenceAdaptor implements FindLecturePort {
 
 	private final LectureRepository lectureRepository;
 	private final LectureMapper lectureMapper;
 
 	@Override
-	public List<Lecture> loadLecturesByLectureCodes(List<String> lectureCodes) {
+	public List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByLectureCodeIn(lectureCodes);
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureDomainEntity)
@@ -25,7 +25,7 @@ class LecturePersistenceAdaptor implements LoadLecturePort {
 	}
 
 	@Override
-	public List<Lecture> loadLecturesByIds(List<Long> lectureIds) {
+	public List<Lecture> findLecturesByIds(List<Long> lectureIds) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByIdIn(lectureIds);
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureDomainEntity)

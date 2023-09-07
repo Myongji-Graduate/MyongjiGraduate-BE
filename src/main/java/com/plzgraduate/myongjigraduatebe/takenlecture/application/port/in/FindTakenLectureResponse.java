@@ -8,19 +8,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GetTakenLectureResponse {
+public class FindTakenLectureResponse {
 	private int totalCredit;
 	private List<TakenLectureResponse> takenLectures;
 
 	@Builder
-	private GetTakenLectureResponse(int totalCredit, List<TakenLectureResponse> takenLectures) {
+	private FindTakenLectureResponse(int totalCredit, List<TakenLectureResponse> takenLectures) {
 		this.totalCredit = totalCredit;
 		this.takenLectures = takenLectures;
 	}
 
-	public static GetTakenLectureResponse from(List<TakenLectureResponse> takenLectures) {
+	public static FindTakenLectureResponse from(List<TakenLectureResponse> takenLectures) {
 		int totalCredit = takenLectures.stream().mapToInt(TakenLectureResponse::getCredit).sum();
-		return GetTakenLectureResponse.builder()
+		return FindTakenLectureResponse.builder()
 			.totalCredit(totalCredit)
 			.takenLectures(takenLectures)
 			.build();

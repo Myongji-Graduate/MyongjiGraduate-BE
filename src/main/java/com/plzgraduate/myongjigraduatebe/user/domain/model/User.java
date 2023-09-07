@@ -2,6 +2,8 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
 import java.time.Instant;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.command.UpdateStudentInformationCommand;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,7 +24,8 @@ public class User {
 	private Instant updatedAt;
 
 	@Builder
-	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber, int entryYear,
+	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
+		int entryYear,
 		String major, String subMajor, StudentCategory studentCategory, Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
@@ -49,11 +52,11 @@ public class User {
 			.build();
 	}
 
-	public void update(String name, String major, String subMajor, StudentCategory studentCategory) {
-		this.name = name;
-		this.major = major;
-		this.subMajor = subMajor;
-		this.studentCategory = studentCategory;
+	public void updateStudentInformation(UpdateStudentInformationCommand updateStudentInformationCommand) {
+		this.name = updateStudentInformationCommand.getName();
+		this.major = updateStudentInformationCommand.getMajor();
+		this.subMajor = updateStudentInformationCommand.getSubMajor();
+		this.studentCategory = updateStudentInformationCommand.getStudentCategory();
 	}
 
 	public boolean checkBeforeEntryYear(int entryYear) {
@@ -64,9 +67,12 @@ public class User {
 		return this.major.equals(major);
 	}
 
-	private static int parseEntryYearInStudentNumber(String studentNumber) {
-		return Integer.parseInt(studentNumber.substring(2,4));
+	public boolean compareStudentNumber(String studentNumber) {
+		return this.studentNumber.equals(studentNumber);
 	}
 
+	private static int parseEntryYearInStudentNumber(String studentNumber) {
+		return Integer.parseInt(studentNumber.substring(2, 4));
+	}
 
 }
