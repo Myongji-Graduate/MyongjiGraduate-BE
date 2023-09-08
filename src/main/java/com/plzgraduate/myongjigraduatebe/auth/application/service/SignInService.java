@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.auth.application.service;
 
 import java.util.Collections;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import com.plzgraduate.myongjigraduatebe.auth.application.port.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.command.SignInCommand;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.response.SignInResponse;
 import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.auth.jwt.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 
 import lombok.RequiredArgsConstructor;
@@ -30,9 +32,13 @@ class SignInService implements SignInUseCase {
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(signInCommand.getAuthId(), signInCommand.getPassword(),
 				Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		//SecurityContextHolder.getContext().setAuthentication(authentication);
-		String accessToken = tokenProvider.generateToken(authentication);
-		return SignInResponse.from(accessToken);
+		try {
+			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String accessToken = tokenProvider.generateToken(authentication);
+			return SignInResponse.from(accessToken);
+		} catch (BadCredentialsException e) {
+			throw new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+		}
 	}
 }

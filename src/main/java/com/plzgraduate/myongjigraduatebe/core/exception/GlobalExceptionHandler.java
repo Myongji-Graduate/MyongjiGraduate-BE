@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Optional;
 
+import com.plzgraduate.myongjigraduatebe.auth.jwt.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.parsing.application.service.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.parsing.application.service.PdfParsingException;
 
@@ -32,7 +33,7 @@ public class GlobalExceptionHandler {
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
 	}
 
-	@ExceptionHandler(AuthenticationException.class)
+	@ExceptionHandler(UnAuthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ExceptionResponse handleUnAuthorizedException(Exception e) {
 		log.debug("unauthorized exception occurred: {}", e.getMessage(), e);

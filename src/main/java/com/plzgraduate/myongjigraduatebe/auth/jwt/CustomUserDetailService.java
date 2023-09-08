@@ -16,6 +16,10 @@ class CustomUserDetailService implements UserDetailsService {
 
 	@Override
 	public CustomUserDetails loadUserByUsername(String authId) throws UsernameNotFoundException {
-		return new CustomUserDetails(findUserUseCase.findUserByAuthId(authId));
+		try {
+			return new CustomUserDetails(findUserUseCase.findUserByAuthId(authId));
+		} catch (IllegalArgumentException e) {
+			throw new UsernameNotFoundException(e.getMessage());
+		}
 	}
 }
