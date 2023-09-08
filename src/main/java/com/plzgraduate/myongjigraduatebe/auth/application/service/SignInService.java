@@ -31,7 +31,7 @@ class SignInService implements SignInUseCase {
 			new UsernamePasswordAuthenticationToken(signInCommand.getAuthId(), signInCommand.getPassword(),
 				Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		//SecurityContextHolder.getContext().setAuthentication(authentication);
 		String accessToken = tokenProvider.generateToken(authentication);
 		return SignInResponse.from(accessToken);
 	}

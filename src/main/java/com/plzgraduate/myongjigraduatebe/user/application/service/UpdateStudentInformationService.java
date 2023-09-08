@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional
 @RequiredArgsConstructor
-public class UpdateStudentInformationService implements UpdateStudentInformationUseCase {
+class UpdateStudentInformationService implements UpdateStudentInformationUseCase {
 	private final UpdateUserPort updateUserPort;
 	@Override
 	public void updateUser(UpdateStudentInformationCommand updateStudentInformationCommand) {

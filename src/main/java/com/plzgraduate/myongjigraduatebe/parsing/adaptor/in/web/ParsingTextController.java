@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command.ParsingTextCommand;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +20,17 @@ import lombok.RequiredArgsConstructor;
 class ParsingTextController {
 
 	private final ParsingTextUseCase parsingTextUseCase;
+	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 
 	@PostMapping
 	public void enrollParsingText(@LoginUser Long userId, @Valid @RequestBody ParsingTextRequest parsingTextRequest) {
-		parsingTextUseCase.enrollParsingText(parsingTextRequest.toCommand(userId));
+		ParsingTextCommand command = parsingTextRequest.toCommand(userId);
+		try {
+			parsingTextUseCase.enrollParsingText(command);
+			parsingTextHistoryUseCase.saveParsingTextHistoryIfSuccess(command);
+		} catch (Exception e) {
+			parsingTextHistoryUseCase.saveParsingTextHistoryIfFail(command);
+			throw e;
+		}
 	}
 }

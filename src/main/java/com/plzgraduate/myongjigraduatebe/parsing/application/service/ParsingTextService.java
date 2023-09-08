@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 class ParsingTextService implements ParsingTextUseCase {
 
-	private final ParsingTextHistoryService parsingTextHistoryService;
 	private final FindUserUseCase findUserUseCase;
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
@@ -45,12 +44,9 @@ class ParsingTextService implements ParsingTextUseCase {
 			updateUser(user, parsingInformation);
 			deleteTakenLecturesIfAlreadyEnrolled(user);
 			saveTakenLectures(user, parsingInformation);
-			parsingTextHistoryService.saveParsingTextHistory(ParsingTextHistory.success(user, parsingText));
-		} catch (InvalidPdfException e) {
-			parsingTextHistoryService.saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
+		} catch (InvalidPdfException | IllegalArgumentException e) {
 			throw e;
 		} catch (Exception e) {
-			parsingTextHistoryService.saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
 			throw new PdfParsingException("PDF에서 정보를 읽어오는데 실패했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
@@ -75,7 +71,7 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void validateParsingText(String parsingText) {
 		if (parsingText.trim().isEmpty()) {
-			throw new InvalidPdfException("PDF를 인식하지 못했습니다.");
+			throw new InvalidPdfException("PDF를 인식하지 못했습니다. 채널톡으로 문의주세요.");
 		}
 	}
 

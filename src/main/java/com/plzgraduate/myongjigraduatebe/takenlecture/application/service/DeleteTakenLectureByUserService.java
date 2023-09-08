@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional
 @RequiredArgsConstructor
-public class DeleteTakenLectureByUserService implements DeleteTakenLectureByUserUseCase {
+class DeleteTakenLectureByUserService implements DeleteTakenLectureByUserUseCase {
 
 	private final DeleteTakenLecturePort deleteTakenLecturePort;
 	@Override
