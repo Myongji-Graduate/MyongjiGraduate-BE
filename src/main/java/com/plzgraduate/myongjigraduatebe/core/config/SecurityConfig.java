@@ -17,8 +17,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.plzgraduate.myongjigraduatebe.auth.jwt.JwtAuthenticationProvider;
 import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenAuthenticationFilter;
 import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.FindUserUseCase;
 
 import lombok.RequiredArgsConstructor;
 
@@ -94,6 +96,11 @@ public class SecurityConfig{
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public JwtAuthenticationProvider jwtAuthenticationProvider(PasswordEncoder passwordEncoder, FindUserUseCase findUserUseCase) {
+		return new JwtAuthenticationProvider(passwordEncoder, findUserUseCase);
 	}
 
 }

@@ -32,8 +32,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 			return null;
 		}
 		Object principal = authentication.getPrincipal();
-		if (principal instanceof Long) {
-			return principal;
+		if (principal instanceof AuthenticationUser) {
+			return ((AuthenticationUser)principal).getId();
 		}
 		log.warn("userId is null");
 		return null;

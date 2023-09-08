@@ -2,6 +2,9 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
 import java.time.Instant;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.plzgraduate.myongjigraduatebe.parsing.application.service.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.command.UpdateStudentInformationCommand;
 
 import lombok.Builder;
@@ -71,6 +74,11 @@ public class User {
 		return this.studentNumber.equals(studentNumber);
 	}
 
+	public void matchPassword(PasswordEncoder passwordEncoder, String password) {
+		if(!passwordEncoder.matches(password, this.password)) {
+			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+		}
+	}
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}

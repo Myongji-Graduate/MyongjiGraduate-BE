@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,6 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		assertThat(userRepository.findByAuthId("mju1001")).isPresent();
 	}
 
-	/**
 	@DisplayName("아이디로 사용자를 조회한다.")
 	@Test
 	void 아아디_사용자_조회() {
@@ -40,10 +41,11 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		UserJpaEntity userEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
 		userRepository.save(userEntity);
 		//when
-		User user = userPersistenceAdaptor.loadUserByAuthId(authId);
+		Optional<User> user = userPersistenceAdaptor.findUserByAuthId(authId);
 
 		//then
-		assertThat(user.getAuthId()).isEqualTo(authId);
+		assertThat(user).isPresent();
+		assertThat(user.get().getAuthId()).isEqualTo(authId);
 	}
 	 **/
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")

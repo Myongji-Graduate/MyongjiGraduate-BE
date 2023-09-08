@@ -31,8 +31,9 @@ public class TokenProvider {
 
 	public Authentication getAuthentication(String token) {
 		Claims claims = verifyToken(token);
-		return new UsernamePasswordAuthenticationToken(
-			claims.id, token, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+		return new JwtAuthenticationToken(
+			new AuthenticationUser(claims.id, claims.authId), null,
+			Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
 	}
 
 	private String makeToken(Authentication authentication, Date expiry) {
@@ -43,13 +44,19 @@ public class TokenProvider {
 			.withIssuedAt(now)
 			.withExpiresAt(expiry)
 			.withClaim("id", getUserId(authentication))
+			.withClaim("authId", getAuthId(authentication))
 			.sign(Algorithm.HMAC256(jwtProperties.getSecretKey()));
 
 	}
 
 	private Long getUserId(Authentication authentication) {
-		CustomUserDetails principal = (CustomUserDetails)authentication.getPrincipal();
-		return principal.getUserId();
+		AuthenticationUser principal = (AuthenticationUser)authentication.getPrincipal();
+		return principal.getId();
+	}
+
+	private String getAuthId(Authentication authentication) {
+		AuthenticationUser principal = (AuthenticationUser)authentication.getPrincipal();
+		return principal.getAuthId();
 	}
 
 	private Claims verifyToken(String token) {
@@ -59,13 +66,18 @@ public class TokenProvider {
 
 	static class Claims {
 		Long id;
+		String authId;
 		Date iat;
 		Date exp;
 
 		Claims(DecodedJWT decodedJWT) {
 			Claim claimId = decodedJWT.getClaim("id");
+			Claim claimAuthId = decodedJWT.getClaim("authId");
 			if (!claimId.isNull()) {
 				this.id = claimId.asLong();
+			}
+			if (!claimAuthId.isNull()) {
+				this.authId = claimAuthId.asString();
 			}
 			this.iat = decodedJWT.getIssuedAt();
 			this.exp = decodedJWT.getExpiresAt();

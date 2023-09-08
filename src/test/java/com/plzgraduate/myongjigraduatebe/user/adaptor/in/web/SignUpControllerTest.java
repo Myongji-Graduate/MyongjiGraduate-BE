@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -17,6 +19,8 @@ import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.request.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.SignUpUseCase;
 
+@WebMvcTest(controllers = SignUpController.class,
+	excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class SignUpControllerTest extends WebAdaptorTestSupport {
 
 	@MockBean
