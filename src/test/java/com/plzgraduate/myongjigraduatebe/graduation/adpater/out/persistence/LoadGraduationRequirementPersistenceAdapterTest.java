@@ -22,7 +22,7 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 	private static final int SUB_MAJOR_CREDIT = 10;
 
 	@Autowired
-	private SpringDataGraduationRequirementRepository graduationRequirementRepository;
+	private GraduationRequirementRepository graduationRequirementRepository;
 	@Autowired
 	private LoadGraduationRequirementPersistenceAdapter loadGraduationRequirementPersistenceAdapter;
 

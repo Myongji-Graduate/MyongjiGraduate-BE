@@ -13,16 +13,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.graduation.adpater.out.persistence.SpringDataGraduationRequirementRepository;
+import com.plzgraduate.myongjigraduatebe.graduation.adpater.out.persistence.GraduationRequirementRepository;
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.out.persistence.entity.GraduationRequirementJpaEntity;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-class SpringDataGraduationRequirementRepositoryTest extends PersistenceTestSupport {
+class GraduationRequirementRepositoryTest extends PersistenceTestSupport {
 
 	@Autowired
-	private SpringDataGraduationRequirementRepository requirementRepository;
+	private GraduationRequirementRepository requirementRepository;
 	private static final int SUB_MAJOR_CREDIT = 10;
 
 
