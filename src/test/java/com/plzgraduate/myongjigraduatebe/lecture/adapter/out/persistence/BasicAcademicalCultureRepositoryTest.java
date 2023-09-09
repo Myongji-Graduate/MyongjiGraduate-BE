@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
 
-
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -27,8 +26,8 @@ class BasicAcademicalCultureRepositoryTest extends PersistenceTestSupport {
 		basicAcademicalCultureRepository.saveAll(basicAcademicalCultures);
 
 		//when
-		List<BasicAcademicalCultureJpaEntity> basicAcademicalCultureJpaEntities = basicAcademicalCultureRepository.findByCollege(
-			college);
+		List<BasicAcademicalCultureJpaEntity> basicAcademicalCultureJpaEntities =
+			basicAcademicalCultureRepository.findAllByCollege(college);
 
 		//then
 		assertThat(basicAcademicalCultureJpaEntities).extracting("college")
