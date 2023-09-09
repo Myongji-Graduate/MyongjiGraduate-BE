@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
@@ -50,6 +52,22 @@ class LectureMapperTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(coreCulture.getCoreCultureCategory()).isEqualTo(CULTURE_ART);
+	}
+
+	@DisplayName("BasicAcademicalCulture: Jpa 엔티티를 도메인 모델로 변환한다.")
+	@Test
+	void mapToCBasicAcademicalCulture() {
+		//given
+		BasicAcademicalCultureJpaEntity basicAcademicalCultureEntity = BasicAcademicalCultureJpaEntity.builder()
+			.lectureJpaEntity(LectureJpaEntity.builder().build())
+			.college("인문대").build();
+
+		//when
+		BasicAcademicalCulture basicAcademicalCulture = lectureMapper.mapToDomainBasicAcademicalCultureModel(
+			basicAcademicalCultureEntity);
+
+		//then
+		assertThat(basicAcademicalCulture.getCollege()).isEqualTo("인문대");
 	}
 
 }
