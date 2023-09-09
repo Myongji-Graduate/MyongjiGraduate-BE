@@ -7,24 +7,24 @@ import lombok.Getter;
 public class Major {
 
 	private final Lecture lecture;
-	private final String department;
+	private final String major;
 	private int isMandatory;
 	private final int appliedStartEntryYear;
 	private final int appliedEndEntryYear;
 
 	@Builder
-	private Major(Lecture lecture, String department, int isMandatory, int appliedStartEntryYear, int appliedEndEntryYear) {
+	private Major(Lecture lecture, String major, int isMandatory, int appliedStartEntryYear, int appliedEndEntryYear) {
 		this.lecture = lecture;
-		this.department = department;
+		this.major = major;
 		this.isMandatory = isMandatory;
 		this.appliedStartEntryYear = appliedStartEntryYear;
 		this.appliedEndEntryYear = appliedEndEntryYear;
 	}
 
-	public static Major of(Lecture lecture, String department, int isMandatory, int appliedStartEntryYear, int appliedEndEntryYear) {
+	public static Major of(Lecture lecture, String major, int isMandatory, int appliedStartEntryYear, int appliedEndEntryYear) {
 		return Major.builder()
 			.lecture(lecture)
-			.department(department)
+			.major(major)
 			.isMandatory(isMandatory)
 			.appliedStartEntryYear(appliedStartEntryYear)
 			.appliedEndEntryYear(appliedEndEntryYear)
