@@ -7,18 +7,18 @@ import lombok.Getter;
 public class BasicAcademicalCulture {
 
 	private Lecture lecture;
-	private String department;
+	private String college;
 
 	@Builder
-	private BasicAcademicalCulture(Lecture lecture, String department) {
+	private BasicAcademicalCulture(Lecture lecture, String college) {
 		this.lecture = lecture;
-		this.department = department;
+		this.college = college;
 	}
 
-	public static BasicAcademicalCulture of(Lecture lecture, String department) {
+	public static BasicAcademicalCulture of(Lecture lecture, String college) {
 		return BasicAcademicalCulture.builder()
 			.lecture(lecture)
-			.department(department)
+			.college(college)
 			.build();
 	}
 }
