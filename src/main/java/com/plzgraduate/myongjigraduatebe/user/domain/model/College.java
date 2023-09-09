@@ -10,12 +10,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum College {
 
-	HUMANITIES(List.of("국어국문", "문예창작", "영어영문", "중어중문", "일어일문", "문헌정보", "사학", "아랍지역", "사학", "철학")),
-	SOCIAL_SCIENCE(List.of("행정", "경제", "정치외교", "디지털미디어", "아동", "청소년지도", "사회복지")),
-	BUSINESS(List.of("경영", "경영정보", "국제통상")),
-	LAW(List.of("법학")),
-	ICT(List.of("디지털콘텐츠디자인", "응용소프트웨어", "데이터테크놀로지"));
+	HUMANITIES("인문대", List.of("국어국문", "문예창작", "영어영문", "중어중문", "일어일문", "문헌정보", "사학", "아랍지역", "사학", "철학")),
+	SOCIAL_SCIENCE("사회과학대", List.of("행정", "경제", "정치외교", "디지털미디어", "아동", "청소년지도", "사회복지")),
+	BUSINESS("경영대", List.of("경영", "경영정보", "국제통상")),
+	LAW("법대", List.of("법학")),
+	ICT("ICT융합대", List.of("디지털콘텐츠디자인", "응용소프트웨어", "데이터테크놀로지"));
 
+	private final String text;
 	private final List<String> holdingMajors;
 
 	public static College findBelongingCollege(String major) {
