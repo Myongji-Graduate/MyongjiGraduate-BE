@@ -11,13 +11,15 @@ import lombok.Getter;
 @Getter
 public class TakenLecture {
 
+	private final Long id;
 	private final User user;
 	private final Lecture lecture;
 	private final int year;
 	private final Semester semester;
 
 	@Builder
-	private TakenLecture(User user, Lecture lecture, int year, Semester semester) {
+	private TakenLecture(Long id, User user, Lecture lecture, int year, Semester semester) {
+		this.id = id;
 		this.user = user;
 		this.lecture = lecture;
 		this.year = year;

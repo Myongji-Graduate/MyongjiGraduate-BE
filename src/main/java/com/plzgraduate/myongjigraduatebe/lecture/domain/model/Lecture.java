@@ -10,6 +10,7 @@ public class Lecture {
 
 	private static final String CULTURE_CODE_START_PREFIX = "KM";
 
+	private final Long id;
 	private final String lectureCode;
 	private final String name;
 	private final int credit;
@@ -17,7 +18,8 @@ public class Lecture {
 	private final int isRevoked;
 
 	@Builder
-	private Lecture(String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+	private Lecture(Long id, String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+		this.id = id;
 		this.lectureCode = lectureCode;
 		this.name = name;
 		this.credit = credit;

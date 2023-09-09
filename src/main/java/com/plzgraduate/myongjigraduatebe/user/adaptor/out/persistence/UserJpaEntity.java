@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class UserJpaEntity extends TimeBaseEntity {
+public class UserJpaEntity extends TimeBaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
