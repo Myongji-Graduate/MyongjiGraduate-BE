@@ -13,9 +13,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 @Import(LectureMapper.class)
@@ -68,6 +70,21 @@ class LectureMapperTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(basicAcademicalCulture.getCollege()).isEqualTo("인문대");
+	}
+
+	@DisplayName("Major: Jpa 엔티티를 도메인 모델로 변환한다.")
+	@Test
+	void mapToMajor() {
+		//given
+		MajorJpaEntity majorEntity = MajorJpaEntity.builder()
+			.lectureJpaEntity(LectureJpaEntity.builder().build())
+			.major("응용소프트웨어").build();
+
+		//when
+		Major basicAcademicalCulture = lectureMapper.mapToDomainMajorModel(majorEntity);
+
+		//then
+		assertThat(basicAcademicalCulture.getMajor()).isEqualTo("응용소프트웨어");
 	}
 
 }
