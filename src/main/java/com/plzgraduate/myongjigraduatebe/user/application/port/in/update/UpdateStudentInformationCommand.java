@@ -16,26 +16,31 @@ public class UpdateStudentInformationCommand {
 
 	private String major;
 
+	private String changeMajor;
+
 	private String subMajor;
 
 	private StudentCategory studentCategory;
 
 	@Builder
-	private UpdateStudentInformationCommand(User user, String name, String major, String subMajor,
-		StudentCategory studentCategory) {
+	private UpdateStudentInformationCommand(User user, String name, String major, String changeMajor,
+		String subMajor, StudentCategory studentCategory) {
 		this.user = user;
 		this.name = name;
 		this.major = major;
+		this.changeMajor = changeMajor;
 		this.subMajor = subMajor;
 		this.studentCategory = studentCategory;
 	}
 
-	public static UpdateStudentInformationCommand of(User user, String name, String major, String subMajor,
+	public static UpdateStudentInformationCommand of(User user, String name, String major, String changeMajor, String subMajor,
 		StudentCategory studentCategory) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
 			.name(name)
 			.major(major)
+			.changeMajor(changeMajor)
+			.subMajor(subMajor)
 			.studentCategory(studentCategory)
 			.build();
 	}

@@ -27,7 +27,6 @@ class UserMapperTest extends PersistenceTestSupport {
 			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
 
 		//when
-
 		User user = userMapper.mapToDomainEntity(userJpaEntity);
 
 		//then

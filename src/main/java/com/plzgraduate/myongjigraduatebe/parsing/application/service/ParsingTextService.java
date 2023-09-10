@@ -66,7 +66,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	private void updateUser(User user, ParsingInformation parsingInformation) {
 		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user,
 			parsingInformation.getStudentName(), parsingInformation.getMajor(),
-			parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
+			parsingInformation.getAssociatedMajor(), parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
 		updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
