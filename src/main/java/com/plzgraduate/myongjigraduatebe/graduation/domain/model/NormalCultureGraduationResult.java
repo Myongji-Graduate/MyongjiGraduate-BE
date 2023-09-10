@@ -17,7 +17,7 @@ public class NormalCultureGraduationResult {
 	private final String categoryName;
 	private boolean isCompleted;
 	private final int totalCredit;
-	private final int takenCredit;
+	private int takenCredit;
 
 	@Builder
 	private NormalCultureGraduationResult(String categoryName, boolean isCompleted, int totalCredit, int takenCredit) {
@@ -44,7 +44,9 @@ public class NormalCultureGraduationResult {
 		if (totalCredit >= takenCredit) {
 			return 0;
 		}
-		return takenCredit - totalCredit;
+		int leftCredit = takenCredit - totalCredit;
+		this.takenCredit = totalCredit;
+		return leftCredit;
 	}
 
 	private static int calculateTakenCredit(TakenLectureInventory takenLectureInventory,
