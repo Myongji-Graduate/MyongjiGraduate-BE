@@ -72,13 +72,13 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void validateParsingText(String parsingText) {
 		if (parsingText.trim().isEmpty()) {
-			throw new InvalidPdfException("PDF를 인식하지 못했습니다. 채널톡으로 문의주세요.");
+			throw new InvalidPdfException("PDF를 인식하지 못했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
 
 	private void validateStudentNumber(User user, ParsingInformation parsingInformation) {
 		if (!user.compareStudentNumber(parsingInformation.getStudentNumber())) {
-			throw new InvalidPdfException("본인의 PDF 학번이 일치하지 않습니다.");
+			throw new InvalidPdfException("본인의 학번과 PDF 학번이 일치하지 않습니다.");
 		}
 	}
 
@@ -94,5 +94,4 @@ class ParsingTextService implements ParsingTextUseCase {
 			.collect(Collectors.toList());
 		return SaveTakenLectureCommand.of(user, takenLectureInformationList);
 	}
-
 }

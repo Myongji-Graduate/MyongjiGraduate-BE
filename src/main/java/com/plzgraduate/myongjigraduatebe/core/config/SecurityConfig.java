@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -101,6 +103,11 @@ public class SecurityConfig {
 	@Bean
 	public JwtAuthenticationProvider jwtAuthenticationProvider(PasswordEncoder passwordEncoder, FindUserUseCase findUserUseCase) {
 		return new JwtAuthenticationProvider(passwordEncoder, findUserUseCase);
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(JwtAuthenticationProvider jwtAuthenticationProvider) {
+		return new ProviderManager(jwtAuthenticationProvider);
 	}
 
 	@Bean

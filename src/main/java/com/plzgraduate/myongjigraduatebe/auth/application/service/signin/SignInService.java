@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.auth.application.service.signin;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,7 @@ class SignInService implements SignInUseCase {
 
 	private final TokenProvider tokenProvider;
 
-	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final AuthenticationManager authenticationManager;
 
 	@Override
 	public SignInResponse signIn(SignInCommand signInCommand) {
@@ -33,7 +34,7 @@ class SignInService implements SignInUseCase {
 	private Authentication authenticateCommand(SignInCommand signInCommand) {
 		JwtAuthenticationToken authenticationToken =
 			new JwtAuthenticationToken(signInCommand.getAuthId(), signInCommand.getPassword());
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		return authentication;
 	}

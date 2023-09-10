@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FindLecturesByIdService implements FindLecturesByIdUseCase {
+
 	private final FindLecturePort findLecturePort;
 	@Override
 	public List<Lecture> findLecturesByIds(List<Long> lectureIds) {

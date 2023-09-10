@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AuthenticationUser {
+public class AuthenticationUser{
 	private final Long id;
 	private final String authId;
 

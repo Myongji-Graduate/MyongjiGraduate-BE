@@ -48,4 +48,5 @@ public class LectureFixture {
 			e.printStackTrace();
 		}
 	}
+
 }

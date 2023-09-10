@@ -46,6 +46,7 @@ dependencies {
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     implementation('org.flywaydb:flyway-core:6.4.2')
+    testImplementation 'org.testng:testng:7.1.0'
 
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
