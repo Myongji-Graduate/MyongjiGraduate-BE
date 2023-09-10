@@ -4,8 +4,7 @@ import java.time.Instant;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.service.InvalidPdfException;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.command.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
 
 import lombok.Builder;
 import lombok.Getter;

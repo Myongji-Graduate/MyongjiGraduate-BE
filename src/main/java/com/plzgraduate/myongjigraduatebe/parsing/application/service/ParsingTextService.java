@@ -5,18 +5,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
+import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command.ParsingTextCommand;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
-import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.SaveTakenLectureCommand;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.SaveTakenLectureFromParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.UpdateStudentInformationUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.command.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.SaveTakenLectureCommand;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.SaveTakenLectureFromParsingTextUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

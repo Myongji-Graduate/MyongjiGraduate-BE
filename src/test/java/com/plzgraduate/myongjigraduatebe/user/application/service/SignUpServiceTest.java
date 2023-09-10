@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -12,9 +11,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.command.SignUpCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpCommand;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.service.signup.SignUpService;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 

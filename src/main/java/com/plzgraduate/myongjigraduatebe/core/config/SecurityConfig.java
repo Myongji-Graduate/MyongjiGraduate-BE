@@ -17,10 +17,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.plzgraduate.myongjigraduatebe.auth.jwt.JwtAuthenticationProvider;
-import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenAuthenticationFilter;
-import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenProvider;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationProvider;
+import com.plzgraduate.myongjigraduatebe.auth.security.TokenAuthenticationFilter;
+import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 
 import lombok.RequiredArgsConstructor;
 

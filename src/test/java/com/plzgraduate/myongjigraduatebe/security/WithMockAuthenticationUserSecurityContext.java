@@ -7,8 +7,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import com.plzgraduate.myongjigraduatebe.auth.jwt.AuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.auth.jwt.JwtAuthenticationToken;
+import com.plzgraduate.myongjigraduatebe.auth.security.AuthenticationUser;
+import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 
 public class WithMockAuthenticationUserSecurityContext
 	implements WithSecurityContextFactory<WithMockAuthenticationUser> {

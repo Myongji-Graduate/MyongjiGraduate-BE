@@ -1,24 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.*;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command.ParsingTextCommand;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.SaveParsingTextHistoryPort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.DeleteTakenLecturePort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.SaveTakenLecturePort;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.FindUserPort;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class ParsingTextServiceTest{

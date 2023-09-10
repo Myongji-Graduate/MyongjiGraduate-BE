@@ -10,7 +10,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command.ParsingTextCommand;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
 
 import lombok.RequiredArgsConstructor;
 
