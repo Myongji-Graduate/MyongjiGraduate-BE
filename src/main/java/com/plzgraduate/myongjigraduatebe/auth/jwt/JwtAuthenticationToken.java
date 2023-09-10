@@ -19,7 +19,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 		this.credentials = credentials;
 	}
 
-	JwtAuthenticationToken(Object principal, String credentials, Collection<? extends GrantedAuthority> authorities) {
+	public JwtAuthenticationToken(Object principal, String credentials, Collection<? extends GrantedAuthority> authorities) {
 		super(authorities);
 		super.setAuthenticated(true);
 

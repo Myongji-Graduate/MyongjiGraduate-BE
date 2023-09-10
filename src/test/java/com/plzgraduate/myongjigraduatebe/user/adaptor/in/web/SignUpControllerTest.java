@@ -19,8 +19,7 @@ import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.request.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.SignUpUseCase;
 
-@WebMvcTest(controllers = SignUpController.class,
-	excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(controllers = SignUpController.class)
 class SignUpControllerTest extends WebAdaptorTestSupport {
 
 	@MockBean

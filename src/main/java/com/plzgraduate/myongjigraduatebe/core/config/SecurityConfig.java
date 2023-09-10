@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-public class SecurityConfig{
+public class SecurityConfig {
 
 	public static final String API_V1_PREFIX = "/api/v1";
 
@@ -45,7 +45,7 @@ public class SecurityConfig{
 			.anyRequest()
 			.authenticated()
 			.and()
-			.addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(tokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.cors()
 			.configurationSource(corsConfigurationSource())
 			.and()
@@ -101,6 +101,11 @@ public class SecurityConfig{
 	@Bean
 	public JwtAuthenticationProvider jwtAuthenticationProvider(PasswordEncoder passwordEncoder, FindUserUseCase findUserUseCase) {
 		return new JwtAuthenticationProvider(passwordEncoder, findUserUseCase);
+	}
+
+	@Bean
+	public TokenAuthenticationFilter tokenAuthenticationFilter(TokenProvider tokenProvider) {
+		return new TokenAuthenticationFilter(tokenProvider);
 	}
 
 }

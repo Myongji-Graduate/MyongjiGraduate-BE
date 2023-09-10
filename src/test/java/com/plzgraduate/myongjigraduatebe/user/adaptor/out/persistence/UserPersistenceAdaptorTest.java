@@ -47,7 +47,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		assertThat(user).isPresent();
 		assertThat(user.get().getAuthId()).isEqualTo(authId);
 	}
-	 **/
+
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")
 	@Test
 	void 중복_아이디_확인() {

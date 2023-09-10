@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-class SignUpController {
+public class SignUpController {
 
 	private final SignUpUseCase signUpUseCase;
 

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
-class SignInController {
+public class SignInController {
 
 	private final SignInUseCase signInUseCase;
 
