@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -41,34 +42,24 @@ public class GraduationResponse {
 		return GraduationResponse.builder()
 			.basicInfo(BasicInfoResponse.of(user, graduationResult))
 			.chapelResult(ChapelResultResponse.from(graduationResult.getChapelResult()))
-			.commonCulture(graduationResult.getDetailGraduationResults().stream()
-				.filter(detailGraduationResult -> detailGraduationResult.getCategoryName()
-					.equals(COMMON_CULTURE.getName()))
-				.map(DetailGraduationResultResponse::from)
-				.findFirst()
-				.orElseThrow(IllegalArgumentException::new))
-			.coreCulture(graduationResult.getDetailGraduationResults().stream()
-				.filter(detailGraduationResult -> detailGraduationResult.getCategoryName()
-					.equals(CORE_CULTURE.getName()))
-				.map(DetailGraduationResultResponse::from)
-				.findFirst()
-				.orElseThrow(IllegalArgumentException::new))
-			.basicAcademicalCulture(graduationResult.getDetailGraduationResults().stream()
-				.filter(detailGraduationResult -> detailGraduationResult.getCategoryName()
-					.equals(BASIC_ACADEMICAL_CULTURE.getName()))
-				.map(DetailGraduationResultResponse::from)
-				.findFirst()
-				.orElseThrow(IllegalArgumentException::new))
-			.major(graduationResult.getDetailGraduationResults().stream()
-				.filter(detailGraduationResult -> detailGraduationResult.getCategoryName()
-					.equals(MAJOR.getName()))
-				.map(DetailGraduationResultResponse::from)
-				.findFirst()
-				.orElseThrow(IllegalArgumentException::new))
+			.commonCulture(findDetailGraduationResultResponse(graduationResult, COMMON_CULTURE))
+			.coreCulture(findDetailGraduationResultResponse(graduationResult, CORE_CULTURE))
+			.basicAcademicalCulture(findDetailGraduationResultResponse(graduationResult, BASIC_ACADEMICAL_CULTURE))
+			.major(findDetailGraduationResultResponse(graduationResult, MAJOR))
 			.normalCulture(
 				RestResultResponse.fromNormalCultureResult(graduationResult.getNormalCultureGraduationResult()))
 			.freeElective(RestResultResponse.fromFreeElectiveResult(graduationResult.getFreeElectiveGraduationResult()))
 			.graduated(graduationResult.isGraduated())
 			.build();
+	}
+
+	private static DetailGraduationResultResponse findDetailGraduationResultResponse(GraduationResult graduationResult,
+		GraduationCategory graduationCategory) {
+		return graduationResult.getDetailGraduationResults().stream()
+			.filter(detailGraduationResult -> detailGraduationResult.getCategoryName()
+				.equals(graduationCategory.getName()))
+			.map(DetailGraduationResultResponse::from)
+			.findFirst()
+			.orElseThrow(IllegalArgumentException::new);
 	}
 }
