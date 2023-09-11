@@ -30,6 +30,10 @@ public class UserFixture {
 		return createUser("mj21", "1234", EnglishLevel.ENG34, "김경영", "60191021", 19, "경영", null, StudentCategory.NORMAL);
 	}
 
+	public static User 경영학과_19학번_영어_면제() {
+		return createUser("mj21", "1234", EnglishLevel.FREE, "김경영", "60191021", 19, "경영", null, StudentCategory.NORMAL);
+	}
+
 	public static User 경영학과_22학번() {
 		return createUser("mj22", "1234", EnglishLevel.ENG34, "김경영", "60221022", 22, "경영", null, StudentCategory.NORMAL);
 	}

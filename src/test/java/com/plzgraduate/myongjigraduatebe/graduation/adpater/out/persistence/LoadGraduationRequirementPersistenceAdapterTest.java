@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequi
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Import(LoadGraduationRequirementPersistenceAdapter.class)
+@Import({LoadGraduationRequirementPersistenceAdapter.class, GraduationRequirementMapper.class})
 class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSupport {
 
 	private static final int SUB_MAJOR_CREDIT = 10;
@@ -46,6 +46,25 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 			.contains(17, 12, 6, 10, 63, 20);
 	}
 
+	@DisplayName("영어 면제 유저의 졸업요건은 공통교양의 영어 카테고리 학점(6)이 일반교양 학점으로 이관된 졸업 요건이다.")
+	@Test
+	void loadFreeEnglishLevelUserGraduationRequirement() {
+	    //given
+		List<GraduationRequirementJpaEntity> graduationRequirements = createBusinessGraduationRequirements();
+		graduationRequirementRepository.saveAll(graduationRequirements);
+
+		User user = UserFixture.경영학과_19학번_영어_면제();
+
+	    //when
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.loadGraduationRequirement(
+			user);
+
+	    //then
+		Assertions.assertThat(graduationRequirement)
+			.extracting("commonCultureCredit", "normalCultureCredit")
+			.contains(11, 16);
+	}
+
 
 	private List<GraduationRequirementJpaEntity> createBusinessGraduationRequirements() {
 
@@ -62,8 +81,19 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 			.majorCredit(63)
 			.freeElectiveCredit(22).build();
 
-		//18~23 경영대 졸업 요건
 		GraduationRequirementJpaEntity graduationRequirementJpaEntityB = GraduationRequirementJpaEntity.builder()
+			.college(BUSINESS)
+			.subMajorCredit(SUB_MAJOR_CREDIT)
+			.startEntryYear(16)
+			.endEntryYear(17).commonCultureCredit(15)
+			.coreCultureCredit(12)
+			.basicAcademicalCredit(6)
+			.normalCultureCredit(10)
+			.majorCredit(63)
+			.freeElectiveCredit(22).build();
+
+		//18~23 경영대 졸업 요건
+		GraduationRequirementJpaEntity graduationRequirementJpaEntityC = GraduationRequirementJpaEntity.builder()
 			.college(BUSINESS)
 			.subMajorCredit(0)
 			.startEntryYear(18)
@@ -74,17 +104,6 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 			.normalCultureCredit(10)
 			.majorCredit(63)
 			.freeElectiveCredit(20).build();
-
-		GraduationRequirementJpaEntity graduationRequirementJpaEntityC = GraduationRequirementJpaEntity.builder()
-			.college(BUSINESS)
-			.subMajorCredit(SUB_MAJOR_CREDIT)
-			.startEntryYear(16)
-			.endEntryYear(17).commonCultureCredit(15)
-			.coreCultureCredit(12)
-			.basicAcademicalCredit(6)
-			.normalCultureCredit(10)
-			.majorCredit(63)
-			.freeElectiveCredit(22).build();
 
 		GraduationRequirementJpaEntity graduationRequirementJpaEntityD = GraduationRequirementJpaEntity.builder()
 			.college(BUSINESS)
