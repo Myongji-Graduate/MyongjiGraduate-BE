@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,9 +12,9 @@ public class GraduationRequirement {
 	private final int majorCredit;
 	private final int subMajorCredit;
 	private final int basicAcademicalCredit;
-	private final int commonCultureCredit;
+	private int commonCultureCredit;
 	private final int coreCultureCredit;
-	private final int normalCultureCredit;
+	private int normalCultureCredit;
 	private final int freeElectiveCredit;
 
 	@Builder
@@ -26,5 +28,10 @@ public class GraduationRequirement {
 		this.coreCultureCredit = coreCultureCredit;
 		this.normalCultureCredit = normalCultureCredit;
 		this.freeElectiveCredit = freeElectiveCredit;
+	}
+
+	public void transferEnglishCategoryCredit() {
+		commonCultureCredit -= ENGLISH.getTotalCredit();
+		normalCultureCredit += ENGLISH.getTotalCredit();
 	}
 }
