@@ -2,7 +2,7 @@ package com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web;
 
 import javax.validation.constraints.NotNull;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.command.ParsingTextCommand;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -14,24 +15,34 @@ public class TakenLecture {
 	private final Long id;
 	private final User user;
 	private final Lecture lecture;
-	private final int year;
+	private final Integer year;
 	private final Semester semester;
+	private final Instant createdAt;
 
 	@Builder
-	private TakenLecture(Long id, User user, Lecture lecture, int year, Semester semester) {
+	private TakenLecture(Long id, User user, Lecture lecture, Integer year, Semester semester, Instant createdAt) {
 		this.id = id;
 		this.user = user;
 		this.lecture = lecture;
 		this.year = year;
 		this.semester = semester;
+		this.createdAt = createdAt;
 	}
 
-	public static TakenLecture of(User user, Lecture lecture, int year, Semester semester) {
+	public static TakenLecture of(User user, Lecture lecture, Integer year, Semester semester) {
 		return TakenLecture.builder()
 			.user(user)
 			.lecture(lecture)
 			.year(year)
 			.semester(semester)
+			.build();
+	}
+
+	public static TakenLecture custom(User user, Lecture lecture) {
+		return TakenLecture.builder()
+			.user(user)
+			.lecture(lecture)
+			.year(2099)
 			.build();
 	}
 

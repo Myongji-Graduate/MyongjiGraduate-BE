@@ -26,7 +26,7 @@ import lombok.experimental.SuperBuilder;
 public class UserJpaEntity extends TimeBaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(unique = true, nullable = false)
@@ -40,7 +40,7 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	private String name;
 
-	@Column(columnDefinition = "char(8)", unique = true, nullable = false)
+	@Column(unique = true, nullable = false)
 	private String studentNumber;
 
 	private int entryYear;

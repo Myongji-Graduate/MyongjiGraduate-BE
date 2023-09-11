@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,7 +27,7 @@ public class GlobalExceptionHandler {
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
 	}
 
-	@ExceptionHandler(AuthenticationException.class)
+	@ExceptionHandler(UnAuthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ExceptionResponse handleUnAuthorizedException(Exception e) {
 		log.debug("unauthorized exception occurred: {}", e.getMessage(), e);
@@ -41,6 +39,13 @@ public class GlobalExceptionHandler {
 	public ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.debug("validation exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getBindingErrorMessage(e));
+	}
+
+	@ExceptionHandler({PdfParsingException.class, InvalidPdfException.class})
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ExceptionResponse handlePdfException(Exception e) {
+		log.warn("pdf exception occurred: {}", e.getMessage(), e);
+		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
 	}
 
 	@ExceptionHandler({RuntimeException.class, Exception.class})

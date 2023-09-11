@@ -1,7 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out;
 
+import java.util.List;
+
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface DeleteTakenLecturePort {
-	void deleteTakenLecturesByUser(User user);
+	void deleteAllTakenLecturesByUser(User user);
+
+	void deleteTakenLecturesByIds(List<Long> deleteIds);
 }

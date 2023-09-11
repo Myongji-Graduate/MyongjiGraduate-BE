@@ -3,9 +3,8 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.service.PdfParsingException;
+import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
