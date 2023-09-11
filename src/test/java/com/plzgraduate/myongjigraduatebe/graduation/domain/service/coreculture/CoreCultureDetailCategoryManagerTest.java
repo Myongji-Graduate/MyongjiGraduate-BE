@@ -41,7 +41,7 @@ class CoreCultureDetailCategoryManagerTest {
 		Set<CoreCulture> graduationLectures) {
     
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02110"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02111"), 2019, Semester.FIRST),
@@ -88,7 +88,7 @@ class CoreCultureDetailCategoryManagerTest {
 		Set<CoreCulture> graduationLectures) {
     
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
@@ -143,7 +143,7 @@ class CoreCultureDetailCategoryManagerTest {
 	void generateUnCompletedCultureArtDetailCategoryResultWith_2022_First() {
     
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02155"), 2022, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02156"), 2022, Semester.FIRST)

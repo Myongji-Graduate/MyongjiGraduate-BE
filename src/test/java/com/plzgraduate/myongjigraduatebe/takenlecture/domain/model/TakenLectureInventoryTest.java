@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class TakenLectureInventoryTest {
 
-	private final User user = UserFixture.경영학과_19학번();
+	private final User user = UserFixture.경영학과_19학번_ENG34();
 	private final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 	private final TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>(Set.of(
 		TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),

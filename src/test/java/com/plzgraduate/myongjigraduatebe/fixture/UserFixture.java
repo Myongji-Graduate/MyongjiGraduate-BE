@@ -26,7 +26,11 @@ public class UserFixture {
 		return createUser("mj12", "1234", EnglishLevel.ENG34, "김행정", "60211012", 21, "행정", null, StudentCategory.NORMAL);
 	}
 
-	public static User 경영학과_19학번() {
+	public static User 경영학과_19학번_ENG12() {
+		return createUser("mj21", "1234", EnglishLevel.ENG12, "김경영", "60191021", 19, "경영", null, StudentCategory.NORMAL);
+	}
+
+	public static User 경영학과_19학번_ENG34() {
 		return createUser("mj21", "1234", EnglishLevel.ENG34, "김경영", "60191021", 19, "경영", null, StudentCategory.NORMAL);
 	}
 

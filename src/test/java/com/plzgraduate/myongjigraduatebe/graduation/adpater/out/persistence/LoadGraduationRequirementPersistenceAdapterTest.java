@@ -33,7 +33,7 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 		List<GraduationRequirementJpaEntity> graduationRequirements = createBusinessGraduationRequirements();
 		graduationRequirementRepository.saveAll(graduationRequirements);
 
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 
 		//when
 		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.loadGraduationRequirement(

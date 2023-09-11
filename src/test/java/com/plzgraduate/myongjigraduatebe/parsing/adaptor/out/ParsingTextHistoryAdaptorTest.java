@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 	@Test
 	void saveParsingTextHistory() {
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		ParsingTextHistory parsingTextHistory = ParsingTextHistory
 			.builder()
 			.user(user)

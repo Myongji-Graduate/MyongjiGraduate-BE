@@ -29,7 +29,7 @@ class FreeElectiveGraduationResultTest {
 	@Test
 	void createFreeElectiveGraduationResult() {
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HBX01104"), 2019, Semester.FIRST), //회계원리
 			TakenLecture.of(user, mockLectureMap.get("HBX01113"), 2019, Semester.FIRST), //인적자원관리

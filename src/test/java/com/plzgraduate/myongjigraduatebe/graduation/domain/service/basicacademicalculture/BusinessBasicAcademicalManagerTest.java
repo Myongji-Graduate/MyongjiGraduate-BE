@@ -37,7 +37,7 @@ class BusinessBasicAcademicalManagerTest {
 		@Test
 		void 경영학과_19학번() {
 			//given
-			User user = UserFixture.경영학과_19학번();
+			User user = UserFixture.경영학과_19학번_ENG34();
 
 			Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),

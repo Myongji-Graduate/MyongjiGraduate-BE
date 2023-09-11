@@ -28,7 +28,7 @@ class NormalCultureGraduationResultTest {
 	@Test
 	void createNormalCultureGraduationResult() {
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
