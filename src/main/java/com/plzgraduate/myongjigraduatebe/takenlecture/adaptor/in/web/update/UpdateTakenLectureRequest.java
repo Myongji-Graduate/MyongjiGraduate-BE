@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.update.UpdateTakenLectureCommand;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,8 @@ public class UpdateTakenLectureRequest {
 
 	private List<Long> addedTakenLectures;
 
-	public UpdateTakenLectureRequest(List<Long> deletedTakenLectures, List<Long> addedTakenLectures) {
+	@Builder
+	private UpdateTakenLectureRequest(List<Long> deletedTakenLectures, List<Long> addedTakenLectures) {
 		this.deletedTakenLectures = deletedTakenLectures;
 		this.addedTakenLectures = addedTakenLectures;
 	}

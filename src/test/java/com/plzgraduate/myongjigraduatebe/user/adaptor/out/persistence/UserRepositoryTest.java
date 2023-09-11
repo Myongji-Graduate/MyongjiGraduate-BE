@@ -24,6 +24,7 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		UserJpaEntity user1 = createUserEntity("mju1001", "1q2w3e4r!", "60181666");
 		UserJpaEntity user2 = createUserEntity("mju1002", "1q2w3e4r!", "60181667");
 		userRepository.saveAll(List.of(user1, user2));
+
 		//when
 		Optional<UserJpaEntity> user = userRepository.findByAuthId("mju1001");
 
@@ -39,6 +40,7 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		String authId = "mju1001";
 		UserJpaEntity user = createUserEntity(authId, "1q2w3e4r!", "60181666");
 		userRepository.save(user);
+
 		//when
 		boolean check= userRepository.existsByAuthId(authId);
 
@@ -53,6 +55,7 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		String studentNumber = "60181666";
 		UserJpaEntity user = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
 		userRepository.save(user);
+
 		//when
 		boolean check= userRepository.existsByStudentNumber(studentNumber);
 

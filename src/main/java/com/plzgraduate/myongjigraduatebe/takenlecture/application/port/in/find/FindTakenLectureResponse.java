@@ -18,8 +18,7 @@ public class FindTakenLectureResponse {
 		this.takenLectures = takenLectures;
 	}
 
-	public static FindTakenLectureResponse from(List<TakenLectureResponse> takenLectures) {
-		int totalCredit = takenLectures.stream().mapToInt(TakenLectureResponse::getCredit).sum();
+	public static FindTakenLectureResponse from(int totalCredit, List<TakenLectureResponse> takenLectures) {
 		return FindTakenLectureResponse.builder()
 			.totalCredit(totalCredit)
 			.takenLectures(takenLectures)

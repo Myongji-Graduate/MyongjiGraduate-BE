@@ -11,6 +11,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.FindTakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.TakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -24,7 +25,7 @@ class FindTakenLectureService implements FindTakenLectureUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 
-	private final com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort findTakenLecturePort;
+	private final FindTakenLecturePort findTakenLecturePort;
 
 	@Override
 	public FindTakenLectureResponse getTakenLectures(Long userId) {
@@ -32,6 +33,7 @@ class FindTakenLectureService implements FindTakenLectureUseCase {
 		List<TakenLecture> takenLectures = findTakenLecturePort.findTakenLecturesByUser(user);
 		sortTakenLectures(takenLectures);
 		return FindTakenLectureResponse.from(
+			calculateTotalCredit(takenLectures),
 			takenLectures.stream()
 				.map(TakenLectureResponse::from)
 				.collect(Collectors.toList())
@@ -44,4 +46,22 @@ class FindTakenLectureService implements FindTakenLectureUseCase {
 			.thenComparing(TakenLecture::getCreatedAt, Comparator.reverseOrder()));
 	}
 
+	private int calculateTotalCredit(List<TakenLecture> takenLectures) {
+		int totalCredit = takenLectures
+			.stream()
+			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
+			.sum();
+		if(checkChapelCountIsFour(takenLectures)) {
+			totalCredit += 2;
+		}
+		return totalCredit;
+	}
+
+	private boolean checkChapelCountIsFour(List<TakenLecture> takenLectures) {
+		long chapelCount = takenLectures
+			.stream()
+			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals("KMA02101"))
+			.count();
+		return chapelCount >= 4;
+	}
 }

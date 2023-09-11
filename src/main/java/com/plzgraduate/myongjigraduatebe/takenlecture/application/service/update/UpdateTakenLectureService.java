@@ -27,13 +27,13 @@ class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 	private final FindLecturesByIdUseCase findLecturesByIdUseCase;
 	private final DeleteTakenLecturePort deleteTakenLecturePort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
+
 	@Override
 	public void updateTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand) {
 		Long userId = updateTakenLectureCommand.getUserId();
 		User user = findUserUseCase.findUserById(userId);
 		deleteTakenLectures(updateTakenLectureCommand);
-		List<Lecture> addedLectures = findAddedLecturesByIds(
-			updateTakenLectureCommand);
+		List<Lecture> addedLectures = findAddedLecturesByIds(updateTakenLectureCommand);
 		addCustomTakenLectures(user, addedLectures);
 	}
 
@@ -53,5 +53,4 @@ class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 		List<Long> deletedTakenLectureIds = updateTakenLectureCommand.getDeletedTakenLectures();
 		deleteTakenLecturePort.deleteTakenLecturesByIds(deletedTakenLectureIds);
 	}
-
 }

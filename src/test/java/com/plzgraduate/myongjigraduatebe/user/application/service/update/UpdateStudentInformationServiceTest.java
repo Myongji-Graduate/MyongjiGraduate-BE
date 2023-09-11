@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.application.service.update;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,7 @@ class UpdateStudentInformationServiceTest {
 	@InjectMocks
 	private UpdateStudentInformationService updateStudentInformationService;
 
+	@DisplayName("User의 하생정보를 수정한다.")
 	@Test
 	void updateUser() {
 		//given

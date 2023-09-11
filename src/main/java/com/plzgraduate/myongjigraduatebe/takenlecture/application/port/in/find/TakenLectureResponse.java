@@ -9,15 +9,10 @@ import lombok.Getter;
 public class TakenLectureResponse {
 
 	private final Long id;
-
 	private final String year;
-
 	private final String semester;
-
 	private final String lectureCode;
-
 	private final String lectureName;
-
 	private final int credit;
 
 	@Builder
