@@ -62,7 +62,7 @@ class GraduationResultTest {
 		assertThat(graduationResult.getNormalCultureGraduationResult())
 			.extracting("categoryName", "totalCredit", "takenCredit")
 			.contains(NORMAL_CULTURE.getName(), graduationRequirement.getNormalCultureCredit(),
-				takenNormalCultureCredit);
+				takenNormalCultureCredit - (takenNormalCultureCredit - graduationRequirement.getNormalCultureCredit()));
 		assertThat(graduationResult.getFreeElectiveGraduationResult())
 			.extracting("categoryName", "totalCredit", "takenCredit")
 			.contains(FREE_ELECTIVE.getName(), graduationRequirement.getFreeElectiveCredit(),

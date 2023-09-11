@@ -71,8 +71,7 @@ public class GraduationResult {
 	private void handleLeftTakenNormaCulture(TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		this.normalCultureGraduationResult = NormalCultureGraduationResult.create(
-			graduationRequirement.getNormalCultureCredit(), takenLectureInventory,
-			detailGraduationResults);
+			graduationRequirement.getNormalCultureCredit(), takenLectureInventory, detailGraduationResults);
 
 		normalCultureGraduationResult.checkCompleted();
 	}

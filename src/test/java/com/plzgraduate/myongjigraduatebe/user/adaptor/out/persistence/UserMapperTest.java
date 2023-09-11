@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +58,7 @@ class UserMapperTest extends PersistenceTestSupport {
 	private User createUser(String authId, String password, EnglishLevel englishLevel, String name,
 		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		return User.builder()
+			.id(1L)
 			.authId(authId)
 			.password(password)
 			.name(name)

@@ -66,6 +66,10 @@ public class UserFixture {
 		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "응용소프트웨어", null, StudentCategory.NORMAL);
 	}
 
+	public static User 응용소프트웨어학과_19학번_영어_면제() {
+		return createUser("mj22", "1234", EnglishLevel.FREE, "김응용", "60191022", 19, "응용소프트웨어", null, StudentCategory.NORMAL);
+	}
+
 	public static User 데이터테크놀로지학과_19학번() {
 		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "데이터테크놀로지", null, StudentCategory.NORMAL);
 	}

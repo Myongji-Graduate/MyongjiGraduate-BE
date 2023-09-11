@@ -60,14 +60,14 @@ class CheckGraduationServiceTest {
 	@Test
 	void checkGraduation() {
 		//given
-		User user = UserFixture.응용소프트웨어학과_19학번();
+		User user = UserFixture.응용소프트웨어학과_19학번_영어_면제();
 		given(loadGraduationRequirementPort.loadGraduationRequirement(user))
 			.willReturn(GraduationRequirement.builder()
-				.commonCultureCredit(15)
+				.commonCultureCredit(9)
 				.coreCultureCredit(12)
 				.basicAcademicalCredit(3)
 				.majorCredit(3)
-				.normalCultureCredit(3)
+				.normalCultureCredit(9)
 				.freeElectiveCredit(3)
 				.totalCredit(41).build());
 		given(loadTakenLecturePort.loadTakenLectures(user))
