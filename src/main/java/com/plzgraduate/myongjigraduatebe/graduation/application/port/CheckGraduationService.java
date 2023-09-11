@@ -54,8 +54,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(
 			loadTakenLecturePort.loadTakenLectures(user));
 
-		ChapelResult chapelResult = generateChapelResult(
-			takenLectureInventory);
+		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
 			takenLectureInventory, graduationRequirement);
