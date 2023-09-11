@@ -36,7 +36,7 @@ class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
 		List<Lecture> lectures = lecturePersistenceAdaptor.findLecturesByLectureCodes(lectureCodes);
 
 		//then
-		assertThat(lectures.size()).isEqualTo(lectureCodes.size());
+		assertThat(lectures).hasSameSizeAs(lectureCodes);
 
 	}
 
@@ -53,7 +53,7 @@ class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
 		List<Lecture> lectures = lecturePersistenceAdaptor.findLecturesByIds(lectureIds);
 
 		//then
-		assertThat(lectures.size()).isEqualTo(lectureIds.size());
+		assertThat(lectures).hasSameSizeAs(lectureIds);
 	}
 
 	private Lecture createLecture(Long id, String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
