@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.FindLecturesByLectureCodeUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.find.FindLecturesByLectureCodeUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 

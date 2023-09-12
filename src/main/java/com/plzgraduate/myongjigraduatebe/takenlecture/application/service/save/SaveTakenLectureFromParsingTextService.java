@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.FindLecturesByLectureCodeUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.find.FindLecturesByLectureCodeUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.SaveTakenLectureCommand;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.SaveTakenLectureFromParsingTextUseCase;
