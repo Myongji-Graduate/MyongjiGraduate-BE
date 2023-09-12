@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

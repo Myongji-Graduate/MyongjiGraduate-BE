@@ -116,7 +116,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 			graduationRequirement.getBasicAcademicalCredit());
 	}
 
-	private static GraduationManager<BasicAcademicalCulture> determineBasicAcademicalCultureGraduationManager(
+	private GraduationManager<BasicAcademicalCulture> determineBasicAcademicalCultureGraduationManager(
 		User user) {
 		GraduationManager<BasicAcademicalCulture> basicAcademicalCultureGraduationManager;
 		switch (findBelongingCollege(user.getMajor())) {
@@ -133,8 +133,8 @@ class CheckGraduationService implements CheckGraduationUseCase {
 		return basicAcademicalCultureGraduationManager;
 	}
 
-	private DetailGraduationResult generateMajorDetailGraduationResult(User user, TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
+	private DetailGraduationResult generateMajorDetailGraduationResult(User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		Set<Major> graduationMajors = loadMajorPort.loadMajor(user);
 		GraduationManager<Major> majorGraduationManager = new MajorManager();
 		return majorGraduationManager.createDetailGraduationResult(user,

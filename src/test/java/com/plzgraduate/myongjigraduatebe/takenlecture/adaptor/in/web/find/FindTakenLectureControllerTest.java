@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.in.web.find;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
