@@ -6,7 +6,6 @@ import javax.persistence.PersistenceContext;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.LectureQueryRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @TestConfiguration
