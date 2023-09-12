@@ -19,6 +19,7 @@ class TakenLectureMapper {
 			.lecture(mapToLectureDomainEntity(takenLecture.getLecture()))
 			.year(takenLecture.getYear())
 			.semester(takenLecture.getSemester())
+			.createdAt(takenLecture.getCreatedAt())
 			.build();
 	}
 
@@ -72,6 +73,7 @@ class TakenLectureMapper {
 	private Lecture mapToLectureDomainEntity(LectureJpaEntity lecture) {
 
 		return Lecture.builder()
+			.id(lecture.getId())
 			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
@@ -83,6 +85,7 @@ class TakenLectureMapper {
 	private LectureJpaEntity mapToLectureJpaEntity(Lecture lecture) {
 
 		return LectureJpaEntity.builder()
+			.id(lecture.getId())
 			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())

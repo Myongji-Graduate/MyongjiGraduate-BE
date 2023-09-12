@@ -9,4 +9,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.
 public interface LectureRepository extends JpaRepository<LectureJpaEntity, Long> {
 
 	List<LectureJpaEntity> findByLectureCodeIn(List<String> lectureCodes);
+
+	List<LectureJpaEntity> findByIdIn(List<Long> ids);
 }

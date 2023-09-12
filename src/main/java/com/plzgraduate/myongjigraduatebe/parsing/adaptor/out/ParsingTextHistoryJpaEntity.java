@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -33,6 +34,7 @@ public class ParsingTextHistoryJpaEntity extends TimeBaseEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	private UserJpaEntity user;
 
+	@Column(length = 3000)
 	private String parsingText;
 
 	@Enumerated(EnumType.STRING)

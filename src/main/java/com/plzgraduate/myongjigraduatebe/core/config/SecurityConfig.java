@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,15 +19,17 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenAuthenticationFilter;
-import com.plzgraduate.myongjigraduatebe.auth.jwt.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationProvider;
+import com.plzgraduate.myongjigraduatebe.auth.security.TokenAuthenticationFilter;
+import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-public class SecurityConfig{
+public class SecurityConfig {
 
 	public static final String API_V1_PREFIX = "/api/v1";
 
@@ -43,7 +47,7 @@ public class SecurityConfig{
 			.anyRequest()
 			.authenticated()
 			.and()
-			.addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(tokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.cors()
 			.configurationSource(corsConfigurationSource())
 			.and()
@@ -94,6 +98,21 @@ public class SecurityConfig{
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public JwtAuthenticationProvider jwtAuthenticationProvider(PasswordEncoder passwordEncoder, FindUserUseCase findUserUseCase) {
+		return new JwtAuthenticationProvider(passwordEncoder, findUserUseCase);
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(JwtAuthenticationProvider jwtAuthenticationProvider) {
+		return new ProviderManager(jwtAuthenticationProvider);
+	}
+
+	@Bean
+	public TokenAuthenticationFilter tokenAuthenticationFilter(TokenProvider tokenProvider) {
+		return new TokenAuthenticationFilter(tokenProvider);
 	}
 
 }

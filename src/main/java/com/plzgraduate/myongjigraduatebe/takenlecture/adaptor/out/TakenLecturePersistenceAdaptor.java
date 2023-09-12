@@ -6,19 +6,31 @@ import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.DeleteTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.LoadTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class TakenLecturePersistenceAdaptor implements SaveTakenLecturePort, DeleteTakenLecturePort, LoadTakenLecturePort {
+class TakenLecturePersistenceAdaptor implements FindTakenLecturePort, SaveTakenLecturePort, DeleteTakenLecturePort,
+	LoadTakenLecturePort {
 
 	private final TakenLectureRepository takenLectureRepository;
 	private final TakenLectureMapper takenLectureMapper;
+
+	@Override
+	public List<TakenLecture> findTakenLecturesByUser(User user) {
+		UserJpaEntity userJpaEntity = takenLectureMapper.mapToUserJpaEntity(user);
+		List<TakenLectureJpaEntity> takenLectures =
+			takenLectureRepository.findTakenLectureJpaEntityWithLectureByUser(userJpaEntity);
+		return takenLectures.stream().map(takenLectureMapper::mapToDomainEntity).collect(Collectors.toList());
+
+	}
 	@Override
 	public void saveTakenLectures(List<TakenLecture> takenLectures) {
 		List<TakenLectureJpaEntity> takenLecturesJpaEntities = takenLectures.stream()
@@ -28,13 +40,18 @@ class TakenLecturePersistenceAdaptor implements SaveTakenLecturePort, DeleteTake
 	}
 
 	@Override
-	public void deleteTakenLecturesByUser(User user) {
+	public void deleteAllTakenLecturesByUser(User user) {
 		takenLectureRepository.deleteAllByUser(takenLectureMapper.mapToUserJpaEntity(user));
 	}
 
 	@Override
+	public void deleteTakenLecturesByIds(List<Long> deleteIds) {
+		takenLectureRepository.deleteAllByIdInBatch(deleteIds);
+	}
+
+	@Override
 	public Set<TakenLecture> loadTakenLectures(User user) {
-		return takenLectureRepository.findById(user.getId()).stream()
+		return takenLectureRepository.findByUser(takenLectureMapper.mapToUserJpaEntity(user)).stream()
 			.map(takenLectureMapper::mapToDomainEntity)
 			.collect(Collectors.toSet());
 	}

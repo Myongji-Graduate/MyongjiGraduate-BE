@@ -18,10 +18,10 @@ public class ParsingInformation {
 	private final String studentNumber;
 	private final String major;
 	private final String changeMajor;
-	private String subMajor;
-	private String associatedMajor;
-	private StudentCategory studentCategory;
-	private List<ParsingTakenLectureDto> takenLectureInformation;
+	private final String subMajor;
+	private final String associatedMajor;
+	private final StudentCategory studentCategory;
+	private final List<ParsingTakenLectureDto> takenLectureInformation;
 
 	@Builder
 	public ParsingInformation(String studentName, String studentNumber, String major, String changeMajor, String subMajor,
