@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.service.find;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -14,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.service.FindLecturesByLectureCodeService;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 @ExtendWith(MockitoExtension.class)

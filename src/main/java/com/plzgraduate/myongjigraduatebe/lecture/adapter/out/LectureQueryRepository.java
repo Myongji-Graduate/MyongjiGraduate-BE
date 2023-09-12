@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class LectureQueryRepository {
+class LectureQueryRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 	private final QLectureJpaEntity lecture = QLectureJpaEntity.lectureJpaEntity;

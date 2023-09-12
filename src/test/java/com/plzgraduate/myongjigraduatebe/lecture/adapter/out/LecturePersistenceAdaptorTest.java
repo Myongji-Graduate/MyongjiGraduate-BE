@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -14,11 +13,14 @@ import org.springframework.context.annotation.Import;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
-@Import({LectureMapper.class, LecturePersistenceAdaptor.class})
+@Import({LectureMapper.class, LecturePersistenceAdaptor.class, TestQuerydslConfig.class})
 class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
 
 	@Autowired
 	private LectureRepository lectureRepository;
+
+	@Autowired
+	private LectureQueryRepository lectureQueryRepository;
 
 	@Autowired
 	private LecturePersistenceAdaptor lecturePersistenceAdaptor;

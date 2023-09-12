@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.lecture.application.service;
+package com.plzgraduate.myongjigraduatebe.lecture.application.service.search;
 
 import java.util.List;
 import java.util.stream.Collectors;
