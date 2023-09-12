@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 class LectureQueryRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
-	private final QLectureJpaEntity lecture = QLectureJpaEntity.lectureJpaEntity;
+	private static final QLectureJpaEntity lecture = QLectureJpaEntity.lectureJpaEntity;
 
 	public List<LectureJpaEntity> searchByNameOrCode(String type, String keyword) {
 		return jpaQueryFactory.selectFrom(lecture)
