@@ -7,16 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class SearchLecture {
-	private Long id;
-	private String lectureCode;
-	private String name;
-	private int credit;
-	private boolean isRevoked;
+public class LectureResponse {
+	private final Long id;
+	private final String lectureCode;
+	private final String name;
+	private final int credit;
+	private final boolean isRevoked;
 
 	@Builder
-	private SearchLecture(Long id, String lectureCode, String name, int credit, boolean isRevoked) {
+	private LectureResponse(Long id, String lectureCode, String name, int credit, boolean isRevoked) {
 		this.id = id;
 		this.lectureCode = lectureCode;
 		this.name = name;
@@ -24,8 +23,8 @@ public class SearchLecture {
 		this.isRevoked = isRevoked;
 	}
 
-	public static SearchLecture of(Lecture lecture) {
-		return SearchLecture.builder()
+	public static LectureResponse of(Lecture lecture) {
+		return LectureResponse.builder()
 			.id(lecture.getId())
 			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())

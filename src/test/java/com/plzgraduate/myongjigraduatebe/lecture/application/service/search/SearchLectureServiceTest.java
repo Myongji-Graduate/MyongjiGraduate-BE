@@ -1,9 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.service.search;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 import java.util.List;
 
@@ -14,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureCommand;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.SearchLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
@@ -42,10 +40,10 @@ class SearchLectureServiceTest {
 			.willReturn(lectures);
 
 		//when
-		List<SearchLecture> searchLectures = searchLectureService.searchLectures(command);
+		SearchLectureResponse searchLectures = searchLectureService.searchLectures(command);
 
 		//then
-		assertThat(searchLectures)
+		assertThat(searchLectures.getLectures())
 			.hasSize(2)
 			.extracting("id", "lectureCode", "name", "credit", "isRevoked")
 			.containsExactlyInAnyOrder(

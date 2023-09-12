@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.BDDMockito.given;
@@ -16,7 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLecture;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.LectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
@@ -31,17 +33,19 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 	@Test
 	void searchLecture() throws Exception {
 		//given
-		List<SearchLecture> searchResults = List.of(
-			SearchLecture.builder().id(1L).build()
+		List<LectureResponse> searchLectures = List.of(
+			LectureResponse.builder().id(1L).build()
 		);
-		given(searchLectureUseCase.searchLectures(any())).willReturn(searchResults);
+		SearchLectureResponse searchLectureResponse = SearchLectureResponse.builder().lectures(searchLectures).build();
+		given(searchLectureUseCase.searchLectures(any())).willReturn(searchLectureResponse);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/lectures")
 				.param("type", "name")
 				.param("keyword", "기초"))
+			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$", hasSize(1)));
+			.andExpect(jsonPath("$.lectures", hasSize(1)));
 
 		then(searchLectureUseCase).should(times(1)).searchLectures(any());
 	}
@@ -55,6 +59,7 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 		mockMvc.perform(get("/api/v1/lectures")
 				.param("type", "name")
 				.param("keyword", ""))
+			.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.message").value("검색어를 2자리 이상 입력해주세요."));
 

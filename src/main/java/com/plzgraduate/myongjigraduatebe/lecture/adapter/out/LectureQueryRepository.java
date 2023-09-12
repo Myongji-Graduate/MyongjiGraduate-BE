@@ -23,11 +23,9 @@ class LectureQueryRepository {
 	}
 
 	private BooleanExpression equalsType(String type, String keyword) {
-		if(type.equals("name")) {
-			return lecture.name.contains(keyword);
-		} else if (type.equals("code")) {
+		if (type.equals("code")) {
 			return lecture.lectureCode.contains(keyword);
 		}
-		return null;
+		return lecture.name.contains(keyword);
 	}
 }
