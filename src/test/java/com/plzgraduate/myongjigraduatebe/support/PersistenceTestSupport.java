@@ -1,5 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -18,4 +22,8 @@ import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 public abstract class PersistenceTestSupport {
 	@Container
 	protected static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8").withDatabaseName("mju-graduate");
+
+	@PersistenceContext
+	protected EntityManager entityManager;
+
 }
