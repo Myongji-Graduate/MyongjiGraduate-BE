@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -82,4 +83,18 @@ public class User {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		User user = (User)o;
+		return Objects.equals(authId, user.authId) && Objects.equals(studentNumber, user.studentNumber);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(authId, studentNumber);
+	}
 }

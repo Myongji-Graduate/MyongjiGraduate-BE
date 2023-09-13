@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.security;
+package com.plzgraduate.myongjigraduatebe.support;
 
 import java.util.Collections;
 

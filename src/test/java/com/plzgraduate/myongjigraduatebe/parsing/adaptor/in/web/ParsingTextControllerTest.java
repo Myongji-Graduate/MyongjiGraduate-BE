@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,7 +18,7 @@ import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.security.WithMockAuthenticationUser;
+import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 
 @WebMvcTest(controllers = ParsingTextController.class)
