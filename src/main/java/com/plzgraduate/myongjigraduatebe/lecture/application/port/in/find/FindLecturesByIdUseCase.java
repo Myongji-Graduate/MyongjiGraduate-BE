@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.lecture.application.port.in;
+package com.plzgraduate.myongjigraduatebe.lecture.application.port.in.find;
 
 import java.util.List;
 

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Optional;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -34,10 +37,19 @@ public class GlobalExceptionHandler {
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
 	}
 
+	@ExceptionHandler(ConstraintViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ExceptionResponse handleValidationException(ConstraintViolationException e) {
+		log.info("validated exception occurred: {}", e.getMessage(), e);
+		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getViolationErrorMessage(e));
+	}
+
+
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.debug("validation exception occurred: {}", e.getMessage(), e);
+		log.debug("validation exception occurred: {}",  e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getBindingErrorMessage(e));
 	}
 
@@ -57,6 +69,10 @@ public class GlobalExceptionHandler {
 
 	private String getMessage(Exception e) {
 		return Optional.ofNullable(e.getCause()).map(Throwable::getMessage).orElse(e.getMessage());
+	}
+
+	private String getViolationErrorMessage(ConstraintViolationException e) {
+		return e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).findFirst().orElse(null);
 	}
 
 	private String getBindingErrorMessage(MethodArgumentNotValidException e) {
