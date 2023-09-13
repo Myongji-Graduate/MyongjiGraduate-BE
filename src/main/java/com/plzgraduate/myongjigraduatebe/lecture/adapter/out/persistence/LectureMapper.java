@@ -19,6 +19,7 @@ public class LectureMapper {
 	Lecture mapToLectureDomainEntity(LectureJpaEntity lecture) {
 
 		return Lecture.builder()
+			.id(lecture.getId())
 			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
