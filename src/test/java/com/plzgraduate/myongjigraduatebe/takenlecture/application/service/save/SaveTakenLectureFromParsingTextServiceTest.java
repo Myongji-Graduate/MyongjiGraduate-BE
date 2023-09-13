@@ -82,7 +82,6 @@ class SaveTakenLectureFromParsingTextServiceTest {
 		Lecture lecture1 = createLecture("KMA02122");
 		given(findLecturesByLectureCodeUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
 			.willReturn(List.of(lecture1));
-		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(List.class);
 
 		//when //then
 		assertThatThrownBy(() -> saveTakenLectureFromParsingTextService.saveTakenLectures(command))
