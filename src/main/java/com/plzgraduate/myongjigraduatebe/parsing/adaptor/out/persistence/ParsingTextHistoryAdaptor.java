@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out.persistence;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.SaveParsingTextHistoryPort;

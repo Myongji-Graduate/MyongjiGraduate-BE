@@ -1,18 +1,16 @@
-package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.out.persistence;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
-import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserJpaEntity;
 
 import lombok.AccessLevel;
@@ -21,22 +19,24 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "parsing_text_history")
+@Table(name = "taken_lecture")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
-public class ParsingTextHistoryJpaEntity extends TimeBaseEntity {
+public class TakenLectureJpaEntity extends TimeBaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private UserJpaEntity user;
 
-	@Column(length = 3000)
-	private String parsingText;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private LectureJpaEntity lecture;
 
-	@Enumerated(EnumType.STRING)
-	private ParsingResult parsingResult;
+	private Integer year;
+
+	private Semester semester;
+
 }

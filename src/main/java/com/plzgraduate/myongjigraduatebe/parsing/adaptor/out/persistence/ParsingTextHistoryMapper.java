@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out.persistence;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

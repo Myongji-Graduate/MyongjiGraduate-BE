@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.out.persistence;
 
 import java.util.List;
 import java.util.Set;
