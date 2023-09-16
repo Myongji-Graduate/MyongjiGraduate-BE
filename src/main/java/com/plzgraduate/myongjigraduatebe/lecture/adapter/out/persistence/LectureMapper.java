@@ -2,12 +2,12 @@ package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
 
 import org.springframework.stereotype.Component;
 
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorLectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -71,9 +71,9 @@ public class LectureMapper {
 			.build();
 	}
 
-	BasicAcademicalCulture mapToDomainBasicAcademicalCultureModel(BasicAcademicalCultureJpaEntity entity) {
+	BasicAcademicalCultureLecture mapToDomainBasicAcademicalCultureModel(BasicAcademicalCultureLectureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
-		return BasicAcademicalCulture.builder()
+		return BasicAcademicalCultureLecture.builder()
 			.lecture(
 				Lecture.builder()
 					.lectureCode(lectureJpaEntity.getLectureCode())

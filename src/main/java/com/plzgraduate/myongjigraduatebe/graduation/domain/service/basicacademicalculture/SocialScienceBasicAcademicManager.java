@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -36,7 +36,7 @@ public class SocialScienceBasicAcademicManager implements BasicAcademicalManager
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCulture> graduationLectures,
+		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCultureLecture> graduationLectures,
 		int basicAcademicalCredit) {
     
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);

@@ -4,19 +4,19 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class BasicAcademicalCulture {
+public class BasicAcademicalCultureLecture {
 
 	private Lecture lecture;
 	private String college;
 
 	@Builder
-	private BasicAcademicalCulture(Lecture lecture, String college) {
+	private BasicAcademicalCultureLecture(Lecture lecture, String college) {
 		this.lecture = lecture;
 		this.college = college;
 	}
 
-	public static BasicAcademicalCulture of(Lecture lecture, String college) {
-		return BasicAcademicalCulture.builder()
+	public static BasicAcademicalCultureLecture of(Lecture lecture, String college) {
+		return BasicAcademicalCultureLecture.builder()
 			.lecture(lecture)
 			.college(college)
 			.build();

@@ -26,7 +26,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindBasicA
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCoreCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindMajorPort;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
@@ -107,18 +107,18 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	private DetailGraduationResult generteBasicAcademicalDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<BasicAcademicalCulture> graduationBasicAcademicalCultures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(
+		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(
 			user);
-		GraduationManager<BasicAcademicalCulture> basicAcademicalCultureGraduationManager = determineBasicAcademicalCultureGraduationManager(
+		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager = determineBasicAcademicalCultureGraduationManager(
 			user);
 		return basicAcademicalCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationBasicAcademicalCultures,
+			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
 			graduationRequirement.getBasicAcademicalCredit());
 	}
 
-	private GraduationManager<BasicAcademicalCulture> determineBasicAcademicalCultureGraduationManager(
+	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
 		User user) {
-		GraduationManager<BasicAcademicalCulture> basicAcademicalCultureGraduationManager;
+		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager;
 		switch (findBelongingCollege(user.getMajor())) {
 			case BUSINESS:
 				basicAcademicalCultureGraduationManager = new BusinessBasicAcademicalManager();

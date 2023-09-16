@@ -15,7 +15,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -30,7 +30,7 @@ class DefaultBasicAcademicalManagerTest {
 	class 인문대_학문기초교양 {
 		User user = UserFixture.영문학과_18학번();
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-		Set<BasicAcademicalCulture> basicAcademicalLectures = BasicAcademicalLectureFixture.인문대_학문기초교양();
+		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.인문대_학문기초교양();
 
 		@DisplayName("학문기초교양을 추가해서 들어도 12학점을 초과하지 않으며 통과한다.")
 		@Test

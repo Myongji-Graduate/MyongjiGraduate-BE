@@ -9,11 +9,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.BasicAcademicalCultureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
-class BasicAcademicalCultureRepositoryTest extends PersistenceTestSupport {
+class BasicAcademicalCultureLectureRepositoryTest extends PersistenceTestSupport {
 
 	@Autowired
 	private BasicAcademicalCultureRepository basicAcademicalCultureRepository;
@@ -23,11 +23,11 @@ class BasicAcademicalCultureRepositoryTest extends PersistenceTestSupport {
 	@ValueSource(strings = {"인문대", "사회과학대", "경영대", "법대", "ICT융합대"})
 	void findByCollege(String college) {
 		//given
-		List<BasicAcademicalCultureJpaEntity> basicAcademicalCultures = createBasicAcademicalCultures();
+		List<BasicAcademicalCultureLectureJpaEntity> basicAcademicalCultures = createBasicAcademicalCultures();
 		basicAcademicalCultureRepository.saveAll(basicAcademicalCultures);
 
 		//when
-		List<BasicAcademicalCultureJpaEntity> basicAcademicalCultureJpaEntities =
+		List<BasicAcademicalCultureLectureJpaEntity> basicAcademicalCultureJpaEntities =
 			basicAcademicalCultureRepository.findAllByCollege(college);
 
 		//then
@@ -35,16 +35,16 @@ class BasicAcademicalCultureRepositoryTest extends PersistenceTestSupport {
 			.contains(college);
 	}
 
-	private List<BasicAcademicalCultureJpaEntity> createBasicAcademicalCultures() {
-		BasicAcademicalCultureJpaEntity humanities = BasicAcademicalCultureJpaEntity.builder()
+	private List<BasicAcademicalCultureLectureJpaEntity> createBasicAcademicalCultures() {
+		BasicAcademicalCultureLectureJpaEntity humanities = BasicAcademicalCultureLectureJpaEntity.builder()
 			.college("인문대").build();
-		BasicAcademicalCultureJpaEntity socialScience = BasicAcademicalCultureJpaEntity.builder()
+		BasicAcademicalCultureLectureJpaEntity socialScience = BasicAcademicalCultureLectureJpaEntity.builder()
 			.college("사회과학대").build();
-		BasicAcademicalCultureJpaEntity business = BasicAcademicalCultureJpaEntity.builder()
+		BasicAcademicalCultureLectureJpaEntity business = BasicAcademicalCultureLectureJpaEntity.builder()
 			.college("경영대").build();
-		BasicAcademicalCultureJpaEntity law = BasicAcademicalCultureJpaEntity.builder()
+		BasicAcademicalCultureLectureJpaEntity law = BasicAcademicalCultureLectureJpaEntity.builder()
 			.college("법대").build();
-		BasicAcademicalCultureJpaEntity ict = BasicAcademicalCultureJpaEntity.builder()
+		BasicAcademicalCultureLectureJpaEntity ict = BasicAcademicalCultureLectureJpaEntity.builder()
 			.college("ICT융합대").build();
 		return List.of(humanities, socialScience, business, law, ict);
 	}

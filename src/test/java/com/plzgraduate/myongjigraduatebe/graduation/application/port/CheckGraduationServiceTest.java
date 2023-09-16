@@ -27,7 +27,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindBasicA
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCoreCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindMajorPort;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -111,7 +111,7 @@ class CheckGraduationServiceTest {
 				CoreCulture.of(mockLectureMap.get("KMA02135"), SCIENCE_TECHNOLOGY))));
 		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(user))
 			.willReturn(new HashSet<>(
-				Set.of(BasicAcademicalCulture.of(mockLectureMap.get("KMB02123"), ICT.getText()))));
+				Set.of(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMB02123"), ICT.getText()))));
 		given((findMajorPort.findMajor(user)))
 			.willReturn(new HashSet<>(Set.of(MajorLecture.of(mockLectureMap.get("HED01206"), "응용소프트웨어", 1, 18, 20))));
 

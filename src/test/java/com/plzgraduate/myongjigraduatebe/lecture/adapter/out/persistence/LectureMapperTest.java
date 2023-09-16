@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorLectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
@@ -60,16 +60,16 @@ class LectureMapperTest extends PersistenceTestSupport {
 	@Test
 	void mapToCBasicAcademicalCulture() {
 		//given
-		BasicAcademicalCultureJpaEntity basicAcademicalCultureEntity = BasicAcademicalCultureJpaEntity.builder()
+		BasicAcademicalCultureLectureJpaEntity basicAcademicalCultureEntity = BasicAcademicalCultureLectureJpaEntity.builder()
 			.lectureJpaEntity(LectureJpaEntity.builder().build())
 			.college("인문대").build();
 
 		//when
-		BasicAcademicalCulture basicAcademicalCulture = lectureMapper.mapToDomainBasicAcademicalCultureModel(
+		BasicAcademicalCultureLecture basicAcademicalCultureLecture = lectureMapper.mapToDomainBasicAcademicalCultureModel(
 			basicAcademicalCultureEntity);
 
 		//then
-		assertThat(basicAcademicalCulture.getCollege()).isEqualTo("인문대");
+		assertThat(basicAcademicalCultureLecture.getCollege()).isEqualTo("인문대");
 	}
 
 	@DisplayName("Major: Jpa 엔티티를 도메인 모델로 변환한다.")

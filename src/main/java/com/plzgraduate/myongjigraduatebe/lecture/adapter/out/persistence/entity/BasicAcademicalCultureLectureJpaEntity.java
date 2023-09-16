@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "basic_academical_culture")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BasicAcademicalCultureJpaEntity {
+public class BasicAcademicalCultureLectureJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class BasicAcademicalCultureJpaEntity {
 	private String college;
 
 	@Builder
-	private BasicAcademicalCultureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String college) {
+	private BasicAcademicalCultureLectureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String college) {
 		this.id = id;
 		this.lectureJpaEntity = lectureJpaEntity;
 		this.college = college;
