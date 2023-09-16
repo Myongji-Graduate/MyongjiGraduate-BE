@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "major")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MajorJpaEntity extends TimeBaseEntity {
+public class MajorJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

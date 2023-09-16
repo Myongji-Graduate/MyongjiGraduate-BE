@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 
 import lombok.AccessLevel;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "graduation_requirement")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GraduationRequirementJpaEntity extends TimeBaseEntity {
+public class GraduationRequirementJpaEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

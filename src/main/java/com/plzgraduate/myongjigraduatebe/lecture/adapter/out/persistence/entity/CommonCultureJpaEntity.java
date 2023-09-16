@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 
 import lombok.AccessLevel;
@@ -23,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "common_culture")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommonCultureJpaEntity extends TimeBaseEntity {
+public class CommonCultureJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
