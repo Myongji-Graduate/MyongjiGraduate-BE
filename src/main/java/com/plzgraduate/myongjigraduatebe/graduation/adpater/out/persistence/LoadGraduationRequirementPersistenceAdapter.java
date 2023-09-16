@@ -22,13 +22,13 @@ class LoadGraduationRequirementPersistenceAdapter implements LoadGraduationRequi
 		if (isDualMajorUser(user)) {
 			GraduationRequirementJpaEntity dualMajorRequirementEntity = graduationRequirementRepository.findDualMajorRequirementByUser(
 				College.findBelongingCollege(user.getMajor()), user.getEntryYear());
-			GraduationRequirement graduationRequirement = mapper.toModel(dualMajorRequirementEntity);
+			GraduationRequirement graduationRequirement = mapper.mapToDomainModel(dualMajorRequirementEntity);
 			checkUserEnglishLevel(user, graduationRequirement);
 			return graduationRequirement;
 		}
 		GraduationRequirementJpaEntity singleMajorRequirementEntity = graduationRequirementRepository.findSingleMajorRequirementByUser(
 			College.findBelongingCollege(user.getMajor()), user.getEntryYear());
-		GraduationRequirement graduationRequirement = mapper.toModel(singleMajorRequirementEntity);
+		GraduationRequirement graduationRequirement = mapper.mapToDomainModel(singleMajorRequirementEntity);
 		checkUserEnglishLevel(user, graduationRequirement);
 		return graduationRequirement;
 	}

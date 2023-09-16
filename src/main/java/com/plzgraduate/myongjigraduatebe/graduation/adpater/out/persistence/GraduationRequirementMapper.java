@@ -8,7 +8,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequi
 @Component
 public class GraduationRequirementMapper {
 
-	public GraduationRequirement toModel(GraduationRequirementJpaEntity entity) {
+	public GraduationRequirement mapToDomainModel(GraduationRequirementJpaEntity entity) {
 		return GraduationRequirement.builder()
 			.totalCredit(entity.getTotalCredit())
 			.majorCredit(entity.getMajorCredit())
