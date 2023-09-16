@@ -29,7 +29,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindMajorP
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -135,10 +135,10 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	private DetailGraduationResult generateMajorDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<Major> graduationMajors = findMajorPort.findMajor(user);
-		GraduationManager<Major> majorGraduationManager = new MajorManager();
+		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user);
+		GraduationManager<MajorLecture> majorGraduationManager = new MajorManager();
 		return majorGraduationManager.createDetailGraduationResult(user,
-			takenLectureInventory, graduationMajors, graduationRequirement.getMajorCredit());
+			takenLectureInventory, graduationMajorLectures, graduationRequirement.getMajorCredit());
 	}
 
 	private GraduationResult generateGraduationResult(ChapelResult chapelResult,

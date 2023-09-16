@@ -13,11 +13,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 @Import(LectureMapper.class)
@@ -76,12 +76,12 @@ class LectureMapperTest extends PersistenceTestSupport {
 	@Test
 	void mapToMajor() {
 		//given
-		MajorJpaEntity majorEntity = MajorJpaEntity.builder()
+		MajorLectureJpaEntity majorEntity = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(LectureJpaEntity.builder().build())
 			.major("응용소프트웨어").build();
 
 		//when
-		Major basicAcademicalCulture = lectureMapper.mapToDomainMajorModel(majorEntity);
+		MajorLecture basicAcademicalCulture = lectureMapper.mapToDomainMajorModel(majorEntity);
 
 		//then
 		assertThat(basicAcademicalCulture.getMajor()).isEqualTo("응용소프트웨어");

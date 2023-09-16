@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.MajorRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindMajorPort;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ class FindMajorPersistenceAdapter implements FindMajorPort {
 	private final LectureMapper mapper;
 
 	@Override
-	public Set<Major> findMajor(User user) {
+	public Set<MajorLecture> findMajor(User user) {
 		return majorRepository.findAllByMajor(user.getMajor()).stream()
 			.map(mapper::mapToDomainMajorModel)
 			.collect(Collectors.toSet());

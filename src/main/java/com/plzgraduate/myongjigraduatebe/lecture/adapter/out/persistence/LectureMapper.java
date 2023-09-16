@@ -6,12 +6,12 @@ import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 
 @Component
 public class LectureMapper {
@@ -87,9 +87,9 @@ public class LectureMapper {
 			.build();
 	}
 
-	Major mapToDomainMajorModel(MajorJpaEntity entity) {
+	MajorLecture mapToDomainMajorModel(MajorLectureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
-		return Major.builder()
+		return MajorLecture.builder()
 			.lecture(
 				Lecture.builder()
 					.lectureCode(lectureJpaEntity.getLectureCode())

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "major")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MajorJpaEntity {
+public class MajorLectureJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class MajorJpaEntity {
 	private int endEntryYear;
 
 	@Builder
-	private MajorJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String major, int mandatory,
+	private MajorLectureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String major, int mandatory,
 		int startEntryYear,
 		int endEntryYear) {
 		this.id = id;

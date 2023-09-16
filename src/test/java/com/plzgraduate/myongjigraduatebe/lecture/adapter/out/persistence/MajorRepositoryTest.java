@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.MajorRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
@@ -21,16 +21,16 @@ class MajorRepositoryTest extends PersistenceTestSupport {
 	@Test
 	void findAllByMajor() {
 	    //given
-		MajorJpaEntity majorJpaEntityA = MajorJpaEntity.builder()
+		MajorLectureJpaEntity majorLectureJpaEntityA = MajorLectureJpaEntity.builder()
 			.major("응용소프트웨어").build();
-		MajorJpaEntity majorJpaEntityB = MajorJpaEntity.builder()
+		MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
 			.major("데이터테크놀로지").build();
-		majorRepository.saveAll(List.of(majorJpaEntityA, majorJpaEntityB));
+		majorRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
 
 		String major = "응용소프트웨어";
 
 	    //when
-		List<MajorJpaEntity> majorLectures = majorRepository.findAllByMajor(major);
+		List<MajorLectureJpaEntity> majorLectures = majorRepository.findAllByMajor(major);
 
 		//then
 		assertThat(majorLectures).hasSize(1)

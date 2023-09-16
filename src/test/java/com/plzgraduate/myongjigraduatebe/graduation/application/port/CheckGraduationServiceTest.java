@@ -31,7 +31,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -113,7 +113,7 @@ class CheckGraduationServiceTest {
 			.willReturn(new HashSet<>(
 				Set.of(BasicAcademicalCulture.of(mockLectureMap.get("KMB02123"), ICT.getText()))));
 		given((findMajorPort.findMajor(user)))
-			.willReturn(new HashSet<>(Set.of(Major.of(mockLectureMap.get("HED01206"), "응용소프트웨어", 1, 18, 20))));
+			.willReturn(new HashSet<>(Set.of(MajorLecture.of(mockLectureMap.get("HED01206"), "응용소프트웨어", 1, 18, 20))));
 
 		//when
 		GraduationResponse graduationResponse = checkGraduationService.checkGraduation(user);
