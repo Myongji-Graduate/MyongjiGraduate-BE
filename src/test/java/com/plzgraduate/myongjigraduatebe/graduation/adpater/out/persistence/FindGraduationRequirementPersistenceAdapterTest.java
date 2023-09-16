@@ -16,19 +16,19 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequi
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Import({LoadGraduationRequirementPersistenceAdapter.class, GraduationRequirementMapper.class})
-class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSupport {
+@Import({FindGraduationRequirementPersistenceAdapter.class, GraduationRequirementMapper.class})
+class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSupport {
 
 	private static final int SUB_MAJOR_CREDIT = 10;
 
 	@Autowired
 	private GraduationRequirementRepository graduationRequirementRepository;
 	@Autowired
-	private LoadGraduationRequirementPersistenceAdapter loadGraduationRequirementPersistenceAdapter;
+	private FindGraduationRequirementPersistenceAdapter loadGraduationRequirementPersistenceAdapter;
 
 	@DisplayName("단일 전공 유저의 입학년도에 해당하는 졸업요건을 반환한다.")
 	@Test
-	void loadSingleMajorUserGraduationRequirement() {
+	void findSingleMajorUserGraduationRequirement() {
 		//given
 		List<GraduationRequirementJpaEntity> graduationRequirements = createBusinessGraduationRequirements();
 		graduationRequirementRepository.saveAll(graduationRequirements);
@@ -36,7 +36,7 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 		User user = UserFixture.경영학과_19학번_ENG34();
 
 		//when
-		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.loadGraduationRequirement(
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
 			user);
 
 		//then
@@ -48,7 +48,7 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 
 	@DisplayName("영어 면제 유저의 졸업요건은 공통교양의 영어 카테고리 학점(6)이 일반교양 학점으로 이관된 졸업 요건이다.")
 	@Test
-	void loadFreeEnglishLevelUserGraduationRequirement() {
+	void findFreeEnglishLevelUserGraduationRequirement() {
 	    //given
 		List<GraduationRequirementJpaEntity> graduationRequirements = createBusinessGraduationRequirements();
 		graduationRequirementRepository.saveAll(graduationRequirements);
@@ -56,7 +56,7 @@ class LoadGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 		User user = UserFixture.경영학과_19학번_영어_면제();
 
 	    //when
-		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.loadGraduationRequirement(
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
 			user);
 
 	    //then

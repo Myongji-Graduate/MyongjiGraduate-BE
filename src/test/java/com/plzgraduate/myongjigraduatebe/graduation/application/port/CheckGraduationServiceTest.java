@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.LoadGraduationRequirementPort;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadCommonCulturePort;
@@ -42,7 +42,7 @@ class CheckGraduationServiceTest {
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 	@Mock
-	private LoadGraduationRequirementPort loadGraduationRequirementPort;
+	private FindGraduationRequirementPort findGraduationRequirementPort;
 	@Mock
 	private LoadTakenLecturePort loadTakenLecturePort;
 	@Mock
@@ -61,7 +61,7 @@ class CheckGraduationServiceTest {
 	void checkGraduation() {
 		//given
 		User user = UserFixture.응용소프트웨어학과_19학번_영어_면제();
-		given(loadGraduationRequirementPort.loadGraduationRequirement(user))
+		given(findGraduationRequirementPort.findGraduationRequirement(user))
 			.willReturn(GraduationRequirement.builder()
 				.commonCultureCredit(9)
 				.coreCultureCredit(12)

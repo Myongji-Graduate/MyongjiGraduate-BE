@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CheckGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.LoadGraduationRequirementPort;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CheckGraduationService implements CheckGraduationUseCase {
 
-	private final LoadGraduationRequirementPort loadGraduationRequirementPort;
+	private final FindGraduationRequirementPort findGraduationRequirementPort;
 	private final LoadTakenLecturePort loadTakenLecturePort;
 	private final LoadCommonCulturePort loadCommonCulturePort;
 	private final LoadCoreCulturePort loadCoreCulturePort;
@@ -50,7 +50,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	@Override
 	public GraduationResponse checkGraduation(User user) {
-		GraduationRequirement graduationRequirement = loadGraduationRequirementPort.loadGraduationRequirement(user);
+		GraduationRequirement graduationRequirement = findGraduationRequirementPort.findGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(
 			loadTakenLecturePort.loadTakenLectures(user));
 
