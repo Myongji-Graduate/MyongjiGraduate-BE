@@ -26,7 +26,7 @@ class TakenLectureRepositoryTest extends PersistenceTestSupport {
 	@DisplayName("유저의 수강 과목을 조회한다.")
 	@Test
 	void findByUser() {
-	    //given
+		//given
 		UserJpaEntity user = UserJpaEntity.builder()
 			.authId("abc")
 			.password("12345153")
@@ -48,7 +48,8 @@ class TakenLectureRepositoryTest extends PersistenceTestSupport {
 		takenLectureRepository.saveAll(List.of(takenLectureA, takenLectureB));
 
 		//when
-		List<TakenLectureJpaEntity> takenLectures = takenLectureRepository.findByUser(user);
+		List<TakenLectureJpaEntity> takenLectures = takenLectureRepository.findTakenLectureJpaEntityWithLectureByUser(
+			user);
 
 		//then
 		assertThat(takenLectures).hasSize(2);

@@ -17,6 +17,4 @@ public interface TakenLectureRepository extends JpaRepository<TakenLectureJpaEnt
 
 	@Query("SELECT t from TakenLectureJpaEntity t join fetch t.lecture join fetch t.user WHERE t.user = :user")
 	List<TakenLectureJpaEntity> findTakenLectureJpaEntityWithLectureByUser(@Param("user") UserJpaEntity user);
-
-	List<TakenLectureJpaEntity> findByUser(UserJpaEntity user);
 }

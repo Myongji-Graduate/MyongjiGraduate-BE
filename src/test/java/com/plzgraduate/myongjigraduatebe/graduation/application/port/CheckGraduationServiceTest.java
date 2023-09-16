@@ -23,16 +23,16 @@ import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadBasicAcademicalCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadCommonCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadCoreCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadMajorPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindBasicAcademicalCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCommonCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCoreCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.LoadTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -44,15 +44,15 @@ class CheckGraduationServiceTest {
 	@Mock
 	private FindGraduationRequirementPort findGraduationRequirementPort;
 	@Mock
-	private LoadTakenLecturePort loadTakenLecturePort;
+	private FindTakenLecturePort findTakenLecturePort;
 	@Mock
-	private LoadCommonCulturePort loadCommonCulturePort;
+	private FindCommonCulturePort findCommonCulturePort;
 	@Mock
-	private LoadCoreCulturePort loadCoreCulturePort;
+	private FindCoreCulturePort findCoreCulturePort;
 	@Mock
-	private LoadBasicAcademicalCulturePort loadBasicAcademicalCulturePort;
+	private FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	@Mock
-	private LoadMajorPort loadMajorPort;
+	private FindMajorPort findMajorPort;
 	@InjectMocks
 	private CheckGraduationService checkGraduationService;
 
@@ -70,7 +70,7 @@ class CheckGraduationServiceTest {
 				.normalCultureCredit(9)
 				.freeElectiveCredit(3)
 				.totalCredit(41).build());
-		given(loadTakenLecturePort.loadTakenLectures(user))
+		given(findTakenLecturePort.findTakenLectureSetByUser(user))
 			.willReturn(new HashSet<>(Set.of(
 				TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, FIRST),
@@ -93,7 +93,7 @@ class CheckGraduationServiceTest {
 				TakenLecture.of(user, mockLectureMap.get("KMA02113"), 2020, SECOND),
 				TakenLecture.of(user, mockLectureMap.get("KMA02130"), 2020, SECOND)
 			)));
-		given(loadCommonCulturePort.loadCommonCulture(user))
+		given(findCommonCulturePort.findCommonCulture(user))
 			.willReturn(new HashSet<>(Set.of(
 				CommonCulture.of(mockLectureMap.get("KMA00101"), CHRISTIAN_A),
 				CommonCulture.of(mockLectureMap.get("KMA02102"), CHRISTIAN_A),
@@ -103,16 +103,16 @@ class CheckGraduationServiceTest {
 				CommonCulture.of(mockLectureMap.get("KMA02108"), ENGLISH),
 				CommonCulture.of(mockLectureMap.get("KMA02109"), ENGLISH),
 				CommonCulture.of(mockLectureMap.get("KMA02137"), CAREER))));
-		given(loadCoreCulturePort.loadCoreCulture(user))
+		given(findCoreCulturePort.findCoreCulture(user))
 			.willReturn(new HashSet<>(Set.of(
 				CoreCulture.of(mockLectureMap.get("KMA02112"), HISTORY_PHILOSOPHY),
 				CoreCulture.of(mockLectureMap.get("KMA02114"), SOCIETY_COMMUNITY),
 				CoreCulture.of(mockLectureMap.get("KMA02128"), CULTURE_ART),
 				CoreCulture.of(mockLectureMap.get("KMA02135"), SCIENCE_TECHNOLOGY))));
-		given(loadBasicAcademicalCulturePort.loadBasicAcademicalCulture(user))
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(user))
 			.willReturn(new HashSet<>(
 				Set.of(BasicAcademicalCulture.of(mockLectureMap.get("KMB02123"), ICT.getText()))));
-		given((loadMajorPort.loadMajor(user)))
+		given((findMajorPort.findMajor(user)))
 			.willReturn(new HashSet<>(Set.of(Major.of(mockLectureMap.get("HED01206"), "응용소프트웨어", 1, 18, 20))));
 
 		//when

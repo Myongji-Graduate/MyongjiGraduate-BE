@@ -5,7 +5,7 @@ import java.util.Set;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-public interface LoadCommonCulturePort {
+public interface FindCommonCulturePort {
 
-	Set<CommonCulture> loadCommonCulture(User user);
+	Set<CommonCulture> findCommonCulture(User user);
 }

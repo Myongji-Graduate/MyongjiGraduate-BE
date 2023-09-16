@@ -22,15 +22,15 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademic
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture.CommonCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture.CoreCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadBasicAcademicalCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadCommonCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadCoreCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.LoadMajorPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindBasicAcademicalCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCommonCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCoreCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.LoadTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -42,17 +42,17 @@ import lombok.RequiredArgsConstructor;
 class CheckGraduationService implements CheckGraduationUseCase {
 
 	private final FindGraduationRequirementPort findGraduationRequirementPort;
-	private final LoadTakenLecturePort loadTakenLecturePort;
-	private final LoadCommonCulturePort loadCommonCulturePort;
-	private final LoadCoreCulturePort loadCoreCulturePort;
-	private final LoadBasicAcademicalCulturePort loadBasicAcademicalCulturePort;
-	private final LoadMajorPort loadMajorPort;
+	private final FindTakenLecturePort findTakenLecturePort;
+	private final FindCommonCulturePort findCommonCulturePort;
+	private final FindCoreCulturePort findCoreCulturePort;
+	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
+	private final FindMajorPort findMajorPort;
 
 	@Override
 	public GraduationResponse checkGraduation(User user) {
 		GraduationRequirement graduationRequirement = findGraduationRequirementPort.findGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(
-			loadTakenLecturePort.loadTakenLectures(user));
+			findTakenLecturePort.findTakenLectureSetByUser(user));
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 
@@ -91,7 +91,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<CommonCulture> graduationCommonCultures = loadCommonCulturePort.loadCommonCulture(user);
+		Set<CommonCulture> graduationCommonCultures = findCommonCulturePort.findCommonCulture(user);
 		GraduationManager<CommonCulture> commonCultureGraduationManager = new CommonCultureGraduationManager();
 		return commonCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationCommonCultures, graduationRequirement.getCommonCultureCredit());
@@ -99,7 +99,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	private DetailGraduationResult generateCoreCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<CoreCulture> graduationCoreCultures = loadCoreCulturePort.loadCoreCulture(user);
+		Set<CoreCulture> graduationCoreCultures = findCoreCulturePort.findCoreCulture(user);
 		GraduationManager<CoreCulture> coreCultureGraduationManager = new CoreCultureGraduationManager();
 		return coreCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationCoreCultures, graduationRequirement.getCoreCultureCredit());
@@ -107,7 +107,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	private DetailGraduationResult generteBasicAcademicalDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<BasicAcademicalCulture> graduationBasicAcademicalCultures = loadBasicAcademicalCulturePort.loadBasicAcademicalCulture(
+		Set<BasicAcademicalCulture> graduationBasicAcademicalCultures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(
 			user);
 		GraduationManager<BasicAcademicalCulture> basicAcademicalCultureGraduationManager = determineBasicAcademicalCultureGraduationManager(
 			user);
@@ -135,7 +135,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 
 	private DetailGraduationResult generateMajorDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<Major> graduationMajors = loadMajorPort.loadMajor(user);
+		Set<Major> graduationMajors = findMajorPort.findMajor(user);
 		GraduationManager<Major> majorGraduationManager = new MajorManager();
 		return majorGraduationManager.createDetailGraduationResult(user,
 			takenLectureInventory, graduationMajors, graduationRequirement.getMajorCredit());
