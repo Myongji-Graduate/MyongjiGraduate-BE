@@ -12,8 +12,8 @@ import lombok.Getter;
 public class User {
 
 	private final Long id;
-	private final String authId;
-	private final String password;
+	private String authId;
+	private String password;
 	private final EnglishLevel englishLevel;
 	private String name;
 	private final String studentNumber;
@@ -23,7 +23,7 @@ public class User {
 	private String subMajor;
 	private StudentCategory studentCategory;
 	private final Instant createdAt;
-	private final Instant updatedAt;
+	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
