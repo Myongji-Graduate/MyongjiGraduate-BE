@@ -25,14 +25,14 @@ class ChapelResultTest {
 	@Test
 	void completedChapelResult() {
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2019, Semester.FIRST), //채플
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2019, Semester.SECOND),
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2020, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2020, Semester.SECOND)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		ChapelResult chapelResult = ChapelResult.create(takenLectureInventory);
 
 		//when
@@ -46,13 +46,13 @@ class ChapelResultTest {
 	@Test
 	void unCompletedChapelResult() {
 	    //given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2019, Semester.FIRST), //채플
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2019, Semester.SECOND),
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2020, Semester.SECOND)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		ChapelResult chapelResult = ChapelResult.create(takenLectureInventory);
 
 	    //when

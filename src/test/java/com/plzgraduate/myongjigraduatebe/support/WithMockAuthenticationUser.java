@@ -5,8 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUserSecurityContext;
-
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockAuthenticationUserSecurityContext.class)
 public @interface WithMockAuthenticationUser {

@@ -48,8 +48,3 @@ if !(printf '%s\n' "${TYPE_LIST[@]}" | grep -xq $TYPE); then
     printf '%s\n' "${TYPE_LIST[@]}"
     exit 1
 fi
-
-# if [ -n $ISSUE_NUMBER ] && ! [[ $BRANCH_IN_COMMIT -ge 1 ]]; then 
-if [ -n $ISSUE_NUMBER ] && ! [[ $BRANCH_IN_COMMIT -ge 1 ]]; then 
-  sed -i.bak -e "1s/^/[$ISSUE_NUMBER]/" $1
-fi

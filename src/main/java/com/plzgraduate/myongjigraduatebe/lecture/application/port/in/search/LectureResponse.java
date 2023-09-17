@@ -4,7 +4,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class LectureResponse {

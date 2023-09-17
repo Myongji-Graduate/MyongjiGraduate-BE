@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,16 +12,14 @@ public class GraduationRequirement {
 	private final int majorCredit;
 	private final int subMajorCredit;
 	private final int basicAcademicalCredit;
-	private final int commonCultureCredit;
+	private int commonCultureCredit;
 	private final int coreCultureCredit;
-	private final int normalCultureCredit;
+	private int normalCultureCredit;
 	private final int freeElectiveCredit;
-	private final StudentCategory studentCategory;
 
 	@Builder
 	private GraduationRequirement(int totalCredit, int majorCredit, int subMajorCredit, int basicAcademicalCredit,
-		int commonCultureCredit, int coreCultureCredit, int normalCultureCredit, int freeElectiveCredit,
-		StudentCategory studentCategory) {
+		int commonCultureCredit, int coreCultureCredit, int normalCultureCredit, int freeElectiveCredit) {
 		this.totalCredit = totalCredit;
 		this.majorCredit = majorCredit;
 		this.subMajorCredit = subMajorCredit;
@@ -30,6 +28,10 @@ public class GraduationRequirement {
 		this.coreCultureCredit = coreCultureCredit;
 		this.normalCultureCredit = normalCultureCredit;
 		this.freeElectiveCredit = freeElectiveCredit;
-		this.studentCategory = studentCategory;
+	}
+
+	public void transferEnglishCategoryCredit() {
+		commonCultureCredit -= ENGLISH.getTotalCredit();
+		normalCultureCredit += ENGLISH.getTotalCredit();
 	}
 }

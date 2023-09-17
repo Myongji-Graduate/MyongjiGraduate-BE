@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -31,19 +31,19 @@ class BusinessBasicAcademicalManagerTest {
 	class 경영학과_학문기초교양 {
 
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-		Set<BasicAcademicalCulture> basicAcademicalLectures = BasicAcademicalLectureFixture.경영대_학문기초교양();
+		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.경영대_학문기초교양();
 
 		@DisplayName("경영대 19학번이 필요 학문 기초교양을 다 들었을 경우 통과한다.")
 		@Test
 		void 경영학과_19학번() {
 			//given
-			User user = UserFixture.경영학과_19학번();
+			User user = UserFixture.경영학과_19학번_ENG34();
 
 			Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMD02107"), 2019, Semester.FIRST)
 			)));
-			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 			BasicAcademicalManager manager = new BusinessBasicAcademicalManager();
 
 			//when
@@ -76,7 +76,7 @@ class BusinessBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMD02107"), 2019, Semester.FIRST)
 			)));
-			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 			BasicAcademicalManager manager = new BusinessBasicAcademicalManager();
 
 			//when

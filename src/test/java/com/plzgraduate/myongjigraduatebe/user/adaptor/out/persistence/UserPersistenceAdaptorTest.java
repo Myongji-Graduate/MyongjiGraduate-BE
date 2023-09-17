@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 

@@ -41,7 +41,7 @@ class CoreCultureDetailCategoryManagerTest {
 		Set<CoreCulture> graduationLectures) {
     
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02110"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02111"), 2019, Semester.FIRST),
@@ -67,7 +67,7 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02139"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
@@ -88,8 +88,8 @@ class CoreCultureDetailCategoryManagerTest {
 		Set<CoreCulture> graduationLectures) {
     
 		//given
-		User user = UserFixture.경영학과_19학번();
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
+		User user = UserFixture.경영학과_19학번_ENG34();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
@@ -114,7 +114,7 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02136"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2019, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CoreCulture> graduationLectures = 핵심교양_과학과기술();
 		CoreCultureCategory coreCultureCategory = SCIENCE_TECHNOLOGY;
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
@@ -143,12 +143,12 @@ class CoreCultureDetailCategoryManagerTest {
 	void generateUnCompletedCultureArtDetailCategoryResultWith_2022_First() {
     
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02155"), 2022, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02156"), 2022, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CoreCulture> graduationLectures = 핵심교양_문화와예술();
 		CoreCultureCategory coreCultureCategory = CULTURE_ART;
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();

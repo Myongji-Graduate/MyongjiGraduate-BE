@@ -18,9 +18,9 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 public class CoreCultureDetailCategoryManager {
 
 	private static final List<String> ICT_DEPARTMENTS = List.of(
-		"응용소프트웨어학과",
-		"데이터테크놀로지학과",
-		"디지털콘텐츠디자인학과");
+		"응용소프트웨어",
+		"데이터테크놀로지",
+		"디지털콘텐츠디자인");
 	private static final Lecture 과학과기술_예외_과목 = Lecture.from("KMA02136");
 	private static final Set<Lecture> 문화와예술_예외_과목 = Set.of(
 		Lecture.from("KMA02155"),

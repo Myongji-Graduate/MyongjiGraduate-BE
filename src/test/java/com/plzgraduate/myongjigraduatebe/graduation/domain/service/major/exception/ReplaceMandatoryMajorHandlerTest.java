@@ -42,7 +42,7 @@ class ReplaceMandatoryMajorHandlerTest {
 			TakenLecture.of(user, mockLectureMap.get("HAI01111"), 2020, Semester.SECOND), //답사2
 			TakenLecture.of(user, mockLectureMap.get("HAI01348"), 2020, Semester.SECOND) //신유학의이해
 		);
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
@@ -76,7 +76,7 @@ class ReplaceMandatoryMajorHandlerTest {
 			TakenLecture.of(user, mockLectureMap.get("HAI01348"), 2021, Semester.FIRST), //신유학의이해
 			TakenLecture.of(user, mockLectureMap.get("HAI01247"), 2021, Semester.SECOND) //유학사상의이해
 		);
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
@@ -106,7 +106,7 @@ class ReplaceMandatoryMajorHandlerTest {
 			mockLectureMap.get("HAI01348"), //신유학의이해
 			mockLectureMap.get("HAI01247") //유학사상의이해
 		));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();

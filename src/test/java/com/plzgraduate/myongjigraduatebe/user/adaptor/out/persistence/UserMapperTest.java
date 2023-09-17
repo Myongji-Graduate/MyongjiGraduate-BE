@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +23,7 @@ class UserMapperTest extends PersistenceTestSupport {
 	void mapToDomainEntityTest() {
 		//given
 		UserJpaEntity userJpaEntity = createUserJpaEntity(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+			"60211111", 21, "경영", null, StudentCategory.NORMAL);
 
 		//when
 		User user = userMapper.mapToDomainEntity(userJpaEntity);
@@ -34,7 +33,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.extracting("id", "authId", "password", "englishLevel", "name",
 				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+				"60211111", 21, "경영", null, StudentCategory.NORMAL);
 	}
 
 	@DisplayName("도메인 엔티티를 JPA 엔티티 변환한다.")
@@ -42,7 +41,7 @@ class UserMapperTest extends PersistenceTestSupport {
 	void mapToJpaEntityTest() {
 		//given
 		User user = createUser("mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+			"60211111", 21, "경영", null, StudentCategory.NORMAL);
 
 		//when
 		UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
@@ -51,13 +50,14 @@ class UserMapperTest extends PersistenceTestSupport {
 		assertThat(userJpaEntity)
 			.extracting("id", "authId", "password", "englishLevel", "name",
 				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
-			.contains(null, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
+			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
+				"60211111", 21, "경영", null, StudentCategory.NORMAL);
 	}
 
 	private User createUser(String authId, String password, EnglishLevel englishLevel, String name,
 		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		return User.builder()
+			.id(1L)
 			.authId(authId)
 			.password(password)
 			.name(name)

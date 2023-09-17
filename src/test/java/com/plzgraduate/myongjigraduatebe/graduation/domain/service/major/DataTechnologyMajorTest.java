@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -63,8 +63,8 @@ class DataTechnologyMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HED01311"), 2021, Semester.SECOND) //자기주도학
 
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
@@ -120,8 +120,8 @@ class DataTechnologyMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HED01404"), 2023, Semester.FIRST), //빅데이터프로그래밍1
 			TakenLecture.of(user, mockLectureMap.get("HED01407"), 2023, Semester.FIRST) //딥러닝
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
 		MajorManager manager = new MajorManager();
 
 		//when

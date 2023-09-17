@@ -5,8 +5,6 @@ import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,7 +14,7 @@ public class User {
 	private final Long id;
 	private String authId;
 	private String password;
-	private EnglishLevel englishLevel;
+	private final EnglishLevel englishLevel;
 	private String name;
 	private final String studentNumber;
 	private final int entryYear;
