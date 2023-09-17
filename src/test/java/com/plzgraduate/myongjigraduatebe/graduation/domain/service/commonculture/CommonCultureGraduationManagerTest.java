@@ -48,7 +48,7 @@ class CommonCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(
@@ -70,7 +70,7 @@ class CommonCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
 		DetailGraduationResult detailGraduationResult = graduationManager.createDetailGraduationResult(

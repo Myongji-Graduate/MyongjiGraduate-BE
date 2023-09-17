@@ -32,7 +32,7 @@ class ChapelResultTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2020, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2020, Semester.SECOND)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		ChapelResult chapelResult = ChapelResult.create(takenLectureInventory);
 
 		//when
@@ -52,7 +52,7 @@ class ChapelResultTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2019, Semester.SECOND),
 			TakenLecture.of(user, mockLectureMap.get("KMA02101"), 2020, Semester.SECOND)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		ChapelResult chapelResult = ChapelResult.create(takenLectureInventory);
 
 	    //when

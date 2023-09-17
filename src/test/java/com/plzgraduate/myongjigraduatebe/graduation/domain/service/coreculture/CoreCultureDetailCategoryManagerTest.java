@@ -67,7 +67,7 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02139"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
@@ -89,7 +89,7 @@ class CoreCultureDetailCategoryManagerTest {
     
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 		String coreCultureCategoryName = coreCultureCategory.getName();
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
 
@@ -114,7 +114,7 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02136"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2019, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CoreCulture> graduationLectures = 핵심교양_과학과기술();
 		CoreCultureCategory coreCultureCategory = SCIENCE_TECHNOLOGY;
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();
@@ -148,7 +148,7 @@ class CoreCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02155"), 2022, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02156"), 2022, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CoreCulture> graduationLectures = 핵심교양_문화와예술();
 		CoreCultureCategory coreCultureCategory = CULTURE_ART;
 		int categoryTotalCredit = coreCultureCategory.getTotalCredit();

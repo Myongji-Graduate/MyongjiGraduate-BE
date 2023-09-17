@@ -43,7 +43,7 @@ class DefaultBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMB02128"), 2020, Semester.SECOND),
 				TakenLecture.of(user, mockLectureMap.get("KMB02122"), 2021, Semester.FIRST)
 			)));
-			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
@@ -74,7 +74,7 @@ class DefaultBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMB02119"), 2019, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMB02120"), 2020, Semester.FIRST)
 			));
-			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when

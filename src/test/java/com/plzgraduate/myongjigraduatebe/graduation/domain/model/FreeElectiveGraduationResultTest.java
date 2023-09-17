@@ -37,7 +37,7 @@ class FreeElectiveGraduationResultTest {
 			TakenLecture.of(user, mockLectureMap.get("HBX01105"), 2020, Semester.SECOND), //재무관리원론
 			TakenLecture.of(user, mockLectureMap.get("HBX01143"), 2021, Semester.FIRST) //운영관리
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.categoryName(FREE_ELECTIVE.getName())

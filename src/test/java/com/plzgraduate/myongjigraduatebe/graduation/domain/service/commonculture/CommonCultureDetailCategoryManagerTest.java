@@ -53,7 +53,7 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String commonCultureCategoryName = commonCultureCategory.getName();
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
@@ -89,7 +89,7 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String commonCultureCategoryName = commonCultureCategory.getName();
 
 		//when
@@ -116,7 +116,7 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String commonCultureCategoryName = commonCultureCategory.getName();
 
 		//when
@@ -136,7 +136,7 @@ class CommonCultureDetailCategoryManagerTest {
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG12();
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 		String commonCultureCategoryName = commonCultureCategory.getName();
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
@@ -157,7 +157,7 @@ class CommonCultureDetailCategoryManagerTest {
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>());
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 		String commonCultureCategoryName = commonCultureCategory.getName();
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
@@ -188,7 +188,7 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02109"), 2023, Semester.FIRST)
 
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
 		//when
@@ -211,7 +211,7 @@ class CommonCultureDetailCategoryManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02103"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
 		//when

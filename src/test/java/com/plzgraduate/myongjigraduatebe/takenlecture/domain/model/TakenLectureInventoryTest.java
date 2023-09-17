@@ -18,7 +18,7 @@ class TakenLectureInventoryTest {
 
 	private final User user = UserFixture.경영학과_19학번_ENG34();
 	private final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	private final TakenLectureInventory takenLectureInventory = new TakenLectureInventory(new HashSet<>(Set.of(
+	private final TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>(Set.of(
 		TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
 		TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
 		TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),

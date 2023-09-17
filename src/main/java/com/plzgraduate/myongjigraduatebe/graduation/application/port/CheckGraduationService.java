@@ -51,7 +51,7 @@ class CheckGraduationService implements CheckGraduationUseCase {
 	@Override
 	public GraduationResponse checkGraduation(User user) {
 		GraduationRequirement graduationRequirement = findGraduationRequirementPort.findGraduationRequirement(user);
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(
 			findTakenLecturePort.findTakenLectureSetByUser(user));
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
