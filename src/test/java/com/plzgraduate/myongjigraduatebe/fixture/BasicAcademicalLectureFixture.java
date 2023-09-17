@@ -7,7 +7,8 @@ import java.util.Set;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
-public class BasicAcademicalLectureFixture {
+public class
+BasicAcademicalLectureFixture {
 	public static final String 인문대 = "인문대";
 	public static final String 사회과학대 = "사회과학대";
 	public static final String 경영대 = "경영대";

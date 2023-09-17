@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class BasicAcademicalCultureLecture {
 
-	private Lecture lecture;
-	private String college;
+	private final Lecture lecture;
+	private final String college;
 
 	@Builder
 	private BasicAcademicalCultureLecture(Lecture lecture, String college) {

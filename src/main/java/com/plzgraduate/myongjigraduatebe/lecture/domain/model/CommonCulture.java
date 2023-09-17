@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class CommonCulture {
 
-	private Lecture lecture;
-	private CommonCultureCategory commonCultureCategory;
+	private final Lecture lecture;
+	private final CommonCultureCategory commonCultureCategory;
 
 	@Builder
 	private CommonCulture(Lecture lecture, CommonCultureCategory commonCultureCategory) {
