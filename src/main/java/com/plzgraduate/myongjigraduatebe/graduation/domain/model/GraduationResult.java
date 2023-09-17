@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult.*;
+
 import java.util.List;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -53,13 +55,16 @@ public class GraduationResult {
 		this.totalCredit = detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getTotalCredit)
 			.sum()
-			+ 2 + normalCultureGraduationResult.getTotalCredit() + freeElectiveGraduationResult.getTotalCredit();
+			+ CHAPEL_CREDIT
+			+ normalCultureGraduationResult.getTotalCredit()
+			+ freeElectiveGraduationResult.getTotalCredit();
 
 		this.takenCredit = detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getTakenCredit)
 			.sum()
-			+ normalCultureGraduationResult.getTakenCredit() + freeElectiveGraduationResult.getTakenCredit()
-			+ (chapelResult.isCompleted() ? 2 : 0);
+			+ normalCultureGraduationResult.getTakenCredit()
+			+ freeElectiveGraduationResult.getTakenCredit()
+			+ (chapelResult.isCompleted() ? CHAPEL_CREDIT : 0);
 
 		boolean isAllDetailGraduationResultCompleted = detailGraduationResults.stream()
 			.allMatch(DetailGraduationResult::isCompleted);
