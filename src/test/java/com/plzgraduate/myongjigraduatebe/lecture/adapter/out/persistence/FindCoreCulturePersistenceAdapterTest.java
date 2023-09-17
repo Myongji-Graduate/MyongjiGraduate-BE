@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
 
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CAREER;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.EXPRESSION;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 

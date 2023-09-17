@@ -23,7 +23,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("데이터테크놀로지학과의 전공 달성 여부를 계산한다.")
-class DataTechnologyMajorTestLecture {
+class DataTechnologyMajorTest {
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 	@DisplayName("(16학번 해당학번 전공필수과목 적용 확인) 전공 필수과목을 다 듣고, 전공 기준 학점을 넘었을 경우 전공 카테고리를 충족한다.")
