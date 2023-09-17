@@ -21,11 +21,6 @@ public class UserFixture {
 			StudentCategory.NORMAL);
 	}
 
-	public static User 행정학과_18학번() {
-		return createUser("mj11", "1234", EnglishLevel.ENG34, "김행정", "60181011", 18, "행정", null,
-			StudentCategory.NORMAL);
-	}
-
 	public static User 행정학과_21학번() {
 		return createUser("mj12", "1234", EnglishLevel.ENG34, "김행정", "60211012", 21, "행정", null,
 			StudentCategory.NORMAL);

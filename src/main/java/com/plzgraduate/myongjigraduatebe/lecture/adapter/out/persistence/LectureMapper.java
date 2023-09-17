@@ -28,17 +28,6 @@ public class LectureMapper {
 			.build();
 	}
 
-	LectureJpaEntity mapToLectureJpaEntity(Lecture lecture) {
-
-		return LectureJpaEntity.builder()
-			.lectureCode(lecture.getLectureCode())
-			.name(lecture.getName())
-			.credit(lecture.getCredit())
-			.isRevoked(lecture.getIsRevoked())
-			.duplicateCode(lecture.getDuplicateCode())
-			.build();
-	}
-
 	CommonCulture mapToCommonCultureModel(CommonCultureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
 		return CommonCulture.builder()

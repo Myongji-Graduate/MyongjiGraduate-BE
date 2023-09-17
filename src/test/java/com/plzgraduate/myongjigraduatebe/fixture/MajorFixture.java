@@ -10,22 +10,9 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 public class MajorFixture {
 
 	public static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	private static final String 경영학과 = "경영";
 	private static final String 국제통상학과 = "국제통상";
-	private static final String 경영정보학과 = "경영정보";
-	private static final String 철학과 = "철학";
 	private static final String 데이터테크놀로지전공 = "데이터테크놀로지";
 
-	public static Set<MajorLecture> 경영학과_전공() {
-		Set<MajorLecture> lectureSet = new HashSet<>();
-		return lectureSet;
-	}
-
-
-	public static Set<MajorLecture> 경영정보_전공() {
-		Set<MajorLecture> lectureSet = new HashSet<>();
-		return lectureSet;
-	}
 
 	public static Set<MajorLecture> 국제통상_전공() {
 		Set<MajorLecture> lectureSet = new HashSet<>();
@@ -71,20 +58,6 @@ public class MajorFixture {
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HCC04463"), 국제통상학과, 0, 16, 99)); //국제경영세미나
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HCC04495"), 국제통상학과, 0, 16, 99)); //국제물류실무
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HCC04496"), 국제통상학과, 0, 16, 99)); //글로벌전략계획
-		return lectureSet;
-	}
-
-	public static Set<MajorLecture> 철학과_전공() {
-		Set<MajorLecture> lectureSet = new HashSet<>();
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01105"), 철학과, 1, 16, 99)); //철학원서감독
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01110"), 철학과, 1, 16, 99)); //답사1
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01111"), 철학과, 1, 16, 99)); //답사2
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01112"), 철학과, 1, 16, 99)); //논리학
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01566"), 철학과, 1, 16, 99)); //서양철학개론
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01263"), 철학과, 1, 16, 99)); //서양철학사1
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01264"), 철학과, 1, 16, 99)); //서양철학사2
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01564"), 철학과, 1, 22, 99)); //동양철학개론
-		lectureSet.add(MajorLecture.of(mockLectureMap.get("HAI01565"), 철학과, 1, 22, 99)); //첧학적글쓰기
 		return lectureSet;
 	}
 
