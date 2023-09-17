@@ -10,11 +10,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.CommonCultureRepository;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
+	@Autowired
+	private LectureRepository lectureRepository;
 	@Autowired
 	private CommonCultureRepository commonCultureRepository;
 
@@ -23,16 +27,25 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 	@ValueSource(ints = {16, 18, 20, 23})
 	void findAllByEntryYear(int entryYears) {
 		//given
+		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
+			.lectureCode("test")
+			.build();
+		lectureRepository.save(lectureJpaEntity);
+
 		CommonCultureJpaEntity commonCultureJpaEntityA = CommonCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(16)
 			.endEntryYear(17).build();
 		CommonCultureJpaEntity commonCultureJpaEntityB = CommonCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(18)
 			.endEntryYear(19).build();
 		CommonCultureJpaEntity commonCultureJpaEntityC = CommonCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(20)
 			.endEntryYear(22).build();
 		CommonCultureJpaEntity commonCultureJpaEntityD = CommonCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(23)
 			.endEntryYear(99).build();
 

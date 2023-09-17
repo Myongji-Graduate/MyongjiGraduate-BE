@@ -10,6 +10,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.
 
 public interface CommonCultureRepository extends JpaRepository<CommonCultureJpaEntity, Long> {
 
-	@Query("select cc from CommonCultureJpaEntity cc where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear")
+	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear")
 	List<CommonCultureJpaEntity> findAllByEntryYear(@Param("entryYear") int entryYear);
 }

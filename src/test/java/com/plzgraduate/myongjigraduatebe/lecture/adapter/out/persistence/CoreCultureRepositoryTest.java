@@ -10,11 +10,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CoreCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.CoreCultureRepository;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class CoreCultureRepositoryTest extends PersistenceTestSupport {
 
+	@Autowired
+	private LectureRepository lectureRepository;
 	@Autowired
 	private CoreCultureRepository coreCultureRepository;
 
@@ -23,10 +27,17 @@ class CoreCultureRepositoryTest extends PersistenceTestSupport {
 	@ValueSource(ints = {16, 18})
 	void findAllByEntryYear(int entryYears) {
 		//given
+		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
+			.lectureCode("test")
+			.build();
+		lectureRepository.save(lectureJpaEntity);
+
 		CoreCultureJpaEntity coreCultureJpaEntityA = CoreCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(16)
 			.endEntryYear(17).build();
 		CoreCultureJpaEntity coreCultureJpaEntityB = CoreCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(18)
 			.endEntryYear(99).build();
 
