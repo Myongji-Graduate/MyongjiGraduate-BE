@@ -46,25 +46,44 @@ class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 			.contains(17, 12, 6, 10, 63, 20);
 	}
 
+	@DisplayName("복수 전공 유저의 입학년도에 해당하는 졸업요건을 반환한다.")
+	@Test
+	void findDualMajorUserGraduationRequirement() {
+		//given
+		List<GraduationRequirementJpaEntity> graduationRequirements = createBusinessGraduationRequirements();
+		graduationRequirementRepository.saveAll(graduationRequirements);
+
+		User user = UserFixture.경영학과_19학번_ENG34_복수전공();
+
+		//when
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
+			user);
+
+		//then
+		Assertions.assertThat(graduationRequirement)
+			.extracting("subMajorCredit", "commonCultureCredit", "coreCultureCredit", "basicAcademica"
+				+ "lCredit", "normalCultureCredit", "majorCredit", "freeElectiveCredit")
+			.contains(SUB_MAJOR_CREDIT, 15, 12, 6, 10, 63, 22);
+	}
+
 	@DisplayName("영어 면제 유저의 졸업요건은 공통교양의 영어 카테고리 학점(6)이 일반교양 학점으로 이관된 졸업 요건이다.")
 	@Test
 	void findFreeEnglishLevelUserGraduationRequirement() {
-	    //given
+		//given
 		List<GraduationRequirementJpaEntity> graduationRequirements = createBusinessGraduationRequirements();
 		graduationRequirementRepository.saveAll(graduationRequirements);
 
 		User user = UserFixture.경영학과_19학번_영어_면제();
 
-	    //when
+		//when
 		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
 			user);
 
-	    //then
+		//then
 		Assertions.assertThat(graduationRequirement)
 			.extracting("commonCultureCredit", "normalCultureCredit")
 			.contains(11, 16);
 	}
-
 
 	private List<GraduationRequirementJpaEntity> createBusinessGraduationRequirements() {
 
@@ -109,7 +128,8 @@ class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 			.college(BUSINESS)
 			.subMajorCredit(SUB_MAJOR_CREDIT)
 			.startEntryYear(18)
-			.endEntryYear(23).commonCultureCredit(15)
+			.endEntryYear(23)
+			.commonCultureCredit(15)
 			.coreCultureCredit(12)
 			.basicAcademicalCredit(6)
 			.normalCultureCredit(10)
