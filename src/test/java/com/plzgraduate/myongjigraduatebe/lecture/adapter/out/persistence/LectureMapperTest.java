@@ -35,7 +35,7 @@ class LectureMapperTest extends PersistenceTestSupport {
 			.commonCultureCategory(CAREER).build();
 
 		//when
-		CommonCulture commonCulture = lectureMapper.mapToDomainCommonCultureModel(commonCultureJpaEntity);
+		CommonCulture commonCulture = lectureMapper.mapToCommonCultureModel(commonCultureJpaEntity);
 
 		//then
 		assertThat(commonCulture.getCommonCultureCategory()).isEqualTo(CAREER);
@@ -50,7 +50,7 @@ class LectureMapperTest extends PersistenceTestSupport {
 			.coreCultureCategory(CULTURE_ART).build();
 
 		//when
-		CoreCulture coreCulture = lectureMapper.mapToDomainCoreCultureModel(commonCultureJpaEntity);
+		CoreCulture coreCulture = lectureMapper.mapToCoreCultureModel(commonCultureJpaEntity);
 
 		//then
 		assertThat(coreCulture.getCoreCultureCategory()).isEqualTo(CULTURE_ART);
@@ -65,7 +65,7 @@ class LectureMapperTest extends PersistenceTestSupport {
 			.college("인문대").build();
 
 		//when
-		BasicAcademicalCultureLecture basicAcademicalCultureLecture = lectureMapper.mapToDomainBasicAcademicalCultureModel(
+		BasicAcademicalCultureLecture basicAcademicalCultureLecture = lectureMapper.mapToBasicAcademicalCultureLectureModel(
 			basicAcademicalCultureEntity);
 
 		//then
@@ -81,7 +81,7 @@ class LectureMapperTest extends PersistenceTestSupport {
 			.major("응용소프트웨어").build();
 
 		//when
-		MajorLecture basicAcademicalCulture = lectureMapper.mapToDomainMajorModel(majorEntity);
+		MajorLecture basicAcademicalCulture = lectureMapper.mapToMajorLectureModel(majorEntity);
 
 		//then
 		assertThat(basicAcademicalCulture.getMajor()).isEqualTo("응용소프트웨어");

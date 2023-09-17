@@ -21,7 +21,7 @@ class FindCoreCulturePersistenceAdapter implements FindCoreCulturePort {
 	@Override
 	public Set<CoreCulture> findCoreCulture(User user) {
 		return coreCultureRepository.findAllByEntryYear(user.getEntryYear()).stream()
-			.map(lectureMapper::mapToDomainCoreCultureModel)
+			.map(lectureMapper::mapToCoreCultureModel)
 			.collect(Collectors.toSet());
 	}
 

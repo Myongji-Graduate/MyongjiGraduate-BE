@@ -21,7 +21,7 @@ class FindMajorPersistenceAdapter implements FindMajorPort {
 	@Override
 	public Set<MajorLecture> findMajor(User user) {
 		return majorRepository.findAllByMajor(user.getMajor()).stream()
-			.map(mapper::mapToDomainMajorModel)
+			.map(mapper::mapToMajorLectureModel)
 			.collect(Collectors.toSet());
 	}
 }

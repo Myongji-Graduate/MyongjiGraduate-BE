@@ -25,7 +25,7 @@ class LecturePersistenceAdaptor implements FindLecturePort, SearchLecturePort {
 	public List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByLectureCodeIn(lectureCodes);
 		return lectureJpaEntities.stream()
-			.map(lectureMapper::mapToLectureDomainEntity)
+			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());
 	}
 
@@ -33,7 +33,7 @@ class LecturePersistenceAdaptor implements FindLecturePort, SearchLecturePort {
 	public List<Lecture> findLecturesByIds(List<Long> lectureIds) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByIdIn(lectureIds);
 		return lectureJpaEntities.stream()
-			.map(lectureMapper::mapToLectureDomainEntity)
+			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());
 	}
 
@@ -41,7 +41,7 @@ class LecturePersistenceAdaptor implements FindLecturePort, SearchLecturePort {
 	public List<Lecture> searchLectureByNameOrCode(String type, String keyword) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureQueryRepository.searchByNameOrCode(type, keyword);
 		return lectureJpaEntities.stream()
-			.map(lectureMapper::mapToLectureDomainEntity)
+			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());
 	}
 }

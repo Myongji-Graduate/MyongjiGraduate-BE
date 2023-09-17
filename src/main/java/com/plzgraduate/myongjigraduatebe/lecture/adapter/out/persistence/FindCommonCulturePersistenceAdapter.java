@@ -21,7 +21,7 @@ class FindCommonCulturePersistenceAdapter implements FindCommonCulturePort {
 	@Override
 	public Set<CommonCulture> findCommonCulture(User user) {
 		return commonCultureRepository.findAllByEntryYear(user.getEntryYear()).stream()
-			.map(lectureMapper::mapToDomainCommonCultureModel)
+			.map(lectureMapper::mapToCommonCultureModel)
 			.collect(Collectors.toSet());
 	}
 }

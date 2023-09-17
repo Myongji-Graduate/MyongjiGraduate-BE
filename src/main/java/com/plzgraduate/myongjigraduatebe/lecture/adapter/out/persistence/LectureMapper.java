@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 @Component
 public class LectureMapper {
 
-	Lecture mapToLectureDomainEntity(LectureJpaEntity lecture) {
+	Lecture mapToLectureModel(LectureJpaEntity lecture) {
 
 		return Lecture.builder()
 			.id(lecture.getId())
@@ -39,7 +39,7 @@ public class LectureMapper {
 			.build();
 	}
 
-	CommonCulture mapToDomainCommonCultureModel(CommonCultureJpaEntity entity) {
+	CommonCulture mapToCommonCultureModel(CommonCultureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
 		return CommonCulture.builder()
 			.lecture(
@@ -55,7 +55,7 @@ public class LectureMapper {
 			.build();
 	}
 
-	CoreCulture mapToDomainCoreCultureModel(CoreCultureJpaEntity entity) {
+	CoreCulture mapToCoreCultureModel(CoreCultureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
 		return CoreCulture.builder()
 			.lecture(
@@ -71,7 +71,8 @@ public class LectureMapper {
 			.build();
 	}
 
-	BasicAcademicalCultureLecture mapToDomainBasicAcademicalCultureModel(BasicAcademicalCultureLectureJpaEntity entity) {
+	BasicAcademicalCultureLecture mapToBasicAcademicalCultureLectureModel(
+		BasicAcademicalCultureLectureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
 		return BasicAcademicalCultureLecture.builder()
 			.lecture(
@@ -87,7 +88,7 @@ public class LectureMapper {
 			.build();
 	}
 
-	MajorLecture mapToDomainMajorModel(MajorLectureJpaEntity entity) {
+	MajorLecture mapToMajorLectureModel(MajorLectureJpaEntity entity) {
 		LectureJpaEntity lectureJpaEntity = entity.getLectureJpaEntity();
 		return MajorLecture.builder()
 			.lecture(
