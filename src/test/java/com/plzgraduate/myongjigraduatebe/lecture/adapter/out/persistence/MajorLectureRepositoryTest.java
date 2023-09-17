@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.MajorLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.MajorRepository;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.MajorLectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
-class MajorRepositoryTest extends PersistenceTestSupport {
+class MajorLectureRepositoryTest extends PersistenceTestSupport {
 
 	@Autowired
 	private LectureRepository lectureRepository;
 	@Autowired
-	private MajorRepository majorRepository;
+	private MajorLectureRepository majorLectureRepository;
 
 
 	@DisplayName("유저의 전공에 해당하는 전공 과목을 조회한다.")
@@ -37,12 +37,12 @@ class MajorRepositoryTest extends PersistenceTestSupport {
 		MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntity)
 			.major("데이터테크놀로지").build();
-		majorRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
+		majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
 
 		String major = "응용소프트웨어";
 
 	    //when
-		List<MajorLectureJpaEntity> majorLectures = majorRepository.findAllByMajor(major);
+		List<MajorLectureJpaEntity> majorLectures = majorLectureRepository.findAllByMajor(major);
 
 		//then
 		assertThat(majorLectures).hasSize(1)
