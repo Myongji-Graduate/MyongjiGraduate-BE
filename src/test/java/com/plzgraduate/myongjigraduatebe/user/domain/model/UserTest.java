@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,6 @@ class UserTest {
 			.contains("테스터2", "경영학과", "데이터테크놀로지학과", null, StudentCategory.CHANGE_MAJOR);
 	}
 
-
 	@DisplayName("checkBeforeEntryYear 메서드 테스트")
 	@Test
 	void checkBeforeEntryYear() {
@@ -96,5 +96,23 @@ class UserTest {
 		assertThatThrownBy(() -> user.matchPassword(passwordEncoder, "wrongPassword"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("비밀번호가 일치하지 않습니다.");
+	}
+
+	@DisplayName("유저의 암호화된 로그인 아이디(뒷 세자리 *** 대체)를 반환한다.")
+	@Test
+	void getEncryptedAuthId() {
+		//given
+		String authId = "testAuthId";
+		User user = User.builder()
+			.authId(authId).build();
+
+		//when
+		String encryptedAuthId = user.getEncryptedAuthId();
+
+		//then
+		assertThat(encryptedAuthId.substring(0, encryptedAuthId.length() - 4))
+			.isEqualTo(authId.substring(0, authId.length() - 4));
+		assertThat(encryptedAuthId.substring(encryptedAuthId.length() - 3)).isEqualTo(
+			"***");
 	}
 }
