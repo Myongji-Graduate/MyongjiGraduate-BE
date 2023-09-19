@@ -201,7 +201,7 @@ public class DefaultTakenLectureService implements TakenLectureService {
   private Lecture getLectureToLectureCode(LectureCode lectureCode) {
     return lectureRepository
         .findByLectureCode(lectureCode)
-        .orElseThrow(() -> new IllegalArgumentException("본 서비스는 자연캠퍼스 과목이 있을 경우 지원되지 않습니다. 서비스 오류일 경우 채널톡으로 문의 부탁드립니다."));
+        .orElseThrow(() -> new IllegalArgumentException("과목 데이터베이스에 존재하지 않은 과목이 있습니다. 채널톡으로 문의 부탁드립니다."));
   }
 
   private boolean containLectures(
