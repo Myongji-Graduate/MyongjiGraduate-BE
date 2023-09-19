@@ -79,6 +79,10 @@ public class User {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
 	}
+
+	public String getEncryptedAuthId() {
+		return authId.replace(authId.substring(authId.length() - 3), "***");
+	}
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}

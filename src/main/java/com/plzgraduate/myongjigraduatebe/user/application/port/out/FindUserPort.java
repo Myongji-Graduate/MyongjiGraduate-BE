@@ -8,4 +8,6 @@ public interface FindUserPort {
 
 	Optional<User> findUserById(Long id);
 	Optional<User> findUserByAuthId(String authId);
+
+	Optional<User> findUserByStudentNumber(String studentNumber);
 }
