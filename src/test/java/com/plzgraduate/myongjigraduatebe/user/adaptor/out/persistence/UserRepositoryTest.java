@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -31,6 +30,22 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		//then
 		assertThat(user).isPresent();
 		assertThat(user.get().getAuthId()).isEqualTo("mju1001");
+	}
+
+	@DisplayName("학번을 통해 유저를 조회한다.")
+	@Test
+	void findByStudentNumber() {
+		//given
+		String studentNumber = "60181666";
+		UserJpaEntity userJpaEntity = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
+		userRepository.save(userJpaEntity);
+
+		//when
+		Optional<UserJpaEntity> user = userRepository.findByStudentNumber(studentNumber);
+
+		//then
+		assertThat(user).isPresent();
+		assertThat(user.get().getStudentNumber()).isEqualTo(studentNumber);
 	}
 
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")
