@@ -46,6 +46,7 @@ public class User {
 
 	}
 
+
 	public static User create(String authId, String password, EnglishLevel englishLevel, String studentNumber) {
 		return User.builder()
 			.authId(authId)

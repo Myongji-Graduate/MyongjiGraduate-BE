@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.application.port.signin;
+package com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin;
 
 import lombok.Builder;
 import lombok.Getter;

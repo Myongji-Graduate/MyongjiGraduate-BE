@@ -5,9 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInUseCase;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInCommand;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInCommand;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInResponse;
 import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;

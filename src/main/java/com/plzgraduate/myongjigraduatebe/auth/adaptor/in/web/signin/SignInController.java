@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInUseCase;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInResponse;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 

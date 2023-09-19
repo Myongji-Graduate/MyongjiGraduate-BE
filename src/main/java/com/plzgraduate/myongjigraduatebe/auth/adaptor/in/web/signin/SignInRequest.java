@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInCommand;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInCommand;
 
 import lombok.Builder;
 import lombok.Getter;
