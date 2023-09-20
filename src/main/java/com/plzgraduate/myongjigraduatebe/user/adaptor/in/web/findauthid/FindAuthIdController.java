@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.findauthid;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
@@ -17,8 +17,8 @@ public class FindAuthIdController {
 
 	private final FindUserAuthIdUseCase findUserAuthIdUseCase;
 
-	@GetMapping("/student-number/{studentNumber}")
-	public UserAuthIdResponse findUserAuthId(@PathVariable String studentNumber) {
+	@GetMapping("/student-number")
+	public UserAuthIdResponse findUserAuthId(@Param("studentNumber") String studentNumber) {
 		return findUserAuthIdUseCase.findUserAuthId(studentNumber);
 	}
 }
