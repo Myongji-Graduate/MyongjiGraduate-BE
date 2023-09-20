@@ -57,7 +57,7 @@ class FindUserAuthIdServiceTest {
 		//when //then
 		assertThatThrownBy(() -> findUserAuthIdService.findUserAuthId(studentNumber))
 			.isInstanceOf(NoSuchElementException.class)
-			.hasMessage("해당 학번의 사용자가 존재하지 않습니다");
+			.hasMessage("해당 학번의 사용자가 존재하지 않습니다.");
 	}
 
 }
