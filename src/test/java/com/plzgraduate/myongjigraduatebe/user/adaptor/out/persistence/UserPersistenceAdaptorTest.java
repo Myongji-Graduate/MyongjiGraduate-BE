@@ -46,6 +46,22 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		assertThat(user.get().getAuthId()).isEqualTo(authId);
 	}
 
+	@DisplayName("학번으로 사용자를 조회한다.")
+	@Test
+	void findUserByStudentNumber() {
+		//given
+		String studentNumber = "60181666";
+		UserJpaEntity userJpaEntity = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
+		userRepository.save(userJpaEntity);
+
+		//when
+		Optional<User> user = userPersistenceAdaptor.findUserByStudentNumber(studentNumber);
+
+		//then
+		assertThat(user).isPresent();
+		assertThat(user.get().getStudentNumber()).isEqualTo(studentNumber);
+	}
+
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")
 	@Test
 	void 중복_아이디_확인() {

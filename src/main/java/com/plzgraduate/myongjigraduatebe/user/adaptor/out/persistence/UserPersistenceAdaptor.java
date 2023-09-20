@@ -45,6 +45,11 @@ class UserPersistenceAdaptor implements FindUserPort, SaveUserPort, CheckUserPor
 	}
 
 	@Override
+	public Optional<User> findUserByStudentNumber(String studentNumber) {
+		return userRepository.findByStudentNumber(studentNumber).map(userMapper::mapToDomainEntity);
+	}
+
+	@Override
 	public boolean checkDuplicateAuthId(String authId) {
 		return userRepository.existsByAuthId(authId);
 	}
