@@ -33,6 +33,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(NoSuchElementException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ExceptionResponse handleNotFoundException(Exception e) {
 		log.debug("Not Found exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.NOT_FOUND, getMessage(e));
