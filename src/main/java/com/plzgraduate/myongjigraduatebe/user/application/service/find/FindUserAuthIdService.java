@@ -23,6 +23,6 @@ public class FindUserAuthIdService implements FindUserAuthIdUseCase {
 	public UserAuthIdResponse findUserAuthId(String studentNumber) {
 		User user = findUserPort.findUserByStudentNumber(studentNumber)
 			.orElseThrow(() -> new NoSuchElementException("해당 학번의 사용자가 존재하지 않습니다"));
-		return UserAuthIdResponse.from(user.getEncryptedAuthId(), studentNumber);
+		return UserAuthIdResponse.of(user.getEncryptedAuthId(), studentNumber);
 	}
 }

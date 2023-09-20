@@ -17,7 +17,7 @@ public class UserAuthIdResponse {
 		this.studentNumber = studentNumber;
 	}
 
-	public static UserAuthIdResponse from(String encryptedAutId, String studentNumber) {
+	public static UserAuthIdResponse of(String encryptedAutId, String studentNumber) {
 		return UserAuthIdResponse.builder()
 			.authId(encryptedAutId)
 			.studentNumber(studentNumber).build();
