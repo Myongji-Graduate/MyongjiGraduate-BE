@@ -113,4 +113,20 @@ class UserTest {
 		assertThat(encryptedAuthId.substring(encryptedAuthId.length() - 3)).isEqualTo(
 			"***");
 	}
+
+	@DisplayName("유저의 패스워드를 초기화한다.")
+	@Test
+	void resetPassword() {
+	    //given
+		String beforePassword = "before";
+		String afterPassword = "after";
+		User user = User.builder()
+			.password(beforePassword).build();
+
+		//when
+		user.resetPassword(afterPassword);
+
+	    //then
+		assertThat(user.getPassword()).isEqualTo(afterPassword);
+	}
 }
