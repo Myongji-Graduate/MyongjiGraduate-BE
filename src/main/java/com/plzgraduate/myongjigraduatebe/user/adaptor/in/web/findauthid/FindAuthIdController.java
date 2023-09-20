@@ -17,7 +17,7 @@ public class FindAuthIdController {
 
 	private final FindUserAuthIdUseCase findUserAuthIdUseCase;
 
-	@GetMapping("/student-number")
+	@GetMapping("/auth-id")
 	public UserAuthIdResponse findUserAuthId(@Param("studentNumber") String studentNumber) {
 		return findUserAuthIdUseCase.findUserAuthId(studentNumber);
 	}
