@@ -135,10 +135,10 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			.notDuplicated(notDuplicated).build();
 		given(checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId)).willReturn(authIdDuplicationResponse);
 
-		//when //then
+		//when //then`
 		mockMvc.perform(
-				get("/api/v1/users/check-duplicate-auth-id")
-					.param("authId", authId)
+				get("/api/v1/users/sign-up/check-duplicate-auth-id")
+					.param("auth-id", authId)
 			)
 			.andDo(print())
 			.andExpect(status().isOk())

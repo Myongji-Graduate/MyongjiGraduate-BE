@@ -2,11 +2,11 @@ package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.signup;
 
 import javax.validation.Valid;
 
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.AuthIdDuplicationResponse;
@@ -28,8 +28,8 @@ public class SignUpController {
 		signUpUseCase.signUp(signUpRequest.toCommand());
 	}
 
-	@GetMapping("/check-duplicate-auth-id")
-	public AuthIdDuplicationResponse checkAuthIdDuplication(@Param("authId") String authId) {
+	@GetMapping("/sign-up/check-duplicate-auth-id")
+	public AuthIdDuplicationResponse checkAuthIdDuplication(@RequestParam("auth-id") String authId) {
 		return checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId);
 	}
 }
