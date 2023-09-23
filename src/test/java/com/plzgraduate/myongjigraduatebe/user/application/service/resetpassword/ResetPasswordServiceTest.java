@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -23,7 +21,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 class ResetPasswordServiceTest {
 
 	@Mock
-	private FindUserPort findUserPort;
+	private FindUserUseCase findUserUseCase;
 	@Mock
 	private UpdateUserPort updateUserPort;
 	@Mock
@@ -41,8 +39,7 @@ class ResetPasswordServiceTest {
 			.newPassword("testPassword")
 			.passwordCheck("testPassword").build();
 		User user = User.builder().build();
-		given(findUserPort.findUserByAuthId(resetPasswordCommand.getAuthId())).willReturn(
-			Optional.of(user));
+		given(findUserUseCase.findUserByAuthId(resetPasswordCommand.getAuthId())).willReturn(user);
 
 		//when
 		resetPasswordService.resetPassword(resetPasswordCommand);
@@ -74,8 +71,8 @@ class ResetPasswordServiceTest {
 			.authId("test")
 			.newPassword("testPassword")
 			.passwordCheck("testPassword").build();
-		given(findUserPort.findUserByAuthId(resetPasswordCommand.getAuthId())).willReturn(
-			Optional.empty());
+		given(findUserUseCase.findUserByAuthId(resetPasswordCommand.getAuthId())).willThrow(
+			new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
 		//when //then
 		assertThatThrownBy(() -> resetPasswordService.resetPassword(resetPasswordCommand)).isInstanceOf(
