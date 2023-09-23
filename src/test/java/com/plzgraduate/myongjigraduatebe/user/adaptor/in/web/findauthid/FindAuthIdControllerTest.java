@@ -37,8 +37,7 @@ class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 		given(findUserAuthIdUseCase.findUserAuthId(studentNumber)).willReturn(userAuthIdResponse);
 
 		//when //then
-		mockMvc.perform(get("/api/v1/users/auth-id")
-				.param("studentNumber", studentNumber))
+		mockMvc.perform(get("/api/v1/users/{student-number}/auth-id", studentNumber))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.authId", is(encryptedAuthId)))
@@ -54,8 +53,7 @@ class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 			new NoSuchElementException("해당 학번의 사용자가 존재하지 않습니다."));
 
 		//when //then
-		mockMvc.perform(get("/api/v1/users/auth-id")
-				.param("studentNumber", studentNumber))
+		mockMvc.perform(get("/api/v1/users/{student-number}/auth-id", studentNumber))
 			.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.status", is(404)))
