@@ -35,7 +35,7 @@ class CheckAuthIdDuplicationServiceTest {
 			authId);
 
 		//then
-		assertThat(authIdDuplicationResponse).extracting("authId", "isNotDuplicated")
+		assertThat(authIdDuplicationResponse).extracting("authId", "notDuplicated")
 			.contains(authId, !authIdDuplication);
 	}
 
