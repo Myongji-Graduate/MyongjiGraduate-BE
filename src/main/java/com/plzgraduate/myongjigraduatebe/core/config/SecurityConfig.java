@@ -40,7 +40,7 @@ public class SecurityConfig {
 		http
 			.authorizeRequests()
 			.antMatchers(
-				API_V1_PREFIX + "/users/sign-up", // 회원가입
+				API_V1_PREFIX + "/users/sign-up/**", // 회원가입
 				API_V1_PREFIX + "/auth/sign-in", // 로그인
 				API_V1_PREFIX + "/users/{student-number}/auth-id", // 아이디 찾기
 				API_V1_PREFIX + "/users/password" // 비밀번호 재설정

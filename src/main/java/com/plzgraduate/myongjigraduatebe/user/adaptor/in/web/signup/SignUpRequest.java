@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignUpRequest {
 
-	@NotBlank(message = "아아디를 입력해주세요.")
+	@NotBlank(message = "아이디를 입력해주세요.")
 	@Size(min = 6, max = 20, message = "아이디는 6자에서 20자 사이여야합니다.")
 	private String authId;
 
