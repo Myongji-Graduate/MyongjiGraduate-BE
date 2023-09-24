@@ -12,7 +12,7 @@ import lombok.Getter;
 public class User {
 
 	private final Long id;
-	private String authId;
+	private final String authId;
 	private String password;
 	private final EnglishLevel englishLevel;
 	private String name;
@@ -82,6 +82,10 @@ public class User {
 
 	public String getEncryptedAuthId() {
 		return authId.replace(authId.substring(authId.length() - 3), "***");
+	}
+
+	public void resetPassword(String newPassword) {
+		this.password = newPassword;
 	}
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
 		return Integer.parseInt(studentNumber.substring(2, 4));
