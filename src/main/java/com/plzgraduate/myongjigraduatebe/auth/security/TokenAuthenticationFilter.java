@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.security;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -30,7 +32,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			String token = getAccessToken(authorizationHeader);
 			if(token != null) {
 				try {
-					Authentication authentication = tokenProvider.getAuthentication(token);
+					Long userId = tokenProvider.extractUserId(token);
+					Authentication authentication = new JwtAuthenticationToken(
+						userId, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				} catch (Exception e) {
 					log.warn("Jwt processing failed: {}", e.getMessage());

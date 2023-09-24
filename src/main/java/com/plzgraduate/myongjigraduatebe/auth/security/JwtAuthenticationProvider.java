@@ -39,7 +39,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 			User user = findUserUseCase.findUserByAuthId(String.valueOf(authenticationToken.getPrincipal()));
 			user.matchPassword(passwordEncoder, String.valueOf(authenticationToken.getCredentials()));
 			return new JwtAuthenticationToken(
-				new AuthenticationUser(user.getId(), user.getAuthId()), null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+				user.getId(), null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
 			);
 		} catch (IllegalArgumentException e) {
 			throw new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다.");
