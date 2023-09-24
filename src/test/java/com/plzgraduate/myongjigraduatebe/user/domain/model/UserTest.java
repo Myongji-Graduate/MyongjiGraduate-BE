@@ -129,4 +129,34 @@ class UserTest {
 	    //then
 		assertThat(user.getPassword()).isEqualTo(afterPassword);
 	}
+
+	@DisplayName("유저의 로그인 아이디와 같을 경우 true를 반환한다.")
+	@Test
+	void isMyAuthId() {
+	    //given
+		String authId = "testAuthId";
+		User user = User.builder()
+			.authId(authId).build();
+
+		//when
+		boolean result = user.isMyAuthId(authId);
+
+		//then
+		assertThat(result).isTrue();
+	}
+
+	@DisplayName("유저의 로그인 아이디와 다를 경우 false를 반환한다.")
+	@Test
+	void isNotMyAuthId() {
+		//given
+		String authId = "testAuthId";
+		User user = User.builder()
+			.authId("userAuthId").build();
+
+		//when
+		boolean result = user.isMyAuthId(authId);
+
+		//then
+		assertThat(result).isFalse();
+	}
 }
