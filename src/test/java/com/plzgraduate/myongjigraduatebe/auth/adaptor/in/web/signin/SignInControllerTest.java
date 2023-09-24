@@ -11,9 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-import com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin.SignInController;
-import com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin.SignInRequest;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.signin.SignInUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 
 @WebMvcTest(controllers = SignInController.class)

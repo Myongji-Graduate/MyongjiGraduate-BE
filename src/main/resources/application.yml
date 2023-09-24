@@ -17,6 +17,10 @@ spring:
         format_sql: true
     open-in-view: false
 
+  redis:
+    host: localhost
+    port: 6380
+
   flyway:
     baseline-on-migrate: true
     enabled: true
