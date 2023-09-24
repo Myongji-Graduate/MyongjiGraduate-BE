@@ -6,4 +6,6 @@ public interface FindUserUseCase {
 	User findUserById(Long id);
 
 	User findUserByAuthId(String authId);
+
+	User findUserByStudentNumber(String studentNumber);
 }

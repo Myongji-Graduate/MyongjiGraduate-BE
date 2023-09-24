@@ -8,8 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -44,20 +42,20 @@ class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 			.andExpect(jsonPath("$.studentNumber", is(studentNumber)));
 	}
 
-	@DisplayName("학번으로 해당 학생의 아이디를 조회한다.")
+	@DisplayName("해당 학번의 유저가 없을 에러 응답을 반환한다.")
 	@Test
 	void findUserAuthIdWithoutUser() throws Exception {
 		//given
 		String studentNumber = "60191111";
 		given(findUserAuthIdUseCase.findUserAuthId(any())).willThrow(
-			new NoSuchElementException("해당 학번의 사용자가 존재하지 않습니다."));
+			new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
 		//when //then
 		mockMvc.perform(get("/api/v1/users/{student-number}/auth-id", studentNumber))
 			.andDo(print())
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.status", is(404)))
-			.andExpect(jsonPath("$.message", is("해당 학번의 사용자가 존재하지 않습니다.")));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.status", is(400)))
+			.andExpect(jsonPath("$.message", is("해당 사용자를 찾을 수 없습니다.")));
 	}
 
 }

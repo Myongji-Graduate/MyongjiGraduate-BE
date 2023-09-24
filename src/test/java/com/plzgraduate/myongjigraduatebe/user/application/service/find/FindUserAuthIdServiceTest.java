@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,15 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.UserAuthIdResponse;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class FindUserAuthIdServiceTest {
 
 	@Mock
-	private FindUserPort findUserPort;
+	private FindUserUseCase findUserUseCase;
 
 	@InjectMocks
 	private FindUserAuthIdService findUserAuthIdService;
@@ -30,16 +28,16 @@ class FindUserAuthIdServiceTest {
 	@DisplayName("학번을 통해 해당 학번 학생의 암호화된 로그인 아이디를 얻는다.")
 	@Test
 	void findUserAuthId() {
-	    //given
+		//given
 		String studentNumber = "60191111";
 		User user = User.builder()
 			.authId("tester00")
 			.password("tester00!")
 			.studentNumber(studentNumber)
 			.build();
-		given(findUserPort.findUserByStudentNumber(anyString())).willReturn(Optional.of(user));
+		given(findUserUseCase.findUserByStudentNumber(anyString())).willReturn(user);
 
-	    //when
+		//when
 		UserAuthIdResponse userAuthIdResponse = findUserAuthIdService.findUserAuthId(studentNumber);
 
 		//then
@@ -52,12 +50,13 @@ class FindUserAuthIdServiceTest {
 	void findUserAuthIdWithoutUser() {
 		//given
 		String studentNumber = "60191111";
-		given(findUserPort.findUserByStudentNumber(anyString())).willReturn(Optional.empty());
+		given(findUserUseCase.findUserByStudentNumber(anyString())).willThrow(
+			new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
 		//when //then
 		assertThatThrownBy(() -> findUserAuthIdService.findUserAuthId(studentNumber))
-			.isInstanceOf(NoSuchElementException.class)
-			.hasMessage("해당 학번의 사용자가 존재하지 않습니다.");
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("해당 사용자를 찾을 수 없습니다.");
 	}
 
 }
