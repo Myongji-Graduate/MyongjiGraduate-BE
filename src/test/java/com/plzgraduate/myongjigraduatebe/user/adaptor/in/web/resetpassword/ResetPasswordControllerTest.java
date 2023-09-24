@@ -1,7 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.resetpassword;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,17 +18,40 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.validate.ValidateUserResponse;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.validate.ValidateUserUseCase;
 
 @WebMvcTest(controllers = ResetPasswordController.class)
 class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 
 	@MockBean
+	private ValidateUserUseCase validateUserUseCase;
+
+	@MockBean
 	private ResetPasswordUseCase resetPasswordUseCase;
+
+	@DisplayName("학번으로 유저 정보 조회 후 로그인 이아디와 일치하는지 확인한다.")
+	@Test
+	void validateUser() throws Exception {
+		//given
+		String studentNumber = "60191656";
+		String authId = "testAuthId";
+		ValidateUserResponse response = ValidateUserResponse.builder()
+			.passedUserValidation(true).build();
+		given(validateUserUseCase.validateUser(studentNumber, authId)).willReturn(response);
+
+		//when //then
+		mockMvc.perform(get("/api/v1/users/{student-number}/validate", studentNumber)
+				.param("auth-id", authId))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.passedUserValidation", is(true)));
+	}
 
 	@DisplayName("아이디로 유저 정보 조회 후 비밀번호를 변경한다.")
 	@Test
 	void resetPassword() throws Exception {
-	    //given
+		//given
 		ResetPasswordRequest request = ResetPasswordRequest.builder()
 			.authId("authId")
 			.newPassword("abcd1234@")
