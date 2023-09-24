@@ -41,7 +41,8 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.antMatchers(
 				API_V1_PREFIX + "/users/sign-up", // 회원가입
-				API_V1_PREFIX + "/auth/sign-in" // 로그인
+				API_V1_PREFIX + "/auth/sign-in", // 로그인
+				API_V1_PREFIX + "/auth/token" //새 토큰 발급
 			)
 			.permitAll()
 			.anyRequest()
