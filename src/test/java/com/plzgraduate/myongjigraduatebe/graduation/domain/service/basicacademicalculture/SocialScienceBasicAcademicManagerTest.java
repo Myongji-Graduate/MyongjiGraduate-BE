@@ -15,7 +15,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -30,7 +30,7 @@ class SocialScienceBasicAcademicManagerTest {
 	class 이십삼년도_이후_교과목_포함 {
 		User user = UserFixture.행정학과_21학번();
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-		Set<BasicAcademicalCulture> basicAcademicalLectures = BasicAcademicalLectureFixture.사회과학대_학문기초교양();
+		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.사회과학대_학문기초교양();
 
 		@DisplayName("2023년도 이후에 들었을 경우 통과한다.")
 		@Test
@@ -42,7 +42,7 @@ class SocialScienceBasicAcademicManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02108"), 2023, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMD02186"), 2023, Semester.SECOND)
 			)));
-			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
 
 			//when
@@ -75,7 +75,7 @@ class SocialScienceBasicAcademicManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02108"), 2020, Semester.FIRST),
 				TakenLecture.of(user, mockLectureMap.get("KMD02186"), 2020, Semester.SECOND)
 			)));
-			TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 			BasicAcademicalManager manager = new SocialScienceBasicAcademicManager();
 
 			//when

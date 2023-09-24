@@ -5,8 +5,6 @@ import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,9 +12,9 @@ import lombok.Getter;
 public class User {
 
 	private final Long id;
-	private String authId;
+	private final String authId;
 	private String password;
-	private EnglishLevel englishLevel;
+	private final EnglishLevel englishLevel;
 	private String name;
 	private final String studentNumber;
 	private final int entryYear;
@@ -29,7 +27,8 @@ public class User {
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
-		int entryYear, String major, String changeMajor, String subMajor, StudentCategory studentCategory, Instant createdAt, Instant updatedAt) {
+		int entryYear, String major, String changeMajor, String subMajor, StudentCategory studentCategory,
+		Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -57,7 +56,8 @@ public class User {
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major, String changeMajor, String subMajor, StudentCategory studentCategory) {
+	public void updateStudentInformation(String name, String major, String changeMajor, String subMajor,
+		StudentCategory studentCategory) {
 		this.name = name;
 		this.major = major;
 		this.changeMajor = changeMajor;
@@ -78,10 +78,23 @@ public class User {
 	}
 
 	public void matchPassword(PasswordEncoder passwordEncoder, String password) {
-		if(!passwordEncoder.matches(password, this.password)) {
+		if (!passwordEncoder.matches(password, this.password)) {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
 	}
+
+	public String getEncryptedAuthId() {
+		return authId.replace(authId.substring(authId.length() - 3), "***");
+	}
+
+	public void resetPassword(String newPassword) {
+		this.password = newPassword;
+	}
+
+	public boolean isMyAuthId(String authId) {
+		return this.authId.equals(authId);
+	}
+
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}

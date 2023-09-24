@@ -28,7 +28,7 @@ class NormalCultureGraduationResultTest {
 	@Test
 	void createNormalCultureGraduationResult() {
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
@@ -36,7 +36,7 @@ class NormalCultureGraduationResultTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
 			)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.categoryName(COMMON_CULTURE.getName())

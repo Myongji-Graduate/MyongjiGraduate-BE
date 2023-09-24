@@ -11,24 +11,32 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler({
-		IllegalArgumentException.class, IllegalStateException.class,
+		IllegalArgumentException.class,
+		IllegalStateException.class,
 		HttpMessageNotReadableException.class
 	})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ExceptionResponse handleBadRequestException(Exception e) {
 		log.debug("Bad request exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
+	}
+
+	@ExceptionHandler(NoSuchElementException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ExceptionResponse handleNotFoundException(Exception e) {
+		log.debug("Not Found exception occurred: {}", e.getMessage(), e);
+		return ExceptionResponse.of(HttpStatus.NOT_FOUND, getMessage(e));
 	}
 
 	@ExceptionHandler(UnAuthorizedException.class)

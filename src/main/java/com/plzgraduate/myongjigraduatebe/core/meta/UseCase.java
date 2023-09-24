@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Documented
 @Component
 public @interface UseCase {
+
 	@AliasFor(annotation = Component.class)
 	String value() default "";
 }

@@ -18,7 +18,7 @@ public class FindTakenLectureResponse {
 		this.takenLectures = takenLectures;
 	}
 
-	public static FindTakenLectureResponse from(int totalCredit, List<TakenLectureResponse> takenLectures) {
+	public static FindTakenLectureResponse of(int totalCredit, List<TakenLectureResponse> takenLectures) {
 		return FindTakenLectureResponse.builder()
 			.totalCredit(totalCredit)
 			.takenLectures(takenLectures)

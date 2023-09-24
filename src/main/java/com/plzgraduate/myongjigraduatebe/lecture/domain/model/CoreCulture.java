@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class CoreCulture {
 
-	private Lecture lecture;
-	private CoreCultureCategory coreCultureCategory;
+	private final Lecture lecture;
+	private final CoreCultureCategory coreCultureCategory;
 
 	@Builder
 	private CoreCulture(Lecture lecture, CoreCultureCategory coreCultureCategory) {

@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -10,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.LectureQueryRepository;
+import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 @Import(TestQuerydslConfig.class)

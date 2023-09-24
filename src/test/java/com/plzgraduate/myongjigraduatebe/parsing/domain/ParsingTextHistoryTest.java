@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ class ParsingTextHistoryTest {
 	@Test
 	void success() {
 	    //given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		String text = "text";
 	    //when
 		ParsingTextHistory parsingTextHistory = ParsingTextHistory.success(user, text);
@@ -29,7 +28,7 @@ class ParsingTextHistoryTest {
 	@Test
 	void fail() {
 		//given
-		User user = UserFixture.경영학과_19학번();
+		User user = UserFixture.경영학과_19학번_ENG34();
 		String text = "text";
 		//when
 		ParsingTextHistory parsingTextHistory = ParsingTextHistory.fail(user, text);

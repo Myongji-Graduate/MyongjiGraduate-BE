@@ -58,7 +58,7 @@ class CoreCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02138"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02139"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CoreCulture> graduationLectures = CoreCultureFixture.getAllCoreCulture();
 
 		//when
@@ -89,7 +89,7 @@ class CoreCultureGraduationManagerTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02142"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02160"), 2023, Semester.FIRST)
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<CoreCulture> graduationLectures = CoreCultureFixture.getAllCoreCulture();
 
 		//when

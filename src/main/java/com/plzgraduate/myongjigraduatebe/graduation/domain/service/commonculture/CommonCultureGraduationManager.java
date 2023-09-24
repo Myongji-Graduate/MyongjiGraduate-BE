@@ -25,7 +25,7 @@ public class CommonCultureGraduationManager implements GraduationManager<CommonC
 		List<DetailCategoryResult> commonCultureDetailCategoryResults = Arrays.stream(CommonCultureCategory.values())
 			.filter(
 				commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
-			.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(takenLectureInventory,
+			.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(user, takenLectureInventory,
 				graduationLectures, commonCultureCategory))
 			.collect(Collectors.toList());
 

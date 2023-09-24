@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -46,6 +44,22 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		//then
 		assertThat(user).isPresent();
 		assertThat(user.get().getAuthId()).isEqualTo(authId);
+	}
+
+	@DisplayName("학번으로 사용자를 조회한다.")
+	@Test
+	void findUserByStudentNumber() {
+		//given
+		String studentNumber = "60181666";
+		UserJpaEntity userJpaEntity = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
+		userRepository.save(userJpaEntity);
+
+		//when
+		Optional<User> user = userPersistenceAdaptor.findUserByStudentNumber(studentNumber);
+
+		//then
+		assertThat(user).isPresent();
+		assertThat(user.get().getStudentNumber()).isEqualTo(studentNumber);
 	}
 
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")

@@ -32,7 +32,7 @@ class FindTakenLectureService implements FindTakenLectureUseCase {
 		User user = findUserUseCase.findUserById(userId);
 		List<TakenLecture> takenLectures = findTakenLecturePort.findTakenLecturesByUser(user);
 		sortTakenLectures(takenLectures);
-		return FindTakenLectureResponse.from(
+		return FindTakenLectureResponse.of(
 			calculateTotalCredit(takenLectures),
 			takenLectures.stream()
 				.map(TakenLectureResponse::from)

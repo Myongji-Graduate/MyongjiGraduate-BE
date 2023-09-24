@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -57,8 +57,8 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04343"), 2022, Semester.SECOND), //해외시장조사론
 			TakenLecture.of(user, mockLectureMap.get("HCC04496"), 2022, Semester.SECOND) //글로벌전략계획
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
@@ -113,8 +113,8 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04343"), 2022, Semester.SECOND), //해외시장조사론
 			TakenLecture.of(user, mockLectureMap.get("HCC04496"), 2022, Semester.SECOND) //글로벌전략계획
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
@@ -170,8 +170,8 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04496"), 2022, Semester.SECOND), //글로벌전략계획
 			TakenLecture.of(user, mockLectureMap.get("HCC04426"), 2023, Semester.SECOND) //다국적기업론
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
@@ -224,8 +224,8 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HCC04456"), 2022, Semester.SECOND), //미국경제론
 			TakenLecture.of(user, mockLectureMap.get("HCC04461"), 2022, Semester.SECOND) //국제통상세미나
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
@@ -263,8 +263,8 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HBX01105"), 2020, Semester.SECOND), //재무관리원론
 			TakenLecture.of(user, mockLectureMap.get("HBX01143"), 2021, Semester.FIRST) //운영관리
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when
@@ -294,8 +294,8 @@ class InternationTradeMajorTest {
 			TakenLecture.of(user, mockLectureMap.get("HBX01105"), 2020, Semester.SECOND), //재무관리원리
 			TakenLecture.of(user, mockLectureMap.get("HBX01114"), 2021, Semester.FIRST) //생산운영관리
 		)));
-		TakenLectureInventory takenLectureInventory = new TakenLectureInventory(takenLectures);
-		Set<Major> 국제통상_전공 = MajorFixture.국제통상_전공();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
 		MajorManager manager = new MajorManager();
 
 		//when

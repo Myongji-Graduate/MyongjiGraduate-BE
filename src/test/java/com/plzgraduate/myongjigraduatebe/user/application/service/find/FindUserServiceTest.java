@@ -1,12 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.find;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
-
-import javax.swing.text.html.Option;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +32,7 @@ class FindUserServiceTest {
 			.id(1L)
 			.authId("tester00")
 			.password("tester00!")
+			.studentNumber("60191656")
 			.build();
 	}
 
@@ -91,5 +89,29 @@ class FindUserServiceTest {
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("해당 사용자를 찾을 수 없습니다.");
 
+	}
+
+	@DisplayName("학번을 통해 유저를 찾는다.")
+	@Test
+	void findUserByStudentNumber() {
+		//given
+		given(findUserPort.findUserByStudentNumber("60191656")).willReturn(Optional.of(user));
+
+		//when
+		User user = findUserService.findUserByStudentNumber("60191656");
+
+		//then
+		assertThat(user.getStudentNumber()).isEqualTo("60191656");
+	}
+
+	@DisplayName("해당 학번의 유저가 존재하지 않을 시 예외가 발생한다.")
+	@Test
+	void findNonUserByStudentNumber() {
+		//given
+		given(findUserPort.findUserByStudentNumber("")).willThrow(new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+		//when //then
+		assertThatThrownBy(() -> findUserService.findUserByStudentNumber("")).isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("해당 사용자를 찾을 수 없습니다.");
 	}
 }

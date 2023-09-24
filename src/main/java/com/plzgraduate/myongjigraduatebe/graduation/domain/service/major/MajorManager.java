@@ -13,21 +13,21 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.excepti
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.OptionalMandatoryHandler;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.ReplaceMandatoryMajorHandler;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Major;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
-public class MajorManager implements GraduationManager<Major> {
+public class MajorManager implements GraduationManager<MajorLecture> {
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, Set<Major> majorLectures, int graduationResultTotalCredit) {
-		removeDuplicateLecture(takenLectureInventory, majorLectures);
-		changeMandatoryToElectiveByMajorRange(user, majorLectures);
+		TakenLectureInventory takenLectureInventory, Set<MajorLecture> majorLectureLectures, int graduationResultTotalCredit) {
+		removeDuplicateLecture(takenLectureInventory, majorLectureLectures);
+		changeMandatoryToElectiveByMajorRange(user, majorLectureLectures);
 
-		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
-		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
+		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectureLectures);
+		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectureLectures);
 
 		List<MajorExceptionHandler> majorExceptionHandlers = List.of(new OptionalMandatoryHandler(),
 			new ReplaceMandatoryMajorHandler());
@@ -45,21 +45,21 @@ public class MajorManager implements GraduationManager<Major> {
 			List.of(mandantoryDetailCategoryResult, electiveDetailCategoryResult));
 	}
 
-	private Set<Lecture> filterMandatoryLectures(Set<Major> majorLectures) {
-		return majorLectures.stream()
+	private Set<Lecture> filterMandatoryLectures(Set<MajorLecture> majorLectureLectures) {
+		return majorLectureLectures.stream()
 			.filter(major -> major.getIsMandatory() == 1)
-			.map(Major::getLecture)
+			.map(MajorLecture::getLecture)
 			.collect(Collectors.toSet());
 	}
 
-	private Set<Lecture> filterElectiveLectures(Set<Major> majorLectures) {
-		return majorLectures.stream()
+	private Set<Lecture> filterElectiveLectures(Set<MajorLecture> majorLectureLectures) {
+		return majorLectureLectures.stream()
 			.filter(major -> major.getIsMandatory() == 0)
-			.map(Major::getLecture)
+			.map(MajorLecture::getLecture)
 			.collect(Collectors.toSet());
 	}
 
-	private void removeDuplicateLecture(TakenLectureInventory takenLectureInventory, Set<Major> graduationLectures) {
+	private void removeDuplicateLecture(TakenLectureInventory takenLectureInventory, Set<MajorLecture> graduationLectures) {
 		Set<Lecture> duplicatedTakenLectures = findDuplicatedTakenLecture(takenLectureInventory);
 		graduationLectures.removeIf(graduationLecture ->
 			duplicatedTakenLectures.stream()
@@ -79,7 +79,7 @@ public class MajorManager implements GraduationManager<Major> {
 	}
 
 	private void changeMandatoryToElectiveByMajorRange(User user,
-		Set<Major> majorsLectures) {
+		Set<MajorLecture> majorsLectures) {
 		majorsLectures.forEach(major ->
 			major.changeMandatoryToElectiveByEntryYearRange(user.getEntryYear()));
 	}
