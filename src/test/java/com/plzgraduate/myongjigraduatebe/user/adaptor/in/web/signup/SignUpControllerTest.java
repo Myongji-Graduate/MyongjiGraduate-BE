@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web;
+package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.signup;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -16,8 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.signup.SignUpController;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.signup.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.AuthIdDuplicationResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckAuthIdDuplicationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpUseCase;
