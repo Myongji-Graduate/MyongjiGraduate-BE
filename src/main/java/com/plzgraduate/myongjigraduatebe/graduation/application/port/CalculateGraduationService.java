@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CheckGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
@@ -32,6 +32,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,9 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-class CheckGraduationService implements CheckGraduationUseCase {
+class CalculateGraduationService implements CalculateGraduationUseCase {
+
+	private final FindUserUseCase findUserUseCase;
 
 	private final FindGraduationRequirementPort findGraduationRequirementPort;
 	private final FindTakenLecturePort findTakenLecturePort;
@@ -49,7 +52,8 @@ class CheckGraduationService implements CheckGraduationUseCase {
 	private final FindMajorPort findMajorPort;
 
 	@Override
-	public GraduationResponse checkGraduation(User user) {
+	public GraduationResponse calculateGraduation(Long userId) {
+		User user = findUserUseCase.findUserById(userId);
 		GraduationRequirement graduationRequirement = findGraduationRequirementPort.findGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(
 			findTakenLecturePort.findTakenLectureSetByUser(user));

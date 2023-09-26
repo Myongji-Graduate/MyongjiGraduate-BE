@@ -104,6 +104,7 @@ public class UserFixture {
 		String studentNumber,
 		int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		return User.builder()
+			.id(1L)
 			.authId(authId)
 			.password(password)
 			.englishLevel(englishLevel)

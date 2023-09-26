@@ -1,9 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.port.in;
 
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-public interface CheckGraduationUseCase {
+public interface CalculateGraduationUseCase {
 
-	GraduationResponse checkGraduation(User user);
+	GraduationResponse calculateGraduation(Long userId);
 }
