@@ -94,10 +94,11 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 	@Test
 	void deleteUser() {
 	    //given
-		String authId = "mju1001";
+		String authId = "mju1000";
 		UserJpaEntity userJpaEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
-		userRepository.save(userJpaEntity);
-		User user = User.builder().id(1L).build();
+		UserJpaEntity savedUserJpaEntity = userRepository.save(userJpaEntity);
+		User user = User.builder()
+			.id(savedUserJpaEntity.getId()).build();
 
 		//when
 		userPersistenceAdaptor.deleteUser(user);
