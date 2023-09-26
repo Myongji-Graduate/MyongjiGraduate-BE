@@ -2,18 +2,17 @@ package com.plzgraduate.myongjigraduatebe.user.application.port.in.check;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-public class AuthIdDuplicationResponse {
+public class StudentNumberDuplicationResponse {
 
-	private final String authId;
+	private final String studentNumber;
 
 	private final boolean notDuplicated;
 
 	@Builder
-	private AuthIdDuplicationResponse(String authId, boolean notDuplicated) {
-		this.authId = authId;
+	private StudentNumberDuplicationResponse(String studentNumber, boolean notDuplicated) {
+		this.studentNumber = studentNumber;
 		this.notDuplicated = notDuplicated;
 	}
 }
