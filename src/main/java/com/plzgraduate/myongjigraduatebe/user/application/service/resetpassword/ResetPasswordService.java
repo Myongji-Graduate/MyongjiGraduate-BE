@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional
 @RequiredArgsConstructor
-public class ResetPasswordService implements ResetPasswordUseCase {
+class ResetPasswordService implements ResetPasswordUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	private final UpdateUserPort updateUserPort;

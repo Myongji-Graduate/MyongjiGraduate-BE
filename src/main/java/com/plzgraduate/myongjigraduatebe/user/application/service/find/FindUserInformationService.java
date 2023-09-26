@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FindUserInformationService implements FindUserInformationUseCase {
+class FindUserInformationService implements FindUserInformationUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	@Override
