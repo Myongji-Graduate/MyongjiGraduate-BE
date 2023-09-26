@@ -25,7 +25,7 @@ class FindUserInformationServiceTest {
 
 	@DisplayName("학생 정보결과를 반환한다.")
 	@Test
-	void generateUserInformation() {
+	void findUserInformation() {
 	    //given
 		Long userId = 1L;
 		String studentName = "testUser";
@@ -41,7 +41,7 @@ class FindUserInformationServiceTest {
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
 
 	    //when
-		UserInformationResponse userInformationResponse = findUserInformationService.generateUserInformation(userId);
+		UserInformationResponse userInformationResponse = findUserInformationService.findUserInformation(userId);
 
 		//then
 		assertThat(userInformationResponse).extracting("studentNumber", "studentName", "major")

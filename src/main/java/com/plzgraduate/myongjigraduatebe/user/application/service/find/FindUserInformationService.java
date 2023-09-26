@@ -17,7 +17,7 @@ public class FindUserInformationService implements FindUserInformationUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	@Override
-	public UserInformationResponse generateUserInformation(Long userId) {
+	public UserInformationResponse findUserInformation(Long userId) {
 		User user = findUserUseCase.findUserById(userId);
 		return UserInformationResponse.builder()
 			.studentName(user.getName())
