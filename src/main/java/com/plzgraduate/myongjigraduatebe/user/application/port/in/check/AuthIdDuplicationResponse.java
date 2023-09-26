@@ -5,12 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class AuthIdDuplicationResponse {
 
-	private String authId;
+	private final String authId;
 
-	private boolean notDuplicated;
+	private final boolean notDuplicated;
 
 	@Builder
 	private AuthIdDuplicationResponse(String authId, boolean notDuplicated) {

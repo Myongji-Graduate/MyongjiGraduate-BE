@@ -18,9 +18,9 @@ public class CheckAuthIdDuplicationService implements CheckAuthIdDuplicationUseC
 
 	@Override
 	public AuthIdDuplicationResponse checkAuthIdDuplication(String authId) {
-		boolean authIdDuplication = checkUserPort.checkDuplicateAuthId(authId);
+		boolean authIdDuplication = !checkUserPort.checkDuplicateAuthId(authId);
 		return AuthIdDuplicationResponse.builder()
 			.authId(authId)
-			.notDuplicated(!authIdDuplication).build();
+			.notDuplicated(authIdDuplication).build();
 	}
 }
