@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.AuthIdDuplicationResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckAuthIdDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckStudentNumberDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.StudentNumberDuplicationResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpUseCase;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class SignUpController {
 
 	private final SignUpUseCase signUpUseCase;
 	private final CheckAuthIdDuplicationUseCase checkAuthIdDuplicationUseCase;
+	private final CheckStudentNumberDuplicationUseCase checkStudentNumberDuplicationUseCase;
 
 	@PostMapping("/sign-up")
 	public void signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -31,5 +34,11 @@ public class SignUpController {
 	@GetMapping("/sign-up/check-duplicate-auth-id")
 	public AuthIdDuplicationResponse checkAuthIdDuplication(@RequestParam("auth-id") String authId) {
 		return checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId);
+	}
+
+	@GetMapping("/sign-up/check-duplicate-student-number")
+	public StudentNumberDuplicationResponse checkStudentNumberDuplication(
+		@RequestParam("student-number") String studentNumber) {
+		return checkStudentNumberDuplicationUseCase.checkStudentNumberDuplication(studentNumber);
 	}
 }

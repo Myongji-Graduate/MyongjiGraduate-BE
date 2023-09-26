@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.AuthIdDuplicationResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckAuthIdDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckStudentNumberDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.StudentNumberDuplicationResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpUseCase;
 
 @WebMvcTest(controllers = SignUpController.class)
@@ -27,6 +29,8 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 	private SignUpUseCase signUpUseCase;
 	@MockBean
 	private CheckAuthIdDuplicationUseCase checkAuthIdDuplicationUseCase;
+	@MockBean
+	private CheckStudentNumberDuplicationUseCase checkStudentNumberDuplicationUseCase;
 
 	@DisplayName("회원가입을 진행한다.")
 	@Test
@@ -133,7 +137,7 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			.notDuplicated(notDuplicated).build();
 		given(checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId)).willReturn(authIdDuplicationResponse);
 
-		//when //then`
+		//when //then
 		mockMvc.perform(
 				get("/api/v1/users/sign-up/check-duplicate-auth-id")
 					.param("auth-id", authId)
@@ -141,6 +145,29 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.authId").value(authId))
+			.andExpect(jsonPath("$.notDuplicated").value(notDuplicated));
+	}
+
+	@DisplayName("학번 중복 여부를 체크한다.")
+	@Test
+	void checkStudentNumberDuplication() throws Exception {
+		//given
+		String studentNumber = "60191656";
+		boolean notDuplicated = true;
+		StudentNumberDuplicationResponse studentNumberDuplicationResponse = StudentNumberDuplicationResponse.builder()
+			.studentNumber(studentNumber)
+			.notDuplicated(notDuplicated).build();
+		given(checkStudentNumberDuplicationUseCase.checkStudentNumberDuplication(studentNumber)).willReturn(
+			studentNumberDuplicationResponse);
+
+		//when //then
+		mockMvc.perform(
+				get("/api/v1/users/sign-up/check-duplicate-student-number")
+					.param("student-number", studentNumber)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.studentNumber").value(studentNumber))
 			.andExpect(jsonPath("$.notDuplicated").value(notDuplicated));
 	}
 }
