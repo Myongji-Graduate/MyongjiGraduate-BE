@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FindUserAuthIdService implements FindUserAuthIdUseCase {
+class FindUserAuthIdService implements FindUserAuthIdUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 

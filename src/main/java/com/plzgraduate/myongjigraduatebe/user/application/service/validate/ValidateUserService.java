@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ValidateUserService implements ValidateUserUseCase {
+class ValidateUserService implements ValidateUserUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	@Override

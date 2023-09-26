@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CheckStudentNumberDuplicationService implements CheckStudentNumberDuplicationUseCase {
+class CheckStudentNumberDuplicationService implements CheckStudentNumberDuplicationUseCase {
 
 	private final CheckUserPort checkUserPort;
 

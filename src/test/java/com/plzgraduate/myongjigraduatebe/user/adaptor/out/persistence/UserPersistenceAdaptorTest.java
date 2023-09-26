@@ -90,6 +90,24 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		assertThat(check).isTrue();
 	}
 
+	@DisplayName("유저 데이터를 삭제한다.")
+	@Test
+	void deleteUser() {
+	    //given
+		String authId = "mju1000";
+		UserJpaEntity userJpaEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
+		UserJpaEntity savedUserJpaEntity = userRepository.save(userJpaEntity);
+		User user = User.builder()
+			.id(savedUserJpaEntity.getId()).build();
+
+		//when
+		userPersistenceAdaptor.deleteUser(user);
+
+	    //then
+		Optional<User> foundUser = userPersistenceAdaptor.findUserByAuthId(authId);
+		assertThat(foundUser.isPresent()).isFalse();
+	}
+
 	private User createUser(String authId, String password, String studentNumber) {
 		return User
 			.builder()
