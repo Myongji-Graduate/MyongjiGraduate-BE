@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response;
+package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response;
 
 import java.util.List;
 import java.util.stream.Collectors;

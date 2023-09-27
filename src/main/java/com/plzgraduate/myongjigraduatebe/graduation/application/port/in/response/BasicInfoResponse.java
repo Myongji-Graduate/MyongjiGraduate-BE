@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response;
+package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;

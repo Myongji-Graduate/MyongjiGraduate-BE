@@ -5,6 +5,7 @@ import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture
 import static com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester.*;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import java.util.HashSet;
@@ -20,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindBasicAcademicalCulturePort;
@@ -34,13 +35,16 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
-class CheckGraduationServiceTest {
+class CalculateGraduationServiceTest {
 
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
+	@Mock
+	private FindUserUseCase findUserUseCase;
 	@Mock
 	private FindGraduationRequirementPort findGraduationRequirementPort;
 	@Mock
@@ -54,13 +58,14 @@ class CheckGraduationServiceTest {
 	@Mock
 	private FindMajorPort findMajorPort;
 	@InjectMocks
-	private CheckGraduationService checkGraduationService;
+	private CalculateGraduationService checkGraduationService;
 
 	@DisplayName("유저 정보, 유저의 수강 과목 정보로 졸업 결과를 확인한다.")
 	@Test
-	void checkGraduation() {
+	void calculateGraduation() {
 		//given
 		User user = UserFixture.응용소프트웨어학과_19학번_영어_면제();
+		given(findUserUseCase.findUserById(anyLong())).willReturn(user);
 		given(findGraduationRequirementPort.findGraduationRequirement(user))
 			.willReturn(GraduationRequirement.builder()
 				.commonCultureCredit(9)
@@ -116,7 +121,7 @@ class CheckGraduationServiceTest {
 			.willReturn(new HashSet<>(Set.of(MajorLecture.of(mockLectureMap.get("HED01206"), "응용소프트웨어", 1, 18, 20))));
 
 		//when
-		GraduationResponse graduationResponse = checkGraduationService.checkGraduation(user);
+		GraduationResponse graduationResponse = checkGraduationService.calculateGraduation(user.getId());
 
 		//then
 		assertThat(graduationResponse.isGraduated()).isTrue();
