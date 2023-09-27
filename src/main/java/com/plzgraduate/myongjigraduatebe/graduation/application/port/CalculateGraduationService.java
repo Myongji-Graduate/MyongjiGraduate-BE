@@ -8,7 +8,7 @@ import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;

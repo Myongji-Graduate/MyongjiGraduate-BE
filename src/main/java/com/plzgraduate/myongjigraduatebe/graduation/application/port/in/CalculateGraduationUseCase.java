@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.port.in;
 
-import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.GraduationResponse;
 
 public interface CalculateGraduationUseCase {
 

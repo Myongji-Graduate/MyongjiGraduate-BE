@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.response.GraduationResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CalculateGraduationUseCase;
 
 import lombok.RequiredArgsConstructor;
