@@ -48,9 +48,9 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.WAS_HOST }}
-          username: ubuntu
+          username: ec2-user
           password: ${{ secrets.WAS_PASSWORD }}
-          source: "./test/*"
+          source: "./deploy/*"
           target: "~/app"
           strip_components: 1
           
@@ -58,7 +58,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.WAS_HOST }}
-          username: ubuntu
+          username: ec2-user
           password: ${{ secrets.WAS_PASSWORD }}
           script : |
             cd ~/app
