@@ -54,7 +54,7 @@ jobs:
         with:
           host: ${{ secrets.WAS_HOST }}
           username: ec2-user
-          password: ${{ secrets.WAS_PASSWORD }}
+          key: ${{ secrets.WAS_KEY }}
           source: "./docker-compose.yml"
           target: "~/app"
           strip_components: 1
@@ -64,7 +64,7 @@ jobs:
         with:
           host: ${{ secrets.WAS_HOST }}
           username: ec2-user
-          password: ${{ secrets.WAS_PASSWORD }}
+          key: ${{ secrets.WAS_KEY }}
           script : |
             cd ~/app
             docker stop $(docker ps -a -q) 
