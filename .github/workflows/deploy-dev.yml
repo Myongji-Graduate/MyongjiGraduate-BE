@@ -38,6 +38,11 @@ jobs:
       - name: Build with gradle
         run : ./gradlew bootJar
 
+      - name: make docker compose
+        run: |
+          touch ./docker-compose.yml
+          echo "${{ secrets.DOCKER_COMPOSE_PROD }}" >> ./docker-compose.yml
+
       - name: Build Docker image
         run: |
           docker login -u ${{ secrets.DOCKERHUB_ID }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
@@ -50,10 +55,10 @@ jobs:
           host: ${{ secrets.WAS_HOST }}
           username: ec2-user
           password: ${{ secrets.WAS_PASSWORD }}
-          source: "./deploy/*"
+          source: "./docker-compose.yml"
           target: "~/app"
           strip_components: 1
-          
+
       - name: Docker Deploy executing remote ssh commands using ssh_key
         uses: appleboy/ssh-action@master
         with:
