@@ -40,8 +40,8 @@ jobs:
           host: ${{ secrets.WAS_HOST }}
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
-          source: ./deploy/*
-          target: /app
+          source: "./deploy/*"
+          target: "/app"
           strip_components: 1
 
 
