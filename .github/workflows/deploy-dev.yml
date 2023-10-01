@@ -71,7 +71,7 @@ jobs:
             docker rm $(docker ps -a -q) 
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2
             docker-compose up -d
-            docker logs -f mj-graduate-boot-server >> app.log >>2 error.log &
+            docker logs -f mj-graduate-boot-server >> app.log &
             docker image prune -f
 
   current-time:
