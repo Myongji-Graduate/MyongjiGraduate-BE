@@ -20,16 +20,6 @@ jobs:
         with:
           java-version: 11
 
-      - name: Set yaml file
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./src/main/resources/application.yml
-        env:
-          spring.datasource.url: ${{secrets.DB_URL}}
-          spring.datasource.username: ${{secrets.DB_USERNAME}}
-          spring.datasource.password: ${{secrets.DB_PASSWORD}}
-          server.port: ${{secrets.PORT}}
-
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
