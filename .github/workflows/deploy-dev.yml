@@ -51,7 +51,7 @@ jobs:
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
           source: "/test/text.txt"
-          target: "/"
+          target: "~/app"
 
       - name: Docker Deploy executing remote ssh commands using ssh_key
         uses: appleboy/ssh-action@master
