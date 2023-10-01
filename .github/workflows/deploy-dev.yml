@@ -50,7 +50,7 @@ jobs:
           host: ${{ secrets.WAS_HOST }}
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
-          source: "/deploy/docker-compose.yml"
+          source: "/deploy/text.txt"
           target: "/app/"
 
       - name: Docker Deploy executing remote ssh commands using ssh_key
