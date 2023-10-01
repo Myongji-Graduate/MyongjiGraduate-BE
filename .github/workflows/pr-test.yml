@@ -19,16 +19,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set yaml file
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./src/main/resources/application.yml
-        env:
-          spring.datasource.url: ${{secrets.DB_URL}}
-          spring.datasource.username: ${{secrets.DB_USERNAME}}
-          spring.datasource.password: ${{secrets.DB_PASSWORD}}
-          server.port: ${{secrets.PORT}}
-
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
