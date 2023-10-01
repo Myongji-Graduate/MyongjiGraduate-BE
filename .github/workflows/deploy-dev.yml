@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - develop
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   build:
@@ -16,16 +19,28 @@ jobs:
       - name: Build with gradle
         run : ./gradlew bootJar
 
-      - name: create env file
+      - name: create docker compose file
         run: |
-          touch .env
-          echo "${{ secrets.DEV_ENV_VARS }}" >> .env
+          cd ./deploy
+          touch .docker-compose.yml
+          echo "${{ secrets.DOCKER_COMPOSE_PROD }}" >> .docker-compose.yml
 
       - name: Build Docker image
         run: |
           docker login -u ${{ secrets.DOCKERHUB_ID }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2 .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2
+
+      - name: send docker-compose file
+        uses: appleboy/scp-actions@master
+        with:
+          host: ${{ secrets.WAS_HOST }}
+          username: ubuntu
+          password: ${{ secrets.WAS_PASSWORD }}
+          source: ./deploy/*
+          target: /app
+          strip_components: 1
+
 
       - name: Docker Deploy executing remote ssh commands using ssh_key
         uses: appleboy/ssh-actions@master
@@ -34,10 +49,25 @@ jobs:
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
           script : |
-            cd ~/home/deploy
+            cd app
             docker stop $(docker ps -a -q) 
             docker rm $(docker ps -a -q) 
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2
             docker-compose up -d
             docker logs -f mj-graduate-boot-server >> app.log >2 error.log &
             docker image prune -f
+
+  current-time:
+    needs: CI-CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Current Time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH:mm:ss
+          utcOffset: "+09:00" # 기준이 UTC이기 때문에 한국시간인 KST를 맞추기 위해 +9시간 추가
+
+      - name: Print Current Time
+        run: echo "Current Time=${{steps.current-time.outputs.formattedTime}}" # current-time 에서 지정한 포맷대로 현재 시간 출력
+        shell: bash
