@@ -45,7 +45,8 @@ public class SecurityConfig {
         		API_V1_PREFIX + "/auth/token", //새 토큰 발급
 				API_V1_PREFIX + "/users/{student-number}/auth-id", // 아이디 찾기
 				API_V1_PREFIX + "/users/{student-number}/validate", // 유저 검증
-				API_V1_PREFIX + "/users/password" // 비밀번호 재설정
+				API_V1_PREFIX + "/users/password", // 비밀번호 재설정
+				API_V1_PREFIX + "/health" //헬스체크
 			)
 			.permitAll()
 			.anyRequest()
