@@ -34,16 +34,14 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2 .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2
 
-      - name: send docker-compose file
+      - name: copy file to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.WAS_HOST }}
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
-          source: "./deploy/*"
+          source: "/deploy/docker-compose.yml"
           target: "/app"
-          strip_components: 1
-
 
       - name: Docker Deploy executing remote ssh commands using ssh_key
         uses: appleboy/ssh-action@master
