@@ -50,9 +50,10 @@ jobs:
           host: ${{ secrets.WAS_HOST }}
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
-          source: "/test/text.txt"
+          source: "./test/*"
           target: "~/app"
-
+          strip_components: 1
+          
       - name: Docker Deploy executing remote ssh commands using ssh_key
         uses: appleboy/ssh-action@master
         with:
@@ -60,7 +61,7 @@ jobs:
           username: ubuntu
           password: ${{ secrets.WAS_PASSWORD }}
           script : |
-            cd app
+            cd ~/app
             docker stop $(docker ps -a -q) 
             docker rm $(docker ps -a -q) 
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate:v2
