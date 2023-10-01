@@ -4,13 +4,13 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://localhost:33066/myongji_graduate?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: mysql
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -21,17 +21,51 @@ spring:
     host: localhost
     port: 6380
 
-  flyway:
-    baseline-on-migrate: true
-    enabled: true
-
 logging:
   level:
     p6spy: info
 
 server:
-  port: ${PORT}
+  port: 8080
 
+jwt:
+  issuer: "plzgraduate"
+  secret-key: "coffee"
+  expiry-seconds: 86400
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  redis:
+    host: mj-redis-server
+    port: 6380
+
+jwt:
+  issuer: "plzgraduate"
+  secret-key: ${JWT_SECRET}
+  expiry-seconds: 86400
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  redis:
+    host: mj-redis-server
+    port: 6380
 
 jwt:
   issuer: "plzgraduate"
