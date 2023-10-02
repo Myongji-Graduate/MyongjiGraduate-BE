@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe;
+package com.plzgraduate.myongjigraduatebe.core;
 
 import javax.annotation.PostConstruct;
 
@@ -22,11 +22,9 @@ public class EnvironmentCheck {
 		String username = env.getProperty("spring.datasource.username");
 		String password = env.getProperty("spring.datasource.password");
 		String jwtKey = env.getProperty("jwt.secret-key");
-		String a= env.getProperty("logging.level.p6spy");
 		log.info("env url={}", url);
 		log.info("env username={}", username);
 		log.info("env password={}", password);
 		log.info("env jwtKey={}", jwtKey);
-		log.info("env level={}", a);
 	}
 }
