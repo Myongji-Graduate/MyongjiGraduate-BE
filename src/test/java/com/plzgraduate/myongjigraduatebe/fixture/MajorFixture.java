@@ -10,8 +10,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 public class MajorFixture {
 
 	public static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	private static final String 국제통상학과 = "국제통상";
-	private static final String 데이터테크놀로지전공 = "데이터테크놀로지";
+	private static final String 국제통상학과 = "국제통상학과";
+	private static final String 데이터테크놀로지전공 = "데이터테크놀로지전공";
 
 
 	public static Set<MajorLecture> 국제통상_전공() {

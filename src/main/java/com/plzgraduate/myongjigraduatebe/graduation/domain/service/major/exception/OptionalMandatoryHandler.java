@@ -15,10 +15,10 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	private int removedMandatoryTotalCredit = 0;
 
 	public boolean isSupport(User user) {
-		if (user.getMajor().equals("경영정보") && user.getEntryYear() >= 19) {
+		if (user.getMajor().equals("경영정보학과") && user.getEntryYear() >= 19) {
 			return true;
 		}
-		return List.of("행정", "경영", "국제통상").contains(user.getMajor());
+		return List.of("행정학과", "경영학과", "국제통상학과").contains(user.getMajor());
 	}
 
 	@Override
