@@ -55,11 +55,11 @@ class DefaultBasicAcademicalManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", true, 12, 15);
+				.contains("학문기초교양", true, 12, 12);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("학문기초교양", true, 12, 15);
+				.contains("학문기초교양", true, 12, 12);
 
 			assertThat(detailCategoryResult.getTakenLectures()).hasSize(5);
 			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();

@@ -136,7 +136,7 @@ class InternationTradeMajorTest {
 		assertThat(mandatoryDetailCategory.getHaveToLectures()).hasSize(1);
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
-			.contains(true, 42, 45);
+			.contains(true, 42, 42);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(15);
 		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
@@ -192,7 +192,7 @@ class InternationTradeMajorTest {
 		assertThat(mandatoryDetailCategory.getHaveToLectures()).hasSize(2);
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
-			.contains(true, 42, 45);
+			.contains(true, 42, 42);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(15);
 		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
