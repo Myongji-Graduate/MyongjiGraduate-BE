@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
 
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.*;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +22,29 @@ class FindCommonCulturePersistenceAdapter implements FindCommonCulturePort {
 
 	@Override
 	public Set<CommonCulture> findCommonCulture(User user) {
-		return commonCultureRepository.findAllByEntryYear(user.getEntryYear()).stream()
+		if (user.getEnglishLevel() == ENG12) {
+			return findEng12CommonCultures(user);
+		}
+		if (user.getEnglishLevel() == ENG34) {
+			return findEng34CommonCultures(user);
+		}
+		return findEngFreeCommonCultures(user);
+	}
+
+	private Set<CommonCulture> findEng12CommonCultures(User user) {
+		return commonCultureRepository.findEng12GraduationCommonCulturesByEntryYear(user.getEntryYear()).stream()
+			.map(lectureMapper::mapToCommonCultureModel)
+			.collect(Collectors.toSet());
+	}
+
+	private Set<CommonCulture> findEng34CommonCultures(User user) {
+		return commonCultureRepository.findEng34GraduationCommonCulturesByEntryYear(user.getEntryYear()).stream()
+			.map(lectureMapper::mapToCommonCultureModel)
+			.collect(Collectors.toSet());
+	}
+
+	private Set<CommonCulture> findEngFreeCommonCultures(User user) {
+		return commonCultureRepository.findEngFreeGraduationCommonCulturesByEntryYear(user.getEntryYear()).stream()
 			.map(lectureMapper::mapToCommonCultureModel)
 			.collect(Collectors.toSet());
 	}

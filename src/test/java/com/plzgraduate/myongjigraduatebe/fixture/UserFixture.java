@@ -65,6 +65,11 @@ public class UserFixture {
 			StudentCategory.NORMAL);
 	}
 
+	public static User 데이테크놀로지학과_16학번_Eng34() {
+		return createUser("mj1001", "1234", EnglishLevel.ENG34, "정데테", "60161666", 16, "데이터테크놀로지전공", null,
+			StudentCategory.NORMAL);
+	}
+
 	public static User 데이테크놀로지학과_18학번() {
 		return createUser("mj1003", "1234", EnglishLevel.ENG12, "정데테", "60181666", 18, "데이터테크놀로지전공", null,
 			StudentCategory.NORMAL);
