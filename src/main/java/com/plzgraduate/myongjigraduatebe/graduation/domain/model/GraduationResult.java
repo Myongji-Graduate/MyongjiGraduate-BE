@@ -55,7 +55,6 @@ public class GraduationResult {
 		this.totalCredit = detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getTotalCredit)
 			.sum()
-			+ CHAPEL_CREDIT
 			+ normalCultureGraduationResult.getTotalCredit()
 			+ freeElectiveGraduationResult.getTotalCredit();
 

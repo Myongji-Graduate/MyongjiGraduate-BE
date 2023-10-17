@@ -107,9 +107,9 @@ class GraduationResultTest {
 		//then
 		assertThat(graduationResult.isGraduated()).isTrue();
 		assertThat(graduationResult.getTotalCredit()).isEqualTo(
-			2 + detailCategoryTotalCredit + normalCultureTotalCredit + freeElectiveTotalCredit);
+			detailCategoryTotalCredit + normalCultureTotalCredit + freeElectiveTotalCredit);
 		assertThat(graduationResult.getTotalCredit()).isEqualTo(
-			2 + detailCategoryTakenCredit + normalCultureTakenCredit + freeElectiveTakenCredit);
+			detailCategoryTakenCredit + normalCultureTakenCredit + freeElectiveTakenCredit);
 	}
 
 	@DisplayName("채플 졸업 결과, 모든 세부 졸업 결과, 일반교양 졸업 결과, 자유선택 졸업 결과 중 하나라도 미이수일 시 전체 졸업 결과가 미이수이다.")
