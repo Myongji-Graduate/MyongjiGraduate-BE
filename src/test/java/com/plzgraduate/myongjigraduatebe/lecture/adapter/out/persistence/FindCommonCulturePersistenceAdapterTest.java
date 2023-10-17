@@ -24,7 +24,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
 	private static final String ENGLISH1_CODE = "KMA02106";
-	private static final String ENGLISH_CONVERSATION3_CODE = "KMA02125";
+	private static final String ENGLISH_CONVERSATION3_CODE = "KMA02123";
 
 	@Autowired
 	private LectureRepository lectureRepository;

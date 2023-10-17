@@ -10,10 +10,10 @@ import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.
 
 public interface CommonCultureRepository extends JpaRepository<CommonCultureJpaEntity, Long> {
 
-	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear and cc.lectureJpaEntity.lectureCode not in ('KMA02108', 'KMA02109', 'KMA02125', 'KMA02126')")
+	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear and cc.lectureJpaEntity.lectureCode not in ('KMA02123', 'KMA02124', 'KMA02125', 'KMA02126')")
 	List<CommonCultureJpaEntity> findEng12GraduationCommonCulturesByEntryYear(@Param("entryYear") int entryYear);
 
-	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear and cc.lectureJpaEntity.lectureCode not in ('KMA02106', 'KMA02107', 'KMA02123', 'KMA02124')")
+	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear and cc.lectureJpaEntity.lectureCode not in ('KMA02106', 'KMA02107', 'KMA02108', 'KMA02109')")
 	List<CommonCultureJpaEntity> findEng34GraduationCommonCulturesByEntryYear(@Param("entryYear") int entryYear);
 
 	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear and cc.commonCultureCategory != 'ENGLISH'")

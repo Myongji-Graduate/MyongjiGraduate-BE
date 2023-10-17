@@ -20,10 +20,10 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
 	private static final String ENGLISH1_CODE = "KMA02106";
 	private static final String ENGLISH2_CODE = "KMA02107";
-	private static final String ENGLISH3_CODE = "KMA02108";
-	private static final String ENGLISH4_CODE = "KMA02109";
-	private static final String ENGLISH_CONVERSATION1_CODE = "KMA02123";
-	private static final String ENGLISH_CONVERSATION2_CODE = "KMA02124";
+	private static final String ENGLISH_CONVERSATION1_CODE = "KMA02108";
+	private static final String ENGLISH_CONVERSATION2_CODE = "KMA02109";
+	private static final String ENGLISH3_CODE = "KMA02123";
+	private static final String ENGLISH4_CODE = "KMA02124";
 	private static final String ENGLISH_CONVERSATION3_CODE = "KMA02125";
 	private static final String ENGLISH_CONVERSATION4_CODE = "KMA02126";
 
