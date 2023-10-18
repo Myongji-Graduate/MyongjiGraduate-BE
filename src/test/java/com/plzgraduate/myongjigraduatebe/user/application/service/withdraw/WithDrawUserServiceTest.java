@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.DeleteUserPort;
@@ -22,6 +23,8 @@ class WithDrawUserServiceTest {
 	private FindUserUseCase findUserUseCase;
 	@Mock
 	private DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
+	@Mock
+	private DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
 	@Mock
 	private DeleteUserPort deleteUserPort;
 
@@ -39,6 +42,7 @@ class WithDrawUserServiceTest {
 		//when //then
 	    withDrawUserService.withDraw(user.getId());
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
+		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
 		then(deleteUserPort).should().deleteUser(user);
 	}
 

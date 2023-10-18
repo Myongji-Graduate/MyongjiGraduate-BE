@@ -19,7 +19,7 @@ class ParsingTextHistoryMapper {
 			.build();
 	}
 
-	private UserJpaEntity mapToUserJpaEntity(User user) {
+	UserJpaEntity mapToUserJpaEntity(User user) {
 
 		return UserJpaEntity.builder()
 			.id(user.getId())

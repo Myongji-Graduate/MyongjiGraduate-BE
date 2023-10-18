@@ -33,6 +33,7 @@ public class LectureMapper {
 		return CommonCulture.builder()
 			.lecture(
 				Lecture.builder()
+					.id(lectureJpaEntity.getId())
 					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
@@ -49,6 +50,7 @@ public class LectureMapper {
 		return CoreCulture.builder()
 			.lecture(
 				Lecture.builder()
+					.id(lectureJpaEntity.getId())
 					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
@@ -66,6 +68,7 @@ public class LectureMapper {
 		return BasicAcademicalCultureLecture.builder()
 			.lecture(
 				Lecture.builder()
+					.id(lectureJpaEntity.getId())
 					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
@@ -82,6 +85,7 @@ public class LectureMapper {
 		return MajorLecture.builder()
 			.lecture(
 				Lecture.builder()
+					.id(lectureJpaEntity.getId())
 					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())

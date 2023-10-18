@@ -77,9 +77,11 @@ public class DetailCategoryResult {
 		if (leftCredit > 0) {
 			if (detailCategoryName.equals(MAJOR.getName())) {
 				freeElectiveLeftCredit = leftCredit;
+				takenCredits -= leftCredit;
 				return;
 			}
 			normalLeftCredit = leftCredit;
+			takenCredits -= leftCredit;
 		}
 	}
 

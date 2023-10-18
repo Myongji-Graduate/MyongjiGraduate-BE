@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OptionalMandatory {
-	ADMINISTRATIONS("행정", 2, Set.of()),
-	BUSINESS("경영", 4, Set.of(
+	ADMINISTRATIONS("행정학과", 2, Set.of()),
+	BUSINESS("경영학과", 4, Set.of(
 		Lecture.of("HBX01104", "회계원리", 3, 0, null),
 		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
 		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
@@ -22,7 +22,7 @@ public enum OptionalMandatory {
 		Lecture.of("HBX01114", "생산운영관리", 3, 1, null),
 		Lecture.of("HBX01143", "운영관리", 3, 0, null)
 	)),
-	INTERNATIONAL_TRADE("국제통상", 4, Set.of(
+	INTERNATIONAL_TRADE("국제통상학과", 4, Set.of(
 		Lecture.of("HBX01104", "회계원리", 3, 0, null),
 		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
 		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
@@ -30,7 +30,7 @@ public enum OptionalMandatory {
 		Lecture.of("HBX01114", "생산운영관리", 3, 1, null),
 		Lecture.of("HBX01143", "운영관리", 3, 0, null)
 	)),
-	MANAGEMENT_INFORMATION("경영정보", 3, Set.of());
+	MANAGEMENT_INFORMATION("경영정보학과", 3, Set.of());
 
 	private final String department;
 	private final int chooseNUmber;

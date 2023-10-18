@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
@@ -60,6 +62,21 @@ class ChapelResultTest {
 
 	    //then
 		assertThat(chapelResult.isCompleted()).isFalse();
+	}
+
+	@DisplayName("채플 수강 횟수에 따른 학점을 반환한다.(2회당 1점)")
+	@ParameterizedTest
+	@ValueSource(ints = {1, 2, 3, 4})
+	void getTakenChapelCredit(int takenCount) {
+	    //given
+		ChapelResult chapelResult = ChapelResult.builder()
+			.takenCount(takenCount).build();
+
+		//when
+		int takenChapelCredit = chapelResult.getTakenChapelCredit();
+
+		//then
+		assertThat(takenChapelCredit).isEqualTo(takenCount / 2);
 	}
 
 }

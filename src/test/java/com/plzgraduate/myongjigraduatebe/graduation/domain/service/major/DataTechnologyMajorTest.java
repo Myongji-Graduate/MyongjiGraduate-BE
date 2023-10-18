@@ -77,7 +77,7 @@ class DataTechnologyMajorTest {
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("isCompleted", "totalCredit", "takenCredit")
-			.contains(true, 70, 71);
+			.contains(true, 70, 70);
 		assertThat(mandatoryDetailCategory)
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(true, true, 36, 36);
@@ -85,7 +85,7 @@ class DataTechnologyMajorTest {
 		assertThat(mandatoryDetailCategory.getHaveToLectures()).isEmpty();
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
-			.contains(true, 34, 35);
+			.contains(true, 34, 34);
 		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(12);
 		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
 	}
