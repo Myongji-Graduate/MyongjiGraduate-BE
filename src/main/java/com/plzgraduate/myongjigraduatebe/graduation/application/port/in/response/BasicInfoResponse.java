@@ -13,10 +13,10 @@ public class BasicInfoResponse {
 	private final String studentNumber;
 	private final String major;
 	private final int totalCredit;
-	private final int takenCredit;
+	private final double takenCredit;
 
 	@Builder
-	private BasicInfoResponse(String name, String studentNumber, String major, int totalCredit, int takenCredit) {
+	private BasicInfoResponse(String name, String studentNumber, String major, int totalCredit, double takenCredit) {
 		this.name = name;
 		this.studentNumber = studentNumber;
 		this.major = major;

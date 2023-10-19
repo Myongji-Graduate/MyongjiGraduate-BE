@@ -30,8 +30,8 @@ public class ChapelResult {
 		isCompleted = takenCount >= GRADUATION_COUNT;
 	}
 
-	public int getTakenChapelCredit() {
-		return takenCount / 2;
+	public double getTakenChapelCredit() {
+		return takenCount * 0.5;
 	}
 
 	private static int countTakenChapel(TakenLectureInventory takenLectureInventory) {

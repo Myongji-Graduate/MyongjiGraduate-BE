@@ -73,10 +73,10 @@ class ChapelResultTest {
 			.takenCount(takenCount).build();
 
 		//when
-		int takenChapelCredit = chapelResult.getTakenChapelCredit();
+		double takenChapelCredit = chapelResult.getTakenChapelCredit();
 
 		//then
-		assertThat(takenChapelCredit).isEqualTo(takenCount / 2);
+		assertThat(takenChapelCredit).isEqualTo(takenCount * 0.5);
 	}
 
 }

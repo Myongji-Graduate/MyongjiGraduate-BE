@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 public class ChapelResultResponse {
 
-	private final int totalCount = 4;
 	private final int takenCount;
 	private final boolean completed;
 

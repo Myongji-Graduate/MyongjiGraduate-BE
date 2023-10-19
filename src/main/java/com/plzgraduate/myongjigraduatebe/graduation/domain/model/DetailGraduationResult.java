@@ -11,7 +11,7 @@ public class DetailGraduationResult {
 	private final String categoryName;
 	private final boolean isCompleted;
 	private final int totalCredit;
-	private final int takenCredit;
+	private double takenCredit;
 	private final List<DetailCategoryResult> detailCategory;
 
 	@Builder
@@ -33,6 +33,10 @@ public class DetailGraduationResult {
 			.takenCredit(calculateTakenCredit(detailCategoryResults))
 			.detailCategory(detailCategoryResults)
 			.build();
+	}
+
+	public void addCredit(double takenCredit) {
+		this.takenCredit += takenCredit;
 	}
 
 	public int getNormalLeftCredit() {
