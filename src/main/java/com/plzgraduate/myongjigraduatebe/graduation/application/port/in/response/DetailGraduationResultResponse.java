@@ -12,12 +12,12 @@ import lombok.Getter;
 public class DetailGraduationResultResponse {
 
 	private final int totalCredit;
-	private final int takenCredit;
+	private final double takenCredit;
 	private final List<DetailGraduationCategoryResultResponse> detailCategory;
 	private final boolean completed;
 
 	@Builder
-	private DetailGraduationResultResponse(int totalCredit, int takenCredit,
+	private DetailGraduationResultResponse(int totalCredit, double takenCredit,
 		List<DetailGraduationCategoryResultResponse> detailCategory, boolean completed) {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
