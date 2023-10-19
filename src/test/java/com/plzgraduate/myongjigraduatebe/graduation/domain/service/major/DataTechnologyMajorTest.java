@@ -134,7 +134,7 @@ class DataTechnologyMajorTest {
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("isCompleted", "totalCredit", "takenCredit")
-			.contains(false, 70, 57);
+			.contains(false, 70, 57.0);
 		assertThat(mandatoryDetailCategory)
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(false, false, 33, 30);

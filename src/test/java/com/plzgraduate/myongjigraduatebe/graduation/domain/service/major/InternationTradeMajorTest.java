@@ -238,7 +238,7 @@ class InternationTradeMajorTest {
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("isCompleted", "totalCredit", "takenCredit")
-			.contains(false, 63, 54);
+			.contains(false, 63, 54.0);
 		assertThat(mandatoryDetailCategory)
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(true, true, 21, 21);

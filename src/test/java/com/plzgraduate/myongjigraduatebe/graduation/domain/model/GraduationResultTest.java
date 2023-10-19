@@ -84,6 +84,7 @@ class GraduationResultTest {
 			.isCompleted(true).build();
 		List<DetailGraduationResult> detailGraduationResults = List.of(DetailGraduationResult.builder()
 			.isCompleted(true)
+			.categoryName(COMMON_CULTURE.getName())
 			.totalCredit(detailCategoryTotalCredit)
 			.takenCredit(detailCategoryTakenCredit).build());
 		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.builder()
@@ -136,25 +137,33 @@ class GraduationResultTest {
 		return Stream.of(
 			Arguments.arguments(
 				ChapelResult.builder().isCompleted(true).build(),
-				List.of(DetailGraduationResult.builder().isCompleted(true).build()),
+				List.of(DetailGraduationResult.builder()
+					.isCompleted(true)
+					.categoryName(COMMON_CULTURE.getName()).build()),
 				NormalCultureGraduationResult.builder().isCompleted(true).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(false).build()
 			),
 			Arguments.arguments(
 				ChapelResult.builder().isCompleted(true).build(),
-				List.of(DetailGraduationResult.builder().isCompleted(true).build()),
+				List.of(DetailGraduationResult.builder()
+					.isCompleted(true)
+					.categoryName(COMMON_CULTURE.getName()).build()),
 				NormalCultureGraduationResult.builder().isCompleted(false).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(true).build()
 			),
 			Arguments.arguments(
 				ChapelResult.builder().isCompleted(true).build(),
-				List.of(DetailGraduationResult.builder().isCompleted(false).build()),
+				List.of(DetailGraduationResult.builder()
+					.isCompleted(false)
+					.categoryName(COMMON_CULTURE.getName()).build()),
 				NormalCultureGraduationResult.builder().isCompleted(true).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(true).build()
 			),
 			Arguments.arguments(
 				ChapelResult.builder().isCompleted(false).build(),
-				List.of(DetailGraduationResult.builder().isCompleted(true).build()),
+				List.of(DetailGraduationResult.builder()
+					.isCompleted(true)
+					.categoryName(COMMON_CULTURE.getName()).build()),
 				NormalCultureGraduationResult.builder().isCompleted(true).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(true).build()
 			)

@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
+
 import java.util.List;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -15,7 +17,7 @@ public class GraduationResult {
 	private NormalCultureGraduationResult normalCultureGraduationResult;
 	private FreeElectiveGraduationResult freeElectiveGraduationResult;
 	private int totalCredit;
-	private int takenCredit;
+	private double takenCredit;
 	private boolean graduated;
 
 	@Builder
@@ -50,24 +52,38 @@ public class GraduationResult {
 	}
 
 	public void checkGraduated() {
+		addUpTotalCredit();
+		addUpTakenCredit();
+		addUpChapelTakenCreditToCommonCulture();
+
+		boolean isAllDetailGraduationResultCompleted = detailGraduationResults.stream()
+			.allMatch(DetailGraduationResult::isCompleted);
+		this.graduated = chapelResult.isCompleted() && isAllDetailGraduationResultCompleted
+			&& normalCultureGraduationResult.isCompleted() && freeElectiveGraduationResult.isCompleted();
+	}
+
+	private void addUpTotalCredit() {
 		this.totalCredit = detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getTotalCredit)
 			.sum()
 			+ normalCultureGraduationResult.getTotalCredit()
 			+ freeElectiveGraduationResult.getTotalCredit();
+	}
 
+	private void addUpTakenCredit() {
 		this.takenCredit = detailGraduationResults.stream()
-			.mapToInt(DetailGraduationResult::getTakenCredit)
+			.mapToDouble(DetailGraduationResult::getTakenCredit)
 			.sum()
 			+ normalCultureGraduationResult.getTakenCredit()
 			+ freeElectiveGraduationResult.getTakenCredit()
 			+ chapelResult.getTakenChapelCredit();
+	}
 
-		boolean isAllDetailGraduationResultCompleted = detailGraduationResults.stream()
-			.allMatch(DetailGraduationResult::isCompleted);
-
-		this.graduated = chapelResult.isCompleted() && isAllDetailGraduationResultCompleted
-			&& normalCultureGraduationResult.isCompleted() && freeElectiveGraduationResult.isCompleted();
+	private void addUpChapelTakenCreditToCommonCulture() {
+		this.detailGraduationResults.stream()
+			.filter(detailGraduationResult -> detailGraduationResult.getCategoryName().equals(COMMON_CULTURE.getName()))
+			.forEach(
+				detailGraduationResult -> detailGraduationResult.addCredit(this.chapelResult.getTakenChapelCredit()));
 	}
 
 	private void handleLeftTakenNormaCulture(TakenLectureInventory takenLectureInventory,

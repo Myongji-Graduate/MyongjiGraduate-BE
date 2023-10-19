@@ -86,7 +86,7 @@ class SocialScienceBasicAcademicManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", false, 12, 6);
+				.contains("학문기초교양", false, 12, 6.0);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")

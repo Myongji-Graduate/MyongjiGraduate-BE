@@ -65,7 +65,7 @@ class BusinessBasicAcademicalManagerTest {
 			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();
 		}
 
-		@DisplayName("경영대 22학번이 18학번의 필수 학문 기초교양을 들었을 경우 통과하지 다한다.")
+		@DisplayName("경영대 22학번이 18학번의 필수 학문 기초교양을 들었을 경우 통과하지 못한다.")
 		@Test
 		void 경영학과_22학번() {
 
@@ -88,11 +88,11 @@ class BusinessBasicAcademicalManagerTest {
 			//then
 			assertThat(detailGraduationResult)
 				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", false, 3, 6);
+				.contains("학문기초교양", false, 6, 3.0);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("학문기초교양", false, 3, 6);
+				.contains("학문기초교양", false, 6, 3);
 
 			assertThat(detailCategoryResult.getTakenLectures()).hasSize(1);
 			assertThat(detailCategoryResult.getHaveToLectures()).hasSize(1);
