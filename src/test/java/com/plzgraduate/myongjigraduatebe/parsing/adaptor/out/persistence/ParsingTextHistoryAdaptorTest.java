@@ -1,13 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.parsing.adaptor.out.persistence;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
@@ -18,7 +17,6 @@ import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserJpaEnt
 import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Import({ParsingTextHistoryAdaptor.class, ParsingTextHistoryMapper.class})
 class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 
 	@Autowired
