@@ -1,26 +1,19 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.finduserinformation;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.UserInformationResponse;
 
-@WebMvcTest(controllers = FindUserInformationController.class)
 class FindUserInformationControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private FindUserInformationUseCase findUserInformationUseCase;
 
 	@WithMockAuthenticationUser
 	@DisplayName("로그인 한 회원 정보를 조회한다.")

@@ -7,18 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 
-@WebMvcTest(controllers = SignInController.class)
 class SignInControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private SignInUseCase signInUseCase;
 
 	@DisplayName("로그인을 진행한다.")
 	@Test

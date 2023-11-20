@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/taken-lectures")
 @RequiredArgsConstructor
-class UpdateTakenLectureController {
+public class UpdateTakenLectureController {
 	private final UpdateTakenLectureUseCase updateTakenLectureUseCase;
 
 	@PostMapping("/update")

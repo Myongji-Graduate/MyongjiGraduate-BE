@@ -10,18 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserAuthIdUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.UserAuthIdResponse;
 
-@WebMvcTest(controllers = FindAuthIdController.class)
 class FindAuthIdControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private FindUserAuthIdUseCase findUserAuthIdUseCase;
 
 	@DisplayName("학번으로 해당 학생의 아이디를 조회한다.")
 	@Test

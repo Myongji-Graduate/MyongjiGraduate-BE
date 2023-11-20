@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/graduation")
 @RequiredArgsConstructor
-class CalculateGraduationController {
+public class CalculateGraduationController {
 
 	private final CalculateGraduationUseCase calculateGraduationUseCase;
 

@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.in.web.find;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -11,20 +12,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.FindTakenLectureResponse;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.TakenLectureResponse;
 
-@WebMvcTest(controllers = FindTakenLectureController.class)
 class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	FindTakenLectureUseCase findTakenLectureUseCase;
 
 	@WithMockAuthenticationUser
 	@DisplayName("사용자의 수강과목을 조회한다.")
