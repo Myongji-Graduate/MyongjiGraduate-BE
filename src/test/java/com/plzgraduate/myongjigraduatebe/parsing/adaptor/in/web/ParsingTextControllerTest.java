@@ -1,6 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.doThrow;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -9,26 +11,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
-@WebMvcTest(controllers = ParsingTextController.class)
 class ParsingTextControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private ParsingTextUseCase parsingTextUseCase;
-
-	@MockBean
-	private ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 
 	@WithMockAuthenticationUser
 	@DisplayName("파싱 텍스트를 등록한다.")

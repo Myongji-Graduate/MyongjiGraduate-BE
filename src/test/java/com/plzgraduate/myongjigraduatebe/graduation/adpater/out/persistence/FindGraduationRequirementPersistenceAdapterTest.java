@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.adpater.out.persistence;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.*;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.BUSINESS;
 
 import java.util.List;
 
@@ -8,7 +8,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.adpater.out.persistence.entity.GraduationRequirementJpaEntity;
@@ -16,7 +15,6 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequi
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Import({FindGraduationRequirementPersistenceAdapter.class, GraduationRequirementMapper.class})
 class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSupport {
 
 	private static final int SUB_MAJOR_CREDIT = 10;

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/lectures")
 @Validated
-class SearchLectureController {
+public class SearchLectureController {
 
 	private final SearchLectureUseCase searchLectureUseCase;
 

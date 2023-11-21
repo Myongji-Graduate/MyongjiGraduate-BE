@@ -9,19 +9,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.update.UpdateTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
-@WebMvcTest(controllers = UpdateTakenLectureController.class)
 class UpdateTakenLectureControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private UpdateTakenLectureUseCase updateTakenLectureUseCase;
 
 	@WithMockAuthenticationUser
 	@DisplayName("수강과목을 수정한다.")

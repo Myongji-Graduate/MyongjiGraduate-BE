@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence;
 
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
-import static org.assertj.core.api.Assertions.*;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Set;
@@ -9,7 +9,6 @@ import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.lecture.adapter.out.persistence.entity.CommonCultureJpaEntity;
@@ -20,7 +19,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Import({LectureMapper.class, FindCommonCulturePersistenceAdapter.class})
 class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
 	private static final String ENGLISH1_CODE = "KMA02106";

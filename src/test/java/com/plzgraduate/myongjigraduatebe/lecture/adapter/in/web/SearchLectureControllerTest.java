@@ -2,31 +2,25 @@ package com.plzgraduate.myongjigraduatebe.lecture.adapter.in.web;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.LectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
-@WebMvcTest(controllers = SearchLectureController.class)
 class SearchLectureControllerTest extends WebAdaptorTestSupport {
-	@MockBean
-	private SearchLectureUseCase searchLectureUseCase;
 
 	@WithMockAuthenticationUser
 	@DisplayName("type과 keyword를 통해 과목정보를 검색한다.")

@@ -1,18 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Import({UserPersistenceAdaptor.class, UserMapper.class})
 class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 
 	@Autowired

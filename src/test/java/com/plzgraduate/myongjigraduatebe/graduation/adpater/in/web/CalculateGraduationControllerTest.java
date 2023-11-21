@@ -9,10 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.BasicInfoResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.ChapelResultResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.DetailGraduationResultResponse;
@@ -21,11 +18,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
-@WebMvcTest(controllers = CalculateGraduationController.class)
 class CalculateGraduationControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private CalculateGraduationUseCase calculateGraduationUseCase;
 
 	@WithMockAuthenticationUser
 	@DisplayName("유저의 졸업 결과를 계산한다.")

@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
 
 import lombok.RequiredArgsConstructor;
 
 @WebAdapter
 @RequestMapping("/api/v1/parsing-text")
 @RequiredArgsConstructor
-class ParsingTextController {
+public class ParsingTextController {
 
 	private final ParsingTextUseCase parsingTextUseCase;
 	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;

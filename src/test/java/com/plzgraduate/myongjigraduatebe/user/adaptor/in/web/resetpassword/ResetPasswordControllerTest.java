@@ -3,7 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.resetpassword;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -11,24 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.validate.ValidateUserResponse;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.validate.ValidateUserUseCase;
 
-@WebMvcTest(controllers = ResetPasswordController.class)
 class ResetPasswordControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private ValidateUserUseCase validateUserUseCase;
-
-	@MockBean
-	private ResetPasswordUseCase resetPasswordUseCase;
 
 	@DisplayName("학번으로 유저 정보 조회 후 로그인 이아디와 일치하는지 확인한다.")
 	@Test
