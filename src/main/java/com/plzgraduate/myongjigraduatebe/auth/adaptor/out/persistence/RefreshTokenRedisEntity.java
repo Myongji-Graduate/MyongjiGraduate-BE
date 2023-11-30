@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.auth.adaptor.out.persistence;
 
-import java.util.ArrayList;
-
 import javax.persistence.Id;
 
 import lombok.Builder;

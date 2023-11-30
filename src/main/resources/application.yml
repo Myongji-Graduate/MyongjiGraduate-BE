@@ -17,10 +17,6 @@ spring:
         format_sql: true
     open-in-view: false
 
-  redis:
-    host: localhost
-    port: 6380
-
 logging:
   level:
     p6spy: info
@@ -38,14 +34,9 @@ spring:
   config:
     activate:
       on-profile: dev
-
   jpa:
     hibernate:
-      ddl-auto: validate
-
-  redis:
-    host: mj-redis-server
-    port: 6380
+      ddl-auto: none
 
 jwt:
   issuer: "plzgraduate"
@@ -59,13 +50,15 @@ spring:
     activate:
       on-profile: prod
 
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_URL}
+
   jpa:
     hibernate:
-      ddl-auto: create
-
-  redis:
-    host: mj-redis-server
-    port: 6380
+      ddl-auto: none
 
 jwt:
   issuer: "plzgraduate"

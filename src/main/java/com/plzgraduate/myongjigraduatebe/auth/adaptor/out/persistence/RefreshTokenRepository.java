@@ -10,12 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
 @Repository
 @RequiredArgsConstructor
 public class RefreshTokenRepository {
 	private final RedisTemplate<String, Long> redisTemplate;
 
 	public void save(RefreshTokenRedisEntity refreshToken) {
+
 		ValueOperations<String, Long> valueOperations = redisTemplate.opsForValue();
 		valueOperations.set(refreshToken.getRefreshToken(), refreshToken.getUserId());
 		redisTemplate.expire(refreshToken.getRefreshToken(), 60L, TimeUnit.SECONDS);
@@ -32,3 +34,4 @@ public class RefreshTokenRepository {
 		return Optional.of(RefreshTokenRedisEntity.create(refreshToken, userId));
 	}
 }
+ **/
