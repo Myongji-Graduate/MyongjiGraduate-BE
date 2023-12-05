@@ -36,7 +36,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with gradle
-        run : ./gradlew clean build -x test
+        run : ./gradlew build -x test -x asciidoctor
 
       - name: Build Docker image
         run: |
