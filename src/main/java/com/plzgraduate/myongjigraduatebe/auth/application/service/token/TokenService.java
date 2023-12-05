@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @RequiredArgsConstructor
 public class TokenService implements TokenUseCase {
-	
+
 	private final TokenProvider tokenProvider;
 
 	private final FindRefreshTokenPort findRefreshTokenPort;
@@ -23,8 +23,8 @@ public class TokenService implements TokenUseCase {
 		return AccessTokenResponse.from(accessToken);
 	}
 
-	public Long findByRefreshToken(String refreshToken) {
+	private Long findByRefreshToken(String refreshToken) {
 		return findRefreshTokenPort.findByRefreshToken(refreshToken)
-			.orElseThrow(() -> new IllegalArgumentException(""));
+			.orElseThrow(() -> new IllegalArgumentException("유효하지 않은 토큰입니다."));
 	}
 }
