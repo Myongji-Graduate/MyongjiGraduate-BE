@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.auth.adaptor.out;
 
-import java.time.Clock;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
