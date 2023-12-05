@@ -59,4 +59,4 @@ jobs:
             docker stop $(docker ps -a -q) 
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
             docker rm -f $(docker ps -a -q) 
-            docker run -d --name mju-graduate-api-server -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/mju-graduate-server:v2
+            docker run -d --name mju-graduate-api-server -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
