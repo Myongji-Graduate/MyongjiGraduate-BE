@@ -53,6 +53,6 @@ jobs:
           script : |
             cd ~/mju-graduate-server
             docker stop $(docker ps -a -q) 
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate-api-server:v2
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mj-graduate-server:v2
             docker rm -f $(docker ps -a -q) 
             docker run -d --name mju-graduate-api-server -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/mj-graduate-server:v2
