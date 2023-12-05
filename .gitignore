@@ -14,3 +14,6 @@ out/
 
 /node_modules
 *.DS_Store
+
+deploy/
+src/main/java/com/plzgraduate/myongjigraduatebe/core/EnvironmentCheck.java

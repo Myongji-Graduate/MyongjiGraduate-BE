@@ -1,0 +1,14 @@
+FROM openjdk:11
+
+ARG JAR_FILE=build/libs/*.jar
+ARG PROFILE=prod
+ARG DATASOURCE_URL
+ARG DATASOURCE_USERNAME
+ARG DATASOURCE_PASSWORD
+ARG JWT_SECRET
+
+COPY ${JAR_FILE} app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "-jar", "/app.jar"]

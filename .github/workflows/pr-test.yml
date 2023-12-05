@@ -19,15 +19,15 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set yaml file
-        uses: microsoft/variable-substitution@v1
+      - name: Gradle Caching
+        uses: actions/cache@v3
         with:
-          files: ./src/main/resources/application.yml
-        env:
-          spring.datasource.url: ${{secrets.DB_URL}}
-          spring.datasource.username: ${{secrets.DB_USERNAME}}
-          spring.datasource.password: ${{secrets.DB_PASSWORD}}
-          server.port: ${{secrets.PORT}}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew

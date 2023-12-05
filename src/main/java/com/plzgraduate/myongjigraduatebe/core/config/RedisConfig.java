@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import lombok.RequiredArgsConstructor;
 
+/**
 @Configuration
 @RequiredArgsConstructor
 public class RedisConfig {
@@ -30,3 +31,4 @@ public class RedisConfig {
 		return redisTemplate;
 	}
 }
+ **/
