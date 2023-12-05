@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.security;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,11 @@ public class TokenProvider {
 			.withClaim("id", userId)
 			.sign(Algorithm.HMAC256(jwtProperties.getSecretKey()));
 	}
+
+	public String generateRefreshToken() {
+		return String.valueOf(UUID.randomUUID());
+	}
+
 	public Long extractUserId(String token) {
 		JWTVerifier jwtverifier = JWT.require(algorithm).withIssuer(jwtProperties.getIssuer()).build();
 		Claims claims = new Claims(jwtverifier.verify(token));

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenResponse;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
@@ -21,7 +22,7 @@ class TokenController {
 	private final TokenUseCase tokenUseCase;
 
 	@PostMapping("/token")
-	public TokenResponse newToken(@Valid @RequestBody TokenRequest tokenRequest) {
+	public AccessTokenResponse newToken(@Valid @RequestBody TokenRequest tokenRequest) {
 		return tokenUseCase.createNewToken(TokenRequest.toCommand(tokenRequest.getRefreshToken()));
 	}
 }
