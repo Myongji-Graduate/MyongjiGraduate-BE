@@ -44,7 +44,8 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2 \
           --build-arg DATASOURCE_URL=${{ DATASOURCE_URL }} \
           --build-arg DATASOURCE_USERNAME=${{ DATASOURCE_USERNAME }} \
-          --build-arg DATASOURCE_PASSWORD=${{ JWT_SECRET }}
+          --build-arg DATASOURCE_PASSWORD=${{ DATASOURCE_PASSWORD }}
+          --build-arg JWT_SECRET=${{ JWT_SECRET }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
 
       - name: Docker Deploy executing remote ssh commands using ssh_key
