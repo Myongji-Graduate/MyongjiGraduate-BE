@@ -71,25 +71,31 @@ dependencyManagement {
     }
 }
 
-tasks.named('test') {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
-    jacoco {
-        excludes += ["com/plzgraduate/myongjigraduatebe/core",
-                     "com/plzgraudate/myongjigraduatebe/*Request*",
-                     "com/plzgraudate/myongjigraduatebe/*Command*",
-                     "com/plzgraudate/myongjigraduatebe/*Response*",
-                     "com/plzgraudate/myongjigraduatebe/*Mapper*"]
-    }
-    finalizedBy 'jacocoTestReport'
-}
 
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
 }
 
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
 jacocoTestReport {
+    dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/plzgraduate/myongjigraduatebe/core/**",
+                    "com/plzgraudate/myongjigraduatebe/*Request*",
+                    "com/plzgraudate/myongjigraduatebe/*Command*",
+                    "com/plzgraudate/myongjigraduatebe/*Response*",
+                    "com/plzgraudate/myongjigraduatebe/*Mapper*"
+            ])
+        }))
+    }
     reports {
         html.enabled true
         xml.enabled true
