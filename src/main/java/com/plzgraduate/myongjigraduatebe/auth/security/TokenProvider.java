@@ -14,11 +14,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 @Component
 public class TokenProvider {
 	private final JwtProperties jwtProperties;
-	private final Algorithm algorithm;
 
 	public TokenProvider(JwtProperties jwtProperties) {
 		this.jwtProperties = jwtProperties;
-		this.algorithm = Algorithm.HMAC256(jwtProperties.getSecretKey());
 	}
 
 	public String generateToken(Long userId) {
@@ -37,7 +35,7 @@ public class TokenProvider {
 	}
 
 	public Long extractUserId(String token) {
-		JWTVerifier jwtverifier = JWT.require(algorithm).withIssuer(jwtProperties.getIssuer()).build();
+		JWTVerifier jwtverifier = JWT.require(Algorithm.HMAC256(jwtProperties.getSecretKey())).withIssuer(jwtProperties.getIssuer()).build();
 		Claims claims = new Claims(jwtverifier.verify(token));
 		return claims.id;
 	}
