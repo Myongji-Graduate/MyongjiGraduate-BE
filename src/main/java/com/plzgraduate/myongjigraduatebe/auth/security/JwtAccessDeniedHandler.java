@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
-	private final static ExceptionResponse E403 = ExceptionResponse.of(HttpStatus.FORBIDDEN, "Authentication error (cause: forbidden)");
+	private static final ExceptionResponse E403 = ExceptionResponse.of(HttpStatus.FORBIDDEN, "Authentication error (cause: forbidden)");
 
 	private final ObjectMapper om;
 

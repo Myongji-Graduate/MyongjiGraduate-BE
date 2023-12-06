@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint{
-	private final static ExceptionResponse E401 = ExceptionResponse.of(HttpStatus.UNAUTHORIZED, "Authentication error (cause: unauthorized)");
+	private static final ExceptionResponse E401 = ExceptionResponse.of(HttpStatus.UNAUTHORIZED, "Authentication error (cause: unauthorized)");
 
 	private final ObjectMapper om;
 
