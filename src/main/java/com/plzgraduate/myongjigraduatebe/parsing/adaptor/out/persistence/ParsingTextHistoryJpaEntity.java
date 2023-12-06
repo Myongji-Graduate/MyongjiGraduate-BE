@@ -28,7 +28,7 @@ import lombok.experimental.SuperBuilder;
 public class ParsingTextHistoryJpaEntity extends TimeBaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@OneToOne(fetch = FetchType.LAZY)
