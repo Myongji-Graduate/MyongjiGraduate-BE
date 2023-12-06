@@ -11,7 +11,7 @@ public class ParsingTextHistory {
 	private final Long id;
 	private final User user;
 	private final String parsingText;
-	private ParsingResult parsingResult;
+	private final ParsingResult parsingResult;
 
 	@Builder
 	private ParsingTextHistory(Long id, User user, String parsingText, ParsingResult parsingResult) {
