@@ -17,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInCommand;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.out.SaveRefreshTokenPort;
 import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 
@@ -27,10 +28,12 @@ class SignInServiceTest {
 	private TokenProvider tokenProvider;
 	@Mock
 	private AuthenticationManager authenticationManager;
+	@Mock
+	private SaveRefreshTokenPort saveRefreshTokenPort;
 	@InjectMocks
 	private SignInService signInService;
 
-	/**
+
 
 	@DisplayName("로그인을 진행한다.")
 	@Test
@@ -40,23 +43,25 @@ class SignInServiceTest {
 			.authId("mju-graduate")
 			.password("1q2w3e4r!")
 			.build();
-		String accessToken = "jwt";
+		Long userId = 1L;
+		String accessToken = "accessToken";
+		String refreshToken = "refreshToken";
 
 		Authentication authentication = new JwtAuthenticationToken(
-			new AuthenticationUser(1L, "mju-graduate"),
-			null,
-			Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+			userId, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
 
 		given(authenticationManager.authenticate(any(JwtAuthenticationToken.class)))
 			.willReturn(authentication);
-		given(tokenProvider.generateToken(any(Authentication.class))).willReturn(accessToken);
+		given(tokenProvider.generateToken(userId)).willReturn(accessToken);
+		given(tokenProvider.generateRefreshToken()).willReturn(refreshToken);
 
 		//when
 		TokenResponse tokenResponse = signInService.signIn(command);
 
 		//then
+		then(saveRefreshTokenPort).should(times(1)).saveRefreshToken(refreshToken, userId);
 		assertThat(tokenResponse.getAccessToken()).isEqualTo(accessToken);
+		assertThat(tokenResponse.getRefreshToken()).isEqualTo(refreshToken);
 	}
-	**/
 
 }

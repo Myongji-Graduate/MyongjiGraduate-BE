@@ -27,7 +27,7 @@ server:
 jwt:
   issuer: "plzgraduate"
   secret-key: "coffee"
-  expiry-seconds: 86400
+  expiry-seconds: 10800000
 
 ---
 spring:
@@ -41,7 +41,7 @@ spring:
 jwt:
   issuer: "plzgraduate"
   secret-key: ${JWT_SECRET}
-  expiry-seconds: 86400
+  expiry-seconds: 3600000
 
 ---
 
@@ -63,4 +63,4 @@ spring:
 jwt:
   issuer: "plzgraduate"
   secret-key: ${JWT_SECRET}
-  expiry-seconds: 86400
+  expiry-seconds: 3600000

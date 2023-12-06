@@ -14,7 +14,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin.SignInController;
+import com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.token.TokenController;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.QuerydslConfig;
@@ -53,6 +55,7 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithD
 )
 @WebMvcTest(controllers = {
 	SignInController.class,
+	TokenController.class,
 	CalculateGraduationController.class,
 	SearchLectureController.class,
 	FindUserInformationController.class,
@@ -80,6 +83,9 @@ public abstract class WebAdaptorTestSupport {
 
 	@MockBean
 	protected SignInUseCase signInUseCase;
+
+	@MockBean
+	protected TokenUseCase tokenUseCase;
 
 	@MockBean
 	protected CalculateGraduationUseCase calculateGraduationUseCase;

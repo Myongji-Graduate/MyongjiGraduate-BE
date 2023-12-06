@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.application.port.in.token;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenResponse;
 
 public interface TokenUseCase {
-	TokenResponse createNewToken(TokenCommand tokenCommand);
+	AccessTokenResponse createNewToken(TokenCommand tokenCommand);
 }
