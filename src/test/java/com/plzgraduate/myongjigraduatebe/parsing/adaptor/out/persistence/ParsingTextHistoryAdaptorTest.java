@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +29,33 @@ class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 	@Autowired
 	private UserRepository userRepository;
 
+	@AfterEach
+	void afterEach() {
+		this.entityManager
+			.createNativeQuery("ALTER TABLE parsing_text_history AUTO_INCREMENT = 1")
+			.executeUpdate();
+	}
+
 	@DisplayName("ParsingTextHistory를 저장한다.")
 	@Test
 	void saveParsingTextHistory() {
 		//given
-		User user = UserFixture.경영학과_19학번_ENG34();
+		User user = User.builder()
+			.id(1L)
+			.build();
+
 		ParsingTextHistory parsingTextHistory = ParsingTextHistory.builder()
 			.user(user)
 			.parsingText("text")
 			.parsingResult(ParsingResult.SUCCESS)
 			.build();
+
+		userRepository.save(UserJpaEntity.builder()
+			.id(1L)
+			.authId("authId")
+			.password("password!")
+			.studentNumber("60181666")
+			.build());
 
 		//when
 		parsingTextHistoryAdaptor.saveParsingTextHistory(parsingTextHistory);
@@ -53,20 +71,25 @@ class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 
 	@DisplayName("유저의 ParsingHistory를 삭제한다.")
 	@Test
-	@Transactional
 	void deleteUserParsingTextHistory() {
 	    //given
-		User user = User.builder().id(1L).build();
-		userRepository.save(UserJpaEntity.builder()
+		User user = User.builder()
 			.id(1L)
-			.studentNumber("test")
 			.authId("test")
-			.password("test").build());
+			.password("test")
+			.studentNumber("test")
+			.build();
 		ParsingTextHistory parsingTextHistory = ParsingTextHistory.builder()
 			.user(user)
 			.parsingText("text")
 			.parsingResult(ParsingResult.SUCCESS)
 			.build();
+		userRepository.save(UserJpaEntity.builder()
+			.id(1L)
+			.studentNumber("test")
+			.authId("test")
+			.password("test")
+			.build());
 		parsingTextHistoryAdaptor.saveParsingTextHistory(parsingTextHistory);
 
 		//when
