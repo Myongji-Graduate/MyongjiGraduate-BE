@@ -35,7 +35,6 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			post("/api/v1/users/sign-up")
 				.content(objectMapper.writeValueAsString(request))
 				.contentType(MediaType.APPLICATION_JSON)
-				.with(csrf())
 		);
 
 		//then
@@ -59,7 +58,6 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 				post("/api/v1/users/sign-up")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
-					.with(csrf())
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
@@ -87,10 +85,10 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.status").value(400))
-			.andExpect(jsonPath("$.message").value("비밀번호는 8자에서 20자 사이여야합니다."));
+			.andExpect(jsonPath("$.message").value("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다."));
 	}
 
-	@DisplayName("비밀번호는 문자, 숫자, 기호의 조합이어야한다.")
+	@DisplayName("비밀번호는 하나 이상의 기호가 포함되어야한다.")
 	@Test
 	void 비밀번호_형식_오류() throws Exception {
 		SignUpRequest request = SignUpRequest.builder()
@@ -105,12 +103,11 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 				post("/api/v1/users/sign-up")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
-					.with(csrf())
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.status").value(400))
-			.andExpect(jsonPath("$.message").value("비밀번호는 문자, 숫자, 기호가 1개 이상 포함되어야합니다."));
+			.andExpect(jsonPath("$.message").value("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다."));
 	}
 
 	@DisplayName("로그인 아이디 중복 여부를 체크한다.")
