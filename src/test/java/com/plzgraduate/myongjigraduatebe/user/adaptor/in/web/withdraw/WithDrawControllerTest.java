@@ -24,7 +24,7 @@ class WithDrawControllerTest extends WebAdaptorTestSupport {
 	
 	    //when
 		ResultActions actions = mockMvc.perform(
-			delete("/api/v1/users")
+			delete("/api/v1/users/me")
 				.with(csrf()));
 	
 	    //then

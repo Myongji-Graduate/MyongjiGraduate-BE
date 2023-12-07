@@ -11,7 +11,7 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.UserInfor
 import lombok.RequiredArgsConstructor;
 
 @WebAdapter
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/users/me")
 @RequiredArgsConstructor
 public class FindUserInformationController {
 

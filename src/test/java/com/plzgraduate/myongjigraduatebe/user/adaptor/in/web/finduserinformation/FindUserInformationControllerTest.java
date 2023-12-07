@@ -32,7 +32,7 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 		given(findUserInformationUseCase.findUserInformation(userId)).willReturn(response);
 
 		//when //then
-		mockMvc.perform(get("/api/v1/users"))
+		mockMvc.perform(get("/api/v1/users/me"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.studentNumber").value(studentNumber))
