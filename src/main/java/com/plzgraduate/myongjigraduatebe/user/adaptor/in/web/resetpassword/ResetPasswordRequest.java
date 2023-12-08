@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.resetpassword;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordCommand;
 
