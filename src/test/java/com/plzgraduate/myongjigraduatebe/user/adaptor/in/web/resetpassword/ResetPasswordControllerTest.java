@@ -101,7 +101,7 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		actions.
 			andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message", is("비밀번호는 문자, 숫자, 기호가 1개 이상 포함되어야합니다.")));
+			.andExpect(jsonPath("$.message", is("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다.")));
 	}
 
 	@DisplayName("비밀번호 확인 비밀번호가 비밀번호 형식에 맞지 않을 시 예외가 발생한다.")
@@ -124,7 +124,7 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		actions.
 			andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message", is("비밀번호는 문자, 숫자, 기호가 1개 이상 포함되어야합니다.")));
+			.andExpect(jsonPath("$.message", is("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다.")));
 	}
 
 }
