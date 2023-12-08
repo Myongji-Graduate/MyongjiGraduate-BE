@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -57,6 +58,28 @@ class WithDrawUserServiceTest {
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
 		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
 		then(deleteUserPort).should().deleteUser(user);
+	}
+
+	@DisplayName("잘못된 비밀번호를 입력하면 예외가 발생한다.")
+	@Test
+	void withDrawWithUnValidationPassword() {
+		//given
+		String password = "abcd1234!";
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		User user = User.builder()
+			.id(1L)
+			.password(encoder.encode(password)).build();
+		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
+		given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
+
+		WithDrawCommand withDrawCommand = WithDrawCommand.builder()
+			.password(password).build();
+
+		//when //then
+		assertThatThrownBy(() -> withDrawUserService.withDraw(user.getId(), withDrawCommand))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("비밀번호가 일치하지 않습니다.");
+
 	}
 
 }
