@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.withdraw;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
@@ -17,7 +18,7 @@ public class WithDrawController {
 	private final WithDrawUserUseCase withDrawUserUseCase;
 
 	@DeleteMapping()
-	public void withDraw(@LoginUser Long userId) {
-		withDrawUserUseCase.withDraw(userId);
+	public void withDraw(@LoginUser Long userId, @RequestBody WithDrawRequest withDrawRequest) {
+		withDrawUserUseCase.withDraw(userId, withDrawRequest.toCommand());
 	}
 }

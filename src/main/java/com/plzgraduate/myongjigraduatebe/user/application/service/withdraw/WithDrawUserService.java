@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.withdraw.WithDrawRequest;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawCommand;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawUserUseCase;
