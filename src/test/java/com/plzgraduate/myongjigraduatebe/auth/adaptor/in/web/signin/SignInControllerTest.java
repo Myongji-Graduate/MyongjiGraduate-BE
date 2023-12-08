@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin;
 
-import static org.hamcrest.Matchers.is;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 
 class SignInControllerTest extends WebAdaptorTestSupport {
@@ -23,6 +24,7 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			.authId("mju-graduate")
 			.password("1q2w3e4r!")
 			.build();
+
 	    //when //then
 		mockMvc.perform(
 			post("/api/v1/auth/sign-in")
@@ -33,12 +35,12 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk());
 	}
 
-	@DisplayName("아이디가 6자리 이상이어야한다.")
+	@DisplayName("아이디가 빈 문자열일 경우 에러를 반환한다.")
 	@Test
-	void wrongSizeAuthId() throws Exception {
+	void blankAuthId() throws Exception {
 		//given
 		SignInRequest request = SignInRequest.builder()
-			.authId("messi")
+			.authId("  ")
 			.password("1q2w3e4r!")
 			.build();
 		//when //then
@@ -49,16 +51,16 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value("아이디는 6자에서 20자 사이여야합니다."));
+			.andExpect(jsonPath("$.message").value("아아디를 입력해주세요."));
 	}
 
-	@DisplayName("비밀번호는 8자리 이상이어야 한다.")
+	@DisplayName("비밀번호가 빈 문자열일 경우 에러를 반환한다.")
 	@Test
-	void wrongSizePassword() throws Exception {
+	void blankPassword() throws Exception {
 		//given
 		SignInRequest request = SignInRequest.builder()
 			.authId("mju-graduate")
-			.password("1q2w3e")
+			.password("")
 			.build();
 		//when //then
 		mockMvc.perform(
@@ -68,6 +70,27 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다."));
+			.andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."));
+	}
+
+	@DisplayName("아이디 및 비밀번호에 해당하는 사용자가 없을 경우 에러를 반환한다.")
+	@Test
+	void invalidUser() throws Exception {
+		//given
+		SignInRequest request = SignInRequest.builder()
+			.authId("mju-graduate")
+			.password("1q2w3e4r")
+			.build();
+		given(signInUseCase.signIn(any())).willThrow(new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
+		//when //then
+		mockMvc.perform(
+				post("/api/v1/auth/sign-in")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("$.status").value("401"))
+			.andExpect(jsonPath("$.message").value("아이디 혹은 비밀번호가 일치하지 않습니다."));
 	}
 }

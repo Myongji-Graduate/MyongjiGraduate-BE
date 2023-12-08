@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ExceptionResponse handleUnAuthorizedException(Exception e) {
 		log.debug("unauthorized exception occurred: {}", e.getMessage(), e);
-		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMessage(e));
+		return ExceptionResponse.of(HttpStatus.UNAUTHORIZED, getMessage(e));
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
