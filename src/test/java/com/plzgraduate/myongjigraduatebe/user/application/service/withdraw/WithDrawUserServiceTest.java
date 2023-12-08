@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -9,10 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawCommand;
 import com.plzgraduate.myongjigraduatebe.user.application.port.out.DeleteUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -27,6 +31,8 @@ class WithDrawUserServiceTest {
 	private DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
 	@Mock
 	private DeleteUserPort deleteUserPort;
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@InjectMocks
 	private WithDrawUserService withDrawUserService;
@@ -35,12 +41,19 @@ class WithDrawUserServiceTest {
 	@Test
 	void withDraw() {
 	    //given
+		String password = "abcd1234!";
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = User.builder()
-			.id(1L).build();
+			.id(1L)
+			.password(encoder.encode(password)).build();
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
+		given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
+
+		WithDrawCommand withDrawCommand = WithDrawCommand.builder()
+			.password(password).build();
 
 		//when //then
-	    withDrawUserService.withDraw(user.getId());
+	    withDrawUserService.withDraw(user.getId(), withDrawCommand);
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
 		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
 		then(deleteUserPort).should().deleteUser(user);
