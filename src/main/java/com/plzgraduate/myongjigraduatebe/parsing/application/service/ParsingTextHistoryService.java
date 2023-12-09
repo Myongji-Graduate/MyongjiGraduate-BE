@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @UseCase
+@Transactional
 @RequiredArgsConstructor
 class ParsingTextHistoryService implements ParsingTextHistoryUseCase {
 
