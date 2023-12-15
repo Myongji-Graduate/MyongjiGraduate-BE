@@ -13,18 +13,22 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 
 public class OptionalMandatoryHandler implements MajorExceptionHandler {
 
+	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
+	private static final String BUSINESS = "경영학과";
+	private static final String ADMINISTRATIONS = "행정학과";
+	private static final String INTERNATIONAL_TRADE = "국제통상학과";
 	private static final int CLASS_OF_17 = 17;
 	private static final int CLASS_OF_19 = 19;
 	private int removedMandatoryTotalCredit = 0;
 
 	public boolean isSupport(User user) {
-		if (user.getMajor().equals("경영정보학과") && user.getEntryYear() >= CLASS_OF_19) {
+		if (user.getMajor().equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
 			return true;
 		}
-		if (user.getMajor().equals("행정학과") && user.getEntryYear() >= CLASS_OF_17) {
+		if (user.getMajor().equals(ADMINISTRATIONS) && user.getEntryYear() >= CLASS_OF_17) {
 			return true;
 		}
-		return List.of("경영학과", "국제통상학과").contains(user.getMajor());
+		return List.of(BUSINESS, INTERNATIONAL_TRADE).contains(user.getMajor());
 	}
 
 	@Override
@@ -53,8 +57,10 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
     
 		OptionalMandatory optionalMandatory = OptionalMandatory.from(user);
 		int chooseNum = optionalMandatory.getChooseNumber();
+		//전공과목Set에서 전공필수과목에 해당되는 과목들을 추출한다.
 		Set<Lecture> optionalMandatoryLectures = mandatoryLectures.stream().filter(
 			optionalMandatory.getOptionalMandatoryLectures()::contains).collect(Collectors.toSet());
+
 		Set<Lecture> remainingMandatoryLectures = new HashSet<>(optionalMandatoryLectures);
 		int count = 0;
 		for (TakenLecture takenLecture : takenLectureInventory.getTakenLectures()) {
