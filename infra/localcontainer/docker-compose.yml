@@ -24,10 +24,3 @@ services:
       MYSQL_DATABASE: myongji_graduate
     platform: linux/x86_64
     restart: always
-
-  redis:
-    image: redis:latest
-    container_name: mg-redis
-    ports:
-      - "6380:6379"
-    restart: always
