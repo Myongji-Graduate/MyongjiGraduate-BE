@@ -18,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.S
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ class ParsingTextService implements ParsingTextUseCase {
 		try {
 			validateParsingText(parsingText);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
+			checkIfNormal(parsingInformation);
 			validateStudentNumber(user, parsingInformation);
 			updateUser(user, parsingInformation);
 			deleteTakenLecturesIfAlreadyEnrolled(user);
@@ -51,6 +53,7 @@ class ParsingTextService implements ParsingTextUseCase {
 			throw new PdfParsingException("PDF에서 정보를 읽어오는데 실패했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
+
 
 	private void deleteTakenLecturesIfAlreadyEnrolled(User user) {
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);
@@ -94,4 +97,11 @@ class ParsingTextService implements ParsingTextUseCase {
 			.collect(Collectors.toList());
 		return SaveTakenLectureCommand.of(user, takenLectureInformationList);
 	}
+
+	private void checkIfNormal(ParsingInformation parsingInformation) {
+		if(parsingInformation.getStudentCategory() != StudentCategory.NORMAL) {
+			throw new IllegalArgumentException("전과생, 복수전공, 연계전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
+		}
+	}
+
 }
