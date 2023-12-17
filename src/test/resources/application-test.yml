@@ -1,4 +1,26 @@
 spring:
+  config:
+    activate:
+      on-profile: test
+
   datasource:
+    url: jdbc:tc:mysql:8:///mju-graduate
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:mysql:8:///
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+
+server:
+  port: 8080
+
+jwt:
+  issuer: "plzgraduate"
+  secret-key: "coffee"
+  expiry-seconds: 86400

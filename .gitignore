@@ -3,7 +3,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -13,6 +12,8 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-
 /node_modules
 *.DS_Store
+
+deploy/
+src/main/java/com/plzgraduate/myongjigraduatebe/core/EnvironmentCheck.java

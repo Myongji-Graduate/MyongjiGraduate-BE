@@ -1,0 +1,10 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= 졸업을 부탁해 API 명세서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
