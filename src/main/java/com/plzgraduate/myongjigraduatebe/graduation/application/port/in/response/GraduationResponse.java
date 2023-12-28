@@ -6,6 +6,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCateg
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,6 +21,7 @@ public class GraduationResponse {
 	private final DetailGraduationResultResponse major;
 	private final RestResultResponse normalCulture;
 	private final RestResultResponse freeElective;
+	@Schema(name = "graduated", example = "false")
 	private final boolean graduated;
 
 	@Builder

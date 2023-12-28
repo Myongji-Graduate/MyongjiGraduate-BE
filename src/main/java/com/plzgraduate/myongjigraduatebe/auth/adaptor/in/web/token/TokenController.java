@@ -10,11 +10,13 @@ import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenRes
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @WebAdapter
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Token", description = "토큰 발급 API")
 public class TokenController {
 
 	private final TokenUseCase tokenUseCase;

@@ -3,14 +3,18 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.respons
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.FreeElectiveGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.NormalCultureGraduationResult;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class RestResultResponse {
 
+	@Schema(name = "totalCredit", example = "10")
 	private final int totalCredit;
+	@Schema(name = "takenCredit", example = "5")
 	private final int takenCredit;
+	@Schema(name = "completed", example = "false")
 	private final boolean completed;
 
 	@Builder

@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class FindTakenLectureResponse {
+
+	@Schema(name = "totalCredit", example = "115")
 	private int totalCredit;
 	private List<TakenLectureResponse> takenLectures;
 
