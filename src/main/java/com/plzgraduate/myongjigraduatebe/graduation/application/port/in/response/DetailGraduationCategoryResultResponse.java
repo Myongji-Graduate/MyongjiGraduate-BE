@@ -5,17 +5,22 @@ import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class DetailGraduationCategoryResultResponse {
 
+	@Schema(name = "categoryName", example = "공통교양(기독교)")
 	private final String categoryName;
+	@Schema(name = "totalCredits", example = "4")
 	private final int totalCredits;
+	@Schema(name = "takenCredits", example = "4")
 	private final int takenCredits;
 	private final List<LectureResponse> takenLectures;
 	private final List<LectureResponse> haveToLectures;
+	@Schema(name = "completed", example = "true")
 	private final boolean completed;
 
 	@Builder

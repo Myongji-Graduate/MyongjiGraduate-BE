@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class FindAuthIdController {
+public class FindAuthIdController implements FindAuthIdApiPresentation {
 
 	private final FindUserAuthIdUseCase findUserAuthIdUseCase;
 

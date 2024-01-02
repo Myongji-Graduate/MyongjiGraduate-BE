@@ -2,13 +2,16 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.respons
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class ChapelResultResponse {
 
+	@Schema(name = "takenCount", example = "4")
 	private final int takenCount;
+	@Schema(name = "completed", example = "true")
 	private final boolean completed;
 
 	@Builder

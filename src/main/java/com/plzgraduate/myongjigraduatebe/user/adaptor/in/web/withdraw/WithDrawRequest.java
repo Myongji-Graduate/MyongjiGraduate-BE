@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawCommand;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class WithDrawRequest {
 
 	@NotBlank(message = "비밀번호를 입력해주세요.")
+	@Schema(name = "password", example = "Plz1231343!")
 	private String password;
 
 	@Builder

@@ -29,6 +29,30 @@ jwt:
   secret-key: "coffee"
   expiry-seconds: 10800000
 
+springdoc:
+  api-docs:
+    path: /api-docs
+    groups:
+      enabled: true
+
+  swagger-ui:
+    path: /swagger-custom-ui.html
+    enabled: true
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
+    display-request-duration: true
+    doc-expansion: none
+
+  cache:
+    disabled: true
+
+  show-actuator: true
+  override-with-generic-response: false
+  model-and-view-allowed: true
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+
 ---
 spring:
   config:

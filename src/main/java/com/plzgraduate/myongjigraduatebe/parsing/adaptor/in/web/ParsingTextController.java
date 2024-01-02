@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/parsing-text")
 @RequiredArgsConstructor
-public class ParsingTextController {
+public class ParsingTextController implements ParsingTextApiPresentation{
 
 	private final ParsingTextUseCase parsingTextUseCase;
 	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;

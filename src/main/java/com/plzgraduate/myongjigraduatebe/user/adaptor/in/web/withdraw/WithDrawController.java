@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/users/me")
 @RequiredArgsConstructor
-public class WithDrawController {
+public class WithDrawController implements WithDrawApiPresentation {
 
 	private final WithDrawUserUseCase withDrawUserUseCase;
 
