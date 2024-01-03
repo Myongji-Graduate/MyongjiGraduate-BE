@@ -3,16 +3,22 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.respons
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class BasicInfoResponse {
 
+	@Schema(name = "name", example = "홍길동")
 	private final String name;
+	@Schema(name = "studentNumber", example = "60202000")
 	private final String studentNumber;
+	@Schema(name = "major", example = "응용소프트웨어전공")
 	private final String major;
+	@Schema(name = "totalCredit", example = "132")
 	private final int totalCredit;
+	@Schema(name = "takenCredit", example = "50")
 	private final double takenCredit;
 
 	@Builder

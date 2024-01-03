@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("api/v1/users")
 @RequiredArgsConstructor
-public class ResetPasswordController {
+public class ResetPasswordController implements ResetPasswordApiPresentation {
 
 	private final ValidateUserUseCase validateUserUseCase;
 	private final ResetPasswordUseCase resetPasswordUseCase;
