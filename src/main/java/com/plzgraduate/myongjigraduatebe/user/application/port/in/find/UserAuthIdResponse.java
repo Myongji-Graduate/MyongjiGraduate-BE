@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.port.in.find;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserAuthIdResponse {
 
+	@Schema(name = "authId", example = "plzgraduate")
 	private String authId;
+	@Schema(name = "studentNumber", example = "60202000")
 	private String studentNumber;
 
 	@Builder

@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/taken-lectures")
 @RequiredArgsConstructor
-public class FindTakenLectureController {
+public class FindTakenLectureController implements FindTakenLectureApiPresentation {
 
 	private final FindTakenLectureUseCase findTakenLectureUseCase;
 

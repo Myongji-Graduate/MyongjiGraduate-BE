@@ -2,17 +2,24 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class TakenLectureResponse {
 
+	@Schema(name = "id", example = "135")
 	private final Long id;
+	@Schema(name = "year", example = "2023")
 	private final String year;
+	@Schema(name = "semester", example = "1학기")
 	private final String semester;
+	@Schema(name = "lectureCode", example = "HED01413")
 	private final String lectureCode;
+	@Schema(name = "lectureName", example = "캡스톤디자인")
 	private final String lectureName;
+	@Schema(name = "credit", example = "3")
 	private final int credit;
 
 	@Builder

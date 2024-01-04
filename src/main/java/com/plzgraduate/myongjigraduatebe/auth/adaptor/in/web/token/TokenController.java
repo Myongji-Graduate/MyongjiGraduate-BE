@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-public class TokenController {
+public class TokenController implements TokenApiPresentation {
 
 	private final TokenUseCase tokenUseCase;
 

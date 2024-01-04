@@ -59,7 +59,13 @@ public class SecurityConfig {
 				API_V1_PREFIX + "/users/{student-number}/auth-id", // 아이디 찾기
 				API_V1_PREFIX + "/users/{student-number}/validate", // 유저 검증
 				API_V1_PREFIX + "/users/password", // 비밀번호 재설정
-				API_V1_PREFIX + "/health" //헬스체크
+				API_V1_PREFIX + "/health", //헬스체크
+				"/api-docs",
+				"/swagger-custom-ui.html",
+				"/v3/api-docs/**",
+				"/swagger-ui/**",
+				"/api-docs/**",
+				"/swagger-ui.html"
 			).permitAll()
 			.anyRequest().authenticated()
 				.and()

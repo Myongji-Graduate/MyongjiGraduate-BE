@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class SignUpController {
+public class SignUpController implements SignUpApiPresentation {
 
 	private final SignUpUseCase signUpUseCase;
 	private final CheckAuthIdDuplicationUseCase checkAuthIdDuplicationUseCase;

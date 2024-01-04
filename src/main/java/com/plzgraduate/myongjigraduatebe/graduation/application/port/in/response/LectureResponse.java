@@ -2,15 +2,20 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.respons
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class LectureResponse {
 
+	@Schema(name = "id", example = "6")
 	private final Long id;
+	@Schema(name = "code", example = "KMA02103")
 	private final String code;
+	@Schema(name = "name", example = "종교와과학")
 	private final String name;
+	@Schema(name = "credit", example = "2")
 	private final int credit;
 
 	@Builder
