@@ -70,13 +70,19 @@ public class CoreCultureDetailCategoryManager {
 
 	private void calculateNormalLeftCredit(Set<Lecture> taken, Set<TakenLecture> finishedTakenLecture,
 		DetailCategoryResult commonCultureDetailCategoryResult) {
-		int normalLeftCredit = finishedTakenLecture.stream()
+		List<TakenLecture> cultureAndArtExceptionLectures = finishedTakenLecture.stream()
 			.filter(takenLecture -> 문화와예술_예외_과목.contains(takenLecture.getLecture())
 				&& takenLecture.getYear() == 2022
 				&& takenLecture.getSemester() == FIRST)
-			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
-			.sum();
-		taken.removeAll(문화와예술_예외_과목);
-		commonCultureDetailCategoryResult.addNormalLeftCredit(normalLeftCredit);
+			.collect(Collectors.toList());
+		if (!cultureAndArtExceptionLectures.isEmpty()) {
+			cultureAndArtExceptionLectures.stream()
+				.map(TakenLecture::getLecture)
+				.forEach(taken::remove);
+			int normalLeftCredit = cultureAndArtExceptionLectures.stream()
+				.mapToInt(exceptionLecture -> exceptionLecture.getLecture().getCredit())
+				.sum();
+			commonCultureDetailCategoryResult.addNormalLeftCredit(normalLeftCredit);
+		}
 	}
 }
