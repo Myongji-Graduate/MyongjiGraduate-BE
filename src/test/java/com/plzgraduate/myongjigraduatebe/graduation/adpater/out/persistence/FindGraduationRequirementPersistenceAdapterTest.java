@@ -34,7 +34,7 @@ class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 		User user = UserFixture.경영학과_19학번_ENG34();
 
 		//when
-		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findSingleGraduationRequirement(
 			user);
 
 		//then
@@ -54,7 +54,7 @@ class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 		User user = UserFixture.경영학과_19학번_ENG34_복수전공();
 
 		//when
-		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findDualGraduationRequirement(
 			user);
 
 		//then
@@ -74,7 +74,7 @@ class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 		User user = UserFixture.경영학과_19학번_영어_면제();
 
 		//when
-		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findGraduationRequirement(
+		GraduationRequirement graduationRequirement = loadGraduationRequirementPersistenceAdapter.findSingleGraduationRequirement(
 			user);
 
 		//then

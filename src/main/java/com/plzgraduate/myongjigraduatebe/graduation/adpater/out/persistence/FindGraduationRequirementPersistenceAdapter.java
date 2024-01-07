@@ -18,14 +18,7 @@ class FindGraduationRequirementPersistenceAdapter implements FindGraduationRequi
 	private final GraduationRequirementMapper mapper;
 
 	@Override
-	public GraduationRequirement findGraduationRequirement(User user) {
-		if (isDualMajorUser(user)) {
-			GraduationRequirementJpaEntity dualMajorRequirementEntity = graduationRequirementRepository.findDualMajorRequirementByUser(
-				College.findBelongingCollege(user.getMajor()), user.getEntryYear());
-			GraduationRequirement graduationRequirement = mapper.mapToDomainModel(dualMajorRequirementEntity);
-			checkUserEnglishLevel(user, graduationRequirement);
-			return graduationRequirement;
-		}
+	public GraduationRequirement findSingleGraduationRequirement(User user) {
 		GraduationRequirementJpaEntity singleMajorRequirementEntity = graduationRequirementRepository.findSingleMajorRequirementByUser(
 			College.findBelongingCollege(user.getMajor()), user.getEntryYear());
 		GraduationRequirement graduationRequirement = mapper.mapToDomainModel(singleMajorRequirementEntity);
@@ -33,8 +26,13 @@ class FindGraduationRequirementPersistenceAdapter implements FindGraduationRequi
 		return graduationRequirement;
 	}
 
-	private boolean isDualMajorUser(User user) {
-		return user.getSubMajor() != null;
+	@Override
+	public GraduationRequirement findDualGraduationRequirement(User user) {
+		GraduationRequirementJpaEntity dualMajorRequirementEntity = graduationRequirementRepository.findDualMajorRequirementByUser(
+			College.findBelongingCollege(user.getMajor()), user.getEntryYear());
+		GraduationRequirement graduationRequirement = mapper.mapToDomainModel(dualMajorRequirementEntity);
+		checkUserEnglishLevel(user, graduationRequirement);
+		return graduationRequirement;
 	}
 
 	private void checkUserEnglishLevel(User user, GraduationRequirement graduationRequirement) {

@@ -66,7 +66,7 @@ class CalculateGraduationServiceTest {
 		//given
 		User user = UserFixture.응용소프트웨어학과_19학번_영어_면제();
 		given(findUserUseCase.findUserById(anyLong())).willReturn(user);
-		given(findGraduationRequirementPort.findGraduationRequirement(user))
+		given(findGraduationRequirementPort.findSingleGraduationRequirement(user))
 			.willReturn(GraduationRequirement.builder()
 				.commonCultureCredit(9)
 				.coreCultureCredit(12)

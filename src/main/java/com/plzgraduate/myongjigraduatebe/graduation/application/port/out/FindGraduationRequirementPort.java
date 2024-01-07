@@ -5,5 +5,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface FindGraduationRequirementPort {
 
-	GraduationRequirement findGraduationRequirement(User user);
+	GraduationRequirement findSingleGraduationRequirement(User user);
+
+	GraduationRequirement findDualGraduationRequirement(User user);
 }

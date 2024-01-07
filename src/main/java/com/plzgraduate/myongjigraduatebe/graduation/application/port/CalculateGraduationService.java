@@ -54,7 +54,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	@Override
 	public GraduationResponse calculateGraduation(Long userId) {
 		User user = findUserUseCase.findUserById(userId);
-		GraduationRequirement graduationRequirement = findGraduationRequirementPort.findGraduationRequirement(user);
+		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(
 			findTakenLecturePort.findTakenLectureSetByUser(user));
 
@@ -67,6 +67,13 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			takenLectureInventory, graduationRequirement);
 
 		return GraduationResponse.of(user, graduationResult);
+	}
+
+	private GraduationRequirement determineGraduationRequirement(User user) {
+		if (user.getMajor() == null) {
+			return findGraduationRequirementPort.findSingleGraduationRequirement(user);
+		}
+		return findGraduationRequirementPort.findDualGraduationRequirement(user);
 	}
 
 	private ChapelResult generateChapelResult(TakenLectureInventory takenLectureInventory) {
