@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.port;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.*;
-
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CalculateGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.out.FindGraduationRequirementPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
@@ -33,6 +30,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.DefaultGraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,6 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 
-	private final FindGraduationRequirementPort findGraduationRequirementPort;
 	private final FindTakenLecturePort findTakenLecturePort;
 	private final FindCommonCulturePort findCommonCulturePort;
 	private final FindCoreCulturePort findCoreCulturePort;
@@ -59,10 +57,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			findTakenLecturePort.findTakenLectureSetByUser(user));
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
-
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
 			takenLectureInventory, graduationRequirement);
-
 		GraduationResult graduationResult = generateGraduationResult(chapelResult, detailGraduationResults,
 			takenLectureInventory, graduationRequirement);
 
@@ -70,10 +66,10 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private GraduationRequirement determineGraduationRequirement(User user) {
-		if (user.getMajor() == null) {
-			return findGraduationRequirementPort.findSingleGraduationRequirement(user);
-		}
-		return findGraduationRequirementPort.findDualGraduationRequirement(user);
+		College userCollage = College.findBelongingCollege(user.getMajor());
+		DefaultGraduationRequirement defaultGraduationRequirement = DefaultGraduationRequirement.determineGraduationRequirement(
+			userCollage, user.getEntryYear());
+		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
 	}
 
 	private ChapelResult generateChapelResult(TakenLectureInventory takenLectureInventory) {
@@ -95,6 +91,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 		DetailGraduationResult majorDetailGraduationResult = generateMajorDetailGraduationResult(
 			user, takenLectureInventory, graduationRequirement);
+
+		// TODO: Additional Major check - DetailGraduationResult
 
 		return List.of(commonCultureGraduationResult, coreCultureDetailGraduationResult,
 			basicAcademicalDetailGraduationResult, majorDetailGraduationResult);
@@ -130,7 +128,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
 		User user) {
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager;
-		switch (findBelongingCollege(user.getMajor())) {
+		switch (College.findBelongingCollege(user.getMajor())) {
 			case BUSINESS:
 				basicAcademicalCultureGraduationManager = new BusinessBasicAcademicalManager();
 				break;
@@ -153,8 +151,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private GraduationResult generateGraduationResult(ChapelResult chapelResult,
-		List<DetailGraduationResult> detailGraduationResults,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+		List<DetailGraduationResult> detailGraduationResults, TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement) {
 		GraduationResult graduationResult = GraduationResult.create(chapelResult, detailGraduationResults);
 		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
 		graduationResult.checkGraduated();
