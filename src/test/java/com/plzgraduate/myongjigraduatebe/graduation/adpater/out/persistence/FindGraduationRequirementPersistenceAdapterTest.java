@@ -39,8 +39,8 @@ class FindGraduationRequirementPersistenceAdapterTest extends PersistenceTestSup
 
 		//then
 		Assertions.assertThat(graduationRequirement)
-			.extracting("commonCultureCredit", "coreCultureCredit", "basicAcademica"
-				+ "lCredit", "normalCultureCredit", "majorCredit", "freeElectiveCredit")
+			.extracting("commonCultureCredit", "coreCultureCredit", "basicAcademicalCredit", "normalCultureCredit",
+				"majorCredit", "freeElectiveCredit")
 			.contains(17, 12, 6, 10, 63, 20);
 	}
 
