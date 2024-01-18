@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum GraduationRequirementType {
-
+	// 단과대명|전공학점|공통교양학점|핵심교양학점|학문기초교양학점|일반교양학점|자유선택학점|전체학점|적용시작입학년도|적용마감입학년도
 	HUMANITIES_16_17("인문대", 63, 15, 12, 12, 10, 16, 128, 16, 17),
 	SOCIAL_SCIENCE_16_17("사회과학대", 63, 15, 12, 12, 10, 16, 128, 16, 17),
 	BUSINESS_16_17("경영대", 63, 15, 12, 6, 10, 22, 128, 16, 17),
