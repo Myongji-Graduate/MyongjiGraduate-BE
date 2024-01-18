@@ -30,8 +30,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.DefaultGraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.GraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -66,9 +66,9 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private GraduationRequirement determineGraduationRequirement(User user) {
-		College userCollage = College.findBelongingCollege(user.getMajor());
-		DefaultGraduationRequirement defaultGraduationRequirement = DefaultGraduationRequirement.determineGraduationRequirement(
-			userCollage, user.getEntryYear());
+		College userCollage = College.findBelongingCollege(user);
+		GraduationRequirementType defaultGraduationRequirement = GraduationRequirementType.determineGraduationRequirement(
+			userCollage, user);
 		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
 	}
 
@@ -128,7 +128,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
 		User user) {
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager;
-		switch (College.findBelongingCollege(user.getMajor())) {
+		switch (College.findBelongingCollege(user)) {
 			case BUSINESS:
 				basicAcademicalCultureGraduationManager = new BusinessBasicAcademicalManager();
 				break;

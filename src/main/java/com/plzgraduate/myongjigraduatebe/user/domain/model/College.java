@@ -20,9 +20,9 @@ public enum College {
 	private final String name;
 	private final List<String> holdingMajors;
 
-	public static College findBelongingCollege(String major) {
+	public static College findBelongingCollege(User user) {
 		return Arrays.stream(College.values())
-			.filter(college -> college.getHoldingMajors().contains(major))
+			.filter(college -> college.getHoldingMajors().contains(user.getMajor()))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("소속 단과대가 존재하지 않습니다."));
 	}

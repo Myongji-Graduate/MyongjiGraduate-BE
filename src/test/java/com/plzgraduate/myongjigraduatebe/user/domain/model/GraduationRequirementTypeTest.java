@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 
-class DefaultGraduationRequirementTest {
+class GraduationRequirementTypeTest {
 
 	@DisplayName("학생의 소속 단과대와 입학년도로 기본졸업요건을 결정한다.")
 	@ParameterizedTest()
@@ -21,16 +21,17 @@ class DefaultGraduationRequirementTest {
 	void determineGraduationRequirement(int entryYear) {
 		//given
 		College ict = College.ICT;
+		User user = User.builder()
+			.entryYear(entryYear).build();
 
 		//when
-		DefaultGraduationRequirement graduationRequirement = DefaultGraduationRequirement.determineGraduationRequirement(
-			ict,
-			entryYear);
+		GraduationRequirementType graduationRequirement = GraduationRequirementType.determineGraduationRequirement(ict,
+			user);
 
 		//then
 		assertThat(graduationRequirement.getCollageName()).isEqualTo(ict.getName());
-		assertThat(graduationRequirement.getStartEntryYear()).isLessThanOrEqualTo(entryYear);
-		assertThat(graduationRequirement.getEndEntryYear()).isGreaterThan(entryYear);
+		assertThat(graduationRequirement.getStartEntryYear()).isLessThanOrEqualTo(user.getEntryYear());
+		assertThat(graduationRequirement.getEndEntryYear()).isGreaterThan(user.getEntryYear());
 	}
 
 	@DisplayName("학생의 입학년도가 16년도 미만일 경우 에러를 발생시킨다.")
@@ -39,9 +40,11 @@ class DefaultGraduationRequirementTest {
 	void determineGraduationRequirementWithIllegalUser(int entryYear) {
 		//given
 		College ict = College.ICT;
+		User user = User.builder()
+			.entryYear(entryYear).build();
 
 		//when //then
-		assertThatThrownBy(() -> DefaultGraduationRequirement.determineGraduationRequirement(ict, entryYear))
+		assertThatThrownBy(() -> GraduationRequirementType.determineGraduationRequirement(ict, user))
 			.isInstanceOf(NoSuchElementException.class)
 			.hasMessage("일치하는 졸업 요건이 존재하지 않습니다.");
 	}
@@ -52,17 +55,17 @@ class DefaultGraduationRequirementTest {
 		//given
 		User freeEnglishUser = UserFixture.경영학과_19학번_영어_면제();
 		College ict = College.ICT;
-		DefaultGraduationRequirement defaultGraduationRequirement = DefaultGraduationRequirement.determineGraduationRequirement(
-			ict, freeEnglishUser.getEntryYear());
+		GraduationRequirementType graduationRequirementType = GraduationRequirementType.determineGraduationRequirement(
+			ict, freeEnglishUser);
 
 		//when
-		GraduationRequirement graduationRequirement = defaultGraduationRequirement.convertToProfitGraduationRequirement(
+		GraduationRequirement graduationRequirement = graduationRequirementType.convertToProfitGraduationRequirement(
 			freeEnglishUser);
 
 		// then
 		assertThat(graduationRequirement.getCommonCultureCredit()).isEqualTo(
-			defaultGraduationRequirement.getCommonCultureCredit() - ENGLISH.getTotalCredit());
+			graduationRequirementType.getCommonCultureCredit() - ENGLISH.getTotalCredit());
 		assertThat(graduationRequirement.getNormalCultureCredit()).isEqualTo(
-			defaultGraduationRequirement.getNormalLectureCredit() + ENGLISH.getTotalCredit());
+			graduationRequirementType.getNormalLectureCredit() + ENGLISH.getTotalCredit());
 	}
 }

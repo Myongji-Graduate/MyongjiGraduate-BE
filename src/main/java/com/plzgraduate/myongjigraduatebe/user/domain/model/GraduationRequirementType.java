@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum DefaultGraduationRequirement {
+public enum GraduationRequirementType {
+
 	HUMANITIES_16_17("인문대", 63, 15, 12, 12, 10, 16, 128, 16, 17),
 	SOCIAL_SCIENCE_16_17("사회과학대", 63, 15, 12, 12, 10, 16, 128, 16, 17),
 	BUSINESS_16_17("경영대", 63, 15, 12, 6, 10, 22, 128, 16, 17),
@@ -33,10 +34,10 @@ public enum DefaultGraduationRequirement {
 	private final int startEntryYear;
 	private final int endEntryYear;
 
-	public static DefaultGraduationRequirement determineGraduationRequirement(College college, int studentEntryYear) {
-		return Arrays.stream(DefaultGraduationRequirement.values())
+	public static GraduationRequirementType determineGraduationRequirement(College college, User user) {
+		return Arrays.stream(GraduationRequirementType.values())
 			.filter(gr -> gr.getCollageName().equals(college.getName()))
-			.filter(gr -> gr.getStartEntryYear() <= studentEntryYear && gr.getEndEntryYear() >= studentEntryYear)
+			.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear()&& gr.getEndEntryYear() >= user.getEntryYear())
 			.findFirst()
 			.orElseThrow(() -> new NoSuchElementException("일치하는 졸업 요건이 존재하지 않습니다."));
 	}
@@ -58,7 +59,7 @@ public enum DefaultGraduationRequirement {
 
 	private void checkUserEnglishLevel(User user, GraduationRequirement graduationRequirement) {
 		if (user.getEnglishLevel() == EnglishLevel.FREE) {
-			graduationRequirement.transferEnglishCategoryCredit();
+			graduationRequirement.transferEnglishCreditCommonToNormal();
 		}
 	}
 }
