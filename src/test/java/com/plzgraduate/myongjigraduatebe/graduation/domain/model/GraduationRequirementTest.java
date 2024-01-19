@@ -19,7 +19,7 @@ class GraduationRequirementTest {
 			.normalCultureCredit(beforeTransferNormalCultureCredit).build();
 
 		//when
-		graduationRequirement.transferEnglishCategoryCredit();
+		graduationRequirement.transferEnglishCreditCommonToNormal();
 
 		//then
 		assertThat(graduationRequirement.getCommonCultureCredit())

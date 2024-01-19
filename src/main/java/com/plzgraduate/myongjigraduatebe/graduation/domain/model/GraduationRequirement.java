@@ -30,7 +30,7 @@ public class GraduationRequirement {
 		this.freeElectiveCredit = freeElectiveCredit;
 	}
 
-	public void transferEnglishCategoryCredit() {
+	public void transferEnglishCreditCommonToNormal() {
 		commonCultureCredit -= ENGLISH.getTotalCredit();
 		normalCultureCredit += ENGLISH.getTotalCredit();
 	}

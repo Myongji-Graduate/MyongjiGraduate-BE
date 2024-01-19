@@ -17,12 +17,12 @@ public enum College {
 	LAW("법대", List.of("법학과")),
 	ICT("ICT융합대", List.of("디지털콘텐츠디자인학과", "응용소프트웨어전공", "데이터테크놀로지전공"));
 
-	private final String text;
+	private final String name;
 	private final List<String> holdingMajors;
 
-	public static College findBelongingCollege(String major) {
+	public static College findBelongingCollege(User user) {
 		return Arrays.stream(College.values())
-			.filter(college -> college.getHoldingMajors().contains(major))
+			.filter(college -> college.getHoldingMajors().contains(user.getMajor()))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("소속 단과대가 존재하지 않습니다."));
 	}

@@ -21,8 +21,8 @@ class FindBasicAcademicalCulturePersistenceAdapter implements FindBasicAcademica
 
 	@Override
 	public Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(User user) {
-		College userCollege = College.findBelongingCollege(user.getMajor());
-		return basicAcademicalCultureRepository.findAllByCollege(userCollege.getText()).stream()
+		College userCollege = College.findBelongingCollege(user);
+		return basicAcademicalCultureRepository.findAllByCollege(userCollege.getName()).stream()
 			.map(lectureMapper::mapToBasicAcademicalCultureLectureModel)
 			.collect(Collectors.toSet());
 	}

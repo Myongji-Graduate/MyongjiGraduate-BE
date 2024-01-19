@@ -44,11 +44,11 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 
 		BasicAcademicalCultureLectureJpaEntity basicAcademicalCultureLectureJpaEntityA = BasicAcademicalCultureLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
-			.college(ICT.getText()).build();
+			.college(ICT.getName()).build();
 
 		BasicAcademicalCultureLectureJpaEntity basicAcademicalCultureLectureJpaEntityB = BasicAcademicalCultureLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
-			.college(BUSINESS.getText()).build();
+			.college(BUSINESS.getName()).build();
 		basicAcademicalCultureRepository.saveAll(
 			List.of(basicAcademicalCultureLectureJpaEntityA, basicAcademicalCultureLectureJpaEntityB));
 
@@ -58,7 +58,7 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 		//then
 		assertThat(basicAcademicalCulture).hasSize(1)
 			.extracting("college")
-			.contains(ICT.getText());
+			.contains(ICT.getName());
 	}
 
 }
