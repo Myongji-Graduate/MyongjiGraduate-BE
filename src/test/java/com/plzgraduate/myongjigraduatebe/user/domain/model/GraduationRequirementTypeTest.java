@@ -49,7 +49,7 @@ class GraduationRequirementTypeTest {
 			.hasMessage("일치하는 졸업 요건이 존재하지 않습니다.");
 	}
 
-	@DisplayName("영어 면제 학생의 졸업요건을 매핑한다.")
+	@DisplayName("영어 면제 학생의 졸업요건을 결정한다.")
 	@Test()
 	void convertToProfitGraduationRequirementWithFreeEnglishUser() {
 		//given
@@ -67,5 +67,23 @@ class GraduationRequirementTypeTest {
 			graduationRequirementType.getCommonCultureCredit() - ENGLISH.getTotalCredit());
 		assertThat(graduationRequirement.getNormalCultureCredit()).isEqualTo(
 			graduationRequirementType.getNormalLectureCredit() + ENGLISH.getTotalCredit());
+	}
+
+	@DisplayName("부전공 학생의 졸업요건을 결정한다.")
+	@Test()
+	void convertToProfitGraduationRequirementWithSubMajorUser() {
+		//given
+		User subMajorUser = UserFixture.경영학과_23학번_국제통상학과_부전공();
+		College ict = College.BUSINESS;
+		GraduationRequirementType graduationRequirementType = GraduationRequirementType.determineGraduationRequirement(
+			ict, subMajorUser);
+
+		//when
+		GraduationRequirement graduationRequirement = graduationRequirementType.convertToProfitGraduationRequirement(
+			subMajorUser);
+
+		// then
+		assertThat(graduationRequirement.getFreeElectiveCredit()).isZero();
+
 	}
 }

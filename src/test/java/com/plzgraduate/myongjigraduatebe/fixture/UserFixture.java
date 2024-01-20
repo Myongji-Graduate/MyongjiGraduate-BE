@@ -55,6 +55,11 @@ public class UserFixture {
 			StudentCategory.NORMAL);
 	}
 
+	public static User 경영학과_23학번_국제통상학과_부전공() {
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김경영", "60231022", 23, "경영학과", "국제통상학과",
+			StudentCategory.SUB_MAJOR);
+	}
+
 	public static User 국제통상학과_19학번() {
 		return createUser("mj31", "1234", EnglishLevel.ENG34, "김국통", "60192021", 19, "국제통상학과", null,
 			StudentCategory.NORMAL);

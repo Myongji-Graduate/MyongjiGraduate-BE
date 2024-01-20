@@ -28,4 +28,18 @@ class GraduationRequirementTest {
 			.isEqualTo(beforeTransferNormalCultureCredit + ENGLISH.getTotalCredit());
 	}
 
+	@DisplayName("자유선택 졸업 학점을 0점으로 한다.")
+	@Test
+	void deleteFreeElectiveCredit() {
+		//given
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
+			.freeElectiveCredit(10).build();
+
+		//when
+		graduationRequirement.deleteFreeElectiveCredit();
+
+		//then
+		assertThat(graduationRequirement.getFreeElectiveCredit()).isZero();
+	}
+
 }
