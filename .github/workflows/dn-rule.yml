@@ -13,7 +13,6 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const github = require('@actions/github');
             const context = github.context;
             const repo = context.repo;
             const prNumber = context.payload.pull_request ? context.payload.pull_request.number : context.issue.number;
