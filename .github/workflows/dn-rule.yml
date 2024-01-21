@@ -1,7 +1,7 @@
 name: PR Label Automation
 on:
   pull_request:
-    types: [ opened, labeled, unlabeled, synchronize ]
+    types: [ opened ]
   schedule:
     - cron: '0 0 * * *'  # 매일 자정에 실행
 
