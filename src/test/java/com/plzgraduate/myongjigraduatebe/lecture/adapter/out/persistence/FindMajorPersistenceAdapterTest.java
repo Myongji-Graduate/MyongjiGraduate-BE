@@ -50,7 +50,7 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 		majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
 
 	    //when
-		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor(user);
+		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor(user.getMajor());
 
 		//then
 		assertThat(majors).hasSize(1)
