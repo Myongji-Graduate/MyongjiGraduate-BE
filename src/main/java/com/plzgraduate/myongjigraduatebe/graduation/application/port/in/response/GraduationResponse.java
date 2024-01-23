@@ -19,6 +19,9 @@ public class GraduationResponse {
 	private final DetailGraduationResultResponse coreCulture;
 	private final DetailGraduationResultResponse basicAcademicalCulture;
 	private final DetailGraduationResultResponse major;
+	@Schema(name = "subMajor", nullable = true)
+	private final DetailGraduationResultResponse subMajor;
+	//TODO: 복수전공 response 추가
 	private final RestResultResponse normalCulture;
 	private final RestResultResponse freeElective;
 	@Schema(name = "graduated", example = "false")
@@ -28,13 +31,15 @@ public class GraduationResponse {
 	private GraduationResponse(BasicInfoResponse basicInfo, ChapelResultResponse chapelResult,
 		DetailGraduationResultResponse commonCulture, DetailGraduationResultResponse coreCulture,
 		DetailGraduationResultResponse basicAcademicalCulture, DetailGraduationResultResponse major,
-		RestResultResponse normalCulture, RestResultResponse freeElective, boolean graduated) {
+		DetailGraduationResultResponse subMajor, RestResultResponse normalCulture, RestResultResponse freeElective,
+		boolean graduated) {
 		this.basicInfo = basicInfo;
 		this.chapelResult = chapelResult;
 		this.commonCulture = commonCulture;
 		this.coreCulture = coreCulture;
 		this.basicAcademicalCulture = basicAcademicalCulture;
 		this.major = major;
+		this.subMajor = subMajor;
 		this.normalCulture = normalCulture;
 		this.freeElective = freeElective;
 		this.graduated = graduated;
@@ -48,6 +53,7 @@ public class GraduationResponse {
 			.coreCulture(findDetailGraduationResultResponse(graduationResult, CORE_CULTURE))
 			.basicAcademicalCulture(findDetailGraduationResultResponse(graduationResult, BASIC_ACADEMICAL_CULTURE))
 			.major(findDetailGraduationResultResponse(graduationResult, MAJOR))
+			.subMajor(findDetailGraduationResultResponse(graduationResult, SUB_MAJOR))
 			.normalCulture(
 				RestResultResponse.fromNormalCultureResult(graduationResult.getNormalCultureGraduationResult()))
 			.freeElective(RestResultResponse.fromFreeElectiveResult(graduationResult.getFreeElectiveGraduationResult()))
