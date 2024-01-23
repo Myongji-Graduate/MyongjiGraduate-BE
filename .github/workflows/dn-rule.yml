@@ -1,9 +1,7 @@
 name: PR Label Automation
 on:
-  pull_request:
-    types: [ opened ]
   schedule:
-    - cron: '0 0 * * *'  # 매일 자정에 실행
+    - cron: '0 0 * * *'  # Executes daily at midnight
 
 jobs:
   update-labels:
@@ -14,55 +12,57 @@ jobs:
         with:
           script: |
             const repo = context.repo;
-            const prNumber = context.payload.pull_request ? context.payload.pull_request.number : context.issue.number;
 
-            // PR 레이블 가져오기
-            const { data: pr } = await github.rest.pulls.get({
+            // Fetch all open PRs
+            const prs = await github.rest.pulls.list({
               owner: repo.owner,
               repo: repo.repo,
-              pull_number: prNumber,
+              state: 'open',
             });
 
-            let labels = pr.labels.map(label => label.name);
-            const hasDLabel = labels.some(label => label.startsWith("D-"));
+            for (const pr of prs.data) {
+              const prNumber = pr.number;
+              let labels = pr.labels.map(label => label.name);
+              const hasDLabel = labels.some(label => label.startsWith("D-"));
 
-            // 'D-' 레이블이 없는 경우 'D-5' 레이블 추가
-            if (!hasDLabel) {
-              await github.rest.issues.addLabels({
-                owner: repo.owner,
-                repo: repo.repo,
-                issue_number: prNumber,
-                labels: ['D-5'],
-              });
-              console.log("Added D-5 label to PR");
-            }
+              // Add 'D-5' label if no 'D-' label is present
+              if (!hasDLabel) {
+                await github.rest.issues.addLabels({
+                  owner: repo.owner,
+                  repo: repo.repo,
+                  issue_number: prNumber,
+                  labels: ['D-5'],
+                });
+                console.log(`Added D-5 label to PR #${prNumber}`);
+              }
 
-            // 'D-x' 레이블 확인 및 업데이트
-            for (let label of labels) {
-              if (label.startsWith("D-") && label !== "D-0") {
-                let day = parseInt(label.split("-")[1]);
-                if (day > 0) {
-                  let newLabel = `D-${day - 1}`;
-                  // 먼저 기존 레이블을 제거
-                  await github.rest.issues.removeLabel({
-                    owner: repo.owner,
-                    repo: repo.repo,
-                    issue_number: prNumber,
-                    name: label,
-                  });
-                  // 새 레이블 추가
-                  await github.rest.issues.addLabels({
-                    owner: repo.owner,
-                    repo: repo.repo,
-                    issue_number: prNumber,
-                    labels: [newLabel],
-                  });
-                  console.log(`Updated label from ${label} to ${newLabel}`);
+              // Update 'D-x' labels
+              for (let label of labels) {
+                if (label.startsWith("D-") && label !== "D-0") {
+                  let day = parseInt(label.split("-")[1]);
+                  if (day > 0) {
+                    let newLabel = `D-${day - 1}`;
+                    // Remove old label
+                    await github.rest.issues.removeLabel({
+                      owner: repo.owner,
+                      repo: repo.repo,
+                      issue_number: prNumber,
+                      name: label,
+                    });
+                    // Add new label
+                    await github.rest.issues.addLabels({
+                      owner: repo.owner,
+                      repo: repo.repo,
+                      issue_number: prNumber,
+                      labels: [newLabel],
+                    });
+                    console.log(`Updated label from ${label} to ${newLabel} on PR #${prNumber}`);
+                  }
+
+                  if (day === 1) {
+                    // Handle 'D-0' logic here
+                  }
+                  break;
                 }
-
-                if (day === 1) {
-                  // 'D-0' 처리 로직
-                }
-                break;
               }
             }
