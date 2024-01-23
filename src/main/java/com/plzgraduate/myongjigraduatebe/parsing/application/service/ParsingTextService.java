@@ -71,7 +71,6 @@ class ParsingTextService implements ParsingTextUseCase {
 			parsingInformation.getStudentName(), parsingInformation.getMajor(),
 			parsingInformation.getAssociatedMajor(), parsingInformation.getSubMajor(),
 			parsingInformation.getStudentCategory());
-		//TODO 부전공 체크
 		updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
