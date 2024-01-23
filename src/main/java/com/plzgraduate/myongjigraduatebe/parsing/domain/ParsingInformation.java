@@ -94,11 +94,13 @@ public class ParsingInformation {
 			if (part.startsWith("부전공 - ")) {
 				categories.add("부전공");
 				subMajor = part.substring("부전공 - ".length());
+			} else if (part.startsWith("복수전공 - ")) {
+				categories.add("복수전공");
+				subMajor = part.substring("복수전공 - ".length());
 			} else if (part.startsWith("연계전공 - ")) {
 				categories.add("연계전공");
 				associatedMajor = part.substring("연계전공 - ".length());
 			}
-			//TODO: 복수전공 파싱 추가 user.dualMajor
 		}
 		studentCategory = StudentCategory.from(categories);
 		return ParsingStudentCategoryDto.of(changeMajor, subMajor, associatedMajor, studentCategory);
