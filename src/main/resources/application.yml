@@ -17,6 +17,9 @@ spring:
         format_sql: true
     open-in-view: false
 
+  jackson:
+    default-property-inclusion: non_null
+
 logging:
   level:
     p6spy: info
