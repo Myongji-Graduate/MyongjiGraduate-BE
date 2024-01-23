@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response;
 
-import org.springframework.lang.Nullable;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -15,10 +14,8 @@ public class MajorResponse {
 	@Schema(name = "primaryMajor", example = "데이터테크놀로지전공")
 	private final String primaryMajor;
 	@Schema(name = "doubleMajor", example = "융합소프트웨어전공", nullable = true)
-	@Nullable()
 	private final String doubleMajor;
 	@Schema(name = "subMajor", example = "융합소프트웨어전공", nullable = true)
-	@Nullable()
 	private final String subMajor;
 
 	@Builder
