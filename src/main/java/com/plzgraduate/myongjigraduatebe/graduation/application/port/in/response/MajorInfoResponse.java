@@ -9,7 +9,7 @@ import lombok.Getter;
 
 
 @Getter
-public class MajorResponse {
+public class MajorInfoResponse {
 
 	@Schema(name = "primaryMajor", example = "데이터테크놀로지전공")
 	private final String primaryMajor;
@@ -19,14 +19,14 @@ public class MajorResponse {
 	private final String subMajor;
 
 	@Builder
-	private MajorResponse(String primaryMajor, String doubleMajor, String subMajor) {
+	private MajorInfoResponse(String primaryMajor, String doubleMajor, String subMajor) {
 		this.primaryMajor = primaryMajor;
 		this.doubleMajor = doubleMajor;
 		this.subMajor = subMajor;
 	}
 
-	public static MajorResponse from(User user) {
-		return MajorResponse.builder()
+	public static MajorInfoResponse from(User user) {
+		return MajorInfoResponse.builder()
 			.primaryMajor(user.getMajor())
 			.subMajor(user.getSubMajor())
 			.doubleMajor(null) //TODO: 복수전공 추가

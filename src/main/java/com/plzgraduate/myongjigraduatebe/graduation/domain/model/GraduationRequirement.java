@@ -36,6 +36,6 @@ public class GraduationRequirement {
 	}
 
 	public void deleteFreeElectiveCredit() {
-		this.freeElectiveCredit = 0;
+		freeElectiveCredit = 0;
 	}
 }
