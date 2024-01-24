@@ -13,6 +13,7 @@ jobs:
           script: |
             const repo = context.repo;
 
+
             // Fetch all open PRs
             const prs = await github.rest.pulls.list({
               owner: repo.owner,
