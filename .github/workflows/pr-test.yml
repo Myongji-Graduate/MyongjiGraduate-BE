@@ -2,9 +2,9 @@ name: Test & Jacoco Code Coverage
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -22,8 +22,18 @@ jobs:
 
       - name: Install Docker
         run: |
+          sudo apt-get remove docker docker-engine docker.io containerd runc
+          sudo apt-get purge docker-ce docker-ce-cli containerd.io
+          sudo apt-get clean
+          sudo apt-get autoclean
+          sudo apt-get autoremove
           sudo apt-get update
-          sudo apt-get -y install docker.io
+          sudo apt-get upgrade
+          sudo apt-get install docker.io
+          sudo apt-get install containerd.io
+
+      - name: Start Docker daemon
+        run: sudo service docker start
 
       - name: Gradle Caching
         uses: actions/cache@v2
@@ -37,9 +47,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Start Docker daemon
-        run: sudo service docker start
 
       # Gradle test를 실행 후 report 추출
       - name: Test with Gradle
