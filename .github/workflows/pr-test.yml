@@ -2,31 +2,28 @@ name: Test & Jacoco Code Coverage
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:20.10.7-dind
-        options: --privileged
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Run Docker Command
+        run: docker run hello-world
+
+      - uses: actions/checkout@v3
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
       - name: Gradle Caching
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -35,6 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
@@ -42,5 +40,6 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew build jacocoTestReport
 
+      # report 업로드하기
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.1.1
