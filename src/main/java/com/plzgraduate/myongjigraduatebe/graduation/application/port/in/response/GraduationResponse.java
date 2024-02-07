@@ -68,6 +68,6 @@ public class GraduationResponse {
 				.equals(graduationCategory.getName()))
 			.map(DetailGraduationResultResponse::from)
 			.findFirst()
-			.orElseThrow(IllegalArgumentException::new);
+			.orElse(null);
 	}
 }
