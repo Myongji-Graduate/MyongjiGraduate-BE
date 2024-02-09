@@ -32,14 +32,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle test를 실행 후 report 추출
+      # 추가: 도커 엔진 상태 확인
+      - name: Check Docker Engine
+        run: |
+          docker info
+          docker ps
+
       - name: Test with Gradle
         run: ./gradlew build jacocoTestReport
 
-      # report 업로드하기
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.1.1
