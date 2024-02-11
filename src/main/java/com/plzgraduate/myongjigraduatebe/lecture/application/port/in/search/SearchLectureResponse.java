@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SearchLectureResponse {
+
 	private List<LectureResponse> lectures;
 
 	@Builder
