@@ -47,8 +47,8 @@ class SearchLectureServiceTest {
 			.hasSize(2)
 			.extracting("id", "lectureCode", "name", "credit", "isRevoked")
 			.containsExactlyInAnyOrder(
-				tuple(1L, "code1", "기초웹프로그래밍", 3, true),
-				tuple(2L, "code2", "앱과웹기초", 2, false)
+				tuple(1L, "code1", "기초웹프로그래밍", 3, false),
+				tuple(2L, "code2", "앱과웹기초", 2, true)
 			);
 	}
 
