@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.port;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademic
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture.CommonCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture.CoreCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindCoreCulturePort;
@@ -32,6 +34,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.GraduationRequirementType;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -59,6 +62,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
 			takenLectureInventory, graduationRequirement);
+
 		GraduationResult graduationResult = generateGraduationResult(chapelResult, detailGraduationResults,
 			takenLectureInventory, graduationRequirement);
 
@@ -80,22 +84,23 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private List<DetailGraduationResult> generateDetailGraduationResults(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		DetailGraduationResult commonCultureGraduationResult = generateCommonCultureDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement);
-
-		DetailGraduationResult coreCultureDetailGraduationResult = generateCoreCultureDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement);
-
-		DetailGraduationResult basicAcademicalDetailGraduationResult = generteBasicAcademicalDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement);
-
-		DetailGraduationResult majorDetailGraduationResult = generateMajorDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement);
+		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>(List.of(
+			generateCommonCultureDetailGraduationResult(
+				user, takenLectureInventory, graduationRequirement),
+			generateCoreCultureDetailGraduationResult(
+				user, takenLectureInventory, graduationRequirement),
+			generteBasicAcademicalDetailGraduationResult(
+				user, takenLectureInventory, graduationRequirement),
+			generateMajorDetailGraduationResult(
+				user, takenLectureInventory, graduationRequirement)
+		));
 
 		// TODO: Additional Major check - DetailGraduationResult
+		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
+			detailGraduationResults.add(generateSubMajorDetailGraduationResult(user, takenLectureInventory));
+		}
 
-		return List.of(commonCultureGraduationResult, coreCultureDetailGraduationResult,
-			basicAcademicalDetailGraduationResult, majorDetailGraduationResult);
+		return detailGraduationResults;
 	}
 
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(User user,
@@ -144,10 +149,19 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateMajorDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user);
+		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getMajor());
 		GraduationManager<MajorLecture> majorGraduationManager = new MajorManager();
 		return majorGraduationManager.createDetailGraduationResult(user,
 			takenLectureInventory, graduationMajorLectures, graduationRequirement.getMajorCredit());
+	}
+
+	private DetailGraduationResult generateSubMajorDetailGraduationResult(User user,
+		TakenLectureInventory takenLectureInventory) {
+		int requireSubMajorCredit = 21;
+		Set<MajorLecture> graduationSubMajorLectures = findMajorPort.findMajor(user.getSubMajor());
+		GraduationManager<MajorLecture> subMajorManager = new SubMajorManager();
+		return subMajorManager.createDetailGraduationResult(user, takenLectureInventory, graduationSubMajorLectures,
+			requireSubMajorCredit);
 	}
 
 	private GraduationResult generateGraduationResult(ChapelResult chapelResult,

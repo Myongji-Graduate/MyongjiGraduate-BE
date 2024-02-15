@@ -15,7 +15,7 @@ public class GraduationRequirement {
 	private int commonCultureCredit;
 	private final int coreCultureCredit;
 	private int normalCultureCredit;
-	private final int freeElectiveCredit;
+	private int freeElectiveCredit;
 
 	@Builder
 	private GraduationRequirement(int totalCredit, int majorCredit, int subMajorCredit, int basicAcademicalCredit,
@@ -33,5 +33,9 @@ public class GraduationRequirement {
 	public void transferEnglishCreditCommonToNormal() {
 		commonCultureCredit -= ENGLISH.getTotalCredit();
 		normalCultureCredit += ENGLISH.getTotalCredit();
+	}
+
+	public void deleteFreeElectiveCredit() {
+		freeElectiveCredit = 0;
 	}
 }

@@ -1,9 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -91,7 +89,10 @@ public class ParsingInformation {
 		}
 
 		for (String part : parts) {
-			if (part.startsWith("복수전공 - ")) {
+			if (part.startsWith("부전공 - ")) {
+				categories.add("부전공");
+				subMajor = part.substring("부전공 - ".length());
+			} else if (part.startsWith("복수전공 - ")) {
 				categories.add("복수전공");
 				subMajor = part.substring("복수전공 - ".length());
 			} else if (part.startsWith("연계전공 - ")) {

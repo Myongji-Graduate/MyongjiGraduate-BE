@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,6 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.S
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -54,12 +55,11 @@ class ParsingTextService implements ParsingTextUseCase {
 		}
 	}
 
-
 	private void deleteTakenLecturesIfAlreadyEnrolled(User user) {
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);
 	}
 
-	private void saveTakenLectures(User user, ParsingInformation parsingInformation){
+	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList = parsingInformation.getTakenLectureInformation();
 		SaveTakenLectureCommand saveTakenLectureCommand = getSaveTakenLectureCommand(
 			user, parsingTakenLectureDtoList);
@@ -69,7 +69,8 @@ class ParsingTextService implements ParsingTextUseCase {
 	private void updateUser(User user, ParsingInformation parsingInformation) {
 		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user,
 			parsingInformation.getStudentName(), parsingInformation.getMajor(),
-			parsingInformation.getAssociatedMajor(), parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
+			parsingInformation.getAssociatedMajor(), parsingInformation.getSubMajor(),
+			parsingInformation.getStudentCategory());
 		updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
@@ -99,8 +100,11 @@ class ParsingTextService implements ParsingTextUseCase {
 	}
 
 	private void checkIfNormal(ParsingInformation parsingInformation) {
-		if(parsingInformation.getStudentCategory() != StudentCategory.NORMAL) {
-			throw new IllegalArgumentException("전과생, 복수전공, 연계전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
+		//TODO: 복수전공 파싱 통과 추가
+		if (!(parsingInformation.getStudentCategory() == NORMAL
+			|| parsingInformation.getStudentCategory() == CHANGE_MAJOR
+			|| parsingInformation.getStudentCategory() == SUB_MAJOR)) {
+			throw new IllegalArgumentException("복수전공, 연계전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
 		}
 	}
 

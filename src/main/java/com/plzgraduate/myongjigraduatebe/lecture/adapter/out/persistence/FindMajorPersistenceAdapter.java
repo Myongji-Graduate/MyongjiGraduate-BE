@@ -19,8 +19,8 @@ class FindMajorPersistenceAdapter implements FindMajorPort {
 	private final LectureMapper mapper;
 
 	@Override
-	public Set<MajorLecture> findMajor(User user) {
-		return majorLectureRepository.findAllByMajor(user.getMajor()).stream()
+	public Set<MajorLecture> findMajor(String major) {
+		return majorLectureRepository.findAllByMajor(major).stream()
 			.map(mapper::mapToMajorLectureModel)
 			.collect(Collectors.toSet());
 	}

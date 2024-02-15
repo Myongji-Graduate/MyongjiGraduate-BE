@@ -14,15 +14,14 @@ public class BasicInfoResponse {
 	private final String name;
 	@Schema(name = "studentNumber", example = "60202000")
 	private final String studentNumber;
-	@Schema(name = "major", example = "응용소프트웨어전공")
-	private final String major;
+	private final MajorInfoResponse major;
 	@Schema(name = "totalCredit", example = "132")
 	private final int totalCredit;
 	@Schema(name = "takenCredit", example = "50")
 	private final double takenCredit;
 
 	@Builder
-	private BasicInfoResponse(String name, String studentNumber, String major, int totalCredit, double takenCredit) {
+	private BasicInfoResponse(String name, String studentNumber, MajorInfoResponse major, int totalCredit, double takenCredit) {
 		this.name = name;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -34,7 +33,7 @@ public class BasicInfoResponse {
 		return BasicInfoResponse.builder()
 			.name(user.getName())
 			.studentNumber(user.getStudentNumber())
-			.major(user.getMajor())
+			.major(MajorInfoResponse.from(user))
 			.totalCredit(graduationResult.getTotalCredit())
 			.takenCredit(graduationResult.getTakenCredit()).build();
 	}

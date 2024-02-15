@@ -52,14 +52,21 @@ public enum GraduationRequirementType {
 			.normalCultureCredit(this.normalLectureCredit)
 			.freeElectiveCredit(this.freeElectiveLectureCredit).build();
 
-		checkUserEnglishLevel(user, graduationRequirement);
+		checkIsEnglishFreeUserAndTransferCredit(user, graduationRequirement);
 		//TODO: Additional Major에 따른 졸업요건 변화 체크 후 졸업 요건 학점 변화 적용
+		checkIsSubMajorUserAndTransferCredit(user, graduationRequirement);
 		return graduationRequirement;
 	}
 
-	private void checkUserEnglishLevel(User user, GraduationRequirement graduationRequirement) {
+	private void checkIsEnglishFreeUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
 		if (user.getEnglishLevel() == EnglishLevel.FREE) {
 			graduationRequirement.transferEnglishCreditCommonToNormal();
+		}
+	}
+
+	private void checkIsSubMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
+			graduationRequirement.deleteFreeElectiveCredit();
 		}
 	}
 }

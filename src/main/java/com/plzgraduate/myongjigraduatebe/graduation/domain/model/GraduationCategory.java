@@ -15,6 +15,7 @@ public enum GraduationCategory {
 	CORE_CULTURE("핵심교양"),
 	BASIC_ACADEMICAL_CULTURE("학문기초교양"),
 	MAJOR("전공"),
+	SUB_MAJOR("부전공"),
 	NORMAL_CULTURE("일반교양"),
 	FREE_ELECTIVE("자유선택");
 
