@@ -32,19 +32,26 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-              ~/.gradle/caches
-              ~/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-              ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-
 
-
-      # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build and analyze
+      - name: Build with Gradle
+        run: ./gradlew build --info
+
+      - name: Set up JDK 17 for SonarQube
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Run SonarQube analysis with JDK 17
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info
+        run: ./gradlew sonarqube --info

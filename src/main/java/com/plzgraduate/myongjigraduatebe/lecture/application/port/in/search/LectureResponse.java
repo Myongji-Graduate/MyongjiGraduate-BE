@@ -34,7 +34,7 @@ public class LectureResponse {
 			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
-			.isRevoked(lecture.getIsRevoked() == 0)
+			.isRevoked(lecture.getIsRevoked() != 0)
 			.build();
 	}
 }

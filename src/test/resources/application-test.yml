@@ -4,7 +4,7 @@ spring:
       on-profile: test
 
   datasource:
-    url: jdbc:tc:mysql:8:///mju-graduate
+    url: jdbc:tc:mysql:8.0.29:///mju-graduate
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     username:
     password:
@@ -16,6 +16,7 @@ spring:
     properties:
       hibernate:
         format_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
   port: 8080
