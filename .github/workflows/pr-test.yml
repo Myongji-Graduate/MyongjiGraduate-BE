@@ -35,12 +35,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 추가: 도커 엔진 상태 확인
-      - name: Check Docker Engine
-        run: |
-          docker info
-          docker ps
-
       - name: Test with Gradle
         run: ./gradlew build jacocoTestReport
 
