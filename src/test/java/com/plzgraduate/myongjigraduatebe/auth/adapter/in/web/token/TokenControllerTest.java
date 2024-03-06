@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.token;
+package com.plzgraduate.myongjigraduatebe.auth.adapter.in.web.token;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request.TokenRequest;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenResponse;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 

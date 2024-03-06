@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web.ParsingTextRequest;
+import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;

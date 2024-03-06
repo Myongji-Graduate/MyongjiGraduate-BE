@@ -6,9 +6,9 @@ import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @Component
-class UserMapper {
+public class UserMapper {
 
-	User mapToDomainEntity(UserJpaEntity user) {
+	public User mapToDomainEntity(UserJpaEntity user) {
 
 		return User.builder()
 			.id(user.getId())
@@ -26,7 +26,7 @@ class UserMapper {
 			.build();
 	}
 
-	UserJpaEntity mapToJpaEntity(User user) {
+	public UserJpaEntity mapToJpaEntity(User user) {
 
 		return UserJpaEntity.builder()
 			.id(user.getId())

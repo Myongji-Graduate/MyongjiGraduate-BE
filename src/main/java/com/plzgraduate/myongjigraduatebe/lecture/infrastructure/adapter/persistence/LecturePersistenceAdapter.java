@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class LecturePersistenceAdapter implements FindLecturePort, SearchLecturePort {
+public class LecturePersistenceAdapter implements FindLecturePort, SearchLecturePort {
 
 	private final LectureQueryRepository lectureQueryRepository;
 	private final LectureRepository lectureRepository;

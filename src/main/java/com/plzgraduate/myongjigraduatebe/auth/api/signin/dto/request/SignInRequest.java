@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin;
+package com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request;
 
 import javax.validation.constraints.NotBlank;
 

@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
-import com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web.ParsingTextRequest;
+import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

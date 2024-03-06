@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-import com.plzgraduate.myongjigraduatebe.user.adapter.out.persistence.mapper.UserMapper;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
@@ -20,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @PersistenceAdapter
 @Slf4j
 @RequiredArgsConstructor
-class UserPersistenceAdapter implements FindUserPort, SaveUserPort, CheckUserPort, UpdateUserPort, DeleteUserPort {
+public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, CheckUserPort, UpdateUserPort, DeleteUserPort {
 
 	private final UserMapper userMapper;
 

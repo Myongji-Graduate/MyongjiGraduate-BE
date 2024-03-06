@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort, DeleteParsingTextHistoryPort {
+public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort, DeleteParsingTextHistoryPort {
 
 	private final ParsingTextRepository parsingTextRepository;
 	private final ParsingTextHistoryMapper parsingTextHistoryMapper;

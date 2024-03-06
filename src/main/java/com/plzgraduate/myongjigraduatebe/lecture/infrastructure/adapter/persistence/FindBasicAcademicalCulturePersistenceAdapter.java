@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class FindBasicAcademicalCulturePersistenceAdapter implements FindBasicAcademicalCulturePort {
+public class FindBasicAcademicalCulturePersistenceAdapter implements FindBasicAcademicalCulturePort {
 
 	private final BasicAcademicalCultureRepository basicAcademicalCultureRepository;
 	private final LectureMapper lectureMapper;

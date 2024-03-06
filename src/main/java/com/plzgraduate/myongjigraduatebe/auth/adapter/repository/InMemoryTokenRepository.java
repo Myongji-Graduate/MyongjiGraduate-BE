@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.auth.adapter.repository;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;

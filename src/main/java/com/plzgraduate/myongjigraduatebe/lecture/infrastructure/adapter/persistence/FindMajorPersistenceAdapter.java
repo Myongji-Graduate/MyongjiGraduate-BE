@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class FindMajorPersistenceAdapter implements FindMajorPort {
+public class FindMajorPersistenceAdapter implements FindMajorPort {
 
 	private final MajorLectureRepository majorLectureRepository;
 	private final LectureMapper mapper;

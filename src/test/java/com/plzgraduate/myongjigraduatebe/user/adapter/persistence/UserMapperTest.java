@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.adapter.out.persistence;
+package com.plzgraduate.myongjigraduatebe.user.adapter.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-import com.plzgraduate.myongjigraduatebe.user.adapter.out.persistence.mapper.UserMapper;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper.UserMapper;
 
 class UserMapperTest extends PersistenceTestSupport {
 

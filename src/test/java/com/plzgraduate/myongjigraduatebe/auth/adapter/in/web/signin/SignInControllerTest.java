@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin;
+package com.plzgraduate.myongjigraduatebe.auth.adapter.in.web.signin;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request.SignInRequest;
 import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 

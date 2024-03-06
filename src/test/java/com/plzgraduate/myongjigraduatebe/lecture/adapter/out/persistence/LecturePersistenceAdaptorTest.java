@@ -18,7 +18,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
-class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
+class lecturePersistenceAdapterTest extends PersistenceTestSupport {
 
 	@Autowired
 	private LectureRepository lectureRepository;
@@ -50,7 +50,7 @@ class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
 		));
 
 		//when
-		List<Lecture> lectures = lecturePersistenceAdaptor.findLecturesByLectureCodes(lectureCodes);
+		List<Lecture> lectures = lecturePersistenceAdapter.findLecturesByLectureCodes(lectureCodes);
 
 		//then
 		assertThat(lectures)
@@ -76,7 +76,7 @@ class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
 		));
 
 		//when
-		List<Lecture> lectures = lecturePersistenceAdaptor.findLecturesByIds(lectureIds);
+		List<Lecture> lectures = lecturePersistenceAdapter.findLecturesByIds(lectureIds);
 
 		//then
 		assertThat(lectures)
@@ -98,7 +98,7 @@ class LecturePersistenceAdaptorTest extends PersistenceTestSupport {
 		));
 
 		//when
-		List<Lecture> lectures = lecturePersistenceAdaptor.searchLectureByNameOrCode("name", "name");
+		List<Lecture> lectures = lecturePersistenceAdapter.searchLectureByNameOrCode("name", "name");
 
 		//then
 		assertThat(lectures)

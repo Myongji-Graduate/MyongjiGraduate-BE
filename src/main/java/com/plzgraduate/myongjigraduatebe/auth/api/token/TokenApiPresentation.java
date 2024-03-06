@@ -1,9 +1,10 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.token;
+package com.plzgraduate.myongjigraduatebe.auth.api.token;
 
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request.TokenRequest;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

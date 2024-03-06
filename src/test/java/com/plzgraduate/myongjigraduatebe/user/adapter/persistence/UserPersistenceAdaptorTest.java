@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.adapter.out.persistence;
+package com.plzgraduate.myongjigraduatebe.user.adapter.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.UserPersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-class UserPersistenceAdaptorTest extends PersistenceTestSupport {
+class userPersistenceAdapterTest extends PersistenceTestSupport {
 
 	@Autowired
-	private UserPersistenceAdapter userPersistenceAdaptor;
+	private UserPersistenceAdapter userPersistenceAdapter;
 	@Autowired
 	private UserRepository userRepository;
 
@@ -26,7 +27,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 	    //given
 		User user = createUser("mju1001", "1q2w3e4r!", "60181666");
 	    //when
-		userPersistenceAdaptor.saveUser(user);
+		userPersistenceAdapter.saveUser(user);
 	    //then
 		assertThat(userRepository.findByAuthId("mju1001")).isPresent();
 	}
@@ -39,7 +40,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		UserJpaEntity userEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
 		userRepository.save(userEntity);
 		//when
-		Optional<User> user = userPersistenceAdaptor.findUserByAuthId(authId);
+		Optional<User> user = userPersistenceAdapter.findUserByAuthId(authId);
 
 		//then
 		assertThat(user).isPresent();
@@ -55,7 +56,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		userRepository.save(userJpaEntity);
 
 		//when
-		Optional<User> user = userPersistenceAdaptor.findUserByStudentNumber(studentNumber);
+		Optional<User> user = userPersistenceAdapter.findUserByStudentNumber(studentNumber);
 
 		//then
 		assertThat(user).isPresent();
@@ -70,7 +71,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		UserJpaEntity user = createUserEntity(authId, "1q2w3e4r!", "60181666");
 		userRepository.save(user);
 		//when
-		boolean check= userPersistenceAdaptor.checkDuplicateAuthId(authId);
+		boolean check= userPersistenceAdapter.checkDuplicateAuthId(authId);
 
 		//then
 		assertThat(check).isTrue();
@@ -84,7 +85,7 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 		UserJpaEntity user = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
 		userRepository.save(user);
 		//when
-		boolean check= userPersistenceAdaptor.checkDuplicateStudentNumber(studentNumber);
+		boolean check= userPersistenceAdapter.checkDuplicateStudentNumber(studentNumber);
 
 		//then
 		assertThat(check).isTrue();
@@ -101,10 +102,10 @@ class UserPersistenceAdaptorTest extends PersistenceTestSupport {
 			.id(savedUserJpaEntity.getId()).build();
 
 		//when
-		userPersistenceAdaptor.deleteUser(user);
+		userPersistenceAdapter.deleteUser(user);
 
 	    //then
-		Optional<User> foundUser = userPersistenceAdaptor.findUserByAuthId(authId);
+		Optional<User> foundUser = userPersistenceAdapter.findUserByAuthId(authId);
 		assertThat(foundUser.isPresent()).isFalse();
 	}
 

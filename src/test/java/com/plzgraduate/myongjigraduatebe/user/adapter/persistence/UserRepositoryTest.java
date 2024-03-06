@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.adapter.out.persistence;
+package com.plzgraduate.myongjigraduatebe.user.adapter.persistence;
 
 import static org.assertj.core.api.Assertions.*;
 

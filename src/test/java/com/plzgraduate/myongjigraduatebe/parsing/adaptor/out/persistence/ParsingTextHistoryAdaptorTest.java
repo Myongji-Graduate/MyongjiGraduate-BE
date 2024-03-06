@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.plzgraduate.myongjigraduatebe.parsing.adaptor.persistence.ParsingTextHistoryAdaptor;
+import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.ParsingTextHistoryAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
@@ -19,13 +19,13 @@ import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
+class parsingTextHistoryAdapterTest extends PersistenceTestSupport {
 
 	@Autowired
 	private ParsingTextRepository parsingTextRepository;
 
 	@Autowired
-	private ParsingTextHistoryAdaptor parsingTextHistoryAdaptor;
+	private ParsingTextHistoryAdapter parsingTextHistoryAdapter;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -59,7 +59,7 @@ class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 			.build());
 
 		//when
-		parsingTextHistoryAdaptor.saveParsingTextHistory(parsingTextHistory);
+		parsingTextHistoryAdapter.saveParsingTextHistory(parsingTextHistory);
 
 		//then
 		Optional<ParsingTextHistoryJpaEntity> byId =
@@ -91,10 +91,10 @@ class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {
 			.authId("test")
 			.password("test")
 			.build());
-		parsingTextHistoryAdaptor.saveParsingTextHistory(parsingTextHistory);
+		parsingTextHistoryAdapter.saveParsingTextHistory(parsingTextHistory);
 
 		//when
-		parsingTextHistoryAdaptor.deleteUserParsingTextHistory(user);
+		parsingTextHistoryAdapter.deleteUserParsingTextHistory(user);
 
 	    //then
 		assertThat(parsingTextRepository.findAll()).isEmpty();

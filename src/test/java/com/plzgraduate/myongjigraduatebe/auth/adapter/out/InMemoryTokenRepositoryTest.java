@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.out;
+package com.plzgraduate.myongjigraduatebe.auth.adapter.out;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.auth.adapter.repository.InMemoryTokenRepository;
 
 @ExtendWith(MockitoExtension.class)
 class InMemoryTokenRepositoryTest {

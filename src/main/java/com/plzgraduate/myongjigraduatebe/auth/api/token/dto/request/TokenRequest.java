@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.token;
+package com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request;
 
 import javax.validation.constraints.NotBlank;
 

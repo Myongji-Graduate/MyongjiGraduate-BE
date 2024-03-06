@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-class FindCommonCulturePersistenceAdapter implements FindCommonCulturePort {
+public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePort {
 
 	private final CommonCultureRepository commonCultureRepository;
 	private final LectureMapper lectureMapper;
