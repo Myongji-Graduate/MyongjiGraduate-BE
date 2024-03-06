@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.AuthIdDuplicationResponse;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
+import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.AuthIdDuplicationResponse;
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
 
 @ExtendWith(MockitoExtension.class)
 class CheckAuthIdDuplicationServiceTest {

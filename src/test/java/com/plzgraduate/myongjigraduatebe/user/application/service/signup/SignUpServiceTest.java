@@ -11,9 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.SaveUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 

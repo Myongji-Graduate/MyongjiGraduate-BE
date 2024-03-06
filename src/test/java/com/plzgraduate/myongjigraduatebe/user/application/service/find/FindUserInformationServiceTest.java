@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.UserInformationResponse;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)

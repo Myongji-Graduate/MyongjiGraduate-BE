@@ -15,8 +15,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.LectureResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.LectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 

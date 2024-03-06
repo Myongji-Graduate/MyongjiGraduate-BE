@@ -12,9 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.ResetPasswordCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)

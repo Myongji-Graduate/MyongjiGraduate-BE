@@ -4,10 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.ResetPasswordCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.ResetPasswordUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

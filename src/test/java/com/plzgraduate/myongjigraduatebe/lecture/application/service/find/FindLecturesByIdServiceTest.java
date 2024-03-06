@@ -12,7 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.service.FindLecturesByIdService;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 @ExtendWith(MockitoExtension.class)

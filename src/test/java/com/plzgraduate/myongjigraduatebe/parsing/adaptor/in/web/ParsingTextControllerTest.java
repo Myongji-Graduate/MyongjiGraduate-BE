@@ -15,7 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
+import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 

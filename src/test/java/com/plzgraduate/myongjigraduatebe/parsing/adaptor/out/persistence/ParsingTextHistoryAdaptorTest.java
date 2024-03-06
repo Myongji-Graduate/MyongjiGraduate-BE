@@ -8,14 +8,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.parsing.adaptor.persistence.ParsingTextHistoryAdaptor;
+import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
+import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserJpaEntity;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.out.persistence.UserRepository;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class ParsingTextHistoryAdaptorTest extends PersistenceTestSupport {

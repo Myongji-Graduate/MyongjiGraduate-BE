@@ -10,11 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.BasicInfoResponse;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.ChapelResultResponse;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.DetailGraduationResultResponse;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.GraduationResponse;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.response.RestResultResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.BasicInfoResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.ChapelResultResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.DetailGraduationResultResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.GraduationResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.RestResultResponse;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 

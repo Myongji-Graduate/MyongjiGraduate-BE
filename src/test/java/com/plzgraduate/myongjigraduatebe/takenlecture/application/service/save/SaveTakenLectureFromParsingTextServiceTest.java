@@ -14,10 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.find.FindLecturesByLectureCodeUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByLectureCodeUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.save.SaveTakenLectureCommand;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.SaveTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureCommand;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
