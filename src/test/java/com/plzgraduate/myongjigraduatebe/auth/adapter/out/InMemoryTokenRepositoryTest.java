@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.auth.adapter.repository.InMemoryTokenRepository;
+import com.plzgraduate.myongjigraduatebe.auth.infrastructure.adapter.repository.InMemoryTokenRepository;
 
 @ExtendWith(MockitoExtension.class)
 class InMemoryTokenRepositoryTest {

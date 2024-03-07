@@ -15,9 +15,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInCommand;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.out.SaveRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInCommand;
+import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.response.TokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.SaveRefreshTokenPort;
 import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 

@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request.SignInRequest;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.response.TokenResponse;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 
 import io.swagger.v3.oas.annotations.Hidden;

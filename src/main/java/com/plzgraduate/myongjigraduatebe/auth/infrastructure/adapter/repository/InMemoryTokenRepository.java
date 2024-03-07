@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.adapter.repository;
+package com.plzgraduate.myongjigraduatebe.auth.infrastructure.adapter.repository;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.out.FindRefreshTokenPort;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.out.SaveRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.SaveRefreshTokenPort;
 
 import lombok.RequiredArgsConstructor;
 

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request.SignInRequest;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.response.TokenResponse;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 

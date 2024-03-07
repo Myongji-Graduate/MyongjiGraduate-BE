@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request.TokenRequest;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 
 class TokenControllerTest extends WebAdaptorTestSupport {

@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.application.port.in.token;
+package com.plzgraduate.myongjigraduatebe.auth.application.usecase.token;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -2,7 +2,7 @@ package com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInCommand;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInCommand;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

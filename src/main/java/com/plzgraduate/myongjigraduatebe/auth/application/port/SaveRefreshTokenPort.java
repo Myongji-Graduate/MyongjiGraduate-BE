@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.auth.application.port.out;
+package com.plzgraduate.myongjigraduatebe.auth.application.port;
 
 
 public interface SaveRefreshTokenPort {

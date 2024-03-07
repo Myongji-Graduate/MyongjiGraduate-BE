@@ -2,7 +2,7 @@ package com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenCommand;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenCommand;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
