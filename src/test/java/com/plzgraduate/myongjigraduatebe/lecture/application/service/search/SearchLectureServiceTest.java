@@ -12,9 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureCommand;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.SearchLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.service.SearchLectureService;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureCommand;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.SearchLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 @ExtendWith(MockitoExtension.class)

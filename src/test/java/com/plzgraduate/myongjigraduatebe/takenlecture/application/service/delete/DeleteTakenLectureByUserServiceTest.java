@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.DeleteTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)

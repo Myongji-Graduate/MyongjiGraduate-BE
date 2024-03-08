@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.FindUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)

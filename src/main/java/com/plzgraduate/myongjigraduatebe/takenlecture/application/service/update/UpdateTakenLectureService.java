@@ -6,14 +6,14 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.find.FindLecturesByIdUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByIdUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.update.UpdateTakenLectureCommand;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.update.UpdateTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.DeleteTakenLecturePort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.SaveTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureCommand;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

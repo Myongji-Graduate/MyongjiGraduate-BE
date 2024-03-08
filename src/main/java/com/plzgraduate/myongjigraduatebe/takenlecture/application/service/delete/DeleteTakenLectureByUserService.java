@@ -3,8 +3,8 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delet
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.out.DeleteTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

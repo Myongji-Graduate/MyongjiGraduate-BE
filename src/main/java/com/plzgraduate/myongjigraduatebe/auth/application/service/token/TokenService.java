@@ -1,9 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.auth.application.service.token;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.AccessTokenResponse;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenCommand;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenUseCase;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.out.FindRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenCommand;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenPort;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 

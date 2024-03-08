@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -12,10 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.SaveParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;

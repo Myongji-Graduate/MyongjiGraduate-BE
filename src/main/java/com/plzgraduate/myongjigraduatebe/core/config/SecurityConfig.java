@@ -20,7 +20,7 @@ import com.plzgraduate.myongjigraduatebe.auth.security.JwtAccessDeniedHandler;
 import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationProvider;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenAuthenticationFilter;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 
 import lombok.RequiredArgsConstructor;
 

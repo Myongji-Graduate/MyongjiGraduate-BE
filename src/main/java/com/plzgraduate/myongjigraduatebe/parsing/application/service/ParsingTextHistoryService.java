@@ -3,11 +3,11 @@ package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.SaveParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

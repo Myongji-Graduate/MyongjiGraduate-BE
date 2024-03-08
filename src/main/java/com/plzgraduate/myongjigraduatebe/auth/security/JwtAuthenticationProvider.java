@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

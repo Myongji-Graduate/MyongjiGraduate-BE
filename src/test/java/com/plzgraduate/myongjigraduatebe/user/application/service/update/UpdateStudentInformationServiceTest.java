@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.update;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.update.UpdateStudentInformationCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.UpdateUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 

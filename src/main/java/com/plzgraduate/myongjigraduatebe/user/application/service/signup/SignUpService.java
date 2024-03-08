@@ -4,10 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.SaveUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;

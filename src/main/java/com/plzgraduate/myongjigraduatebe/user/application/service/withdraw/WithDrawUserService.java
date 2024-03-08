@@ -4,12 +4,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.DeleteParsingTextHistoryPort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.DeleteUserPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
