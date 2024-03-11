@@ -1,8 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.auth.application.service.token;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.never;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.times;
 
 import java.util.Optional;
 
@@ -14,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
-import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenCommand;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenPort;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 
@@ -37,14 +40,11 @@ class TokenServiceTest {
 		Long userId = 1L;
 		String refreshToken = "refreshToken";
 		String accessToken = "accessToken";
-		TokenCommand command = TokenCommand.builder()
-			.refreshToken(refreshToken)
-				.build();
 		given(findRefreshTokenPort.findByRefreshToken(refreshToken)).willReturn(Optional.of(userId));
 		given(tokenProvider.generateToken(userId)).willReturn(accessToken);
 
 		//when
-		AccessTokenResponse accessTokenResponse = tokenService.generateNewToken(command);
+		AccessTokenResponse accessTokenResponse = tokenService.generateNewToken(refreshToken);
 
 		//then
 		assertThat(accessTokenResponse.getAccessToken()).isEqualTo(accessToken);
@@ -55,13 +55,10 @@ class TokenServiceTest {
 	void illegalArgumentExceptionIfInvalidToken() {
 		//given
 		String refreshToken = "refreshToken";
-		TokenCommand command = TokenCommand.builder()
-			.refreshToken(refreshToken)
-			.build();
 		given(findRefreshTokenPort.findByRefreshToken(refreshToken)).willReturn(Optional.empty());
 
 		//when
-		assertThatThrownBy(() -> tokenService.generateNewToken(command))
+		assertThatThrownBy(() -> tokenService.generateNewToken(refreshToken))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("유효하지 않은 토큰입니다.");
 

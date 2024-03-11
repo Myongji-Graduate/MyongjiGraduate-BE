@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+// FindLecturesByLectureCodeService와 통합하는게 나아보임
 public class FindLecturesByIdService implements FindLecturesByIdUseCase {
 
 	private final FindLecturePort findLecturePort;

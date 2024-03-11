@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByIdUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureCommand;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
@@ -29,11 +28,10 @@ class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 	private final SaveTakenLecturePort saveTakenLecturePort;
 
 	@Override
-	public void modifyTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand) {
-		Long userId = updateTakenLectureCommand.getUserId();
+	public void modifyTakenLecture(Long userId, List<Long> deletedTakenLectureIds, List<Long> addedTakenLectureIds) {
 		User user = findUserUseCase.findUserById(userId);
-		deleteTakenLectures(updateTakenLectureCommand);
-		List<Lecture> addedLectures = findAddedLecturesByIds(updateTakenLectureCommand);
+		deleteTakenLecturePort.deleteTakenLecturesByIds(deletedTakenLectureIds);
+		List<Lecture> addedLectures = findLecturesByIdUseCase.findLecturesByIds(addedTakenLectureIds);
 		addCustomTakenLectures(user, addedLectures);
 	}
 
@@ -42,15 +40,5 @@ class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 			.map(addedLecture -> TakenLecture.custom(user, addedLecture))
 			.collect(Collectors.toList());
 		saveTakenLecturePort.saveTakenLectures(addedTakenLectures);
-	}
-
-	private List<Lecture> findAddedLecturesByIds(UpdateTakenLectureCommand updateTakenLectureCommand) {
-		List<Long> addedLectureIds = updateTakenLectureCommand.getAddedTakenLectures();
-		return findLecturesByIdUseCase.findLecturesByIds(addedLectureIds);
-	}
-
-	private void deleteTakenLectures(UpdateTakenLectureCommand updateTakenLectureCommand) {
-		List<Long> deletedTakenLectureIds = updateTakenLectureCommand.getDeletedTakenLectures();
-		deleteTakenLecturePort.deleteTakenLecturesByIds(deletedTakenLectureIds);
 	}
 }

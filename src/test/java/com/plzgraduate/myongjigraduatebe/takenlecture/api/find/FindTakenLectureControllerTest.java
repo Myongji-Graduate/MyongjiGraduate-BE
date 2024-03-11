@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureResponse;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.TakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.FindTakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.TakenLectureResponse;
 
 class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 

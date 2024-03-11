@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureResponse;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.TakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.FindTakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.TakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;

@@ -1,6 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.*;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.CHANGE_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.NORMAL;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.SUB_MAJOR;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,15 +13,14 @@ import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureCommand;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,8 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
 
 	@Override
-	public void enrollParsingText(ParsingTextCommand parsingTextCommand) {
-		String parsingText = parsingTextCommand.getParsingText();
-		User user = findUserUseCase.findUserById(parsingTextCommand.getUserId());
+	public void enrollParsingText(Long userId, String parsingText) {
+		User user = findUserUseCase.findUserById(userId);
 		try {
 			validateParsingText(parsingText);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
@@ -61,9 +61,9 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList = parsingInformation.getTakenLectureInformation();
-		SaveTakenLectureCommand saveTakenLectureCommand = getSaveTakenLectureCommand(
-			user, parsingTakenLectureDtoList);
-		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(saveTakenLectureCommand);
+		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(user,
+			parsingTakenLectureDtoList);
+		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
 	private void updateUser(User user, ParsingInformation parsingInformation) {
@@ -86,17 +86,16 @@ class ParsingTextService implements ParsingTextUseCase {
 		}
 	}
 
-	private SaveTakenLectureCommand getSaveTakenLectureCommand(User user,
+	private List<TakenLectureInformation> getSaveTakenLectureCommand(User user,
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList) {
-		List<SaveTakenLectureCommand.TakenLectureInformation> takenLectureInformationList = parsingTakenLectureDtoList.stream()
+		return parsingTakenLectureDtoList.stream()
 			.map(parsingTakenLectureDto ->
-				SaveTakenLectureCommand.createTakenLectureInformation(
+				TakenLectureInformation.createTakenLectureInformation(
 					parsingTakenLectureDto.getLectureCode(),
 					parsingTakenLectureDto.getYear(),
 					parsingTakenLectureDto.getSemester())
 			)
 			.collect(Collectors.toList());
-		return SaveTakenLectureCommand.of(user, takenLectureInformationList);
 	}
 
 	private void checkIfNormal(ParsingInformation parsingInformation) {

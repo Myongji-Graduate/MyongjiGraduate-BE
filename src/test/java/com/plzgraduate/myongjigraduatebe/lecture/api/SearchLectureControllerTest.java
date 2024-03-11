@@ -31,7 +31,7 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 			LectureResponse.builder().id(1L).build()
 		);
 		SearchLectureResponse searchLectureResponse = SearchLectureResponse.builder().lectures(searchLectures).build();
-		given(searchLectureUseCase.searchLectures(any())).willReturn(searchLectureResponse);
+		given(searchLectureUseCase.searchLectures(any(), any())).willReturn(searchLectureResponse);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/lectures")
@@ -41,7 +41,7 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.lectures", hasSize(1)));
 
-		then(searchLectureUseCase).should(times(1)).searchLectures(any());
+		then(searchLectureUseCase).should(times(1)).searchLectures(any(), any());
 	}
 
 	@WithMockAuthenticationUser

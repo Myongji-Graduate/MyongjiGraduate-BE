@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.user.api.withdraw.WithDrawRequest;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawCommand;
+import com.plzgraduate.myongjigraduatebe.user.api.withdraw.dto.request.WithDrawRequest;
 
 class WithDrawControllerTest extends WebAdaptorTestSupport {
 
@@ -33,7 +32,7 @@ class WithDrawControllerTest extends WebAdaptorTestSupport {
 				.contentType(MediaType.APPLICATION_JSON));
 
 		//then
-		then(withDrawUserUseCase).should().withDraw(any(), any(WithDrawCommand.class));
+		then(withDrawUserUseCase).should().withDraw(any(), any(String.class));
 		actions.
 			andDo(print())
 			.andExpect(status().isOk());

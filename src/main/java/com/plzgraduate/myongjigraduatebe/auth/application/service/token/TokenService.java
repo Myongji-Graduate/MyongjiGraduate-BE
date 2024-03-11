@@ -1,9 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.auth.application.service.token;
 
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
-import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenCommand;
-import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 
@@ -17,8 +16,8 @@ public class TokenService implements TokenUseCase {
 
 	private final FindRefreshTokenPort findRefreshTokenPort;
 	@Override
-	public AccessTokenResponse generateNewToken(TokenCommand tokenCommand) {
-		Long userId = findByRefreshToken(tokenCommand.getRefreshToken());
+	public AccessTokenResponse generateNewToken(String refreshToken) {
+		Long userId = findByRefreshToken(refreshToken);
 		String accessToken = tokenProvider.generateToken(userId);
 		return AccessTokenResponse.from(accessToken);
 	}

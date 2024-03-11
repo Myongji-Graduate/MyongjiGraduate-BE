@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureCommand;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
 
@@ -27,6 +26,6 @@ public class SearchLectureController implements SearchLectureApiPresentation {
 		@RequestParam(defaultValue = "name") String type,
 		@RequestParam @Size(min = 2, message = "검색어를 2자리 이상 입력해주세요.") String keyword
 	) {
-		return searchLectureUseCase.searchLectures(SearchLectureCommand.toCommand(type, keyword));
+		return searchLectureUseCase.searchLectures(type, keyword);
 	}
 }

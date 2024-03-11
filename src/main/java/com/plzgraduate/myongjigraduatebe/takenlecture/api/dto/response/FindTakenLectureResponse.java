@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find;
+package com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response;
 
 import java.util.List;
 

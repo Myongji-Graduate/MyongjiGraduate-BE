@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.ResetPasswordRequest;
+import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request.ResetPasswordRequest;
 import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.response.ValidateUserResponse;
 
 class ResetPasswordControllerTest extends WebAdaptorTestSupport {

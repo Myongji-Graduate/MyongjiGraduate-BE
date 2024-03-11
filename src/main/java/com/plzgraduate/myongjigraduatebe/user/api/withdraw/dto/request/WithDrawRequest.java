@@ -1,8 +1,7 @@
-package com.plzgraduate.myongjigraduatebe.user.api.withdraw;
+package com.plzgraduate.myongjigraduatebe.user.api.withdraw.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawCommand;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -22,8 +21,4 @@ public class WithDrawRequest {
 		this.password = password;
 	}
 
-	public WithDrawCommand toCommand() {
-		return WithDrawCommand.builder()
-			.password(this.password).build();
-	}
 }
