@@ -2,5 +2,5 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.updat
 
 public interface UpdateTakenLectureUseCase {
 
-	void updateTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand);
+	void modifyTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand);
 }

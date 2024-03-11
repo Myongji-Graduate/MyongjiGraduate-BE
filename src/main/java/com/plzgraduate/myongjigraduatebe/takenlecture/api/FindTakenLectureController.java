@@ -19,6 +19,6 @@ public class FindTakenLectureController implements FindTakenLectureApiPresentati
 
 	@GetMapping
 	public FindTakenLectureResponse getTakenLectures(@LoginUser Long userId) {
-		return findTakenLectureUseCase.getTakenLectures(userId);
+		return findTakenLectureUseCase.findTakenLectures(userId);
 	}
 }

@@ -46,7 +46,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk());
 
 		then(parsingTextUseCase).should().enrollParsingText(any(ParsingTextCommand.class));
-		then(parsingTextHistoryUseCase).should().saveParsingTextHistoryIfSuccess(any(ParsingTextCommand.class));
+		then(parsingTextHistoryUseCase).should().generateSucceedParsingTextHistory(any(ParsingTextCommand.class));
 
 	}
 
@@ -77,7 +77,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.andExpect(jsonPath("$.status").value(400))
 			.andExpect(jsonPath("$.message").value(""));
 
-		then(parsingTextHistoryUseCase).should().saveParsingTextHistoryIfFail(any(ParsingTextCommand.class));
+		then(parsingTextHistoryUseCase).should().generateFailedParsingTextHistory(any(ParsingTextCommand.class));
 	}
 
 }

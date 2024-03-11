@@ -28,9 +28,9 @@ class ParsingTextHistoryServiceTest {
 	@InjectMocks
 	private ParsingTextHistoryService parsingTextHistoryService;
 
-	@DisplayName("saveParsingTextHistoryIfSuccess 메서드 테스트")
+	@DisplayName("generateSucceedParsingTextHistory 메서드 테스트")
 	@Test
-	void saveParsingTextHistoryIfSuccess() {
+	void generateSucceedParsingTextHistory() {
 		//given
 		Long userId = 1L;
 		User user = createUser(userId, "mju1001!", "1q2w3e4r!", EnglishLevel.ENG12, "정지환",
@@ -43,7 +43,7 @@ class ParsingTextHistoryServiceTest {
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
 		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
 		//when
-		parsingTextHistoryService.saveParsingTextHistoryIfSuccess(command);
+		parsingTextHistoryService.generateSucceedParsingTextHistory(command);
 
 		//then
 		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
@@ -52,9 +52,9 @@ class ParsingTextHistoryServiceTest {
 		assertThat(captureArgument.getParsingText()).isEqualTo(parsingText);
 	}
 
-	@DisplayName("saveParsingTextHistoryIfFail 메서드 테스트")
+	@DisplayName("generateFailedParsingTextHistory 메서드 테스트")
 	@Test
-	void saveParsingTextHistoryIfFail() {
+	void generateFailedParsingTextHistory() {
 		//given
 		Long userId = 1L;
 		User user = createUser(userId, "mju1001!", "1q2w3e4r!", EnglishLevel.ENG12, "정지환",
@@ -67,7 +67,7 @@ class ParsingTextHistoryServiceTest {
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
 		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
 		//when
-		parsingTextHistoryService.saveParsingTextHistoryIfFail(command);
+		parsingTextHistoryService.generateFailedParsingTextHistory(command);
 
 		//then
 		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());

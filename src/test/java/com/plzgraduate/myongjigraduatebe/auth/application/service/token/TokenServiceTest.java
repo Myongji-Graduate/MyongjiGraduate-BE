@@ -32,7 +32,7 @@ class TokenServiceTest {
 
 	@DisplayName("accessToken을 생성한다.")
 	@Test
-	void createNewToken() {
+	void generateNewToken() {
 		//given
 		Long userId = 1L;
 		String refreshToken = "refreshToken";
@@ -44,7 +44,7 @@ class TokenServiceTest {
 		given(tokenProvider.generateToken(userId)).willReturn(accessToken);
 
 		//when
-		AccessTokenResponse accessTokenResponse = tokenService.createNewToken(command);
+		AccessTokenResponse accessTokenResponse = tokenService.generateNewToken(command);
 
 		//then
 		assertThat(accessTokenResponse.getAccessToken()).isEqualTo(accessToken);
@@ -61,7 +61,7 @@ class TokenServiceTest {
 		given(findRefreshTokenPort.findByRefreshToken(refreshToken)).willReturn(Optional.empty());
 
 		//when
-		assertThatThrownBy(() -> tokenService.createNewToken(command))
+		assertThatThrownBy(() -> tokenService.generateNewToken(command))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("유효하지 않은 토큰입니다.");
 

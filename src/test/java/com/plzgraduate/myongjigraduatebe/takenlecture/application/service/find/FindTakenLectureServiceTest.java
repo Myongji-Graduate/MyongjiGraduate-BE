@@ -34,7 +34,7 @@ class FindTakenLectureServiceTest {
 
 	@DisplayName("해당 학생의 수강정보를 조회하고 정렬한다.")
 	@Test
-	void getTakenLectures() {
+	void findTakenLectures() {
 		//given
 		User user = User.builder().id(1L).build();
 		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
@@ -63,7 +63,7 @@ class FindTakenLectureServiceTest {
 		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(takenLectures);
 
 		//when
-		FindTakenLectureResponse response = findTakenLectureService.getTakenLectures(1L);
+		FindTakenLectureResponse response = findTakenLectureService.findTakenLectures(1L);
 
 		//then
 		assertThat(response.getTotalCredit()).isEqualTo(15);
@@ -115,7 +115,7 @@ class FindTakenLectureServiceTest {
 		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(takenLectures);
 
 		//when
-		FindTakenLectureResponse response = findTakenLectureService.getTakenLectures(1L);
+		FindTakenLectureResponse response = findTakenLectureService.findTakenLectures(1L);
 
 		//then
 		assertThat(response.getTotalCredit()).isEqualTo(17);

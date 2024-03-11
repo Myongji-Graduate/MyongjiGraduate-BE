@@ -28,9 +28,9 @@ public class ParsingTextController implements ParsingTextApiPresentation{
 		ParsingTextCommand command = parsingTextRequest.toCommand(userId);
 		try {
 			parsingTextUseCase.enrollParsingText(command);
-			parsingTextHistoryUseCase.saveParsingTextHistoryIfSuccess(command);
+			parsingTextHistoryUseCase.generateSucceedParsingTextHistory(command);
 		} catch (Exception e) {
-			parsingTextHistoryUseCase.saveParsingTextHistoryIfFail(command);
+			parsingTextHistoryUseCase.generateFailedParsingTextHistory(command);
 			throw e;
 		}
 	}

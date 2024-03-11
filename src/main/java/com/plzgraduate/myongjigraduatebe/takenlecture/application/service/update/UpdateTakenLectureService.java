@@ -29,7 +29,7 @@ class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 	private final SaveTakenLecturePort saveTakenLecturePort;
 
 	@Override
-	public void updateTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand) {
+	public void modifyTakenLecture(UpdateTakenLectureCommand updateTakenLectureCommand) {
 		Long userId = updateTakenLectureCommand.getUserId();
 		User user = findUserUseCase.findUserById(userId);
 		deleteTakenLectures(updateTakenLectureCommand);

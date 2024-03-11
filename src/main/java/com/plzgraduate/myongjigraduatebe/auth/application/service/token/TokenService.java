@@ -17,7 +17,7 @@ public class TokenService implements TokenUseCase {
 
 	private final FindRefreshTokenPort findRefreshTokenPort;
 	@Override
-	public AccessTokenResponse createNewToken(TokenCommand tokenCommand) {
+	public AccessTokenResponse generateNewToken(TokenCommand tokenCommand) {
 		Long userId = findByRefreshToken(tokenCommand.getRefreshToken());
 		String accessToken = tokenProvider.generateToken(userId);
 		return AccessTokenResponse.from(accessToken);

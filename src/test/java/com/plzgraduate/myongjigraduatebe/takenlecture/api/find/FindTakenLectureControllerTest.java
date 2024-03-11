@@ -30,7 +30,7 @@ class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 			.totalCredit(10)
 			.takenLectures(takenLectures)
 			.build();
-		given(findTakenLectureUseCase.getTakenLectures(anyLong())).willReturn(response);
+		given(findTakenLectureUseCase.findTakenLectures(anyLong())).willReturn(response);
 
 		//when //when
 		mockMvc.perform(

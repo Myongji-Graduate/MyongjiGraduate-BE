@@ -28,7 +28,7 @@ class FindTakenLectureService implements FindTakenLectureUseCase {
 	private final FindTakenLecturePort findTakenLecturePort;
 
 	@Override
-	public FindTakenLectureResponse getTakenLectures(Long userId) {
+	public FindTakenLectureResponse findTakenLectures(Long userId) {
 		User user = findUserUseCase.findUserById(userId);
 		List<TakenLecture> takenLectures = findTakenLecturePort.findTakenLecturesByUser(user);
 		sortTakenLectures(takenLectures);

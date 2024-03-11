@@ -38,7 +38,7 @@ class UpdateTakenLectureServiceTest {
 
 	@DisplayName("수강과목을 삭제하고 새로운 수강정보를 추가한다.")
 	@Test
-	void updateTakenLecture() {
+	void modifyTakenLecture() {
 		//given
 		UpdateTakenLectureCommand command = UpdateTakenLectureCommand.builder()
 			.userId(1L)
@@ -53,7 +53,7 @@ class UpdateTakenLectureServiceTest {
 
 		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(List.class);
 		//when
-		updateTakenLectureService.updateTakenLecture(command);
+		updateTakenLectureService.modifyTakenLecture(command);
 
 		//then
 		then(deleteTakenLecturePort).should().deleteTakenLecturesByIds(List.of(21L, 22L));

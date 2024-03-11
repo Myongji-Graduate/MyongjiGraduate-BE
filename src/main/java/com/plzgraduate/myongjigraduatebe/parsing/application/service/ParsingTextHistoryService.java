@@ -23,14 +23,14 @@ class ParsingTextHistoryService implements ParsingTextHistoryUseCase {
 	private final FindUserUseCase findUserUseCase;
 
 	@Override
-	public void saveParsingTextHistoryIfSuccess(ParsingTextCommand parsingTextCommand) {
+	public void generateSucceedParsingTextHistory(ParsingTextCommand parsingTextCommand) {
 		String parsingText = parsingTextCommand.getParsingText();
 		User user = findUserUseCase.findUserById(parsingTextCommand.getUserId());
 		saveParsingTextHistoryPort.saveParsingTextHistory(ParsingTextHistory.success(user, parsingText));
 	}
 
 	@Override
-	public void saveParsingTextHistoryIfFail(ParsingTextCommand parsingTextCommand) {
+	public void generateFailedParsingTextHistory(ParsingTextCommand parsingTextCommand) {
 		String parsingText = parsingTextCommand.getParsingText();
 		User user = findUserUseCase.findUserById(parsingTextCommand.getUserId());
 		saveParsingTextHistoryPort.saveParsingTextHistory(ParsingTextHistory.fail(user, parsingText));
