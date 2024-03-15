@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByIdUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 
 	private final FindUserUseCase findUserUseCase;
-	private final FindLecturesByIdUseCase findLecturesByIdUseCase;
+	private final FindLecturesUseCase findLecturesUseCase;
 	private final DeleteTakenLecturePort deleteTakenLecturePort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
 
@@ -31,7 +31,7 @@ class UpdateTakenLectureService implements UpdateTakenLectureUseCase {
 	public void modifyTakenLecture(Long userId, List<Long> deletedTakenLectureIds, List<Long> addedTakenLectureIds) {
 		User user = findUserUseCase.findUserById(userId);
 		deleteTakenLecturePort.deleteTakenLecturesByIds(deletedTakenLectureIds);
-		List<Lecture> addedLectures = findLecturesByIdUseCase.findLecturesByIds(addedTakenLectureIds);
+		List<Lecture> addedLectures = findLecturesUseCase.findLecturesByIds(addedTakenLectureIds);
 		addCustomTakenLectures(user, addedLectures);
 	}
 

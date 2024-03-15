@@ -1,8 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.user.application.usecase.find;
 
-import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface FindUserInformationUseCase {
 
-	UserInformationResponse findUserInformation(Long userId);
+	User findUserInformation(Long userId);
 }

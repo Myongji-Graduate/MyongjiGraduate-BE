@@ -1,7 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyLong;
+import static org.mockito.BDDMockito.given;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,10 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.FindTakenLectureResponse;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -32,27 +35,27 @@ class FindTakenLectureServiceTest {
 	@InjectMocks
 	private FindTakenLectureService findTakenLectureService;
 
-	@DisplayName("해당 학생의 수강정보를 조회하고 정렬한다.")
+	@DisplayName("해당 학생의 수강정보를 조회한다.")
 	@Test
 	void findTakenLectures() {
 		//given
 		User user = User.builder().id(1L).build();
 		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
-		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1",2);
-		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2",2);
-		Lecture 글쓰기 = createLecture(4L, "KMA02104", "글쓰기",3);
-		Lecture 세계화와사회변화 = createLecture(5L, "KMA02113", "세계화와사회변화",3);
+		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1", 2);
+		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2", 2);
+		Lecture 글쓰기 = createLecture(4L, "KMA02104", "글쓰기", 3);
+		Lecture 세계화와사회변화 = createLecture(5L, "KMA02113", "세계화와사회변화", 3);
 		Lecture 고전으로읽는인문학 = createLecture(6L, "KMA02130", "고전으로읽는인문학", 3);
 		Lecture 사차산업혁명과미래사회진로선택 = createLecture(7L, "KMA02141", "4차산업혁명과미래사회진로선택", 2);
 
-		Instant basicTime =  Instant.parse("2022-02-15T00:00:00.00Z");
-		Instant customTime1 = Instant.parse("2022-12-15T00:00:00.00Z");
+		Instant basicTime = Instant.parse("2022-02-15T00:00:00.00Z");
 		Instant customTime2 = Instant.parse("2022-12-15T00:10:00.00Z");
+		Instant customTime1 = Instant.parse("2022-12-15T00:00:00.00Z");
 		List<TakenLecture> takenLectures = new ArrayList<>(List.of(
 			createTakenLecture(1L, user, 채플, 2020, Semester.FIRST, basicTime),
 			createTakenLecture(2L, user, 채플, 2021, Semester.FIRST, basicTime),
+			createTakenLecture(4L, user, 글쓰기, 2020, Semester.WINTER, basicTime),
 			createTakenLecture(3L, user, 고전으로읽는인문학, 2020, Semester.SECOND, basicTime),
-			createTakenLecture(4L, user, 글쓰기,2020, Semester.WINTER, basicTime),
 			createTakenLecture(5L, user, 영어1, 2020, Semester.SUMMER, basicTime),
 			createTakenLecture(6L, user, 세계화와사회변화, 2021, Semester.SECOND, basicTime),
 			createTakenLecture(7L, user, 영어2, 2099, null, customTime1),
@@ -63,22 +66,22 @@ class FindTakenLectureServiceTest {
 		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(takenLectures);
 
 		//when
-		FindTakenLectureResponse response = findTakenLectureService.findTakenLectures(1L);
+		TakenLectureInventory foundTakenLectures = findTakenLectureService.findTakenLectures(1L);
 
 		//then
-		assertThat(response.getTotalCredit()).isEqualTo(15);
-		assertThat(response.getTakenLectures())
+		assertThat(foundTakenLectures.calculateTotalCredit()).isEqualTo(15);
+		assertThat(foundTakenLectures.getTakenLectures())
 			.hasSize(8)
-			.extracting("id", "year", "semester", "lectureCode", "lectureName", "credit")
-			.containsExactly(
-				tuple(8L, "CUSTOM", "CUSTOM", "KMA02141", "4차산업혁명과미래사회진로선택", 2),
-				tuple(7L, "CUSTOM", "CUSTOM", "KMA02107", "영어2", 2),
-				tuple(6L, "2021", "2학기", "KMA02113", "세계화와사회변화", 3),
-				tuple(2L, "2021", "1학기", "KMA02101", "채플", 0),
-				tuple(4L, "2020", "동계계절", "KMA02104", "글쓰기", 3),
-				tuple(3L, "2020", "2학기", "KMA02130", "고전으로읽는인문학", 3),
-				tuple(5L, "2020", "하계계절", "KMA02106", "영어1", 2),
-				tuple(1L, "2020", "1학기", "KMA02101", "채플", 0)
+			.extracting("id", "lecture")
+			.contains(
+				tuple(8L, 사차산업혁명과미래사회진로선택),
+				tuple(7L, 영어2),
+				tuple(6L, 세계화와사회변화),
+				tuple(2L, 채플),
+				tuple(4L, 글쓰기),
+				tuple(3L, 고전으로읽는인문학),
+				tuple(5L, 영어1),
+				tuple(1L, 채플)
 			);
 	}
 
@@ -88,21 +91,21 @@ class FindTakenLectureServiceTest {
 		//given
 		User user = User.builder().id(1L).build();
 		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
-		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1",2);
-		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2",2);
-		Lecture 글쓰기 = createLecture(4L, "KMA02104", "글쓰기",3);
-		Lecture 세계화와사회변화 = createLecture(5L, "KMA02113", "세계화와사회변화",3);
+		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1", 2);
+		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2", 2);
+		Lecture 글쓰기 = createLecture(4L, "KMA02104", "글쓰기", 3);
+		Lecture 세계화와사회변화 = createLecture(5L, "KMA02113", "세계화와사회변화", 3);
 		Lecture 고전으로읽는인문학 = createLecture(6L, "KMA02130", "고전으로읽는인문학", 3);
 		Lecture 사차산업혁명과미래사회진로선택 = createLecture(7L, "KMA02141", "4차산업혁명과미래사회진로선택", 2);
 
-		Instant basicTime =  Instant.parse("2022-02-15T00:00:00.00Z");
+		Instant basicTime = Instant.parse("2022-02-15T00:00:00.00Z");
 		Instant customTime1 = Instant.parse("2022-12-15T00:00:00.00Z");
 		Instant customTime2 = Instant.parse("2022-12-15T00:10:00.00Z");
 		List<TakenLecture> takenLectures = new ArrayList<>(List.of(
 			createTakenLecture(1L, user, 채플, 2020, Semester.FIRST, basicTime),
 			createTakenLecture(2L, user, 채플, 2021, Semester.FIRST, basicTime),
 			createTakenLecture(3L, user, 고전으로읽는인문학, 2020, Semester.SECOND, basicTime),
-			createTakenLecture(4L, user, 글쓰기,2020, Semester.WINTER, basicTime),
+			createTakenLecture(4L, user, 글쓰기, 2020, Semester.WINTER, basicTime),
 			createTakenLecture(5L, user, 영어1, 2020, Semester.SUMMER, basicTime),
 			createTakenLecture(6L, user, 세계화와사회변화, 2021, Semester.SECOND, basicTime),
 			createTakenLecture(7L, user, 영어2, 2099, null, customTime1),
@@ -115,11 +118,11 @@ class FindTakenLectureServiceTest {
 		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(takenLectures);
 
 		//when
-		FindTakenLectureResponse response = findTakenLectureService.findTakenLectures(1L);
+		TakenLectureInventory foundTakenLectures = findTakenLectureService.findTakenLectures(1L);
 
 		//then
-		assertThat(response.getTotalCredit()).isEqualTo(17);
-		assertThat(response.getTakenLectures()).hasSize(10);
+		assertThat(foundTakenLectures.calculateTotalCredit()).isEqualTo(17);
+		assertThat(foundTakenLectures.getTakenLectures()).hasSize(10);
 	}
 
 	private TakenLecture createTakenLecture(Long id, User user, Lecture lecture, Integer year,

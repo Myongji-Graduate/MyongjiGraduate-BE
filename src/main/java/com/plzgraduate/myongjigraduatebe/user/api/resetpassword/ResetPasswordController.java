@@ -29,7 +29,8 @@ public class ResetPasswordController implements ResetPasswordApiPresentation {
 	public ValidateUserResponse validateUser(
 		@PathVariable("student-number") String studentNumber,
 		@RequestParam("auth-id") String authId) {
-		return validateUserUseCase.validateUser(studentNumber, authId);
+		boolean validated = validateUserUseCase.validateUser(studentNumber, authId);
+		return ValidateUserResponse.builder().passedUserValidation(validated).build();
 	}
 
 	@PatchMapping("/password")

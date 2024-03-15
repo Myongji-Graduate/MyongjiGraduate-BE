@@ -68,4 +68,20 @@ class TakenLectureInventoryTest {
 			.hasSize(beforeHandleSize - finishedTakenLecture.size());
 	}
 
+	@DisplayName("총 수강학점을 계산한다.")
+	@Test
+	void calculateTotalCredit() {
+		//given
+		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST), // credit 2
+			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST)  // credit 2
+		));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		//when
+		int calculatedCredit = takenLectureInventory.calculateTotalCredit();
+
+		//then
+		assertThat(calculatedCredit).isEqualTo(6);
+	}
 }

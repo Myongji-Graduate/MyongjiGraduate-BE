@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 
@@ -24,12 +24,14 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 		String studentNumber = "111111111";
 		String studentName = "testUser";
 		String major = "testMajor";
-		UserInformationResponse response = UserInformationResponse.builder()
+
+		User user = User.builder()
+			.id(userId)
 			.studentNumber(studentNumber)
-			.studentName(studentName)
+			.name(studentName)
 			.major(major).build();
 
-		given(findUserInformationUseCase.findUserInformation(userId)).willReturn(response);
+		given(findUserInformationUseCase.findUserInformation(userId)).willReturn(user);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/users/me"))

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByLectureCodeUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromParsingTextUseCase {
 
 	private final SaveTakenLecturePort saveTakenLecturePort;
-	private final FindLecturesByLectureCodeUseCase findLecturesByLectureCodeUseCase;
+	private final FindLecturesUseCase findLecturesUseCase;
 
 	@Override
 	public void saveTakenLectures(User user, List<TakenLectureInformation> takenLectureInformationList) {
@@ -57,7 +57,7 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 		List<String> lectureCodes = takenLectureInformationList.stream()
 			.map(TakenLectureInformation::getLectureCode)
 			.collect(Collectors.toList());
-		List<Lecture> lectures = findLecturesByLectureCodeUseCase.findLecturesByLectureCodes(lectureCodes);
+		List<Lecture> lectures = findLecturesUseCase.findLecturesByLectureCodes(lectureCodes);
 		return lectures.stream()
 			.collect(Collectors.toMap(Lecture::getLectureCode, Function.identity()));
 	}

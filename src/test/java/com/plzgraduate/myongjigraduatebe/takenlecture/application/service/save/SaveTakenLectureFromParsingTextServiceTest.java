@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByLectureCodeUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -31,7 +31,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 	@Mock
 	private SaveTakenLecturePort saveTakenLecturePort;
 	@Mock
-	private FindLecturesByLectureCodeUseCase findLecturesByLectureCodeUseCase;
+	private FindLecturesUseCase findLecturesUseCase;
 	@InjectMocks
 	private SaveTakenLectureFromParsingTextService saveTakenLectureFromParsingTextService;
 
@@ -46,7 +46,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 		));
 		Lecture lecture1 = createLecture("KMA02122");
 		Lecture lecture2 = createLecture("KMA02135");
-		given(findLecturesByLectureCodeUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
+		given(findLecturesUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
 			.willReturn(List.of(lecture1, lecture2));
 		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(List.class);
 
@@ -75,7 +75,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 			createTakenLectureInformation("KMA02135", 2023)
 		));
 		Lecture lecture1 = createLecture("KMA02122");
-		given(findLecturesByLectureCodeUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
+		given(findLecturesUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
 			.willReturn(List.of(lecture1));
 
 		//when //then

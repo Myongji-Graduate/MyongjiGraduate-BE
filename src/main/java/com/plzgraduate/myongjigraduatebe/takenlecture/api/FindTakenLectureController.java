@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.FindTakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ public class FindTakenLectureController implements FindTakenLectureApiPresentati
 
 	@GetMapping
 	public FindTakenLectureResponse getTakenLectures(@LoginUser Long userId) {
-		return findTakenLectureUseCase.findTakenLectures(userId);
+		TakenLectureInventory takenLectures = findTakenLectureUseCase.findTakenLectures(userId);
+		return FindTakenLectureResponse.from(takenLectures);
 	}
 }

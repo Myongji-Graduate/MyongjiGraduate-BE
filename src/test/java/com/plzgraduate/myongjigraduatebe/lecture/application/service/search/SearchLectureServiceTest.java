@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.SearchLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.service.SearchLectureService;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -38,15 +37,15 @@ class SearchLectureServiceTest {
 			.willReturn(lectures);
 
 		//when
-		SearchLectureResponse searchLectures = searchLectureService.searchLectures(type, keyword);
+		List<Lecture> searchedLectures = searchLectureService.searchLectures(type, keyword);
 
 		//then
-		assertThat(searchLectures.getLectures())
+		assertThat(searchedLectures)
 			.hasSize(2)
 			.extracting("id", "lectureCode", "name", "credit", "isRevoked")
 			.containsExactlyInAnyOrder(
-				tuple(1L, "code1", "기초웹프로그래밍", 3, false),
-				tuple(2L, "code2", "앱과웹기초", 2, true)
+				tuple(1L, "code1", "기초웹프로그래밍", 3, 0),
+				tuple(2L, "code2", "앱과웹기초", 2, 1)
 			);
 	}
 

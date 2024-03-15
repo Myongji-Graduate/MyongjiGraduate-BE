@@ -7,16 +7,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.FindTakenLectureResponse;
-import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.TakenLectureResponse;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
 class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 
@@ -25,12 +27,28 @@ class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 	@Test
 	void getTakenLectures() throws Exception {
 		//given
-		List<TakenLectureResponse> takenLectures = new ArrayList<>();
-		FindTakenLectureResponse response = FindTakenLectureResponse.builder()
-			.totalCredit(10)
-			.takenLectures(takenLectures)
-			.build();
-		given(findTakenLectureUseCase.findTakenLectures(anyLong())).willReturn(response);
+		HashSet<TakenLecture> takenLectures = new HashSet<>(Set.of(
+			TakenLecture.builder()
+				.lecture(Lecture.builder()
+					.lectureCode("KMA")
+					.credit(4).build())
+				.year(2020)
+				.semester(Semester.FIRST).build(),
+			TakenLecture.builder()
+				.lecture(Lecture.builder()
+					.lectureCode("KMB")
+					.credit(3).build())
+				.year(2020)
+				.semester(Semester.SECOND).build(),
+			TakenLecture.builder()
+				.lecture(Lecture.builder()
+					.lectureCode("KMC")
+					.credit(3).build())
+				.year(2021)
+				.semester(Semester.FIRST).build()
+		));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		given(findTakenLectureUseCase.findTakenLectures(anyLong())).willReturn(takenLectureInventory);
 
 		//when //when
 		mockMvc.perform(

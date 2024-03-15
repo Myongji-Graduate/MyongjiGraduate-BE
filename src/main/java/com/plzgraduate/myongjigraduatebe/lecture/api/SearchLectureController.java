@@ -26,6 +26,6 @@ public class SearchLectureController implements SearchLectureApiPresentation {
 		@RequestParam(defaultValue = "name") String type,
 		@RequestParam @Size(min = 2, message = "검색어를 2자리 이상 입력해주세요.") String keyword
 	) {
-		return searchLectureUseCase.searchLectures(type, keyword);
+		return SearchLectureResponse.from(searchLectureUseCase.searchLectures(type, keyword));
 	}
 }

@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request.ResetPasswordRequest;
-import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.response.ValidateUserResponse;
 
 class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 
@@ -26,9 +25,7 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		//given
 		String studentNumber = "60191656";
 		String authId = "testAuthId";
-		ValidateUserResponse response = ValidateUserResponse.builder()
-			.passedUserValidation(true).build();
-		given(validateUserUseCase.validateUser(studentNumber, authId)).willReturn(response);
+		given(validateUserUseCase.validateUser(studentNumber, authId)).willReturn(true);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/users/{student-number}/validate", studentNumber)

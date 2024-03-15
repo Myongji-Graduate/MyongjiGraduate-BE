@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByIdUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
@@ -29,7 +29,7 @@ class UpdateTakenLectureServiceTest {
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
-	private FindLecturesByIdUseCase findLecturesByIdUseCase;
+	private FindLecturesUseCase findLecturesUseCase;
 	@Mock
 	private DeleteTakenLecturePort deleteTakenLecturePort;
 	@Mock
@@ -44,7 +44,7 @@ class UpdateTakenLectureServiceTest {
 		User user = User.builder().id(1L).build();
 		Lecture lecture1 = createLecture(1L);
 		Lecture lecture2 = createLecture(2L);
-		given(findLecturesByIdUseCase.findLecturesByIds(List.of(1L, 2L)))
+		given(findLecturesUseCase.findLecturesByIds(List.of(1L, 2L)))
 			.willReturn(new ArrayList<>(List.of(lecture1, lecture2)));
 
 		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(List.class);
