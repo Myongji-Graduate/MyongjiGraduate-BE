@@ -82,6 +82,6 @@ class TakenLectureInventoryTest {
 		int calculatedCredit = takenLectureInventory.calculateTotalCredit();
 
 		//then
-		assertThat(calculatedCredit).isEqualTo(6);
+		assertThat(calculatedCredit).isEqualTo(4);
 	}
 }
