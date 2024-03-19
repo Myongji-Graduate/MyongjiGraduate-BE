@@ -28,7 +28,7 @@ class GraduationRequirementTest {
 			.isEqualTo(beforeTransferNormalCultureCredit + ENGLISH.getTotalCredit());
 	}
 
-	@DisplayName("자유선택 졸업 학점을 0점으로 한다.")
+	@DisplayName("자유선택 졸업 학점을 부전공 졸업학점으로 조정한다.")
 	@Test
 	void deleteFreeElectiveCredit() {
 		//given
@@ -36,10 +36,11 @@ class GraduationRequirementTest {
 			.freeElectiveCredit(10).build();
 
 		//when
-		graduationRequirement.deleteFreeElectiveCredit();
+		graduationRequirement.modifyCreditForSubMajor();
 
 		//then
 		assertThat(graduationRequirement.getFreeElectiveCredit()).isZero();
+		assertThat(graduationRequirement.getSubMajorCredit()).isEqualTo(21);
 	}
 
 }
