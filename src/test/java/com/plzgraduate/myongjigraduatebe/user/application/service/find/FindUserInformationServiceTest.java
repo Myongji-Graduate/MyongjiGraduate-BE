@@ -35,7 +35,7 @@ class FindUserInformationServiceTest {
 			.id(userId)
 			.name(studentName)
 			.studentNumber(studentNumber)
-			.major(major).build();
+			.primaryMajor(major).build();
 
 		given(findUserUseCase.findUserById(userId)).willReturn(foundUser);
 

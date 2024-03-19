@@ -15,7 +15,7 @@ public enum StudentCategory {
 	NORMAL(List.of()),
 	CHANGE_MAJOR(List.of("전과")),
 	SUB_MAJOR(List.of("부전공")),
-	DOUBLE_MAJOR(List.of("복수전공")),
+	DUAL_MAJOR(List.of("복수전공")),
 	ASSOCIATED_MAJOR(List.of("연계전공")),
 	DOUBLE_SUB(List.of("복수전공", "부전공"));
 

@@ -11,9 +11,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 
-class GraduationRequirementTypeTest {
+class DefaultGraduationRequirementTypeTest {
 
 	@DisplayName("학생의 소속 단과대와 입학년도로 기본졸업요건을 결정한다.")
 	@ParameterizedTest()
@@ -25,7 +26,7 @@ class GraduationRequirementTypeTest {
 			.entryYear(entryYear).build();
 
 		//when
-		GraduationRequirementType graduationRequirement = GraduationRequirementType.determineGraduationRequirement(ict,
+		DefaultGraduationRequirementType graduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(ict,
 			user);
 
 		//then
@@ -44,7 +45,7 @@ class GraduationRequirementTypeTest {
 			.entryYear(entryYear).build();
 
 		//when //then
-		assertThatThrownBy(() -> GraduationRequirementType.determineGraduationRequirement(ict, user))
+		assertThatThrownBy(() -> DefaultGraduationRequirementType.determineGraduationRequirement(ict, user))
 			.isInstanceOf(NoSuchElementException.class)
 			.hasMessage("일치하는 졸업 요건이 존재하지 않습니다.");
 	}
@@ -55,18 +56,18 @@ class GraduationRequirementTypeTest {
 		//given
 		User freeEnglishUser = UserFixture.경영학과_19학번_영어_면제();
 		College ict = College.ICT;
-		GraduationRequirementType graduationRequirementType = GraduationRequirementType.determineGraduationRequirement(
+		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
 			ict, freeEnglishUser);
 
 		//when
-		GraduationRequirement graduationRequirement = graduationRequirementType.convertToProfitGraduationRequirement(
+		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(
 			freeEnglishUser);
 
 		// then
 		assertThat(graduationRequirement.getCommonCultureCredit()).isEqualTo(
-			graduationRequirementType.getCommonCultureCredit() - ENGLISH.getTotalCredit());
+			defaultGraduationRequirementType.getCommonCultureCredit() - ENGLISH.getTotalCredit());
 		assertThat(graduationRequirement.getNormalCultureCredit()).isEqualTo(
-			graduationRequirementType.getNormalLectureCredit() + ENGLISH.getTotalCredit());
+			defaultGraduationRequirementType.getNormalLectureCredit() + ENGLISH.getTotalCredit());
 	}
 
 	@DisplayName("부전공 학생의 졸업요건을 결정한다.")
@@ -75,11 +76,11 @@ class GraduationRequirementTypeTest {
 		//given
 		User subMajorUser = UserFixture.경영학과_23학번_국제통상학과_부전공();
 		College ict = College.BUSINESS;
-		GraduationRequirementType graduationRequirementType = GraduationRequirementType.determineGraduationRequirement(
+		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
 			ict, subMajorUser);
 
 		//when
-		GraduationRequirement graduationRequirement = graduationRequirementType.convertToProfitGraduationRequirement(
+		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(
 			subMajorUser);
 
 		// then

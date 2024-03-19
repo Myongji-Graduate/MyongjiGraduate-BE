@@ -43,7 +43,7 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 
 		MajorLectureJpaEntity majorLectureJpaEntityA = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
-			.major(user.getMajor()).build();
+			.major(user.getPrimaryMajor()).build();
 
 		MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
@@ -51,12 +51,12 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 		majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
 
 	    //when
-		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor(user.getMajor());
+		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor(user.getPrimaryMajor());
 
 		//then
 		assertThat(majors).hasSize(1)
 			.extracting("major")
-			.contains(user.getMajor());
+			.contains(user.getPrimaryMajor());
 	}
 
 }

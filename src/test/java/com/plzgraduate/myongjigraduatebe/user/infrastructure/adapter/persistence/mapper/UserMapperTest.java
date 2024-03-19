@@ -31,7 +31,7 @@ class UserMapperTest extends PersistenceTestSupport {
 		//then
 		assertThat(user)
 			.extracting("id", "authId", "password", "englishLevel", "name",
-				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
+				"studentNumber", "entryYear", "primaryMajor", "subMajor", "studentCategory")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL);
 	}
@@ -64,7 +64,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.studentNumber(studentNumber)
 			.entryYear(entryYear)
 			.englishLevel(englishLevel)
-			.major(major)
+			.primaryMajor(major)
 			.subMajor(subMajor)
 			.studentCategory(studentCategory)
 			.build();

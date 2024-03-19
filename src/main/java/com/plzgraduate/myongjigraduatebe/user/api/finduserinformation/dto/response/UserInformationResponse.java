@@ -27,6 +27,6 @@ public class UserInformationResponse {
 		return UserInformationResponse.builder()
 			.studentNumber(user.getStudentNumber())
 			.studentName(user.getName())
-			.major(user.getMajor()).build();
+			.major(user.getPrimaryMajor()).build();
 	}
 }

@@ -162,7 +162,7 @@ class ParsingTextServiceTest{
 			.studentNumber(studentNumber)
 			.entryYear(18)
 			.englishLevel(EnglishLevel.ENG12)
-			.major("융합소프트웨어학부")
+			.primaryMajor("융합소프트웨어학부")
 			.subMajor(null)
 			.studentCategory(StudentCategory.NORMAL)
 			.build();
