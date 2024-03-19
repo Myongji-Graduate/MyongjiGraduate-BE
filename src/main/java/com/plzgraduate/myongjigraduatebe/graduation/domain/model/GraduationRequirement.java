@@ -37,7 +37,8 @@ public class GraduationRequirement {
 		normalCultureCredit += ENGLISH.getTotalCredit();
 	}
 
-	public void deleteFreeElectiveCredit() {
+	public void modifyCreditForSubMajor() {
+		subMajorCredit = 21;
 		freeElectiveCredit = 0;
 	}
 
