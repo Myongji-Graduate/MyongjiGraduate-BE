@@ -6,10 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,9 @@ class WithDrawUserService implements WithDrawUserUseCase {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public void withDraw(Long userId, WithDrawCommand withDrawCommand) {
+	public void withDraw(Long userId, String password) {
 		User user = findUserUseCase.findUserById(userId);
-		user.matchPassword(passwordEncoder, withDrawCommand.getPassword());
+		user.matchPassword(passwordEncoder, password);
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);
 		deleteParsingTextHistoryPort.deleteUserParsingTextHistory(user);
 		deleteUserPort.deleteUser(user);

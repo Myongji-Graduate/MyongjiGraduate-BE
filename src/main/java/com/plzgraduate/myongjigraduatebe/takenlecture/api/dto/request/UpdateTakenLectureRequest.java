@@ -2,8 +2,6 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request;
 
 import java.util.List;
 
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureCommand;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,11 +23,4 @@ public class UpdateTakenLectureRequest {
 		this.addedTakenLectures = addedTakenLectures;
 	}
 
-	public UpdateTakenLectureCommand toCommand(Long userId) {
-		return UpdateTakenLectureCommand.builder()
-			.userId(userId)
-			.deletedTakenLectures(deletedTakenLectures)
-			.addedTakenLectures(addedTakenLectures)
-			.build();
-	}
 }

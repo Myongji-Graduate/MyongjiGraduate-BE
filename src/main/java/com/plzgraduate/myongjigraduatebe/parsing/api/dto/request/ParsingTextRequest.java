@@ -2,8 +2,6 @@ package com.plzgraduate.myongjigraduatebe.parsing.api.dto.request;
 
 import javax.validation.constraints.NotNull;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +20,4 @@ public class ParsingTextRequest {
 		this.parsingText = parsingText;
 	}
 
-	public ParsingTextCommand toCommand(Long userId) {
-		return ParsingTextCommand.builder()
-			.userId(userId)
-			.parsingText(parsingText)
-			.build();
-	}
 }

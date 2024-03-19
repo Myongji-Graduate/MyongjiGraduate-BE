@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
-import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextCommand;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
@@ -45,8 +44,8 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.andDo(print())
 			.andExpect(status().isOk());
 
-		then(parsingTextUseCase).should().enrollParsingText(any(ParsingTextCommand.class));
-		then(parsingTextHistoryUseCase).should().saveParsingTextHistoryIfSuccess(any(ParsingTextCommand.class));
+		then(parsingTextUseCase).should().enrollParsingText(any(Long.class), any(String.class));
+		then(parsingTextHistoryUseCase).should().generateSucceedParsingTextHistory(any(Long.class), any(String.class));
 
 	}
 
@@ -60,7 +59,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.parsingText(parsingText)
 			.build();
 
-		doThrow(new InvalidPdfException("")).when(parsingTextUseCase).enrollParsingText(any(ParsingTextCommand.class));
+		doThrow(new InvalidPdfException("")).when(parsingTextUseCase).enrollParsingText(any(Long.class), any(String.class));
 
 		//when
 		ResultActions actions = mockMvc.perform(
@@ -77,7 +76,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.andExpect(jsonPath("$.status").value(400))
 			.andExpect(jsonPath("$.message").value(""));
 
-		then(parsingTextHistoryUseCase).should().saveParsingTextHistoryIfFail(any(ParsingTextCommand.class));
+		then(parsingTextHistoryUseCase).should().generateFailedParsingTextHistory(any(Long.class), any(String.class));
 	}
 
 }

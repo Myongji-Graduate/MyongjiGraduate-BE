@@ -21,7 +21,7 @@ public class TokenController implements TokenApiPresentation {
 	private final TokenUseCase tokenUseCase;
 
 	@PostMapping("/token")
-	public AccessTokenResponse newToken(@Valid @RequestBody TokenRequest tokenRequest) {
-		return tokenUseCase.createNewToken(TokenRequest.toCommand(tokenRequest.getRefreshToken()));
+	public AccessTokenResponse createNewToken(@Valid @RequestBody TokenRequest tokenRequest) {
+		return tokenUseCase.generateNewToken(tokenRequest.getRefreshToken());
 	}
 }

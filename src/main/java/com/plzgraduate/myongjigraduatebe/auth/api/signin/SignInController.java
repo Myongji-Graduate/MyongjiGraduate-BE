@@ -24,7 +24,7 @@ public class SignInController implements SignInApiPresentation {
 
 	@PostMapping("/sign-in")
 	public TokenResponse signIn(@Valid @RequestBody SignInRequest signInRequest) {
-		return signInUseCase.signIn(signInRequest.toCommand());
+		return signInUseCase.signIn(signInRequest.getAuthId(), signInRequest.getPassword());
 	}
 
 	@GetMapping("/check-login")

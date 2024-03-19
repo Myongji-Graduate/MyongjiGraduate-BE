@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.user.api.signup;
+package com.plzgraduate.myongjigraduatebe.user.api.signup.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

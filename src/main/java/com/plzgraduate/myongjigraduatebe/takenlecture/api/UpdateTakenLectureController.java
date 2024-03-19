@@ -20,8 +20,10 @@ public class UpdateTakenLectureController implements UpdateTakenLectureApiPresen
 	private final UpdateTakenLectureUseCase updateTakenLectureUseCase;
 
 	@PostMapping("/update")
-	public void updateTakenLectures(@LoginUser Long userId, @Valid @RequestBody UpdateTakenLectureRequest updateTakenLectureRequest) {
-		updateTakenLectureUseCase.updateTakenLecture(updateTakenLectureRequest.toCommand(userId));
+	public void updateTakenLectures(@LoginUser Long userId,
+		@Valid @RequestBody UpdateTakenLectureRequest updateTakenLectureRequest) {
+		updateTakenLectureUseCase.modifyTakenLecture(userId, updateTakenLectureRequest.getDeletedTakenLectures(),
+			updateTakenLectureRequest.getAddedTakenLectures());
 	}
 
 }

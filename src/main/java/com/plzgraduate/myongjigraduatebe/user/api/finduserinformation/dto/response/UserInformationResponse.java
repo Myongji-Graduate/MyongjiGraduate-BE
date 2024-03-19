@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response;
 
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +21,12 @@ public class UserInformationResponse {
 		this.studentNumber = studentNumber;
 		this.studentName = studentName;
 		this.major = major;
+	}
+
+	public static UserInformationResponse from(User user) {
+		return UserInformationResponse.builder()
+			.studentNumber(user.getStudentNumber())
+			.studentName(user.getName())
+			.major(user.getMajor()).build();
 	}
 }

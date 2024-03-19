@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -16,9 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawCommand;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,11 +49,8 @@ class WithDrawUserServiceTest {
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-		WithDrawCommand withDrawCommand = WithDrawCommand.builder()
-			.password(password).build();
-
 		//when //then
-	    withDrawUserService.withDraw(user.getId(), withDrawCommand);
+	    withDrawUserService.withDraw(user.getId(), password);
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
 		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
 		then(deleteUserPort).should().deleteUser(user);
@@ -72,11 +68,8 @@ class WithDrawUserServiceTest {
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
-		WithDrawCommand withDrawCommand = WithDrawCommand.builder()
-			.password(password).build();
-
 		//when //then
-		assertThatThrownBy(() -> withDrawUserService.withDraw(user.getId(), withDrawCommand))
+		assertThatThrownBy(() -> withDrawUserService.withDraw(user.getId(), password))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("비밀번호가 일치하지 않습니다.");
 

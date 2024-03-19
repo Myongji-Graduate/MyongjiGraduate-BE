@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.find;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,20 +31,19 @@ class FindUserInformationServiceTest {
 		String studentNumber = "11111111";
 		String major = "testMajor";
 
-		User user = User.builder()
+		User foundUser = User.builder()
 			.id(userId)
 			.name(studentName)
 			.studentNumber(studentNumber)
 			.major(major).build();
 
-		given(findUserUseCase.findUserById(userId)).willReturn(user);
+		given(findUserUseCase.findUserById(userId)).willReturn(foundUser);
 
 	    //when
-		UserInformationResponse userInformationResponse = findUserInformationService.findUserInformation(userId);
+		User user = findUserInformationService.findUserInformation(userId);
 
 		//then
-		assertThat(userInformationResponse).extracting("studentNumber", "studentName", "major")
-			.contains(studentNumber, studentName, major);
+		assertThat(user).isEqualTo(foundUser);
 	}
 
 }

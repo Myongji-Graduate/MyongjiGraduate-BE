@@ -1,7 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.usecase;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
+import java.util.List;
+
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 public interface SearchLectureUseCase {
-	SearchLectureResponse searchLectures(SearchLectureCommand searchLectureCommand);
+	List<Lecture> searchLectures(String type, String keyword);
 }

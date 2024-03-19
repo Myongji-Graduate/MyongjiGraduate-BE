@@ -1,7 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.update;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesByIdUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureCommand;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -28,7 +29,7 @@ class UpdateTakenLectureServiceTest {
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
-	private FindLecturesByIdUseCase findLecturesByIdUseCase;
+	private FindLecturesUseCase findLecturesUseCase;
 	@Mock
 	private DeleteTakenLecturePort deleteTakenLecturePort;
 	@Mock
@@ -38,22 +39,17 @@ class UpdateTakenLectureServiceTest {
 
 	@DisplayName("수강과목을 삭제하고 새로운 수강정보를 추가한다.")
 	@Test
-	void updateTakenLecture() {
+	void modifyTakenLecture() {
 		//given
-		UpdateTakenLectureCommand command = UpdateTakenLectureCommand.builder()
-			.userId(1L)
-			.addedTakenLectures(List.of(1L, 2L))
-			.deletedTakenLectures(List.of(21L, 22L))
-			.build();
 		User user = User.builder().id(1L).build();
 		Lecture lecture1 = createLecture(1L);
 		Lecture lecture2 = createLecture(2L);
-		given(findLecturesByIdUseCase.findLecturesByIds(List.of(1L, 2L)))
+		given(findLecturesUseCase.findLecturesByIds(List.of(1L, 2L)))
 			.willReturn(new ArrayList<>(List.of(lecture1, lecture2)));
 
 		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(List.class);
 		//when
-		updateTakenLectureService.updateTakenLecture(command);
+		updateTakenLectureService.modifyTakenLecture(user.getId(), List.of(21L, 22L), List.of(1L, 2L));
 
 		//then
 		then(deleteTakenLecturePort).should().deleteTakenLecturesByIds(List.of(21L, 22L));

@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.usecase;
 
 public interface ParsingTextHistoryUseCase {
-	void saveParsingTextHistoryIfSuccess(ParsingTextCommand parsingTextCommand);
+	void generateSucceedParsingTextHistory(Long userId, String parsingText);
 
-	void saveParsingTextHistoryIfFail(ParsingTextCommand parsingTextCommand);
+	void generateFailedParsingTextHistory(Long userId, String parsingText);
 }

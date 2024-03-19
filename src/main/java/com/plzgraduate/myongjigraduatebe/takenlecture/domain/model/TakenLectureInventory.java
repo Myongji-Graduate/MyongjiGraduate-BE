@@ -25,13 +25,32 @@ public class TakenLectureInventory {
 			.collect(Collectors.toSet());
 	}
 
-	public void handleFinishedTakenLectures(Set<TakenLecture> finishedTakenLecture) {
-		takenLecture.removeAll(finishedTakenLecture);
-	}
-
 	public static TakenLectureInventory from(Set<TakenLecture> takenLectures) {
 		return TakenLectureInventory.builder()
 			.takenLecture(takenLectures)
 			.build();
+	}
+
+	public void handleFinishedTakenLectures(Set<TakenLecture> finishedTakenLecture) {
+		takenLecture.removeAll(finishedTakenLecture);
+	}
+
+	public int calculateTotalCredit() {
+		int totalCredit = this.takenLecture
+			.stream()
+			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
+			.sum();
+		if(checkChapelCountIsFour(this.takenLecture)) {
+			totalCredit += 2;
+		}
+		return totalCredit;
+	}
+
+	private boolean checkChapelCountIsFour(Set<TakenLecture> takenLectures) {
+		long chapelCount = takenLectures
+			.stream()
+			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals("KMA02101"))
+			.count();
+		return chapelCount >= 4;
 	}
 }

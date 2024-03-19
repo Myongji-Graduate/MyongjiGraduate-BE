@@ -15,8 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.LectureResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
@@ -27,11 +26,10 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 	@Test
 	void searchLecture() throws Exception {
 		//given
-		List<LectureResponse> searchLectures = List.of(
-			LectureResponse.builder().id(1L).build()
+		List<Lecture> searchedLectures = List.of(
+			Lecture.builder().id(1L).build()
 		);
-		SearchLectureResponse searchLectureResponse = SearchLectureResponse.builder().lectures(searchLectures).build();
-		given(searchLectureUseCase.searchLectures(any())).willReturn(searchLectureResponse);
+		given(searchLectureUseCase.searchLectures(any(), any())).willReturn(searchedLectures);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/lectures")
@@ -41,7 +39,7 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.lectures", hasSize(1)));
 
-		then(searchLectureUseCase).should(times(1)).searchLectures(any());
+		then(searchLectureUseCase).should(times(1)).searchLectures(any(), any());
 	}
 
 	@WithMockAuthenticationUser

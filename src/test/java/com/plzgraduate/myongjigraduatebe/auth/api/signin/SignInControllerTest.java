@@ -82,7 +82,7 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			.authId("mju-graduate")
 			.password("1q2w3e4r")
 			.build();
-		given(signInUseCase.signIn(any())).willThrow(new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
+		given(signInUseCase.signIn(any(), any())).willThrow(new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
 		//when //then
 		mockMvc.perform(
 				post("/api/v1/auth/sign-in")

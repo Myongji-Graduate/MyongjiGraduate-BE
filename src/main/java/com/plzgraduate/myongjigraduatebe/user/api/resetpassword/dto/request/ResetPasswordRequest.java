@@ -1,9 +1,7 @@
-package com.plzgraduate.myongjigraduatebe.user.api.resetpassword;
+package com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.ResetPasswordCommand;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -35,10 +33,4 @@ public class ResetPasswordRequest {
 		this.passwordCheck = passwordCheck;
 	}
 
-	public ResetPasswordCommand toCommand() {
-		return ResetPasswordCommand.builder()
-			.authId(authId)
-			.newPassword(newPassword)
-			.passwordCheck(passwordCheck).build();
-	}
 }

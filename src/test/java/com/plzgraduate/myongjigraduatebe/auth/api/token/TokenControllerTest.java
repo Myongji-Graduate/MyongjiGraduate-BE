@@ -32,7 +32,7 @@ class TokenControllerTest extends WebAdaptorTestSupport {
 		AccessTokenResponse response = AccessTokenResponse.builder()
 				.accessToken(accessToken)
 				.build();
-		given(tokenUseCase.createNewToken(any())).willReturn(response);
+		given(tokenUseCase.generateNewToken(any())).willReturn(response);
 		//when //then
 		mockMvc.perform(
 				post("/api/v1/auth/token")
@@ -53,7 +53,7 @@ class TokenControllerTest extends WebAdaptorTestSupport {
 		TokenRequest request = TokenRequest.builder()
 			.refreshToken(refreshToken)
 			.build();
-		given(tokenUseCase.createNewToken(any())).willThrow(
+		given(tokenUseCase.generateNewToken(any())).willThrow(
 			new IllegalArgumentException("유효하지 않은 토큰입니다."));
 
 		//when //then

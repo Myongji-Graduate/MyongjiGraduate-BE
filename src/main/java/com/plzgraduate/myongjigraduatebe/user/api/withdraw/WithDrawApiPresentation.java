@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.api.withdraw;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
+import com.plzgraduate.myongjigraduatebe.user.api.withdraw.dto.request.WithDrawRequest;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

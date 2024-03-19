@@ -1,9 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.find;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.api.findauthid.dto.response.UserAuthIdResponse;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,11 +37,10 @@ class FindUserAuthIdServiceTest {
 		given(findUserUseCase.findUserByStudentNumber(anyString())).willReturn(user);
 
 		//when
-		UserAuthIdResponse userAuthIdResponse = findUserAuthIdService.findUserAuthId(studentNumber);
+		String userAuthId = findUserAuthIdService.findUserAuthId(studentNumber);
 
 		//then
-		assertThat(userAuthIdResponse).extracting("authId", "studentNumber")
-			.contains("teste***", studentNumber);
+		assertThat(userAuthId).isEqualTo("teste***");
 	}
 
 	@DisplayName("학번에 해당하는 유저가 존재하지 않을 경우 예외가 발생한다.")

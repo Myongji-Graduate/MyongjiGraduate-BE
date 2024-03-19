@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.service.find;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.service.FindLecturesByLectureCodeService;
+import com.plzgraduate.myongjigraduatebe.lecture.application.service.FindLecturesService;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +23,7 @@ class FindLecturesByLectureCodeServiceTest {
 	private FindLecturePort findLecturePort;
 
 	@InjectMocks
-	private FindLecturesByLectureCodeService findLecturesByLectureCodeService;
+	private FindLecturesService findLecturesService;
 
 	@DisplayName("과목 코드 리스트에 포함되는 과목들을 반환한다.")
 	@Test
@@ -38,7 +38,7 @@ class FindLecturesByLectureCodeServiceTest {
 		given(findLecturePort.findLecturesByLectureCodes(lectureCodes)).willReturn(lectures);
 
 		//when
-		List<Lecture> result = findLecturesByLectureCodeService.findLecturesByLectureCodes(lectureCodes);
+		List<Lecture> result = findLecturesService.findLecturesByLectureCodes(lectureCodes);
 
 		//then
 		assertThat(result).isEqualTo(lectures);

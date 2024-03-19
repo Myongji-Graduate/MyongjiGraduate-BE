@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.api.findauthid.dto.response.UserAuthIdResponse;
 
 class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 
@@ -22,10 +21,7 @@ class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 		//given
 		String studentNumber = "60191111";
 		String encryptedAuthId = "test***";
-		UserAuthIdResponse userAuthIdResponse = UserAuthIdResponse.builder()
-			.authId(encryptedAuthId)
-			.studentNumber(studentNumber).build();
-		given(findUserAuthIdUseCase.findUserAuthId(studentNumber)).willReturn(userAuthIdResponse);
+		given(findUserAuthIdUseCase.findUserAuthId(studentNumber)).willReturn(encryptedAuthId);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/users/{student-number}/auth-id", studentNumber))

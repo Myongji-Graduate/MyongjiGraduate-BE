@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
+import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request.ResetPasswordRequest;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.ResetPasswordUseCase;
 import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.response.ValidateUserResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.validate.ValidateUserUseCase;
@@ -28,11 +29,13 @@ public class ResetPasswordController implements ResetPasswordApiPresentation {
 	public ValidateUserResponse validateUser(
 		@PathVariable("student-number") String studentNumber,
 		@RequestParam("auth-id") String authId) {
-		return validateUserUseCase.validateUser(studentNumber, authId);
+		boolean validated = validateUserUseCase.validateUser(studentNumber, authId);
+		return ValidateUserResponse.builder().passedUserValidation(validated).build();
 	}
 
 	@PatchMapping("/password")
 	public void resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
-		resetPasswordUseCase.resetPassword(resetPasswordRequest.toCommand());
+		resetPasswordUseCase.resetPassword(resetPasswordRequest.getAuthId(), resetPasswordRequest.getNewPassword(),
+			resetPasswordRequest.getPasswordCheck());
 	}
 }

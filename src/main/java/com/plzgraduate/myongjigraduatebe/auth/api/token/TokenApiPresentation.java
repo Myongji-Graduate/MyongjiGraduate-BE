@@ -12,5 +12,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Token", description = "토큰 발급 API")
 public interface TokenApiPresentation {
 
-	AccessTokenResponse newToken(@Valid @RequestBody TokenRequest tokenRequest);
+	AccessTokenResponse createNewToken(@Valid @RequestBody TokenRequest tokenRequest);
 }

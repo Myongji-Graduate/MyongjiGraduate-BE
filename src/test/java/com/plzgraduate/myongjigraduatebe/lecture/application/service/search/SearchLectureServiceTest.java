@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.service.search;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
@@ -12,10 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.service.SearchLectureService;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureCommand;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.SearchLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.service.SearchLectureService;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,11 +27,8 @@ class SearchLectureServiceTest {
 	@DisplayName("과목을 검색한다.")
 	@Test
 	void searchLectures() {
-
-		SearchLectureCommand command = SearchLectureCommand.builder()
-			.type("name")
-			.keyword("기초")
-			.build();
+		String type = "name";
+		String keyword = "기초";
 		List<Lecture> lectures = List.of(
 			createLecture(1L, "code1", "기초웹프로그래밍", 3, 0),
 			createLecture(2L, "code2", "앱과웹기초", 2, 1)
@@ -41,15 +37,15 @@ class SearchLectureServiceTest {
 			.willReturn(lectures);
 
 		//when
-		SearchLectureResponse searchLectures = searchLectureService.searchLectures(command);
+		List<Lecture> searchedLectures = searchLectureService.searchLectures(type, keyword);
 
 		//then
-		assertThat(searchLectures.getLectures())
+		assertThat(searchedLectures)
 			.hasSize(2)
 			.extracting("id", "lectureCode", "name", "credit", "isRevoked")
 			.containsExactlyInAnyOrder(
-				tuple(1L, "code1", "기초웹프로그래밍", 3, false),
-				tuple(2L, "code2", "앱과웹기초", 2, true)
+				tuple(1L, "code1", "기초웹프로그래밍", 3, 0),
+				tuple(2L, "code2", "앱과웹기초", 2, 1)
 			);
 	}
 

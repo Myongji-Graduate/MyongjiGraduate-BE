@@ -4,7 +4,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.response.ValidateUserResponse;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.validate.ValidateUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -17,10 +16,8 @@ class ValidateUserService implements ValidateUserUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	@Override
-	public ValidateUserResponse validateUser(String studentNumber, String authId) {
+	public boolean validateUser(String studentNumber, String authId) {
 		User user = findUserUseCase.findUserByStudentNumber(studentNumber);
-		boolean validateAuthIdResult = user.isMyAuthId(authId);
-		return ValidateUserResponse.builder()
-			.passedUserValidation(validateAuthIdResult).build();
+		return user.isMyAuthId(authId);
 	}
 }
