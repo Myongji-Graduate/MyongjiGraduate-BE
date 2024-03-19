@@ -9,8 +9,9 @@ import lombok.Getter;
 public class GraduationRequirement {
 
 	private final int totalCredit;
-	private final int majorCredit;
-	private final int subMajorCredit;
+	private int primaryMajorCredit;
+	private int dualMajorCredit;
+	private int subMajorCredit;
 	private final int basicAcademicalCredit;
 	private int commonCultureCredit;
 	private final int coreCultureCredit;
@@ -18,10 +19,11 @@ public class GraduationRequirement {
 	private int freeElectiveCredit;
 
 	@Builder
-	private GraduationRequirement(int totalCredit, int majorCredit, int subMajorCredit, int basicAcademicalCredit,
+	private GraduationRequirement(int totalCredit, int primaryMajorCredit, int dualMajorCredit, int subMajorCredit, int basicAcademicalCredit,
 		int commonCultureCredit, int coreCultureCredit, int normalCultureCredit, int freeElectiveCredit) {
 		this.totalCredit = totalCredit;
-		this.majorCredit = majorCredit;
+		this.primaryMajorCredit = primaryMajorCredit;
+		this.dualMajorCredit = dualMajorCredit;
 		this.subMajorCredit = subMajorCredit;
 		this.basicAcademicalCredit = basicAcademicalCredit;
 		this.commonCultureCredit = commonCultureCredit;
@@ -37,5 +39,11 @@ public class GraduationRequirement {
 
 	public void deleteFreeElectiveCredit() {
 		freeElectiveCredit = 0;
+	}
+
+	public void modifyCreditForDualMajor(int primaryMajorCredit, int dualMajorCredit) {
+		normalCultureCredit = 0;
+		this.primaryMajorCredit = primaryMajorCredit;
+		this.dualMajorCredit = dualMajorCredit;
 	}
 }
