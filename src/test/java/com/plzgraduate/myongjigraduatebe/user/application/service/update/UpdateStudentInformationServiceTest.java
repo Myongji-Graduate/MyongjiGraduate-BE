@@ -22,7 +22,7 @@ class UpdateStudentInformationServiceTest {
 	@InjectMocks
 	private UpdateStudentInformationService updateStudentInformationService;
 
-	@DisplayName("User의 하생정보를 수정한다.")
+	@DisplayName("User의 학생정보를 수정한다.")
 	@Test
 	void updateUser() {
 		//given
@@ -34,7 +34,7 @@ class UpdateStudentInformationServiceTest {
 			.major("응용소프트웨어학과")
 			.changeMajor(null)
 			.subMajor("경영학과")
-			.studentCategory(StudentCategory.DOUBLE_MAJOR)
+			.studentCategory(StudentCategory.DUAL_MAJOR)
 			.build();
 
 		//then

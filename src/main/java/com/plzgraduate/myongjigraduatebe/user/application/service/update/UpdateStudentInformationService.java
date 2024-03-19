@@ -15,12 +15,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class UpdateStudentInformationService implements UpdateStudentInformationUseCase {
 	private final UpdateUserPort updateUserPort;
+
 	@Override
 	public void updateUser(UpdateStudentInformationCommand updateStudentInformationCommand) {
 		User user = updateStudentInformationCommand.getUser();
 		user.updateStudentInformation(updateStudentInformationCommand.getName(),
 			updateStudentInformationCommand.getMajor(),
 			updateStudentInformationCommand.getChangeMajor(),
+			updateStudentInformationCommand.getDualMajor(),
 			updateStudentInformationCommand.getSubMajor(),
 			updateStudentInformationCommand.getStudentCategory()
 		);
