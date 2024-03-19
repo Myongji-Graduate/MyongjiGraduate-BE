@@ -69,9 +69,18 @@ public enum DefaultGraduationRequirementType {
 		}
 	}
 
-	private void checkIsSubMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+	private void checkIsMultiMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
+			DualMajorGraduationRequirementType originMajorGraduationRequirementType = DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType(
+				College.findBelongingCollege(user.getPrimaryMajor()).getName());
+			DualMajorGraduationRequirementType dualMajorGraduationRequirementType = DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType(
+				College.findBelongingCollege(user.getDualMajor()).getName());
+
+			graduationRequirement.modifyCreditForDualMajor(originMajorGraduationRequirementType.getOriginMajorCredit(),
+				dualMajorGraduationRequirementType.getDualMajorCredit());
+		}
 		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
-			graduationRequirement.deleteFreeElectiveCredit();
+			graduationRequirement.modifyCreditForSubMajor();
 		}
 	}
 }
