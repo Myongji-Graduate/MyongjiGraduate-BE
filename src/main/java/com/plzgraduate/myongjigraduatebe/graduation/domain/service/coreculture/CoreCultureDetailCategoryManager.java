@@ -61,7 +61,7 @@ public class CoreCultureDetailCategoryManager {
 
 	private void calculateFreeElectiveLeftCredit(User user, Set<Lecture> taken,
 		DetailCategoryResult commonCultureDetailCategoryResult) {
-		if (ICT_DEPARTMENTS.contains(user.getMajor()) && (taken.contains(과학과기술_예외_과목))) {
+		if (ICT_DEPARTMENTS.contains(user.getPrimaryMajor()) && (taken.contains(과학과기술_예외_과목))) {
 			taken.remove(과학과기술_예외_과목);
 			int exceptionLectureCredit = 3;
 			commonCultureDetailCategoryResult.addFreeElectiveLeftCredit(exceptionLectureCredit);

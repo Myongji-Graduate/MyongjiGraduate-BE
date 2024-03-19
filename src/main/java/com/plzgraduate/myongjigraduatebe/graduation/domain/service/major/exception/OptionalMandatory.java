@@ -50,7 +50,7 @@ public enum OptionalMandatory {
 	public static OptionalMandatory from(User user) {
 		return Arrays.stream(OptionalMandatory.values())
 			.filter(optionalMandatory -> Objects.equals(optionalMandatory.getDepartment(),
-				user.getMajor()))
+				user.getPrimaryMajor()))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("해당 전공선택필수를 찾을 수 없습니다."));
 	}

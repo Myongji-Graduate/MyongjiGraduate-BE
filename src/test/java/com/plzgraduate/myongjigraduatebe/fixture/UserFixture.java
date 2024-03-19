@@ -121,7 +121,7 @@ public class UserFixture {
 			.name(name)
 			.studentNumber(studentNumber)
 			.entryYear(entryYear)
-			.major(major)
+			.primaryMajor(major)
 			.subMajor(subMajor)
 			.studentCategory(studentCategory)
 			.build();

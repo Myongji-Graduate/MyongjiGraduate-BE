@@ -18,7 +18,7 @@ public class User {
 	private String name;
 	private final String studentNumber;
 	private final int entryYear;
-	private String major;
+	private String primaryMajor;
 	private String changeMajor;
 	private String subMajor;
 	private StudentCategory studentCategory;
