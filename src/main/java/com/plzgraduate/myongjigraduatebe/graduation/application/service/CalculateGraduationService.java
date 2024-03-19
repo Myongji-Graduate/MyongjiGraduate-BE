@@ -156,8 +156,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private DetailGraduationResult generateSubMajorDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory) {
-		int requireSubMajorCredit = 21;
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationSubMajorLectures = findMajorPort.findMajor(user.getSubMajor());
 		GraduationManager<MajorLecture> subMajorManager = new SubMajorManager();
 		return subMajorManager.createDetailGraduationResult(user, takenLectureInventory, graduationSubMajorLectures,
