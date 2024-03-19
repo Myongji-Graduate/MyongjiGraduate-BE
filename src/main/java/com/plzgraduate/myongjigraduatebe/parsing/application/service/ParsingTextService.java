@@ -1,8 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.CHANGE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.NORMAL;
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.SUB_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +41,7 @@ class ParsingTextService implements ParsingTextUseCase {
 		try {
 			validateParsingText(parsingText);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
-			checkIfNormal(parsingInformation);
+			checkUnSupportedUser(parsingInformation);
 			validateStudentNumber(user, parsingInformation);
 			updateUser(user, parsingInformation);
 			deleteTakenLecturesIfAlreadyEnrolled(user);
@@ -69,8 +67,8 @@ class ParsingTextService implements ParsingTextUseCase {
 	private void updateUser(User user, ParsingInformation parsingInformation) {
 		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user,
 			parsingInformation.getStudentName(), parsingInformation.getMajor(),
-			parsingInformation.getAssociatedMajor(), parsingInformation.getSubMajor(),
-			parsingInformation.getStudentCategory());
+			parsingInformation.getChangeMajor(), parsingInformation.getDualMajor(),
+			parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
 		updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
@@ -98,12 +96,10 @@ class ParsingTextService implements ParsingTextUseCase {
 			.collect(Collectors.toList());
 	}
 
-	private void checkIfNormal(ParsingInformation parsingInformation) {
-		//TODO: 복수전공 파싱 통과 추가
-		if (!(parsingInformation.getStudentCategory() == NORMAL
-			|| parsingInformation.getStudentCategory() == CHANGE_MAJOR
-			|| parsingInformation.getStudentCategory() == SUB_MAJOR)) {
-			throw new IllegalArgumentException("복수전공, 연계전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
+	private void checkUnSupportedUser(ParsingInformation parsingInformation) {
+		if (parsingInformation.getStudentCategory() == ASSOCIATED_MAJOR
+			|| parsingInformation.getStudentCategory() == DOUBLE_SUB) {
+			throw new IllegalArgumentException("연계전공, 복수+부전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
 		}
 	}
 
