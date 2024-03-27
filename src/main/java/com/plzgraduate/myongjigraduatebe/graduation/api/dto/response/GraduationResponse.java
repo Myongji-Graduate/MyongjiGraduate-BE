@@ -51,8 +51,9 @@ public class GraduationResponse {
 			.chapelResult(ChapelResultResponse.from(graduationResult.getChapelResult()))
 			.commonCulture(findDetailGraduationResultResponse(graduationResult, COMMON_CULTURE))
 			.coreCulture(findDetailGraduationResultResponse(graduationResult, CORE_CULTURE))
-			.basicAcademicalCulture(findDetailGraduationResultResponse(graduationResult, BASIC_ACADEMICAL_CULTURE))
-			.major(findDetailGraduationResultResponse(graduationResult, MAJOR))
+			.basicAcademicalCulture(findDetailGraduationResultResponse(graduationResult,
+				PRIMARY_BASIC_ACADEMICAL_CULTURE))
+			.major(findDetailGraduationResultResponse(graduationResult, PRIMARY_MAJOR))
 			.subMajor(findDetailGraduationResultResponse(graduationResult, SUB_MAJOR))
 			.normalCulture(
 				RestResultResponse.fromNormalCultureResult(graduationResult.getNormalCultureGraduationResult()))

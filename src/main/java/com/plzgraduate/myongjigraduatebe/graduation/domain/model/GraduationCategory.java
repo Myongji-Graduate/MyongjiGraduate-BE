@@ -13,11 +13,14 @@ public enum GraduationCategory {
 
 	COMMON_CULTURE("공통교양"),
 	CORE_CULTURE("핵심교양"),
-	BASIC_ACADEMICAL_CULTURE("학문기초교양"),
-	MAJOR("전공"),
+	PRIMARY_MAJOR("주전공"),
+	DUAL_MAJOR("복수전공"),
 	SUB_MAJOR("부전공"),
+	PRIMARY_BASIC_ACADEMICAL_CULTURE("주 학문기초교양"),
+	DUAL_BASIC_ACADEMICAL_CULTURE("복수 학문기초교양"),
 	NORMAL_CULTURE("일반교양"),
-	FREE_ELECTIVE("자유선택");
+	FREE_ELECTIVE("자유선택"),
+	CHAPEL("채플");
 
 	private final String name;
 
