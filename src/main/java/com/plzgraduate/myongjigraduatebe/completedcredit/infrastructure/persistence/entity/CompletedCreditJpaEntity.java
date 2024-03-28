@@ -30,7 +30,7 @@ public class CompletedCreditJpaEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")J
+	@JoinColumn(name = "user_id")
 	private UserJpaEntity userJpaEntity;
 
 	@Enumerated(value = EnumType.STRING)
