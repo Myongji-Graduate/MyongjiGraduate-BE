@@ -1,8 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.usecase;
 
-import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.GraduationResponse;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 
 public interface CalculateGraduationUseCase {
 
-	GraduationResponse calculateGraduation(Long userId);
+	GraduationResult calculateGraduation(Long userId);
 }

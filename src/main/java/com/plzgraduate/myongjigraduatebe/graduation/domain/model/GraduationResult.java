@@ -81,7 +81,7 @@ public class GraduationResult {
 
 	private void addUpChapelTakenCreditToCommonCulture() {
 		this.detailGraduationResults.stream()
-			.filter(detailGraduationResult -> detailGraduationResult.getCategoryName().equals(COMMON_CULTURE.getName()))
+			.filter(detailGraduationResult -> detailGraduationResult.getGraduationCategory() ==COMMON_CULTURE)
 			.forEach(
 				detailGraduationResult -> detailGraduationResult.addCredit(this.chapelResult.getTakenChapelCredit()));
 	}

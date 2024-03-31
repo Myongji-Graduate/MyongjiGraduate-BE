@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -56,8 +58,8 @@ class CommonCultureGraduationManagerTest {
     
 		//then
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted")
-			.contains("공통교양", true);
+			.extracting("graduationCategory", "isCompleted")
+			.contains(COMMON_CULTURE, true);
 	}
 
 	@DisplayName("모든 공통교양 세부 카테고리가 이수 완료가 아닐 경우 이수 미 완료 공통교양 전체 졸업 결과를 생성한다.")
@@ -78,8 +80,8 @@ class CommonCultureGraduationManagerTest {
     
 		//then
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted")
-			.contains("공통교양", false);
+			.extracting("graduationCategory", "isCompleted")
+			.contains(COMMON_CULTURE, false);
 	}
 
 }

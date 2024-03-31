@@ -8,16 +8,16 @@ import lombok.Getter;
 @Getter
 public class DetailGraduationResult {
 
-	private final String categoryName;
+	private final GraduationCategory graduationCategory;
 	private final boolean isCompleted;
 	private final int totalCredit;
 	private double takenCredit;
 	private final List<DetailCategoryResult> detailCategory;
 
 	@Builder
-	private DetailGraduationResult(String categoryName, boolean isCompleted, int totalCredit, int takenCredit,
+	private DetailGraduationResult(GraduationCategory graduationCategory, boolean isCompleted, int totalCredit, int takenCredit,
 		List<DetailCategoryResult> detailCategory) {
-		this.categoryName = categoryName;
+		this.graduationCategory = graduationCategory;
 		this.isCompleted = isCompleted;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -27,7 +27,7 @@ public class DetailGraduationResult {
 	public static DetailGraduationResult create(GraduationCategory graduationCategory, int totalCredit,
 		List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
-			.categoryName(graduationCategory.getName())
+			.graduationCategory(graduationCategory)
 			.isCompleted(checkIsCompleted(detailCategoryResults))
 			.totalCredit(totalCredit)
 			.takenCredit(calculateTakenCredit(detailCategoryResults))
