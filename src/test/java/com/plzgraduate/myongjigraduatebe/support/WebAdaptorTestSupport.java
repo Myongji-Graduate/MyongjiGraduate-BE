@@ -21,7 +21,6 @@ import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.QuerydslConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.SecurityConfig;
-import com.plzgraduate.myongjigraduatebe.graduation.api.CalculateGraduationController;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.api.SearchLectureController;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
@@ -56,7 +55,6 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithD
 @WebMvcTest(controllers = {
 	SignInController.class,
 	TokenController.class,
-	CalculateGraduationController.class,
 	SearchLectureController.class,
 	FindUserInformationController.class,
 	UpdateTakenLectureController.class,
