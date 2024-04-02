@@ -32,13 +32,13 @@ class CompletedCreditRepositoryTest extends PersistenceTestSupport {
 
 		CompletedCreditJpaEntity commonCultureCompletedCreditJpaEntity = CompletedCreditJpaEntity.builder()
 			.userJpaEntity(userJpaEntity)
-			.category(GraduationCategory.COMMON_CULTURE)
+			.graduationCategory(GraduationCategory.COMMON_CULTURE)
 			.totalCredit(10)
 			.takenCredit(10).build();
 
 		CompletedCreditJpaEntity coreCultureCompletedCreditJpaEntity = CompletedCreditJpaEntity.builder()
 			.userJpaEntity(userJpaEntity)
-			.category(GraduationCategory.CORE_CULTURE)
+			.graduationCategory(GraduationCategory.CORE_CULTURE)
 			.totalCredit(10)
 			.takenCredit(10).build();
 
