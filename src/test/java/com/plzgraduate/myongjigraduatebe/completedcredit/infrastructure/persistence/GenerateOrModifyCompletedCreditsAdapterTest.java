@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -14,6 +13,7 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persiste
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.repository.CompletedCreditRepository;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 
@@ -30,6 +30,9 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 	@Test
 	void saveOrModifyCompletedCredits() {
 		//given
+		User user = User.builder()
+			.id(1L)
+			.build();
 		UserJpaEntity userJpaEntity = UserJpaEntity.builder()
 			.id(1L)
 			.authId("test")
@@ -39,18 +42,16 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 
 		List<CompletedCredit> completedCredits = List.of(CompletedCredit.builder()
 				.id(1L)
-				.userId(1L)
 				.graduationCategory(GraduationCategory.COMMON_CULTURE)
 				.totalCredit(10)
 				.takenCredit(5).build(),
 			CompletedCredit.builder()
-				.userId(1L)
 				.graduationCategory(GraduationCategory.COMMON_CULTURE)
 				.totalCredit(10)
 				.takenCredit(5).build());
 
 		//when
-		generateOrModifyCompletedCreditsAdapter.generateOrModifyCompletedCredits(completedCredits);
+		generateOrModifyCompletedCreditsAdapter.generateOrModifyCompletedCredits(user, completedCredits);
 
 		//then
 		List<CompletedCreditJpaEntity> foundCompletedCredits = completedCreditRepository.findAllByUserJpaEntity(

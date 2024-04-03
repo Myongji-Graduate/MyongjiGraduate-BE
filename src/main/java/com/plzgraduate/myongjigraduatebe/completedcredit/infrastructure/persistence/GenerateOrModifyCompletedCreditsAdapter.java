@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persiste
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.mapper.CompletedCreditPersistenceMapper;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.repository.CompletedCreditRepository;
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,9 +21,9 @@ public class GenerateOrModifyCompletedCreditsAdapter implements GenerateOrModify
 	private final CompletedCreditRepository completedCreditRepository;
 
 	@Override
-	public void generateOrModifyCompletedCredits(List<CompletedCredit> completedCredits) {
+	public void generateOrModifyCompletedCredits(User user, List<CompletedCredit> completedCredits) {
 		List<CompletedCreditJpaEntity> completedCreditJpaEntities = completedCredits.stream()
-			.map(completedCreditPersistenceMapper::mapToJpaEntity)
+			.map(completedCredit -> completedCreditPersistenceMapper.mapToJpaEntity(user, completedCredit))
 			.collect(Collectors.toList());
 
 		completedCreditRepository.saveAll(completedCreditJpaEntities);

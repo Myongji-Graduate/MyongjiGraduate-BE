@@ -58,14 +58,13 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(completedCreditModels);
 		allCompletedCreditModels.addAll(
 			List.of(chapelCompletedCreditModel, normalCultureCompletedCreditModel, freeElectiveCompletedCreditModel));
-		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(allCompletedCreditModels);
+		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, allCompletedCreditModels);
 	}
 
 	private CompletedCredit createCompletedCreditModel(User user, DetailGraduationResult detailGraduationResult,
 		Optional<CompletedCredit> completedCredit) {
 		return CompletedCredit.builder()
 			.id(completedCredit.map(CompletedCredit::getId).orElse(null))
-			.userId(completedCredit.map(CompletedCredit::getUserId).orElse(user.getId()))
 			.totalCredit(detailGraduationResult.getTotalCredit())
 			.takenCredit(detailGraduationResult.getTakenCredit())
 			.graduationCategory(detailGraduationResult.getGraduationCategory())
@@ -78,13 +77,11 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == CHAPEL)
 			.map(completedCredit -> CompletedCredit.builder()
 				.id(completedCredit.getId())
-				.userId(completedCredit.getUserId())
 				.totalCredit(ChapelResult.GRADUATION_COUNT)
 				.takenCredit(graduationResult.getChapelResult().getTakenChapelCredit())
 				.graduationCategory(CHAPEL).build())
 			.findFirst()
 			.orElse(CompletedCredit.builder()
-				.userId(user.getId())
 				.totalCredit(ChapelResult.GRADUATION_COUNT)
 				.takenCredit(graduationResult.getChapelResult().getTakenChapelCredit())
 				.graduationCategory(CHAPEL).build());
@@ -96,13 +93,11 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == NORMAL_CULTURE)
 			.map(completedCredit -> CompletedCredit.builder()
 				.id(completedCredit.getId())
-				.userId(completedCredit.getUserId())
 				.totalCredit(graduationResult.getNormalCultureGraduationResult().getTotalCredit())
 				.takenCredit(graduationResult.getNormalCultureGraduationResult().getTakenCredit())
 				.graduationCategory(NORMAL_CULTURE).build())
 			.findFirst()
 			.orElse(CompletedCredit.builder()
-				.userId(user.getId())
 				.totalCredit(graduationResult.getNormalCultureGraduationResult().getTotalCredit())
 				.takenCredit(graduationResult.getNormalCultureGraduationResult().getTakenCredit())
 				.graduationCategory(NORMAL_CULTURE).build());
@@ -114,13 +109,11 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == FREE_ELECTIVE)
 			.map(completedCredit -> CompletedCredit.builder()
 				.id(completedCredit.getId())
-				.userId(completedCredit.getUserId())
 				.totalCredit(graduationResult.getFreeElectiveGraduationResult().getTotalCredit())
 				.takenCredit(graduationResult.getFreeElectiveGraduationResult().getTakenCredit())
 				.graduationCategory(FREE_ELECTIVE).build())
 			.findFirst()
 			.orElse(CompletedCredit.builder()
-				.userId(user.getId())
 				.totalCredit(graduationResult.getFreeElectiveGraduationResult().getTotalCredit())
 				.takenCredit(graduationResult.getFreeElectiveGraduationResult().getTakenCredit())
 				.graduationCategory(FREE_ELECTIVE).build());

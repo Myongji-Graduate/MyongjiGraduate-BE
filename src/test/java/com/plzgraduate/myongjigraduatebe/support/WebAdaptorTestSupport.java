@@ -12,12 +12,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.SignInController;
 import com.plzgraduate.myongjigraduatebe.auth.api.token.TokenController;
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.completedcredit.api.FindCompletedCreditController;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.FindCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.QuerydslConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.SecurityConfig;
@@ -63,7 +66,8 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithD
 	FindTakenLectureController.class,
 	ResetPasswordController.class,
 	SignUpController.class,
-	FindAuthIdController.class
+	FindAuthIdController.class,
+	FindCompletedCreditController.class
 })
 public abstract class WebAdaptorTestSupport {
 
@@ -126,6 +130,9 @@ public abstract class WebAdaptorTestSupport {
 
 	@MockBean
 	protected CheckStudentNumberDuplicationUseCase checkStudentNumberDuplicationUseCase;
+
+	@MockBean
+	protected FindCompletedCreditUseCase findCompletedCreditUseCase;
 
 	@BeforeEach
 	void setUp() {
