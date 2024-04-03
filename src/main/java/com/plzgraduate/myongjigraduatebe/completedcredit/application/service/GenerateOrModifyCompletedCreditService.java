@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional
 @RequiredArgsConstructor
-public class GenerateOrModifyCompletedCreditService implements GenerateOrModifyCompletedCreditUseCase {
+class GenerateOrModifyCompletedCreditService implements GenerateOrModifyCompletedCreditUseCase {
 
 	private final FindCompletedCreditPort findCompletedCreditPort;
 	private final GenerateOrModifyCompletedCreditPort generateOrModifyCompletedCreditPort;

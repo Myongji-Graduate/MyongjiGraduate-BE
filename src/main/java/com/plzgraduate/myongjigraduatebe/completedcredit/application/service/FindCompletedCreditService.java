@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FindCompletedCreditService implements FindCompletedCreditUseCase {
+class FindCompletedCreditService implements FindCompletedCreditUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	private final FindCompletedCreditPort findCompletedCreditPort;

@@ -29,9 +29,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -41,22 +40,18 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+//TODO: 로직 분리 후 테스트 코드 작성
 class CalculateGraduationService implements CalculateGraduationUseCase {
 
-	private final FindUserUseCase findUserUseCase;
-
-	private final FindTakenLecturePort findTakenLecturePort;
 	private final FindCommonCulturePort findCommonCulturePort;
 	private final FindCoreCulturePort findCoreCulturePort;
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindMajorPort findMajorPort;
 
 	@Override
-	public GraduationResult calculateGraduation(Long userId) {
-		User user = findUserUseCase.findUserById(userId);
+	public GraduationResult calculateGraduation(User user, Set<TakenLecture> takenLectures) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(
-			findTakenLecturePort.findTakenLectureSetByUser(user));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
