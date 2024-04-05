@@ -45,15 +45,15 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			));
 
 		List<CompletedCredit> completedCreditModels = resultMap.keySet().stream()
-			.map(completedCredit -> createCompletedCreditModel(user, completedCredit, resultMap.get(completedCredit)))
+			.map(completedCredit -> createCompletedCreditModel(completedCredit, resultMap.get(completedCredit)))
 			.collect(Collectors.toList());
 
-		CompletedCredit chapelCompletedCreditModel = createChapelCompletedCreditModel(user, completedCredits,
+		CompletedCredit chapelCompletedCreditModel = createChapelCompletedCreditModel(completedCredits,
 			graduationResult);
-		CompletedCredit normalCultureCompletedCreditModel = createNormalCultureCompletedCreditModel(user,
-			completedCredits, graduationResult);
-		CompletedCredit freeElectiveCompletedCreditModel = createFreeElectiveCompletedCreditModel(user,
-			completedCredits, graduationResult);
+		CompletedCredit normalCultureCompletedCreditModel = createNormalCultureCompletedCreditModel(completedCredits,
+			graduationResult);
+		CompletedCredit freeElectiveCompletedCreditModel = createFreeElectiveCompletedCreditModel(completedCredits,
+			graduationResult);
 
 		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(completedCreditModels);
 		allCompletedCreditModels.addAll(
@@ -61,7 +61,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, allCompletedCreditModels);
 	}
 
-	private CompletedCredit createCompletedCreditModel(User user, DetailGraduationResult detailGraduationResult,
+	private CompletedCredit createCompletedCreditModel(DetailGraduationResult detailGraduationResult,
 		Optional<CompletedCredit> completedCredit) {
 		return CompletedCredit.builder()
 			.id(completedCredit.map(CompletedCredit::getId).orElse(null))
@@ -71,7 +71,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.build();
 	}
 
-	private CompletedCredit createChapelCompletedCreditModel(User user, List<CompletedCredit> completedCredits,
+	private CompletedCredit createChapelCompletedCreditModel(List<CompletedCredit> completedCredits,
 		GraduationResult graduationResult) {
 		return completedCredits.stream()
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == CHAPEL)
@@ -87,7 +87,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 				.graduationCategory(CHAPEL).build());
 	}
 
-	private CompletedCredit createNormalCultureCompletedCreditModel(User user, List<CompletedCredit> completedCredits,
+	private CompletedCredit createNormalCultureCompletedCreditModel(List<CompletedCredit> completedCredits,
 		GraduationResult graduationResult) {
 		return completedCredits.stream()
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == NORMAL_CULTURE)
@@ -103,7 +103,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 				.graduationCategory(NORMAL_CULTURE).build());
 	}
 
-	private CompletedCredit createFreeElectiveCompletedCreditModel(User user, List<CompletedCredit> completedCredits,
+	private CompletedCredit createFreeElectiveCompletedCreditModel(List<CompletedCredit> completedCredits,
 		GraduationResult graduationResult) {
 		return completedCredits.stream()
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == FREE_ELECTIVE)
