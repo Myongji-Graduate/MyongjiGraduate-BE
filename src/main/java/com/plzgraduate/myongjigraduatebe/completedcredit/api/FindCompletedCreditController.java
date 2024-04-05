@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.plzgraduate.myongjigraduatebe.completedcredit.api.dto.CompletedCreditResponse;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.FindCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
+import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
+@WebAdapter
 @RequestMapping(value = "/api/v1/graduations/credit")
 @RequiredArgsConstructor
-public class FindCompletedCreditController {
+public class FindCompletedCreditController implements FindCompletedCreditApiPresentation{
 
 	private final FindCompletedCreditUseCase findCompletedCreditUseCase;
 
