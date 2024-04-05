@@ -19,7 +19,7 @@ import com.plzgraduate.myongjigraduatebe.auth.api.token.TokenController;
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
-import com.plzgraduate.myongjigraduatebe.completedcredit.api.FindCompletedCreditController;
+import com.plzgraduate.myongjigraduatebe.completedcredit.api.FindCompletedCreditsController;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.FindCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.QuerydslConfig;
@@ -67,7 +67,7 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithD
 	ResetPasswordController.class,
 	SignUpController.class,
 	FindAuthIdController.class,
-	FindCompletedCreditController.class
+	FindCompletedCreditsController.class
 })
 public abstract class WebAdaptorTestSupport {
 

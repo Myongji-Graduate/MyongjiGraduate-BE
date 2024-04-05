@@ -16,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCateg
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
-class CompletedCreditControllerTest extends WebAdaptorTestSupport {
+class FindCompletedCreditsControllerTest extends WebAdaptorTestSupport {
 
 	@WithMockAuthenticationUser
 	@DisplayName("유저의 이수 학점을 조회한다.")
@@ -37,7 +37,7 @@ class CompletedCreditControllerTest extends WebAdaptorTestSupport {
 		given(findCompletedCreditUseCase.findCompletedCredits(1L)).willReturn(completedCredits);
 
 		//when //then
-		mockMvc.perform(get("/api/v1/graduations/credit"))
+		mockMvc.perform(get("/api/v1/graduations/credits"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.length()").value(completedCredits.size()))
