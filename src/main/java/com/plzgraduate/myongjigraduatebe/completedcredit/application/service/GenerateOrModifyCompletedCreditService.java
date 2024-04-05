@@ -40,7 +40,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.collect(Collectors.toMap(
 				Function.identity(),
 				detailGraduationResult -> completedCredits.stream()
-					.filter(cc -> cc.getGraduationCategory().equals(detailGraduationResult.getGraduationCategory()))
+					.filter(completedCredit -> completedCredit.getGraduationCategory().equals(detailGraduationResult.getGraduationCategory()))
 					.findFirst()
 			));
 
@@ -78,7 +78,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.map(completedCredit -> CompletedCredit.builder()
 				.id(completedCredit.getId())
 				.totalCredit(ChapelResult.GRADUATION_COUNT)
-				.takenCredit(graduationResult.getChapelResult().getTakenChapelCredit())
+				.takenCredit(graduationResult.getChapelResult().getTakenCount())
 				.graduationCategory(CHAPEL).build())
 			.findFirst()
 			.orElse(CompletedCredit.builder()
