@@ -43,8 +43,6 @@ public class GraduationRequirement {
 	}
 
 	public void modifyCreditForDualMajor(int primaryMajorCredit, int dualMajorCredit) {
-		normalCultureCredit = 0;
-		this.primaryMajorCredit = primaryMajorCredit;
-		this.dualMajorCredit = dualMajorCredit;
+		//TODO: 복수 전공의 정확한 졸업요건 체크 후 로직 작성
 	}
 }
