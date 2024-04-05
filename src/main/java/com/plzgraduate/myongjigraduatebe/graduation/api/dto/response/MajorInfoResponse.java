@@ -28,8 +28,8 @@ public class MajorInfoResponse {
 	public static MajorInfoResponse from(User user) {
 		return MajorInfoResponse.builder()
 			.primaryMajor(user.getPrimaryMajor())
-			.subMajor(user.getSubMajor())
 			.doubleMajor(null) //TODO: 복수전공 추가
+			.subMajor(user.getSubMajor())
 			.build();
 	}
 

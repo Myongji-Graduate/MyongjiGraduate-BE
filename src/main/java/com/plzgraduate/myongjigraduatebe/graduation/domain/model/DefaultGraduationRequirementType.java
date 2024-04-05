@@ -58,7 +58,6 @@ public enum DefaultGraduationRequirementType {
 			.freeElectiveCredit(this.freeElectiveLectureCredit).build();
 
 		checkIsEnglishFreeUserAndTransferCredit(user, graduationRequirement);
-		//TODO: Additional Major에 따른 졸업요건 변화 체크 후 졸업 요건 학점 변화 적용
 		checkIsMultiMajorUserAndTransferCredit(user, graduationRequirement);
 		return graduationRequirement;
 	}

@@ -96,7 +96,6 @@ class GenerateOrModifyCompletedCreditServiceTest {
 					(double)eachDetailGraduationResultTakenCredit));
 
 	}
-	//TODO: update 테스트 케이스 추가
 
 	private List<DetailGraduationResult> createDetailGraduationResults(int totalCredit, int takenCredit) {
 		return List.of(DetailGraduationResult.builder()
