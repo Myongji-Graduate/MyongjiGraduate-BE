@@ -4,19 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
-import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
+import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
+import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 
@@ -29,33 +28,23 @@ class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 	@Autowired
 	private UserRepository userRepository;
 
-	@AfterEach
-	void afterEach() {
-		this.entityManager
-			.createNativeQuery("ALTER TABLE parsing_text_history AUTO_INCREMENT = 1")
-			.executeUpdate();
-	}
-
 	@DisplayName("ParsingTextHistory를 저장한다.")
 	@Test
 	void saveParsingTextHistory() {
 		//given
+		UserJpaEntity userJpaEntity = userRepository.save(UserJpaEntity.builder()
+			.authId("authId")
+			.password("password!")
+			.studentNumber("60181666")
+			.build());
 		User user = User.builder()
-			.id(1L)
+			.id(userJpaEntity.getId())
 			.build();
-
 		ParsingTextHistory parsingTextHistory = ParsingTextHistory.builder()
 			.user(user)
 			.parsingText("text")
 			.parsingResult(ParsingResult.SUCCESS)
 			.build();
-
-		userRepository.save(UserJpaEntity.builder()
-			.id(1L)
-			.authId("authId")
-			.password("password!")
-			.studentNumber("60181666")
-			.build());
 
 		//when
 		parsingTextHistoryAdapter.saveParsingTextHistory(parsingTextHistory);
@@ -73,8 +62,13 @@ class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 	@Test
 	void deleteUserParsingTextHistory() {
 	    //given
+		UserJpaEntity userJpaEntity = userRepository.save(UserJpaEntity.builder()
+			.studentNumber("test")
+			.authId("test")
+			.password("test")
+			.build());
 		User user = User.builder()
-			.id(1L)
+			.id(userJpaEntity.getId())
 			.authId("test")
 			.password("test")
 			.studentNumber("test")
@@ -84,12 +78,6 @@ class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 			.parsingText("text")
 			.parsingResult(ParsingResult.SUCCESS)
 			.build();
-		userRepository.save(UserJpaEntity.builder()
-			.id(1L)
-			.studentNumber("test")
-			.authId("test")
-			.password("test")
-			.build());
 		parsingTextHistoryAdapter.saveParsingTextHistory(parsingTextHistory);
 
 		//when

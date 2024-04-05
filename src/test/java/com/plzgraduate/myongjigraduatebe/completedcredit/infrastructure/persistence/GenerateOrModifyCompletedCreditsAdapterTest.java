@@ -30,15 +30,13 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 	@Test
 	void saveOrModifyCompletedCredits() {
 		//given
-		User user = User.builder()
-			.id(1L)
-			.build();
-		UserJpaEntity userJpaEntity = UserJpaEntity.builder()
-			.id(1L)
+		UserJpaEntity userJpaEntity = userRepository.save( UserJpaEntity.builder()
 			.authId("test")
 			.password("test")
-			.studentNumber("60191111").build();
-		userRepository.save(userJpaEntity);
+			.studentNumber("60191111").build());
+		User user = User.builder()
+			.id(userJpaEntity.getId())
+			.build();
 
 		List<CompletedCredit> completedCredits = List.of(CompletedCredit.builder()
 				.id(1L)
@@ -58,7 +56,7 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 			userJpaEntity);
 		assertThat(foundCompletedCredits).hasSize(completedCredits.size())
 			.extracting("userJpaEntity.id")
-			.contains(1L);
+			.contains(user.getId());
 	}
 
 }
