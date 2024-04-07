@@ -29,7 +29,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
@@ -47,11 +47,12 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private final FindCoreCulturePort findCoreCulturePort;
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindMajorPort findMajorPort;
+	private final FindTakenLectureUseCase findTakenLectureUseCase;
 
 	@Override
-	public GraduationResult calculateGraduation(User user, Set<TakenLecture> takenLectures) {
+	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,

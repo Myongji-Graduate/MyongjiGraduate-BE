@@ -1,6 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CHAPEL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.FREE_ELECTIVE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.NORMAL_CULTURE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.Genera
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
@@ -31,9 +34,12 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 	private final FindCompletedCreditPort findCompletedCreditPort;
 	private final GenerateOrModifyCompletedCreditPort generateOrModifyCompletedCreditPort;
 
+	private final CalculateGraduationUseCase calculateGraduationUseCase;
+
 	@Override
-	public void generateOrModifyCompletedCredit(User user, GraduationResult graduationResult) {
+	public void generateOrModifyCompletedCredit(User user) {
 		List<CompletedCredit> completedCredits = findCompletedCreditPort.findCompletedCredit(user);
+		GraduationResult graduationResult = calculateGraduationUseCase.calculateGraduation(user);
 		List<DetailGraduationResult> detailGraduationResults = graduationResult.getDetailGraduationResults();
 
 		Map<DetailGraduationResult, Optional<CompletedCredit>> resultMap = detailGraduationResults.stream()

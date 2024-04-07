@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
@@ -35,6 +36,8 @@ class ParsingTextServiceTest{
 	private SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	@Mock
 	private DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
+	@Mock
+	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@InjectMocks
 	private ParsingTextService parsingTextService;
 
@@ -61,6 +64,7 @@ class ParsingTextServiceTest{
 		then(updateStudentInformationUseCase).should().updateUser(any(UpdateStudentInformationCommand.class));
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(any(User.class));
 		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(User.class), any());
+		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(any(User.class));
 	}
 
 	@DisplayName("PDF 파싱 텍스트가 빈 문자열로 오면 InvalidPdfException을 반환한다.")

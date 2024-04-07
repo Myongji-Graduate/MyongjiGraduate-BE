@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
@@ -35,11 +31,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 	@Mock
 	private SaveTakenLecturePort saveTakenLecturePort;
 	@Mock
-	private CalculateGraduationUseCase calculateGraduationUseCase;
-	@Mock
 	private FindLecturesUseCase findLecturesUseCase;
-	@Mock
-	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@InjectMocks
 	private SaveTakenLectureFromParsingTextService saveTakenLectureFromParsingTextService;
 
@@ -63,9 +55,6 @@ class SaveTakenLectureFromParsingTextServiceTest {
 
 		//then
 		then(saveTakenLecturePort).should().saveTakenLectures(takenLectureListCaptor.capture());
-		GraduationResult graduationResult = then(calculateGraduationUseCase).should()
-			.calculateGraduation(user, new HashSet<>(takenLectureListCaptor.getValue()));
-		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(user, graduationResult);
 		List<TakenLecture> capturesTakenLectures = takenLectureListCaptor.getValue();
 		assertThat(capturesTakenLectures)
 			.hasSize(2)

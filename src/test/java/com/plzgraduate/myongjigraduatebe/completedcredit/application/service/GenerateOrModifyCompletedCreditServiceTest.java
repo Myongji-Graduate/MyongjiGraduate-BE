@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.GenerateOrModifyCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.FreeElectiveGraduationResult;
@@ -33,7 +34,8 @@ class GenerateOrModifyCompletedCreditServiceTest {
 	private FindCompletedCreditPort findCompletedCreditPort;
 	@Mock
 	private GenerateOrModifyCompletedCreditPort generateOrModifyCompletedCreditPort;
-
+	@Mock
+	private CalculateGraduationUseCase calculateGraduationUseCase;
 	@InjectMocks
 	private GenerateOrModifyCompletedCreditService generateOrModifyCompletedCreditService;
 
@@ -68,11 +70,12 @@ class GenerateOrModifyCompletedCreditServiceTest {
 					.takenCredit(eachDetailGraduationResultTakenCredit)
 					.build())
 			.build();
+		given(calculateGraduationUseCase.calculateGraduation(user)).willReturn(graduationResult);
 		ArgumentCaptor<List<CompletedCredit>> completedCreditArgumentCaptor = ArgumentCaptor.forClass(List.class);
 		ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
 		//when
-		generateOrModifyCompletedCreditService.generateOrModifyCompletedCredit(user, graduationResult);
+		generateOrModifyCompletedCreditService.generateOrModifyCompletedCredit(user);
 
 		//then
 		then(generateOrModifyCompletedCreditPort).should()

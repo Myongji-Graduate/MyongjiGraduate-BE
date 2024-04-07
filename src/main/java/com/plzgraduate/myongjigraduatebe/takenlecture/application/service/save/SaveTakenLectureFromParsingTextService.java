@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,10 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
@@ -30,24 +26,18 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	private final FindLecturesUseCase findLecturesUseCase;
-	private final CalculateGraduationUseCase calculateGraduationUseCase;
-	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 
 	@Override
 	public void saveTakenLectures(User user, List<TakenLectureInformation> takenLectureInformationList) {
 		Map<String, Lecture> lectureMap = makeLectureMapByLectureCodes(takenLectureInformationList);
 		List<TakenLecture> takenLectures = makeTakenLectures(user, takenLectureInformationList, lectureMap);
 		saveTakenLecturePort.saveTakenLectures(takenLectures);
-
-		GraduationResult graduationResult = calculateGraduationUseCase.calculateGraduation(user,
-			new HashSet<>(takenLectures));
-		generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user, graduationResult);
 	}
 
 	private List<TakenLecture> makeTakenLectures(User user, List<TakenLectureInformation> takenLectureInformationList,
 		Map<String, Lecture> lectureMap) {
-		return takenLectureInformationList.stream().map(
-			takenLectureInformation -> {
+		return takenLectureInformationList.stream()
+			.map(takenLectureInformation -> {
 				Lecture lecture = getLectureFromLectureMap(lectureMap, takenLectureInformation);
 				return TakenLecture.of(user, lecture, takenLectureInformation.getYear(),
 					takenLectureInformation.getSemester());

@@ -1,12 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.*;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.ASSOCIATED_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.DOUBLE_SUB;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
@@ -35,6 +37,8 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	private final DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
 
+	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+
 	@Override
 	public void enrollParsingText(Long userId, String parsingText) {
 		User user = findUserUseCase.findUserById(userId);
@@ -46,6 +50,7 @@ class ParsingTextService implements ParsingTextUseCase {
 			updateUser(user, parsingInformation);
 			deleteTakenLecturesIfAlreadyEnrolled(user);
 			saveTakenLectures(user, parsingInformation);
+			generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
 		} catch (InvalidPdfException | IllegalArgumentException e) {
 			throw e;
 		} catch (Exception e) {
@@ -59,8 +64,7 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList = parsingInformation.getTakenLectureInformation();
-		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(user,
-			parsingTakenLectureDtoList);
+		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(parsingTakenLectureDtoList);
 		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
@@ -84,7 +88,7 @@ class ParsingTextService implements ParsingTextUseCase {
 		}
 	}
 
-	private List<TakenLectureInformation> getSaveTakenLectureCommand(User user,
+	private List<TakenLectureInformation> getSaveTakenLectureCommand(
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList) {
 		return parsingTakenLectureDtoList.stream()
 			.map(parsingTakenLectureDto ->
