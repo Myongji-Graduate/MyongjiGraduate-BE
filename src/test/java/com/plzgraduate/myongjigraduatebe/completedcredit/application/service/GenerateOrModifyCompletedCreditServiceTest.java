@@ -92,7 +92,7 @@ class GenerateOrModifyCompletedCreditServiceTest {
 					(double)eachDetailGraduationResultTakenCredit),
 				tuple(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE, eachDetailGraduationResultTotalCredit,
 					(double)eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.CHAPEL, 4, 1.5),
+				tuple(GraduationCategory.CHAPEL, 2, 1.5),
 				tuple(GraduationCategory.NORMAL_CULTURE, eachDetailGraduationResultTotalCredit,
 					(double)eachDetailGraduationResultTakenCredit),
 				tuple(GraduationCategory.FREE_ELECTIVE, eachDetailGraduationResultTotalCredit,

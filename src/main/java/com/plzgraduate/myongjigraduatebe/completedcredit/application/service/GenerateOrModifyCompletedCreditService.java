@@ -83,12 +83,12 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == CHAPEL)
 			.map(completedCredit -> CompletedCredit.builder()
 				.id(completedCredit.getId())
-				.totalCredit(ChapelResult.GRADUATION_COUNT)
-				.takenCredit(graduationResult.getChapelResult().getTakenCount())
+				.totalCredit(ChapelResult.GRADUATION_COUNT / 2)
+				.takenCredit(graduationResult.getChapelResult().getTakenChapelCredit())
 				.graduationCategory(CHAPEL).build())
 			.findFirst()
 			.orElse(CompletedCredit.builder()
-				.totalCredit(ChapelResult.GRADUATION_COUNT)
+				.totalCredit(ChapelResult.GRADUATION_COUNT / 2)
 				.takenCredit(graduationResult.getChapelResult().getTakenChapelCredit())
 				.graduationCategory(CHAPEL).build());
 	}
