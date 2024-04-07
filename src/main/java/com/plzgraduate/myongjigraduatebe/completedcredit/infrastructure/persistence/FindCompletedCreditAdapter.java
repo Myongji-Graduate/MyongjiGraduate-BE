@@ -20,6 +20,7 @@ public class FindCompletedCreditAdapter implements FindCompletedCreditPort {
 	private final UserMapper userMapper;
 	private final CompletedCreditPersistenceMapper completedCreditPersistenceMapper;
 	private final CompletedCreditRepository completedCreditRepository;
+
 	@Override
 	public List<CompletedCredit> findCompletedCredit(User user) {
 		return completedCreditRepository.findAllByUserJpaEntity(userMapper.mapToJpaEntity(user)).stream()
