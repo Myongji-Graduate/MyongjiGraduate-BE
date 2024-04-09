@@ -24,6 +24,6 @@ class FindCompletedCreditService implements FindCompletedCreditUseCase {
 	@Override
 	public List<CompletedCredit> findCompletedCredits(Long userId) {
 		User user = findUserUseCase.findUserById(userId);
-		return findCompletedCreditPort.findCompletedCredit(user);
+		return findCompletedCreditPort.findCompletedCredits(user);
 	}
 }

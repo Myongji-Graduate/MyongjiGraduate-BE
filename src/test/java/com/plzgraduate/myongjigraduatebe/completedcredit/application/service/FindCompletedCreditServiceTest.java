@@ -1,13 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.application.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +34,7 @@ class FindCompletedCreditServiceTest {
 		User user = User.builder()
 			.id(1L).build();
 		given(findUserUseCase.findUserById(1L)).willReturn(user);
-		given(findCompletedCreditPort.findCompletedCredit(user)).willReturn(List.of(
+		given(findCompletedCreditPort.findCompletedCredits(user)).willReturn(List.of(
 			CompletedCredit.builder().build(),
 			CompletedCredit.builder().build(),
 			CompletedCredit.builder().build()

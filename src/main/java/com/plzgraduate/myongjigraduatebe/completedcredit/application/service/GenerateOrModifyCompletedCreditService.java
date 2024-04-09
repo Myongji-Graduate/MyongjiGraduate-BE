@@ -39,7 +39,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 	@Override
 	public void generateOrModifyCompletedCredit(User user) {
-		List<CompletedCredit> completedCredits = findCompletedCreditPort.findCompletedCredit(user);
+		List<CompletedCredit> completedCredits = findCompletedCreditPort.findCompletedCredits(user);
 		GraduationResult graduationResult = calculateGraduationUseCase.calculateGraduation(user);
 		List<DetailGraduationResult> detailGraduationResults = graduationResult.getDetailGraduationResults();
 

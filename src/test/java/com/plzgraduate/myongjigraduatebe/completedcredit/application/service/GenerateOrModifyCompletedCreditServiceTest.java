@@ -45,7 +45,7 @@ class GenerateOrModifyCompletedCreditServiceTest {
 		//given
 		User user = User.builder()
 			.id(1L).build();
-		given(findCompletedCreditPort.findCompletedCredit(user)).willReturn(List.of());
+		given(findCompletedCreditPort.findCompletedCredits(user)).willReturn(List.of());
 
 		int eachDetailGraduationResultTotalCredit = 10;
 		int eachDetailGraduationResultTakenCredit = 5;
