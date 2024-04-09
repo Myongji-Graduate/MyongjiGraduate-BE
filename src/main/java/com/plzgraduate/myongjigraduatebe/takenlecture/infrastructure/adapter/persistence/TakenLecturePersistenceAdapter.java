@@ -58,7 +58,7 @@ class TakenLecturePersistenceAdapter implements FindTakenLecturePort, SaveTakenL
 	}
 
 	@Override
-	public void deleteTakenLecturesByIds(List<Long> deleteIds) {
-		takenLectureRepository.deleteAllByIdInBatch(deleteIds);
+	public void deleteTakenLectureById(Long deleteId) {
+		takenLectureRepository.deleteById(deleteId);
 	}
 }
