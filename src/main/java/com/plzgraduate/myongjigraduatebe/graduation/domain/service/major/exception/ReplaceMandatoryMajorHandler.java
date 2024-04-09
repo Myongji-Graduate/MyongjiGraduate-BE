@@ -23,7 +23,7 @@ public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 
 	@Override
 	public boolean isSupport(User user) {
-		return user.getMajor().equals("철학과") && user.getEntryYear() <= 21;
+		return user.getPrimaryMajor().equals("철학과") && user.getEntryYear() <= 21;
 	}
 
 	@Override

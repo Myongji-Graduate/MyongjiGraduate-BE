@@ -36,8 +36,8 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 
 	private List<TakenLecture> makeTakenLectures(User user, List<TakenLectureInformation> takenLectureInformationList,
 		Map<String, Lecture> lectureMap) {
-		return takenLectureInformationList.stream().map(
-			takenLectureInformation -> {
+		return takenLectureInformationList.stream()
+			.map(takenLectureInformation -> {
 				Lecture lecture = getLectureFromLectureMap(lectureMap, takenLectureInformation);
 				return TakenLecture.of(user, lecture, takenLectureInformation.getYear(),
 					takenLectureInformation.getSemester());

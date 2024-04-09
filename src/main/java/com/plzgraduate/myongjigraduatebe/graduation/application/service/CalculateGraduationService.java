@@ -7,9 +7,9 @@ import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.GraduationResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
@@ -29,11 +29,9 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.GraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -42,36 +40,31 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+//TODO: 로직 분리 후 테스트 코드 작성
 class CalculateGraduationService implements CalculateGraduationUseCase {
 
-	private final FindUserUseCase findUserUseCase;
-
-	private final FindTakenLecturePort findTakenLecturePort;
 	private final FindCommonCulturePort findCommonCulturePort;
 	private final FindCoreCulturePort findCoreCulturePort;
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindMajorPort findMajorPort;
+	private final FindTakenLectureUseCase findTakenLectureUseCase;
 
 	@Override
-	public GraduationResponse calculateGraduation(Long userId) {
-		User user = findUserUseCase.findUserById(userId);
+	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(
-			findTakenLecturePort.findTakenLectureSetByUser(user));
+		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
 			takenLectureInventory, graduationRequirement);
 
-		GraduationResult graduationResult = generateGraduationResult(chapelResult, detailGraduationResults,
+		return generateGraduationResult(chapelResult, detailGraduationResults,
 			takenLectureInventory, graduationRequirement);
-
-		return GraduationResponse.of(user, graduationResult);
 	}
 
 	private GraduationRequirement determineGraduationRequirement(User user) {
-		College userCollage = College.findBelongingCollege(user);
-		GraduationRequirementType defaultGraduationRequirement = GraduationRequirementType.determineGraduationRequirement(
+		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
+		DefaultGraduationRequirementType defaultGraduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(
 			userCollage, user);
 		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
 	}
@@ -95,9 +88,9 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 				user, takenLectureInventory, graduationRequirement)
 		));
 
-		// TODO: Additional Major check - DetailGraduationResult
 		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
-			detailGraduationResults.add(generateSubMajorDetailGraduationResult(user, takenLectureInventory));
+			detailGraduationResults.add(
+				generateSubMajorDetailGraduationResult(user, takenLectureInventory, graduationRequirement));
 		}
 
 		return detailGraduationResults;
@@ -133,7 +126,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
 		User user) {
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager;
-		switch (College.findBelongingCollege(user)) {
+		switch (College.findBelongingCollege(user.getPrimaryMajor())) {
 			case BUSINESS:
 				basicAcademicalCultureGraduationManager = new BusinessBasicAcademicalManager();
 				break;
@@ -149,19 +142,18 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateMajorDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getMajor());
+		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getPrimaryMajor());
 		GraduationManager<MajorLecture> majorGraduationManager = new MajorManager();
 		return majorGraduationManager.createDetailGraduationResult(user,
-			takenLectureInventory, graduationMajorLectures, graduationRequirement.getMajorCredit());
+			takenLectureInventory, graduationMajorLectures, graduationRequirement.getPrimaryMajorCredit());
 	}
 
 	private DetailGraduationResult generateSubMajorDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory) {
-		int requireSubMajorCredit = 21;
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationSubMajorLectures = findMajorPort.findMajor(user.getSubMajor());
 		GraduationManager<MajorLecture> subMajorManager = new SubMajorManager();
 		return subMajorManager.createDetailGraduationResult(user, takenLectureInventory, graduationSubMajorLectures,
-			requireSubMajorCredit);
+			graduationRequirement.getSubMajorCredit());
 	}
 
 	private GraduationResult generateGraduationResult(ChapelResult chapelResult,

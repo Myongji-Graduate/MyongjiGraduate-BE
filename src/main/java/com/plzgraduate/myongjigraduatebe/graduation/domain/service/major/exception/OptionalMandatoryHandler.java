@@ -22,13 +22,13 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	private int removedMandatoryTotalCredit = 0;
 
 	public boolean isSupport(User user) {
-		if (user.getMajor().equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
+		if (user.getPrimaryMajor().equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
 			return true;
 		}
-		if (user.getMajor().equals(ADMINISTRATIONS) && user.getEntryYear() >= CLASS_OF_17) {
+		if (user.getPrimaryMajor().equals(ADMINISTRATIONS) && user.getEntryYear() >= CLASS_OF_17) {
 			return true;
 		}
-		return List.of(BUSINESS, INTERNATIONAL_TRADE).contains(user.getMajor());
+		return List.of(BUSINESS, INTERNATIONAL_TRADE).contains(user.getPrimaryMajor());
 	}
 
 	@Override

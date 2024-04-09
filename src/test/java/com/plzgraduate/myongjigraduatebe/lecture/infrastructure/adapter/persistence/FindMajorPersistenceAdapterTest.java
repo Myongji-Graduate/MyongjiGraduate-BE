@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.FindMajorPersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
@@ -43,7 +42,7 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 
 		MajorLectureJpaEntity majorLectureJpaEntityA = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
-			.major(user.getMajor()).build();
+			.major(user.getPrimaryMajor()).build();
 
 		MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
@@ -51,12 +50,12 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 		majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
 
 	    //when
-		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor(user.getMajor());
+		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor(user.getPrimaryMajor());
 
 		//then
 		assertThat(majors).hasSize(1)
 			.extracting("major")
-			.contains(user.getMajor());
+			.contains(user.getPrimaryMajor());
 	}
 
 }

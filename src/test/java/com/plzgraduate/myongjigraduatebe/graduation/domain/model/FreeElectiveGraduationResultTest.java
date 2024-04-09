@@ -40,7 +40,7 @@ class FreeElectiveGraduationResultTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
-			.categoryName(FREE_ELECTIVE.getName())
+			.graduationCategory(FREE_ELECTIVE)
 			.detailCategory(List.of(
 				DetailCategoryResult.builder()
 					.detailCategoryName(CHRISTIAN_A.getName())

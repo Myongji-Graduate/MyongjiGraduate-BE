@@ -1,16 +1,19 @@
-package com.plzgraduate.myongjigraduatebe.user.domain.model;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum GraduationRequirementType {
+public enum DefaultGraduationRequirementType {
 	// 단과대명|전공학점|공통교양학점|핵심교양학점|학문기초교양학점|일반교양학점|자유선택학점|전체학점|적용시작입학년도|적용마감입학년도
 	HUMANITIES_16_17("인문대", 63, 15, 12, 12, 10, 16, 128, 16, 17),
 	SOCIAL_SCIENCE_16_17("사회과학대", 63, 15, 12, 12, 10, 16, 128, 16, 17),
@@ -34,10 +37,10 @@ public enum GraduationRequirementType {
 	private final int startEntryYear;
 	private final int endEntryYear;
 
-	public static GraduationRequirementType determineGraduationRequirement(College college, User user) {
-		return Arrays.stream(GraduationRequirementType.values())
+	public static DefaultGraduationRequirementType determineGraduationRequirement(College college, User user) {
+		return Arrays.stream(DefaultGraduationRequirementType.values())
 			.filter(gr -> gr.getCollageName().equals(college.getName()))
-			.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear()&& gr.getEndEntryYear() >= user.getEntryYear())
+			.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear() && gr.getEndEntryYear() >= user.getEntryYear())
 			.findFirst()
 			.orElseThrow(() -> new NoSuchElementException("일치하는 졸업 요건이 존재하지 않습니다."));
 	}
@@ -45,7 +48,9 @@ public enum GraduationRequirementType {
 	public GraduationRequirement convertToProfitGraduationRequirement(User user) {
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
 			.totalCredit(this.totalCredit)
-			.majorCredit(this.majorLectureCredit)
+			.primaryMajorCredit(this.majorLectureCredit)
+			.dualMajorCredit(0)
+			.subMajorCredit(0)
 			.basicAcademicalCredit(this.basicAcademicalLectureCredit)
 			.commonCultureCredit(this.commonCultureCredit)
 			.coreCultureCredit(this.coreCultureCredit)
@@ -53,8 +58,7 @@ public enum GraduationRequirementType {
 			.freeElectiveCredit(this.freeElectiveLectureCredit).build();
 
 		checkIsEnglishFreeUserAndTransferCredit(user, graduationRequirement);
-		//TODO: Additional Major에 따른 졸업요건 변화 체크 후 졸업 요건 학점 변화 적용
-		checkIsSubMajorUserAndTransferCredit(user, graduationRequirement);
+		checkIsMultiMajorUserAndTransferCredit(user, graduationRequirement);
 		return graduationRequirement;
 	}
 
@@ -64,9 +68,18 @@ public enum GraduationRequirementType {
 		}
 	}
 
-	private void checkIsSubMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+	private void checkIsMultiMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
+			DualMajorGraduationRequirementType originMajorGraduationRequirementType = DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType(
+				College.findBelongingCollege(user.getPrimaryMajor()).getName());
+			DualMajorGraduationRequirementType dualMajorGraduationRequirementType = DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType(
+				College.findBelongingCollege(user.getDualMajor()).getName());
+
+			graduationRequirement.modifyCreditForDualMajor(originMajorGraduationRequirementType.getOriginMajorCredit(),
+				dualMajorGraduationRequirementType.getDualMajorCredit());
+		}
 		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
-			graduationRequirement.deleteFreeElectiveCredit();
+			graduationRequirement.modifyCreditForSubMajor();
 		}
 	}
 }

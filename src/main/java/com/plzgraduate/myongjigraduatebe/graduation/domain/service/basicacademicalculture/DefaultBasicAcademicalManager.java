@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.BASIC_ACADEMICAL_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 
 import java.util.HashSet;
 import java.util.List;
@@ -43,10 +43,10 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
+			PRIMARY_BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
-		return DetailGraduationResult.create(BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
+		return DetailGraduationResult.create(PRIMARY_BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
 			List.of(detailCategoryResult));
 	}
 }

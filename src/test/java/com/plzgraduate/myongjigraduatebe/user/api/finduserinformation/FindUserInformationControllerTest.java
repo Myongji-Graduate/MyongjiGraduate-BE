@@ -29,7 +29,7 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 			.id(userId)
 			.studentNumber(studentNumber)
 			.name(studentName)
-			.major(major).build();
+			.primaryMajor(major).build();
 
 		given(findUserInformationUseCase.findUserInformation(userId)).willReturn(user);
 

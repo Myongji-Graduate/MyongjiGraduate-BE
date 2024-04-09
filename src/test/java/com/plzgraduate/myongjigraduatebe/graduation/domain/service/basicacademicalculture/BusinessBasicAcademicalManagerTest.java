@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -54,12 +55,12 @@ class BusinessBasicAcademicalManagerTest {
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", true, 6, 6);
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.contains(PRIMARY_BASIC_ACADEMICAL_CULTURE, true, 6, 6);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("학문기초교양", true, 6, 6);
+				.contains("주 학문기초교양", true, 6, 6);
 
 			assertThat(detailCategoryResult.getTakenLectures()).hasSize(2);
 			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();
@@ -87,12 +88,12 @@ class BusinessBasicAcademicalManagerTest {
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", false, 6, 3.0);
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.contains(PRIMARY_BASIC_ACADEMICAL_CULTURE, false, 6, 3.0);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("학문기초교양", false, 6, 3);
+				.contains("주 학문기초교양", false, 6, 3);
 
 			assertThat(detailCategoryResult.getTakenLectures()).hasSize(1);
 			assertThat(detailCategoryResult.getHaveToLectures()).hasSize(1);

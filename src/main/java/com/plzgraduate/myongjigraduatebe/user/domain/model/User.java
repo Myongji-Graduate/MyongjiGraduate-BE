@@ -18,16 +18,17 @@ public class User {
 	private String name;
 	private final String studentNumber;
 	private final int entryYear;
-	private String major;
+	private String primaryMajor;
 	private String changeMajor;
 	private String subMajor;
+	private String dualMajor;
 	private StudentCategory studentCategory;
 	private final Instant createdAt;
 	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
-		int entryYear, String major, String changeMajor, String subMajor, StudentCategory studentCategory,
+		int entryYear, String primaryMajor, String changeMajor, String subMajor, String dualMajor, StudentCategory studentCategory,
 		Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
@@ -36,9 +37,10 @@ public class User {
 		this.name = name;
 		this.studentNumber = studentNumber;
 		this.entryYear = entryYear;
-		this.major = major;
+		this.primaryMajor = primaryMajor;
 		this.changeMajor = changeMajor;
 		this.subMajor = subMajor;
+		this.dualMajor = dualMajor;
 		this.studentCategory = studentCategory;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -56,11 +58,12 @@ public class User {
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major, String changeMajor, String subMajor,
+	public void updateStudentInformation(String name, String major, String changeMajor, String subMajor, String dualMajor,
 		StudentCategory studentCategory) {
 		this.name = name;
-		this.major = major;
+		this.primaryMajor = major;
 		this.changeMajor = changeMajor;
+		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.studentCategory = studentCategory;
 	}
@@ -70,7 +73,7 @@ public class User {
 	}
 
 	public boolean checkMajor(String major) {
-		return this.major.equals(major);
+		return this.primaryMajor.equals(major);
 	}
 
 	public boolean compareStudentNumber(String studentNumber) {

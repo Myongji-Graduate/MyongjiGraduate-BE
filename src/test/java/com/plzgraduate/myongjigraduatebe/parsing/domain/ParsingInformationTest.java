@@ -31,9 +31,9 @@ class ParsingInformationTest {
 			.contains("이아현", "60191000", "경영학과", null, null, StudentCategory.NORMAL);
 	}
 
-	@DisplayName("복수전공을 할 경우 StudentCategory는 DOUBLE MAJOR이다.")
+	@DisplayName("복수전공을 할 경우 StudentCategory는 DUAL MAJOR이다.")
 	@Test
-	void test() {
+	void 복수전공생_확인() {
 	    //given
 		String parsingText = "출력일자 :  2022/11/14|1/1"
 			+ "|사회과학대학 정치외교학과, 복수전공 - 경제학과, 이인구(60161000), 현학적 - 재학, 이수 - 7, 입학 - 신입학(2015/03/02)"
@@ -47,9 +47,8 @@ class ParsingInformationTest {
 		ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
 		//then
 		assertThat(parsingInformation)
-			.extracting("studentName", "studentNumber", "major", "subMajor", "associatedMajor", "studentCategory")
-			.contains("이인구", "60161000", "정치외교학과", "경제학과", null, StudentCategory.DOUBLE_MAJOR);
-
+			.extracting("studentName", "studentNumber", "major", "dualMajor", "associatedMajor", "studentCategory")
+			.contains("이인구", "60161000", "정치외교학과", "경제학과", null, StudentCategory.DUAL_MAJOR);
 	}
 
 	@DisplayName("전과을 할 경우 StudentCategory는 CHANGE_MAJOR이다.")

@@ -30,7 +30,7 @@ public class ParsingTextHistoryMapper {
 			.englishLevel(user.getEnglishLevel())
 			.studentNumber(user.getStudentNumber())
 			.entryYear(user.getEntryYear())
-			.major(user.getMajor())
+			.major(user.getPrimaryMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
 			.createdAt(user.getCreatedAt())

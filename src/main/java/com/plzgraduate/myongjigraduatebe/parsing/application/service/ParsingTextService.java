@@ -1,14 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.CHANGE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.NORMAL;
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.SUB_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.ASSOCIATED_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.DOUBLE_SUB;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
@@ -37,17 +37,20 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	private final DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
 
+	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+
 	@Override
 	public void enrollParsingText(Long userId, String parsingText) {
 		User user = findUserUseCase.findUserById(userId);
 		try {
 			validateParsingText(parsingText);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
-			checkIfNormal(parsingInformation);
+			checkUnSupportedUser(parsingInformation);
 			validateStudentNumber(user, parsingInformation);
 			updateUser(user, parsingInformation);
 			deleteTakenLecturesIfAlreadyEnrolled(user);
 			saveTakenLectures(user, parsingInformation);
+			generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
 		} catch (InvalidPdfException | IllegalArgumentException e) {
 			throw e;
 		} catch (Exception e) {
@@ -61,16 +64,15 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList = parsingInformation.getTakenLectureInformation();
-		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(user,
-			parsingTakenLectureDtoList);
+		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(parsingTakenLectureDtoList);
 		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
 	private void updateUser(User user, ParsingInformation parsingInformation) {
 		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user,
 			parsingInformation.getStudentName(), parsingInformation.getMajor(),
-			parsingInformation.getAssociatedMajor(), parsingInformation.getSubMajor(),
-			parsingInformation.getStudentCategory());
+			parsingInformation.getChangeMajor(), parsingInformation.getDualMajor(),
+			parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
 		updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
@@ -86,7 +88,7 @@ class ParsingTextService implements ParsingTextUseCase {
 		}
 	}
 
-	private List<TakenLectureInformation> getSaveTakenLectureCommand(User user,
+	private List<TakenLectureInformation> getSaveTakenLectureCommand(
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList) {
 		return parsingTakenLectureDtoList.stream()
 			.map(parsingTakenLectureDto ->
@@ -98,12 +100,10 @@ class ParsingTextService implements ParsingTextUseCase {
 			.collect(Collectors.toList());
 	}
 
-	private void checkIfNormal(ParsingInformation parsingInformation) {
-		//TODO: 복수전공 파싱 통과 추가
-		if (!(parsingInformation.getStudentCategory() == NORMAL
-			|| parsingInformation.getStudentCategory() == CHANGE_MAJOR
-			|| parsingInformation.getStudentCategory() == SUB_MAJOR)) {
-			throw new IllegalArgumentException("복수전공, 연계전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
+	private void checkUnSupportedUser(ParsingInformation parsingInformation) {
+		if (parsingInformation.getStudentCategory() == ASSOCIATED_MAJOR
+			|| parsingInformation.getStudentCategory() == DOUBLE_SUB) {
+			throw new IllegalArgumentException("연계전공, 복수+부전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
 		}
 	}
 

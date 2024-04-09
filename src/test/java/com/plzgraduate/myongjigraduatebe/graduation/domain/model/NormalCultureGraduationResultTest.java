@@ -39,7 +39,7 @@ class NormalCultureGraduationResultTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
-			.categoryName(COMMON_CULTURE.getName())
+			.graduationCategory(COMMON_CULTURE)
 			.detailCategory(List.of(
 				DetailCategoryResult.builder()
 					.detailCategoryName(CHRISTIAN_A.getName())

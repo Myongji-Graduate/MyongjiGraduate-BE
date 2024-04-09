@@ -84,7 +84,7 @@ class GraduationResultTest {
 			.isCompleted(true).build();
 		List<DetailGraduationResult> detailGraduationResults = List.of(DetailGraduationResult.builder()
 			.isCompleted(true)
-			.categoryName(COMMON_CULTURE.getName())
+			.graduationCategory(COMMON_CULTURE)
 			.totalCredit(detailCategoryTotalCredit)
 			.takenCredit(detailCategoryTakenCredit).build());
 		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.builder()
@@ -139,7 +139,7 @@ class GraduationResultTest {
 				ChapelResult.builder().isCompleted(true).build(),
 				List.of(DetailGraduationResult.builder()
 					.isCompleted(true)
-					.categoryName(COMMON_CULTURE.getName()).build()),
+					.graduationCategory(COMMON_CULTURE).build()),
 				NormalCultureGraduationResult.builder().isCompleted(true).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(false).build()
 			),
@@ -147,7 +147,7 @@ class GraduationResultTest {
 				ChapelResult.builder().isCompleted(true).build(),
 				List.of(DetailGraduationResult.builder()
 					.isCompleted(true)
-					.categoryName(COMMON_CULTURE.getName()).build()),
+					.graduationCategory(COMMON_CULTURE).build()),
 				NormalCultureGraduationResult.builder().isCompleted(false).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(true).build()
 			),
@@ -155,7 +155,7 @@ class GraduationResultTest {
 				ChapelResult.builder().isCompleted(true).build(),
 				List.of(DetailGraduationResult.builder()
 					.isCompleted(false)
-					.categoryName(COMMON_CULTURE.getName()).build()),
+					.graduationCategory(COMMON_CULTURE).build()),
 				NormalCultureGraduationResult.builder().isCompleted(true).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(true).build()
 			),
@@ -163,7 +163,7 @@ class GraduationResultTest {
 				ChapelResult.builder().isCompleted(false).build(),
 				List.of(DetailGraduationResult.builder()
 					.isCompleted(true)
-					.categoryName(COMMON_CULTURE.getName()).build()),
+					.graduationCategory(COMMON_CULTURE).build()),
 				NormalCultureGraduationResult.builder().isCompleted(true).build(),
 				FreeElectiveGraduationResult.builder().isCompleted(true).build()
 			)

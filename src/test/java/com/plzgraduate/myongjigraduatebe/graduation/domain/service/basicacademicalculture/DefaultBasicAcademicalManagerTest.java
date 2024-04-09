@@ -15,6 +15,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -32,7 +33,7 @@ class DefaultBasicAcademicalManagerTest {
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.인문대_학문기초교양();
 
-		@DisplayName("학문기초교양을 추가해서 들어도 12학점을 초과하지 않으며 통과한다.")
+		@DisplayName("학문기초교양을 추가해서 들어도 12학점을 초과하지 않으면 통과한다.")
 		@Test
 		void 영문학과_12학점_이상() {
 			//given
@@ -54,12 +55,12 @@ class DefaultBasicAcademicalManagerTest {
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", true, 12, 12);
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE, true, 12, 12);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("학문기초교양", true, 12, 12);
+				.contains("주 학문기초교양", true, 12, 12);
 
 			assertThat(detailCategoryResult.getTakenLectures()).hasSize(5);
 			assertThat(detailCategoryResult.getHaveToLectures()).isEmpty();
@@ -85,12 +86,12 @@ class DefaultBasicAcademicalManagerTest {
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", false, 12, 9.0);
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE, false, 12, 9.0);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
-				.contains("학문기초교양", false, 12, 9);
+				.contains("주 학문기초교양", false, 12, 9);
 
 			assertThat(detailCategoryResult.getTakenLectures()).hasSize(3);
 			assertThat(detailCategoryResult.getHaveToLectures()).hasSize(10);

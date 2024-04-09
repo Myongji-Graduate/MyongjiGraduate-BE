@@ -109,7 +109,7 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.studentNumber(studentNumber)
 			.entryYear(entryYear)
 			.englishLevel(englishLevel)
-			.major(major)
+			.primaryMajor(major)
 			.subMajor(subMajor)
 			.studentCategory(studentCategory)
 			.build();

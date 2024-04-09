@@ -54,8 +54,8 @@ class SubMajorManagerTest {
 			.contains(
 				tuple("전공선택", true, true, subMajorGraduationCredit, majorCredit * takenLecturesCount));
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-			.contains(SUB_MAJOR.getName(), true, subMajorGraduationCredit, (double)majorCredit * takenLecturesCount);
+			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+			.contains(SUB_MAJOR, true, subMajorGraduationCredit, (double)majorCredit * takenLecturesCount);
 
 	}
 

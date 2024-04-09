@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MAJOR;
 
 import java.util.List;
 import java.util.Set;
@@ -50,7 +50,7 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
 			takenLectureInventory, electiveLectures, electiveMajorTotalCredit);
 
-		return DetailGraduationResult.create(MAJOR, graduationResultTotalCredit,
+		return DetailGraduationResult.create(PRIMARY_MAJOR, graduationResultTotalCredit,
 			List.of(mandantoryDetailCategoryResult, electiveDetailCategoryResult));
 	}
 
