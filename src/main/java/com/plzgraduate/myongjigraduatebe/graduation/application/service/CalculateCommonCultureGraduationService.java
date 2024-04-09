@@ -26,15 +26,13 @@ import lombok.RequiredArgsConstructor;
 public class CalculateCommonCultureGraduationService implements CalculateCommonCultureGraduationUseCase {
 
 	private final FindCommonCulturePort findCommonCulturePort;
-	private final FindCompletedCreditPort findCompletedCreditPort;
 
 	@Override
-	public DetailGraduationResult calculateCommonCulture(User user, TakenLectureInventory takenLectureInventory) {
+	public DetailGraduationResult calculateCommonCulture(User user, TakenLectureInventory takenLectureInventory,
+		int totalGraduationCredit) {
 		Set<CommonCulture> graduationCommonCultures = findCommonCulturePort.findCommonCulture(user);
-		CompletedCredit completedCredit = findCompletedCreditPort.findCategorizedCompletedCredit(user,
-			COMMON_CULTURE);
 		GraduationManager<CommonCulture> commonCultureGraduationManager = new CommonCultureGraduationManager();
 		return commonCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationCommonCultures, completedCredit.getTotalCredit());
+			user, takenLectureInventory, graduationCommonCultures, totalGraduationCredit);
 	}
 }

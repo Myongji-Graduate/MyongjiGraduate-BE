@@ -15,8 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
-import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
@@ -30,8 +28,6 @@ class CalculateCommonCultureGraduationServiceTest {
 
 	@Mock
 	private FindCommonCulturePort findCommonCulturePort;
-	@Mock
-	private FindCompletedCreditPort findCompletedCreditPort;
 	@InjectMocks
 	private CalculateCommonCultureGraduationService calculateCommonCultureGraduationService;
 
@@ -45,17 +41,13 @@ class CalculateCommonCultureGraduationServiceTest {
 			Set.of(CommonCulture.of(Lecture.from("KMA00101"), CHRISTIAN_B)));
 		given(findCommonCulturePort.findCommonCulture(user)).willReturn(graduationCommonCultures);
 
-		CompletedCredit completedCredit = CompletedCredit.builder()
-			.totalCredit(2).build();
-		given(findCompletedCreditPort.findCategorizedCompletedCredit(user, COMMON_CULTURE)).willReturn(completedCredit);
-
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
 			Set.of(TakenLecture.builder().lecture(Lecture.from("KMA00101")).build()));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
 		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateCommonCulture(
-			user, takenLectureInventory);
+			user, takenLectureInventory, 2);
 
 		//then
 		assertThat(detailCommonCultureGraduationResult)

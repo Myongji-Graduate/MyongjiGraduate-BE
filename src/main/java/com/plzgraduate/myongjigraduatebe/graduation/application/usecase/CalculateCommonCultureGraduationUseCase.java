@@ -6,5 +6,5 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface CalculateCommonCultureGraduationUseCase {
 
-	DetailGraduationResult calculateCommonCulture(User user, TakenLectureInventory takenLectureInventory);
+	DetailGraduationResult calculateCommonCulture(User user, TakenLectureInventory takenLectureInventory, int graduationTotalCredit);
 }
