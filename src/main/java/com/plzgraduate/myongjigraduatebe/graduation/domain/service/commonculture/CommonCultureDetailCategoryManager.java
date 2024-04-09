@@ -40,7 +40,6 @@ class CommonCultureDetailCategoryManager {
 				taken.add(takenLecture.getLecture());
 			});
 
-
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(), checkMandatorySatisfaction(user, takenLectureInventory, category),
 			checkCategoryTotalCredit(user, category));
