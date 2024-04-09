@@ -15,8 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
+import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -29,6 +30,8 @@ class CalculateCommonCultureGraduationServiceTest {
 
 	@Mock
 	private FindCommonCulturePort findCommonCulturePort;
+	@Mock
+	private FindCompletedCreditPort findCompletedCreditPort;
 	@InjectMocks
 	private CalculateCommonCultureGraduationService calculateCommonCultureGraduationService;
 
@@ -42,15 +45,17 @@ class CalculateCommonCultureGraduationServiceTest {
 			Set.of(CommonCulture.of(Lecture.from("KMA00101"), CHRISTIAN_B)));
 		given(findCommonCulturePort.findCommonCulture(user)).willReturn(graduationCommonCultures);
 
-		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
-			.commonCultureCredit(2).build();
+		CompletedCredit completedCredit = CompletedCredit.builder()
+			.totalCredit(2).build();
+		given(findCompletedCreditPort.findCategorizedCompletedCredit(user, COMMON_CULTURE)).willReturn(completedCredit);
+
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
 			Set.of(TakenLecture.builder().lecture(Lecture.from("KMA00101")).build()));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
 		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateCommonCulture(
-			user, graduationRequirement, takenLectureInventory);
+			user, takenLectureInventory);
 
 		//then
 		assertThat(detailCommonCultureGraduationResult)
