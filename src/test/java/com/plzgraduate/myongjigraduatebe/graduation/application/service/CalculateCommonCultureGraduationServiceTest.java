@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_B;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -36,23 +36,28 @@ class CalculateCommonCultureGraduationServiceTest {
 	void calculateCommonCulture() {
 		//given
 		User user = User.builder()
-			.id(1L).build();
+			.id(1L)
+			.primaryMajor("응용소프트웨어전공")
+			.entryYear(19).build();
 		HashSet<CommonCulture> graduationCommonCultures = new HashSet<>(
-			Set.of(CommonCulture.of(Lecture.from("KMA00101"), CHRISTIAN_B)));
+			Set.of(CommonCulture.of(Lecture.from("KMA00101"), CHRISTIAN_A)));
 		given(findCommonCulturePort.findCommonCulture(user)).willReturn(graduationCommonCultures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
-			Set.of(TakenLecture.builder().lecture(Lecture.from("KMA00101")).build()));
+			Set.of(
+				TakenLecture.builder().lecture(Lecture.builder()
+					.lectureCode("KMA00101")
+					.credit(2).build()).build()));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
-		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateCommonCulture(
-			user, takenLectureInventory, 2);
+		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateDetailGraduation(
+			user, takenLectureInventory);
 
 		//then
 		assertThat(detailCommonCultureGraduationResult)
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
-			.contains(COMMON_CULTURE, true, 2, 2);
+			.contains(COMMON_CULTURE, false, 17, 2.0);
 	}
 
 }
