@@ -30,7 +30,7 @@ public class CoreCultureDetailCategoryManager {
 		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures,
 		CoreCultureCategory category) {
     
-		Set<Lecture> graduationCoreCultureLectures = categorizeCommonCultures(graduationLectures, category);
+		Set<Lecture> graduationCoreCultureLectures = categorizeCoreCultures(graduationLectures, category);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
@@ -42,16 +42,16 @@ public class CoreCultureDetailCategoryManager {
 			});
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
-		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
+		DetailCategoryResult coreCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(), true, category.getTotalCredit());
-		calculateFreeElectiveLeftCredit(user, taken, commonCultureDetailCategoryResult);
-		calculateNormalLeftCredit(taken, finishedTakenLecture, commonCultureDetailCategoryResult);
-		commonCultureDetailCategoryResult.calculate(taken, graduationCoreCultureLectures);
+		calculateFreeElectiveLeftCredit(user, taken, coreCultureDetailCategoryResult);
+		calculateNormalLeftCredit(taken, finishedTakenLecture, coreCultureDetailCategoryResult);
+		coreCultureDetailCategoryResult.calculate(taken, graduationCoreCultureLectures);
 
-		return commonCultureDetailCategoryResult;
+		return coreCultureDetailCategoryResult;
 	}
 
-	private Set<Lecture> categorizeCommonCultures(Set<CoreCulture> graduationLectures,
+	private Set<Lecture> categorizeCoreCultures(Set<CoreCulture> graduationLectures,
 		CoreCultureCategory category) {
 		return graduationLectures.stream()
 			.filter(coreCulture -> coreCulture.getCoreCultureCategory() == category)
