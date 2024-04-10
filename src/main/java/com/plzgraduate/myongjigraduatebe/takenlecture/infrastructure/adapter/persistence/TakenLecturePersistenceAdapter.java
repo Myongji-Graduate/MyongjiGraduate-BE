@@ -5,14 +5,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
-import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.mapper.TakenLectureMapper;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.mapper.TakenLectureMapper;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,6 +50,12 @@ class TakenLecturePersistenceAdapter implements FindTakenLecturePort, SaveTakenL
 			.map(takenLectureMapper::mapToJpaEntity)
 			.collect(Collectors.toList());
 		takenLectureRepository.saveAll(takenLecturesJpaEntities);
+	}
+
+	@Override
+	public void saveTakenLecture(final TakenLecture takenLecture) {
+		TakenLectureJpaEntity takenLectureJpaEntity = takenLectureMapper.mapToJpaEntity(takenLecture);
+		takenLectureRepository.save(takenLectureJpaEntity);
 	}
 
 	@Override

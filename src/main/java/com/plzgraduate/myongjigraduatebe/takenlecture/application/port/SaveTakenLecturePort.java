@@ -7,4 +7,6 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 public interface SaveTakenLecturePort {
 
 	void saveTakenLectures(List<TakenLecture> takenLectures);
+
+	void saveTakenLecture(TakenLecture takenLecture);
 }
