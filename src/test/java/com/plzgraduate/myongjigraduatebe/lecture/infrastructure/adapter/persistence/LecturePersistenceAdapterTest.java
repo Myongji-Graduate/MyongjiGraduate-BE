@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LecturePersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureQueryRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class LecturePersistenceAdapterTest extends PersistenceTestSupport {
@@ -86,6 +84,26 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 				tuple(1L, "code1", "name1"),
 				tuple(2L, "code2", "name2")
 			);
+	}
+
+	@DisplayName("아이디로 과목을 찾는다.")
+	@Test
+	void findLectureById() {
+		//given
+		String lectureCode = "code";
+		String lectureName = "name";
+		LectureJpaEntity lectureJpaEntity = lectureRepository.save(createLectureJpaEntity(lectureCode, lectureName));
+
+		//when
+		Lecture lecture = lecturePersistenceAdapter.findLectureById(lectureJpaEntity.getId());
+
+		//then
+		Long expectedLectureId = lectureJpaEntity.getId();
+		String expectedLectureCode = "code";
+		String expectedLectureName = "name";
+		assertThat(lecture.getId()).isEqualTo(expectedLectureId);
+		assertThat(lecture.getLectureCode()).isEqualTo(expectedLectureCode);
+		assertThat(lecture.getName()).isEqualTo(expectedLectureName);
 	}
 
 	@DisplayName("과목명이나 과목코드를 포함하는 과목들을 찾는다.")
