@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateTakenLectureRequest;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateTakenLectureUseCase;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,8 @@ public class UpdateTakenLectureController implements UpdateTakenLectureApiPresen
 	}
 
 	@DeleteMapping("{taken-lecture-id}")
-	public void deleteTakenLecture(@Valid @PathVariable("taken-lecture-id") Long takenLectureId) {
-		deleteTakenLectureUseCase.deleteTakenLecture(takenLectureId);
+	public void deleteTakenLecture(@LoginUser Long userId,
+		@Valid @PathVariable("taken-lecture-id") Long takenLectureId) {
+		deleteTakenLectureUseCase.deleteTakenLecture(userId, takenLectureId);
 	}
 }
