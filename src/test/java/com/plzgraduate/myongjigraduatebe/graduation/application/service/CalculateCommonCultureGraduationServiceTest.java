@@ -52,7 +52,7 @@ class CalculateCommonCultureGraduationServiceTest {
 
 		//when
 		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateDetailGraduation(
-			user, takenLectureInventory);
+			user, takenLectureInventory, 17);
 
 		//then
 		assertThat(detailCommonCultureGraduationResult)

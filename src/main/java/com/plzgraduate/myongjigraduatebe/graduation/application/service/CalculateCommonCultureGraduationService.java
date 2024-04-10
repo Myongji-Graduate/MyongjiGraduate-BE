@@ -27,18 +27,12 @@ public class CalculateCommonCultureGraduationService implements CalculateCommonC
 	private final FindCommonCulturePort findCommonCulturePort;
 
 	@Override
-	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory) {
+	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
+		int totalCredit) {
 		Set<CommonCulture> graduationCommonCultures = findCommonCulturePort.findCommonCulture(user);
 		GraduationManager<CommonCulture> commonCultureGraduationManager = new CommonCultureGraduationManager();
-		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 		return commonCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationCommonCultures, graduationRequirement.getCommonCultureCredit());
+			user, takenLectureInventory, graduationCommonCultures, totalCredit);
 	}
 
-	private GraduationRequirement determineGraduationRequirement(User user) {
-		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
-		DefaultGraduationRequirementType defaultGraduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(
-			userCollage, user);
-		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
-	}
 }

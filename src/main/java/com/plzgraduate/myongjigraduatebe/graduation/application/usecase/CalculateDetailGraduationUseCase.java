@@ -6,5 +6,6 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface CalculateDetailGraduationUseCase {
 
-	DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory);
+	DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
+		int totalCredit);
 }
