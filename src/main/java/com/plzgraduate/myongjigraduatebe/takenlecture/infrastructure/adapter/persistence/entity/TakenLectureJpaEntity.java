@@ -1,6 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +39,7 @@ public class TakenLectureJpaEntity extends TimeBaseEntity {
 
 	private Integer year;
 
+	@Enumerated(EnumType.STRING)
 	private Semester semester;
 
 }
