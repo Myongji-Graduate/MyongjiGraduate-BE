@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
-
 import java.util.List;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;

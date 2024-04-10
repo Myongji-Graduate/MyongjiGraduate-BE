@@ -22,6 +22,7 @@ public class DefaultDetailGraduationResolver implements DetailGraduationResolver
 	public ResolvedDetailGraduation resolveDetailGraduationUseCase(User user,
 		GraduationCategory graduationCategory) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
+		//TODO: 추가 CalculateDetailGraduationUseCase 작성
 		switch (graduationCategory) {
 			case COMMON_CULTURE:
 				return ResolvedDetailGraduation.builder()
