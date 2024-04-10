@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/graduations/details")
 @RequiredArgsConstructor
-public class FindDetailGraduationsController {
+public class FindDetailGraduationsController implements FindDetailGraduationsApiPresentation{
 
 	private final CalculateSingleDetailGraduationUseCase calculateSingleDetailGraduationUseCase;
 
