@@ -1,12 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
 
+import com.plzgraduate.myongjigraduatebe.graduation.application.dto.ResolvedDetailGraduation;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
@@ -22,17 +19,17 @@ public class DefaultDetailGraduationResolver implements DetailGraduationResolver
 	private final CalculateCommonCultureGraduationUseCase calculateCommonCultureGraduationUseCase;
 
 	@Override
-	public Map<CalculateDetailGraduationUseCase, Integer> resolveDetailGraduationUseCase(User user,
+	public ResolvedDetailGraduation resolveDetailGraduationUseCase(User user,
 		GraduationCategory graduationCategory) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		HashMap<CalculateDetailGraduationUseCase, Integer> resolvedDetailGraduation = new HashMap<>();
 		switch (graduationCategory) {
 			case COMMON_CULTURE:
-				resolvedDetailGraduation.put(calculateCommonCultureGraduationUseCase,
-					graduationRequirement.getCommonCultureCredit());
-				return resolvedDetailGraduation;
+				return ResolvedDetailGraduation.builder()
+					.calculateDetailGraduationUseCase(calculateCommonCultureGraduationUseCase)
+					.graduationCategoryTotalCredit(graduationRequirement.getCommonCultureCredit()).build();
+
 			default:
-				return resolvedDetailGraduation;
+				return ResolvedDetailGraduation.builder().build();
 		}
 	}
 

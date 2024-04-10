@@ -2,8 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Map;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.graduation.application.dto.ResolvedDetailGraduation;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -33,11 +31,11 @@ class DefaultDetailGraduationResolverTest {
 			.primaryMajor("응용소프트웨어전공").build();
 		GraduationCategory commonCultureGraduationCategory = GraduationCategory.COMMON_CULTURE;
 		//when
-		Map<CalculateDetailGraduationUseCase, Integer> resolvedDetailGraduation = defaultDetailGraduationResolver.resolveDetailGraduationUseCase(
+		ResolvedDetailGraduation resolvedDetailGraduation = defaultDetailGraduationResolver.resolveDetailGraduationUseCase(
 			user, commonCultureGraduationCategory);
 
 		//then
-		assertThat(resolvedDetailGraduation.keySet()).contains(calculateCommonCultureGraduationUseCase);
-		assertThat(resolvedDetailGraduation.get(calculateCommonCultureGraduationUseCase)).isEqualTo(17);
+		assertThat(resolvedDetailGraduation.getCalculateDetailGraduationUseCase()).isEqualTo(calculateCommonCultureGraduationUseCase);
+		assertThat(resolvedDetailGraduation.getGraduationCategoryTotalCredit()).isEqualTo(17);
 	}
 }
