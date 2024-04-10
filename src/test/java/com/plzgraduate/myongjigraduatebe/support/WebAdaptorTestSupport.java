@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,9 @@ import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingText
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.FindTakenLectureController;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.UpdateTakenLectureController;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.update.UpdateTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.user.api.findauthid.FindAuthIdController;
 import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.FindUserInformationController;
 import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.ResetPasswordController;
@@ -96,7 +97,10 @@ public abstract class WebAdaptorTestSupport {
 	protected SearchLectureUseCase searchLectureUseCase;
 
 	@MockBean
-	protected UpdateTakenLectureUseCase updateTakenLectureUseCase;
+	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
+
+	@MockBean
+	protected GenerateTakenLectureUseCase generateTakenLectureUseCase;
 
 	@MockBean
 	protected FindTakenLectureUseCase findTakenLectureUseCase;
