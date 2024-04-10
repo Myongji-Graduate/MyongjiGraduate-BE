@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.api;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service;
 
 import org.springframework.stereotype.Component;
 

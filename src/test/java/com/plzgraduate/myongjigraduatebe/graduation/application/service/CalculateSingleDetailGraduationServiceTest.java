@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.graduation.api.DetailGraduationResolver;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.DetailGraduationResolver;
 import com.plzgraduate.myongjigraduatebe.graduation.application.dto.ResolvedDetailGraduation;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.FindCommonCulturePersistenceAdapter;

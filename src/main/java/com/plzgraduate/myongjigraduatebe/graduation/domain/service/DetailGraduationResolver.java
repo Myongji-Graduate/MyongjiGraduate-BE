@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.api;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service;
 
 import com.plzgraduate.myongjigraduatebe.graduation.application.dto.ResolvedDetailGraduation;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;

@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.plzgraduate.myongjigraduatebe.graduation.application.dto.ResolvedDetailGraduation;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.DefaultDetailGraduationResolver;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)

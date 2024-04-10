@@ -3,7 +3,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.plzgraduate.myongjigraduatebe.graduation.api.DetailGraduationResolver;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.DetailGraduationResolver;
 import com.plzgraduate.myongjigraduatebe.graduation.application.dto.ResolvedDetailGraduation;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
