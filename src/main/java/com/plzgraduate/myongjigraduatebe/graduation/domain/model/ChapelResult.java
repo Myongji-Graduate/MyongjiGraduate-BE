@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class ChapelResult {
 
-	private static final String CHAPEL_LECTURE_CODE = "KMA02101";
+	public static final String CHAPEL_LECTURE_CODE = "KMA02101";
 	public static final int GRADUATION_COUNT = 4;
 
 	private final int takenCount;

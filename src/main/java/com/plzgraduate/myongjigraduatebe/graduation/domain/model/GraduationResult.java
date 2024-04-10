@@ -54,7 +54,6 @@ public class GraduationResult {
 	public void checkGraduated() {
 		addUpTotalCredit();
 		addUpTakenCredit();
-		addUpChapelTakenCreditToCommonCulture();
 
 		boolean isAllDetailGraduationResultCompleted = detailGraduationResults.stream()
 			.allMatch(DetailGraduationResult::isCompleted);
@@ -79,12 +78,6 @@ public class GraduationResult {
 			+ chapelResult.getTakenChapelCredit();
 	}
 
-	private void addUpChapelTakenCreditToCommonCulture() {
-		this.detailGraduationResults.stream()
-			.filter(detailGraduationResult -> detailGraduationResult.getGraduationCategory() ==COMMON_CULTURE)
-			.forEach(
-				detailGraduationResult -> detailGraduationResult.addCredit(this.chapelResult.getTakenChapelCredit()));
-	}
 
 	private void handleLeftTakenNormaCulture(TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
