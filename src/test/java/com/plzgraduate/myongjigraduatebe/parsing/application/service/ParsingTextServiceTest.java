@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
@@ -35,7 +35,7 @@ class ParsingTextServiceTest{
 	@Mock
 	private SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	@Mock
-	private DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
+	private DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	@Mock
 	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@InjectMocks

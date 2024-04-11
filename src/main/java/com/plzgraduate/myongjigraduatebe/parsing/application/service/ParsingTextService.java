@@ -15,7 +15,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
@@ -35,7 +35,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final FindUserUseCase findUserUseCase;
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
-	private final DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
+	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 

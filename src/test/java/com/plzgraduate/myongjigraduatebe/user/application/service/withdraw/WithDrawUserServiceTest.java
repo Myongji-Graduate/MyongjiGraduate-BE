@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureByUserUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -26,7 +26,7 @@ class WithDrawUserServiceTest {
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
-	private DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
+	private DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	@Mock
 	private DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
 	@Mock

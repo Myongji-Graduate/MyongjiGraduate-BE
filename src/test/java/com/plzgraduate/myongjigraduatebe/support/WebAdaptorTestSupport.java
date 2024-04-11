@@ -34,7 +34,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.api.FindTakenLectureContro
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.UpdateTakenLectureController;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.user.api.findauthid.FindAuthIdController;
 import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.FindUserInformationController;
 import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.ResetPasswordController;
@@ -100,7 +100,7 @@ public abstract class WebAdaptorTestSupport {
 	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
 
 	@MockBean
-	protected GenerateTakenLectureUseCase generateTakenLectureUseCase;
+	protected GenerateCustomizedTakenLectureUseCase generateCustomizedTakenLectureUseCase;
 
 	@MockBean
 	protected FindTakenLectureUseCase findTakenLectureUseCase;
