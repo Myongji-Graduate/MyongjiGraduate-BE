@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GenerateTakenLectureRequest {
+public class GenerateCustomizedTakenLectureRequest {
 
 	@Schema(name = "lectureId", example = "103")
 	private Long lectureId;
 
 	@Builder
-	private GenerateTakenLectureRequest(Long lectureId) {
+	private GenerateCustomizedTakenLectureRequest(Long lectureId) {
 		this.lectureId = lectureId;
 	}
 }

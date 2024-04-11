@@ -29,7 +29,7 @@ class GenerateTakenLectureServiceTest {
 	@Mock
 	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@InjectMocks
-	private GenerateTakenLectureService generateTakenLectureService;
+	private GenerateCustomizedTakenLectureService generateTakenLectureService;
 
 	@DisplayName("새로운 custom 과목을 추가한다.")
 	@Test
@@ -43,7 +43,7 @@ class GenerateTakenLectureServiceTest {
 		ArgumentCaptor<TakenLecture> takenLectureCaptor = ArgumentCaptor.forClass(TakenLecture.class);
 
 		//when
-		generateTakenLectureService.generateTakenLecture(user.getId(), 1L);
+		generateTakenLectureService.generateCustomizedTakenLecture(user.getId(), 1L);
 		generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
 
 		//then

@@ -7,7 +7,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional
 @RequiredArgsConstructor
-public class GenerateTakenLectureService implements GenerateTakenLectureUseCase {
+public class GenerateCustomizedTakenLectureService implements GenerateCustomizedTakenLectureUseCase {
 
 	private final FindUserUseCase findUserUseCase;
 	private final FindLecturePort findLecturePort;
@@ -25,7 +25,7 @@ public class GenerateTakenLectureService implements GenerateTakenLectureUseCase 
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 
 	@Override
-	public void generateTakenLecture(final Long userId, final Long addedTakenLectureId) {
+	public void generateCustomizedTakenLecture(final Long userId, final Long addedTakenLectureId) {
 		User user = findUserUseCase.findUserById(userId);
 		Lecture lecture = findLecturePort.findLectureById(addedTakenLectureId);
 		addCustomTakenLecture(user, lecture);
