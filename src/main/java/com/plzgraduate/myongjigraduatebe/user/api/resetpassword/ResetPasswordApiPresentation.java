@@ -22,7 +22,7 @@ public interface ResetPasswordApiPresentation {
 	@Parameter(name = "auth-id", description = "아이디")
 	ValidateUserResponse validateUser(
 		@Parameter(name = "studentNumber", description = "학번", in = ParameterIn.PATH)
-		@PathVariable("student-number") String studentNumber,
+		@PathVariable String studentNumber,
 		@RequestParam("auth-id") String authId);
 
 	@PatchMapping("/password")

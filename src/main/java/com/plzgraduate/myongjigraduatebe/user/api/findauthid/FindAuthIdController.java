@@ -17,8 +17,8 @@ public class FindAuthIdController implements FindAuthIdApiPresentation {
 
 	private final FindUserAuthIdUseCase findUserAuthIdUseCase;
 
-	@GetMapping("/{student-number}/auth-id")
-	public UserAuthIdResponse findUserAuthId(@PathVariable("student-number") String studentNumber) {
+	@GetMapping("/{studentNumber}/auth-id")
+	public UserAuthIdResponse findUserAuthId(@PathVariable String studentNumber) {
 		String foundUserAuthId = findUserAuthIdUseCase.findUserAuthId(studentNumber);
 		return UserAuthIdResponse.of(foundUserAuthId, studentNumber);
 	}
