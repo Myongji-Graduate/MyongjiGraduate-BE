@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateTakenLectureRequest;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateCustomizedTakenLectureRequest;
 
 class UpdateTakenLectureControllerTest extends WebAdaptorTestSupport {
 
@@ -20,7 +20,7 @@ class UpdateTakenLectureControllerTest extends WebAdaptorTestSupport {
 	@Test
 	void generateTakenLecture() throws Exception {
 		//given
-		GenerateTakenLectureRequest request = GenerateTakenLectureRequest.builder()
+		GenerateCustomizedTakenLectureRequest request = GenerateCustomizedTakenLectureRequest.builder()
 			.lectureId(1L)
 			.build();
 

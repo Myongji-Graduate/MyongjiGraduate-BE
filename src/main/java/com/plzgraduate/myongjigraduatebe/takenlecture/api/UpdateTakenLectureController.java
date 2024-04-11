@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateTakenLectureRequest;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateCustomizedTakenLectureRequest;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,18 +21,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdateTakenLectureController implements UpdateTakenLectureApiPresentation {
 
-	private final GenerateTakenLectureUseCase generateTakenLectureUseCase;
+	private final GenerateCustomizedTakenLectureUseCase generateCustomizedTakenLectureUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureUseCase;
 
 	@PostMapping()
-	public void generateTakenLecture(@LoginUser Long userId,
-		@Valid @RequestBody GenerateTakenLectureRequest generateTakenLectureRequest) {
-		generateTakenLectureUseCase.generateTakenLecture(userId, generateTakenLectureRequest.getLectureId());
+	public void generateCustomizedTakenLecture(@LoginUser Long userId,
+		@Valid @RequestBody GenerateCustomizedTakenLectureRequest generateCustomizedTakenLectureRequest) {
+		generateCustomizedTakenLectureUseCase.generateCustomizedTakenLecture(userId,
+			generateCustomizedTakenLectureRequest.getLectureId());
 	}
 
-	@DeleteMapping("{taken-lecture-id}")
-	public void deleteTakenLecture(@LoginUser Long userId,
-		@Valid @PathVariable("taken-lecture-id") Long takenLectureId) {
+	@DeleteMapping("{takenLectureId}")
+	public void deleteCustomizedTakenLecture(@LoginUser Long userId,
+		@Valid @PathVariable Long takenLectureId) {
 		deleteTakenLectureUseCase.deleteTakenLecture(userId, takenLectureId);
 	}
 }
