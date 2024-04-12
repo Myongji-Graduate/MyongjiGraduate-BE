@@ -10,6 +10,7 @@ public class ChapelResult {
 
 	public static final String CHAPEL_LECTURE_CODE = "KMA02101";
 	public static final int GRADUATION_COUNT = 4;
+	public static final double CHAPEL_CREDIT = 0.5;
 
 	private final int takenCount;
 	private boolean isCompleted;
@@ -31,7 +32,7 @@ public class ChapelResult {
 	}
 
 	public double getTakenChapelCredit() {
-		return takenCount * 0.5;
+		return takenCount * CHAPEL_CREDIT;
 	}
 
 	private static int countTakenChapel(TakenLectureInventory takenLectureInventory) {
