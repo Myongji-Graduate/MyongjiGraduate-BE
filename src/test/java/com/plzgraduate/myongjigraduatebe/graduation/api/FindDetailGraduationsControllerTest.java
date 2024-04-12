@@ -42,7 +42,7 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 			COMMON_CULTURE)).willReturn(detailGraduationResult);
 
 		//when //then
-		mockMvc.perform(get("/api/v1/graduations/details")
+		mockMvc.perform(get("/api/v1/graduations/detail")
 				.param("graduationCategory", "COMMON_CULTURE"))
 			.andDo(print())
 			.andExpect(status().isOk())

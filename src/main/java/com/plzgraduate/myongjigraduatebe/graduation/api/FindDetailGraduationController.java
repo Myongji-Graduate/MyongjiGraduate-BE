@@ -17,9 +17,9 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCateg
 import lombok.RequiredArgsConstructor;
 
 @WebAdapter
-@RequestMapping("/api/v1/graduations/details")
+@RequestMapping("/api/v1/graduations/detail")
 @RequiredArgsConstructor
-public class FindDetailGraduationsController implements FindDetailGraduationsApiPresentation{
+public class FindDetailGraduationController implements FindDetailGraduationApiPresentation {
 
 	private final CalculateSingleDetailGraduationUseCase calculateSingleDetailGraduationUseCase;
 
