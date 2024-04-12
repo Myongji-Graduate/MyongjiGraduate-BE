@@ -9,16 +9,39 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
-class DeleteTakenLectureByUserServiceTest {
+class DeleteTakenLectureServiceTest {
+
+	@Mock
+	private FindUserUseCase findUserUseCase;
 
 	@Mock
 	private DeleteTakenLecturePort deleteTakenLecturePort;
+
+	@Mock
+	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+
 	@InjectMocks
-	private DeleteTakenLectureByUserService deleteTakenLectureByUserService;
+	private DeleteTakenLectureService deleteTakenLectureService;
+
+	@DisplayName("수강과목을 삭제한다.")
+	@Test
+	void deleteTakenLecture() {
+		//given
+		Long userId = 1L;
+		Long deletedTakenLectureId = 102L;
+
+		//when
+		deleteTakenLectureService.deleteTakenLecture(userId, deletedTakenLectureId);
+
+		//then
+		then(deleteTakenLecturePort).should().deleteTakenLectureById(102L);
+	}
 
 	@DisplayName("사용자의 모든 수강과목을 삭제한다.")
 	@Test
@@ -27,7 +50,7 @@ class DeleteTakenLectureByUserServiceTest {
 		User user = User.builder().build();
 
 		//when
-		deleteTakenLectureByUserService.deleteAllTakenLecturesByUser(user);
+		deleteTakenLectureService.deleteAllTakenLecturesByUser(user);
 
 		//then
 		then(deleteTakenLecturePort).should().deleteAllTakenLecturesByUser(eq(user));

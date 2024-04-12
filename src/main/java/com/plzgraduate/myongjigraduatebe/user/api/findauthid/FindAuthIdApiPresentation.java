@@ -12,5 +12,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface FindAuthIdApiPresentation {
 
 	UserAuthIdResponse findUserAuthId(
-		@Parameter(name = "studentNumber", description = "학번", in = ParameterIn.PATH) @PathVariable("student-number") String studentNumber);
+		@Parameter(name = "studentNumber", description = "학번", in = ParameterIn.PATH) @PathVariable String studentNumber);
 }

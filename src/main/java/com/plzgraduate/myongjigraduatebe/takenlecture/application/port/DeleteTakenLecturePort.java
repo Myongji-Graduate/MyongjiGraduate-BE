@@ -7,5 +7,5 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 public interface DeleteTakenLecturePort {
 	void deleteAllTakenLecturesByUser(User user);
 
-	void deleteTakenLecturesByIds(List<Long> deleteIds);
+	void deleteTakenLectureById(Long deleteId);
 }

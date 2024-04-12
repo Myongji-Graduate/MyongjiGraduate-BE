@@ -2,6 +2,9 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delet
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-public interface DeleteTakenLectureByUserUseCase {
+public interface DeleteTakenLectureUseCase {
 	void deleteAllTakenLecturesByUser(User user);
+
+	void deleteTakenLecture(Long userId, Long deletedTakenLectureId);
+
 }

@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.SearchLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.mapper.LectureMapper;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureQueryRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.SearchLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LecturePersistenceAdapter implements FindLecturePort, SearchLecturePort {
 
+	private final static String NOT_FOUND_LECTURE_ERROR_MESSAGE = "해당 과목을 찾을 수 없습니다.";
 	private final LectureQueryRepository lectureQueryRepository;
 	private final LectureRepository lectureRepository;
 	private final LectureMapper lectureMapper;
@@ -36,6 +37,13 @@ public class LecturePersistenceAdapter implements FindLecturePort, SearchLecture
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public Lecture findLectureById(final Long lectureId) {
+		LectureJpaEntity lectureJpaEntity = lectureRepository.findById(lectureId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_LECTURE_ERROR_MESSAGE));
+		return lectureMapper.mapToLectureModel(lectureJpaEntity);
 	}
 
 	@Override
