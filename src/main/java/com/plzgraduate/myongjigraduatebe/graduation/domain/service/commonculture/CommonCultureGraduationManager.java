@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult.*;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 
 import java.util.Arrays;
@@ -38,14 +39,9 @@ public class CommonCultureGraduationManager implements GraduationManager<CommonC
 
 	private double getTakenChapelCredits(TakenLectureInventory takenLectureInventory) {
 		int chapelCount = (int)takenLectureInventory.getTakenLectures().stream()
-			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals(ChapelResult.CHAPEL_LECTURE_CODE))
+			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals(CHAPEL_LECTURE_CODE))
 			.count();
-		return chapelCount * 0.5;
+		return chapelCount * CHAPEL_CREDIT;
 
-		// this.detailGraduationResults.stream()
-		// 	.filter(detailGraduationResult -> detailGraduationResult.getGraduationCategory() ==COMMON_CULTURE)
-		// 	.forEach(
-		// 		detailGraduationResult -> detailGraduationResult.addCredit(this.chapelResult.getTakenChapelCredit()));
 	}
-
 }
