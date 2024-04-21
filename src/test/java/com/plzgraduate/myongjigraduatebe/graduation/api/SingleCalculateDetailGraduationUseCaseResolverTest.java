@@ -7,17 +7,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class SingleCalculateDetailGraduationUseCaseResolverTest {
 
 	@Autowired
 	private SingleCalculateDetailGraduationUseCaseResolver singleCalculateDetailGraduationUseCaseResolver;
 
-	@DisplayName("공통교양 졸업 카테고리를 계산할 수 있는 UseCase를 반환한다.")
+	@DisplayName("졸업 카테고리를 계산할 수 있는 CalculateDetailGraduationUseCaseResolver 반환한다.")
 	@ValueSource(strings =
 		{"COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MAJOR", "DUAL_MAJOR", "SUB_MAJOR",
 			"PRIMARY_BASIC_ACADEMICAL_CULTURE", "DUAL_BASIC_ACADEMICAL_CULTURE"
