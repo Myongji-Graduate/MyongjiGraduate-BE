@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.api.CalculateDetailGraduationUseCaseResolver;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
@@ -18,7 +19,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CalculateSingleDetailGraduationService implements CalculateSingleDetailGraduationUseCase {

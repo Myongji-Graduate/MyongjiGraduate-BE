@@ -98,7 +98,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		return calculateCommonCultureGraduationUseCase.calculateDetailGraduation(user, takenLectureInventory,
-			graduationRequirement.getCommonCultureCredit());
+			graduationRequirement);
 	}
 
 	private DetailGraduationResult generateCoreCultureDetailGraduationResult(User user,
