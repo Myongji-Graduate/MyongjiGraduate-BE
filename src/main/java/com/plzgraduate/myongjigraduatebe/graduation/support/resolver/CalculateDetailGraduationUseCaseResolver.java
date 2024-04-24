@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.api;
+package com.plzgraduate.myongjigraduatebe.graduation.support.resolver;
 
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;

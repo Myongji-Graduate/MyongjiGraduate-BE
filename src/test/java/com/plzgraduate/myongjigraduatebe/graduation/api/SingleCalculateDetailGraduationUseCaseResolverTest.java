@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.graduation.support.resolver.SingleCalculateDetailGraduationUseCaseResolver;
 
 @SpringBootTest
 @ActiveProfiles("test")
