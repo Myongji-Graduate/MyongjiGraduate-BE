@@ -1,28 +1,19 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 
-@Component
+import lombok.RequiredArgsConstructor;
+
+@Component()
+@RequiredArgsConstructor
 public class SingleCalculateDetailGraduationUseCaseResolver implements CalculateDetailGraduationUseCaseResolver {
 
-	private List<CalculateDetailGraduationUseCase> calculateDetailGraduationUseCases;
-
-	private final ApplicationContext applicationContext;
-
-	@Autowired
-	public SingleCalculateDetailGraduationUseCaseResolver(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-		initCalculateDetailGraduationUseCase();
-	}
+	private final List<CalculateDetailGraduationUseCase> calculateDetailGraduationUseCases;
 
 	@Override
 	public CalculateDetailGraduationUseCase resolveCalculateDetailGraduationUseCase(
@@ -33,9 +24,4 @@ public class SingleCalculateDetailGraduationUseCaseResolver implements Calculate
 			.orElseThrow(() -> new RuntimeException("No calculate detail graduation case found"));
 	}
 
-	private void initCalculateDetailGraduationUseCase() {
-		Map<String, CalculateDetailGraduationUseCase> matchingBeans = applicationContext.getBeansOfType(
-			CalculateDetailGraduationUseCase.class);
-		this.calculateDetailGraduationUseCases = new ArrayList<>(matchingBeans.values());
-	}
 }
