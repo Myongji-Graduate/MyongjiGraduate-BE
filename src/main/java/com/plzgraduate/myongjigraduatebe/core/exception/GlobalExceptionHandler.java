@@ -1,6 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.core.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -10,12 +15,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -62,6 +64,13 @@ public class GlobalExceptionHandler {
 		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getBindingErrorMessage(e));
 	}
 
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ExceptionResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+		log.debug("graduation category mismatch exception occurred: {}",  e.getMessage(), e);
+		return ExceptionResponse.of(HttpStatus.BAD_REQUEST, getMethodArgumentTypeMismatchErrorMessage(e));
+	}
+
 	@ExceptionHandler({PdfParsingException.class, InvalidPdfException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ExceptionResponse handlePdfException(Exception e) {
@@ -87,6 +96,11 @@ public class GlobalExceptionHandler {
 	private String getBindingErrorMessage(MethodArgumentNotValidException e) {
 		Optional<ObjectError> objectError = e.getBindingResult().getAllErrors().stream().findFirst();
 		return objectError.map(DefaultMessageSourceResolvable::getDefaultMessage).orElse(null);
+	}
+
+	private String getMethodArgumentTypeMismatchErrorMessage(MethodArgumentTypeMismatchException e) {
+		String errorMessage = Objects.requireNonNull(e.getMessage()).split("value '")[1].split("'")[0];
+		return "Failed to convert value: " + errorMessage;
 	}
 
 }
