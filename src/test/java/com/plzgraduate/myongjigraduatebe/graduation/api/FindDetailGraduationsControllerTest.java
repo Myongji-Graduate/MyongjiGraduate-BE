@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CORE_CULTURE;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 
@@ -49,6 +51,39 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.totalCredit").value(17))
 			.andExpect(jsonPath("$.takenCredit").value(17))
+			.andExpect(jsonPath("$.completed").value(true))
+			.andExpect(jsonPath("$.detailCategory.length()").value(detailCategories.size()));
+	}
+
+	@WithMockAuthenticationUser
+	@DisplayName("핵심교양 졸업 상세 결과를 조회한다.")
+	@Test
+	void getCoreDetailGraduations() throws Exception {
+		//given
+		List<DetailCategoryResult> detailCategories = List.of(
+			DetailCategoryResult.builder().build(),
+			DetailCategoryResult.builder().build(),
+			DetailCategoryResult.builder().build(),
+			DetailCategoryResult.builder().build()
+		);
+		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
+			.graduationCategory(CORE_CULTURE)
+			.totalCredit(12)
+			.takenCredit(12)
+			.isCompleted(true)
+			.detailCategory(detailCategories)
+			.build();
+
+		given(calculateSingleDetailGraduationUseCase.calculateSingleDetailGraduation(1L,
+			CORE_CULTURE)).willReturn(detailGraduationResult);
+
+		//when //then
+		mockMvc.perform(get("/api/v1/graduations/detail")
+				.param("graduationCategory", "CORE_CULTURE"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.totalCredit").value(12))
+			.andExpect(jsonPath("$.takenCredit").value(12))
 			.andExpect(jsonPath("$.completed").value(true))
 			.andExpect(jsonPath("$.detailCategory.length()").value(detailCategories.size()));
 	}
