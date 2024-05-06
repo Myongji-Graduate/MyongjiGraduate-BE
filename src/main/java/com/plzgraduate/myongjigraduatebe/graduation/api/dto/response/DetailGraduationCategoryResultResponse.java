@@ -14,21 +14,21 @@ public class DetailGraduationCategoryResultResponse {
 
 	@Schema(name = "categoryName", example = "공통교양(기독교)")
 	private final String categoryName;
-	@Schema(name = "totalCredits", example = "4")
-	private final int totalCredits;
-	@Schema(name = "takenCredits", example = "4")
-	private final int takenCredits;
+	@Schema(name = "totalCredit", example = "4")
+	private final int totalCredit;
+	@Schema(name = "takenCredit", example = "4")
+	private final int takenCredit;
 	private final List<LectureResponse> takenLectures;
 	private final List<LectureResponse> haveToLectures;
 	@Schema(name = "completed", example = "true")
 	private final boolean completed;
 
 	@Builder
-	private DetailGraduationCategoryResultResponse(String categoryName, int totalCredits, int takenCredits,
+	private DetailGraduationCategoryResultResponse(String categoryName, int totalCredit, int takenCredit,
 		List<LectureResponse> takenLectures, List<LectureResponse> haveToLectures, boolean completed) {
 		this.categoryName = categoryName;
-		this.totalCredits = totalCredits;
-		this.takenCredits = takenCredits;
+		this.totalCredit = totalCredit;
+		this.takenCredit = takenCredit;
 		this.takenLectures = takenLectures;
 		this.haveToLectures = haveToLectures;
 		this.completed = completed;
@@ -37,8 +37,8 @@ public class DetailGraduationCategoryResultResponse {
 	public static DetailGraduationCategoryResultResponse from(DetailCategoryResult detailCategoryResult) {
 		return DetailGraduationCategoryResultResponse.builder()
 			.categoryName(detailCategoryResult.getDetailCategoryName())
-			.totalCredits(detailCategoryResult.getTotalCredits())
-			.takenCredits(detailCategoryResult.getTakenCredits())
+			.totalCredit(detailCategoryResult.getTotalCredits())
+			.takenCredit(detailCategoryResult.getTakenCredits())
 			.takenLectures(detailCategoryResult.getTakenLectures().stream()
 				.map(LectureResponse::from)
 				.collect(Collectors.toList()))

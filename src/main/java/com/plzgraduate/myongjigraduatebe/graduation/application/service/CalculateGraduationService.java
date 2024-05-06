@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
@@ -17,16 +18,13 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationMan
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BusinessBasicAcademicalManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.SocialScienceBasicAcademicManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture.CommonCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture.CoreCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCoreCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
@@ -40,18 +38,19 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-//TODO: 로직 분리 후 테스트 코드 작성
 class CalculateGraduationService implements CalculateGraduationUseCase {
 
-	private final FindCommonCulturePort findCommonCulturePort;
 	private final FindCoreCulturePort findCoreCulturePort;
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindMajorPort findMajorPort;
 	private final FindTakenLectureUseCase findTakenLectureUseCase;
 
+	private final CalculateCommonCultureGraduationUseCase calculateCommonCultureGraduationUseCase;
+
 	@Override
 	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
+		// 모든 DetialCategory 분리 시 제거
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
@@ -98,10 +97,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<CommonCulture> graduationCommonCultures = findCommonCulturePort.findCommonCulture(user);
-		GraduationManager<CommonCulture> commonCultureGraduationManager = new CommonCultureGraduationManager();
-		return commonCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationCommonCultures, graduationRequirement.getCommonCultureCredit());
+		return calculateCommonCultureGraduationUseCase.calculateDetailGraduation(user, takenLectureInventory,
+			graduationRequirement);
 	}
 
 	private DetailGraduationResult generateCoreCultureDetailGraduationResult(User user,

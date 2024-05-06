@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult.*;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 
 import java.util.Arrays;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
@@ -29,8 +31,17 @@ public class CommonCultureGraduationManager implements GraduationManager<CommonC
 				graduationLectures, commonCultureCategory))
 			.collect(Collectors.toList());
 
-		return DetailGraduationResult.create(COMMON_CULTURE, commonCultureGraduationTotalCredit,
-			commonCultureDetailCategoryResults);
+		DetailGraduationResult detailGraduationResult = DetailGraduationResult.create(COMMON_CULTURE,
+			commonCultureGraduationTotalCredit, commonCultureDetailCategoryResults);
+		detailGraduationResult.addCredit(getTakenChapelCredits(takenLectureInventory));
+		return detailGraduationResult;
 	}
 
+	private double getTakenChapelCredits(TakenLectureInventory takenLectureInventory) {
+		int chapelCount = (int)takenLectureInventory.getTakenLectures().stream()
+			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals(CHAPEL_LECTURE_CODE))
+			.count();
+		return chapelCount * CHAPEL_CREDIT;
+
+	}
 }

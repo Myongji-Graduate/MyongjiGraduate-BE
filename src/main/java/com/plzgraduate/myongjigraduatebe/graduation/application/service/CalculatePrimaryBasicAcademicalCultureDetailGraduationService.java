@@ -4,6 +4,7 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 
 import org.springframework.stereotype.Service;
 
+import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
@@ -11,7 +12,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequi
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-@Service
+@UseCase
 public class CalculatePrimaryBasicAcademicalCultureDetailGraduationService
 	implements CalculateDetailGraduationUseCase {
 	@Override

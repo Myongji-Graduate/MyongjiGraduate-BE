@@ -24,7 +24,9 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.Fin
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.QuerydslConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.SecurityConfig;
+import com.plzgraduate.myongjigraduatebe.graduation.api.FindDetailGraduationController;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.api.SearchLectureController;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.api.ParsingTextController;
@@ -68,7 +70,8 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithD
 	ResetPasswordController.class,
 	SignUpController.class,
 	FindAuthIdController.class,
-	FindCompletedCreditsController.class
+	FindCompletedCreditsController.class,
+	FindDetailGraduationController.class
 })
 public abstract class WebAdaptorTestSupport {
 
@@ -137,6 +140,9 @@ public abstract class WebAdaptorTestSupport {
 
 	@MockBean
 	protected FindCompletedCreditUseCase findCompletedCreditUseCase;
+
+	@MockBean
+	protected CalculateSingleDetailGraduationUseCase calculateSingleDetailGraduationUseCase;
 
 	@BeforeEach
 	void setUp() {

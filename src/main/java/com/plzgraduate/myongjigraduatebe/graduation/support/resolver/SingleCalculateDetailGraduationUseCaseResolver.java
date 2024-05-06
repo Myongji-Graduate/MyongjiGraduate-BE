@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.api;
+package com.plzgraduate.myongjigraduatebe.graduation.support.resolver;
 
 import java.util.List;
 
