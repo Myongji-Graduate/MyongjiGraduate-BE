@@ -1,7 +1,7 @@
 name: PR Label Automation
 on:
   schedule:
-    - cron: '0 0 * * *'  # Executes daily at midnight
+    - cron: '0 0 10 * *'
 
 jobs:
   update-labels:
@@ -19,6 +19,9 @@ jobs:
               repo: repo.repo,
               state: 'open',
             });
+
+            // Define the Discord webhook URL
+            const webhookUrl = 'https://discord.com/api/webhooks/1198592354127458326/mighz1RApMReApkYxMy0mJHI97du_nWnBRymuRLldMqgvRDNCme2RIW0fDtS3nEZAKip';
 
             for (const pr of prs.data) {
               const prNumber = pr.number;
@@ -47,14 +50,30 @@ jobs:
               if (dLabel) {
                 let day = parseInt(dLabel.split("-")[1]);
                 if (day > 0) {
-                  await updateLabel(dLabel, `D-${day - 1}`);
-                  console.log(`Updated label from ${dLabel} to D-${day - 1} on PR #${prNumber}`);
+                  const newDayLabel = `D-${day - 1}`;
+                  await updateLabel(dLabel, newDayLabel);
+                  console.log(`Updated label from ${dLabel} to ${newDayLabel} on PR #${prNumber}`);
+                  await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      content: `Attention! PR #${prNumber} has ${day - 1} day(s) left before the deadline.`,
+                    }),
+                  });
                 } else if (day === 0) {
-                  // Handle 'D-0' logic here
+                  await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      content: `Urgent! PR #${prNumber} is due today!`,
+                    }),
+                  });
                 }
               } else {
-                // Add 'D-5' label if no 'D-' label is present
                 await updateLabel(null, 'D-5');
-                console.log(`Added D-5 label to PR #${prNumber}`);
               }
             }
