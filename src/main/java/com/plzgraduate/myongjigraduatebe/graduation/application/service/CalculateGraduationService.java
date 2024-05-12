@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCoreCultureGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
@@ -18,14 +19,11 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationMan
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BusinessBasicAcademicalManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.SocialScienceBasicAcademicManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture.CoreCultureGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCoreCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -40,17 +38,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CalculateGraduationService implements CalculateGraduationUseCase {
 
-	private final FindCoreCulturePort findCoreCulturePort;
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindMajorPort findMajorPort;
 	private final FindTakenLectureUseCase findTakenLectureUseCase;
 
 	private final CalculateCommonCultureGraduationUseCase calculateCommonCultureGraduationUseCase;
+	private final CalculateCoreCultureGraduationUseCase calculateCoreCultureGraduationUseCase;
 
 	@Override
 	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		// 모든 DetialCategory 분리 시 제거
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
@@ -103,10 +100,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateCoreCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<CoreCulture> graduationCoreCultures = findCoreCulturePort.findCoreCulture(user);
-		GraduationManager<CoreCulture> coreCultureGraduationManager = new CoreCultureGraduationManager();
-		return coreCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationCoreCultures, graduationRequirement.getCoreCultureCredit());
+		return calculateCoreCultureGraduationUseCase.calculateDetailGraduation(user, takenLectureInventory,
+			graduationRequirement);
 	}
 
 	private DetailGraduationResult generteBasicAcademicalDetailGraduationResult(User user,
