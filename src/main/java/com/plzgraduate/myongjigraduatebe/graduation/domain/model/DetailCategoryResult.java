@@ -76,7 +76,7 @@ public class DetailCategoryResult {
 		int leftCredit = takenCredits - totalCredits;
 		if (leftCredit > 0) {
 			if (detailCategoryName.equals(PRIMARY_MANDATORY_MAJOR.getName()) ||
-				detailCategoryName.equals(PRIMARY_ELECTIVE_MAJOR)) {
+				detailCategoryName.equals(PRIMARY_ELECTIVE_MAJOR.getName())) {
 				freeElectiveLeftCredit = leftCredit;
 				takenCredits -= leftCredit;
 				return;
