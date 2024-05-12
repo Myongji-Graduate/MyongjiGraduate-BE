@@ -31,7 +31,7 @@ class CalculatePrimaryMandatoryMajorDetailGraduationServiceTest {
 	@InjectMocks
 	private CalculatePrimaryMandatoryMajorDetailGraduationService calculatePrimaryMandatoryMajorDetailGraduationService;
 
-	@DisplayName("유저의 핵심교양 상세 졸업결과를 계산한다.")
+	@DisplayName("유저의 주전공필수 졸업결과를 계산한다.")
 	@Test
 	void calculateCoreCulture() {
 		//given

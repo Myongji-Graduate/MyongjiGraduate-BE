@@ -48,12 +48,12 @@ public class CalculatePrimaryMandatoryMajorDetailGraduationService
 
 	private static DetailGraduationResult separateMandatoryMajor(
 		DetailGraduationResult majorDetailGraduationResult) {
-		DetailCategoryResult majorMandatoryDetailCategoryResult = majorDetailGraduationResult.getDetailCategory().stream()
+		DetailCategoryResult mandatoryMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory().stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공필수"))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("Not Found DetailCategoryResult(전공 필수)"));
 
 		return DetailGraduationResult.create(PRIMARY_MANDATORY_MAJOR,
-			majorMandatoryDetailCategoryResult.getTotalCredits(), List.of(majorMandatoryDetailCategoryResult));
+			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
 	}
 }
