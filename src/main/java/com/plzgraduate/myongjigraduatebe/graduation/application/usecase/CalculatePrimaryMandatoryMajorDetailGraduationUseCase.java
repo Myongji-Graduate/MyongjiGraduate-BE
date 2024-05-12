@@ -1,0 +1,4 @@
+package com.plzgraduate.myongjigraduatebe.graduation.application.usecase;
+
+public interface CalculatePrimaryMandatoryMajorDetailGraduationUseCase extends CalculateDetailGraduationUseCase {
+}

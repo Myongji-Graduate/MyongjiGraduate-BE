@@ -1,11 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MAJOR;
-
-import org.springframework.stereotype.Service;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryMajorDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryElectiveMajorDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
@@ -13,10 +11,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @UseCase
-public class CalculatePrimaryMajorDetailGraduationService implements CalculatePrimaryMajorDetailGraduationUseCase {
+public class CalculatePrimaryElectiveMajorDetailGraduationService
+	implements CalculatePrimaryElectiveMajorDetailGraduationUseCase {
+
 	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
-		return graduationCategory == PRIMARY_MAJOR;
+		return graduationCategory == PRIMARY_ELECTIVE_MAJOR;
 	}
 
 	@Override
@@ -24,4 +24,5 @@ public class CalculatePrimaryMajorDetailGraduationService implements CalculatePr
 		GraduationRequirement graduationRequirement) {
 		return null;
 	}
+
 }

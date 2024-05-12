@@ -15,7 +15,8 @@ public class DetailGraduationResult {
 	private final List<DetailCategoryResult> detailCategory;
 
 	@Builder
-	private DetailGraduationResult(GraduationCategory graduationCategory, boolean isCompleted, int totalCredit, int takenCredit,
+	private DetailGraduationResult(GraduationCategory graduationCategory, boolean isCompleted, int totalCredit,
+		int takenCredit,
 		List<DetailCategoryResult> detailCategory) {
 		this.graduationCategory = graduationCategory;
 		this.isCompleted = isCompleted;
@@ -28,6 +29,16 @@ public class DetailGraduationResult {
 		List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
 			.graduationCategory(graduationCategory)
+			.isCompleted(checkIsCompleted(detailCategoryResults))
+			.totalCredit(totalCredit)
+			.takenCredit(calculateTakenCredit(detailCategoryResults))
+			.detailCategory(detailCategoryResults)
+			.build();
+	}
+
+	public static DetailGraduationResult createMajorDetailGraduationResult(int totalCredit,
+		List<DetailCategoryResult> detailCategoryResults) {
+		return DetailGraduationResult.builder()
 			.isCompleted(checkIsCompleted(detailCategoryResults))
 			.totalCredit(totalCredit)
 			.takenCredit(calculateTakenCredit(detailCategoryResults))

@@ -52,7 +52,7 @@ public class DetailCategoryResult {
 	public void calculate(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		addTakenLectures(taken);
 		calculateLeftCredit();
-		if(!checkCompleted()) {
+		if (!checkCompleted()) {
 			addMandatoryLectures(taken, graduationLectures);
 		}
 	}
@@ -75,7 +75,8 @@ public class DetailCategoryResult {
 	private void calculateLeftCredit() {
 		int leftCredit = takenCredits - totalCredits;
 		if (leftCredit > 0) {
-			if (detailCategoryName.equals(PRIMARY_MAJOR.getName())) {
+			if (detailCategoryName.equals(PRIMARY_MANDATORY_MAJOR.getName()) ||
+				detailCategoryName.equals(PRIMARY_ELECTIVE_MAJOR)) {
 				freeElectiveLeftCredit = leftCredit;
 				takenCredits -= leftCredit;
 				return;
