@@ -43,17 +43,25 @@ public class CalculatePrimaryMandatoryMajorDetailGraduationService
 		DetailGraduationResult majorDetailGraduationResult = majorGraduationManager.createDetailGraduationResult(user,
 			takenLectureInventory, graduationMajorLectures, graduationRequirement.getPrimaryMajorCredit());
 
-		return separateMandatoryMajor(majorDetailGraduationResult);
+		DetailCategoryResult mandatoryMajorDetailCategoryResult = separateMandatoryMajor(majorDetailGraduationResult);
+		return DetailGraduationResult.create(PRIMARY_MANDATORY_MAJOR,
+			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
 	}
 
-	private static DetailGraduationResult separateMandatoryMajor(
+	@Override
+	public DetailGraduationResult isolatePrimaryMandatoryMajorDetailGraduation(
+		DetailGraduationResult primaryMajorDetailGraduationResult) {
+		DetailCategoryResult mandatoryMajorDetailCategoryResult = separateMandatoryMajor(
+			primaryMajorDetailGraduationResult);
+		return DetailGraduationResult.create(PRIMARY_MANDATORY_MAJOR,
+			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
+	}
+
+	private DetailCategoryResult separateMandatoryMajor(
 		DetailGraduationResult majorDetailGraduationResult) {
-		DetailCategoryResult mandatoryMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory().stream()
+		return majorDetailGraduationResult.getDetailCategory().stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공필수"))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("Not Found DetailCategoryResult(전공 필수)"));
-
-		return DetailGraduationResult.create(PRIMARY_MANDATORY_MAJOR,
-			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
 	}
 }

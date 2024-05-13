@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
@@ -70,6 +72,36 @@ class CalculatePrimaryElectiveMajorDetailGraduationServiceTest {
 		assertThat(detailPrimaryElectiveMajorGraduationResult)
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 			.contains(PRIMARY_ELECTIVE_MAJOR, false, 67, 3.0);
+	}
+
+	@DisplayName("주전공 졸업결과에서 주전공선택 졸업결과를 분리한다.")
+	@Test
+	void isolatePrimaryElectiveMajorDetailGraduation() {
+		//given
+		DetailCategoryResult primaryMandatoryMajorDetailCategoryResult = DetailCategoryResult.builder()
+			.detailCategoryName("전공필수")
+			.totalCredits(18)
+			.takenCredits(18)
+			.build();
+		DetailCategoryResult primaryElectiveMajorDetailCategoryResult = DetailCategoryResult.builder()
+			.detailCategoryName("전공선택")
+			.totalCredits(52)
+			.takenCredits(52)
+			.build();
+		DetailGraduationResult primaryMajorDetailGraduationResult = DetailGraduationResult.createMajorDetailGraduationResult(
+			70, List.of(primaryMandatoryMajorDetailCategoryResult, primaryElectiveMajorDetailCategoryResult));
+
+		//when
+		DetailGraduationResult primaryElectiveMajorDetailGraduationResult = calculatePrimaryElectiveMajorDetailGraduationService.isolatePrimaryElectiveMajorDetailGraduation(
+			primaryMajorDetailGraduationResult);
+
+		//then
+		assertThat(primaryElectiveMajorDetailGraduationResult)
+			.extracting("graduationCategory", "totalCredit", "takenCredit")
+			.contains(
+				PRIMARY_ELECTIVE_MAJOR,
+				primaryElectiveMajorDetailCategoryResult.getTotalCredits(),
+				primaryElectiveMajorDetailCategoryResult.getTakenCredits());
 	}
 
 }
