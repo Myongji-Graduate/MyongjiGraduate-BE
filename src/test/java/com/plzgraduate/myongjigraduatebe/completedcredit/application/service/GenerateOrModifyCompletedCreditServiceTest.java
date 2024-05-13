@@ -88,7 +88,9 @@ class GenerateOrModifyCompletedCreditServiceTest {
 					(double)eachDetailGraduationResultTakenCredit),
 				tuple(GraduationCategory.CORE_CULTURE, eachDetailGraduationResultTotalCredit,
 					(double)eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.PRIMARY_MAJOR, eachDetailGraduationResultTotalCredit,
+				tuple(GraduationCategory.PRIMARY_MANDATORY_MAJOR, eachDetailGraduationResultTotalCredit,
+					(double)eachDetailGraduationResultTakenCredit),
+				tuple(GraduationCategory.PRIMARY_ELECTIVE_MAJOR, eachDetailGraduationResultTotalCredit,
 					(double)eachDetailGraduationResultTakenCredit),
 				tuple(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE, eachDetailGraduationResultTotalCredit,
 					(double)eachDetailGraduationResultTakenCredit),
@@ -111,7 +113,12 @@ class GenerateOrModifyCompletedCreditServiceTest {
 				.takenCredit(takenCredit)
 				.build(),
 			DetailGraduationResult.builder()
-				.graduationCategory(GraduationCategory.PRIMARY_MAJOR)
+				.graduationCategory(GraduationCategory.PRIMARY_MANDATORY_MAJOR)
+				.totalCredit(totalCredit)
+				.takenCredit(takenCredit)
+				.build(),
+			DetailGraduationResult.builder()
+				.graduationCategory(GraduationCategory.PRIMARY_ELECTIVE_MAJOR)
 				.totalCredit(totalCredit)
 				.takenCredit(takenCredit)
 				.build(),
