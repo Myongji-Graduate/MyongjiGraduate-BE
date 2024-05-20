@@ -1,7 +1,7 @@
 name: PR Label Automation
 on:
   schedule:
-    - cron: '0 0 10 * *'
+    - cron: '0 10 * * *'
 
 jobs:
   update-labels:

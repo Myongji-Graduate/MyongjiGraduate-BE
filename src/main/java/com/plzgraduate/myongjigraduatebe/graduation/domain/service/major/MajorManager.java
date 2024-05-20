@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MAJOR;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,8 +13,8 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.excepti
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public class MajorManager implements GraduationManager<MajorLecture> {
 
@@ -50,7 +48,7 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
 			takenLectureInventory, electiveLectures, electiveMajorTotalCredit);
 
-		return DetailGraduationResult.create(PRIMARY_MAJOR, graduationResultTotalCredit,
+		return DetailGraduationResult.createMajorDetailGraduationResult(graduationResultTotalCredit,
 			List.of(mandantoryDetailCategoryResult, electiveDetailCategoryResult));
 	}
 

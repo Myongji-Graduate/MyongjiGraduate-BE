@@ -13,7 +13,8 @@ public enum GraduationCategory {
 
 	COMMON_CULTURE("공통교양"),
 	CORE_CULTURE("핵심교양"),
-	PRIMARY_MAJOR("주전공"),
+	PRIMARY_MANDATORY_MAJOR("주전공필수"),
+	PRIMARY_ELECTIVE_MAJOR("주전공선택"),
 	DUAL_MAJOR("복수전공"),
 	SUB_MAJOR("부전공"),
 	PRIMARY_BASIC_ACADEMICAL_CULTURE("주 학문기초교양"),

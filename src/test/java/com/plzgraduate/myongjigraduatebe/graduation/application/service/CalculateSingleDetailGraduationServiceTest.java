@@ -41,9 +41,8 @@ CalculateSingleDetailGraduationServiceTest {
 
 	@DisplayName("단일 카테고리 졸업상세결과를 조회한다.")
 	@ValueSource(strings =
-		{"COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MAJOR", "DUAL_MAJOR", "SUB_MAJOR",
-			"PRIMARY_BASIC_ACADEMICAL_CULTURE",
-			"DUAL_BASIC_ACADEMICAL_CULTURE"
+		{"COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MANDATORY_MAJOR", "PRIMARY_ELECTIVE_MAJOR", "DUAL_MAJOR",
+			"SUB_MAJOR", "PRIMARY_BASIC_ACADEMICAL_CULTURE", "DUAL_BASIC_ACADEMICAL_CULTURE"
 		})
 	@ParameterizedTest
 	void calculateSingleDetailGraduation(String graduationCategoryName) {
