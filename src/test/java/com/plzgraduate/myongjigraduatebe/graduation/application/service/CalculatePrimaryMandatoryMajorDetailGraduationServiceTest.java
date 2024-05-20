@@ -84,7 +84,7 @@ class CalculatePrimaryMandatoryMajorDetailGraduationServiceTest {
 			.totalCredits(52)
 			.takenCredits(52)
 			.build();
-		DetailGraduationResult primaryMajorDetailGraduationResult = DetailGraduationResult.createMajorDetailGraduationResult(
+		DetailGraduationResult primaryMajorDetailGraduationResult = DetailGraduationResult.createNonCategorizedGraduationResult(
 			70, List.of(primaryMandatoryMajorDetailCategoryResult, primaryElectiveMajorDetailCategoryResult));
 
 		//when

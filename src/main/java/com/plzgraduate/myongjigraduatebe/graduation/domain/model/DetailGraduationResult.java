@@ -36,7 +36,7 @@ public class DetailGraduationResult {
 			.build();
 	}
 
-	public static DetailGraduationResult createMajorDetailGraduationResult(int totalCredit,
+	public static DetailGraduationResult createNonCategorizedGraduationResult(int totalCredit,
 		List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
 			.isCompleted(checkIsCompleted(detailCategoryResults))
