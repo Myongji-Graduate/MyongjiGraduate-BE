@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
@@ -30,8 +32,8 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 	);
 
 	@Override
-	public boolean isSatisfied(User user) {
-		return false;
+	public boolean isSatisfied(String major) {
+		return findBelongingCollege(major) == BUSINESS;
 	}
 
 	@Override
@@ -54,10 +56,10 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			PRIMARY_BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
+			"학문기초교양", true, basicAcademicalCredit);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
-		return DetailGraduationResult.create(PRIMARY_BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
+		return DetailGraduationResult.createNonCategorizedGraduationResult(basicAcademicalCredit,
 			List.of(detailCategoryResult));
 	}
 
