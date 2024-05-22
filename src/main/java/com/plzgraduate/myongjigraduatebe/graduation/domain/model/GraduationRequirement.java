@@ -12,20 +12,23 @@ public class GraduationRequirement {
 	private int primaryMajorCredit;
 	private int dualMajorCredit;
 	private int subMajorCredit;
-	private final int basicAcademicalCredit;
+	private final int primaryBasicAcademicalCredit;
+	private final int dualBasicAcademicalCredit;
 	private int commonCultureCredit;
 	private final int coreCultureCredit;
 	private int normalCultureCredit;
 	private int freeElectiveCredit;
 
 	@Builder
-	private GraduationRequirement(int totalCredit, int primaryMajorCredit, int dualMajorCredit, int subMajorCredit, int basicAcademicalCredit,
-		int commonCultureCredit, int coreCultureCredit, int normalCultureCredit, int freeElectiveCredit) {
+	private GraduationRequirement(int totalCredit, int primaryMajorCredit, int dualMajorCredit, int subMajorCredit,
+		int primaryBasicAcademicalCredit, int dualBasicAcademicalCredit, int commonCultureCredit, int coreCultureCredit,
+		int normalCultureCredit, int freeElectiveCredit) {
 		this.totalCredit = totalCredit;
 		this.primaryMajorCredit = primaryMajorCredit;
 		this.dualMajorCredit = dualMajorCredit;
 		this.subMajorCredit = subMajorCredit;
-		this.basicAcademicalCredit = basicAcademicalCredit;
+		this.primaryBasicAcademicalCredit = primaryBasicAcademicalCredit;
+		this.dualBasicAcademicalCredit = dualBasicAcademicalCredit;
 		this.commonCultureCredit = commonCultureCredit;
 		this.coreCultureCredit = coreCultureCredit;
 		this.normalCultureCredit = normalCultureCredit;

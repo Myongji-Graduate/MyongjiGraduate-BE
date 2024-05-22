@@ -116,7 +116,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			user);
 		return basicAcademicalCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
-			graduationRequirement.getBasicAcademicalCredit());
+			graduationRequirement.getPrimaryBasicAcademicalCredit());
 	}
 
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
