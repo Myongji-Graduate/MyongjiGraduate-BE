@@ -18,14 +18,9 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BusinessBasicAcademicalManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.SocialScienceBasicAcademicManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorManager;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -40,14 +35,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CalculateGraduationService implements CalculateGraduationUseCase {
 
-	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindMajorPort findMajorPort;
-	private final FindTakenLectureUseCase findTakenLectureUseCase;
 
+	private final FindTakenLectureUseCase findTakenLectureUseCase;
 	private final CalculateCommonCultureGraduationUseCase calculateCommonCultureGraduationUseCase;
 	private final CalculateCoreCultureGraduationUseCase calculateCoreCultureGraduationUseCase;
 	private final CalculatePrimaryMandatoryMajorDetailGraduationUseCase calculatePrimaryMandatoryMajorDetailGraduationUseCase;
 	private final CalculatePrimaryElectiveMajorDetailGraduationUseCase calculatePrimaryElectiveMajorDetailGraduationUseCase;
+	private final CalculatePrimaryBasicAcademicalCultureDetailGraduationService calculatePrimaryBasicAcademicalCultureDetailGraduationService;
 
 	@Override
 	public GraduationResult calculateGraduation(User user) {
@@ -110,30 +105,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generteBasicAcademicalDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(
-			user);
-		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager = determineBasicAcademicalCultureGraduationManager(
-			user);
-		return basicAcademicalCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
-			graduationRequirement.getPrimaryBasicAcademicalCredit());
-	}
-
-	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
-		User user) {
-		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager;
-		switch (College.findBelongingCollege(user.getPrimaryMajor())) {
-			case BUSINESS:
-				basicAcademicalCultureGraduationManager = new BusinessBasicAcademicalManager();
-				break;
-			case SOCIAL_SCIENCE:
-				basicAcademicalCultureGraduationManager = new SocialScienceBasicAcademicManager();
-				break;
-			default:
-				basicAcademicalCultureGraduationManager = new DefaultBasicAcademicalManager();
-				break;
-		}
-		return basicAcademicalCultureGraduationManager;
+		return calculatePrimaryBasicAcademicalCultureDetailGraduationService.calculateDetailGraduation(user,
+			takenLectureInventory, graduationRequirement);
 	}
 
 	private void addPrimaryMajorDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
