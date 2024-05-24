@@ -54,6 +54,7 @@ springdoc:
   default-consumes-media-type: application/json
 
 ---
+
 spring:
   config:
     activate:
