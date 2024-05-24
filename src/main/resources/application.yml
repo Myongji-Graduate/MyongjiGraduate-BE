@@ -54,10 +54,18 @@ springdoc:
   default-consumes-media-type: application/json
 
 ---
+
 spring:
   config:
     activate:
       on-profile: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: none
