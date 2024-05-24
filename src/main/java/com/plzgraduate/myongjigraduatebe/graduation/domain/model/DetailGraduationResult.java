@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class DetailGraduationResult {
 
-	private final GraduationCategory graduationCategory;
+	private GraduationCategory graduationCategory;
 	private final boolean isCompleted;
 	private final int totalCredit;
 	private double takenCredit;
@@ -36,7 +36,7 @@ public class DetailGraduationResult {
 			.build();
 	}
 
-	public static DetailGraduationResult createMajorDetailGraduationResult(int totalCredit,
+	public static DetailGraduationResult createNonCategorizedGraduationResult(int totalCredit,
 		List<DetailCategoryResult> detailCategoryResults) {
 		return DetailGraduationResult.builder()
 			.isCompleted(checkIsCompleted(detailCategoryResults))
@@ -44,6 +44,10 @@ public class DetailGraduationResult {
 			.takenCredit(calculateTakenCredit(detailCategoryResults))
 			.detailCategory(detailCategoryResults)
 			.build();
+	}
+
+	public void assignGraduationCategory(GraduationCategory graduationCategory) {
+		this.graduationCategory = graduationCategory;
 	}
 
 	public void addCredit(double takenCredit) {

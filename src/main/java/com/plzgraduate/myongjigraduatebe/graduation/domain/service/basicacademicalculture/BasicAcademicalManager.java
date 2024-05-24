@@ -9,7 +9,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 public interface BasicAcademicalManager extends GraduationManager<BasicAcademicalCultureLecture> {
-	boolean isSatisfied(User user);
+	boolean isSatisfied(String major);
 
 	default Set<Lecture> convertToLectureSet(Set<BasicAcademicalCultureLecture> basicAcademicalCultureLectures) {
 		return basicAcademicalCultureLectures.stream()

@@ -48,7 +48,7 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
 			takenLectureInventory, electiveLectures, electiveMajorTotalCredit);
 
-		return DetailGraduationResult.createMajorDetailGraduationResult(graduationResultTotalCredit,
+		return DetailGraduationResult.createNonCategorizedGraduationResult(graduationResultTotalCredit,
 			List.of(mandantoryDetailCategoryResult, electiveDetailCategoryResult));
 	}
 

@@ -3,7 +3,7 @@ name: dev-depoly
 on:
   push:
     branches:
-      - dev
+      - develop
 jobs:
   build:
     runs-on: ubuntu-latest

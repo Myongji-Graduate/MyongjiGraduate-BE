@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 
 	@Override
-	public boolean isSatisfied(User user) {
+	public boolean isSatisfied(String major) {
 		return false;
 	}
 
@@ -43,10 +43,10 @@ public class DefaultBasicAcademicalManager implements BasicAcademicalManager {
 		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			PRIMARY_BASIC_ACADEMICAL_CULTURE.getName(), true, basicAcademicalCredit);
+			"학문기초교양", true, basicAcademicalCredit);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
-		return DetailGraduationResult.create(PRIMARY_BASIC_ACADEMICAL_CULTURE, basicAcademicalCredit,
+		return DetailGraduationResult.createNonCategorizedGraduationResult(basicAcademicalCredit,
 			List.of(detailCategoryResult));
 	}
 }
