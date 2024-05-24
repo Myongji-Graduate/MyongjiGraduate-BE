@@ -3,7 +3,7 @@ name: dev-depoly
 on:
   push:
     branches:
-      - chore/DEV-24-deploy-test-server
+      - dev
 jobs:
   build:
     runs-on: ubuntu-latest
