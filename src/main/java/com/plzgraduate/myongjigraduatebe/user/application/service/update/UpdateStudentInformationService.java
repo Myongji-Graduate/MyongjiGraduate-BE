@@ -17,7 +17,7 @@ class UpdateStudentInformationService implements UpdateStudentInformationUseCase
 	private final UpdateUserPort updateUserPort;
 
 	@Override
-	public void updateUser(UpdateStudentInformationCommand updateStudentInformationCommand) {
+	public User updateUser(UpdateStudentInformationCommand updateStudentInformationCommand) {
 		User user = updateStudentInformationCommand.getUser();
 		user.updateStudentInformation(updateStudentInformationCommand.getName(),
 			updateStudentInformationCommand.getMajor(),
@@ -29,5 +29,6 @@ class UpdateStudentInformationService implements UpdateStudentInformationUseCase
 			updateStudentInformationCommand.isGraduate()
 		);
 		updateUserPort.updateUser(user);
+		return user;
 	}
 }

@@ -61,10 +61,11 @@ class ParsingTextServiceTest{
 		parsingTextService.enrollParsingText(1L, parsingText);
 
 	    //then
-		then(updateStudentInformationUseCase).should().updateUser(any(UpdateStudentInformationCommand.class));
-		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(any(User.class));
-		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(User.class), any());
-		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(any(User.class));
+		User updatedUser = then(updateStudentInformationUseCase).should()
+			.updateUser(any(UpdateStudentInformationCommand.class));
+		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(updatedUser);
+		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(), any());
+		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(updatedUser);
 	}
 
 	@DisplayName("PDF 파싱 텍스트가 빈 문자열로 오면 InvalidPdfException을 반환한다.")
@@ -152,9 +153,11 @@ class ParsingTextServiceTest{
 		parsingTextService.enrollParsingText(1L, parsingText);
 
 		//then
-		then(updateStudentInformationUseCase).should().updateUser(any(UpdateStudentInformationCommand.class));
-		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(any(User.class));
-		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(User.class), any());
+		User updatedUser = then(updateStudentInformationUseCase).should()
+			.updateUser(any(UpdateStudentInformationCommand.class));
+		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(updatedUser);
+		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(), any());
+		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(updatedUser);
 	}
 
 	private User createUser(String studentNumber) {

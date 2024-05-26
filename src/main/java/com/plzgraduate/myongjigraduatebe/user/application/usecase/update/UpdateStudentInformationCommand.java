@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.usecase.update;
 
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -42,15 +43,14 @@ public class UpdateStudentInformationCommand {
 		this.graduate = graduate;
 	}
 
-	public static UpdateStudentInformationCommand of(User user, String name, String major,
-		String dualMajor, String subMajor, StudentCategory studentCategory) {
+	public static UpdateStudentInformationCommand of(User user, ParsingInformation parsingInformation) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
-			.name(name)
-			.major(major)
-			.dualMajor(dualMajor)
-			.subMajor(subMajor)
-			.studentCategory(studentCategory)
+			.name(parsingInformation.getStudentName())
+			.major(parsingInformation.getMajor())
+			.dualMajor(parsingInformation.getDualMajor())
+			.subMajor(parsingInformation.getSubMajor())
+			.studentCategory(parsingInformation.getStudentCategory())
 			.build();
 	}
 }
