@@ -11,7 +11,6 @@ import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper.UserMapper;
 
 class UserMapperTest extends PersistenceTestSupport {
 
@@ -22,67 +21,71 @@ class UserMapperTest extends PersistenceTestSupport {
 	@Test
 	void mapToDomainEntityTest() {
 		//given
-		UserJpaEntity userJpaEntity = createUserJpaEntity(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-			"60211111", 21, "경영", null, StudentCategory.NORMAL);
+		UserJpaEntity userJpaEntity = createUserJpaEntity();
 
 		//when
 		User user = userMapper.mapToDomainEntity(userJpaEntity);
 
 		//then
 		assertThat(user)
-			.extracting("id", "authId", "password", "englishLevel", "name",
-				"studentNumber", "entryYear", "primaryMajor", "subMajor", "studentCategory")
+			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber", "entryYear",
+				"primaryMajor", "subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영", null, StudentCategory.NORMAL);
+				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
 	}
 
 	@DisplayName("도메인 엔티티를 JPA 엔티티 변환한다.")
 	@Test
 	void mapToJpaEntityTest() {
 		//given
-		User user = createUser("mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-			"60211111", 21, "경영", null, StudentCategory.NORMAL);
+		User user = createUser();
 
 		//when
 		UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
 
 		//then
 		assertThat(userJpaEntity)
-			.extracting("id", "authId", "password", "englishLevel", "name",
-				"studentNumber", "entryYear", "major", "subMajor", "studentCategory")
+			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber", "entryYear", "major",
+				"subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영", null, StudentCategory.NORMAL);
+				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
 	}
 
-	private User createUser(String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
+	private User createUser() {
 		return User.builder()
 			.id(1L)
-			.authId(authId)
-			.password(password)
-			.name(name)
-			.studentNumber(studentNumber)
-			.entryYear(entryYear)
-			.englishLevel(englishLevel)
-			.primaryMajor(major)
-			.subMajor(subMajor)
-			.studentCategory(studentCategory)
+			.authId("mju1000")
+			.password("mju1000!")
+			.name("김명지")
+			.studentNumber("60211111")
+			.entryYear(21)
+			.englishLevel(EnglishLevel.ENG12)
+			.primaryMajor("경영")
+			.dualMajor(null)
+			.subMajor(null)
+			.totalCredit(100)
+			.takenCredit(40)
+			.graduated(false)
+			.studentCategory(StudentCategory.NORMAL)
 			.build();
 	}
 
-	private UserJpaEntity createUserJpaEntity(Long id, String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
+	private UserJpaEntity createUserJpaEntity() {
 		return UserJpaEntity.builder()
-			.id(id)
-			.authId(authId)
-			.password(password)
-			.name(name)
-			.studentNumber(studentNumber)
-			.entryYear(entryYear)
-			.englishLevel(englishLevel)
-			.major(major)
-			.subMajor(subMajor)
-			.studentCategory(studentCategory)
+			.id(1L)
+			.authId("mju1000")
+			.password("mju1000!")
+			.name("김명지")
+			.studentNumber("60211111")
+			.entryYear(21)
+			.englishLevel(EnglishLevel.ENG12)
+			.major("경영")
+			.dualMajor("복수전공")
+			.totalCredit(100)
+			.takenCredit(40)
+			.graduated(false)
+			.subMajor(null)
+			.studentCategory(StudentCategory.NORMAL)
 			.build();
 	}
 }

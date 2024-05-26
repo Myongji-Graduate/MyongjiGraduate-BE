@@ -48,11 +48,13 @@ class UserTest {
 	@Test
 	void updateStudentInformation() {
 		//given //when
-		user.updateStudentInformation("테스터2", "경영학과", "데이터테크놀로지학과", null, null, StudentCategory.CHANGE_MAJOR);
+		user.updateStudentInformation("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134,
+			120.5, true);
 		//then
 		assertThat(user)
-			.extracting("name", "primaryMajor", "changeMajor", "subMajor", "dualMajor","studentCategory")
-			.contains("테스터2", "경영학과", "데이터테크놀로지학과", null, null, StudentCategory.CHANGE_MAJOR);
+			.extracting("name", "primaryMajor", "subMajor", "dualMajor", "studentCategory",
+				"totalCredit", "takenCredit", "graduated")
+			.contains("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134, 120.5, true);
 	}
 
 	@DisplayName("checkBeforeEntryYear 메서드 테스트")
@@ -117,7 +119,7 @@ class UserTest {
 	@DisplayName("유저의 패스워드를 초기화한다.")
 	@Test
 	void resetPassword() {
-	    //given
+		//given
 		String beforePassword = "before";
 		String afterPassword = "after";
 		User user = User.builder()
@@ -126,14 +128,14 @@ class UserTest {
 		//when
 		user.resetPassword(afterPassword);
 
-	    //then
+		//then
 		assertThat(user.getPassword()).isEqualTo(afterPassword);
 	}
 
 	@DisplayName("유저의 로그인 아이디와 같을 경우 true를 반환한다.")
 	@Test
 	void isMyAuthId() {
-	    //given
+		//given
 		String authId = "testAuthId";
 		User user = User.builder()
 			.authId(authId).build();

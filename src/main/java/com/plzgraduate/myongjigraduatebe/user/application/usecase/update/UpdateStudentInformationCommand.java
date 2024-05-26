@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.usecase.update;
 
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -16,36 +17,40 @@ public class UpdateStudentInformationCommand {
 
 	private String major;
 
-	private String changeMajor;
-
 	private String dualMajor;
 
 	private String subMajor;
 
 	private StudentCategory studentCategory;
 
+	private int totalCredit;
+
+	private double takenCredit;
+
+	private boolean graduate;
+
 	@Builder
-	private UpdateStudentInformationCommand(User user, String name, String major, String changeMajor, String dualMajor,
-		String subMajor, StudentCategory studentCategory) {
+	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
+		String subMajor, StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.user = user;
 		this.name = name;
 		this.major = major;
-		this.changeMajor = changeMajor;
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.studentCategory = studentCategory;
+		this.totalCredit = totalCredit;
+		this.takenCredit = takenCredit;
+		this.graduate = graduate;
 	}
 
-	public static UpdateStudentInformationCommand of(User user, String name, String major, String changeMajor,
-		String dualMajor, String subMajor, StudentCategory studentCategory) {
+	public static UpdateStudentInformationCommand of(User user, ParsingInformation parsingInformation) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
-			.name(name)
-			.major(major)
-			.changeMajor(changeMajor)
-			.dualMajor(dualMajor)
-			.subMajor(subMajor)
-			.studentCategory(studentCategory)
+			.name(parsingInformation.getStudentName())
+			.major(parsingInformation.getMajor())
+			.dualMajor(parsingInformation.getDualMajor())
+			.subMajor(parsingInformation.getSubMajor())
+			.studentCategory(parsingInformation.getStudentCategory())
 			.build();
 	}
 }

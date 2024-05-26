@@ -24,6 +24,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -43,6 +45,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private final CalculatePrimaryMandatoryMajorDetailGraduationUseCase calculatePrimaryMandatoryMajorDetailGraduationUseCase;
 	private final CalculatePrimaryElectiveMajorDetailGraduationUseCase calculatePrimaryElectiveMajorDetailGraduationUseCase;
 	private final CalculatePrimaryBasicAcademicalCultureDetailGraduationService calculatePrimaryBasicAcademicalCultureDetailGraduationService;
+	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 
 	@Override
 	public GraduationResult calculateGraduation(User user) {
@@ -53,8 +56,10 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
 			takenLectureInventory, graduationRequirement);
 
-		return generateGraduationResult(chapelResult, detailGraduationResults,
+		GraduationResult graduationResult = generateGraduationResult(chapelResult, detailGraduationResults,
 			takenLectureInventory, graduationRequirement);
+		updateUserGraduationInformation(user, graduationResult);
+		return graduationResult;
 	}
 
 	private GraduationRequirement determineGraduationRequirement(User user) {
@@ -140,5 +145,20 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
 		graduationResult.checkGraduated();
 		return graduationResult;
+	}
+
+	private void updateUserGraduationInformation(User user, GraduationResult graduationResult) {
+		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.builder()
+			.user(user)
+			.name(user.getName())
+			.studentCategory(user.getStudentCategory())
+			.major(user.getPrimaryMajor())
+			.dualMajor(user.getDualMajor())
+			.subMajor(user.getSubMajor())
+			.totalCredit(graduationResult.getTotalCredit())
+			.takenCredit(graduationResult.getTakenCredit())
+			.graduate(graduationResult.isGraduated())
+			.build();
+		updateStudentInformationUseCase.updateUser(updateStudentInformationCommand);
 	}
 }

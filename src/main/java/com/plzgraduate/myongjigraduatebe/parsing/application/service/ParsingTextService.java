@@ -47,10 +47,10 @@ class ParsingTextService implements ParsingTextUseCase {
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
 			checkUnSupportedUser(parsingInformation);
 			validateStudentNumber(user, parsingInformation);
-			updateUser(user, parsingInformation);
-			deleteTakenLecturesIfAlreadyEnrolled(user);
-			saveTakenLectures(user, parsingInformation);
-			generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
+			User updatedUser = updateUser(user, parsingInformation);
+			deleteTakenLecturesIfAlreadyEnrolled(updatedUser);
+			saveTakenLectures(updatedUser, parsingInformation);
+			generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(updatedUser);
 		} catch (InvalidPdfException | IllegalArgumentException e) {
 			throw e;
 		} catch (Exception e) {
@@ -68,12 +68,9 @@ class ParsingTextService implements ParsingTextUseCase {
 		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
-	private void updateUser(User user, ParsingInformation parsingInformation) {
-		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user,
-			parsingInformation.getStudentName(), parsingInformation.getMajor(),
-			parsingInformation.getChangeMajor(), parsingInformation.getDualMajor(),
-			parsingInformation.getSubMajor(), parsingInformation.getStudentCategory());
-		updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
+	private User updateUser(User user, ParsingInformation parsingInformation) {
+		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user, parsingInformation);
+		return updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
 	private void validateParsingText(String parsingText) {
