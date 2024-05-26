@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class FindUserInformationControllerTest extends WebAdaptorTestSupport {
@@ -19,7 +20,7 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 	@DisplayName("로그인 한 회원 정보를 조회한다.")
 	@Test
 	void getUserInformation() throws Exception {
-	    //given
+		//given
 		Long userId = 1L;
 		String studentNumber = "111111111";
 		String studentName = "testUser";
@@ -29,7 +30,11 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 			.id(userId)
 			.studentNumber(studentNumber)
 			.name(studentName)
-			.primaryMajor(major).build();
+			.primaryMajor(major)
+			.studentCategory(StudentCategory.NORMAL)
+			.totalCredit(134)
+			.takenCredit(130.0)
+			.graduated(false).build();
 
 		given(findUserInformationUseCase.findUserInformation(userId)).willReturn(user);
 
@@ -39,7 +44,13 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.studentNumber").value(studentNumber))
 			.andExpect(jsonPath("$.studentName").value(studentName))
-			.andExpect(jsonPath("$.major").value(major));
+			.andExpect(jsonPath("$.completeDivision").isArray())
+			.andExpect(jsonPath("$.completeDivision[0].majorType").value("PRIMARY"))
+			.andExpect(jsonPath("$.completeDivision[0].major").value(user.getPrimaryMajor()))
+			.andExpect(jsonPath("$.totalCredit").value(134))
+			.andExpect(jsonPath("$.takenCredit").value(130.0))
+			.andExpect(jsonPath("$.graduated").value(false))
+		;
 	}
 
 }
