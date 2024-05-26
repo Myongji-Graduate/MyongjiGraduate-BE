@@ -9,7 +9,6 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 public class UserMapper {
 
 	public User mapToDomainEntity(UserJpaEntity user) {
-
 		return User.builder()
 			.id(user.getId())
 			.authId(user.getAuthId())
@@ -19,8 +18,12 @@ public class UserMapper {
 			.entryYear(user.getEntryYear())
 			.englishLevel(user.getEnglishLevel())
 			.primaryMajor(user.getMajor())
+			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
+			.totalCredit(user.getTotalCredit())
+			.takenCredit(user.getTakenCredit())
+			.graduate(user.isGraduate())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
 			.build();
@@ -39,6 +42,9 @@ public class UserMapper {
 			.major(user.getPrimaryMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
+			.totalCredit(user.getTotalCredit())
+			.takenCredit(user.getTakenCredit())
+			.graduate(user.isGraduate())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
 			.build();

@@ -19,17 +19,19 @@ public class User {
 	private final String studentNumber;
 	private final int entryYear;
 	private String primaryMajor;
-	private String changeMajor;
 	private String subMajor;
 	private String dualMajor;
 	private StudentCategory studentCategory;
+	private int totalCredit;
+	private double takenCredit;
+	private boolean graduate;
 	private final Instant createdAt;
 	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
-		int entryYear, String primaryMajor, String changeMajor, String subMajor, String dualMajor, StudentCategory studentCategory,
-		Instant createdAt, Instant updatedAt) {
+		int entryYear, String primaryMajor, String subMajor, String dualMajor, StudentCategory studentCategory,
+		int totalCredit, double takenCredit, boolean graduate, Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -38,15 +40,15 @@ public class User {
 		this.studentNumber = studentNumber;
 		this.entryYear = entryYear;
 		this.primaryMajor = primaryMajor;
-		this.changeMajor = changeMajor;
 		this.subMajor = subMajor;
 		this.dualMajor = dualMajor;
 		this.studentCategory = studentCategory;
+		this.totalCredit = totalCredit;
+		this.takenCredit = takenCredit;
+		this.graduate = graduate;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-
 	}
-
 
 	public static User create(String authId, String password, EnglishLevel englishLevel, String studentNumber) {
 		return User.builder()
@@ -55,17 +57,22 @@ public class User {
 			.englishLevel(englishLevel)
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduate(false)
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major, String changeMajor, String subMajor, String dualMajor,
-		StudentCategory studentCategory) {
+	public void updateStudentInformation(String name, String major, String subMajor, String dualMajor,
+		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.name = name;
 		this.primaryMajor = major;
-		this.changeMajor = changeMajor;
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.studentCategory = studentCategory;
+		this.totalCredit = totalCredit;
+		this.takenCredit = takenCredit;
+		this.graduate = graduate;
 	}
 
 	public boolean checkBeforeEntryYear(int entryYear) {

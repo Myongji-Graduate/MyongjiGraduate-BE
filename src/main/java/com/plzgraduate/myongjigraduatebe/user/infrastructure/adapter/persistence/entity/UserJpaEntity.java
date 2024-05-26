@@ -47,7 +47,15 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	private String major;
 
+	private String dualMajor;
+
 	private String subMajor;
+
+	private int totalCredit;
+
+	private double takenCredit;
+
+	private boolean graduate;
 
 	@Enumerated(value = EnumType.STRING)
 	private StudentCategory studentCategory;
