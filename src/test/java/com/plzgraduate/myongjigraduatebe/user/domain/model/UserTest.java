@@ -53,7 +53,7 @@ class UserTest {
 		//then
 		assertThat(user)
 			.extracting("name", "primaryMajor", "subMajor", "dualMajor", "studentCategory",
-				"totalCredit", "takenCredit", "graduate")
+				"totalCredit", "takenCredit", "graduated")
 			.contains("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134, 120.5, true);
 	}
 

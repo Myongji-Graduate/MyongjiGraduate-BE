@@ -23,7 +23,7 @@ public class UserMapper {
 			.studentCategory(user.getStudentCategory())
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
-			.graduate(user.isGraduate())
+			.graduated(user.isGraduated())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
 			.build();
@@ -44,7 +44,7 @@ public class UserMapper {
 			.studentCategory(user.getStudentCategory())
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
-			.graduate(user.isGraduate())
+			.graduated(user.isGraduated())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
 			.build();

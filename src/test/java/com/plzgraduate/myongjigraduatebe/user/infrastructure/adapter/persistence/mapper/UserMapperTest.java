@@ -29,7 +29,7 @@ class UserMapperTest extends PersistenceTestSupport {
 		//then
 		assertThat(user)
 			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber", "entryYear",
-				"primaryMajor", "subMajor", "studentCategory", "totalCredit", "takenCredit", "graduate")
+				"primaryMajor", "subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
 	}
@@ -46,7 +46,7 @@ class UserMapperTest extends PersistenceTestSupport {
 		//then
 		assertThat(userJpaEntity)
 			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber", "entryYear", "major",
-				"subMajor", "studentCategory", "totalCredit", "takenCredit", "graduate")
+				"subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
 	}
@@ -65,7 +65,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.subMajor(null)
 			.totalCredit(100)
 			.takenCredit(40)
-			.graduate(false)
+			.graduated(false)
 			.studentCategory(StudentCategory.NORMAL)
 			.build();
 	}
@@ -83,7 +83,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.dualMajor("복수전공")
 			.totalCredit(100)
 			.takenCredit(40)
-			.graduate(false)
+			.graduated(false)
 			.subMajor(null)
 			.studentCategory(StudentCategory.NORMAL)
 			.build();

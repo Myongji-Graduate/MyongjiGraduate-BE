@@ -24,14 +24,14 @@ public class User {
 	private StudentCategory studentCategory;
 	private int totalCredit;
 	private double takenCredit;
-	private boolean graduate;
+	private boolean graduated;
 	private final Instant createdAt;
 	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
 		int entryYear, String primaryMajor, String subMajor, String dualMajor, StudentCategory studentCategory,
-		int totalCredit, double takenCredit, boolean graduate, Instant createdAt, Instant updatedAt) {
+		int totalCredit, double takenCredit, boolean graduated, Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -45,7 +45,7 @@ public class User {
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
-		this.graduate = graduate;
+		this.graduated = graduated;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -59,7 +59,7 @@ public class User {
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
 			.totalCredit(0)
 			.takenCredit(0)
-			.graduate(false)
+			.graduated(false)
 			.build();
 	}
 
@@ -72,7 +72,7 @@ public class User {
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
-		this.graduate = graduate;
+		this.graduated = graduate;
 	}
 
 	public boolean checkBeforeEntryYear(int entryYear) {
