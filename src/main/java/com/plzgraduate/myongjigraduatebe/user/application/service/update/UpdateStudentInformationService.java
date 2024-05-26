@@ -21,10 +21,12 @@ class UpdateStudentInformationService implements UpdateStudentInformationUseCase
 		User user = updateStudentInformationCommand.getUser();
 		user.updateStudentInformation(updateStudentInformationCommand.getName(),
 			updateStudentInformationCommand.getMajor(),
-			updateStudentInformationCommand.getChangeMajor(),
 			updateStudentInformationCommand.getDualMajor(),
 			updateStudentInformationCommand.getSubMajor(),
-			updateStudentInformationCommand.getStudentCategory()
+			updateStudentInformationCommand.getStudentCategory(),
+			updateStudentInformationCommand.getTotalCredit(),
+			updateStudentInformationCommand.getTakenCredit(),
+			updateStudentInformationCommand.isGraduate()
 		);
 		updateUserPort.updateUser(user);
 	}

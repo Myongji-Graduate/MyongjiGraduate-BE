@@ -32,7 +32,6 @@ class UpdateStudentInformationServiceTest {
 			.user(user)
 			.name("정지환")
 			.major("응용소프트웨어학과")
-			.changeMajor(null)
 			.subMajor("경영학과")
 			.studentCategory(StudentCategory.DUAL_MAJOR)
 			.build();
