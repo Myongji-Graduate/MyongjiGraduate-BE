@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.lecture.api;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -15,6 +16,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.SearchedLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
@@ -26,10 +28,8 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 	@Test
 	void searchLecture() throws Exception {
 		//given
-		List<Lecture> searchedLectures = List.of(
-			Lecture.builder().id(1L).build()
-		);
-		given(searchLectureUseCase.searchLectures(any(), any())).willReturn(searchedLectures);
+		List<SearchedLectureDto> searchedLectures = List.of(SearchedLectureDto.of(true, Lecture.from("code")));
+		given(searchLectureUseCase.searchLectures(anyLong(), any(), any())).willReturn(searchedLectures);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/lectures")
@@ -37,9 +37,10 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 				.param("keyword", "기초"))
 			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.lectures", hasSize(1)));
+			.andExpect(jsonPath("$", hasSize(searchedLectures.size())))
+			.andExpect(jsonPath("$.[0].addable").value(true));
 
-		then(searchLectureUseCase).should(times(1)).searchLectures(any(), any());
+		then(searchLectureUseCase).should(times(1)).searchLectures(anyLong(), any(), any());
 	}
 
 	@WithMockAuthenticationUser
