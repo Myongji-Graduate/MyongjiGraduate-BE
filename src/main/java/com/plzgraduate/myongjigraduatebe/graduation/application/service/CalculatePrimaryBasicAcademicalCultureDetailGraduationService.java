@@ -46,7 +46,7 @@ public class CalculatePrimaryBasicAcademicalCultureDetailGraduationService
 			user);
 		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
-			graduationRequirement.getPrimaryBasicAcademicalCredit());
+			graduationRequirement.getPrimaryBasicAcademicalCultureCredit());
 		detailGraduationResult.assignGraduationCategory(PRIMARY_BASIC_ACADEMICAL_CULTURE);
 		return detailGraduationResult;
 	}

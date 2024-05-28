@@ -52,7 +52,7 @@ class CalculatePrimaryBasicAcademicalCultureDetailGraduationServiceTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
-			.primaryBasicAcademicalCredit(18).build();
+			.primaryBasicAcademicalCultureCredit(18).build();
 
 		//when
 		DetailGraduationResult detailCoreCultureGraduationResult = calculatePrimaryBasicAcademicalCultureDetailGraduationService.calculateDetailGraduation(
