@@ -8,7 +8,7 @@ import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryBasicAcademicalCultureDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CalculatePrimaryBasicAcademicalCultureDetailGraduationService
-	implements CalculateDetailGraduationUseCase {
+	implements CalculatePrimaryBasicAcademicalCultureDetailGraduationUseCase {
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 
