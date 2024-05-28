@@ -16,7 +16,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class MajorManager implements GraduationManager<MajorLecture> {
+
+	private final MajorGraduationCategory majorGraduationCategory;
 
 	/**
 	 *
@@ -42,7 +47,7 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(
-			user, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, takenLectureInventory, mandatoryLectures, electiveLectures, majorGraduationCategory);
 
 		int electiveMajorTotalCredit = graduationResultTotalCredit - mandantoryDetailCategoryResult.getTotalCredits();
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(

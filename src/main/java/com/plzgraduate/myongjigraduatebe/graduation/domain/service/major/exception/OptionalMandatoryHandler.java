@@ -1,10 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -21,22 +24,21 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	private static final int CLASS_OF_19 = 19;
 	private int removedMandatoryTotalCredit = 0;
 
-	public boolean isSupport(User user) {
-		if (user.getPrimaryMajor().equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
-			return true;
+	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
+		if (majorGraduationCategory == PRIMARY) {
+			return checkSupport(user.getPrimaryMajor(), user.getEntryYear());
 		}
-		if (user.getPrimaryMajor().equals(ADMINISTRATIONS) && user.getEntryYear() >= CLASS_OF_17) {
-			return true;
+		if (majorGraduationCategory == DUAL) {
+			return checkSupport(user.getDualMajor(), user.getEntryYear());
 		}
-		return List.of(BUSINESS, INTERNATIONAL_TRADE).contains(user.getPrimaryMajor());
+		return checkSupport(user.getSubMajor(), user.getEntryYear());
 	}
 
 	@Override
 	public boolean checkMandatoryCondition(User user,
 		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-    
-		boolean checkMandatoryCondition = checkCompleteOptionalMandatory(user, takenLectureInventory,
-			mandatoryLectures,
+
+		boolean checkMandatoryCondition = checkCompleteOptionalMandatory(user, takenLectureInventory, mandatoryLectures,
 			electiveLectures);
 
 		if (!checkMandatoryCondition) {
@@ -54,7 +56,7 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 
 	public boolean checkCompleteOptionalMandatory(User user,
 		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-    
+
 		OptionalMandatory optionalMandatory = OptionalMandatory.from(user);
 		int chooseNum = optionalMandatory.getChooseNumber();
 		//전공과목Set에서 전공필수과목에 해당되는 과목들을 추출한다.
@@ -74,5 +76,15 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 			mandatoryLectures.removeAll(remainingMandatoryLectures);
 		}
 		return count >= chooseNum;
+	}
+
+	private static boolean checkSupport(String major, int entryYear) {
+		if (major.equals(MANAGEMENT_INFORMATION) && entryYear >= CLASS_OF_19) {
+			return true;
+		}
+		if (major.equals(ADMINISTRATIONS) && entryYear >= CLASS_OF_17) {
+			return true;
+		}
+		return List.of(BUSINESS, INTERNATIONAL_TRADE).contains(major);
 	}
 }

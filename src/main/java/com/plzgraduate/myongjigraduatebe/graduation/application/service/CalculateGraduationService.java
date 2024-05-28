@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCoreCultureGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDualBasicAcademicalCultureDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDualElectiveMajorDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDualMandatoryMajorDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryBasicAcademicalCultureDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryElectiveMajorDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryMandatoryMajorDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
@@ -18,6 +24,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
@@ -85,6 +92,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			generteBasicAcademicalDetailGraduationResult(
 				user, takenLectureInventory, graduationRequirement)
 		));
+		detailGraduationResults.addAll(
+			generatePrimaryMajorDetailGraduations(user, takenLectureInventory, graduationRequirement));
 
 		addPrimaryMajorDetailGraduation(user, takenLectureInventory, graduationRequirement, detailGraduationResults);
 
@@ -110,15 +119,16 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generteBasicAcademicalDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculatePrimaryBasicAcademicalCultureDetailGraduationService.calculateDetailGraduation(user,
+		return calculatePrimaryBasicAcademicalCultureDetailGraduationUseCase.calculateDetailGraduation(user,
 			takenLectureInventory, graduationRequirement);
 	}
 
-	private void addPrimaryMajorDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement, List<DetailGraduationResult> detailGraduationResults) {
+	private List<DetailGraduationResult> generatePrimaryMajorDetailGraduations(User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationPrimaryMajorLectures = findMajorPort.findMajor(user.getPrimaryMajor());
-		MajorManager majorManager = new MajorManager();
 
+		MajorGraduationManager majorManager = new MajorManager();
+		majorManager.designateMajorGraduationCategory(PRIMARY);
 		DetailGraduationResult primaryMajorDetailGraduationResult = majorManager.createDetailGraduationResult(user,
 			takenLectureInventory, graduationPrimaryMajorLectures, graduationRequirement.getPrimaryMajorCredit());
 		DetailGraduationResult primaryMandatoryMajorDetailGraduationResult = calculatePrimaryMandatoryMajorDetailGraduationUseCase.isolatePrimaryMandatoryMajorDetailGraduation(

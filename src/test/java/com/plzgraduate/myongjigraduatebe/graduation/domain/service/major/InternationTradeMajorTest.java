@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -59,7 +60,7 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager();
+		MajorManager manager = new MajorManager(PRIMARY);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -115,7 +116,7 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager();
+		MajorManager manager = new MajorManager(PRIMARY);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -172,7 +173,7 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager();
+		MajorManager manager = new MajorManager(PRIMARY);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -226,7 +227,7 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager();
+		MajorManager manager = new MajorManager(PRIMARY);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -265,7 +266,7 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager();
+		MajorManager manager = new MajorManager(PRIMARY);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -296,7 +297,7 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager();
+		MajorManager manager = new MajorManager(PRIMARY);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,

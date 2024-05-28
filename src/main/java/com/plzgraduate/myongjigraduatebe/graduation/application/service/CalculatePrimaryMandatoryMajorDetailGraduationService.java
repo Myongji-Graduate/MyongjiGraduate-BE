@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.PRIMARY;
 
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class CalculatePrimaryMandatoryMajorDetailGraduationService
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getPrimaryMajor());
-		GraduationManager<MajorLecture> majorGraduationManager = new MajorManager();
+		GraduationManager<MajorLecture> majorGraduationManager = new MajorManager(PRIMARY);
 		DetailGraduationResult majorDetailGraduationResult = majorGraduationManager.createDetailGraduationResult(user,
 			takenLectureInventory, graduationMajorLectures, graduationRequirement.getPrimaryMajorCredit());
 
