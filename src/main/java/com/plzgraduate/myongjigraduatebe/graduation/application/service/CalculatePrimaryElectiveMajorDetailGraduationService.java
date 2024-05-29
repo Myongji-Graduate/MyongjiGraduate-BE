@@ -61,10 +61,12 @@ public class CalculatePrimaryElectiveMajorDetailGraduationService
 
 	private DetailCategoryResult separateElectiveMajor(
 		DetailGraduationResult majorDetailGraduationResult) {
-		return majorDetailGraduationResult.getDetailCategory()
+		DetailCategoryResult primaryElectiveDetailCategoryResult = majorDetailGraduationResult.getDetailCategory()
 			.stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공선택"))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 선택)"));
+		primaryElectiveDetailCategoryResult.assignDetailCategoryName("주전공선택");
+		return primaryElectiveDetailCategoryResult;
 	}
 }

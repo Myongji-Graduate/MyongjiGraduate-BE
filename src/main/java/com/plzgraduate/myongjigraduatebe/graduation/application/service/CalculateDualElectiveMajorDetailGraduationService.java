@@ -60,9 +60,11 @@ public class CalculateDualElectiveMajorDetailGraduationService
 
 	private DetailCategoryResult separateElectiveMajor(
 		DetailGraduationResult majorDetailGraduationResult) {
-		return majorDetailGraduationResult.getDetailCategory().stream()
-			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공선택"))
-			.findFirst()
-			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 선택)"));
+			DetailCategoryResult dualElectiveMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory().stream()
+				.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공선택"))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 선택)"));
+			dualElectiveMajorDetailCategoryResult.assignDetailCategoryName("복수전공선택");
+			return dualElectiveMajorDetailCategoryResult;
 	}
 }
