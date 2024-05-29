@@ -40,6 +40,7 @@ public class UserMapper {
 			.studentNumber(user.getStudentNumber())
 			.entryYear(user.getEntryYear())
 			.major(user.getPrimaryMajor())
+			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
 			.totalCredit(user.getTotalCredit())
