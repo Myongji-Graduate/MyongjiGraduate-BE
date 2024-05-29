@@ -28,8 +28,8 @@ public class MandatoryMajorManager {
 
 		for (MajorExceptionHandler majorExceptionHandler : majorExceptionHandlers) {
 			if (majorExceptionHandler.isSupport(user, majorGraduationCategory)) {
-				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(user,
-					takenLectureInventory, mandatoryLectures, electiveLectures);
+				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(takenLectureInventory,
+					mandatoryLectures, electiveLectures);
 				removeMandatoryTotalCredit = majorExceptionHandler.getRemovedMandatoryTotalCredit();
 			}
 		}

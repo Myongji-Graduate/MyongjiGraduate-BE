@@ -40,17 +40,16 @@ public enum OptionalMandatory {
 	MANAGEMENT_INFORMATION("경영정보학과", 2, Set.of(
 		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
 		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
-		Lecture.of("HBX01105", "재무관리원론",3, 0, null)
+		Lecture.of("HBX01105", "재무관리원론", 3, 0, null)
 	));
 
 	private final String department;
 	private final int chooseNumber;
 	private final Set<Lecture> optionalMandatoryLectures;
 
-	public static OptionalMandatory from(User user) {
+	public static OptionalMandatory from(String major) {
 		return Arrays.stream(OptionalMandatory.values())
-			.filter(optionalMandatory -> Objects.equals(optionalMandatory.getDepartment(),
-				user.getPrimaryMajor()))
+			.filter(optionalMandatory -> Objects.equals(optionalMandatory.getDepartment(), major))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("해당 전공선택필수를 찾을 수 없습니다."));
 	}

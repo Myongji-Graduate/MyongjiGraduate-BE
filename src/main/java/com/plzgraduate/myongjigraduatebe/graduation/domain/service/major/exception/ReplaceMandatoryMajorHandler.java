@@ -38,8 +38,8 @@ public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 	}
 
 	@Override
-	public boolean checkMandatoryCondition(User user,
-		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+	public boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		boolean checkCondition = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures);
 		if (!checkCondition) {
