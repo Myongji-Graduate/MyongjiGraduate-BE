@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_MANDATORY_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_ELECTIVE_MAJOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -26,14 +26,14 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
-class CalculateDualMandatoryMajorDetailGraduationServiceTest {
+class CalculateDualElectiveMajorDetailGraduationServiceTest {
 
 	@Mock
 	private FindMajorPort findMajorPort;
 	@InjectMocks
-	private CalculateDualMandatoryMajorDetailGraduationService calculateDualMandatoryMajorDetailGraduationService;
+	private CalculateDualElectiveMajorDetailGraduationService calculateDualElectiveMajorDetailGraduationService;
 
-	@DisplayName("유저의 복수전공필수 졸업결과를 계산한다.")
+	@DisplayName("유저의 복수전공선택 졸업결과를 계산한다.")
 	@Test
 	void calculateCoreCulture() {
 		//given
@@ -44,7 +44,7 @@ class CalculateDualMandatoryMajorDetailGraduationServiceTest {
 		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
 			Set.of(
 				MajorLecture.of(Lecture.builder().lectureCode("HEC01211").credit(3).build(), "응용소프트웨어전공", 1, 16, 23),
-				MajorLecture.of(Lecture.builder().lectureCode("HEC01204").credit(3).build(), "응용소프트웨어전공", 1, 16, 23)));
+				MajorLecture.of(Lecture.builder().lectureCode("HEC01304").credit(3).build(), "응용소프트웨어전공", 0, 16, 23)));
 		given(findMajorPort.findMajor(user.getDualMajor())).willReturn(graduationMajorLectures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
@@ -53,7 +53,7 @@ class CalculateDualMandatoryMajorDetailGraduationServiceTest {
 					.lectureCode("HEC01211") //전공 필수
 					.credit(3).build()).build(),
 				TakenLecture.builder().lecture(Lecture.builder()
-					.lectureCode("HEC01305") //전공 선택
+					.lectureCode("HEC01304") //전공 선택
 					.credit(3).build()).build()));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
@@ -61,16 +61,16 @@ class CalculateDualMandatoryMajorDetailGraduationServiceTest {
 			.dualMajorCredit(70).build();
 
 		//when
-		DetailGraduationResult detailDualMandatoryMajorGraduationResult = calculateDualMandatoryMajorDetailGraduationService.calculateDetailGraduation(
+		DetailGraduationResult detailDualMandatoryMajorGraduationResult = calculateDualElectiveMajorDetailGraduationService.calculateDetailGraduation(
 			user, takenLectureInventory, graduationRequirement);
 
 		//then
 		assertThat(detailDualMandatoryMajorGraduationResult)
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
-			.contains(DUAL_MANDATORY_MAJOR, false, 6, 3.0);
+			.contains(DUAL_ELECTIVE_MAJOR, false, 67, 3.0);
 	}
 
-	@DisplayName("복수전공 졸업결과에서 복수전공필수 졸업결과를 분리한다.")
+	@DisplayName("복수전공 졸업결과에서 복수전공선택 졸업결과를 분리한다.")
 	@Test
 	void isolateDualElectiveMajorDetailGraduation() {
 		//given
@@ -88,16 +88,17 @@ class CalculateDualMandatoryMajorDetailGraduationServiceTest {
 			70, List.of(dualMandatoryMajorDetailCategoryResult, dualElectiveMajorDetailCategoryResult));
 
 		//when
-		DetailGraduationResult dualMandatoryMajorDetailGraduationResult = calculateDualMandatoryMajorDetailGraduationService.isolateDualMandatoryMajorDetailGraduation(
-			dualMajorDetailGraduationResult);
+		DetailGraduationResult primaryMandatoryMajorDetailGraduationResult =
+			calculateDualElectiveMajorDetailGraduationService.isolateDualElectiveMajorDetailGraduation(
+				dualMajorDetailGraduationResult);
 
 		//then
-		assertThat(dualMandatoryMajorDetailGraduationResult)
+		assertThat(primaryMandatoryMajorDetailGraduationResult)
 			.extracting("graduationCategory", "totalCredit", "takenCredit")
 			.contains(
-				DUAL_MANDATORY_MAJOR,
-				dualMandatoryMajorDetailCategoryResult.getTotalCredits(),
-				dualMandatoryMajorDetailCategoryResult.getTakenCredits());
+				DUAL_ELECTIVE_MAJOR,
+				dualElectiveMajorDetailCategoryResult.getTotalCredits(),
+				dualElectiveMajorDetailCategoryResult.getTakenCredits());
 	}
 
 }

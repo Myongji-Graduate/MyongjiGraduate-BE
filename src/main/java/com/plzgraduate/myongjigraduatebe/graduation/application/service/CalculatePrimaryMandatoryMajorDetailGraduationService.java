@@ -63,6 +63,6 @@ public class CalculatePrimaryMandatoryMajorDetailGraduationService
 		return majorDetailGraduationResult.getDetailCategory().stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공필수"))
 			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("Not Found DetailCategoryResult(전공 필수)"));
+			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 필수)"));
 	}
 }

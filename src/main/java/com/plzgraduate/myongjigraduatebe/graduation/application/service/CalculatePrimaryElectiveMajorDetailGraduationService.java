@@ -65,6 +65,6 @@ public class CalculatePrimaryElectiveMajorDetailGraduationService
 			.stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공선택"))
 			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("Not Found DetailCategoryResult(전공 선택)"));
+			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 선택)"));
 	}
 }
