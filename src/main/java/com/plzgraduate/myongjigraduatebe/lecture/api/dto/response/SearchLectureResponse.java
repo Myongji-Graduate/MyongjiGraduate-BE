@@ -20,17 +20,17 @@ public class SearchLectureResponse {
 	@Schema(name = "isRevoked", example = "false")
 	private final boolean revoked;
 	@Schema(name = "isAddable", example = "true")
-	private final boolean addable;
+	private final boolean taken;
 
 	@Builder
 	private SearchLectureResponse(Long id, String lectureCode, String name, int credit, boolean revoked,
-		boolean addable) {
+		boolean taken) {
 		this.id = id;
 		this.lectureCode = lectureCode;
 		this.name = name;
 		this.credit = credit;
 		this.revoked = revoked;
-		this.addable = addable;
+		this.taken = taken;
 	}
 
 	public static SearchLectureResponse from(SearchedLectureDto searchedLectureDto) {
@@ -40,7 +40,7 @@ public class SearchLectureResponse {
 			.name(searchedLectureDto.getLecture().getName())
 			.credit(searchedLectureDto.getLecture().getCredit())
 			.revoked(searchedLectureDto.getLecture().getIsRevoked() != 0)
-			.addable(searchedLectureDto.isAddable())
+			.taken(searchedLectureDto.isAddable())
 			.build();
 	}
 }

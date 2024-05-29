@@ -38,7 +38,7 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$", hasSize(searchedLectures.size())))
-			.andExpect(jsonPath("$.[0].addable").value(true));
+			.andExpect(jsonPath("$.[0].taken").value(true));
 
 		then(searchLectureUseCase).should(times(1)).searchLectures(anyLong(), any(), any());
 	}
