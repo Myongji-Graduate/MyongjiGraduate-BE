@@ -173,7 +173,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		GraduationRequirement graduationRequirement) {
 		GraduationResult graduationResult = GraduationResult.create(chapelResult, detailGraduationResults);
 		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
-		graduationResult.checkGraduated();
+		graduationResult.checkGraduated(graduationRequirement);
 		return graduationResult;
 	}
 
