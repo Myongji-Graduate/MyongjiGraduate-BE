@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +20,19 @@ public enum OptionalMandatory {
 		Lecture.of("HBA01113", "비영리조직", 3, 0, null),
 		Lecture.of("HBA01222", "커뮤니티개발연구", 3, 0, null)
 	)),
-	BUSINESS("경영학과", 4, Set.of(
-		Lecture.of("HBX01104", "회계원리", 3, 0, null),
-		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
-		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
-		Lecture.of("HBX01105", "재무관리원론", 3, 0, null),
-		Lecture.of("HBX01114", "생산운영관리", 3, 1, null),
-		Lecture.of("HBX01143", "운영관리", 3, 0, null)
+	// 기존 OptionalMandatory
+	// BUSINESS("경영학과", 4, Set.of(
+	// 	Lecture.of("HBX01104", "회계원리", 3, 0, null),
+	// 	Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
+	// 	Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
+	// 	Lecture.of("HBX01105", "재무관리원론", 3, 0, null),
+	// 	Lecture.of("HBX01114", "생산운영관리", 3, 1, null),
+	// 	Lecture.of("HBX01143", "운영관리", 3, 0, null)
+	BUSINESS("경영학과", 1, Set.of(
+		Lecture.of("HBW01201", "국제통산원론", 3, 0, "HBW01201"),
+		Lecture.of("HBX01127", "국제경영학", 3, 0, "CE224"),
+		Lecture.of("HBX01125", "경영정보", 3, 0, "KMJ01116"),
+		Lecture.of("HBY01103", "경영정보", 3, 1, "KMJ01116")
 	)),
 	INTERNATIONAL_TRADE("국제통상학과", 4, Set.of(
 		Lecture.of("HBX01104", "회계원리", 3, 0, null),
