@@ -42,7 +42,7 @@ class CalculatePrimaryBasicAcademicalCultureDetailGraduationServiceTest {
 			.entryYear(19).build();
 		HashSet<BasicAcademicalCultureLecture> graduationCoreCultures = new HashSet<>(
 			Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02128"), ICT.getName())));
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(user)).willReturn(graduationCoreCultures);
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(user.getPrimaryMajor())).willReturn(graduationCoreCultures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
 			Set.of(

@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.ICT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -43,7 +42,7 @@ class CalculateDualBasicAcademicalCultureDetailGraduationServiceTest {
 			.entryYear(19).build();
 		HashSet<BasicAcademicalCultureLecture> graduationCoreCultures = new HashSet<>(
 			Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02128"), ICT.getName())));
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(user)).willReturn(graduationCoreCultures);
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(user.getDualMajor())).willReturn(graduationCoreCultures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
 			Set.of(

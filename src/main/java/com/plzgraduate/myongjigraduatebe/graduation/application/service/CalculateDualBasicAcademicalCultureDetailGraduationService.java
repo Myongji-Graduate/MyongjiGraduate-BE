@@ -41,7 +41,7 @@ public class CalculateDualBasicAcademicalCultureDetailGraduationService implemen
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(
-			user);
+			user.getDualMajor());
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager = determineBasicAcademicalCultureGraduationManager(
 			user);
 		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
