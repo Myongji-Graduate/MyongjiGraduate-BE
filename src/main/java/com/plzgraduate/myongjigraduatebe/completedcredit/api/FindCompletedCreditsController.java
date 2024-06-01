@@ -23,6 +23,7 @@ public class FindCompletedCreditsController implements FindCompletedCreditApiPre
 	@GetMapping()
 	public List<CompletedCreditResponse> getCompletedCredits(@LoginUser Long userId) {
 		return findCompletedCreditUseCase.findCompletedCredits(userId).stream()
+			.filter(completedCredit -> completedCredit.getTotalCredit() != 0)
 			.map(CompletedCreditResponse::from)
 			.collect(Collectors.toList());
 	}

@@ -51,4 +51,30 @@ class FindCompletedCreditsControllerTest extends WebAdaptorTestSupport {
 			.andExpect(jsonPath("$[1].completed").value(false));
 
 	}
+
+
+	@WithMockAuthenticationUser
+	@DisplayName("유저의 이수 학점을 조회 시 totalCredit이 0인 CompletedCredit은 조회하지 않는다.")
+	@Test
+	void findCompletedCreditsWithZeroTotalCredit() throws Exception {
+		//given
+		List<CompletedCredit> completedCredits = List.of(
+			CompletedCredit.builder()
+				.graduationCategory(GraduationCategory.COMMON_CULTURE)
+				.totalCredit(0)
+				.takenCredit(10)
+				.build(),
+			CompletedCredit.builder()
+				.graduationCategory(GraduationCategory.CORE_CULTURE)
+				.totalCredit(0)
+				.takenCredit(5)
+				.build());
+		given(findCompletedCreditUseCase.findCompletedCredits(1L)).willReturn(completedCredits);
+
+		//when //then
+		mockMvc.perform(get("/api/v1/graduations/credits"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.length()").value(0));
+	}
 }
