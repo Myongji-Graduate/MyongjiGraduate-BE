@@ -77,8 +77,7 @@ public class GraduationResult {
 			.mapToDouble(DetailGraduationResult::getTakenCredit)
 			.sum()
 			+ normalCultureGraduationResult.getTakenCredit()
-			+ freeElectiveGraduationResult.getTakenCredit()
-			+ chapelResult.getTakenChapelCredit();
+			+ freeElectiveGraduationResult.getTakenCredit();
 	}
 
 
