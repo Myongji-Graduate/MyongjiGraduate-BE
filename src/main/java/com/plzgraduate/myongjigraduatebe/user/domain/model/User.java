@@ -63,7 +63,7 @@ public class User {
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major, String subMajor, String dualMajor,
+	public void updateStudentInformation(String name, String major,  String dualMajor, String subMajor,
 		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.name = name;
 		this.primaryMajor = major;

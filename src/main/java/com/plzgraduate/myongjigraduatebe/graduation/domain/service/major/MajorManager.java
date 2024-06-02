@@ -16,7 +16,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class MajorManager implements GraduationManager<MajorLecture> {
+
+	private final MajorGraduationCategory majorGraduationCategory;
 
 	/**
 	 *
@@ -36,13 +41,14 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
 		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
 
-		List<MajorExceptionHandler> majorExceptionHandlers = List.of(new OptionalMandatoryHandler(),
+		List<MajorExceptionHandler> majorExceptionHandlers = List.of(
+			new OptionalMandatoryHandler(),
 			new ReplaceMandatoryMajorHandler());
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(majorExceptionHandlers);
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(
-			user, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, takenLectureInventory, mandatoryLectures, electiveLectures, majorGraduationCategory);
 
 		int electiveMajorTotalCredit = graduationResultTotalCredit - mandantoryDetailCategoryResult.getTotalCredits();
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
@@ -78,7 +84,8 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 	 * 사용자가 B과목을 들었다면 A,C는 전공과목에서 삭제한다.
 	 * B과목만 takenLectures(수강했던 전공과목)에 넣어주면 되고 A,C 과목은 haveToTLectures(들어야하는 전공과목)에 넣어주면 안되기 떄문이다.
 	 */
-	private void removeDuplicateLectureIfTaken(TakenLectureInventory takenLectureInventory, Set<MajorLecture> graduationLectures) {
+	private void removeDuplicateLectureIfTaken(TakenLectureInventory takenLectureInventory,
+		Set<MajorLecture> graduationLectures) {
 		Set<Lecture> duplicatedTakenLectures = findDuplicatedTakenLecture(takenLectureInventory);
 		graduationLectures.removeIf(graduationLecture ->
 			duplicatedTakenLectures.stream()

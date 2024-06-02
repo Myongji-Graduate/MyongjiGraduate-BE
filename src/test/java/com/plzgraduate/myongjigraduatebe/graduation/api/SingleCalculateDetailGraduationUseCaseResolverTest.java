@@ -22,8 +22,8 @@ class SingleCalculateDetailGraduationUseCaseResolverTest {
 
 	@DisplayName("졸업 카테고리를 계산할 수 있는 CalculateDetailGraduationUseCaseResolver 반환한다.")
 	@ValueSource(strings =
-		{"COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MANDATORY_MAJOR", "PRIMARY_ELECTIVE_MAJOR", "DUAL_MAJOR",
-			"SUB_MAJOR", "PRIMARY_BASIC_ACADEMICAL_CULTURE", "DUAL_BASIC_ACADEMICAL_CULTURE"
+		{"COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MANDATORY_MAJOR", "PRIMARY_ELECTIVE_MAJOR", "DUAL_MANDATORY_MAJOR",
+			"DUAL_ELECTIVE_MAJOR", "SUB_MAJOR", "PRIMARY_BASIC_ACADEMICAL_CULTURE", "DUAL_BASIC_ACADEMICAL_CULTURE"
 		})
 	@ParameterizedTest
 	void resolveCalculateDetailGraduationUseCase(String graduationCategoryName) {

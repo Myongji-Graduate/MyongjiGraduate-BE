@@ -1,10 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -22,13 +25,21 @@ public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 	);
 
 	@Override
-	public boolean isSupport(User user) {
-		return user.getPrimaryMajor().equals("철학과") && user.getEntryYear() <= 21;
+	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
+		String major;
+		if (majorGraduationCategory == PRIMARY) {
+			major = user.getPrimaryMajor();
+		} else if (majorGraduationCategory == DUAL) {
+			major = user.getDualMajor();
+		} else {
+			major = user.getSubMajor();
+		}
+		return major.equals("철학과") && user.getEntryYear() <= 21;
 	}
 
 	@Override
-	public boolean checkMandatoryCondition(User user,
-		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+	public boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		boolean checkCondition = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures);
 		if (!checkCondition) {

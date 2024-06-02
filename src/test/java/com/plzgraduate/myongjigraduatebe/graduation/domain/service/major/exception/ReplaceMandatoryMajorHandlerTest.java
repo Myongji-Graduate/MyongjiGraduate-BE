@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -25,7 +25,7 @@ class ReplaceMandatoryMajorHandlerTest {
 	@DisplayName("답사1와 답사2를 수강했을 경우 세부조건을 달성한다.")
 	@Test
 	void 답사과목_수강() {
-    
+
 		//given
 		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(
 			mockLectureMap.get("HAI01110"), //답사1
@@ -46,10 +46,10 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(user,
-			takenLectureInventory, mandatoryLectures, electiveLectures);
+		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(takenLectureInventory,
+			mandatoryLectures, electiveLectures);
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
-    
+
 		//then
 		assertThat(checkMandatoryCondition).isTrue();
 		assertThat(removedMandatoryTotalCredit).isZero();
@@ -60,7 +60,7 @@ class ReplaceMandatoryMajorHandlerTest {
 	@DisplayName("답사1,답사2를 수강했을 못했고, 대체과목을 수강했을 경우 세부조건을 달성한다. 이때 나중에 들은 대체과목은 전공선택으로 인정된다.")
 	@Test
 	void 답사과목_미수강_대체과목_수강() {
-    
+
 		//given
 		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(
 			mockLectureMap.get("HAI01110"), //답사1
@@ -80,10 +80,10 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(user,
-			takenLectureInventory, mandatoryLectures, electiveLectures);
+		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(takenLectureInventory,
+			mandatoryLectures, electiveLectures);
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
-    
+
 		//then
 		assertThat(checkMandatoryCondition).isTrue();
 		assertThat(removedMandatoryTotalCredit).isZero();
@@ -94,7 +94,7 @@ class ReplaceMandatoryMajorHandlerTest {
 	@DisplayName("답사1,답사2를 수강했을 못했고, 대체과목을 수강하지 못했을 경우 대체과목은 전공필수 과목으로 이동한다.")
 	@Test
 	void 답사_미수강_대체과목_미수강() {
-    
+
 		//given
 		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(
 			mockLectureMap.get("HAI01110"), //답사1
@@ -110,10 +110,10 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(user,
-			takenLectureInventory, mandatoryLectures, electiveLectures);
+		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(takenLectureInventory,
+			mandatoryLectures, electiveLectures);
 		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
-    
+
 		//then
 		assertThat(checkMandatoryCondition).isFalse();
 		assertThat(removedMandatoryTotalCredit).isEqualTo(3);

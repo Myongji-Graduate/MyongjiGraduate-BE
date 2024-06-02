@@ -1,6 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
+
+import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +16,8 @@ public class GraduationRequirement {
 	private int primaryMajorCredit;
 	private int dualMajorCredit;
 	private int subMajorCredit;
-	private final int primaryBasicAcademicalCredit;
-	private final int dualBasicAcademicalCredit;
+	private final int primaryBasicAcademicalCultureCredit;
+	private int dualBasicAcademicalCultureCredit;
 	private int commonCultureCredit;
 	private final int coreCultureCredit;
 	private int normalCultureCredit;
@@ -21,14 +25,15 @@ public class GraduationRequirement {
 
 	@Builder
 	private GraduationRequirement(int totalCredit, int primaryMajorCredit, int dualMajorCredit, int subMajorCredit,
-		int primaryBasicAcademicalCredit, int dualBasicAcademicalCredit, int commonCultureCredit, int coreCultureCredit,
+		int primaryBasicAcademicalCultureCredit, int dualBasicAcademicalCultureCredit, int commonCultureCredit,
+		int coreCultureCredit,
 		int normalCultureCredit, int freeElectiveCredit) {
 		this.totalCredit = totalCredit;
 		this.primaryMajorCredit = primaryMajorCredit;
 		this.dualMajorCredit = dualMajorCredit;
 		this.subMajorCredit = subMajorCredit;
-		this.primaryBasicAcademicalCredit = primaryBasicAcademicalCredit;
-		this.dualBasicAcademicalCredit = dualBasicAcademicalCredit;
+		this.primaryBasicAcademicalCultureCredit = primaryBasicAcademicalCultureCredit;
+		this.dualBasicAcademicalCultureCredit = dualBasicAcademicalCultureCredit;
 		this.commonCultureCredit = commonCultureCredit;
 		this.coreCultureCredit = coreCultureCredit;
 		this.normalCultureCredit = normalCultureCredit;
@@ -45,7 +50,25 @@ public class GraduationRequirement {
 		freeElectiveCredit = 0;
 	}
 
-	public void modifyCreditForDualMajor(int primaryMajorCredit, int dualMajorCredit) {
-		//TODO: 복수 전공의 정확한 졸업요건 체크 후 로직 작성
+	public void modifyCreditForDualMajor(User user) {
+		DualMajorGraduationRequirementType primaryMajorGraduationRequirementType =
+			findBelongingDualMajorGraduationRequirementType(
+				College.findBelongingCollege(user.getPrimaryMajor()).getName());
+		DualMajorGraduationRequirementType dualMajorGraduationRequirementType =
+			findBelongingDualMajorGraduationRequirementType(
+				College.findBelongingCollege(user.getDualMajor()).getName());
+
+		primaryMajorCredit = primaryMajorGraduationRequirementType.getMajorCredit();
+		dualMajorCredit = dualMajorGraduationRequirementType.getMajorCredit();
+		dualBasicAcademicalCultureCredit = dualMajorGraduationRequirementType.getBasicAcademicalCultureCredit();
+		normalCultureCredit = 0;
+		freeElectiveCredit = calculateFreeElectiveCreditWithDualMajorStudent();
+	}
+
+	private int calculateFreeElectiveCreditWithDualMajorStudent() {
+		int freeElectiveCredit =
+			totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit - dualMajorCredit
+				- primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
+		return Math.max(freeElectiveCredit, 0);
 	}
 }

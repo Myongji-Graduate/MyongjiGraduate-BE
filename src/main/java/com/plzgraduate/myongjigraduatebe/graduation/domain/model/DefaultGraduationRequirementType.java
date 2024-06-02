@@ -51,8 +51,8 @@ public enum DefaultGraduationRequirementType {
 			.primaryMajorCredit(this.majorLectureCredit)
 			.dualMajorCredit(0)
 			.subMajorCredit(0)
-			.primaryBasicAcademicalCredit(this.basicAcademicalLectureCredit)
-			.dualBasicAcademicalCredit(0)
+			.primaryBasicAcademicalCultureCredit(this.basicAcademicalLectureCredit)
+			.dualBasicAcademicalCultureCredit(0)
 			.commonCultureCredit(this.commonCultureCredit)
 			.coreCultureCredit(this.coreCultureCredit)
 			.normalCultureCredit(this.normalLectureCredit)
@@ -71,13 +71,7 @@ public enum DefaultGraduationRequirementType {
 
 	private void checkIsMultiMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
-			DualMajorGraduationRequirementType originMajorGraduationRequirementType = DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getPrimaryMajor()).getName());
-			DualMajorGraduationRequirementType dualMajorGraduationRequirementType = DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getDualMajor()).getName());
-
-			graduationRequirement.modifyCreditForDualMajor(originMajorGraduationRequirementType.getOriginMajorCredit(),
-				dualMajorGraduationRequirementType.getDualMajorCredit());
+			graduationRequirement.modifyCreditForDualMajor(user);
 		}
 		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
 			graduationRequirement.modifyCreditForSubMajor();

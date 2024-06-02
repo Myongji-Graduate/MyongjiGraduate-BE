@@ -103,7 +103,7 @@ class GraduationResultTest {
 			.freeElectiveGraduationResult(freeElectiveGraduationResult).build();
 
 		//when
-		graduationResult.checkGraduated();
+		graduationResult.checkGraduated(GraduationRequirement.builder().totalCredit(134).build());
 
 		//then
 		assertThat(graduationResult.isGraduated()).isTrue();
@@ -127,7 +127,7 @@ class GraduationResultTest {
 			.freeElectiveGraduationResult(freeElectiveGraduationResult).build();
 
 		//when
-		graduationResult.checkGraduated();
+		graduationResult.checkGraduated(GraduationRequirement.builder().totalCredit(134).build());
 
 		//then
 		assertThat(graduationResult.isGraduated()).isFalse();

@@ -18,17 +18,18 @@ public class MandatoryMajorManager {
 
 	private final List<MajorExceptionHandler> majorExceptionHandlers;
 
-	public DetailCategoryResult createDetailCategoryResult(User user,
-		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+	public DetailCategoryResult createDetailCategoryResult(User user, TakenLectureInventory takenLectureInventory,
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures,
+		MajorGraduationCategory majorGraduationCategory) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		boolean isSatisfiedMandatory = true;
 		int removeMandatoryTotalCredit = 0;
 
 		for (MajorExceptionHandler majorExceptionHandler : majorExceptionHandlers) {
-			if (majorExceptionHandler.isSupport(user)) {
-				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(user,
-					takenLectureInventory, mandatoryLectures, electiveLectures);
+			if (majorExceptionHandler.isSupport(user, majorGraduationCategory)) {
+				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(takenLectureInventory,
+					mandatoryLectures, electiveLectures);
 				removeMandatoryTotalCredit = majorExceptionHandler.getRemovedMandatoryTotalCredit();
 			}
 		}
