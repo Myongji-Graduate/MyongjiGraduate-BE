@@ -28,32 +28,27 @@ public class OptionalMandatoryMandatoryMajorHandler implements MandatoryMajorSpe
 	private static final String INTERNATIONAL_TRADE = "국제통상학과";
 	private static final int CLASS_OF_17 = 17;
 	private static final int CLASS_OF_19 = 19;
-	private OptionalMandatory optionalMandatory;
 
 	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
 		String calculatingMajor = getCalculatingMajor(user, majorGraduationCategory);
 		if (calculatingMajor.equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
-			this.optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
 			return true;
 		}
 		if (calculatingMajor.equals(ADMINISTRATIONS) && user.getEntryYear() >= CLASS_OF_17) {
-			this.optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
 			return true;
 		}
-		if (List.of(BUSINESS, INTERNATIONAL_TRADE).contains(calculatingMajor)) {
-			this.optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
-			return true;
-		}
-		return false;
+		return List.of(BUSINESS, INTERNATIONAL_TRADE).contains(calculatingMajor);
 	}
 
 	@Override
 	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(
-		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+		User user, MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory,
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 
+		OptionalMandatory optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
 		int removedMandatoryTotalCredit = 0;
 		boolean completeMandatorySpecialCase = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
-			electiveLectures);
+			electiveLectures, optionalMandatory);
 
 		if (!completeMandatorySpecialCase) {
 			removedMandatoryTotalCredit = optionalMandatory.getTotalOptionalMandatoryCredit()
@@ -63,7 +58,7 @@ public class OptionalMandatoryMandatoryMajorHandler implements MandatoryMajorSpe
 	}
 
 	private boolean checkCompleteOptionalMandatory(TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, OptionalMandatory optionalMandatory) {
 		int chooseNum = optionalMandatory.getChooseNumber();
 		/*
 		 * 전공과목 Set 에서 전공선택필수과목에 해당되는 과목들을 추출한다.

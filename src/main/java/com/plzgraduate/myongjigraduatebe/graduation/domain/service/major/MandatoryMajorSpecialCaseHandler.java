@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 public interface MandatoryMajorSpecialCaseHandler {
 	boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory);
 
-	MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(TakenLectureInventory takenLectureInventory,
+	MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(
+		User user, MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures);
 }

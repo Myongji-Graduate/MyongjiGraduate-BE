@@ -30,7 +30,7 @@ public class MandatoryMajorManager {
 		for (MandatoryMajorSpecialCaseHandler mandatoryMajorSpecialCaseHandler : mandatoryMajorSpecialCaseHandlers) {
 			if (mandatoryMajorSpecialCaseHandler.isSupport(user, majorGraduationCategory)) {
 				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = mandatoryMajorSpecialCaseHandler.getMandatorySpecialCaseInformation(
-					takenLectureInventory, mandatoryLectures, electiveLectures);
+					user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
 				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 				removeMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 			}

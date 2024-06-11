@@ -42,7 +42,7 @@ public class ReplaceMandatoryMandatoryMajorHandler implements MandatoryMajorSpec
 
 	@Override
 	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(
-		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+		User user, MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		boolean completeMandatorySpecialCase = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures);
 		int removedMandatoryTotalCredit = 0;
