@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.DUAL;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.PRIMARY;
@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -21,7 +20,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
  * 경영의 경우 국제통상원론, 국제경양, 경영정보 중 택1
  * 행정의
  */
-public class OptionalMandatoryHandler implements MajorExceptionHandler {
+public class OptionalMandatoryMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
 
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
 	private static final String BUSINESS = "경영학과";

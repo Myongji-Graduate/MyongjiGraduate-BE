@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.MajorExceptionHandler;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.MandatorySpecialCaseInformation;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -19,7 +17,7 @@ public class MandatoryMajorManager {
 
 	private static final String detailCategoryName = "전공필수";
 
-	private final List<MajorExceptionHandler> majorExceptionHandlers;
+	private final List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers;
 
 	public DetailCategoryResult createDetailCategoryResult(User user, TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures,
@@ -29,9 +27,9 @@ public class MandatoryMajorManager {
 		boolean isSatisfiedMandatory = true;
 		int removeMandatoryTotalCredit = 0;
 
-		for (MajorExceptionHandler majorExceptionHandler : majorExceptionHandlers) {
-			if (majorExceptionHandler.isSupport(user, majorGraduationCategory)) {
-				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = majorExceptionHandler.getMandatorySpecialCaseInformation(
+		for (MandatoryMajorSpecialCaseHandler mandatoryMajorSpecialCaseHandler : mandatoryMajorSpecialCaseHandlers) {
+			if (mandatoryMajorSpecialCaseHandler.isSupport(user, majorGraduationCategory)) {
+				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = mandatoryMajorSpecialCaseHandler.getMandatorySpecialCaseInformation(
 					takenLectureInventory, mandatoryLectures, electiveLectures);
 				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 				removeMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();

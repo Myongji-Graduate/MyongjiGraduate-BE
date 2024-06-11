@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
 
@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -17,7 +16,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
  * 철학과의 경우 답사1, 답사2는 폐지 되었지만 2021번 이전까지 전공필수
  * '신유학의 이해' '유학사상의이해' 중 택1 이수 시 대체 인정
  */
-public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
+public class ReplaceMandatoryMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
 	//private int removedMandatoryTotalCredit = 0;
 	private static final List<Lecture> REPLACED_LECTURES = List.of(
 		Lecture.of("HAI01110", "답사1", 1, 1, null),

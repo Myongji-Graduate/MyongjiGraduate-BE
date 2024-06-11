@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import java.util.Arrays;
 import java.util.Objects;

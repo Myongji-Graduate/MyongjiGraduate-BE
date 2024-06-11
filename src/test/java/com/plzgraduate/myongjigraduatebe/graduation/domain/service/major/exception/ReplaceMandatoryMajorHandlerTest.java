@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MandatoryMajorSpecialCaseHandler;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MandatorySpecialCaseInformation;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.ReplaceMandatoryMandatoryMajorHandler;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -45,7 +48,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
-		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
+		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			takenLectureInventory,
 			mandatoryLectures, electiveLectures);
@@ -81,7 +84,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
-		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
+		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			takenLectureInventory,
 			mandatoryLectures, electiveLectures);
@@ -113,7 +116,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 
 		//when
-		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
+		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			takenLectureInventory,
 			mandatoryLectures, electiveLectures);
