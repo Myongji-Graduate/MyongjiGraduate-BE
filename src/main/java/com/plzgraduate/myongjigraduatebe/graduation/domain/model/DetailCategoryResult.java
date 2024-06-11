@@ -95,7 +95,6 @@ public class DetailCategoryResult {
 		graduationLectures.stream()
 			.filter(graduationLecture -> graduationLecture.getIsRevoked() == 0)
 			.forEach(haveToLectures::add);
-
 	}
 
 	private boolean checkCompleted() {

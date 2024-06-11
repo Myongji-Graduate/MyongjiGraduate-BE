@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.MajorExceptionHandler;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.MandatorySpecialCaseInformation;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class MandatoryMajorManager {
+
+	private static final String detailCategoryName = "전공필수";
 
 	private final List<MajorExceptionHandler> majorExceptionHandlers;
 
@@ -28,9 +31,10 @@ public class MandatoryMajorManager {
 
 		for (MajorExceptionHandler majorExceptionHandler : majorExceptionHandlers) {
 			if (majorExceptionHandler.isSupport(user, majorGraduationCategory)) {
-				isSatisfiedMandatory = majorExceptionHandler.checkMandatoryCondition(takenLectureInventory,
-					mandatoryLectures, electiveLectures);
-				removeMandatoryTotalCredit = majorExceptionHandler.getRemovedMandatoryTotalCredit();
+				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = majorExceptionHandler.getMandatorySpecialCaseInformation(
+					takenLectureInventory, mandatoryLectures, electiveLectures);
+				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+				removeMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 			}
 		}
 
@@ -40,7 +44,7 @@ public class MandatoryMajorManager {
 				finishedTakenLecture.add(takenLecture);
 				takenMandatory.add(takenLecture.getLecture());
 			});
-		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create("전공필수", isSatisfiedMandatory,
+		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create(detailCategoryName, isSatisfiedMandatory,
 			calculateTotalCredit(takenMandatory, mandatoryLectures, removeMandatoryTotalCredit));
 		majorMandatoryResult.calculate(takenMandatory, mandatoryLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);

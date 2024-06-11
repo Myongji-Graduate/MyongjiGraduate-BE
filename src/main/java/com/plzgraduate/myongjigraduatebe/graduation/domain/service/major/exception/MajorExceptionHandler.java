@@ -10,8 +10,6 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 public interface MajorExceptionHandler {
 	boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory);
 
-	boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
+	MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures);
-
-	int getRemovedMandatoryTotalCredit();
 }

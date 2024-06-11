@@ -14,6 +14,13 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+/**
+ * N택 M의 선택과목이 있는 경우 처리하는 핸들러 클래스
+ * 국제통상의 경우 회계원리, 마케팅원론, 재무관리 원론, 인적자원관리, 생산운영관리(폐지), 운영관리(구, 생산운영관리) 5개 중 4개 선택
+ * 경영정보의 경우 인적자원관리, 마켓팅원론, 재무관리원론에서 ~18학번까지는 3개 모두 이수, 19학번 이후 택 2
+ * 경영의 경우 국제통상원론, 국제경양, 경영정보 중 택1
+ * 행정의
+ */
 public class OptionalMandatoryHandler implements MajorExceptionHandler {
 
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
@@ -22,7 +29,6 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	private static final String INTERNATIONAL_TRADE = "국제통상학과";
 	private static final int CLASS_OF_17 = 17;
 	private static final int CLASS_OF_19 = 19;
-	private int removedMandatoryTotalCredit = 0;
 	private OptionalMandatory optionalMandatory;
 
 	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
@@ -43,29 +49,36 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 	}
 
 	@Override
-	public boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		boolean checkMandatoryCondition = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
+	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(
+		TakenLectureInventory takenLectureInventory, Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+
+		int removedMandatoryTotalCredit = 0;
+		boolean completeMandatorySpecialCase = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures);
 
-		if (!checkMandatoryCondition) {
-			removedMandatoryTotalCredit = optionalMandatory.getTotalOptionalMandatoryCredit(optionalMandatory)
-				- optionalMandatory.getChooseLectureCredit(optionalMandatory);
+		if (!completeMandatorySpecialCase) {
+			removedMandatoryTotalCredit = optionalMandatory.getTotalOptionalMandatoryCredit()
+				- optionalMandatory.getChooseLectureCredit();
 		}
-		return checkMandatoryCondition;
-	}
-
-	@Override
-	public int getRemovedMandatoryTotalCredit() {
-		return removedMandatoryTotalCredit;
+		return MandatorySpecialCaseInformation.of(completeMandatorySpecialCase, removedMandatoryTotalCredit);
 	}
 
 	private boolean checkCompleteOptionalMandatory(TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		int chooseNum = optionalMandatory.getChooseNumber();
-		//전공과목Set에서 전공필수과목에 해당되는 과목들을 추출한다.
+		/*
+		 * 전공과목 Set 에서 전공선택필수과목에 해당되는 과목들을 추출한다.
+		 */
+
 		Set<Lecture> optionalMandatoryLectures = mandatoryLectures.stream().filter(
 			optionalMandatory.getOptionalMandatoryLectures()::contains).collect(Collectors.toSet());
+
+		/*
+		remainingMandatoryLectures에 모든 전공선택필수 과목을 넣고 수강했을 시 제거한다.
+		최종적으로 전공선택필수 과목들 목록에서 사용자가 전공선택필수과목을 수강했다면 제거한다.
+		최종적으로  remainingMandatoryLectures에 남아있는 과목은 수강해야하는 과목들이다.
+		N택 M개 수강이라면 M개 이상 수강하였으면 전공필수에서 전부 제거, 전공 선택으로 이관하고 아니라면 전공필수에 그대로 남아있어야한다.
+		 */
 
 		Set<Lecture> remainingMandatoryLectures = new HashSet<>(optionalMandatoryLectures);
 		int count = 0;
@@ -91,4 +104,23 @@ public class OptionalMandatoryHandler implements MajorExceptionHandler {
 		}
 		return user.getSubMajor();
 	}
+	/**
+	@Override
+	public boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+		boolean checkMandatoryCondition = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
+			electiveLectures);
+
+		if (!checkMandatoryCondition) {
+			removedMandatoryTotalCredit = optionalMandatory.getTotalOptionalMandatoryCredit()
+				- optionalMandatory.getChooseLectureCredit();
+		}
+		return checkMandatoryCondition;
+	}
+
+	@Override
+	public int getRemovedMandatoryTotalCredit() {
+		return removedMandatoryTotalCredit;
+	}
+	 **/
 }

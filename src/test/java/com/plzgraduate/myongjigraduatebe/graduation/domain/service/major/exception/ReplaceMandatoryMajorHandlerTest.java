@@ -46,9 +46,11 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(takenLectureInventory,
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
+			takenLectureInventory,
 			mandatoryLectures, electiveLectures);
-		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
+		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
 		assertThat(checkMandatoryCondition).isTrue();
@@ -80,9 +82,11 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(takenLectureInventory,
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
+			takenLectureInventory,
 			mandatoryLectures, electiveLectures);
-		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
+		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
 		assertThat(checkMandatoryCondition).isTrue();
@@ -110,9 +114,11 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MajorExceptionHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		boolean checkMandatoryCondition = exceptionHandler.checkMandatoryCondition(takenLectureInventory,
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
+			takenLectureInventory,
 			mandatoryLectures, electiveLectures);
-		int removedMandatoryTotalCredit = exceptionHandler.getRemovedMandatoryTotalCredit();
+		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
 		assertThat(checkMandatoryCondition).isFalse();
