@@ -7,6 +7,4 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 public class InternationalTradeFixture {
 	public static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	
-	
 }

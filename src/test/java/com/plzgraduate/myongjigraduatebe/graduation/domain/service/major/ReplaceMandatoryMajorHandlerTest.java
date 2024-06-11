@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +23,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 @DisplayName("21학번 이전 철학과 학생의 경우 폐지된 전공필수의 대체 과목을 인정한다.")
 class ReplaceMandatoryMajorHandlerTest {
 	private static final User user = UserFixture.철학과_20학번();
+	private static final MajorGraduationCategory majorGraduationCategory = MajorGraduationCategory.PRIMARY;
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 	@DisplayName("답사1와 답사2를 수강했을 경우 세부조건을 달성한다.")
@@ -50,8 +51,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			takenLectureInventory,
-			mandatoryLectures, electiveLectures);
+			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -86,8 +86,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			takenLectureInventory,
-			mandatoryLectures, electiveLectures);
+			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -118,8 +117,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			takenLectureInventory,
-			mandatoryLectures, electiveLectures);
+			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
