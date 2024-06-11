@@ -22,10 +22,10 @@ public enum OptionalMandatory {
 	)),
 
 	BUSINESS("경영학과", 1, Set.of(
-		Lecture.of("HBW01201", "국제통산원론", 3, 0, "HBW01201"),
-		Lecture.of("HBX01127", "국제경영학", 3, 0, "CE224"),
-		Lecture.of("HBX01125", "경영정보", 3, 0, "KMJ01116"),
-		Lecture.of("HBY01103", "경영정보", 3, 1, "KMJ01116")
+		Lecture.of("HBX01128", "국제통상원론", 3, 0, null),
+		Lecture.of("HBX01127", "국제경영학", 3, 0, null),
+		Lecture.of("HBX01125", "경영정보", 3, 0, null),
+		Lecture.of("HBY01103", "경영정보", 3, 1, null)
 	)),
 	INTERNATIONAL_TRADE("국제통상학과", 4, Set.of(
 		Lecture.of("HBX01104", "회계원리", 3, 0, null),
