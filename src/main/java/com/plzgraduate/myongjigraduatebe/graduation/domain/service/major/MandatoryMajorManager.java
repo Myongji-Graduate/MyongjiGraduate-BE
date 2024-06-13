@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MandatoryMajorManager {
 
-	private static final String detailCategoryName = "전공필수";
+	private static final String MANDATORY_MAJOR_NAME = "전공필수";
 
 	private final List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers;
 
@@ -42,7 +43,7 @@ public class MandatoryMajorManager {
 				finishedTakenLecture.add(takenLecture);
 				takenMandatory.add(takenLecture.getLecture());
 			});
-		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create(detailCategoryName, isSatisfiedMandatory,
+		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create(MANDATORY_MAJOR_NAME, isSatisfiedMandatory,
 			calculateTotalCredit(takenMandatory, mandatoryLectures, removeMandatoryTotalCredit));
 		majorMandatoryResult.calculate(takenMandatory, mandatoryLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);

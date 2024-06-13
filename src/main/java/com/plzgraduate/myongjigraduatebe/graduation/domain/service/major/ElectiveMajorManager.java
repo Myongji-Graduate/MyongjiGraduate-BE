@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
 public class ElectiveMajorManager {
+	private static final String ELECTIVE_MAJOR_NAME = "전공선택";
 	public DetailCategoryResult createDetailCategoryResult(TakenLectureInventory takenLectureInventory,
 		Set<Lecture> electiveLectures, int electiveMajorTotalCredit) {
 		Set<Lecture> takenElective = new HashSet<>();
@@ -19,7 +20,7 @@ public class ElectiveMajorManager {
 				finishedTakenLecture.add(takenLecture);
 				takenElective.add(takenLecture.getLecture());
 			});
-		DetailCategoryResult electiveMajorResult = DetailCategoryResult.create("전공선택", true, electiveMajorTotalCredit);
+		DetailCategoryResult electiveMajorResult = DetailCategoryResult.create(ELECTIVE_MAJOR_NAME, true, electiveMajorTotalCredit);
 		electiveMajorResult.calculate(takenElective, electiveLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
