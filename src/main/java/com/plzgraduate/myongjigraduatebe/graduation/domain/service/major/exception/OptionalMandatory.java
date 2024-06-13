@@ -59,15 +59,15 @@ public enum OptionalMandatory {
 			.orElseThrow(() -> new IllegalArgumentException("해당 전공선택필수를 찾을 수 없습니다."));
 	}
 
-	public int getTotalOptionalMandatoryCredit(OptionalMandatory optionalMandatory) {
-		return optionalMandatory.optionalMandatoryLectures.stream()
+	public int getTotalOptionalMandatoryCredit() {
+		return optionalMandatoryLectures.stream()
 			.filter(lecture -> lecture.getIsRevoked() == 0)
 			.mapToInt(Lecture::getCredit)
 			.sum();
 	}
 
-	public int getChooseLectureCredit(OptionalMandatory optionalMandatory) {
-		return optionalMandatory.chooseNumber * 3;
+	public int getChooseLectureCredit() {
+		return chooseNumber * 3;
 	}
 
 }
