@@ -39,7 +39,7 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
 
 		List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers = List.of(
-			new OptionalMandatoryMajoHandler(),
+			new OptionalMandatoryMajorHandler(),
 			new ReplaceMandatoryMajorHandler());
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(mandatoryMajorSpecialCaseHandlers);
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();

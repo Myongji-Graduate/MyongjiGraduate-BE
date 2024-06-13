@@ -19,7 +19,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
  * 경영정보의 경우 인적자원관리, 마켓팅원론, 재무관리원론에서 ~18학번까지는 3개 모두 이수, 19학번 이후 택 2
  * 경영의 경우 국제통상원론, 국제경양, 경영정보 중 택1
  **/
-public class OptionalMandatoryMajoHandler implements MandatoryMajorSpecialCaseHandler {
+public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
 
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
 	private static final String BUSINESS = "경영학과";
