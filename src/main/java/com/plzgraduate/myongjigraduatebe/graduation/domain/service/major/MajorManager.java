@@ -7,9 +7,6 @@ import java.util.stream.Collectors;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.MajorExceptionHandler;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.OptionalMandatoryHandler;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception.ReplaceMandatoryMajorHandler;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -41,10 +38,10 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
 		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
 
-		List<MajorExceptionHandler> majorExceptionHandlers = List.of(
-			new OptionalMandatoryHandler(),
+		List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers = List.of(
+			new OptionalMandatoryMajorHandler(),
 			new ReplaceMandatoryMajorHandler());
-		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(majorExceptionHandlers);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(mandatoryMajorSpecialCaseHandlers);
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(

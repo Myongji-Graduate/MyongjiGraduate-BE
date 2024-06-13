@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
 
@@ -7,14 +7,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
-public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
-	private int removedMandatoryTotalCredit = 0;
+/**
+ * 철학과의 경우 답사1, 답사2는 폐지 되었지만 2021번 이전까지 전공필수
+ * '신유학의 이해' '유학사상의이해' 중 택1 이수 시 대체 인정
+ */
+public class ReplaceMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
 	private static final List<Lecture> REPLACED_LECTURES = List.of(
 		Lecture.of("HAI01110", "답사1", 1, 1, null),
 		Lecture.of("HAI01111", "답사2", 1, 1, "HAI01111")
@@ -38,19 +40,17 @@ public class ReplaceMandatoryMajorHandler implements MajorExceptionHandler {
 	}
 
 	@Override
-	public boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
+	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(User user,
+		MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		boolean checkCondition = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
+		boolean completeMandatorySpecialCase = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures);
-		if (!checkCondition) {
+		int removedMandatoryTotalCredit = 0;
+		if (!completeMandatorySpecialCase) {
 			removedMandatoryTotalCredit = 3;
 		}
-		return checkCondition;
-	}
+		return MandatorySpecialCaseInformation.of(completeMandatorySpecialCase, removedMandatoryTotalCredit);
 
-	@Override
-	public int getRemovedMandatoryTotalCredit() {
-		return removedMandatoryTotalCredit;
 	}
 
 	public boolean checkCompleteReplaceMandatory(TakenLectureInventory takenLectureInventory,
