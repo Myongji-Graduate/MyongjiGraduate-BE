@@ -1,8 +1,7 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import java.util.Set;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;

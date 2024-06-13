@@ -1,4 +1,4 @@
-package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.exception;
+package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import lombok.Builder;
 import lombok.Getter;
