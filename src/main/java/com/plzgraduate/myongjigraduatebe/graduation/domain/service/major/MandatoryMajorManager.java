@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;

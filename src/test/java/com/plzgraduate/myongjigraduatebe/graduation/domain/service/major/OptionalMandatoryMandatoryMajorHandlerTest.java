@@ -90,7 +90,7 @@ class OptionalMandatoryMandatoryMajorHandlerTest {
 		assertThat(isCompleteMandatorySpecialCase).isFalse();
 		assertThat(removedMandatoryTotalCredit).isEqualTo(6);
 		assertThat(mandatoryLectures).hasSize(6);
-		assertThat(electiveLectures).hasSize(0);
+		assertThat(electiveLectures).isEmpty();
 	}
 
 }
