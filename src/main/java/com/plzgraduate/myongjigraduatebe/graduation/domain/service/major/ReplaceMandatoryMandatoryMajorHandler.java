@@ -17,7 +17,6 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
  * '신유학의 이해' '유학사상의이해' 중 택1 이수 시 대체 인정
  */
 public class ReplaceMandatoryMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
-	//private int removedMandatoryTotalCredit = 0;
 	private static final List<Lecture> REPLACED_LECTURES = List.of(
 		Lecture.of("HAI01110", "답사1", 1, 1, null),
 		Lecture.of("HAI01111", "답사2", 1, 1, "HAI01111")
@@ -51,23 +50,6 @@ public class ReplaceMandatoryMandatoryMajorHandler implements MandatoryMajorSpec
 		}
 		return MandatorySpecialCaseInformation.of(completeMandatorySpecialCase, removedMandatoryTotalCredit);
 	}
-/**
-	@Override
-	public boolean checkMandatoryCondition(TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		boolean checkCondition = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
-			electiveLectures);
-		if (!checkCondition) {
-			removedMandatoryTotalCredit = 3;
-		}
-		return checkCondition;
-	}
-
-	@Override
-	public int getRemovedMandatoryTotalCredit() {
-		return removedMandatoryTotalCredit;
-	}
-	**/
 
 	public boolean checkCompleteReplaceMandatory(TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {

@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MandatorySpecialCaseInformation {
 
-	private final boolean completeMandatorySpecialCase;
+	private final boolean isCompleteMandatorySpecialCase;
 
 	private final int removedMandatoryTotalCredit;
 
 	public static MandatorySpecialCaseInformation of(boolean completeMandatorySpecialCase, int removedMandatoryTotalCredit) {
 		return MandatorySpecialCaseInformation.builder()
-			.completeMandatorySpecialCase(completeMandatorySpecialCase)
+			.isCompleteMandatorySpecialCase(completeMandatorySpecialCase)
 			.removedMandatoryTotalCredit(removedMandatoryTotalCredit)
 			.build();
 	}

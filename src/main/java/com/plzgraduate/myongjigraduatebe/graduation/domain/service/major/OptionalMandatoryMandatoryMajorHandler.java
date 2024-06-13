@@ -47,14 +47,14 @@ public class OptionalMandatoryMandatoryMajorHandler implements MandatoryMajorSpe
 
 		OptionalMandatory optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
 		int removedMandatoryTotalCredit = 0;
-		boolean completeMandatorySpecialCase = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
+		boolean isCompletedMandatorySpecialCase  = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures, optionalMandatory);
 
-		if (!completeMandatorySpecialCase) {
+		if (!isCompletedMandatorySpecialCase ) {
 			removedMandatoryTotalCredit = optionalMandatory.getTotalOptionalMandatoryCredit()
 				- optionalMandatory.getChooseLectureCredit();
 		}
-		return MandatorySpecialCaseInformation.of(completeMandatorySpecialCase, removedMandatoryTotalCredit);
+		return MandatorySpecialCaseInformation.of(isCompletedMandatorySpecialCase , removedMandatoryTotalCredit);
 	}
 
 	private boolean checkCompleteOptionalMandatory(TakenLectureInventory takenLectureInventory,

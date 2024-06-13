@@ -52,11 +52,11 @@ class ReplaceMandatoryMajorHandlerTest {
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
-		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
-		assertThat(checkMandatoryCondition).isTrue();
+		assertThat(isCompleteMandatorySpecialCase).isTrue();
 		assertThat(removedMandatoryTotalCredit).isZero();
 		assertThat(mandatoryLectures).hasSize(4);
 		assertThat(electiveLectures).hasSize(2);
@@ -87,11 +87,11 @@ class ReplaceMandatoryMajorHandlerTest {
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
-		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
-		assertThat(checkMandatoryCondition).isTrue();
+		assertThat(isCompleteMandatorySpecialCase).isTrue();
 		assertThat(removedMandatoryTotalCredit).isZero();
 		assertThat(mandatoryLectures).hasSize(5).contains(mockLectureMap.get("HAI01348"));
 		assertThat(electiveLectures).hasSize(1).contains(mockLectureMap.get("HAI01247"));
@@ -118,11 +118,11 @@ class ReplaceMandatoryMajorHandlerTest {
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
-		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
-		assertThat(checkMandatoryCondition).isFalse();
+		assertThat(isCompleteMandatorySpecialCase).isFalse();
 		assertThat(removedMandatoryTotalCredit).isEqualTo(3);
 		assertThat(mandatoryLectures).hasSize(6);
 		assertThat(electiveLectures).isEmpty();

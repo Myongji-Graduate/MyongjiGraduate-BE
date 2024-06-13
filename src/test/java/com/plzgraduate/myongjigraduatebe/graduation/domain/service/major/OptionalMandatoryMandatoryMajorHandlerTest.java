@@ -18,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+@DisplayName("N개 중에 M개 이상을 수강할 경우 세부조건을 달성한다.")
 class OptionalMandatoryMandatoryMajorHandlerTest {
 
 	private static final User user = UserFixture.경영학과_19학번_ENG12();
@@ -49,11 +50,11 @@ class OptionalMandatoryMandatoryMajorHandlerTest {
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new OptionalMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
-		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
-		assertThat(checkMandatoryCondition).isTrue();
+		assertThat(isCompleteMandatorySpecialCase).isTrue();
 		assertThat(removedMandatoryTotalCredit).isZero();
 		assertThat(mandatoryLectures).hasSize(3);
 		assertThat(electiveLectures).hasSize(3);
@@ -83,11 +84,11 @@ class OptionalMandatoryMandatoryMajorHandlerTest {
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new OptionalMandatoryMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
 			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
-		boolean checkMandatoryCondition = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
+		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
 		//then
-		assertThat(checkMandatoryCondition).isFalse();
+		assertThat(isCompleteMandatorySpecialCase).isFalse();
 		assertThat(removedMandatoryTotalCredit).isEqualTo(6);
 		assertThat(mandatoryLectures).hasSize(6);
 		assertThat(electiveLectures).hasSize(0);
