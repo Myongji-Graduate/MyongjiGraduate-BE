@@ -1,12 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.*;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -27,11 +28,11 @@ public class ReplaceMandatoryMajorHandler implements MandatoryMajorSpecialCaseHa
 	);
 
 	@Override
-	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
+	public boolean isSupport(User user, MajorType majorType) {
 		String major;
-		if (majorGraduationCategory == PRIMARY) {
+		if (majorType == PRIMARY) {
 			major = user.getPrimaryMajor();
-		} else if (majorGraduationCategory == DUAL) {
+		} else if (majorType == DUAL) {
 			major = user.getDualMajor();
 		} else {
 			major = user.getSubMajor();
@@ -41,7 +42,7 @@ public class ReplaceMandatoryMajorHandler implements MandatoryMajorSpecialCaseHa
 
 	@Override
 	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(User user,
-		MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory,
+		MajorType majorType, TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
 		boolean completeMandatorySpecialCase = checkCompleteReplaceMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures);

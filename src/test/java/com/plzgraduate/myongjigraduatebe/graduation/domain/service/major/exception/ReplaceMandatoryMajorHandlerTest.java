@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MandatoryMajorSpecialCaseHandler;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MandatorySpecialCaseInformation;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.ReplaceMandatoryMajorHandler;
@@ -24,7 +24,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 @DisplayName("21학번 이전 철학과 학생의 경우 폐지된 전공필수의 대체 과목을 인정한다.")
 class ReplaceMandatoryMajorHandlerTest {
 	private static final User user = UserFixture.철학과_20학번();
-	private static final MajorGraduationCategory majorGraduationCategory = MajorGraduationCategory.PRIMARY;
+	private static final MajorType MAJOR_TYPE = MajorType.PRIMARY;
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 	@DisplayName("답사1와 답사2를 수강했을 경우 세부조건을 달성한다.")
@@ -52,7 +52,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -87,7 +87,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -118,7 +118,7 @@ class ReplaceMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 

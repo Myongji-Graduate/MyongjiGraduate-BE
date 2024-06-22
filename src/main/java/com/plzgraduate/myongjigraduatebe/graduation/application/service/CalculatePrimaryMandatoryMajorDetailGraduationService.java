@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.PRIMARY;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 
 import java.util.List;
 import java.util.Set;

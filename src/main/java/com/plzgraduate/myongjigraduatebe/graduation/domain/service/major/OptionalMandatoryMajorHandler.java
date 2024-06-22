@@ -1,13 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.DUAL;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.PRIMARY;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -28,8 +29,8 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 	private static final int CLASS_OF_17 = 17;
 	private static final int CLASS_OF_19 = 19;
 
-	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
-		String calculatingMajor = getCalculatingMajor(user, majorGraduationCategory);
+	public boolean isSupport(User user, MajorType majorType) {
+		String calculatingMajor = getCalculatingMajor(user, majorType);
 		if (calculatingMajor.equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
 			return true;
 		}
@@ -41,9 +42,9 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 
 	@Override
 	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(User user,
-		MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory,
+		MajorType majorType, TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		OptionalMandatory optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
+		OptionalMandatory optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorType));
 		int removedMandatoryTotalCredit = 0;
 		boolean isCompletedMandatorySpecialCase = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures, optionalMandatory);
@@ -84,11 +85,11 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 		return count >= chooseNum;
 	}
 
-	private String getCalculatingMajor(User user, MajorGraduationCategory majorGraduationCategory) {
-		if (majorGraduationCategory == PRIMARY) {
+	private String getCalculatingMajor(User user, MajorType majorType) {
+		if (majorType == PRIMARY) {
 			return user.getPrimaryMajor();
 		}
-		if (majorGraduationCategory == DUAL) {
+		if (majorType == DUAL) {
 			return user.getDualMajor();
 		}
 		return user.getSubMajor();

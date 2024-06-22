@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_ELECTIVE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.DUAL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
 
 import java.util.List;
 import java.util.Set;

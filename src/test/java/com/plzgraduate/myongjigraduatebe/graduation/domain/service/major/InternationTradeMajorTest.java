@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.*;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
