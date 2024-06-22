@@ -13,6 +13,7 @@ import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
@@ -32,10 +33,11 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CalculateMajorGraduationService {
+public class CalculateMajorGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FindMajorPort findMajorPort;
 
+	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
 		return graduationCategory == PRIMARY_MANDATORY_MAJOR
 			|| graduationCategory == PRIMARY_ELECTIVE_MAJOR
@@ -73,6 +75,7 @@ public class CalculateMajorGraduationService {
 		return majorGraduationResults;
 	}
 
+	@Override
 	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		MajorType majorType = MajorType.from(graduationCategory);

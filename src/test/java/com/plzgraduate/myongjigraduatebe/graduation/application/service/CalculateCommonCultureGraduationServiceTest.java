@@ -55,8 +55,8 @@ class CalculateCommonCultureGraduationServiceTest {
 			.commonCultureCredit(17).build();
 
 		//when
-		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateDetailGraduation(
-			user, takenLectureInventory, graduationRequirement);
+		DetailGraduationResult detailCommonCultureGraduationResult = calculateCommonCultureGraduationService.calculateSingleDetailGraduation(
+			user, COMMON_CULTURE, takenLectureInventory, graduationRequirement);
 
 		//then
 		assertThat(detailCommonCultureGraduationResult)

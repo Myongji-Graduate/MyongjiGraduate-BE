@@ -27,17 +27,14 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CalculateDualBasicAcademicalCultureDetailGraduationService implements
-	CalculateDualBasicAcademicalCultureDetailGraduationUseCase {
+public class CalculateDualBasicAcademicalCultureDetailGraduationService{
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 
-	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
 		return graduationCategory == DUAL_BASIC_ACADEMICAL_CULTURE;
 	}
 
-	@Override
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(

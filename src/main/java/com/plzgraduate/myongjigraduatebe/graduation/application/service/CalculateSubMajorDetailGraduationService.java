@@ -13,13 +13,11 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @UseCase
-public class CalculateSubMajorDetailGraduationService implements CalculateSubMajorDetailGraduationUseCase {
-	@Override
+public class CalculateSubMajorDetailGraduationService  {
 	public boolean supports(GraduationCategory graduationCategory) {
 		return graduationCategory == SUB_MAJOR;
 	}
 
-	@Override
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		return null;

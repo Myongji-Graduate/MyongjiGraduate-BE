@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 
 import java.util.List;
@@ -27,17 +28,14 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CalculatePrimaryBasicAcademicalCultureDetailGraduationService
-	implements CalculatePrimaryBasicAcademicalCultureDetailGraduationUseCase {
+public class CalculatePrimaryBasicAcademicalCultureDetailGraduationService {
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 
-	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
 		return graduationCategory == PRIMARY_BASIC_ACADEMICAL_CULTURE;
 	}
 
-	@Override
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(

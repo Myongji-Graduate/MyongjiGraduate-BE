@@ -26,17 +26,14 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CalculateDualElectiveMajorDetailGraduationService
-	implements CalculateDualElectiveMajorDetailGraduationUseCase {
+public class CalculateDualElectiveMajorDetailGraduationService {
 
 	private final FindMajorPort findMajorPort;
 
-	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
 		return graduationCategory == DUAL_ELECTIVE_MAJOR;
 	}
 
-	@Override
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getDualMajor());
@@ -49,7 +46,6 @@ public class CalculateDualElectiveMajorDetailGraduationService
 			List.of(electiveMajorDetailCategoryResult));
 	}
 
-	@Override
 	public DetailGraduationResult isolateDualElectiveMajorDetailGraduation(
 		DetailGraduationResult dualMajorDetailGraduationResult) {
 		DetailCategoryResult electiveMajorDetailCategoryResult = separateElectiveMajor(

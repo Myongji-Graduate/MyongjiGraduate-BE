@@ -6,12 +6,11 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCommonCultureGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateCoreCultureGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
@@ -32,8 +31,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindTakenLectureUseCase findTakenLectureUseCase;
-	private final CalculateCommonCultureGraduationUseCase calculateCommonCultureGraduationUseCase;
-	private final CalculateCoreCultureGraduationUseCase calculateCoreCultureGraduationUseCase;
+	private final CalculateCommonCultureGraduationService calculateCommonCultureGraduationService;
+	private final CalculateCoreCultureGraduationService calculateCoreCultureGraduationService;
 	private final CalculateBasicAcademicalCultureGraduationService calculateBasicAcademicalCultureGraduationService;
 	private final CalculateMajorGraduationService calculateMajorGraduationService;
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
@@ -84,14 +83,14 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculateCommonCultureGraduationUseCase.calculateDetailGraduation(user, takenLectureInventory,
-			graduationRequirement);
+		return calculateCommonCultureGraduationService.calculateSingleDetailGraduation(user,
+			GraduationCategory.COMMON_CULTURE, takenLectureInventory, graduationRequirement);
 	}
 
 	private DetailGraduationResult generateCoreCultureDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculateCoreCultureGraduationUseCase.calculateDetailGraduation(user, takenLectureInventory,
-			graduationRequirement);
+		return calculateCoreCultureGraduationService.calculateSingleDetailGraduation(user,
+			GraduationCategory.CORE_CULTURE, takenLectureInventory, graduationRequirement);
 	}
 
 	private List<DetailGraduationResult> generateBasicAcademicalDetailGraduationResult(User user,

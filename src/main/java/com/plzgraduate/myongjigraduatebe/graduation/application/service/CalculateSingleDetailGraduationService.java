@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.support.resolver.CalculateDetailGraduationUseCaseResolver;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
@@ -37,7 +36,7 @@ public class CalculateSingleDetailGraduationService implements CalculateSingleDe
 			graduationCategory);
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 
-		return calculateDetailGraduationUseCase.calculateDetailGraduation(user, takenLectures, graduationRequirement);
+		return calculateDetailGraduationUseCase.calculateSingleDetailGraduation(user, graduationCategory, takenLectures, graduationRequirement);
 	}
 
 	public CalculateDetailGraduationUseCase resolveCalculateDetailGraduationUseCase(

@@ -9,7 +9,6 @@ import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculatePrimaryMandatoryMajorDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
@@ -26,17 +25,14 @@ import lombok.RequiredArgsConstructor;
 @UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CalculatePrimaryMandatoryMajorDetailGraduationService
-	implements CalculatePrimaryMandatoryMajorDetailGraduationUseCase {
+public class CalculatePrimaryMandatoryMajorDetailGraduationService {
 
 	private final FindMajorPort findMajorPort;
 
-	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
 		return graduationCategory == PRIMARY_MANDATORY_MAJOR;
 	}
 
-	@Override
 	public DetailGraduationResult calculateDetailGraduation(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getPrimaryMajor());
@@ -49,7 +45,6 @@ public class CalculatePrimaryMandatoryMajorDetailGraduationService
 			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
 	}
 
-	@Override
 	public DetailGraduationResult isolatePrimaryMandatoryMajorDetailGraduation(
 		DetailGraduationResult primaryMajorDetailGraduationResult) {
 		DetailCategoryResult mandatoryMajorDetailCategoryResult = separateMandatoryMajor(

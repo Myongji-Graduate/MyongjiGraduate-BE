@@ -55,8 +55,8 @@ class CalculateCoreCultureGraduationServiceTest {
 			.coreCultureCredit(12).build();
 
 		//when
-		DetailGraduationResult detailCoreCultureGraduationResult = calculateCoreCultureGraduationService.calculateDetailGraduation(
-			user, takenLectureInventory, graduationRequirement);
+		DetailGraduationResult detailCoreCultureGraduationResult = calculateCoreCultureGraduationService.calculateSingleDetailGraduation(
+			user, CORE_CULTURE, takenLectureInventory, graduationRequirement);
 
 		//then
 		assertThat(detailCoreCultureGraduationResult)
