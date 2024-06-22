@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
@@ -70,5 +71,21 @@ public class GraduationRequirement {
 			totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit - dualMajorCredit
 				- primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
 		return Math.max(freeElectiveCredit, 0);
+	}
+
+	public int getBasicCreditByMajorType(MajorType majorType) {
+		if(majorType == MajorType.PRIMARY) {
+			return primaryBasicAcademicalCultureCredit;
+		}
+		return dualBasicAcademicalCultureCredit;
+	}
+
+	public int getMajorCreditByMajorType(MajorType majorType) {
+		if(majorType == MajorType.PRIMARY) {
+			return primaryMajorCredit;
+		} else if(majorType == MajorType.DUAL) {
+			return dualMajorCredit;
+		}
+		return subMajorCredit;
 	}
 }
