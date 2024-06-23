@@ -32,14 +32,14 @@ public class CalculateSingleDetailGraduationService implements CalculateSingleDe
 	public DetailGraduationResult calculateSingleDetailGraduation(Long userId, GraduationCategory graduationCategory) {
 		User user = findUserUseCase.findUserById(userId);
 		TakenLectureInventory takenLectures = findTakenLectureUseCase.findTakenLectures(userId);
-		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = resolveCalculateDetailGraduationUseCase(
+		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = determineCalculateDetailGraduationUseCase(
 			graduationCategory);
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 
 		return calculateDetailGraduationUseCase.calculateSingleDetailGraduation(user, graduationCategory, takenLectures, graduationRequirement);
 	}
 
-	public CalculateDetailGraduationUseCase resolveCalculateDetailGraduationUseCase(
+	private CalculateDetailGraduationUseCase determineCalculateDetailGraduationUseCase(
 		GraduationCategory graduationCategory) {
 		return calculateDetailGraduationUseCases.stream()
 			.filter(calculateDetailGraduationUseCase -> calculateDetailGraduationUseCase.supports(graduationCategory))

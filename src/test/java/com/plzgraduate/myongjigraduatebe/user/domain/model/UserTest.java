@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -7,8 +9,12 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 
 class UserTest {
 
@@ -160,5 +166,19 @@ class UserTest {
 
 		//then
 		assertThat(result).isFalse();
+	}
+
+	@DisplayName("MajorType별 사용자의 전공을 반환하는지 확인한다.")
+	@CsvSource({"PRIMARY, 융합소프트웨어부", "DUAL, 경영학과", "SUB, 영문학과"})
+	@ParameterizedTest
+	void getMajorByMajorType(MajorType majorType, String major) {
+		//given
+		User user = User.builder().id(1L).primaryMajor("융합소프트웨어부").dualMajor("경영학과").subMajor("영문학과").build();
+
+		//when
+		String majorByMajorType = user.getMajorByMajorType(majorType);
+
+		//then
+		assertThat(majorByMajorType).isEqualTo(major);
 	}
 }

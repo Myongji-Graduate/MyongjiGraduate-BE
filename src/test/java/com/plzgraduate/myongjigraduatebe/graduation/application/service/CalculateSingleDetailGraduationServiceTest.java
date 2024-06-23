@@ -1,21 +1,27 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.graduation.support.resolver.CalculateDetailGraduationUseCaseResolver;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
@@ -24,20 +30,23 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserU
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
-class
-CalculateSingleDetailGraduationServiceTest {
+class CalculateSingleDetailGraduationServiceTest {
 
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
 	private FindTakenLectureUseCase findTakenLectureUseCase;
 	@Mock
-	private CalculateDetailGraduationUseCaseResolver calculateDetailGraduationUseCaseResolver;
-	@Mock
-	private CalculateDetailGraduationUseCase calculateDetailGraduationUseCase;
+	private List<CalculateDetailGraduationUseCase> calculateDetailGraduationUseCases;
 
 	@InjectMocks
 	private CalculateSingleDetailGraduationService calculateSingleDetailGraduationService;
+
+	private static Stream<Arguments> provideCalculateDetailGraduationUseCaseForCheckingSupportGraduationCategoryName() {
+		return Stream.of(
+			Arguments.of(CalculateCommonCultureGraduationService.class, GraduationCategory.COMMON_CULTURE)
+		);
+	}
 
 	@DisplayName("단일 카테고리 졸업상세결과를 조회한다.")
 	@ValueSource(strings =
@@ -51,24 +60,28 @@ CalculateSingleDetailGraduationServiceTest {
 			.id(1L)
 			.entryYear(19)
 			.primaryMajor("응용소프트웨어전공").build();
-		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
-
-		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
-		given(findTakenLectureUseCase.findTakenLectures(user.getId())).willReturn(
-			takenLectureInventory);
-
 		GraduationCategory graduationCategory = GraduationCategory.valueOf(graduationCategoryName);
-		given(calculateDetailGraduationUseCaseResolver.resolveCalculateDetailGraduationUseCase(
-			graduationCategory)).willReturn(calculateDetailGraduationUseCase);
+		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = mock(CalculateDetailGraduationUseCase.class);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
+
+		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
+		given(findTakenLectureUseCase.findTakenLectures(user.getId())).willReturn(takenLectureInventory);
+		given(calculateDetailGraduationUseCases.stream()).willReturn(Stream.of(calculateDetailGraduationUseCase));
+		given(calculateDetailGraduationUseCase.supports(graduationCategory)).willReturn(true);
+		given(calculateDetailGraduationUseCase.calculateSingleDetailGraduation(
+			any(User.class), any(GraduationCategory.class),
+			any(TakenLectureInventory.class), any(GraduationRequirement.class)))
+			.willReturn(DetailGraduationResult.create(graduationCategory, 10, List.of()));
 
 		// when
-		calculateSingleDetailGraduationService.calculateSingleDetailGraduation(
-			user.getId(), graduationCategory);
+		DetailGraduationResult result =
+			calculateSingleDetailGraduationService.calculateSingleDetailGraduation(1L, graduationCategory);
 
 		// then
+		assertNotNull(result);
 		then(calculateDetailGraduationUseCase).should()
-			.calculateDetailGraduation(any(User.class), any(TakenLectureInventory.class),
-				any(GraduationRequirement.class));
+			.calculateSingleDetailGraduation(any(User.class), any(GraduationCategory.class),
+				any(TakenLectureInventory.class), any(GraduationRequirement.class));
 
 	}
 
