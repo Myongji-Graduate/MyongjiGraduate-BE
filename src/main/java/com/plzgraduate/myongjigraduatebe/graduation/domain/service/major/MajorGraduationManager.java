@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -16,21 +17,23 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
-public class MajorManager implements GraduationManager<MajorLecture> {
+public class MajorGraduationManager {
 
-	private final MajorType majorType;
+	private final MandatoryMajorManager mandatoryMajorManager;
+	private final ElectiveMajorManager electiveMajorManager;
 
 	/**
 	 *
 	 * @param user 사용자
+	 * @param majorType 주전공, 복수전공, 부전공
 	 * @param takenLectureInventory 수강과목 목록
 	 * @param majorLectures 해당 사용자의 전공과목
 	 * @param graduationResultTotalCredit 해당 사용자의 전공 졸업 학점
 	 * @return 전공 카테고리에 대한 졸업 결과 반환
 	 */
-	@Override
-	public DetailGraduationResult createDetailGraduationResult(User user,
+	public DetailGraduationResult createDetailGraduationResult(User user, MajorType majorType,
 		TakenLectureInventory takenLectureInventory, Set<MajorLecture> majorLectures, int graduationResultTotalCredit) {
 
 		removeDuplicateLectureIfTaken(takenLectureInventory, majorLectures);
@@ -38,12 +41,6 @@ public class MajorManager implements GraduationManager<MajorLecture> {
 
 		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
 		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
-
-		List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers = List.of(
-			new OptionalMandatoryMajorHandler(),
-			new ReplaceMandatoryMajorHandler());
-		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(mandatoryMajorSpecialCaseHandlers);
-		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(
 			user, takenLectureInventory, mandatoryLectures, electiveLectures, majorType);

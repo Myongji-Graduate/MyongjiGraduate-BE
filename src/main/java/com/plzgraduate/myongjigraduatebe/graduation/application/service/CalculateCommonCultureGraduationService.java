@@ -11,8 +11,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.Calculat
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture.CommonCultureGraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture.CommonGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -26,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CalculateCommonCultureGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FindCommonCulturePort findCommonCulturePort;
+	private final CommonGraduationManager commonCultureGraduationManager;
 
 	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
@@ -36,7 +36,6 @@ public class CalculateCommonCultureGraduationService implements CalculateDetailG
 	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<CommonCulture> graduationCommonCultures = findCommonCulturePort.findCommonCulture(user);
-		GraduationManager<CommonCulture> commonCultureGraduationManager = new CommonCultureGraduationManager();
 		return commonCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationCommonCultures, graduationRequirement.getCommonCultureCredit());
 	}

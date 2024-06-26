@@ -18,10 +18,9 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryR
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -36,6 +35,8 @@ import lombok.RequiredArgsConstructor;
 public class CalculateMajorGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FindMajorPort findMajorPort;
+	private final MajorGraduationManager majorGraduationManager;
+	private final SubMajorGraduationManager subMajorGraduationManager;
 
 	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
@@ -103,16 +104,14 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 	private DetailGraduationResult generateMajorDetailGraduationResult(User user, MajorType majorType, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getMajorByMajorType(majorType));
-		GraduationManager<MajorLecture> majorManager = new MajorManager(majorType);
-		return majorManager.createDetailGraduationResult(user,
+		return majorGraduationManager.createDetailGraduationResult(user, majorType,
 			takenLectureInventory, graduationMajorLectures, graduationRequirement.getMajorCreditByMajorType(majorType));
 	}
 
 	private DetailGraduationResult generateSubMajorDetailGraduationResult(User user, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<MajorLecture> graduationSubMajorLectures = findMajorPort.findMajor(user.getSubMajor());
-		GraduationManager<MajorLecture> subMajorManager = new SubMajorManager();
-		return subMajorManager.createDetailGraduationResult(user, takenLectureInventory, graduationSubMajorLectures,
+		return subMajorGraduationManager.createDetailGraduationResult(user, takenLectureInventory, graduationSubMajorLectures,
 			graduationRequirement.getSubMajorCredit());
 	}
 

@@ -14,13 +14,10 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.Calculat
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicalManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BusinessBasicAcademicalManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.SocialScienceBasicAcademicManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicalGraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -36,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class CalculateBasicAcademicalCultureGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
+	private final List<BasicAcademicalGraduationManager> basicAcademicalGraduationManagers;
 
 	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
@@ -79,14 +77,10 @@ public class CalculateBasicAcademicalCultureGraduationService implements Calcula
 
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
 		String userMajor) {
-		List<BasicAcademicalManager> basicAcademicalManagers = List.of(
-			new BusinessBasicAcademicalManager(),
-			new SocialScienceBasicAcademicManager());
-
-		return basicAcademicalManagers.stream()
+		return basicAcademicalGraduationManagers.stream()
 			.filter(basicAcademicalManager -> basicAcademicalManager.isSatisfied(userMajor))
 			.findFirst()
-			.orElse(new DefaultBasicAcademicalManager());
+			.orElse(new DefaultBasicAcademicalGraduationManager());
 	}
 
 	private void syncOriginalTakenLectureInventory(TakenLectureInventory originalTakenLectureInventory,

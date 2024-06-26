@@ -20,7 +20,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
-class SubMajorManagerTest {
+class SubMajorGraduationManagerTest {
 
 	@DisplayName("부전공 학생의 부전공 졸업 결과를 생성한다.")
 	@Test
@@ -41,7 +41,7 @@ class SubMajorManagerTest {
 		int subMajorGraduationCredit = 21;
 		int takenLecturesCount = takenLectures.size();
 
-		GraduationManager<MajorLecture> subMajorManager = new SubMajorManager();
+		GraduationManager<MajorLecture> subMajorManager = new SubMajorGraduationManager();
 
 		//when
 		DetailGraduationResult detailGraduationResult = subMajorManager.createDetailGraduationResult(user,

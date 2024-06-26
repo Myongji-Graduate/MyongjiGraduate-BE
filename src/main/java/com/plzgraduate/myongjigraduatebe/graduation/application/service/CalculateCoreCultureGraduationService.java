@@ -11,8 +11,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.Calculat
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture.CoreCultureGraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture.CoreGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCoreCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -26,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CalculateCoreCultureGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FindCoreCulturePort findCoreCulturePort;
+	private final CoreGraduationManager coreCultureGraduationManager;
 
 	@Override
 	public boolean supports(GraduationCategory graduationCategory) {
@@ -36,7 +36,6 @@ public class CalculateCoreCultureGraduationService implements CalculateDetailGra
 	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		Set<CoreCulture> graduationCoreCultures = findCoreCulturePort.findCoreCulture(user);
-		GraduationManager<CoreCulture> coreCultureGraduationManager = new CoreCultureGraduationManager();
 		return coreCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationCoreCultures, graduationRequirement.getCoreCultureCredit());
 	}

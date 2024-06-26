@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
@@ -17,7 +18,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCateg
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
-public class CommonCultureGraduationManager implements GraduationManager<CommonCulture> {
+@Component
+public class CommonGraduationManager implements GraduationManager<CommonCulture> {
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,

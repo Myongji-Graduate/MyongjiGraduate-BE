@@ -60,10 +60,12 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager(PRIMARY);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -116,10 +118,12 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager(PRIMARY);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -173,10 +177,12 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager(PRIMARY);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -227,10 +233,12 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager(PRIMARY);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 국제통상_전공, 63);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -266,10 +274,12 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager(PRIMARY);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 국제통상_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -297,10 +307,12 @@ class InternationTradeMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 국제통상_전공 = MajorFixture.국제통상_전공();
-		MajorManager manager = new MajorManager(PRIMARY);
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 국제통상_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);

@@ -1,25 +1,30 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_ELECTIVE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_MANDATORY_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.ElectiveMajorManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MandatoryMajorManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.OptionalMandatoryMajorHandler;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.ReplaceMandatoryMajorHandler;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
@@ -33,8 +38,32 @@ class CalculateMajorGraduationServiceTest {
 	@Mock
 	private FindMajorPort findMajorPort;
 
-	@InjectMocks
 	private CalculateMajorGraduationService calculateMajorGraduationService;
+
+
+	@BeforeEach
+	void setUp() {
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
+			List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		SubMajorGraduationManager subMajorGraduationManager = new SubMajorGraduationManager();
+		MajorGraduationManager majorGraduationManager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
+		calculateMajorGraduationService = new CalculateMajorGraduationService(findMajorPort, majorGraduationManager, subMajorGraduationManager);
+	}
+
+	@DisplayName("MAJOR 관련 카테고리 일때만 MajorGraduationService를 호출한다.")
+	@Test
+	public void supportsTest() {
+		assertTrue(calculateMajorGraduationService.supports(PRIMARY_MANDATORY_MAJOR));
+		assertTrue(calculateMajorGraduationService.supports(PRIMARY_ELECTIVE_MAJOR));
+		assertTrue(calculateMajorGraduationService.supports(DUAL_MANDATORY_MAJOR));
+		assertTrue(calculateMajorGraduationService.supports(DUAL_ELECTIVE_MAJOR));
+		assertTrue(calculateMajorGraduationService.supports(SUB_MAJOR));
+		assertFalse(calculateMajorGraduationService.supports(COMMON_CULTURE));
+		assertFalse(calculateMajorGraduationService.supports(CORE_CULTURE));
+		assertFalse(calculateMajorGraduationService.supports(PRIMARY_BASIC_ACADEMICAL_CULTURE));
+		assertFalse(calculateMajorGraduationService.supports(DUAL_BASIC_ACADEMICAL_CULTURE));
+	}
 
 	@DisplayName("유저의 주전공필수 졸업결과를 계산한다.")
 	@Test

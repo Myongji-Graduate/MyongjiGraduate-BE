@@ -16,7 +16,7 @@ public class DetailGraduationResult {
 
 	@Builder
 	private DetailGraduationResult(GraduationCategory graduationCategory, boolean isCompleted, int totalCredit,
-		int takenCredit,
+		double takenCredit,
 		List<DetailCategoryResult> detailCategory) {
 		this.graduationCategory = graduationCategory;
 		this.isCompleted = isCompleted;

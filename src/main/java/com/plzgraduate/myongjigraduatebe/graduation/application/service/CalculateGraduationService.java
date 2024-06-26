@@ -123,17 +123,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private void updateUserGraduationInformation(User user, GraduationResult graduationResult) {
-		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.builder()
-			.user(user)
-			.name(user.getName())
-			.studentCategory(user.getStudentCategory())
-			.major(user.getPrimaryMajor())
-			.dualMajor(user.getDualMajor())
-			.subMajor(user.getSubMajor())
-			.totalCredit(graduationResult.getTotalCredit())
-			.takenCredit(graduationResult.getTakenCredit())
-			.graduate(graduationResult.isGraduated())
-			.build();
+		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(user, graduationResult);
 		updateStudentInformationUseCase.updateUser(updateStudentInformationCommand);
 	}
 }

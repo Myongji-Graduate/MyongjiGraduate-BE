@@ -15,7 +15,6 @@ import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -24,7 +23,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("기본 단과대에 대해 학문기초교양 결과를 반환한다.")
-class DefaultBasicAcademicalManagerTest {
+class DefaultBasicAcademicalGraduationManagerTest {
 
 	@DisplayName("인문대의 학문기초교양을 계산한다.")
 	@Nested
@@ -45,7 +44,7 @@ class DefaultBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMB02122"), 2021, Semester.FIRST)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
+			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -76,7 +75,7 @@ class DefaultBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMB02120"), 2020, Semester.FIRST)
 			));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
+			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
