@@ -91,12 +91,12 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 		boolean isMandatory = graduationCategory.checkMandatoryIfSeperatedByMandatoryAndElective();
 
 		if(isMandatory) {
-			DetailCategoryResult majorDetailCategoryResult = separateMandatoryMajor(majorDetailGraduationResult);
+			DetailCategoryResult majorDetailCategoryResult = separateMandatoryMajor(graduationCategory, majorDetailGraduationResult);
 			return DetailGraduationResult.create(graduationCategory,
 				majorDetailCategoryResult.getTotalCredits(), List.of(majorDetailCategoryResult));
 		}
 
-		DetailCategoryResult majorDetailCategoryResult = separateElectiveMajor(majorDetailGraduationResult);
+		DetailCategoryResult majorDetailCategoryResult = separateElectiveMajor(graduationCategory, majorDetailGraduationResult);
 		return DetailGraduationResult.create(graduationCategory,
 				majorDetailCategoryResult.getTotalCredits(), List.of(majorDetailCategoryResult));
 	}
@@ -116,39 +116,39 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 	}
 
 	private DetailGraduationResult isolateMandatoryMajorDetailGraduation(
-		GraduationCategory graduationCategory, DetailGraduationResult primaryMajorDetailGraduationResult) {
+		GraduationCategory graduationCategory, DetailGraduationResult majorDetailGraduationResult) {
 		DetailCategoryResult mandatoryMajorDetailCategoryResult = separateMandatoryMajor(
-			primaryMajorDetailGraduationResult);
+			graduationCategory, majorDetailGraduationResult);
 		return DetailGraduationResult.create(graduationCategory,
 			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
 	}
 
 	private DetailGraduationResult isolateElectiveMajorDetailGraduation(
-		GraduationCategory graduationCategory, DetailGraduationResult detailPrimaryMajorGraduationResult) {
+		GraduationCategory graduationCategory, DetailGraduationResult majorDetailGraduationResult) {
 		DetailCategoryResult electiveMajorDetailCategoryResult = separateElectiveMajor(
-			detailPrimaryMajorGraduationResult);
+			graduationCategory, majorDetailGraduationResult);
 		return DetailGraduationResult.create(graduationCategory,
 			electiveMajorDetailCategoryResult.getTotalCredits(), List.of(electiveMajorDetailCategoryResult));
 	}
 
 	private DetailCategoryResult separateMandatoryMajor(
-		DetailGraduationResult majorDetailGraduationResult) {
-		DetailCategoryResult primaryMandatoryMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory().stream()
+		GraduationCategory graduationCategory, DetailGraduationResult majorDetailGraduationResult) {
+		DetailCategoryResult mandatoryMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory().stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공필수"))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 필수)"));
-		primaryMandatoryMajorDetailCategoryResult.assignDetailCategoryName("주전공필수");
-		return primaryMandatoryMajorDetailCategoryResult;
+		mandatoryMajorDetailCategoryResult.assignDetailCategoryName(graduationCategory.getName());
+		return mandatoryMajorDetailCategoryResult;
 	}
 
 	private DetailCategoryResult separateElectiveMajor(
-		DetailGraduationResult majorDetailGraduationResult) {
-		DetailCategoryResult primaryElectiveDetailCategoryResult = majorDetailGraduationResult.getDetailCategory()
+		GraduationCategory graduationCategory, DetailGraduationResult majorDetailGraduationResult) {
+		DetailCategoryResult electiveMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory()
 			.stream()
 			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공선택"))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 선택)"));
-		primaryElectiveDetailCategoryResult.assignDetailCategoryName("주전공선택");
-		return primaryElectiveDetailCategoryResult;
+		electiveMajorDetailCategoryResult.assignDetailCategoryName(graduationCategory.getName());
+		return  electiveMajorDetailCategoryResult;
 	}
 }
