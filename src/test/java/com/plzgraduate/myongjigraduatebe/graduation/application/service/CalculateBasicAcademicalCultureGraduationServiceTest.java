@@ -1,8 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.BUSINESS;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.ICT;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.*;
@@ -10,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +31,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +58,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 
 	@DisplayName("BASIC_ACADEMICAL_CULTURE 관련 카테고리 일때만 BasicAcademicalCultureGraduationService를 호출한다.")
 	@Test
-	public void shouldSupportsBasicAcademicalCultureCategory() {
+	void shouldSupportBasicAcademicalCultureCategory() {
 		assertTrue(calculateBasicAcademicalCultureGraduationService.supports(PRIMARY_BASIC_ACADEMICAL_CULTURE));
 		assertTrue(calculateBasicAcademicalCultureGraduationService.supports(DUAL_BASIC_ACADEMICAL_CULTURE));
 		assertFalse(calculateBasicAcademicalCultureGraduationService.supports(CORE_CULTURE));

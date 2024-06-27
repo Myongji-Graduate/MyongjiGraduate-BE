@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -41,12 +40,6 @@ class CalculateSingleDetailGraduationServiceTest {
 
 	@InjectMocks
 	private CalculateSingleDetailGraduationService calculateSingleDetailGraduationService;
-
-	private static Stream<Arguments> provideCalculateDetailGraduationUseCaseForCheckingSupportGraduationCategoryName() {
-		return Stream.of(
-			Arguments.of(CalculateCommonCultureGraduationService.class, GraduationCategory.COMMON_CULTURE)
-		);
-	}
 
 	@DisplayName("단일 카테고리 졸업상세결과를 조회한다.")
 	@ValueSource(strings =

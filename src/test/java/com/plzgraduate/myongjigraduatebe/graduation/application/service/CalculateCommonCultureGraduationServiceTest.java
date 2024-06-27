@@ -46,14 +46,14 @@ class CalculateCommonCultureGraduationServiceTest {
 
 	@DisplayName("COMMON_CULTURE 카테고리 일때만 CommonCultureGraduationService를 호출한다.")
 	@Test
-	public void supportsTest() {
+	void shouldSupportCommonCultureCategory() {
 		assertTrue(calculateCommonCultureGraduationService.supports(GraduationCategory.COMMON_CULTURE));
 		assertFalse(calculateCommonCultureGraduationService.supports(GraduationCategory.CORE_CULTURE));
 	}
 
 	@DisplayName("유저의 공통교양 상세 졸업결과를 계산한다.")
 	@Test
-	void calculateCommonCulture() {
+	void shouldCalculateCommonCulture() {
 		//given
 		User user = User.builder()
 			.id(1L)

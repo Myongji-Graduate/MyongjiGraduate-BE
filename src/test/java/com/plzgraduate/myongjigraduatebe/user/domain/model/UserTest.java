@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -173,10 +171,10 @@ class UserTest {
 	@ParameterizedTest
 	void getMajorByMajorType(MajorType majorType, String major) {
 		//given
-		User user = User.builder().id(1L).primaryMajor("융합소프트웨어부").dualMajor("경영학과").subMajor("영문학과").build();
+		User dualMajorUser = User.builder().id(1L).primaryMajor("융합소프트웨어부").dualMajor("경영학과").subMajor("영문학과").build();
 
 		//when
-		String majorByMajorType = user.getMajorByMajorType(majorType);
+		String majorByMajorType = dualMajorUser.getMajorByMajorType(majorType);
 
 		//then
 		assertThat(majorByMajorType).isEqualTo(major);

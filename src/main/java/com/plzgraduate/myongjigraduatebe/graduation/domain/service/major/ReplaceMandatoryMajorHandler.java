@@ -1,7 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.*;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;

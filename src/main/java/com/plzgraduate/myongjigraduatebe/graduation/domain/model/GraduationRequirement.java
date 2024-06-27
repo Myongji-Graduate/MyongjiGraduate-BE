@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.DualMajorGraduationRequirementType.findBelongingDualMajorGraduationRequirementType;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;

@@ -1,8 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

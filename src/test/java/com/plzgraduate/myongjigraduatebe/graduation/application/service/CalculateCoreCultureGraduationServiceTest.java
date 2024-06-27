@@ -42,14 +42,14 @@ class CalculateCoreCultureGraduationServiceTest {
 
 	@DisplayName("CORE_CULTURE 카테고리 일때만 CoreCultureGraduationService를 호출한다.")
 	@Test
-	public void supportsTest() {
+	void shouldSupportCoreCultureCategory() {
 		assertTrue(calculateCoreCultureGraduationService.supports(GraduationCategory.CORE_CULTURE));
 		assertFalse(calculateCoreCultureGraduationService.supports(GraduationCategory.COMMON_CULTURE));
 	}
 
 	@DisplayName("유저의 핵심교양 상세 졸업결과를 계산한다.")
 	@Test
-	void calculateCoreCulture() {
+	void shouldCalculateCoreCulture() {
 		//given
 		User user = User.builder()
 			.id(1L)

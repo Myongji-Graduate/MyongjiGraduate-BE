@@ -53,7 +53,7 @@ class CalculateMajorGraduationServiceTest {
 
 	@DisplayName("MAJOR 관련 카테고리 일때만 MajorGraduationService를 호출한다.")
 	@Test
-	public void supportsTest() {
+	void shouldSupportMajorCategory() {
 		assertTrue(calculateMajorGraduationService.supports(PRIMARY_MANDATORY_MAJOR));
 		assertTrue(calculateMajorGraduationService.supports(PRIMARY_ELECTIVE_MAJOR));
 		assertTrue(calculateMajorGraduationService.supports(DUAL_MANDATORY_MAJOR));
@@ -67,7 +67,7 @@ class CalculateMajorGraduationServiceTest {
 
 	@DisplayName("유저의 주전공필수 졸업결과를 계산한다.")
 	@Test
-	void calculateSingleDetailGraduationIfPrimaryMandatory() {
+	void shouldCalculateSingleDetailGraduationIfPrimaryMandatory() {
 		//given
 		User user = User.builder()
 			.id(1L)
