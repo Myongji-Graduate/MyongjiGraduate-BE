@@ -74,7 +74,7 @@ class TakenLectureInventoryTest {
 
 	@DisplayName("수강과목 목록에서 처리 완료된 과목을 제거한다.")
 	@Test
-	void handleFinishedLectures() {
+	void sync() {
 		//given
 		TakenLectureInventory takenLectureInventory = getTakenLectureInventory();
 		int beforeHandleSize = takenLectureInventory.getTakenLectures().size();
@@ -84,7 +84,7 @@ class TakenLectureInventoryTest {
 		));
 
 		//when
-		takenLectureInventory.handleFinishedLectures(finishedLectures);
+		takenLectureInventory.sync(finishedLectures);
 
 		//then
 		assertThat(takenLectureInventory.getTakenLectures())
