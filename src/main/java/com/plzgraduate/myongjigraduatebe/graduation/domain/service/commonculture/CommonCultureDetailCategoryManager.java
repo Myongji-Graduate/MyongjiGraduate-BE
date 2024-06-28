@@ -39,14 +39,11 @@ class CommonCultureDetailCategoryManager {
 				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
+		boolean isSatisfiedMandatory = checkMandatorySatisfaction(user, takenLectureInventory, category);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
-
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), checkMandatorySatisfaction(user, takenLectureInventory, category),
-			checkCategoryTotalCredit(user, category));
+			category.getName(), isSatisfiedMandatory, checkCategoryTotalCredit(user, category));
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
-
-
 		return commonCultureDetailCategoryResult;
 	}
 
