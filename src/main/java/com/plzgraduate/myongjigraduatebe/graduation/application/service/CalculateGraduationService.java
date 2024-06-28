@@ -95,12 +95,14 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private List<DetailGraduationResult> generateBasicAcademicalDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(user, takenLectureInventory, graduationRequirement);
+		return calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(user,
+			takenLectureInventory, graduationRequirement);
 	}
 
 	private List<DetailGraduationResult> generateMajorDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculateMajorGraduationService.calculateAllDetailGraduation(user, takenLectureInventory, graduationRequirement);
+		return calculateMajorGraduationService.calculateAllDetailGraduation(user, takenLectureInventory,
+			graduationRequirement);
 	}
 
 	private GraduationResult generateGraduationResult(ChapelResult chapelResult,
@@ -123,7 +125,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private void updateUserGraduationInformation(User user, GraduationResult graduationResult) {
-		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(user, graduationResult);
+		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(user,
+			graduationResult);
 		updateStudentInformationUseCase.updateUser(updateStudentInformationCommand);
 	}
 }

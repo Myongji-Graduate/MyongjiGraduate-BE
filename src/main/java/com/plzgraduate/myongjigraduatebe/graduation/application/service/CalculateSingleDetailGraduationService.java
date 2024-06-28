@@ -36,7 +36,8 @@ public class CalculateSingleDetailGraduationService implements CalculateSingleDe
 			graduationCategory);
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 
-		return calculateDetailGraduationUseCase.calculateSingleDetailGraduation(user, graduationCategory, takenLectures, graduationRequirement);
+		return calculateDetailGraduationUseCase.calculateSingleDetailGraduation(user, graduationCategory, takenLectures,
+			graduationRequirement);
 	}
 
 	private CalculateDetailGraduationUseCase determineCalculateDetailGraduationUseCase(

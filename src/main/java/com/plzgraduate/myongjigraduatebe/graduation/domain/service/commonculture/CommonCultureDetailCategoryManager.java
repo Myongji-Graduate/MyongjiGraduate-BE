@@ -30,32 +30,28 @@ class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
-		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
-			graduationLectures, category);
-
-		Set<TakenLecture> removedTakenLecture = new HashSet<>();
+		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(graduationLectures, category);
+		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
-
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCommonCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
-				removedTakenLecture.add(takenLecture);
+				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-
+		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(), checkMandatorySatisfaction(user, takenLectureInventory, category),
 			checkCategoryTotalCredit(user, category));
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
 
-		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
 
 		return commonCultureDetailCategoryResult;
 	}
 
 	private int checkCategoryTotalCredit(User user, CommonCultureCategory commonCultureCategory) {
-		if (user.getEnglishLevel() == FREE && commonCultureCategory == ENGLISH){
+		if (user.getEnglishLevel() == FREE && commonCultureCategory == ENGLISH) {
 			return 0;
 		}
 		return commonCultureCategory.getTotalCredit();

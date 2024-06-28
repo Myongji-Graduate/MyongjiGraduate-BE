@@ -33,8 +33,8 @@ public class CalculateCoreCultureGraduationService implements CalculateDetailGra
 	}
 
 	@Override
-	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
+	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		Set<CoreCulture> graduationCoreCultures = findCoreCulturePort.findCoreCulture(user);
 		return coreCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationCoreCultures, graduationRequirement.getCoreCultureCredit());

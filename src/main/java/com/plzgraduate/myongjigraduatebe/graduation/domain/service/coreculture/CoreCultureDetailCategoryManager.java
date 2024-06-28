@@ -29,14 +29,11 @@ public class CoreCultureDetailCategoryManager {
 		Lecture.from("KMA02155"),
 		Lecture.from("KMA02156"));
 
-	public DetailCategoryResult generate(User user,
-		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures,
-		CoreCultureCategory category) {
-    
-		Set<Lecture> graduationCoreCultureLectures = categorizeCommonCultures(graduationLectures, category);
+	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
+		Set<CoreCulture> graduationLectures, CoreCultureCategory category) {
+		Set<Lecture> graduationCoreCultureLectures = categorizeCoreCultures(graduationLectures, category);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
-
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCoreCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
@@ -54,7 +51,7 @@ public class CoreCultureDetailCategoryManager {
 		return commonCultureDetailCategoryResult;
 	}
 
-	private Set<Lecture> categorizeCommonCultures(Set<CoreCulture> graduationLectures,
+	private Set<Lecture> categorizeCoreCultures(Set<CoreCulture> graduationLectures,
 		CoreCultureCategory category) {
 		return graduationLectures.stream()
 			.filter(coreCulture -> coreCulture.getCoreCultureCategory() == category)

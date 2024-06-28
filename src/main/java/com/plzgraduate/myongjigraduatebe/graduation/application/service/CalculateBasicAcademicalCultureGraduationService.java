@@ -40,39 +40,42 @@ public class CalculateBasicAcademicalCultureGraduationService implements Calcula
 		return graduationCategory == PRIMARY_BASIC_ACADEMICAL_CULTURE
 			|| graduationCategory == DUAL_BASIC_ACADEMICAL_CULTURE;
 	}
+
+	@Override
+	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+		MajorType majorType = MajorType.from(graduationCategory);
+		String userMajor = user.getMajorByMajorType(majorType);
+		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures =
+			findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor);
+		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager =
+			determineBasicAcademicalCultureGraduationManager(userMajor);
+		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
+			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
+			graduationRequirement.getBasicCreditByMajorType(majorType));
+		detailGraduationResult.assignGraduationCategory(graduationCategory);
+		return detailGraduationResult;
+	}
+
 	public List<DetailGraduationResult> calculateAllDetailGraduation(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			TakenLectureInventory copiedTakenLectureForPrimaryBasicAcademicalCulture = takenLectureInventory.copy();
 			TakenLectureInventory copiedTakenLectureForDualBasicAcademicalCulture = takenLectureInventory.copy();
 			DetailGraduationResult primaryBasicAcademicalCultureDetailGraduationResult = calculateSingleDetailGraduation(
-				user, PRIMARY_BASIC_ACADEMICAL_CULTURE, copiedTakenLectureForPrimaryBasicAcademicalCulture, graduationRequirement);
+				user, PRIMARY_BASIC_ACADEMICAL_CULTURE, copiedTakenLectureForPrimaryBasicAcademicalCulture,
+				graduationRequirement);
 			DetailGraduationResult dualBasicAcademicalCultureDetailGraduationResult = calculateSingleDetailGraduation(
-				user, DUAL_BASIC_ACADEMICAL_CULTURE, copiedTakenLectureForDualBasicAcademicalCulture, graduationRequirement);
+				user, DUAL_BASIC_ACADEMICAL_CULTURE, copiedTakenLectureForDualBasicAcademicalCulture,
+				graduationRequirement);
 			syncOriginalTakenLectureInventory(takenLectureInventory,
-				primaryBasicAcademicalCultureDetailGraduationResult,
-				dualBasicAcademicalCultureDetailGraduationResult);
+				primaryBasicAcademicalCultureDetailGraduationResult, dualBasicAcademicalCultureDetailGraduationResult);
 			return List.of(primaryBasicAcademicalCultureDetailGraduationResult,
 				dualBasicAcademicalCultureDetailGraduationResult);
 		}
 		DetailGraduationResult primaryBasicAcademicalCultureGraduationResult = calculateSingleDetailGraduation(
 			user, PRIMARY_BASIC_ACADEMICAL_CULTURE, takenLectureInventory, graduationRequirement);
 		return List.of(primaryBasicAcademicalCultureGraduationResult);
-	}
-
-	@Override
-	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
-		MajorType majorType = MajorType.from(graduationCategory);
-		String userMajor = user.getMajorByMajorType(majorType);
-		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures = findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor);
-		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager = determineBasicAcademicalCultureGraduationManager(userMajor);
-		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
-			graduationRequirement.getBasicCreditByMajorType(majorType));
-		detailGraduationResult.assignGraduationCategory(graduationCategory);
-		return detailGraduationResult;
 	}
 
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
@@ -86,15 +89,14 @@ public class CalculateBasicAcademicalCultureGraduationService implements Calcula
 	private void syncOriginalTakenLectureInventory(TakenLectureInventory originalTakenLectureInventory,
 		DetailGraduationResult primaryBasicAcademicalCultureDetailGraduationResult,
 		DetailGraduationResult dualBasicAcademicalCultureDetailGraduationResult) {
-		List<Lecture> primaryBasicAcademicalCultureTakenLectures = primaryBasicAcademicalCultureDetailGraduationResult.getDetailCategory()
-			.get(0)
-			.getTakenLectures();
-		List<Lecture> dualBasicAcademicalCultureTakenLectures = dualBasicAcademicalCultureDetailGraduationResult.getDetailCategory()
-			.get(0)
-			.getTakenLectures();
+		List<Lecture> primaryBasicAcademicalCultureTakenLectures =
+			primaryBasicAcademicalCultureDetailGraduationResult.getDetailCategory().get(0).getTakenLectures();
+		List<Lecture> dualBasicAcademicalCultureTakenLectures =
+			dualBasicAcademicalCultureDetailGraduationResult.getDetailCategory().get(0).getTakenLectures();
+
 		Set<Lecture> basicAcademicalCultureTakenLectures = new HashSet<>();
 		basicAcademicalCultureTakenLectures.addAll(primaryBasicAcademicalCultureTakenLectures);
 		basicAcademicalCultureTakenLectures.addAll(dualBasicAcademicalCultureTakenLectures);
-		originalTakenLectureInventory.handleFinishedLectures(basicAcademicalCultureTakenLectures);
+		originalTakenLectureInventory.sync(basicAcademicalCultureTakenLectures);
 	}
 }

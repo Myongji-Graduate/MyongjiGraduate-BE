@@ -44,7 +44,7 @@ public class SocialScienceBasicAcademicGraduationManager implements BasicAcademi
 		int basicAcademicalCredit) {
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
-		Set<TakenLecture> removedTakenLecture = new HashSet<>();
+		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
 		takenLectureInventory.getTakenLectures().stream()
@@ -52,10 +52,10 @@ public class SocialScienceBasicAcademicGraduationManager implements BasicAcademi
 			.filter(takenLecture -> lecturesAcceptTakenAfter2023.contains(takenLecture.getLecture())
 				&& !takenLecture.takenAfter(TWENTY_THREE_YEAR))
 			.forEach(takenLecture -> {
-				removedTakenLecture.add(takenLecture);
+				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			"학문기초교양", true, basicAcademicalCredit);
