@@ -32,4 +32,8 @@ public enum GraduationCategory {
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리를 찾을 수 없습니다."));
 	}
+
+	public boolean checkMandatoryIfSeperatedByMandatoryAndElective() {
+		return this == PRIMARY_MANDATORY_MAJOR || this == DUAL_MANDATORY_MAJOR;
+	}
 }

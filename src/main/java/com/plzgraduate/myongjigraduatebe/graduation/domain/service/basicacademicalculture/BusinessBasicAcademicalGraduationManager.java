@@ -1,22 +1,23 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
-public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
+@Component
+public class BusinessBasicAcademicalGraduationManager implements BasicAcademicalGraduationManager {
 
 	private static final int TWENTY = 20;
 	private static final String BUSINESS_ADMINISTRATION = "경영학과";
@@ -42,7 +43,7 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		int basicAcademicalCredit) {
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
-		Set<TakenLecture> removedTakenLecture = new HashSet<>();
+		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 		Set<Lecture> finalBasicAcademicalLectures = resetBasicAcademicalLectureSet(basicAcademicalLectures,
 			user);
@@ -50,10 +51,10 @@ public class BusinessBasicAcademicalManager implements BasicAcademicalManager {
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
-				removedTakenLecture.add(takenLecture);
+				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			"학문기초교양", true, basicAcademicalCredit);

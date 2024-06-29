@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -12,6 +15,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class MandatoryMajorManager {
 
@@ -20,17 +24,16 @@ public class MandatoryMajorManager {
 	private final List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers;
 
 	public DetailCategoryResult createDetailCategoryResult(User user, TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures,
-		MajorGraduationCategory majorGraduationCategory) {
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		boolean isSatisfiedMandatory = true;
 		int removeMandatoryTotalCredit = 0;
 
 		for (MandatoryMajorSpecialCaseHandler mandatoryMajorSpecialCaseHandler : mandatoryMajorSpecialCaseHandlers) {
-			if (mandatoryMajorSpecialCaseHandler.isSupport(user, majorGraduationCategory)) {
+			if (mandatoryMajorSpecialCaseHandler.isSupport(user, majorType)) {
 				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = mandatoryMajorSpecialCaseHandler.getMandatorySpecialCaseInformation(
-					user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
+					user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures);
 				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 				removeMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 			}

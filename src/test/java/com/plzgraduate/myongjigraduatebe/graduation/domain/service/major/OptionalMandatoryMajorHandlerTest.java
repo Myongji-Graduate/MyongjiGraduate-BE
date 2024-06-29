@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -20,7 +21,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 @DisplayName("N개 중에 M개 이상을 수강할 경우 세부조건을 달성한다.")
 class OptionalMandatoryMajorHandlerTest {
 	private static final User user = UserFixture.경영학과_19학번_ENG12();
-	private static final MajorGraduationCategory majorGraduationCategory = MajorGraduationCategory.PRIMARY;
+	private static final MajorType MAJOR_TYPE = MajorType.PRIMARY;
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 
 	@DisplayName("3개 중에 1개를 수강할 경우 세부조건을 달성한다.")
@@ -47,7 +48,7 @@ class OptionalMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new OptionalMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -81,7 +82,7 @@ class OptionalMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new OptionalMandatoryMajorHandler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, majorGraduationCategory, takenLectureInventory, mandatoryLectures, electiveLectures);
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 

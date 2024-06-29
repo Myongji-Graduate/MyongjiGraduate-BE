@@ -71,4 +71,20 @@ public class GraduationRequirement {
 				- primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
 		return Math.max(freeElectiveCredit, 0);
 	}
+
+	public int getBasicCreditByMajorType(MajorType majorType) {
+		if(majorType == MajorType.PRIMARY) {
+			return primaryBasicAcademicalCultureCredit;
+		}
+		return dualBasicAcademicalCultureCredit;
+	}
+
+	public int getMajorCreditByMajorType(MajorType majorType) {
+		if(majorType == MajorType.PRIMARY) {
+			return primaryMajorCredit;
+		} else if(majorType == MajorType.DUAL) {
+			return dualMajorCredit;
+		}
+		return subMajorCredit;
+	}
 }

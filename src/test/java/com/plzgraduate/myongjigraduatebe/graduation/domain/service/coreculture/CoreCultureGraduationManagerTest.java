@@ -26,7 +26,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 class CoreCultureGraduationManagerTest {
 
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	GraduationManager<CoreCulture> graduationManager = new CoreCultureGraduationManager();
+	GraduationManager<CoreCulture> graduationManager = new CoreGraduationManager();
 
 	@DisplayName("모든 핵심교양 세부 카테고리가 이수 완료일 경우 이수 완료 핵심교양 전체 졸업 결과를 생성한다.")
 	@Test

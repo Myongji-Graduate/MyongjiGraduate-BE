@@ -3,11 +3,14 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
+@Component
 public class ElectiveMajorManager {
 
 	private static final String ELECTIVE_MAJOR_NAME = "전공선택";

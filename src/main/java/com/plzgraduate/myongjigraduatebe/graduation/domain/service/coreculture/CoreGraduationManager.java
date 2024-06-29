@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
@@ -15,7 +17,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategor
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
-public class CoreCultureGraduationManager implements GraduationManager<CoreCulture> {
+@Component
+public class CoreGraduationManager implements GraduationManager<CoreCulture> {
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures, int coreCultureGraduationTotalCredit) {

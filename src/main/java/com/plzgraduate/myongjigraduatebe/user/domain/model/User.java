@@ -1,9 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
+
 import java.time.Instant;
 import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -103,6 +108,15 @@ public class User {
 
 	public boolean isMyAuthId(String authId) {
 		return this.authId.equals(authId);
+	}
+
+	public String getMajorByMajorType(MajorType majorType) {
+		if(majorType == PRIMARY) {
+			return primaryMajor;
+		} else if(majorType == DUAL) {
+			return dualMajor;
+		}
+		return subMajor;
 	}
 
 	private static int parseEntryYearInStudentNumber(String studentNumber) {

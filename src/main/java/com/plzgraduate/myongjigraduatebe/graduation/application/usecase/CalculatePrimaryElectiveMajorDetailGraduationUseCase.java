@@ -1,9 +1,0 @@
-package com.plzgraduate.myongjigraduatebe.graduation.application.usecase;
-
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-
-public interface CalculatePrimaryElectiveMajorDetailGraduationUseCase extends CalculateDetailGraduationUseCase {
-
-	DetailGraduationResult isolatePrimaryElectiveMajorDetailGraduation(
-		DetailGraduationResult primaryMajorDetailGraduationResult);
-}

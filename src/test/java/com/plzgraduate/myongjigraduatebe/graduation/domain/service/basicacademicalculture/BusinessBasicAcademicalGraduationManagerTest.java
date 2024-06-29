@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -25,7 +24,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @DisplayName("경영대의 학문기초교양 결과를 반환한다.")
-class BusinessBasicAcademicalManagerTest {
+class BusinessBasicAcademicalGraduationManagerTest {
 
 	@DisplayName("경영학과의 학문기초교양 결과를 계산한다.")
 	@Nested
@@ -45,7 +44,7 @@ class BusinessBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02107"), 2019, Semester.FIRST)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new BusinessBasicAcademicalManager();
+			BasicAcademicalGraduationManager manager = new BusinessBasicAcademicalGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -78,7 +77,7 @@ class BusinessBasicAcademicalManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02107"), 2019, Semester.FIRST)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new BusinessBasicAcademicalManager();
+			BasicAcademicalGraduationManager manager = new BusinessBasicAcademicalGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,

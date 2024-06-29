@@ -1,13 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.DUAL;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationCategory.PRIMARY;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -19,6 +19,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
  * 경영정보의 경우 인적자원관리, 마켓팅원론, 재무관리원론에서 ~18학번까지는 3개 모두 이수, 19학번 이후 택 2
  * 경영의 경우 국제통상원론, 국제경양, 경영정보 중 택1
  **/
+@Component
 public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
 
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
@@ -28,8 +29,8 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 	private static final int CLASS_OF_17 = 17;
 	private static final int CLASS_OF_19 = 19;
 
-	public boolean isSupport(User user, MajorGraduationCategory majorGraduationCategory) {
-		String calculatingMajor = getCalculatingMajor(user, majorGraduationCategory);
+	public boolean isSupport(User user, MajorType majorType) {
+		String calculatingMajor = getCalculatingMajor(user, majorType);
 		if (calculatingMajor.equals(MANAGEMENT_INFORMATION) && user.getEntryYear() >= CLASS_OF_19) {
 			return true;
 		}
@@ -41,9 +42,9 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 
 	@Override
 	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(User user,
-		MajorGraduationCategory majorGraduationCategory, TakenLectureInventory takenLectureInventory,
+		MajorType majorType, TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		OptionalMandatory optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorGraduationCategory));
+		OptionalMandatory optionalMandatory = OptionalMandatory.from(getCalculatingMajor(user, majorType));
 		int removedMandatoryTotalCredit = 0;
 		boolean isCompletedMandatorySpecialCase = checkCompleteOptionalMandatory(takenLectureInventory, mandatoryLectures,
 			electiveLectures, optionalMandatory);
@@ -84,13 +85,7 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 		return count >= chooseNum;
 	}
 
-	private String getCalculatingMajor(User user, MajorGraduationCategory majorGraduationCategory) {
-		if (majorGraduationCategory == PRIMARY) {
-			return user.getPrimaryMajor();
-		}
-		if (majorGraduationCategory == DUAL) {
-			return user.getDualMajor();
-		}
-		return user.getSubMajor();
+	private String getCalculatingMajor(User user, MajorType majorType) {
+		return user.getMajorByMajorType(majorType);
 	}
 }

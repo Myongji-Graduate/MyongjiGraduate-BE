@@ -42,10 +42,10 @@ public class TakenLectureInventory {
 		takenLecture.removeAll(finishedTakenLecture);
 	}
 
-	public void handleFinishedLectures(Set<Lecture> finishedBasicAcademicalCultureLecture) {
+	public void sync(Set<Lecture> finishedLectures) {
 		takenLecture.removeAll(
 			takenLecture.stream()
-				.filter(taken -> finishedBasicAcademicalCultureLecture.contains(taken.getLecture()))
+				.filter(taken -> finishedLectures.contains(taken.getLecture()))
 				.collect(Collectors.toSet())
 		);
 	}

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
@@ -16,6 +18,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+@Component
 class CommonCultureDetailCategoryManager {
 
 	private static final List<String> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST =
@@ -27,32 +30,25 @@ class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
-		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
-			graduationLectures, category);
-
-		Set<TakenLecture> removedTakenLecture = new HashSet<>();
+		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(graduationLectures, category);
+		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
-
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCommonCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
-				removedTakenLecture.add(takenLecture);
+				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-
-
+		boolean isSatisfiedMandatory = checkMandatorySatisfaction(user, takenLectureInventory, category);
+		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), checkMandatorySatisfaction(user, takenLectureInventory, category),
-			checkCategoryTotalCredit(user, category));
+			category.getName(), isSatisfiedMandatory, checkCategoryTotalCredit(user, category));
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
-
-		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
-
 		return commonCultureDetailCategoryResult;
 	}
 
 	private int checkCategoryTotalCredit(User user, CommonCultureCategory commonCultureCategory) {
-		if (user.getEnglishLevel() == FREE && commonCultureCategory == ENGLISH){
+		if (user.getEnglishLevel() == FREE && commonCultureCategory == ENGLISH) {
 			return 0;
 		}
 		return commonCultureCategory.getTotalCredit();

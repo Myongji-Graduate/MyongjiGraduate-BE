@@ -15,7 +15,6 @@ import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -44,7 +43,7 @@ class SocialScienceBasicAcademicManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02186"), 2023, Semester.SECOND)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
+			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -77,7 +76,7 @@ class SocialScienceBasicAcademicManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02186"), 2020, Semester.SECOND)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new SocialScienceBasicAcademicManager();
+			BasicAcademicalGraduationManager manager = new SocialScienceBasicAcademicGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
