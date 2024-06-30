@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
@@ -31,6 +32,8 @@ class WithDrawUserServiceTest {
 	private DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
 	@Mock
 	private DeleteUserPort deleteUserPort;
+	@Mock
+	private DeleteCompletedCreditPort deleteCompletedCreditPort;
 	@Mock
 	private PasswordEncoder passwordEncoder;
 
@@ -53,6 +56,7 @@ class WithDrawUserServiceTest {
 	    withDrawUserService.withDraw(user.getId(), password);
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
 		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
+		then(deleteCompletedCreditPort).should().deleteAllCompletedCredits(user);
 		then(deleteUserPort).should().deleteUser(user);
 	}
 

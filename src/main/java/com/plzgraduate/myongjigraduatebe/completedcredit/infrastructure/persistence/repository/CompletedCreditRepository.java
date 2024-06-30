@@ -11,4 +11,6 @@ public interface CompletedCreditRepository extends JpaRepository<CompletedCredit
 
 	List<CompletedCreditJpaEntity> findAllByUserJpaEntity(UserJpaEntity userJpaEntity);
 
+	void deleteAllByUserJpaEntity(UserJpaEntity userJpaEntity);
+
 }
