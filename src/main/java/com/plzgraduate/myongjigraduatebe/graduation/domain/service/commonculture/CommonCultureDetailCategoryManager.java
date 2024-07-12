@@ -23,6 +23,7 @@ class CommonCultureDetailCategoryManager {
 
 	private static final List<String> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST =
 		List.of("KMA02100", "KMA00100", "KMA00101"); // 성경개론, 성서의이해, 성서와인간이해
+	private static final String BASIC_ENGLISH_LECTURE_CODE = "KMP02126";
 	private static final List<String> ENGLISH_12_MANDATORY_LECTURE_CODE_LIST =
 		List.of("KMA02106", "KMA02107", "KMA02108", "KMA02109"); // 영어1, 영어2, 영어회화1, 영어회화2
 	private static final List<String> ENGLISH_34_MANDATORY_LECTURE_CODE_LIST =
@@ -70,6 +71,9 @@ class CommonCultureDetailCategoryManager {
 					takenLecture -> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST
 						.contains(takenLecture.getLecture().getLectureCode()));
 		}
+		if(user.getEnglishLevel() == BASIC && category == ENGLISH) {
+			return isTakenBasicEnglish(takenLectureInventory) && checkEnglish12Satisfaction(takenLectureInventory);
+		}
 		if (user.getEnglishLevel() == ENG12 && category == ENGLISH) {
 			return checkEnglish12Satisfaction(takenLectureInventory);
 		}
@@ -77,6 +81,13 @@ class CommonCultureDetailCategoryManager {
 			return checkEnglish34Satisfaction(takenLectureInventory);
 		}
 		return true;
+	}
+
+	private boolean isTakenBasicEnglish(TakenLectureInventory takenLectureInventory) {
+		return takenLectureInventory.getCultureLectures().stream()
+			.map(takenLecture -> takenLecture.getLecture().getLectureCode())
+			.collect(Collectors.toList())
+			.contains(BASIC_ENGLISH_LECTURE_CODE);
 	}
 
 	private boolean checkEnglish12Satisfaction(TakenLectureInventory takenLectureInventory) {

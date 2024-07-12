@@ -31,6 +31,43 @@ class CommonCultureDetailCategoryManagerTest {
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 	CommonCultureDetailCategoryManager manager = new CommonCultureDetailCategoryManager();
 
+	@DisplayName("영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
+	@ParameterizedTest
+	@ArgumentsSource(CommonCultureCategoryFixture.class)
+	void generateEngBasicCompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+		Set<CommonCulture> graduationLectures) {
+		//given
+		User user = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMP02126"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02106"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02107"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02123"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02124"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02108"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02109"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		String commonCultureCategoryName = commonCultureCategory.getName();
+		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
+
+		//when
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+			commonCultureCategory);
+
+		//then
+		assertThat(detailCategoryResult)
+			.extracting("detailCategoryName", "isCompleted", "totalCredits")
+			.contains(commonCultureCategoryName, true, categoryTotalCredit);
+	}
+
 	@DisplayName("영어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
@@ -127,6 +164,39 @@ class CommonCultureDetailCategoryManagerTest {
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted")
 			.contains(commonCultureCategoryName, true);
+	}
+
+	@DisplayName("영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우(기초영어 미수강) 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
+	@Test
+	void generateEngBasicUnCompletedCommonCultureDetailCategory() {
+		//given
+		User user = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02106"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02107"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02108"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02109"), 2023, Semester.FIRST)
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		CommonCultureCategory commonCultureCategory = ENGLISH;
+		Set<CommonCulture> graduationLectures = new HashSet<>(Set.of(
+			CommonCulture.of(mockLectureMap.get("KMP02126"), commonCultureCategory),
+			CommonCulture.of(mockLectureMap.get("KMA02106"), commonCultureCategory),
+			CommonCulture.of(mockLectureMap.get("KMA02107"), commonCultureCategory),
+			CommonCulture.of(mockLectureMap.get("KMA02108"), commonCultureCategory),
+			CommonCulture.of(mockLectureMap.get("KMA02109"), commonCultureCategory)));
+		String commonCultureCategoryName = commonCultureCategory.getName();
+		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
+
+		//when
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+			commonCultureCategory);
+
+		//then
+		assertThat(detailCategoryResult)
+			.extracting("detailCategoryName", "isCompleted", "totalCredits")
+			.contains(commonCultureCategoryName, false, categoryTotalCredit);
 	}
 
 	@DisplayName("영어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
