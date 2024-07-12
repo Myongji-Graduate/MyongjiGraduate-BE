@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum EnglishLevel {
-	ENG12, ENG34, FREE
+	BASIC, ENG12, ENG34, FREE
 }
