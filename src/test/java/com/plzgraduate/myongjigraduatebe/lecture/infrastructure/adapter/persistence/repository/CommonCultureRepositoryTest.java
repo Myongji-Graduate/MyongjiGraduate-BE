@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CommonCultureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
+	private static final String BASIC_ENGLISH_CODE = "KMP02126";
 	private static final String ENGLISH1_CODE = "KMA02106";
 	private static final String ENGLISH2_CODE = "KMA02107";
 	private static final String ENGLISH_CONVERSATION1_CODE = "KMA02108";
@@ -27,11 +26,36 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 	private static final String ENGLISH_CONVERSATION3_CODE = "KMA02125";
 	private static final String ENGLISH_CONVERSATION4_CODE = "KMA02126";
 
-
 	@Autowired
 	private LectureRepository lectureRepository;
 	@Autowired
 	private CommonCultureRepository commonCultureRepository;
+
+	@DisplayName("BASIC ENG: 유저의 입학년도가 적용 시작 년도, 적용 마감 년도 사이에 속하는 공통 교양 과목을 조회한다.")
+	@ParameterizedTest
+	@ValueSource(ints = {16, 18, 20, 23})
+	void findEngBasicAllByEntryYear(int entryYear) {
+		//given
+		saveEnglishLectures();
+
+		//when
+		List<CommonCultureJpaEntity> commonCultureGraduationLectures = commonCultureRepository.findEngBasicGraduationCommonCulturesByEntryYear(
+			entryYear);
+
+		//then
+		assertThat(commonCultureGraduationLectures).hasSize(5)
+			.extracting("startEntryYear")
+			.contains(entryYear);
+
+		List<String> lectureCodes = commonCultureGraduationLectures.stream()
+			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity().getLectureCode())
+			.collect(Collectors.toList());
+		assertThat(lectureCodes).contains(BASIC_ENGLISH_CODE);
+		assertThat(lectureCodes).doesNotContain(ENGLISH3_CODE);
+		assertThat(lectureCodes).doesNotContain(ENGLISH4_CODE);
+		assertThat(lectureCodes).doesNotContain(ENGLISH_CONVERSATION3_CODE);
+		assertThat(lectureCodes).doesNotContain(ENGLISH_CONVERSATION4_CODE);
+	}
 
 	@DisplayName("ENG12: 유저의 입학년도가 적용 시작 년도, 적용 마감 년도 사이에 속하는 공통 교양 과목을 조회한다.")
 	@ParameterizedTest
@@ -52,6 +76,7 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
 			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity().getLectureCode())
 			.collect(Collectors.toList());
+		assertThat(lectureCodes).doesNotContain(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH3_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH4_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH_CONVERSATION3_CODE);
@@ -77,6 +102,7 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
 			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity().getLectureCode())
 			.collect(Collectors.toList());
+		assertThat(lectureCodes).doesNotContain(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH1_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH2_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH_CONVERSATION1_CODE);
@@ -99,6 +125,9 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 	}
 
 	private void saveEnglishLectures() {
+		LectureJpaEntity 기초영어 = LectureJpaEntity.builder()
+			.lectureCode(BASIC_ENGLISH_CODE)
+			.build();
 		LectureJpaEntity 영어1 = LectureJpaEntity.builder()
 			.lectureCode(ENGLISH1_CODE)
 			.build();
@@ -123,7 +152,7 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 		LectureJpaEntity 영어회화4 = LectureJpaEntity.builder()
 			.lectureCode(ENGLISH_CONVERSATION4_CODE)
 			.build();
-		List<LectureJpaEntity> englishLectures = List.of(영어1, 영어2, 영어3, 영어4, 영어회화1, 영어회화2, 영어회화3, 영어회화4);
+		List<LectureJpaEntity> englishLectures = List.of(기초영어, 영어1, 영어2, 영어3, 영어4, 영어회화1, 영어회화2, 영어회화3, 영어회화4);
 		lectureRepository.saveAll(englishLectures);
 
 		for (LectureJpaEntity englishLecture : englishLectures) {
