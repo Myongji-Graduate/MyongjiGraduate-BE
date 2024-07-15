@@ -26,9 +26,9 @@ public class CommonCultureCategoryFixture implements ArgumentsProvider {
 			Arguments.arguments(CAREER, 공통교양_18_19()),
 			Arguments.arguments(CAREER, 공통교양_20_21_22()),
 			Arguments.arguments(DIGITAL_LITERACY, 공통교양_23()),
+			Arguments.arguments(ENGLISH, 영어레벨_Basic()),
 			Arguments.arguments(ENGLISH, 영어레벨_12()),
 			Arguments.arguments(ENGLISH, 영어레벨_34())
-
 		);
 	}
 }
