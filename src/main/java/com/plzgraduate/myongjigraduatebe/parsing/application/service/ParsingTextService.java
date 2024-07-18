@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.ASSOCIATED_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.DOUBLE_SUB;
 
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
@@ -81,7 +83,7 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void validateStudentNumber(User user, ParsingInformation parsingInformation) {
 		if (!user.compareStudentNumber(parsingInformation.getStudentNumber())) {
-			throw new InvalidPdfException("본인의 학번과 PDF 학번이 일치하지 않습니다.");
+			throw new InvalidPdfException(INCORRECT_STUDENT_NUMBER.toString());
 		}
 	}
 
@@ -100,7 +102,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	private void checkUnSupportedUser(ParsingInformation parsingInformation) {
 		if (parsingInformation.getStudentCategory() == ASSOCIATED_MAJOR
 			|| parsingInformation.getStudentCategory() == DOUBLE_SUB) {
-			throw new IllegalArgumentException("연계전공, 복수+부전공은 참여가 어렵습니다. 빠른 시일 내에 업데이트하도록 하겠습니다.");
+			throw new IllegalArgumentException(ErrorCode.UNSUPPORTED_STUDENT_CATEGORY.toString());
 		}
 	}
 
