@@ -12,6 +12,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.exception.ExceptionResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
-	private static final ExceptionResponse E403 = ExceptionResponse.of(HttpStatus.FORBIDDEN, "Authentication error (cause: forbidden)");
+	private static final ExceptionResponse E403 = ExceptionResponse.from(ErrorCode.AUTHENTICATION_FAIL_FORBIDDEN);
 
 	private final ObjectMapper om;
 
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
-		AccessDeniedException accessDeniedException) throws IOException, ServletException {
+		AccessDeniedException accessDeniedException) throws IOException {
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		response.setHeader("content-type", "application/json");
 		response.getWriter().write(om.writeValueAsString(E403));
