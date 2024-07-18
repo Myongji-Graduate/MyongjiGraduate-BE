@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
@@ -22,6 +23,7 @@ class WithDrawUserService implements WithDrawUserUseCase {
 	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	private final DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
 	private final DeleteUserPort deleteUserPort;
+	private final DeleteCompletedCreditPort deleteCompletedCreditPort;
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
@@ -30,6 +32,7 @@ class WithDrawUserService implements WithDrawUserUseCase {
 		user.matchPassword(passwordEncoder, password);
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);
 		deleteParsingTextHistoryPort.deleteUserParsingTextHistory(user);
+		deleteCompletedCreditPort.deleteAllCompletedCredits(user);
 		deleteUserPort.deleteUser(user);
 	}
 }

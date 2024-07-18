@@ -1,8 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 import lombok.Builder;
 
@@ -17,6 +20,10 @@ public class TakenLectureInventory {
 
 	public Set<TakenLecture> getTakenLectures() {
 		return Collections.unmodifiableSet(takenLecture);
+	}
+
+	public TakenLectureInventory copy() {
+		return TakenLectureInventory.from(new HashSet<>(takenLecture));
 	}
 
 	public Set<TakenLecture> getCultureLectures() {
@@ -35,12 +42,20 @@ public class TakenLectureInventory {
 		takenLecture.removeAll(finishedTakenLecture);
 	}
 
+	public void sync(Set<Lecture> finishedLectures) {
+		takenLecture.removeAll(
+			takenLecture.stream()
+				.filter(taken -> finishedLectures.contains(taken.getLecture()))
+				.collect(Collectors.toSet())
+		);
+	}
+
 	public int calculateTotalCredit() {
 		int totalCredit = this.takenLecture
 			.stream()
 			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
 			.sum();
-		if(checkChapelCountIsFour(this.takenLecture)) {
+		if (checkChapelCountIsFour(this.takenLecture)) {
 			totalCredit += 2;
 		}
 		return totalCredit;

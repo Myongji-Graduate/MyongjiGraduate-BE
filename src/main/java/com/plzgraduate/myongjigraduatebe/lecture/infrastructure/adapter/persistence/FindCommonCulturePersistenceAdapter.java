@@ -23,6 +23,9 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 
 	@Override
 	public Set<CommonCulture> findCommonCulture(User user) {
+		if (user.getEnglishLevel() == BASIC) {
+			return findEngBasicCommonCultures(user);
+		}
 		if (user.getEnglishLevel() == ENG12) {
 			return findEng12CommonCultures(user);
 		}
@@ -30,6 +33,12 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 			return findEng34CommonCultures(user);
 		}
 		return findEngFreeCommonCultures(user);
+	}
+
+	private Set<CommonCulture> findEngBasicCommonCultures(User user) {
+		return commonCultureRepository.findEngBasicGraduationCommonCulturesByEntryYear(user.getEntryYear()).stream()
+			.map(lectureMapper::mapToCommonCultureModel)
+			.collect(Collectors.toSet());
 	}
 
 	private Set<CommonCulture> findEng12CommonCultures(User user) {

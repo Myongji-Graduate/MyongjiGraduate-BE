@@ -11,17 +11,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.FindCommonCulturePersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CommonCultureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
+	private static final String BASIC_ENGLISH_CODE = "KMP02126";
 	private static final String ENGLISH1_CODE = "KMA02106";
 	private static final String ENGLISH_CONVERSATION3_CODE = "KMA02123";
 
@@ -34,8 +34,24 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
 	@DisplayName("Eng12: 유저의 입학년도와 영어레벨에 해당하는 공통교양과목들을 조회한다.")
 	@Test
+	void findBasicEngCommonCulture() {
+		//given
+		User basicEngUser = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
+		createCommonCultures();
+
+		//when
+		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(basicEngUser);
+
+		//then
+		assertThat(commonCultures).hasSize(2)
+			.extracting("commonCultureCategory")
+			.contains(ENGLISH);
+	}
+
+	@DisplayName("Eng12: 유저의 입학년도와 영어레벨에 해당하는 공통교양과목들을 조회한다.")
+	@Test
 	void findEng12CommonCulture() {
-	    //given
+		//given
 		User eng12User = UserFixture.데이테크놀로지학과_18학번();
 		createCommonCultures();
 
@@ -85,7 +101,10 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 		LectureJpaEntity lectureJpaEntityB = LectureJpaEntity.builder()
 			.lectureCode(ENGLISH_CONVERSATION3_CODE)
 			.build();
-		lectureRepository.saveAll(List.of(lectureJpaEntityA, lectureJpaEntityB));
+		LectureJpaEntity lectureJpaEntityC = LectureJpaEntity.builder()
+			.lectureCode(BASIC_ENGLISH_CODE)
+			.build();
+		lectureRepository.saveAll(List.of(lectureJpaEntityA, lectureJpaEntityB, lectureJpaEntityC));
 
 		CommonCultureJpaEntity commonCultureJpaEntityA = CommonCultureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
@@ -97,7 +116,13 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 			.commonCultureCategory(ENGLISH)
 			.startEntryYear(16)
 			.endEntryYear(17).build();
-		commonCultureRepository.saveAll(List.of(commonCultureJpaEntityA, commonCultureJpaEntityB));
+		CommonCultureJpaEntity commonCultureJpaEntityC = CommonCultureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntityC)
+			.commonCultureCategory(ENGLISH)
+			.startEntryYear(16)
+			.endEntryYear(99).build();
+		commonCultureRepository.saveAll(
+			List.of(commonCultureJpaEntityA, commonCultureJpaEntityB, commonCultureJpaEntityC));
 	}
 
 }

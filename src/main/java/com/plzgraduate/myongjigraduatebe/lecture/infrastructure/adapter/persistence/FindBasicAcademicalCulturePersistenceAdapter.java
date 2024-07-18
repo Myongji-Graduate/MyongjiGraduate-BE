@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.mapper.LectureMapper;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.BasicAcademicalCultureRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,4 +27,15 @@ public class FindBasicAcademicalCulturePersistenceAdapter implements FindBasicAc
 			.map(lectureMapper::mapToBasicAcademicalCultureLectureModel)
 			.collect(Collectors.toSet());
 	}
+
+	@Override
+	public Set<BasicAcademicalCultureLecture> findDuplicatedLecturesBetweenMajors(User user) {
+		College primaryMajorCollage = College.findBelongingCollege(user.getPrimaryMajor());
+		College dualMajorCollage = College.findBelongingCollege(user.getDualMajor());
+		return basicAcademicalCultureRepository.findAllDuplicatedTakenByCollages(user.getId(),
+				primaryMajorCollage.getName(), dualMajorCollage.getName()).stream()
+			.map(lectureMapper::mapToBasicAcademicalCultureLectureModel)
+			.collect(Collectors.toSet());
+	}
+
 }

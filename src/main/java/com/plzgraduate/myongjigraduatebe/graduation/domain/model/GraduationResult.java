@@ -59,6 +59,10 @@ public class GraduationResult {
 			&& normalCultureGraduationResult.isCompleted() && freeElectiveGraduationResult.isCompleted();
 	}
 
+	public void deductDuplicatedCredit(int duplicatedCredit) {
+		this.takenCredit -= duplicatedCredit;
+	}
+
 	private void addUpTotalCredit(int originTotalCredit) {
 		int combinedScore = detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getTotalCredit)

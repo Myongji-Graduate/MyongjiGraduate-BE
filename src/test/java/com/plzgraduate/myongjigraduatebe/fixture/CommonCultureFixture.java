@@ -102,6 +102,16 @@ public class CommonCultureFixture implements ArgumentsProvider {
 		return lectureSet;
 	}
 
+	public static Set<CommonCulture> 영어레벨_Basic() {
+		Set<CommonCulture> lectureSet = new HashSet<>();
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMP02126"), ENGLISH));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02106"), ENGLISH));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02107"), ENGLISH));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02108"), ENGLISH));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02109"), ENGLISH));
+		return lectureSet;
+	}
+
 	public static Set<CommonCulture> 영어레벨_12() {
 		Set<CommonCulture> lectureSet = new HashSet<>();
 		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02106"), ENGLISH));

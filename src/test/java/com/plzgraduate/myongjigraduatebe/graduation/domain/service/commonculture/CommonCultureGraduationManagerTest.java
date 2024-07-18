@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -28,7 +27,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 class CommonCultureGraduationManagerTest {
 
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	GraduationManager<CommonCulture> graduationManager = new CommonCultureGraduationManager();
+	GraduationManager<CommonCulture> graduationManager = new CommonGraduationManager();
 
 	@DisplayName("모든 공통교양 세부 카테고리가 이수 완료일 경우 이수 완료 공통교양 전체 졸업 결과를 생성한다.")
 	@ParameterizedTest

@@ -1,9 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.support.resolver.CalculateDetailGraduationUseCaseResolver;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
@@ -25,17 +26,26 @@ public class CalculateSingleDetailGraduationService implements CalculateSingleDe
 
 	private final FindUserUseCase findUserUseCase;
 	private final FindTakenLectureUseCase findTakenLectureUseCase;
-	private final CalculateDetailGraduationUseCaseResolver calculateDetailGraduationUseCaseResolver;
+	private final List<CalculateDetailGraduationUseCase> calculateDetailGraduationUseCases;
 
 	@Override
 	public DetailGraduationResult calculateSingleDetailGraduation(Long userId, GraduationCategory graduationCategory) {
 		User user = findUserUseCase.findUserById(userId);
 		TakenLectureInventory takenLectures = findTakenLectureUseCase.findTakenLectures(userId);
-		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = calculateDetailGraduationUseCaseResolver.resolveCalculateDetailGraduationUseCase(
+		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = determineCalculateDetailGraduationUseCase(
 			graduationCategory);
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 
-		return calculateDetailGraduationUseCase.calculateDetailGraduation(user, takenLectures, graduationRequirement);
+		return calculateDetailGraduationUseCase.calculateSingleDetailGraduation(user, graduationCategory, takenLectures,
+			graduationRequirement);
+	}
+
+	private CalculateDetailGraduationUseCase determineCalculateDetailGraduationUseCase(
+		GraduationCategory graduationCategory) {
+		return calculateDetailGraduationUseCases.stream()
+			.filter(calculateDetailGraduationUseCase -> calculateDetailGraduationUseCase.supports(graduationCategory))
+			.findFirst()
+			.orElseThrow(() -> new RuntimeException("No calculate detail graduation case found"));
 	}
 
 	private GraduationRequirement determineGraduationRequirement(User user) {
