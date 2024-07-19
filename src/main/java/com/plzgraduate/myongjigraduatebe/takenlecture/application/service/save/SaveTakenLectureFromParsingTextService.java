@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -18,10 +19,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @UseCase
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromParsingTextUseCase {
 
 	private final SaveTakenLecturePort saveTakenLecturePort;
@@ -38,18 +41,20 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 		Map<String, Lecture> lectureMap) {
 		return takenLectureInformationList.stream()
 			.map(takenLectureInformation -> {
-				Lecture lecture = getLectureFromLectureMap(lectureMap, takenLectureInformation);
-				return TakenLecture.of(user, lecture, takenLectureInformation.getYear(),
-					takenLectureInformation.getSemester());
-			}
-		).collect(Collectors.toList());
+					Lecture lecture = getLectureFromLectureMap(lectureMap, takenLectureInformation);
+					return TakenLecture.of(user, lecture, takenLectureInformation.getYear(),
+						takenLectureInformation.getSemester());
+				}
+			).collect(Collectors.toList());
 	}
 
 	private Lecture getLectureFromLectureMap(Map<String, Lecture> lectureMap,
 		TakenLectureInformation takenLectureInformation) {
 		return Optional.ofNullable(lectureMap.get(takenLectureInformation.getLectureCode()))
-			.orElseThrow(
-				() -> new IllegalArgumentException(takenLectureInformation.getLectureCode() + "이 데이터베이스에 존재하지 않습니다."));
+			.orElseThrow(() -> {
+				log.warn("Not Found Lecture in Database: {}", takenLectureInformation.getLectureCode());
+				return new IllegalArgumentException(ErrorCode.NON_EXISTED_LECTURE.toString());
+			});
 	}
 
 	private Map<String, Lecture> makeLectureMapByLectureCodes(

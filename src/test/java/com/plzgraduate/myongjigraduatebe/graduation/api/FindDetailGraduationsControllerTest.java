@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INVALIDATED_GRADUATION_CATEGORY;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CORE_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
@@ -202,8 +203,7 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 				.param("graduationCategory", invalidGraduationCategoryName))
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
-			.andExpect(jsonPath("$.message").value("Failed to convert value: " + invalidGraduationCategoryName));
+			.andExpect(jsonPath("$.errorCode").value(INVALIDATED_GRADUATION_CATEGORY.toString()));
 	}
 
 }

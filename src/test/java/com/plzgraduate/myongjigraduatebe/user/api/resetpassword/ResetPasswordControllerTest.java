@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.api.resetpassword;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INVALIDATED_PASSWORD_TYPE;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -76,7 +77,7 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		actions.
 			andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message", is("아이디를 입력해주세요.")));
+			.andExpect(jsonPath("$.errorCode", is("아이디를 입력해주세요.")));
 	}
 
 	@DisplayName("새로운 비밀번호가 비밀번호 형식에 맞지 않을 시 예외가 발생한다.")
@@ -99,7 +100,7 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		actions.
 			andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message", is("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다.")));
+			.andExpect(jsonPath("$.errorCode", is(INVALIDATED_PASSWORD_TYPE.toString())));
 	}
 
 	@DisplayName("비밀번호 확인 비밀번호가 비밀번호 형식에 맞지 않을 시 예외가 발생한다.")
@@ -122,7 +123,7 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		actions.
 			andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message", is("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다.")));
+			.andExpect(jsonPath("$.errorCode", is(INVALIDATED_PASSWORD_TYPE.toString())));
 	}
 
 }

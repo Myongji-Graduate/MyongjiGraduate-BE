@@ -96,10 +96,12 @@ class UserTest {
 	void matchWrongPassword() {
 		//given
 		given(passwordEncoder.matches("wrongPassword", "tester00!")).willReturn(false);
-		//when //then
-		assertThatThrownBy(() -> user.matchPassword(passwordEncoder, "wrongPassword"))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("비밀번호가 일치하지 않습니다.");
+
+		//when
+		boolean result = user.matchPassword(passwordEncoder, "wrongPassword");
+
+		// then
+		assertThat(result).isFalse();
 	}
 
 	@DisplayName("유저의 암호화된 로그인 아이디(뒷 세자리 *** 대체)를 반환한다.")

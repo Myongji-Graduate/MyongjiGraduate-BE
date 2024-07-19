@@ -54,7 +54,7 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 				.param("keyword", ""))
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value("검색어를 2자리 이상 입력해주세요."));
+			.andExpect(jsonPath("$.errorCode").value("검색어를 2자리 이상 입력해주세요."));
 
 	}
 }

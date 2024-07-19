@@ -52,7 +52,7 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value("아아디를 입력해주세요."));
+			.andExpect(jsonPath("$.errorCode").value("아이디를 입력해주세요."));
 	}
 
 	@DisplayName("비밀번호가 빈 문자열일 경우 에러를 반환한다.")
@@ -71,7 +71,7 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."));
+			.andExpect(jsonPath("$.errorCode").value("비밀번호를 입력해주세요."));
 	}
 
 	@DisplayName("아이디 및 비밀번호에 해당하는 사용자가 없을 경우 에러를 반환한다.")
@@ -91,7 +91,6 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isUnauthorized())
-			.andExpect(jsonPath("$.status").value("401"))
-			.andExpect(jsonPath("$.message").value("아이디 혹은 비밀번호가 일치하지 않습니다."));
+			.andExpect(jsonPath("$.errorCode").value("아이디 혹은 비밀번호가 일치하지 않습니다."));
 	}
 }

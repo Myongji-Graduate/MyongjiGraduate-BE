@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
@@ -29,7 +30,9 @@ class WithDrawUserService implements WithDrawUserUseCase {
 	@Override
 	public void withDraw(Long userId, String password) {
 		User user = findUserUseCase.findUserById(userId);
-		user.matchPassword(passwordEncoder, password);
+		if(!user.matchPassword(passwordEncoder, password)){
+			throw new IllegalArgumentException(ErrorCode.INCORRECT_PASSWORD.toString());
+		}
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);
 		deleteParsingTextHistoryPort.deleteUserParsingTextHistory(user);
 		deleteCompletedCreditPort.deleteAllCompletedCredits(user);

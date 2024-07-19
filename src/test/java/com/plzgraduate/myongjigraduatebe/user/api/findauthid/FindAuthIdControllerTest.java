@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.api.findauthid;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.UNREGISTERED_USER;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -37,14 +38,13 @@ class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 		//given
 		String studentNumber = "60191111";
 		given(findUserAuthIdUseCase.findUserAuthId(any())).willThrow(
-			new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+			new IllegalArgumentException(UNREGISTERED_USER.toString()));
 
 		//when //then
 		mockMvc.perform(get("/api/v1/users/{student-number}/auth-id", studentNumber))
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.status", is(400)))
-			.andExpect(jsonPath("$.message", is("해당 사용자를 찾을 수 없습니다.")));
+			.andExpect(jsonPath("$.errorCode", is(UNREGISTERED_USER.toString())));
 	}
 
 }

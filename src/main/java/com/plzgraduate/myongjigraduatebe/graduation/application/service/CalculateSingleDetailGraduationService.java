@@ -31,6 +31,7 @@ public class CalculateSingleDetailGraduationService implements CalculateSingleDe
 	@Override
 	public DetailGraduationResult calculateSingleDetailGraduation(Long userId, GraduationCategory graduationCategory) {
 		User user = findUserUseCase.findUserById(userId);
+		user.getStudentCategory().validateGraduationCategoryInclusion(graduationCategory);
 		TakenLectureInventory takenLectures = findTakenLectureUseCase.findTakenLectures(userId);
 		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = determineCalculateDetailGraduationUseCase(
 			graduationCategory);

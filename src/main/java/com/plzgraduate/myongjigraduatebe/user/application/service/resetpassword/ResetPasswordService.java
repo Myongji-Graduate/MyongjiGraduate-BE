@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.application.service.resetpassword
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
@@ -30,7 +31,7 @@ class ResetPasswordService implements ResetPasswordUseCase {
 
 	private void checkMatchPassword(String newPassword,String passwordCheck) {
 		if (!newPassword.equals(passwordCheck)) {
-			throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+			throw new IllegalArgumentException(ErrorCode.MISMATCHED_PASSWORD.toString());
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.resetpassword;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.MISMATCHED_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -58,7 +59,7 @@ class ResetPasswordServiceTest {
 		//when //then
 		assertThatThrownBy(() -> resetPasswordService.resetPassword(authId, newPassword, passwordCheck))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+			.hasMessage(MISMATCHED_PASSWORD.toString());
 	}
 
 	@DisplayName("해당 유저 아이디가 존재하지 않을 경우 예외가 발생한다.")

@@ -1,6 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +23,11 @@ public interface SignUpApiPresentation {
 
 	@Operation(description = "로그인 아이디 중복 여부를 체크한다.")
 	@Parameter(name = "auth-id", description = "아이디")
-	AuthIdDuplicationResponse checkAuthIdDuplication(@RequestParam("auth-id") String authId);
+	AuthIdDuplicationResponse checkAuthIdDuplication(
+		@RequestParam("auth-id") @Size(min = 6, max = 20, message = "INVALIDATED_AUTHID_TYPE") String authId);
 
 	@Operation(description = "학번 중복 여부를 체크한다.")
 	@Parameter(name = "student-number", description = "학번")
 	StudentNumberDuplicationResponse checkStudentNumberDuplication(
-		@RequestParam("student-number") String studentNumber);
+		@RequestParam("student-number") @Pattern(regexp = "^60\\d{6}$", message = "INVALIDATED_STUDENT_NUMBER_TYPE") String studentNumber);
 }
