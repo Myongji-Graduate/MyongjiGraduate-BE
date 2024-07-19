@@ -35,7 +35,7 @@ class FindUserService implements FindUserUseCase {
 	@Override
 	public User findUserByStudentNumber(String studentNumber) {
 		return findUserPort.findUserByStudentNumber(studentNumber)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_USER_ERROR_MESSAGE));
+			.orElseThrow(() -> new IllegalArgumentException(UNREGISTERED_USER.toString()));
 	}
 
 }

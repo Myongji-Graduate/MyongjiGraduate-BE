@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.security;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -21,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
-	private static final ExceptionResponse E403 = ExceptionResponse.from(ErrorCode.AUTHENTICATION_FAIL_FORBIDDEN);
+	private static final ExceptionResponse E403 = ExceptionResponse.from(AUTHENTICATION_FAIL_FORBIDDEN.toString());
 
 	private final ObjectMapper om;
 

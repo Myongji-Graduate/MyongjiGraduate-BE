@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.security;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -20,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-	private static final ExceptionResponse E401 = ExceptionResponse.from(ErrorCode.AUTHENTICATION_FAIL_UNAUTHORIZED);
+	private static final ExceptionResponse E401 = ExceptionResponse.from(AUTHENTICATION_FAIL_UNAUTHORIZED.toString());
 
 	private final ObjectMapper om;
 

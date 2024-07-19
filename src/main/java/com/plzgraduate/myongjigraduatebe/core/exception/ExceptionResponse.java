@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public class ExceptionResponse {
 
-	private final ErrorCode errorCode;
+	private final String errorCode;
 
-	private ExceptionResponse(ErrorCode errorCode) {
+	private ExceptionResponse(String errorCode) {
 		this.errorCode = errorCode;
 	}
 
-	public static ExceptionResponse from(ErrorCode errorCode) {
+	public static ExceptionResponse from(String errorCode) {
 		return new ExceptionResponse(errorCode);
 	}
 }
