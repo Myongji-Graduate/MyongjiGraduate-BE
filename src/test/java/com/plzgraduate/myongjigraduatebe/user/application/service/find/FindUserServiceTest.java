@@ -1,7 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.find;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.NOT_FOUND_AUTHID;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
 
 import java.util.Optional;
 
@@ -87,7 +89,7 @@ class FindUserServiceTest {
 		//when //test
 		assertThatThrownBy(() -> findUserService.findUserByAuthId("tester00"))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("해당 사용자를 찾을 수 없습니다.");
+			.hasMessage(NOT_FOUND_AUTHID.toString());
 
 	}
 

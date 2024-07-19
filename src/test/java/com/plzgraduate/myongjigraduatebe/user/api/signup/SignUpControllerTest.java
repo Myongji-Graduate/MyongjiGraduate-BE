@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.request.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.AuthIdDuplicationResponse;
@@ -62,8 +64,7 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.status").value(400))
-			.andExpect(jsonPath("$.message").value("아이디는 6자에서 20자 사이여야합니다."));
+			.andExpect(jsonPath("$.errorCode").value(INVALIDATED_AUTHID_TYPE.toString()));
 	}
 
 	@DisplayName("비밀번호는 8자리 이상 20자리 미민이어야한다.")
@@ -85,8 +86,7 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.status").value(400))
-			.andExpect(jsonPath("$.message").value("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다."));
+			.andExpect(jsonPath("$.errorCode").value(INVALIDATED_PASSWORD_TYPE.toString()));
 	}
 
 	@DisplayName("비밀번호는 하나 이상의 기호가 포함되어야한다.")
@@ -107,8 +107,7 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.status").value(400))
-			.andExpect(jsonPath("$.message").value("비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다."));
+			.andExpect(jsonPath("$.errorCode").value(INVALIDATED_PASSWORD_TYPE.toString()));
 	}
 
 	@DisplayName("로그인 아이디 중복 여부를 체크한다.")

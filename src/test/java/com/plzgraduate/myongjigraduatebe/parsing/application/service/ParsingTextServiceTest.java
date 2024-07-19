@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INCORRECT_STUDENT_NUMBER;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyLong;
@@ -102,7 +103,7 @@ class ParsingTextServiceTest{
 
 		assertThatThrownBy(() -> parsingTextService.enrollParsingText(1L, parsingText))
 			.isInstanceOf(InvalidPdfException.class)
-			.hasMessage("본인의 학번과 PDF 학번이 일치하지 않습니다.");
+			.hasMessage(INCORRECT_STUDENT_NUMBER.toString());
 	}
 
 	@DisplayName("RuntimeException이 발생했을 경우 PdfParsingException을 반환한다.")

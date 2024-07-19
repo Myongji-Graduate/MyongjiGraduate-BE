@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.NON_EXISTED_LECTURE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
@@ -82,7 +83,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 		assertThatThrownBy(
 			() -> saveTakenLectureFromParsingTextService.saveTakenLectures(user, takenLectureInformationList))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("KMA02135이 데이터베이스에 존재하지 않습니다.");
+			.hasMessage(NON_EXISTED_LECTURE.toString());
 
 	}
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignInRequest {
 
-	@NotBlank(message = "아아디를 입력해주세요.")
+	@NotBlank(message = "아이디를 입력해주세요.")
 	@Schema(name = "authId", example = "plzgraduate")
 	private String authId;
 

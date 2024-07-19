@@ -22,7 +22,7 @@ public class SignUpRequest {
 	private String authId;
 
 	@NotBlank(message = "비밀번호를 입력해주세요.")
-	@Pattern(regexp = "^(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9]).{8,20}$", message = "INVALIDATED_PASSWORD_TPYE")
+	@Pattern(regexp = "^(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9]).{8,20}$", message = "INVALIDATED_PASSWORD_TYPE")
 	@Schema(name = "password", example = "Plz1231343!")
 	private String password;
 

@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INCORRECT_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -75,7 +76,7 @@ class WithDrawUserServiceTest {
 		//when //then
 		assertThatThrownBy(() -> withDrawUserService.withDraw(user.getId(), password))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("비밀번호가 일치하지 않습니다.");
+			.hasMessage(INCORRECT_PASSWORD.toString());
 
 	}
 

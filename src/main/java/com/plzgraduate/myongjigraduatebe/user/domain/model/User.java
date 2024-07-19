@@ -68,7 +68,7 @@ public class User {
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major,  String dualMajor, String subMajor,
+	public void updateStudentInformation(String name, String major, String dualMajor, String subMajor,
 		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -92,7 +92,7 @@ public class User {
 		return this.studentNumber.equals(studentNumber);
 	}
 
-	public boolean  matchPassword(PasswordEncoder passwordEncoder, String password) {
+	public boolean matchPassword(PasswordEncoder passwordEncoder, String password) {
 		return passwordEncoder.matches(password, this.password);
 	}
 
@@ -109,9 +109,9 @@ public class User {
 	}
 
 	public String getMajorByMajorType(MajorType majorType) {
-		if(majorType == PRIMARY) {
+		if (majorType == PRIMARY) {
 			return primaryMajor;
-		} else if(majorType == DUAL) {
+		} else if (majorType == DUAL) {
 			return dualMajor;
 		}
 		return subMajor;
