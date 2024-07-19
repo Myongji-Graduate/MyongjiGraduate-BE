@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,5 +29,5 @@ public interface SignUpApiPresentation {
 	@Operation(description = "학번 중복 여부를 체크한다.")
 	@Parameter(name = "student-number", description = "학번")
 	StudentNumberDuplicationResponse checkStudentNumberDuplication(
-		@RequestParam("student-number") String studentNumber);
+		@RequestParam("student-number") @Pattern(regexp = "^60\\d{6}$", message = "INVALIDATED_STUDENT_NUMBER_TYPE") String studentNumber);
 }

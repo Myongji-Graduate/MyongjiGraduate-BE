@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +44,7 @@ public class SignUpController implements SignUpApiPresentation {
 
 	@GetMapping("/sign-up/check-duplicate-student-number")
 	public StudentNumberDuplicationResponse checkStudentNumberDuplication(
-		@RequestParam("student-number") String studentNumber) {
+		@RequestParam("student-number") @Pattern(regexp = "^60\\d{6}$", message = "INVALIDATED_STUDENT_NUMBER_TYPE") String studentNumber) {
 		return checkStudentNumberDuplicationUseCase.checkStudentNumberDuplication(studentNumber);
 	}
 }
