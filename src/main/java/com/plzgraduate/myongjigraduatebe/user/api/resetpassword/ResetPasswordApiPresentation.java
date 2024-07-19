@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.api.resetpassword;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ public interface ResetPasswordApiPresentation {
 	@Parameter(name = "auth-id", description = "아이디")
 	ValidateUserResponse validateUser(
 		@Parameter(name = "studentNumber", description = "학번", in = ParameterIn.PATH)
-		@PathVariable String studentNumber,
+		@PathVariable @Pattern(regexp = "^60\\d{6}$", message = "INVALIDATED_STUDENT_NUMBER_TYPE") String studentNumber,
 		@RequestParam("auth-id") String authId);
 
 	@PatchMapping("/password")
