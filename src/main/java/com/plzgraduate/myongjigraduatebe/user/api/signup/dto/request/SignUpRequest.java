@@ -17,17 +17,17 @@ import lombok.NoArgsConstructor;
 public class SignUpRequest {
 
 	@NotBlank(message = "아이디를 입력해주세요.")
-	@Size(min = 6, max = 20, message = "아이디는 6자에서 20자 사이여야합니다.")
+	@Size(min = 6, max = 20, message = "INVALIDATED_AUTHID_TYPE")
 	@Schema(name = "authId", example = "plzgraduate")
 	private String authId;
 
 	@NotBlank(message = "비밀번호를 입력해주세요.")
-	@Pattern(regexp = "^(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9]).{8,20}$", message = "비밀번호는 특수문자를 포함한 8자에서 20자 사이여야합니다.")
+	@Pattern(regexp = "^(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9]).{8,20}$", message = "INVALIDATED_PASSWORD_TPYE")
 	@Schema(name = "password", example = "Plz1231343!")
 	private String password;
 
 	@NotBlank(message = "비밀번호를 입력해주세요.")
-	@Pattern(regexp = "\\d{8}", message = "학번은 8자리 숫자여야 합니다.")
+	@Pattern(regexp = "\\d{8}", message = "INVALIDATED_STUDENT_NUMBER_TYPE")
 	@Schema(name = "studentNumber", example = "60202000")
 	private String studentNumber;
 

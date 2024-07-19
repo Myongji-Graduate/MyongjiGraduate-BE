@@ -1,8 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.signup;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
@@ -35,16 +38,16 @@ class SignUpService implements SignUpUseCase {
 
 	private void checkStudentNumberOver16(User user) {
 		if(user.checkBeforeEntryYear(CLASS_OF_2016)) {
-			throw new IllegalArgumentException("서비스 이용대상자는 16~23학번까지입니다.");
+			throw new IllegalArgumentException(UNSUPPORTED_STUDENT_NUMBER.toString());
 		}
 	}
 
 	private void checkDuplicateUser(SignUpCommand signUpCommand) {
 		if(checkUserPort.checkDuplicateAuthId(signUpCommand.getAuthId())) {
-			throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+			throw new IllegalArgumentException(DUPLICATED_AUTHID.toString());
 		}
 		if(checkUserPort.checkDuplicateStudentNumber(signUpCommand.getStudentNumber())) {
-			throw new IllegalArgumentException("이미 존재하는 학번입니다.");
+			throw new IllegalArgumentException(DUPLICATED_STUDENT_NUMBER.toString());
 		}
 	}
 }
