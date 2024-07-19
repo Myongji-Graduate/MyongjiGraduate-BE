@@ -92,10 +92,8 @@ public class User {
 		return this.studentNumber.equals(studentNumber);
 	}
 
-	public void matchPassword(PasswordEncoder passwordEncoder, String password) {
-		if (!passwordEncoder.matches(password, this.password)) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-		}
+	public boolean  matchPassword(PasswordEncoder passwordEncoder, String password) {
+		return passwordEncoder.matches(password, this.password);
 	}
 
 	public String getEncryptedAuthId() {
