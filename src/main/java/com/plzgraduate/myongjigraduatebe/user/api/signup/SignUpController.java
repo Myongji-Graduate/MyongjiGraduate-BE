@@ -1,7 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @WebAdapter
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Validated
 public class SignUpController implements SignUpApiPresentation {
 
 	private final SignUpUseCase signUpUseCase;
@@ -33,7 +36,8 @@ public class SignUpController implements SignUpApiPresentation {
 	}
 
 	@GetMapping("/sign-up/check-duplicate-auth-id")
-	public AuthIdDuplicationResponse checkAuthIdDuplication(@RequestParam("auth-id") String authId) {
+	public AuthIdDuplicationResponse checkAuthIdDuplication(
+		@RequestParam("auth-id") @Size(min = 6, max = 20, message = "INVALIDATED_AUTHID_TYPE") String authId) {
 		return checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId);
 	}
 
