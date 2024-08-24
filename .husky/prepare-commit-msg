@@ -10,6 +10,7 @@ TYPE_LIST=(
   style
   chore
   test
+  build
   docs
 )
 

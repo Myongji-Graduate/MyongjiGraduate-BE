@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CORE_CULTURE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 class CoreCultureGraduationManagerTest {
 
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	GraduationManager<CoreCulture> graduationManager = new CoreCultureGraduationManager();
+	GraduationManager<CoreCulture> graduationManager = new CoreGraduationManager();
 
 	@DisplayName("모든 핵심교양 세부 카테고리가 이수 완료일 경우 이수 완료 핵심교양 전체 졸업 결과를 생성한다.")
 	@Test
@@ -67,8 +68,8 @@ class CoreCultureGraduationManagerTest {
 
 		//then
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted")
-			.contains("핵심교양", true);
+			.extracting("graduationCategory", "isCompleted")
+			.contains(CORE_CULTURE, true);
 	}
 
 	@DisplayName("모든 핵심교양 세부 카테고리가 이수 완료가 아닐 경우 이수 미 완료 핵심교양 전체 졸업 결과를 생성한다.")
@@ -98,8 +99,8 @@ class CoreCultureGraduationManagerTest {
 
 		//then
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted")
-			.contains("핵심교양", false);
+			.extracting("graduationCategory", "isCompleted")
+			.contains(CORE_CULTURE, false);
 	}
 
 }

@@ -1,9 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
+
 import java.time.Instant;
 import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,17 +23,20 @@ public class User {
 	private String name;
 	private final String studentNumber;
 	private final int entryYear;
-	private String major;
-	private String changeMajor;
+	private String primaryMajor;
 	private String subMajor;
+	private String dualMajor;
 	private StudentCategory studentCategory;
+	private int totalCredit;
+	private double takenCredit;
+	private boolean graduated;
 	private final Instant createdAt;
 	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
-		int entryYear, String major, String changeMajor, String subMajor, StudentCategory studentCategory,
-		Instant createdAt, Instant updatedAt) {
+		int entryYear, String primaryMajor, String subMajor, String dualMajor, StudentCategory studentCategory,
+		int totalCredit, double takenCredit, boolean graduated, Instant createdAt, Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -36,15 +44,16 @@ public class User {
 		this.name = name;
 		this.studentNumber = studentNumber;
 		this.entryYear = entryYear;
-		this.major = major;
-		this.changeMajor = changeMajor;
+		this.primaryMajor = primaryMajor;
 		this.subMajor = subMajor;
+		this.dualMajor = dualMajor;
 		this.studentCategory = studentCategory;
+		this.totalCredit = totalCredit;
+		this.takenCredit = takenCredit;
+		this.graduated = graduated;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-
 	}
-
 
 	public static User create(String authId, String password, EnglishLevel englishLevel, String studentNumber) {
 		return User.builder()
@@ -53,16 +62,22 @@ public class User {
 			.englishLevel(englishLevel)
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduated(false)
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major, String changeMajor, String subMajor,
-		StudentCategory studentCategory) {
+	public void updateStudentInformation(String name, String major, String dualMajor, String subMajor,
+		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.name = name;
-		this.major = major;
-		this.changeMajor = changeMajor;
+		this.primaryMajor = major;
+		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.studentCategory = studentCategory;
+		this.totalCredit = totalCredit;
+		this.takenCredit = takenCredit;
+		this.graduated = graduate;
 	}
 
 	public boolean checkBeforeEntryYear(int entryYear) {
@@ -70,17 +85,15 @@ public class User {
 	}
 
 	public boolean checkMajor(String major) {
-		return this.major.equals(major);
+		return this.primaryMajor.equals(major);
 	}
 
 	public boolean compareStudentNumber(String studentNumber) {
 		return this.studentNumber.equals(studentNumber);
 	}
 
-	public void matchPassword(PasswordEncoder passwordEncoder, String password) {
-		if (!passwordEncoder.matches(password, this.password)) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-		}
+	public boolean matchPassword(PasswordEncoder passwordEncoder, String password) {
+		return passwordEncoder.matches(password, this.password);
 	}
 
 	public String getEncryptedAuthId() {
@@ -93,6 +106,15 @@ public class User {
 
 	public boolean isMyAuthId(String authId) {
 		return this.authId.equals(authId);
+	}
+
+	public String getMajorByMajorType(MajorType majorType) {
+		if (majorType == PRIMARY) {
+			return primaryMajor;
+		} else if (majorType == DUAL) {
+			return dualMajor;
+		}
+		return subMajor;
 	}
 
 	private static int parseEntryYearInStudentNumber(String studentNumber) {

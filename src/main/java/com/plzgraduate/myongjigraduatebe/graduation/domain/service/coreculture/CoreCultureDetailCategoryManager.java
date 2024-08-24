@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
@@ -15,6 +17,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 
+@Component
 public class CoreCultureDetailCategoryManager {
 
 	private static final List<String> ICT_DEPARTMENTS = List.of(
@@ -26,14 +29,11 @@ public class CoreCultureDetailCategoryManager {
 		Lecture.from("KMA02155"),
 		Lecture.from("KMA02156"));
 
-	public DetailCategoryResult generate(User user,
-		TakenLectureInventory takenLectureInventory, Set<CoreCulture> graduationLectures,
-		CoreCultureCategory category) {
-    
-		Set<Lecture> graduationCoreCultureLectures = categorizeCommonCultures(graduationLectures, category);
+	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
+		Set<CoreCulture> graduationLectures, CoreCultureCategory category) {
+		Set<Lecture> graduationCoreCultureLectures = categorizeCoreCultures(graduationLectures, category);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
-
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCoreCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
@@ -51,7 +51,7 @@ public class CoreCultureDetailCategoryManager {
 		return commonCultureDetailCategoryResult;
 	}
 
-	private Set<Lecture> categorizeCommonCultures(Set<CoreCulture> graduationLectures,
+	private Set<Lecture> categorizeCoreCultures(Set<CoreCulture> graduationLectures,
 		CoreCultureCategory category) {
 		return graduationLectures.stream()
 			.filter(coreCulture -> coreCulture.getCoreCultureCategory() == category)
@@ -61,7 +61,7 @@ public class CoreCultureDetailCategoryManager {
 
 	private void calculateFreeElectiveLeftCredit(User user, Set<Lecture> taken,
 		DetailCategoryResult commonCultureDetailCategoryResult) {
-		if (ICT_DEPARTMENTS.contains(user.getMajor()) && (taken.contains(과학과기술_예외_과목))) {
+		if (ICT_DEPARTMENTS.contains(user.getPrimaryMajor()) && (taken.contains(과학과기술_예외_과목))) {
 			taken.remove(과학과기술_예외_과목);
 			int exceptionLectureCredit = 3;
 			commonCultureDetailCategoryResult.addFreeElectiveLeftCredit(exceptionLectureCredit);

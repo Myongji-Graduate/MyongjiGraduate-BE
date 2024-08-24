@@ -36,7 +36,9 @@ jobs:
       # Gradle test를 실행 후 report 추출
       - name: Test with Gradle
         run: ./gradlew build jacocoTestReport
-        
+
       # report 업로드하기
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3.1.1
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

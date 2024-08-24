@@ -3,9 +3,9 @@ package com.plzgraduate.myongjigraduatebe.user.application.service.check;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckStudentNumberDuplicationUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.StudentNumberDuplicationResponse;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.check.CheckStudentNumberDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.StudentNumberDuplicationResponse;
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
 
 import lombok.RequiredArgsConstructor;
 

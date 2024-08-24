@@ -43,7 +43,7 @@ class SocialScienceBasicAcademicManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02186"), 2023, Semester.SECOND)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new DefaultBasicAcademicalManager();
+			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -53,8 +53,8 @@ class SocialScienceBasicAcademicManagerTest {
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", true, 12, 12);
+				.extracting("isCompleted", "totalCredit", "takenCredit")
+				.contains(true, 12, 12);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")
@@ -76,7 +76,7 @@ class SocialScienceBasicAcademicManagerTest {
 				TakenLecture.of(user, mockLectureMap.get("KMD02186"), 2020, Semester.SECOND)
 			)));
 			TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-			BasicAcademicalManager manager = new SocialScienceBasicAcademicManager();
+			BasicAcademicalGraduationManager manager = new SocialScienceBasicAcademicGraduationManager();
 
 			//when
 			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
@@ -85,8 +85,8 @@ class SocialScienceBasicAcademicManagerTest {
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting("categoryName", "isCompleted", "totalCredit", "takenCredit")
-				.contains("학문기초교양", false, 12, 6.0);
+				.extracting("isCompleted", "totalCredit", "takenCredit")
+				.contains(false, 12, 6.0);
 
 			assertThat(detailCategoryResult)
 				.extracting("detailCategoryName", "isCompleted", "totalCredits", "takenCredits")

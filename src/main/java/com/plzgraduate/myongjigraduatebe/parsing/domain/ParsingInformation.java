@@ -1,9 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -19,17 +17,19 @@ public class ParsingInformation {
 	private final String major;
 	private final String changeMajor;
 	private final String subMajor;
+	private final String dualMajor;
 	private final String associatedMajor;
 	private final StudentCategory studentCategory;
 	private final List<ParsingTakenLectureDto> takenLectureInformation;
 
 	@Builder
-	public ParsingInformation(String studentName, String studentNumber, String major, String changeMajor, String subMajor,
+	public ParsingInformation(String studentName, String studentNumber, String major, String changeMajor, String subMajor, String dualMajor,
 		String associatedMajor, StudentCategory studentCategory, List<ParsingTakenLectureDto> takenLectureInformation) {
 		this.studentName = studentName;
 		this.studentNumber = studentNumber;
 		this.major = major;
 		this.changeMajor = changeMajor;
+		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
@@ -43,6 +43,7 @@ public class ParsingInformation {
 			.studentName(parseStudentName(splitText))
 			.studentNumber(parseStudentNumber(splitText))
 			.major(parseMajor(splitText))
+			.dualMajor(parsingStudentCategoryDto.getDualMajor())
 			.changeMajor(parsingStudentCategoryDto.getChangeMajor())
 			.subMajor(parsingStudentCategoryDto.getSubMajor())
 			.associatedMajor(parsingStudentCategoryDto.getAssociatedMajor())
@@ -74,6 +75,7 @@ public class ParsingInformation {
 
 	private static ParsingStudentCategoryDto parseStudentCategory(String[] splitText) {
 		String changeMajor = null;
+		String dualMajor = null;
 		String subMajor = null;
 		String associatedMajor = null;
 		StudentCategory studentCategory;
@@ -91,16 +93,19 @@ public class ParsingInformation {
 		}
 
 		for (String part : parts) {
-			if (part.startsWith("복수전공 - ")) {
+			if (part.startsWith("부전공 - ")) {
+				categories.add("부전공");
+				subMajor = part.substring("부전공 - ".length());
+			} else if (part.startsWith("복수전공 - ")) {
 				categories.add("복수전공");
-				subMajor = part.substring("복수전공 - ".length());
+				dualMajor = part.substring("복수전공 - ".length());
 			} else if (part.startsWith("연계전공 - ")) {
 				categories.add("연계전공");
 				associatedMajor = part.substring("연계전공 - ".length());
 			}
 		}
 		studentCategory = StudentCategory.from(categories);
-		return ParsingStudentCategoryDto.of(changeMajor, subMajor, associatedMajor, studentCategory);
+		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor, studentCategory);
 	}
 
 	private static List<ParsingTakenLectureDto> parseTakenLectureInformation(String[] splitText) {

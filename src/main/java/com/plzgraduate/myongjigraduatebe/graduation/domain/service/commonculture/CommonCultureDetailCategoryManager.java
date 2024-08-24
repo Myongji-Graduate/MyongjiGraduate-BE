@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
@@ -16,10 +18,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
+@Component
 class CommonCultureDetailCategoryManager {
 
 	private static final List<String> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST =
 		List.of("KMA02100", "KMA00100", "KMA00101"); // 성경개론, 성서의이해, 성서와인간이해
+	private static final String BASIC_ENGLISH_LECTURE_CODE = "KMP02126";
 	private static final List<String> ENGLISH_12_MANDATORY_LECTURE_CODE_LIST =
 		List.of("KMA02106", "KMA02107", "KMA02108", "KMA02109"); // 영어1, 영어2, 영어회화1, 영어회화2
 	private static final List<String> ENGLISH_34_MANDATORY_LECTURE_CODE_LIST =
@@ -27,32 +31,25 @@ class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
-		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(
-			graduationLectures, category);
-
-		Set<TakenLecture> removedTakenLecture = new HashSet<>();
+		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(graduationLectures, category);
+		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
-
 		takenLectureInventory.getTakenLectures().stream()
 			.filter(takenLecture -> graduationCommonCultureLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
-				removedTakenLecture.add(takenLecture);
+				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
 			});
-
-
+		boolean isSatisfiedMandatory = checkMandatorySatisfaction(user, takenLectureInventory, category);
+		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
-			category.getName(), checkMandatorySatisfaction(user, takenLectureInventory, category),
-			checkCategoryTotalCredit(user, category));
+			category.getName(), isSatisfiedMandatory, checkCategoryTotalCredit(user, category));
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
-
-		takenLectureInventory.handleFinishedTakenLectures(removedTakenLecture);
-
 		return commonCultureDetailCategoryResult;
 	}
 
 	private int checkCategoryTotalCredit(User user, CommonCultureCategory commonCultureCategory) {
-		if (user.getEnglishLevel() == FREE && commonCultureCategory == ENGLISH){
+		if (user.getEnglishLevel() == FREE && commonCultureCategory == ENGLISH) {
 			return 0;
 		}
 		return commonCultureCategory.getTotalCredit();
@@ -74,6 +71,9 @@ class CommonCultureDetailCategoryManager {
 					takenLecture -> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST
 						.contains(takenLecture.getLecture().getLectureCode()));
 		}
+		if(user.getEnglishLevel() == BASIC && category == ENGLISH) {
+			return isTakenBasicEnglish(takenLectureInventory) && checkEnglish12Satisfaction(takenLectureInventory);
+		}
 		if (user.getEnglishLevel() == ENG12 && category == ENGLISH) {
 			return checkEnglish12Satisfaction(takenLectureInventory);
 		}
@@ -81,6 +81,13 @@ class CommonCultureDetailCategoryManager {
 			return checkEnglish34Satisfaction(takenLectureInventory);
 		}
 		return true;
+	}
+
+	private boolean isTakenBasicEnglish(TakenLectureInventory takenLectureInventory) {
+		return takenLectureInventory.getCultureLectures().stream()
+			.map(takenLecture -> takenLecture.getLecture().getLectureCode())
+			.collect(Collectors.toList())
+			.contains(BASIC_ENGLISH_LECTURE_CODE);
 	}
 
 	private boolean checkEnglish12Satisfaction(TakenLectureInventory takenLectureInventory) {

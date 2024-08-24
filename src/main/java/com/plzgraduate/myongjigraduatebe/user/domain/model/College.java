@@ -17,7 +17,7 @@ public enum College {
 	LAW("법대", List.of("법학과")),
 	ICT("ICT융합대", List.of("디지털콘텐츠디자인학과", "응용소프트웨어전공", "데이터테크놀로지전공"));
 
-	private final String text;
+	private final String name;
 	private final List<String> holdingMajors;
 
 	public static College findBelongingCollege(String major) {

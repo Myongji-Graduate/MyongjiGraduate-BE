@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashSet;
@@ -26,7 +27,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 class CommonCultureGraduationManagerTest {
 
 	Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-	GraduationManager<CommonCulture> graduationManager = new CommonCultureGraduationManager();
+	GraduationManager<CommonCulture> graduationManager = new CommonGraduationManager();
 
 	@DisplayName("모든 공통교양 세부 카테고리가 이수 완료일 경우 이수 완료 공통교양 전체 졸업 결과를 생성한다.")
 	@ParameterizedTest
@@ -56,8 +57,8 @@ class CommonCultureGraduationManagerTest {
     
 		//then
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted")
-			.contains("공통교양", true);
+			.extracting("graduationCategory", "isCompleted")
+			.contains(COMMON_CULTURE, true);
 	}
 
 	@DisplayName("모든 공통교양 세부 카테고리가 이수 완료가 아닐 경우 이수 미 완료 공통교양 전체 졸업 결과를 생성한다.")
@@ -78,8 +79,8 @@ class CommonCultureGraduationManagerTest {
     
 		//then
 		assertThat(detailGraduationResult)
-			.extracting("categoryName", "isCompleted")
-			.contains("공통교양", false);
+			.extracting("graduationCategory", "isCompleted")
+			.contains(COMMON_CULTURE, false);
 	}
 
 }

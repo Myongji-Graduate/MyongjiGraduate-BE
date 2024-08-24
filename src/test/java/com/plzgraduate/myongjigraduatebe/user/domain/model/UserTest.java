@@ -7,8 +7,12 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 
 class UserTest {
 
@@ -27,7 +31,7 @@ class UserTest {
 			.studentNumber("60201000")
 			.entryYear(20)
 			.englishLevel(EnglishLevel.ENG12)
-			.major("경영학과")
+			.primaryMajor("경영학과")
 			.studentCategory(StudentCategory.NORMAL)
 			.build();
 	}
@@ -48,11 +52,13 @@ class UserTest {
 	@Test
 	void updateStudentInformation() {
 		//given //when
-		user.updateStudentInformation("테스터2", "경영학과", "데이터테크놀로지학과", null, StudentCategory.CHANGE_MAJOR);
+		user.updateStudentInformation("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134,
+			120.5, true);
 		//then
 		assertThat(user)
-			.extracting("name", "major", "changeMajor", "subMajor", "studentCategory")
-			.contains("테스터2", "경영학과", "데이터테크놀로지학과", null, StudentCategory.CHANGE_MAJOR);
+			.extracting("name", "primaryMajor", "subMajor", "dualMajor", "studentCategory",
+				"totalCredit", "takenCredit", "graduated")
+			.contains("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134, 120.5, true);
 	}
 
 	@DisplayName("checkBeforeEntryYear 메서드 테스트")
@@ -90,10 +96,12 @@ class UserTest {
 	void matchWrongPassword() {
 		//given
 		given(passwordEncoder.matches("wrongPassword", "tester00!")).willReturn(false);
-		//when //then
-		assertThatThrownBy(() -> user.matchPassword(passwordEncoder, "wrongPassword"))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("비밀번호가 일치하지 않습니다.");
+
+		//when
+		boolean result = user.matchPassword(passwordEncoder, "wrongPassword");
+
+		// then
+		assertThat(result).isFalse();
 	}
 
 	@DisplayName("유저의 암호화된 로그인 아이디(뒷 세자리 *** 대체)를 반환한다.")
@@ -117,7 +125,7 @@ class UserTest {
 	@DisplayName("유저의 패스워드를 초기화한다.")
 	@Test
 	void resetPassword() {
-	    //given
+		//given
 		String beforePassword = "before";
 		String afterPassword = "after";
 		User user = User.builder()
@@ -126,14 +134,14 @@ class UserTest {
 		//when
 		user.resetPassword(afterPassword);
 
-	    //then
+		//then
 		assertThat(user.getPassword()).isEqualTo(afterPassword);
 	}
 
 	@DisplayName("유저의 로그인 아이디와 같을 경우 true를 반환한다.")
 	@Test
 	void isMyAuthId() {
-	    //given
+		//given
 		String authId = "testAuthId";
 		User user = User.builder()
 			.authId(authId).build();
@@ -158,5 +166,19 @@ class UserTest {
 
 		//then
 		assertThat(result).isFalse();
+	}
+
+	@DisplayName("MajorType별 사용자의 전공을 반환하는지 확인한다.")
+	@CsvSource({"PRIMARY, 융합소프트웨어부", "DUAL, 경영학과", "SUB, 영문학과"})
+	@ParameterizedTest
+	void getMajorByMajorType(MajorType majorType, String major) {
+		//given
+		User dualMajorUser = User.builder().id(1L).primaryMajor("융합소프트웨어부").dualMajor("경영학과").subMajor("영문학과").build();
+
+		//when
+		String majorByMajorType = dualMajorUser.getMajorByMajorType(majorType);
+
+		//then
+		assertThat(majorByMajorType).isEqualTo(major);
 	}
 }

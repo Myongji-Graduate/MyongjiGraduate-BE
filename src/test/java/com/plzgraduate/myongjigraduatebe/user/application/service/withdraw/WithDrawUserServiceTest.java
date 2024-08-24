@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 
-import static org.assertj.core.api.Assertions.*;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INCORRECT_PASSWORD;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -14,11 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.DeleteParsingTextHistoryPort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.delete.DeleteTakenLectureByUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.DeleteUserPort;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,11 +28,13 @@ class WithDrawUserServiceTest {
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
-	private DeleteTakenLectureByUserUseCase deleteTakenLectureByUserUseCase;
+	private DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	@Mock
 	private DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
 	@Mock
 	private DeleteUserPort deleteUserPort;
+	@Mock
+	private DeleteCompletedCreditPort deleteCompletedCreditPort;
 	@Mock
 	private PasswordEncoder passwordEncoder;
 
@@ -50,13 +53,11 @@ class WithDrawUserServiceTest {
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-		WithDrawCommand withDrawCommand = WithDrawCommand.builder()
-			.password(password).build();
-
 		//when //then
-	    withDrawUserService.withDraw(user.getId(), withDrawCommand);
+	    withDrawUserService.withDraw(user.getId(), password);
 		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
 		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
+		then(deleteCompletedCreditPort).should().deleteAllCompletedCredits(user);
 		then(deleteUserPort).should().deleteUser(user);
 	}
 
@@ -72,13 +73,10 @@ class WithDrawUserServiceTest {
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
-		WithDrawCommand withDrawCommand = WithDrawCommand.builder()
-			.password(password).build();
-
 		//when //then
-		assertThatThrownBy(() -> withDrawUserService.withDraw(user.getId(), withDrawCommand))
+		assertThatThrownBy(() -> withDrawUserService.withDraw(user.getId(), password))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("비밀번호가 일치하지 않습니다.");
+			.hasMessage(INCORRECT_PASSWORD.toString());
 
 	}
 

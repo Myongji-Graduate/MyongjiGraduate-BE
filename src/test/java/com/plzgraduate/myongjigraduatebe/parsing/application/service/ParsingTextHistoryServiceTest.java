@@ -1,8 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextCommand;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.out.SaveParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -29,22 +28,18 @@ class ParsingTextHistoryServiceTest {
 	@InjectMocks
 	private ParsingTextHistoryService parsingTextHistoryService;
 
-	@DisplayName("saveParsingTextHistoryIfSuccess 메서드 테스트")
+	@DisplayName("generateSucceedParsingTextHistory 메서드 테스트")
 	@Test
-	void saveParsingTextHistoryIfSuccess() {
+	void generateSucceedParsingTextHistory() {
 		//given
 		Long userId = 1L;
 		User user = createUser(userId, "mju1001!", "1q2w3e4r!", EnglishLevel.ENG12, "정지환",
 			"60181666", 18, "융합소프트웨어학부", null, StudentCategory.NORMAL);
 		String parsingText = "parsingText";
-		ParsingTextCommand command = ParsingTextCommand.builder()
-			.userId(userId)
-			.parsingText(parsingText)
-			.build();
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
 		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
 		//when
-		parsingTextHistoryService.saveParsingTextHistoryIfSuccess(command);
+		parsingTextHistoryService.generateSucceedParsingTextHistory(userId, parsingText);
 
 		//then
 		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
@@ -53,22 +48,18 @@ class ParsingTextHistoryServiceTest {
 		assertThat(captureArgument.getParsingText()).isEqualTo(parsingText);
 	}
 
-	@DisplayName("saveParsingTextHistoryIfFail 메서드 테스트")
+	@DisplayName("generateFailedParsingTextHistory 메서드 테스트")
 	@Test
-	void saveParsingTextHistoryIfFail() {
+	void generateFailedParsingTextHistory() {
 		//given
 		Long userId = 1L;
 		User user = createUser(userId, "mju1001!", "1q2w3e4r!", EnglishLevel.ENG12, "정지환",
 			"60181666", 18, "융합소프트웨어학부", null, StudentCategory.NORMAL);
 		String parsingText = "parsingText";
-		ParsingTextCommand command = ParsingTextCommand.builder()
-			.userId(userId)
-			.parsingText(parsingText)
-			.build();
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
 		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
 		//when
-		parsingTextHistoryService.saveParsingTextHistoryIfFail(command);
+		parsingTextHistoryService.generateFailedParsingTextHistory(userId, parsingText);
 
 		//then
 		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
@@ -87,7 +78,7 @@ class ParsingTextHistoryServiceTest {
 			.studentNumber(studentNumber)
 			.entryYear(entryYear)
 			.englishLevel(englishLevel)
-			.major(major)
+			.primaryMajor(major)
 			.subMajor(subMajor)
 			.studentCategory(studentCategory)
 			.build();

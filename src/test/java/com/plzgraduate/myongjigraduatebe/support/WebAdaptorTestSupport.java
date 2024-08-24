@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,40 +12,45 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.signin.SignInController;
-import com.plzgraduate.myongjigraduatebe.auth.adaptor.in.web.token.TokenController;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInUseCase;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.token.TokenUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.api.signin.SignInController;
+import com.plzgraduate.myongjigraduatebe.auth.api.token.TokenController;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInUseCase;
+import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
+import com.plzgraduate.myongjigraduatebe.completedcredit.api.FindCompletedCreditsController;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.FindCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.QuerydslConfig;
 import com.plzgraduate.myongjigraduatebe.core.config.SecurityConfig;
-import com.plzgraduate.myongjigraduatebe.graduation.adpater.in.web.CalculateGraduationController;
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.in.CalculateGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.adapter.in.web.SearchLectureController;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.in.search.SearchLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.adaptor.in.web.ParsingTextController;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextHistoryUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.in.ParsingTextUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.in.web.find.FindTakenLectureController;
-import com.plzgraduate.myongjigraduatebe.takenlecture.adaptor.in.web.update.UpdateTakenLectureController;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.find.FindTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.in.update.UpdateTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.findauthid.FindAuthIdController;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.finduserinformation.FindUserInformationController;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.resetpassword.ResetPasswordController;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.signup.SignUpController;
-import com.plzgraduate.myongjigraduatebe.user.adaptor.in.web.withdraw.WithDrawController;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckAuthIdDuplicationUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.check.CheckStudentNumberDuplicationUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserAuthIdUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserInformationUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.resetpassword.ResetPasswordUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.validate.ValidateUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithDrawUserUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.api.FindDetailGraduationController;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.api.SearchLectureController;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.parsing.api.ParsingTextController;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.FindTakenLectureController;
+import com.plzgraduate.myongjigraduatebe.takenlecture.api.UpdateTakenLectureController;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.user.api.findauthid.FindAuthIdController;
+import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.FindUserInformationController;
+import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.ResetPasswordController;
+import com.plzgraduate.myongjigraduatebe.user.api.signup.SignUpController;
+import com.plzgraduate.myongjigraduatebe.user.api.withdraw.WithDrawController;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.check.CheckAuthIdDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.check.CheckStudentNumberDuplicationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserAuthIdUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserInformationUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.ResetPasswordUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.validate.ValidateUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
 
 @ActiveProfiles("test")
 @ComponentScan(
@@ -56,7 +61,6 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithD
 @WebMvcTest(controllers = {
 	SignInController.class,
 	TokenController.class,
-	CalculateGraduationController.class,
 	SearchLectureController.class,
 	FindUserInformationController.class,
 	UpdateTakenLectureController.class,
@@ -65,7 +69,9 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.in.withdraw.WithD
 	FindTakenLectureController.class,
 	ResetPasswordController.class,
 	SignUpController.class,
-	FindAuthIdController.class
+	FindAuthIdController.class,
+	FindCompletedCreditsController.class,
+	FindDetailGraduationController.class
 })
 public abstract class WebAdaptorTestSupport {
 
@@ -94,7 +100,10 @@ public abstract class WebAdaptorTestSupport {
 	protected SearchLectureUseCase searchLectureUseCase;
 
 	@MockBean
-	protected UpdateTakenLectureUseCase updateTakenLectureUseCase;
+	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
+
+	@MockBean
+	protected GenerateCustomizedTakenLectureUseCase generateCustomizedTakenLectureUseCase;
 
 	@MockBean
 	protected FindTakenLectureUseCase findTakenLectureUseCase;
@@ -128,6 +137,12 @@ public abstract class WebAdaptorTestSupport {
 
 	@MockBean
 	protected CheckStudentNumberDuplicationUseCase checkStudentNumberDuplicationUseCase;
+
+	@MockBean
+	protected FindCompletedCreditUseCase findCompletedCreditUseCase;
+
+	@MockBean
+	protected CalculateSingleDetailGraduationUseCase calculateSingleDetailGraduationUseCase;
 
 	@BeforeEach
 	void setUp() {

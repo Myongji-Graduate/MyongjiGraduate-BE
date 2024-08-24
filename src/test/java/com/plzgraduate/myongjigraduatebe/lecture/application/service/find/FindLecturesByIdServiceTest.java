@@ -12,7 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.out.FindLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.service.FindLecturesService;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +23,7 @@ class FindLecturesByIdServiceTest {
 	private FindLecturePort findLecturePort;
 
 	@InjectMocks
-	private FindLecturesByIdService findLecturesByIdService;
+	private FindLecturesService findLecturesByIdService;
 
 	@DisplayName("과목 아이디 리스트에 포함되는 과목들을 반환한다.")
 	@Test

@@ -14,7 +14,7 @@ import lombok.Getter;
 @Getter
 public class DetailCategoryResult {
 
-	private final String detailCategoryName;
+	private String detailCategoryName;
 	private boolean isCompleted;
 	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
@@ -49,10 +49,14 @@ public class DetailCategoryResult {
 			.build();
 	}
 
+	public void assignDetailCategoryName(String detailCategoryName) {
+		this.detailCategoryName = detailCategoryName;
+	}
+
 	public void calculate(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		addTakenLectures(taken);
 		calculateLeftCredit();
-		if(!checkCompleted()) {
+		if (!checkCompleted()) {
 			addMandatoryLectures(taken, graduationLectures);
 		}
 	}
@@ -75,7 +79,8 @@ public class DetailCategoryResult {
 	private void calculateLeftCredit() {
 		int leftCredit = takenCredits - totalCredits;
 		if (leftCredit > 0) {
-			if (detailCategoryName.equals(MAJOR.getName())) {
+			if (detailCategoryName.equals(PRIMARY_MANDATORY_MAJOR.getName()) ||
+				detailCategoryName.equals(PRIMARY_ELECTIVE_MAJOR.getName())) {
 				freeElectiveLeftCredit = leftCredit;
 				takenCredits -= leftCredit;
 				return;

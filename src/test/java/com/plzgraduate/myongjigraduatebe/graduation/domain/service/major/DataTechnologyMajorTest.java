@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -65,10 +66,12 @@ class DataTechnologyMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
-		MajorManager manager = new MajorManager();
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 데이터테크놀로지_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -122,10 +125,12 @@ class DataTechnologyMajorTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
-		MajorManager manager = new MajorManager();
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager, electiveMajorManager);
 
 		//when
-		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user, PRIMARY,
 			takenLectureInventory, 데이터테크놀로지_전공, 70);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);

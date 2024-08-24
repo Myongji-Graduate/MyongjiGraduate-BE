@@ -1,7 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.signup;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.DUPLICATED_AUTHID;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.DUPLICATED_STUDENT_NUMBER;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.never;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.times;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +18,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.in.signup.SignUpCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.CheckUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.port.out.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
@@ -31,7 +38,7 @@ class SignUpServiceTest {
 	@DisplayName("회원가입을 진행한다")
 	@Test
 	void signUp() {
-	    //given
+		//given
 		SignUpCommand command = SignUpCommand.builder()
 			.authId("mju-graduate")
 			.password("1q2w3e4r!")
@@ -43,7 +50,7 @@ class SignUpServiceTest {
 		//when
 		signUpService.signUp(command);
 
-	    //then
+		//then
 		then(passwordEncoder).should().encode("1q2w3e4r!");
 		then(saveUserPort).should().saveUser(any(User.class));
 	}
@@ -64,7 +71,7 @@ class SignUpServiceTest {
 		//when //then
 		assertThatThrownBy(() -> signUpService.signUp(command))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("이미 존재하는 아이디입니다.");
+			.hasMessage(DUPLICATED_AUTHID.toString());
 
 		then(checkUserPort).should(times(1)).checkDuplicateAuthId(authId);
 		then(checkUserPort).should(never()).checkDuplicateStudentNumber(anyString());
@@ -88,7 +95,7 @@ class SignUpServiceTest {
 		//when //then
 		assertThatThrownBy(() -> signUpService.signUp(command))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("이미 존재하는 학번입니다.");
+			.hasMessage(DUPLICATED_STUDENT_NUMBER.toString());
 
 		then(checkUserPort).should(times(1)).checkDuplicateAuthId(anyString());
 		then(checkUserPort).should(times(1)).checkDuplicateStudentNumber(studentNumber);

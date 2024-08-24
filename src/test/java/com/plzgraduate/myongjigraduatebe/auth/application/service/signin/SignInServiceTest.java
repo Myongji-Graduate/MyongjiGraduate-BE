@@ -15,9 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.signin.SignInCommand;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.in.TokenResponse;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.out.SaveRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.response.TokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.SaveRefreshTokenPort;
 import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 
@@ -39,10 +38,8 @@ class SignInServiceTest {
 	@Test
 	void singIn() {
 	    //given
-		SignInCommand command = SignInCommand.builder()
-			.authId("mju-graduate")
-			.password("1q2w3e4r!")
-			.build();
+		String authId = "mju-graduate";
+		String password = "1q2w3e4r!";
 		Long userId = 1L;
 		String accessToken = "accessToken";
 		String refreshToken = "refreshToken";
@@ -56,7 +53,7 @@ class SignInServiceTest {
 		given(tokenProvider.generateRefreshToken()).willReturn(refreshToken);
 
 		//when
-		TokenResponse tokenResponse = signInService.signIn(command);
+		TokenResponse tokenResponse = signInService.signIn(authId, password);
 
 		//then
 		then(saveRefreshTokenPort).should(times(1)).saveRefreshToken(refreshToken, userId);
