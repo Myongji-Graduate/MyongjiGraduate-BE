@@ -38,14 +38,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
 	private Authentication processAuthentication(JwtAuthenticationToken authenticationToken) {
 		User user = findUserUseCase.findUserByAuthId(String.valueOf(authenticationToken.getPrincipal()));
-		try {
-			user.matchPassword(passwordEncoder, String.valueOf(authenticationToken.getCredentials()));
-			return new JwtAuthenticationToken(
-				user.getId(), null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
-			);
-		} catch (IllegalArgumentException e) {
+		String userPassword = String.valueOf(authenticationToken.getCredentials());
+		if(!user.matchPassword(passwordEncoder, userPassword)) {
 			throw new UnAuthorizedException(INCORRECT_PASSWORD.toString());
 		}
+		return new JwtAuthenticationToken(
+			user.getId(), null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+		);
 	}
-
 }
