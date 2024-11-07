@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import java.util.Arrays;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +22,8 @@ public enum DualMajorGraduationRequirementType {
 		String collageName) {
 		return Arrays.stream(DualMajorGraduationRequirementType.values())
 			.filter(dualMajorGraduationRequirementType ->
-				dualMajorGraduationRequirementType.getCollageName().equals(collageName))
+				dualMajorGraduationRequirementType.getCollageName()
+					.equals(collageName))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("소속 단과대가 존재하지 않습니다."));
 	}

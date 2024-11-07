@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,12 +13,14 @@ public class ParsingTextHistory {
 	private final ParsingResult parsingResult;
 
 	@Builder
-	private ParsingTextHistory(Long id, User user, String parsingText, ParsingResult parsingResult) {
+	private ParsingTextHistory(Long id, User user, String parsingText,
+		ParsingResult parsingResult) {
 		this.id = id;
 		this.user = user;
 		this.parsingText = parsingText;
 		this.parsingResult = parsingResult;
 	}
+
 	public static ParsingTextHistory success(User user, String parsingText) {
 		return ParsingTextHistory.builder()
 			.user(user)

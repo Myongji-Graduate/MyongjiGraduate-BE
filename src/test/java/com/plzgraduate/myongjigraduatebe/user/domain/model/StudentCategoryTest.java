@@ -2,12 +2,11 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 
 class StudentCategoryTest {
 
@@ -18,12 +17,14 @@ class StudentCategoryTest {
 	void validateGraduationCategoryInclusion(String graduationCategoryName) {
 		//given
 		User user = User.builder()
-			.studentCategory(StudentCategory.NORMAL).build();
+			.studentCategory(StudentCategory.NORMAL)
+			.build();
 		GraduationCategory graduationCategory = GraduationCategory.valueOf(graduationCategoryName);
 
 		//when //then
 		assertThatThrownBy(
-				() -> user.getStudentCategory().validateGraduationCategoryInclusion(graduationCategory))
+			() -> user.getStudentCategory()
+				.validateGraduationCategoryInclusion(graduationCategory))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage(ErrorCode.UNFITTED_GRADUATION_CATEGORY.toString());
 

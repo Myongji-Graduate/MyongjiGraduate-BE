@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +33,8 @@ public class LectureJpaEntity {
 	private int isRevoked;
 
 	@Builder
-	private LectureJpaEntity(Long id, String lectureCode, String name, int credit, String duplicateCode, int isRevoked) {
+	private LectureJpaEntity(Long id, String lectureCode, String name, int credit,
+		String duplicateCode, int isRevoked) {
 		this.id = id;
 		this.lectureCode = lectureCode;
 		this.name = name;

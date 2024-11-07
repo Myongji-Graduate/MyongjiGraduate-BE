@@ -1,18 +1,17 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.NoSuchElementException;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import java.util.NoSuchElementException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class DefaultGraduationRequirementTypeTest {
 
@@ -23,15 +22,18 @@ class DefaultGraduationRequirementTypeTest {
 		//given
 		College ict = College.ICT;
 		User user = User.builder()
-			.entryYear(entryYear).build();
+			.entryYear(entryYear)
+			.build();
 
 		//when
-		DefaultGraduationRequirementType graduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(ict,
+		DefaultGraduationRequirementType graduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(
+			ict,
 			user);
 
 		//then
 		assertThat(graduationRequirement.getCollageName()).isEqualTo(ict.getName());
-		assertThat(graduationRequirement.getStartEntryYear()).isLessThanOrEqualTo(user.getEntryYear());
+		assertThat(graduationRequirement.getStartEntryYear()).isLessThanOrEqualTo(
+			user.getEntryYear());
 		assertThat(graduationRequirement.getEndEntryYear()).isGreaterThan(user.getEntryYear());
 	}
 
@@ -42,10 +44,12 @@ class DefaultGraduationRequirementTypeTest {
 		//given
 		College ict = College.ICT;
 		User user = User.builder()
-			.entryYear(entryYear).build();
+			.entryYear(entryYear)
+			.build();
 
 		//when //then
-		assertThatThrownBy(() -> DefaultGraduationRequirementType.determineGraduationRequirement(ict, user))
+		assertThatThrownBy(
+			() -> DefaultGraduationRequirementType.determineGraduationRequirement(ict, user))
 			.isInstanceOf(NoSuchElementException.class)
 			.hasMessage("일치하는 졸업 요건이 존재하지 않습니다.");
 	}

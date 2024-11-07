@@ -22,7 +22,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: myongji_graduate
-    platform: linux/x86_64
     restart: always
 
   redis:

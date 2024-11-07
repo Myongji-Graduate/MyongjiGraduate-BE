@@ -1,9 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 
 class UserTest {
 
@@ -110,7 +109,8 @@ class UserTest {
 		//given
 		String authId = "testAuthId";
 		User user = User.builder()
-			.authId(authId).build();
+			.authId(authId)
+			.build();
 
 		//when
 		String encryptedAuthId = user.getEncryptedAuthId();
@@ -129,7 +129,8 @@ class UserTest {
 		String beforePassword = "before";
 		String afterPassword = "after";
 		User user = User.builder()
-			.password(beforePassword).build();
+			.password(beforePassword)
+			.build();
 
 		//when
 		user.resetPassword(afterPassword);
@@ -144,7 +145,8 @@ class UserTest {
 		//given
 		String authId = "testAuthId";
 		User user = User.builder()
-			.authId(authId).build();
+			.authId(authId)
+			.build();
 
 		//when
 		boolean result = user.isMyAuthId(authId);
@@ -159,7 +161,8 @@ class UserTest {
 		//given
 		String authId = "testAuthId";
 		User user = User.builder()
-			.authId("userAuthId").build();
+			.authId("userAuthId")
+			.build();
 
 		//when
 		boolean result = user.isMyAuthId(authId);
@@ -173,7 +176,12 @@ class UserTest {
 	@ParameterizedTest
 	void getMajorByMajorType(MajorType majorType, String major) {
 		//given
-		User dualMajorUser = User.builder().id(1L).primaryMajor("융합소프트웨어부").dualMajor("경영학과").subMajor("영문학과").build();
+		User dualMajorUser = User.builder()
+			.id(1L)
+			.primaryMajor("융합소프트웨어부")
+			.dualMajor("경영학과")
+			.subMajor("영문학과")
+			.build();
 
 		//when
 		String majorByMajorType = dualMajorUser.getMajorByMajorType(majorType);

@@ -1,5 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity;
 
+import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,12 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -13,7 +13,8 @@ public class MandatorySpecialCaseInformation {
 
 	private final int removedMandatoryTotalCredit;
 
-	public static MandatorySpecialCaseInformation of(boolean completeMandatorySpecialCase, int removedMandatoryTotalCredit) {
+	public static MandatorySpecialCaseInformation of(boolean completeMandatorySpecialCase,
+		int removedMandatoryTotalCredit) {
 		return MandatorySpecialCaseInformation.builder()
 			.isCompleteMandatorySpecialCase(completeMandatorySpecialCase)
 			.removedMandatoryTotalCredit(removedMandatoryTotalCredit)

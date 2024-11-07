@@ -1,17 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
-import static com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture.*;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import static com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture.공통교양_16_17;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.CommonCultureCategoryFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
@@ -24,6 +16,13 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 @DisplayName("각 공통교양 세부 카테고리 별 카테고리 이름, 총 학점, 이수 여부를 포함한 카테고리 졸업 결과를 생성한다.")
 class CommonCultureDetailCategoryManagerTest {
@@ -34,7 +33,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@DisplayName("영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
-	void generateEngBasicCompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+	void generateEngBasicCompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
@@ -59,7 +59,8 @@ class CommonCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -71,7 +72,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@DisplayName("영어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
-	void generateEng12CompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+	void generateEng12CompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG12();
@@ -95,7 +97,8 @@ class CommonCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -107,7 +110,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@DisplayName("영어 레벨 34: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
-	void generateEng34CompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+	void generateEng34CompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
@@ -130,7 +134,8 @@ class CommonCultureDetailCategoryManagerTest {
 		String commonCultureCategoryName = commonCultureCategory.getName();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -142,7 +147,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@DisplayName("영어 레벨 FREE: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
-	void generateEngFreeCompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+	void generateEngFreeCompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_영어_면제();
@@ -157,7 +163,8 @@ class CommonCultureDetailCategoryManagerTest {
 		String commonCultureCategoryName = commonCultureCategory.getName();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -190,7 +197,8 @@ class CommonCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -202,7 +210,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@DisplayName("영어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
-	void generateEng12UnCompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+	void generateEng12UnCompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG12();
@@ -211,7 +220,8 @@ class CommonCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -223,7 +233,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@DisplayName("영어 레벨 34: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
-	void generateEng34UnCompletedCommonCultureDetailCategory(CommonCultureCategory commonCultureCategory,
+	void generateEng34UnCompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
 		Set<CommonCulture> graduationLectures) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
@@ -232,7 +243,8 @@ class CommonCultureDetailCategoryManagerTest {
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			commonCultureCategory);
 
 		//then
@@ -262,7 +274,8 @@ class CommonCultureDetailCategoryManagerTest {
 		Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			CHRISTIAN_A);
 
 		//then
@@ -285,7 +298,8 @@ class CommonCultureDetailCategoryManagerTest {
 		Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
 		//when
-		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory, graduationLectures,
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
 			CHRISTIAN_A);
 
 		//then

@@ -3,15 +3,14 @@ package com.plzgraduate.myongjigraduatebe.user.application.service.validate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class ValidateUserServiceTest {
@@ -25,14 +24,15 @@ class ValidateUserServiceTest {
 	@DisplayName("성공: 학번으로 유저를 조회 후 로그인 아이디가 맞는지 검증한다.")
 	@Test
 	void validatePassedUser() {
-	    //given
+		//given
 		String studentNumber = "60191656";
 		String authId = "testAuthId";
 		User user = User.builder()
-			.authId(authId).build();
+			.authId(authId)
+			.build();
 		given(findUserUseCase.findUserByStudentNumber(studentNumber)).willReturn(user);
 
-	    //when
+		//when
 		boolean validated = validateUserService.validateUser(studentNumber, authId);
 
 		//then
@@ -46,7 +46,8 @@ class ValidateUserServiceTest {
 		String studentNumber = "60191656";
 		String authId = "testAuthId";
 		User user = User.builder()
-			.authId("userAuthId").build();
+			.authId("userAuthId")
+			.build();
 		given(findUserUseCase.findUserByStudentNumber(studentNumber)).willReturn(user);
 
 		//when

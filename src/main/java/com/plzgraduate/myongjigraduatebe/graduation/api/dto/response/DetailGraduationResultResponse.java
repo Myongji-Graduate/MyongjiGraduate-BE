@@ -1,11 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api.dto.response;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,13 +27,16 @@ public class DetailGraduationResultResponse {
 		this.completed = completed;
 	}
 
-	public static DetailGraduationResultResponse from(DetailGraduationResult detailGraduationResult) {
+	public static DetailGraduationResultResponse from(
+		DetailGraduationResult detailGraduationResult) {
 		return DetailGraduationResultResponse.builder()
 			.totalCredit(detailGraduationResult.getTotalCredit())
 			.takenCredit(detailGraduationResult.getTakenCredit())
-			.detailCategory(detailGraduationResult.getDetailCategory().stream()
+			.detailCategory(detailGraduationResult.getDetailCategory()
+				.stream()
 				.map(DetailGraduationCategoryResultResponse::from)
 				.collect(Collectors.toList()))
-			.completed(detailGraduationResult.isCompleted()).build();
+			.completed(detailGraduationResult.isCompleted())
+			.build();
 	}
 }

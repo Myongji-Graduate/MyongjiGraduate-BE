@@ -3,13 +3,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CORE_CULTURE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.CoreCultureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
@@ -21,6 +14,11 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("각 핵심교양 세부 카테고리 졸업 결과를 포함한 공통교양 전체 졸업 결과를 생성한다.")
 class CoreCultureGraduationManagerTest {
@@ -31,7 +29,7 @@ class CoreCultureGraduationManagerTest {
 	@DisplayName("모든 핵심교양 세부 카테고리가 이수 완료일 경우 이수 완료 핵심교양 전체 졸업 결과를 생성한다.")
 	@Test
 	void generateCompletedDetailGraduationResult() {
-    
+
 		//given
 		User user = UserFixture.영문학과_16학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -75,7 +73,7 @@ class CoreCultureGraduationManagerTest {
 	@DisplayName("모든 핵심교양 세부 카테고리가 이수 완료가 아닐 경우 이수 미 완료 핵심교양 전체 졸업 결과를 생성한다.")
 	@Test
 	void generateUnCompletedDetailGraduationResult() {
-    
+
 		//given
 		User user = UserFixture.영문학과_16학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(

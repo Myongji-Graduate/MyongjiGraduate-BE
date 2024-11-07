@@ -1,13 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup.dto.request;
 
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

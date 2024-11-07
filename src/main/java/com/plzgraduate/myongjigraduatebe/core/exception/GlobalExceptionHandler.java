@@ -3,10 +3,9 @@ package com.plzgraduate.myongjigraduatebe.core.exception;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -57,15 +54,18 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.debug("validation exception occurred: {}",  e.getMessage(), e);
+	public ExceptionResponse handleMethodArgumentNotValidException(
+		MethodArgumentNotValidException e) {
+		log.debug("validation exception occurred: {}", e.getMessage(), e);
 		return ExceptionResponse.from(getBindingErrorMessage(e));
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ExceptionResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-		log.debug("graduation category mismatch exception occurred: {}", getMethodArgumentTypeMismatchErrorMessage(e));
+	public ExceptionResponse handleMethodArgumentTypeMismatchException(
+		MethodArgumentTypeMismatchException e) {
+		log.debug("graduation category mismatch exception occurred: {}",
+			getMethodArgumentTypeMismatchErrorMessage(e));
 		return ExceptionResponse.from(ErrorCode.INVALIDATED_GRADUATION_CATEGORY.toString());
 	}
 
@@ -84,16 +84,27 @@ public class GlobalExceptionHandler {
 	}
 
 	private String getViolationErrorMessage(ConstraintViolationException e) {
-		return e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).findFirst().orElse(null);
+		return e.getConstraintViolations()
+			.stream()
+			.map(ConstraintViolation::getMessage)
+			.findFirst()
+			.orElse(null);
 	}
 
 	private String getBindingErrorMessage(MethodArgumentNotValidException e) {
-		Optional<ObjectError> objectError = e.getBindingResult().getAllErrors().stream().findFirst();
-		return objectError.map(DefaultMessageSourceResolvable::getDefaultMessage).orElse(null);
+		Optional<ObjectError> objectError = e.getBindingResult()
+			.getAllErrors()
+			.stream()
+			.findFirst();
+		return objectError.map(DefaultMessageSourceResolvable::getDefaultMessage)
+			.orElse(null);
 	}
 
-	private String getMethodArgumentTypeMismatchErrorMessage(MethodArgumentTypeMismatchException e) {
-		String errorMessage = Objects.requireNonNull(e.getMessage()).split("value '")[1].split("'")[0];
+	private String getMethodArgumentTypeMismatchErrorMessage(
+		MethodArgumentTypeMismatchException e) {
+		String errorMessage = Objects.requireNonNull(e.getMessage())
+			.split("value '")[1].split(
+			"'")[0];
 		return "Failed to convert value: " + errorMessage;
 	}
 

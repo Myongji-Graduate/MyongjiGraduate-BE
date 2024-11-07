@@ -3,26 +3,25 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import java.time.Instant;
 import java.util.Objects;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
-
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 public class User {
 
 	private final Long id;
 	private final String authId;
-	private String password;
 	private final EnglishLevel englishLevel;
-	private String name;
 	private final String studentNumber;
 	private final int entryYear;
+	private final Instant createdAt;
+	private final Instant updatedAt;
+	private String password;
+	private String name;
 	private String primaryMajor;
 	private String subMajor;
 	private String dualMajor;
@@ -30,13 +29,14 @@ public class User {
 	private int totalCredit;
 	private double takenCredit;
 	private boolean graduated;
-	private final Instant createdAt;
-	private Instant updatedAt;
 
 	@Builder
-	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name, String studentNumber,
-		int entryYear, String primaryMajor, String subMajor, String dualMajor, StudentCategory studentCategory,
-		int totalCredit, double takenCredit, boolean graduated, Instant createdAt, Instant updatedAt) {
+	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name,
+		String studentNumber,
+		int entryYear, String primaryMajor, String subMajor, String dualMajor,
+		StudentCategory studentCategory,
+		int totalCredit, double takenCredit, boolean graduated, Instant createdAt,
+		Instant updatedAt) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -55,7 +55,8 @@ public class User {
 		this.updatedAt = updatedAt;
 	}
 
-	public static User create(String authId, String password, EnglishLevel englishLevel, String studentNumber) {
+	public static User create(String authId, String password, EnglishLevel englishLevel,
+		String studentNumber) {
 		return User.builder()
 			.authId(authId)
 			.password(password)
@@ -68,7 +69,12 @@ public class User {
 			.build();
 	}
 
-	public void updateStudentInformation(String name, String major, String dualMajor, String subMajor,
+	private static int parseEntryYearInStudentNumber(String studentNumber) {
+		return Integer.parseInt(studentNumber.substring(2, 4));
+	}
+
+	public void updateStudentInformation(String name, String major, String dualMajor,
+		String subMajor,
 		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -117,18 +123,17 @@ public class User {
 		return subMajor;
 	}
 
-	private static int parseEntryYearInStudentNumber(String studentNumber) {
-		return Integer.parseInt(studentNumber.substring(2, 4));
-	}
-
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (o == null || getClass() != o.getClass()) {
 			return false;
-		User user = (User)o;
-		return Objects.equals(authId, user.authId) && Objects.equals(studentNumber, user.studentNumber);
+		}
+		User user = (User) o;
+		return Objects.equals(authId, user.authId) && Objects.equals(studentNumber,
+			user.studentNumber);
 	}
 
 	@Override

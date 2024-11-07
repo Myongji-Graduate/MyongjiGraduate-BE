@@ -2,21 +2,19 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.pe
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
-import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.mapper.TakenLectureMapper;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class TakenLectureMapperTest extends PersistenceTestSupport {
 
@@ -27,10 +25,13 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 	@Test
 	void mapToDomainEntity() {
 		//given
-		UserJpaEntity userJpaEntity = createUserJpaEntity(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
+		UserJpaEntity userJpaEntity = createUserJpaEntity(1L, "mju1000", "mju1000!",
+			EnglishLevel.ENG12, "김명지",
 			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
-		LectureJpaEntity lectureJpaEntity = createLectureJpaEntity(1L, "HEB01102", "기초프로그래밍", 3, 0, null);
-		TakenLectureJpaEntity takenLectureJpaEntity = createTakenLectureJpaEntity(1L, userJpaEntity, lectureJpaEntity,
+		LectureJpaEntity lectureJpaEntity = createLectureJpaEntity(1L, "HEB01102", "기초프로그래밍", 3, 0,
+			null);
+		TakenLectureJpaEntity takenLectureJpaEntity = createTakenLectureJpaEntity(1L, userJpaEntity,
+			lectureJpaEntity,
 			2020, Semester.FIRST);
 
 		//when
@@ -53,7 +54,8 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 		TakenLecture takenLecture = createTakenLecture(null, user, lecture, 2020, Semester.FIRST);
 
 		//when
-		TakenLectureJpaEntity takenLectureJpaEntity = takenLectureMapper.mapToJpaEntity(takenLecture);
+		TakenLectureJpaEntity takenLectureJpaEntity = takenLectureMapper.mapToJpaEntity(
+			takenLecture);
 
 		//then
 		assertThat(takenLectureJpaEntity)
@@ -79,7 +81,8 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 				"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
 	}
 
-	private TakenLecture createTakenLecture(Long id, User user, Lecture lecture, int year, Semester semester) {
+	private TakenLecture createTakenLecture(Long id, User user, Lecture lecture, int year,
+		Semester semester) {
 		return TakenLecture.builder()
 			.id(id)
 			.user(user)
@@ -89,7 +92,8 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private TakenLectureJpaEntity createTakenLectureJpaEntity(Long id, UserJpaEntity user, LectureJpaEntity lecture, int year, Semester semester) {
+	private TakenLectureJpaEntity createTakenLectureJpaEntity(Long id, UserJpaEntity user,
+		LectureJpaEntity lecture, int year, Semester semester) {
 		return TakenLectureJpaEntity.builder()
 			.id(id)
 			.user(user)
@@ -99,8 +103,10 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
+	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel,
+		String name,
+		String studentNumber, int entryYear, String major, String subMajor,
+		StudentCategory studentCategory) {
 		return User.builder()
 			.id(id)
 			.authId(authId)
@@ -115,8 +121,10 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private UserJpaEntity createUserJpaEntity(Long id, String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
+	private UserJpaEntity createUserJpaEntity(Long id, String authId, String password,
+		EnglishLevel englishLevel, String name,
+		String studentNumber, int entryYear, String major, String subMajor,
+		StudentCategory studentCategory) {
 		return UserJpaEntity.builder()
 			.id(id)
 			.authId(authId)
@@ -131,7 +139,8 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private Lecture createLecture(Long id, String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+	private Lecture createLecture(Long id, String lectureCode, String name, int credit,
+		int isRevoked, String duplicateCode) {
 		return Lecture.builder()
 			.id(id)
 			.lectureCode(lectureCode)
@@ -142,7 +151,8 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private LectureJpaEntity createLectureJpaEntity(Long id, String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+	private LectureJpaEntity createLectureJpaEntity(Long id, String lectureCode, String name,
+		int credit, int isRevoked, String duplicateCode) {
 		return LectureJpaEntity.builder()
 			.id(id)
 			.lectureCode(lectureCode)

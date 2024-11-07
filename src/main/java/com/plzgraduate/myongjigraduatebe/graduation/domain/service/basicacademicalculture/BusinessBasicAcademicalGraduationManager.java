@@ -1,20 +1,19 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.stereotype.Component;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.BUSINESS;
+import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.findBelongingCollege;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BusinessBasicAcademicalGraduationManager implements BasicAcademicalGraduationManager {
@@ -39,17 +38,21 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCultureLecture> graduationLectures,
+		TakenLectureInventory takenLectureInventory,
+		Set<BasicAcademicalCultureLecture> graduationLectures,
 		int basicAcademicalCredit) {
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
-		Set<Lecture> finalBasicAcademicalLectures = resetBasicAcademicalLectureSet(basicAcademicalLectures,
+		Set<Lecture> finalBasicAcademicalLectures = resetBasicAcademicalLectureSet(
+			basicAcademicalLectures,
 			user);
 
-		takenLectureInventory.getTakenLectures().stream()
-			.filter(takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
+		takenLectureInventory.getTakenLectures()
+			.stream()
+			.filter(
+				takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
 				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
@@ -66,8 +69,9 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 
 	private Set<Lecture> resetBasicAcademicalLectureSet(Set<Lecture> basicAcademicalLectures,
 		User user) {
-		if (!user.checkBeforeEntryYear(TWENTY))
+		if (!user.checkBeforeEntryYear(TWENTY)) {
 			return basicAcademicalLectures;
+		}
 
 		if (user.checkMajor(BUSINESS_ADMINISTRATION) || user.checkMajor(MANAGEMENT_INFORMATION)) {
 			return new HashSet<>(businessBefore20);

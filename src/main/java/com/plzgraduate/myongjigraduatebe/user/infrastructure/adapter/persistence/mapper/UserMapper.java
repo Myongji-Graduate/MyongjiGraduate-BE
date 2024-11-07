@@ -1,9 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper;
 
-import org.springframework.stereotype.Component;
-
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {

@@ -1,16 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.NORMAL_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CAREER;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
@@ -19,6 +13,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class NormalCultureGraduationResultTest {
 
@@ -35,7 +35,7 @@ class NormalCultureGraduationResultTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST)
-			)));
+		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
@@ -43,26 +43,33 @@ class NormalCultureGraduationResultTest {
 			.detailCategory(List.of(
 				DetailCategoryResult.builder()
 					.detailCategoryName(CHRISTIAN_A.getName())
-					.normalLeftCredit(3).build(),
+					.normalLeftCredit(3)
+					.build(),
 				DetailCategoryResult.builder()
 					.detailCategoryName(CAREER.getName())
-					.normalLeftCredit(3).build()
-			)).build();
+					.normalLeftCredit(3)
+					.build()
+			))
+			.build();
 
-		int remainTakenNormalCultureCredit = takenLectureInventory.getCultureLectures().stream()
-			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
+		int remainTakenNormalCultureCredit = takenLectureInventory.getCultureLectures()
+			.stream()
+			.mapToInt(takenLecture -> takenLecture.getLecture()
+				.getCredit())
 			.sum();
 		int remainCreditByDetailGraduationResult = detailGraduationResult.getNormalLeftCredit();
 
 		//when
-		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.create(15,
+		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.create(
+			15,
 			takenLectureInventory,
 			List.of(detailGraduationResult));
 
 		//then
 		assertThat(normalCultureGraduationResult)
 			.extracting("categoryName", "takenCredit")
-			.contains(NORMAL_CULTURE.getName(), remainTakenNormalCultureCredit + remainCreditByDetailGraduationResult);
+			.contains(NORMAL_CULTURE.getName(),
+				remainTakenNormalCultureCredit + remainCreditByDetailGraduationResult);
 	}
 
 }

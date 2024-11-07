@@ -4,7 +4,6 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResul
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UpdateStudentInformationCommand {
+
 	private User user;
 
 	private String name;
@@ -32,7 +32,8 @@ public class UpdateStudentInformationCommand {
 
 	@Builder
 	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
-		String subMajor, StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
+		String subMajor, StudentCategory studentCategory, int totalCredit, double takenCredit,
+		boolean graduate) {
 		this.user = user;
 		this.name = name;
 		this.major = major;
@@ -44,7 +45,8 @@ public class UpdateStudentInformationCommand {
 		this.graduate = graduate;
 	}
 
-	public static UpdateStudentInformationCommand of(User user, ParsingInformation parsingInformation) {
+	public static UpdateStudentInformationCommand of(User user,
+		ParsingInformation parsingInformation) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
 			.name(parsingInformation.getStudentName())
@@ -55,7 +57,8 @@ public class UpdateStudentInformationCommand {
 			.build();
 	}
 
-	public static UpdateStudentInformationCommand update(User user, GraduationResult graduationResult) {
+	public static UpdateStudentInformationCommand update(User user,
+		GraduationResult graduationResult) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
 			.name(user.getName())

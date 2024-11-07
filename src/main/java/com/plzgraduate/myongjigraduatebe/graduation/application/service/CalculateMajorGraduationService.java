@@ -6,12 +6,6 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.SUB_MAJOR;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
@@ -26,8 +20,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @Transactional(readOnly = true)
@@ -48,21 +45,25 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 	}
 
 	@Override
-	public DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory,
+	public DetailGraduationResult calculateSingleDetailGraduation(User user,
+		GraduationCategory graduationCategory,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 		MajorType majorType = MajorType.from(graduationCategory);
 
 		if (majorType == MajorType.SUB) {
-			return generateSubMajorDetailGraduationResult(user, takenLectureInventory, graduationRequirement);
+			return generateSubMajorDetailGraduationResult(user, takenLectureInventory,
+				graduationRequirement);
 		}
 
-		DetailGraduationResult majorDetailGraduationResult = generateMajorDetailGraduationResult(user,
+		DetailGraduationResult majorDetailGraduationResult = generateMajorDetailGraduationResult(
+			user,
 			majorType, takenLectureInventory, graduationRequirement);
 
 		boolean isMandatory = graduationCategory.checkMandatoryIfSeperatedByMandatoryAndElective();
 
 		if (isMandatory) {
-			DetailCategoryResult majorDetailCategoryResult = separateMandatoryMajor(graduationCategory,
+			DetailCategoryResult majorDetailCategoryResult = separateMandatoryMajor(
+				graduationCategory,
 				majorDetailGraduationResult);
 			return DetailGraduationResult.create(graduationCategory,
 				majorDetailCategoryResult.getTotalCredits(), List.of(majorDetailCategoryResult));
@@ -77,7 +78,8 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 	public List<DetailGraduationResult> calculateAllDetailGraduation(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
 
-		DetailGraduationResult primaryMajorDetailGraduationResult = generateMajorDetailGraduationResult(user,
+		DetailGraduationResult primaryMajorDetailGraduationResult = generateMajorDetailGraduationResult(
+			user,
 			MajorType.PRIMARY, takenLectureInventory, graduationRequirement);
 		DetailGraduationResult primaryMandatoryMajorDetailGraduationResult = isolateMandatoryMajorDetailGraduation(
 			PRIMARY_MANDATORY_MAJOR, primaryMajorDetailGraduationResult);
@@ -85,31 +87,38 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 			PRIMARY_ELECTIVE_MAJOR, primaryMajorDetailGraduationResult);
 
 		List<DetailGraduationResult> majorGraduationResults = new ArrayList<>(
-			List.of(primaryMandatoryMajorDetailGraduationResult, primaryElectiveMajorDetailGraduationResult));
+			List.of(primaryMandatoryMajorDetailGraduationResult,
+				primaryElectiveMajorDetailGraduationResult));
 
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
-			DetailGraduationResult dualMajorDetailGraduationResult = generateMajorDetailGraduationResult(user,
+			DetailGraduationResult dualMajorDetailGraduationResult = generateMajorDetailGraduationResult(
+				user,
 				MajorType.DUAL, takenLectureInventory, graduationRequirement);
 			DetailGraduationResult dualMandatoryMajorDetailGraduationResult = isolateMandatoryMajorDetailGraduation(
 				DUAL_MANDATORY_MAJOR, dualMajorDetailGraduationResult);
 			DetailGraduationResult dualElectiveMajorDetailGraduationResult = isolateElectiveMajorDetailGraduation(
 				DUAL_ELECTIVE_MAJOR, dualMajorDetailGraduationResult);
 			majorGraduationResults.addAll(
-				List.of(dualMandatoryMajorDetailGraduationResult, dualElectiveMajorDetailGraduationResult));
+				List.of(dualMandatoryMajorDetailGraduationResult,
+					dualElectiveMajorDetailGraduationResult));
 		}
 		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
 			majorGraduationResults.add(
-				generateSubMajorDetailGraduationResult(user, takenLectureInventory, graduationRequirement));
+				generateSubMajorDetailGraduationResult(user, takenLectureInventory,
+					graduationRequirement));
 		}
 		return majorGraduationResults;
 	}
 
-	private DetailGraduationResult generateMajorDetailGraduationResult(User user, MajorType majorType,
+	private DetailGraduationResult generateMajorDetailGraduationResult(User user,
+		MajorType majorType,
 		TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
-		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getMajorByMajorType(majorType));
+		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(
+			user.getMajorByMajorType(majorType));
 		return majorGraduationManager.createDetailGraduationResult(user, majorType,
-			takenLectureInventory, graduationMajorLectures, graduationRequirement.getMajorCreditByMajorType(majorType));
+			takenLectureInventory, graduationMajorLectures,
+			graduationRequirement.getMajorCreditByMajorType(majorType));
 	}
 
 	private DetailGraduationResult generateSubMajorDetailGraduationResult(User user,
@@ -126,7 +135,8 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 		DetailCategoryResult mandatoryMajorDetailCategoryResult = separateMandatoryMajor(
 			graduationCategory, majorDetailGraduationResult);
 		return DetailGraduationResult.create(graduationCategory,
-			mandatoryMajorDetailCategoryResult.getTotalCredits(), List.of(mandatoryMajorDetailCategoryResult));
+			mandatoryMajorDetailCategoryResult.getTotalCredits(),
+			List.of(mandatoryMajorDetailCategoryResult));
 	}
 
 	private DetailGraduationResult isolateElectiveMajorDetailGraduation(
@@ -134,14 +144,16 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 		DetailCategoryResult electiveMajorDetailCategoryResult = separateElectiveMajor(
 			graduationCategory, majorDetailGraduationResult);
 		return DetailGraduationResult.create(graduationCategory,
-			electiveMajorDetailCategoryResult.getTotalCredits(), List.of(electiveMajorDetailCategoryResult));
+			electiveMajorDetailCategoryResult.getTotalCredits(),
+			List.of(electiveMajorDetailCategoryResult));
 	}
 
 	private DetailCategoryResult separateMandatoryMajor(
 		GraduationCategory graduationCategory, DetailGraduationResult majorDetailGraduationResult) {
 		DetailCategoryResult mandatoryMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory()
 			.stream()
-			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공필수"))
+			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName()
+				.equals("전공필수"))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 필수)"));
 		mandatoryMajorDetailCategoryResult.assignDetailCategoryName(graduationCategory.getName());
@@ -152,7 +164,8 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 		GraduationCategory graduationCategory, DetailGraduationResult majorDetailGraduationResult) {
 		DetailCategoryResult electiveMajorDetailCategoryResult = majorDetailGraduationResult.getDetailCategory()
 			.stream()
-			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName().equals("전공선택"))
+			.filter(detailCategoryResult -> detailCategoryResult.getDetailCategoryName()
+				.equals("전공선택"))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Not Found DetailCategoryResult(전공 선택)"));
 		electiveMajorDetailCategoryResult.assignDetailCategoryName(graduationCategory.getName());

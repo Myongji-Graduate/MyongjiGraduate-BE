@@ -2,15 +2,14 @@ package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistenc
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class UserMapperTest extends PersistenceTestSupport {
 
@@ -28,8 +27,10 @@ class UserMapperTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(user)
-			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber", "entryYear",
-				"primaryMajor", "subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
+			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber",
+				"entryYear",
+				"primaryMajor", "subMajor", "studentCategory", "totalCredit", "takenCredit",
+				"graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
 	}
@@ -45,7 +46,8 @@ class UserMapperTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(userJpaEntity)
-			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber", "entryYear", "major",
+			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber",
+				"entryYear", "major",
 				"subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);

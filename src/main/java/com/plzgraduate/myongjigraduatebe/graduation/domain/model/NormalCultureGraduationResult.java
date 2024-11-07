@@ -1,13 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
-
-import java.util.List;
-import java.util.Set;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.NORMAL_CULTURE;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-
+import java.util.List;
+import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,25 +13,44 @@ import lombok.Getter;
 public class NormalCultureGraduationResult {
 
 	private final String categoryName;
-	private boolean isCompleted;
 	private final int totalCredit;
+	private boolean isCompleted;
 	private int takenCredit;
 
 	@Builder
-	private NormalCultureGraduationResult(String categoryName, boolean isCompleted, int totalCredit, int takenCredit) {
+	private NormalCultureGraduationResult(String categoryName, boolean isCompleted, int totalCredit,
+		int takenCredit) {
 		this.categoryName = categoryName;
 		this.isCompleted = isCompleted;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 	}
 
-	public static NormalCultureGraduationResult create(int totalCredit, TakenLectureInventory takenLectureInventory,
+	public static NormalCultureGraduationResult create(int totalCredit,
+		TakenLectureInventory takenLectureInventory,
 		List<DetailGraduationResult> detailGraduationResults) {
 		return NormalCultureGraduationResult.builder()
 			.categoryName(NORMAL_CULTURE.getName())
 			.isCompleted(false)
 			.totalCredit(totalCredit)
-			.takenCredit(calculateTakenCredit(takenLectureInventory, detailGraduationResults)).build();
+			.takenCredit(calculateTakenCredit(takenLectureInventory, detailGraduationResults))
+			.build();
+	}
+
+	private static int calculateTakenCredit(TakenLectureInventory takenLectureInventory,
+		List<DetailGraduationResult> detailGraduationResults) {
+		int remainCreditByDetailGraduationResult = detailGraduationResults.stream()
+			.mapToInt(DetailGraduationResult::getNormalLeftCredit)
+			.sum();
+
+		Set<TakenLecture> remainTakenNormalCultures = takenLectureInventory.getCultureLectures();
+		int remainCreditByTakenLectures = remainTakenNormalCultures.stream()
+			.mapToInt(takenLecture -> takenLecture.getLecture()
+				.getCredit())
+			.sum();
+
+		takenLectureInventory.handleFinishedTakenLectures(remainTakenNormalCultures);
+		return remainCreditByDetailGraduationResult + remainCreditByTakenLectures;
 	}
 
 	public void checkCompleted() {
@@ -47,20 +64,5 @@ public class NormalCultureGraduationResult {
 		int leftCredit = takenCredit - totalCredit;
 		this.takenCredit = totalCredit;
 		return leftCredit;
-	}
-
-	private static int calculateTakenCredit(TakenLectureInventory takenLectureInventory,
-		List<DetailGraduationResult> detailGraduationResults) {
-		int remainCreditByDetailGraduationResult = detailGraduationResults.stream()
-			.mapToInt(DetailGraduationResult::getNormalLeftCredit)
-			.sum();
-
-		Set<TakenLecture> remainTakenNormalCultures = takenLectureInventory.getCultureLectures();
-		int remainCreditByTakenLectures = remainTakenNormalCultures.stream()
-			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
-			.sum();
-
-		takenLectureInventory.handleFinishedTakenLectures(remainTakenNormalCultures);
-		return remainCreditByDetailGraduationResult + remainCreditByTakenLectures;
 	}
 }

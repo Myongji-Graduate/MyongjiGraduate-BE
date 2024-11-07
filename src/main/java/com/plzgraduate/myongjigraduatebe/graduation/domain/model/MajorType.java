@@ -9,11 +9,11 @@ public enum MajorType {
 	SUB;
 
 	public static MajorType from(GraduationCategory graduationCategory) {
-		if(graduationCategory == GraduationCategory.PRIMARY_MANDATORY_MAJOR
+		if (graduationCategory == GraduationCategory.PRIMARY_MANDATORY_MAJOR
 			|| graduationCategory == GraduationCategory.PRIMARY_ELECTIVE_MAJOR
 			|| graduationCategory == GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE) {
 			return PRIMARY;
-		} else if(graduationCategory == GraduationCategory.DUAL_MANDATORY_MAJOR
+		} else if (graduationCategory == GraduationCategory.DUAL_MANDATORY_MAJOR
 			|| graduationCategory == GraduationCategory.DUAL_ELECTIVE_MAJOR
 			|| graduationCategory == GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE) {
 			return DUAL;

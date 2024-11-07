@@ -1,8 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.withdraw;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
@@ -12,8 +9,9 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @Transactional
@@ -30,7 +28,7 @@ class WithDrawUserService implements WithDrawUserUseCase {
 	@Override
 	public void withDraw(Long userId, String password) {
 		User user = findUserUseCase.findUserById(userId);
-		if(!user.matchPassword(passwordEncoder, password)){
+		if (!user.matchPassword(passwordEncoder, password)) {
 			throw new IllegalArgumentException(ErrorCode.INCORRECT_PASSWORD.toString());
 		}
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);

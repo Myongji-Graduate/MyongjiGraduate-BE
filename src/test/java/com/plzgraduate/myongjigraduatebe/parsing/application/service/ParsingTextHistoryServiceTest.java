@@ -4,6 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,15 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
-import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 @ExtendWith(MockitoExtension.class)
 class ParsingTextHistoryServiceTest {
+
 	@Mock
 	private SaveParsingTextHistoryPort saveParsingTextHistoryPort;
 	@Mock
@@ -37,12 +37,14 @@ class ParsingTextHistoryServiceTest {
 			"60181666", 18, "융합소프트웨어학부", null, StudentCategory.NORMAL);
 		String parsingText = "parsingText";
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
-		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
+		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(
+			ParsingTextHistory.class);
 		//when
 		parsingTextHistoryService.generateSucceedParsingTextHistory(userId, parsingText);
 
 		//then
-		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
+		then(saveParsingTextHistoryPort).should()
+			.saveParsingTextHistory(captor.capture());
 		ParsingTextHistory captureArgument = captor.getValue();
 		assertThat(captureArgument.getUser()).isEqualTo(user);
 		assertThat(captureArgument.getParsingText()).isEqualTo(parsingText);
@@ -57,19 +59,23 @@ class ParsingTextHistoryServiceTest {
 			"60181666", 18, "융합소프트웨어학부", null, StudentCategory.NORMAL);
 		String parsingText = "parsingText";
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
-		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
+		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(
+			ParsingTextHistory.class);
 		//when
 		parsingTextHistoryService.generateFailedParsingTextHistory(userId, parsingText);
 
 		//then
-		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
+		then(saveParsingTextHistoryPort).should()
+			.saveParsingTextHistory(captor.capture());
 		ParsingTextHistory captureArgument = captor.getValue();
 		assertThat(captureArgument.getUser()).isEqualTo(user);
 		assertThat(captureArgument.getParsingText()).isEqualTo(parsingText);
 	}
 
-	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber, int entryYear, String major, String subMajor, StudentCategory studentCategory) {
+	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel,
+		String name,
+		String studentNumber, int entryYear, String major, String subMajor,
+		StudentCategory studentCategory) {
 		return User.builder()
 			.id(id)
 			.authId(authId)

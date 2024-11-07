@@ -18,6 +18,7 @@ public class CommonCulture {
 	public static CommonCulture of(Lecture lecture, CommonCultureCategory category) {
 		return CommonCulture.builder()
 			.lecture(lecture)
-			.commonCultureCategory(category).build();
+			.commonCultureCategory(category)
+			.build();
 	}
 }

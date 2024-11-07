@@ -1,13 +1,11 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -37,10 +35,13 @@ public enum DefaultGraduationRequirementType {
 	private final int startEntryYear;
 	private final int endEntryYear;
 
-	public static DefaultGraduationRequirementType determineGraduationRequirement(College college, User user) {
+	public static DefaultGraduationRequirementType determineGraduationRequirement(College college,
+		User user) {
 		return Arrays.stream(DefaultGraduationRequirementType.values())
-			.filter(gr -> gr.getCollageName().equals(college.getName()))
-			.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear() && gr.getEndEntryYear() >= user.getEntryYear())
+			.filter(gr -> gr.getCollageName()
+				.equals(college.getName()))
+			.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear()
+				&& gr.getEndEntryYear() >= user.getEntryYear())
 			.findFirst()
 			.orElseThrow(() -> new NoSuchElementException("일치하는 졸업 요건이 존재하지 않습니다."));
 	}
@@ -56,20 +57,23 @@ public enum DefaultGraduationRequirementType {
 			.commonCultureCredit(this.commonCultureCredit)
 			.coreCultureCredit(this.coreCultureCredit)
 			.normalCultureCredit(this.normalLectureCredit)
-			.freeElectiveCredit(this.freeElectiveLectureCredit).build();
+			.freeElectiveCredit(this.freeElectiveLectureCredit)
+			.build();
 
 		checkIsEnglishFreeUserAndTransferCredit(user, graduationRequirement);
 		checkIsMultiMajorUserAndTransferCredit(user, graduationRequirement);
 		return graduationRequirement;
 	}
 
-	private void checkIsEnglishFreeUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+	private void checkIsEnglishFreeUserAndTransferCredit(User user,
+		GraduationRequirement graduationRequirement) {
 		if (user.getEnglishLevel() == EnglishLevel.FREE) {
 			graduationRequirement.transferEnglishCreditCommonToNormal();
 		}
 	}
 
-	private void checkIsMultiMajorUserAndTransferCredit(User user, GraduationRequirement graduationRequirement) {
+	private void checkIsMultiMajorUserAndTransferCredit(User user,
+		GraduationRequirement graduationRequirement) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			graduationRequirement.modifyCreditForDualMajor(user);
 		}

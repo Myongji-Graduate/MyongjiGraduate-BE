@@ -2,12 +2,6 @@ package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.entity.CompletedCreditJpaEntity;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.repository.CompletedCreditRepository;
@@ -16,6 +10,10 @@ import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport {
 
@@ -30,10 +28,11 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 	@Test
 	void saveOrModifyCompletedCredits() {
 		//given
-		UserJpaEntity userJpaEntity = userRepository.save( UserJpaEntity.builder()
+		UserJpaEntity userJpaEntity = userRepository.save(UserJpaEntity.builder()
 			.authId("test")
 			.password("test")
-			.studentNumber("60191111").build());
+			.studentNumber("60191111")
+			.build());
 		User user = User.builder()
 			.id(userJpaEntity.getId())
 			.build();
@@ -42,14 +41,17 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 				.id(1L)
 				.graduationCategory(GraduationCategory.COMMON_CULTURE)
 				.totalCredit(10)
-				.takenCredit(5).build(),
+				.takenCredit(5)
+				.build(),
 			CompletedCredit.builder()
 				.graduationCategory(GraduationCategory.COMMON_CULTURE)
 				.totalCredit(10)
-				.takenCredit(5).build());
+				.takenCredit(5)
+				.build());
 
 		//when
-		generateOrModifyCompletedCreditsAdapter.generateOrModifyCompletedCredits(user, completedCredits);
+		generateOrModifyCompletedCreditsAdapter.generateOrModifyCompletedCredits(user,
+			completedCredits);
 
 		//then
 		List<CompletedCreditJpaEntity> foundCompletedCredits = completedCreditRepository.findAllByUserJpaEntity(
@@ -58,5 +60,4 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 			.extracting("userJpaEntity.id")
 			.contains(user.getId());
 	}
-
 }

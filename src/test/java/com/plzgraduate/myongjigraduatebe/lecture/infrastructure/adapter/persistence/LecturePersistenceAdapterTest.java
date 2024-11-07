@@ -1,20 +1,19 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureQueryRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 
@@ -92,7 +91,8 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		//given
 		String lectureCode = "code";
 		String lectureName = "name";
-		LectureJpaEntity lectureJpaEntity = lectureRepository.save(createLectureJpaEntity(lectureCode, lectureName));
+		LectureJpaEntity lectureJpaEntity = lectureRepository.save(
+			createLectureJpaEntity(lectureCode, lectureName));
 
 		//when
 		Lecture lecture = lecturePersistenceAdapter.findLectureById(lectureJpaEntity.getId());
@@ -116,7 +116,8 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		));
 
 		//when
-		List<Lecture> lectures = lecturePersistenceAdapter.searchLectureByNameOrCode("name", "name");
+		List<Lecture> lectures = lecturePersistenceAdapter.searchLectureByNameOrCode("name",
+			"name");
 
 		//then
 		assertThat(lectures)
@@ -128,7 +129,8 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 			);
 	}
 
-	private Lecture createLecture(String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+	private Lecture createLecture(String lectureCode, String name, int credit, int isRevoked,
+		String duplicateCode) {
 		return Lecture.builder()
 			.lectureCode(lectureCode)
 			.name(name)

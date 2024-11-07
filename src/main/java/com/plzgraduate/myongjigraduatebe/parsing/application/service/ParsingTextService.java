@@ -1,13 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
-import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INCORRECT_STUDENT_NUMBER;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.ASSOCIATED_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.DOUBLE_SUB;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.transaction.annotation.Transactional;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
@@ -24,9 +19,11 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserU
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @UseCase
@@ -66,17 +63,20 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList = parsingInformation.getTakenLectureInformation();
-		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(parsingTakenLectureDtoList);
+		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(
+			parsingTakenLectureDtoList);
 		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
 	private User updateUser(User user, ParsingInformation parsingInformation) {
-		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(user, parsingInformation);
+		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(
+			user, parsingInformation);
 		return updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
 	private void validateParsingText(String parsingText) {
-		if (parsingText.trim().isEmpty()) {
+		if (parsingText.trim()
+			.isEmpty()) {
 			throw new InvalidPdfException("PDF를 인식하지 못했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}

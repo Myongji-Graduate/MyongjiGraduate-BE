@@ -1,17 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.SignInController;
@@ -51,11 +40,22 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.resetpassword.
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.validate.ValidateUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @ActiveProfiles("test")
 @ComponentScan(
 	basePackageClasses = {SecurityConfig.class, TokenProvider.class},
-	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {QuerydslConfig.class,
+	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+		QuerydslConfig.class,
 		JpaAuditingConfig.class})
 )
 @WebMvcTest(controllers = {
@@ -76,73 +76,51 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithD
 public abstract class WebAdaptorTestSupport {
 
 	@Autowired
-	private WebApplicationContext context;
-
-	@Autowired
 	protected MockMvc mockMvc;
-
 	@Autowired
 	protected ObjectMapper objectMapper;
-
 	@MockBean
 	protected FindUserUseCase findUserUseCase;
-
 	@MockBean
 	protected SignInUseCase signInUseCase;
-
 	@MockBean
 	protected TokenUseCase tokenUseCase;
-
 	@MockBean
 	protected CalculateGraduationUseCase calculateGraduationUseCase;
-
 	@MockBean
 	protected SearchLectureUseCase searchLectureUseCase;
-
 	@MockBean
 	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
-
 	@MockBean
 	protected GenerateCustomizedTakenLectureUseCase generateCustomizedTakenLectureUseCase;
-
 	@MockBean
 	protected FindTakenLectureUseCase findTakenLectureUseCase;
-
 	@MockBean
 	protected FindUserInformationUseCase findUserInformationUseCase;
-
 	@MockBean
 	protected FindUserAuthIdUseCase findUserAuthIdUseCase;
-
 	@MockBean
 	protected ValidateUserUseCase validateUserUseCase;
-
 	@MockBean
 	protected ResetPasswordUseCase resetPasswordUseCase;
-
 	@MockBean
 	protected WithDrawUserUseCase withDrawUserUseCase;
-
 	@MockBean
 	protected ParsingTextUseCase parsingTextUseCase;
-
 	@MockBean
 	protected ParsingTextHistoryUseCase parsingTextHistoryUseCase;
-
 	@MockBean
 	protected SignUpUseCase signUpUseCase;
-
 	@MockBean
 	protected CheckAuthIdDuplicationUseCase checkAuthIdDuplicationUseCase;
-
 	@MockBean
 	protected CheckStudentNumberDuplicationUseCase checkStudentNumberDuplicationUseCase;
-
 	@MockBean
 	protected FindCompletedCreditUseCase findCompletedCreditUseCase;
-
 	@MockBean
 	protected CalculateSingleDetailGraduationUseCase calculateSingleDetailGraduationUseCase;
+	@Autowired
+	private WebApplicationContext context;
 
 	@BeforeEach
 	void setUp() {

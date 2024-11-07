@@ -6,17 +6,6 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -24,6 +13,15 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class FindTakenLectureServiceTest {
@@ -39,7 +37,9 @@ class FindTakenLectureServiceTest {
 	@Test
 	void findTakenLectures() {
 		//given
-		User user = User.builder().id(1L).build();
+		User user = User.builder()
+			.id(1L)
+			.build();
 		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
 		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1", 2);
 		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2", 2);
@@ -63,7 +63,8 @@ class FindTakenLectureServiceTest {
 		));
 
 		given(findUserUseCase.findUserById(anyLong())).willReturn(user);
-		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(takenLectures);
+		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(
+			takenLectures);
 
 		//when
 		TakenLectureInventory foundTakenLectures = findTakenLectureService.findTakenLectures(1L);
@@ -89,7 +90,9 @@ class FindTakenLectureServiceTest {
 	@Test
 	void addTwoPointIfChapelCountIsOver4() {
 		//given
-		User user = User.builder().id(1L).build();
+		User user = User.builder()
+			.id(1L)
+			.build();
 		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
 		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1", 2);
 		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2", 2);
@@ -115,7 +118,8 @@ class FindTakenLectureServiceTest {
 		));
 
 		given(findUserUseCase.findUserById(anyLong())).willReturn(user);
-		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(takenLectures);
+		given(findTakenLecturePort.findTakenLecturesByUser(any(User.class))).willReturn(
+			takenLectures);
 
 		//when
 		TakenLectureInventory foundTakenLectures = findTakenLectureService.findTakenLectures(1L);

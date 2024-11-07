@@ -1,5 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity;
 
+import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,11 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

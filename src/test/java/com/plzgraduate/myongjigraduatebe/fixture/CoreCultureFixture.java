@@ -5,13 +5,11 @@ import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.SCIENCE_TECHNOLOGY;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.SOCIETY_COMMUNITY;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 
 public class CoreCultureFixture {
 

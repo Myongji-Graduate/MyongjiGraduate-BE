@@ -1,13 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
@@ -17,9 +9,14 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.S
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @Transactional
@@ -31,13 +28,16 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 	private final FindLecturesUseCase findLecturesUseCase;
 
 	@Override
-	public void saveTakenLectures(User user, List<TakenLectureInformation> takenLectureInformationList) {
+	public void saveTakenLectures(User user,
+		List<TakenLectureInformation> takenLectureInformationList) {
 		Map<String, Lecture> lectureMap = makeLectureMapByLectureCodes(takenLectureInformationList);
-		List<TakenLecture> takenLectures = makeTakenLectures(user, takenLectureInformationList, lectureMap);
+		List<TakenLecture> takenLectures = makeTakenLectures(user, takenLectureInformationList,
+			lectureMap);
 		saveTakenLecturePort.saveTakenLectures(takenLectures);
 	}
 
-	private List<TakenLecture> makeTakenLectures(User user, List<TakenLectureInformation> takenLectureInformationList,
+	private List<TakenLecture> makeTakenLectures(User user,
+		List<TakenLectureInformation> takenLectureInformationList,
 		Map<String, Lecture> lectureMap) {
 		return takenLectureInformationList.stream()
 			.map(takenLectureInformation -> {
@@ -45,14 +45,16 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 					return TakenLecture.of(user, lecture, takenLectureInformation.getYear(),
 						takenLectureInformation.getSemester());
 				}
-			).collect(Collectors.toList());
+			)
+			.collect(Collectors.toList());
 	}
 
 	private Lecture getLectureFromLectureMap(Map<String, Lecture> lectureMap,
 		TakenLectureInformation takenLectureInformation) {
 		return Optional.ofNullable(lectureMap.get(takenLectureInformation.getLectureCode()))
 			.orElseThrow(() -> {
-				log.warn("Not Found Lecture in Database: {}", takenLectureInformation.getLectureCode());
+				log.warn("Not Found Lecture in Database: {}",
+					takenLectureInformation.getLectureCode());
 				return new IllegalArgumentException(ErrorCode.NON_EXISTED_LECTURE.toString());
 			});
 	}

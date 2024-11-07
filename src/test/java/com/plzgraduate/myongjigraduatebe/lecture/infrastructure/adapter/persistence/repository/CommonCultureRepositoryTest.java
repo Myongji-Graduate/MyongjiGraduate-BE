@@ -2,17 +2,15 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
@@ -48,7 +46,8 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 			.contains(entryYear);
 
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
-			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity().getLectureCode())
+			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity()
+				.getLectureCode())
 			.collect(Collectors.toList());
 		assertThat(lectureCodes).contains(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH3_CODE);
@@ -74,7 +73,8 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 			.contains(entryYears);
 
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
-			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity().getLectureCode())
+			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity()
+				.getLectureCode())
 			.collect(Collectors.toList());
 		assertThat(lectureCodes).doesNotContain(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH3_CODE);
@@ -100,7 +100,8 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 			.contains(entryYears);
 
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
-			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity().getLectureCode())
+			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity()
+				.getLectureCode())
 			.collect(Collectors.toList());
 		assertThat(lectureCodes).doesNotContain(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH1_CODE);
@@ -152,26 +153,31 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 		LectureJpaEntity 영어회화4 = LectureJpaEntity.builder()
 			.lectureCode(ENGLISH_CONVERSATION4_CODE)
 			.build();
-		List<LectureJpaEntity> englishLectures = List.of(기초영어, 영어1, 영어2, 영어3, 영어4, 영어회화1, 영어회화2, 영어회화3, 영어회화4);
+		List<LectureJpaEntity> englishLectures = List.of(기초영어, 영어1, 영어2, 영어3, 영어4, 영어회화1, 영어회화2,
+			영어회화3, 영어회화4);
 		lectureRepository.saveAll(englishLectures);
 
 		for (LectureJpaEntity englishLecture : englishLectures) {
 			CommonCultureJpaEntity commonCultureJpaEntityA = CommonCultureJpaEntity.builder()
 				.lectureJpaEntity(englishLecture)
 				.startEntryYear(16)
-				.endEntryYear(17).build();
+				.endEntryYear(17)
+				.build();
 			CommonCultureJpaEntity commonCultureJpaEntityB = CommonCultureJpaEntity.builder()
 				.lectureJpaEntity(englishLecture)
 				.startEntryYear(18)
-				.endEntryYear(19).build();
+				.endEntryYear(19)
+				.build();
 			CommonCultureJpaEntity commonCultureJpaEntityC = CommonCultureJpaEntity.builder()
 				.lectureJpaEntity(englishLecture)
 				.startEntryYear(20)
-				.endEntryYear(22).build();
+				.endEntryYear(22)
+				.build();
 			CommonCultureJpaEntity commonCultureJpaEntityD = CommonCultureJpaEntity.builder()
 				.lectureJpaEntity(englishLecture)
 				.startEntryYear(23)
-				.endEntryYear(99).build();
+				.endEntryYear(99)
+				.build();
 			commonCultureRepository.saveAll(
 				List.of(commonCultureJpaEntityA, commonCultureJpaEntityB, commonCultureJpaEntityC,
 					commonCultureJpaEntityD));

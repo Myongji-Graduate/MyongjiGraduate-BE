@@ -1,18 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.auth.application.service.signin;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.response.TokenResponse;
 import com.plzgraduate.myongjigraduatebe.auth.application.port.SaveRefreshTokenPort;
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @Transactional(readOnly = true)
@@ -37,8 +35,8 @@ class SignInService implements SignInUseCase {
 		JwtAuthenticationToken authenticationToken =
 			new JwtAuthenticationToken(authId, password);
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		SecurityContextHolder.getContext()
+			.setAuthentication(authentication);
 		return authentication;
 	}
-
 }

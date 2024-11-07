@@ -1,18 +1,17 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.update;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.then;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateStudentInformationServiceTest {
@@ -40,6 +39,7 @@ class UpdateStudentInformationServiceTest {
 		updateStudentInformationService.updateUser(command);
 
 		//then
-		then(updateUserPort).should().updateUser(user);
+		then(updateUserPort).should()
+			.updateUser(user);
 	}
 }

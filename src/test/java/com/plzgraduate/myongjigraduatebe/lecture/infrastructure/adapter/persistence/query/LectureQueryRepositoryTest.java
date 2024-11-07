@@ -2,16 +2,14 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureQueryRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class LectureQueryRepositoryTest extends PersistenceTestSupport {
 
@@ -26,10 +24,10 @@ class LectureQueryRepositoryTest extends PersistenceTestSupport {
 	void searchLectureByCode() {
 		//given
 		List<LectureJpaEntity> lectureJpaEntities = List.of(
-			createLectureJpaEntity( "HEB01102", "기초프로그래밍"),
+			createLectureJpaEntity("HEB01102", "기초프로그래밍"),
 			createLectureJpaEntity("HED01315", "인공지능"),
-			createLectureJpaEntity( "KMI02118", "엑셀기초및실무활용"),
-			createLectureJpaEntity( "KMI02123", "웹과앱기초")
+			createLectureJpaEntity("KMI02118", "엑셀기초및실무활용"),
+			createLectureJpaEntity("KMI02123", "웹과앱기초")
 		);
 		lectureRepository.saveAll(lectureJpaEntities);
 

@@ -2,17 +2,14 @@ package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistenc
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.UserPersistenceAdapter;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class UserPersistenceAdapterTest extends PersistenceTestSupport {
 
@@ -24,11 +21,11 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	@DisplayName("사용자를 저장한다.")
 	@Test
 	void 사용자_저장() {
-	    //given
+		//given
 		User user = createUser("mju1001", "1q2w3e4r!", "60181666");
-	    //when
+		//when
 		userPersistenceAdapter.saveUser(user);
-	    //then
+		//then
 		assertThat(userRepository.findByAuthId("mju1001")).isPresent();
 	}
 
@@ -44,7 +41,8 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(user).isPresent();
-		assertThat(user.get().getAuthId()).isEqualTo(authId);
+		assertThat(user.get()
+			.getAuthId()).isEqualTo(authId);
 	}
 
 	@DisplayName("학번으로 사용자를 조회한다.")
@@ -60,7 +58,8 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(user).isPresent();
-		assertThat(user.get().getStudentNumber()).isEqualTo(studentNumber);
+		assertThat(user.get()
+			.getStudentNumber()).isEqualTo(studentNumber);
 	}
 
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")
@@ -71,7 +70,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 		UserJpaEntity user = createUserEntity(authId, "1q2w3e4r!", "60181666");
 		userRepository.save(user);
 		//when
-		boolean check= userPersistenceAdapter.checkDuplicateAuthId(authId);
+		boolean check = userPersistenceAdapter.checkDuplicateAuthId(authId);
 
 		//then
 		assertThat(check).isTrue();
@@ -85,7 +84,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 		UserJpaEntity user = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
 		userRepository.save(user);
 		//when
-		boolean check= userPersistenceAdapter.checkDuplicateStudentNumber(studentNumber);
+		boolean check = userPersistenceAdapter.checkDuplicateStudentNumber(studentNumber);
 
 		//then
 		assertThat(check).isTrue();
@@ -94,17 +93,18 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	@DisplayName("유저 데이터를 삭제한다.")
 	@Test
 	void deleteUser() {
-	    //given
+		//given
 		String authId = "mju1000";
 		UserJpaEntity userJpaEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
 		UserJpaEntity savedUserJpaEntity = userRepository.save(userJpaEntity);
 		User user = User.builder()
-			.id(savedUserJpaEntity.getId()).build();
+			.id(savedUserJpaEntity.getId())
+			.build();
 
 		//when
 		userPersistenceAdapter.deleteUser(user);
 
-	    //then
+		//then
 		Optional<User> foundUser = userPersistenceAdapter.findUserByAuthId(authId);
 		assertThat(foundUser.isPresent()).isFalse();
 	}

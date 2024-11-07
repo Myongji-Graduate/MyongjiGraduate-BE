@@ -2,17 +2,15 @@ package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
+import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
-import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
-import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
-import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.mapper.ParsingTextHistoryMapper;
-import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 class ParsingTextHistoryMapperTest extends PersistenceTestSupport {
 

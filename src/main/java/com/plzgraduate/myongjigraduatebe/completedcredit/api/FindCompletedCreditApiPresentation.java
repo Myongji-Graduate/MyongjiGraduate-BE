@@ -1,15 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.api;
 
-import java.util.List;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.api.dto.CompletedCreditResponse;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 
-@Tag(name = "CompletdCredit")
+@Tag(name = "CompletedCredit")
 public interface FindCompletedCreditApiPresentation {
 
 	@Operation(summary = "기이수 학점 조회", description = "유저의 기이수 학점 조회 API")

@@ -10,6 +10,7 @@ public interface CalculateDetailGraduationUseCase {
 
 	boolean supports(GraduationCategory graduationCategory);
 
-	DetailGraduationResult calculateSingleDetailGraduation(User user, GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
+	DetailGraduationResult calculateSingleDetailGraduation(User user,
+		GraduationCategory graduationCategory, TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement);
 }
