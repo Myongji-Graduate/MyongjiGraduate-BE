@@ -37,7 +37,8 @@ public class UserFixture {
 	}
 
 	public static User 경영학과_19학번_영어_면제() {
-		return createUser("mj21", "1234", EnglishLevel.FREE, "김경영", "60191021", 19, "경영학과", null, StudentCategory.NORMAL);
+		return createUser("mj21", "1234", EnglishLevel.FREE, "김경영", "60191021", 19, "경영학과", null,
+			StudentCategory.NORMAL);
 	}
 
 	public static User 경영학과_22학번() {
@@ -51,7 +52,8 @@ public class UserFixture {
 	}
 
 	public static User 경영학과_23학번_국제통상학과_부전공() {
-		return createUser("mj22", "1234", EnglishLevel.ENG34, "김경영", "60231022", 23, "경영학과", "국제통상학과",
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김경영", "60231022", 23, "경영학과",
+			"국제통상학과",
 			StudentCategory.SUB_MAJOR);
 	}
 
@@ -61,56 +63,67 @@ public class UserFixture {
 	}
 
 	public static User 데이테크놀로지학과_16학번() {
-		return createUser("mj1001", "1234", EnglishLevel.ENG12, "정데테", "60161666", 16, "데이터테크놀로지전공", null,
+		return createUser("mj1001", "1234", EnglishLevel.ENG12, "정데테", "60161666", 16, "데이터테크놀로지전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 데이테크놀로지학과_16학번_Eng34() {
-		return createUser("mj1001", "1234", EnglishLevel.ENG34, "정데테", "60161666", 16, "데이터테크놀로지전공", null,
+		return createUser("mj1001", "1234", EnglishLevel.ENG34, "정데테", "60161666", 16, "데이터테크놀로지전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 데이테크놀로지학과_18학번_Basic_Eng() {
-		return createUser("mj1001", "1234", EnglishLevel.BASIC, "정데테", "60181666", 18, "데이터테크놀로지전공", null,
+		return createUser("mj1001", "1234", EnglishLevel.BASIC, "정데테", "60181666", 18, "데이터테크놀로지전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 데이테크놀로지학과_18학번() {
-		return createUser("mj1003", "1234", EnglishLevel.ENG12, "정데테", "60181666", 18, "데이터테크놀로지전공", null,
+		return createUser("mj1003", "1234", EnglishLevel.ENG12, "정데테", "60181666", 18, "데이터테크놀로지전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 응용소프트웨어학과_17학번() {
-		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60171022", 17, "응용소프트웨어전공", null,
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60171022", 17, "응용소프트웨어전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 응용소프트웨어학과_19학번() {
-		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "응용소프트웨어전공", null,
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "응용소프트웨어전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 응용소프트웨어학과_19학번_영어_면제() {
-		return createUser("mj22", "1234", EnglishLevel.FREE, "김응용", "60191022", 19, "응용소프트웨어전공", null,
+		return createUser("mj22", "1234", EnglishLevel.FREE, "김응용", "60191022", 19, "응용소프트웨어전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 데이터테크놀로지학과_19학번() {
-		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "데이터테크놀로지전공", null,
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "데이터테크놀로지전공",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 디지털콘텐츠디자인학과_19학번() {
-		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "디지털콘텐츠디자인학과", null,
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60191022", 19, "디지털콘텐츠디자인학과",
+			null,
 			StudentCategory.NORMAL);
 	}
 
 	public static User 디지털콘텐츠디자인학과_23학번() {
-		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60231022", 23, "디지털콘텐츠디자인학과", null,
+		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60231022", 23, "디지털콘텐츠디자인학과",
+			null,
 			StudentCategory.NORMAL);
 	}
 
-	public static User createUser(String authId, String password, EnglishLevel englishLevel, String name,
+	public static User createUser(String authId, String password, EnglishLevel englishLevel,
+		String name,
 		String studentNumber,
 		int entryYear, String major, String subMajor, StudentCategory studentCategory) {
 		return User.builder()

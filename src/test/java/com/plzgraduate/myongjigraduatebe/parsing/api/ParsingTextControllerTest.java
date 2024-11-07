@@ -9,15 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
-
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 class ParsingTextControllerTest extends WebAdaptorTestSupport {
 
@@ -25,7 +24,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 	@DisplayName("파싱 텍스트를 등록한다.")
 	@Test
 	void enrollParsingText() throws Exception {
-	    //given
+		//given
 		String parsingText = "parsingText";
 		ParsingTextRequest request = ParsingTextRequest.builder()
 			.parsingText(parsingText)
@@ -39,13 +38,15 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 				.with(csrf())
 		);
 
-	    //then
+		//then
 		actions
 			.andDo(print())
 			.andExpect(status().isOk());
 
-		then(parsingTextUseCase).should().enrollParsingText(any(Long.class), any(String.class));
-		then(parsingTextHistoryUseCase).should().generateSucceedParsingTextHistory(any(Long.class), any(String.class));
+		then(parsingTextUseCase).should()
+			.enrollParsingText(any(Long.class), any(String.class));
+		then(parsingTextHistoryUseCase).should()
+			.generateSucceedParsingTextHistory(any(Long.class), any(String.class));
 
 	}
 
@@ -59,7 +60,8 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.parsingText(parsingText)
 			.build();
 
-		doThrow(new InvalidPdfException("")).when(parsingTextUseCase).enrollParsingText(any(Long.class), any(String.class));
+		doThrow(new InvalidPdfException("")).when(parsingTextUseCase)
+			.enrollParsingText(any(Long.class), any(String.class));
 
 		//when
 		ResultActions actions = mockMvc.perform(
@@ -75,7 +77,8 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.errorCode").value(""));
 
-		then(parsingTextHistoryUseCase).should().generateFailedParsingTextHistory(any(Long.class), any(String.class));
+		then(parsingTextHistoryUseCase).should()
+			.generateFailedParsingTextHistory(any(Long.class), any(String.class));
 	}
 
 }

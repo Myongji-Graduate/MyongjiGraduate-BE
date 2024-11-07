@@ -6,6 +6,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
-import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
-import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class WithDrawUserServiceTest {
@@ -44,21 +43,26 @@ class WithDrawUserServiceTest {
 	@DisplayName("유저 정보를 삭제한다.")
 	@Test
 	void withDraw() {
-	    //given
+		//given
 		String password = "abcd1234!";
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = User.builder()
 			.id(1L)
-			.password(encoder.encode(password)).build();
+			.password(encoder.encode(password))
+			.build();
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
 		//when //then
-	    withDrawUserService.withDraw(user.getId(), password);
-		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(user);
-		then(deleteParsingTextHistoryPort).should().deleteUserParsingTextHistory(user);
-		then(deleteCompletedCreditPort).should().deleteAllCompletedCredits(user);
-		then(deleteUserPort).should().deleteUser(user);
+		withDrawUserService.withDraw(user.getId(), password);
+		then(deleteTakenLectureByUserUseCase).should()
+			.deleteAllTakenLecturesByUser(user);
+		then(deleteParsingTextHistoryPort).should()
+			.deleteUserParsingTextHistory(user);
+		then(deleteCompletedCreditPort).should()
+			.deleteAllCompletedCredits(user);
+		then(deleteUserPort).should()
+			.deleteUser(user);
 	}
 
 	@DisplayName("잘못된 비밀번호를 입력하면 예외가 발생한다.")
@@ -69,7 +73,8 @@ class WithDrawUserServiceTest {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = User.builder()
 			.id(1L)
-			.password(encoder.encode(password)).build();
+			.password(encoder.encode(password))
+			.build();
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 

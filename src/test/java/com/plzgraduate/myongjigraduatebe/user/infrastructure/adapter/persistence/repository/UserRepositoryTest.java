@@ -1,17 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class UserRepositoryTest extends PersistenceTestSupport {
 
@@ -31,7 +28,8 @@ class UserRepositoryTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(user).isPresent();
-		assertThat(user.get().getAuthId()).isEqualTo("mju1001");
+		assertThat(user.get()
+			.getAuthId()).isEqualTo("mju1001");
 	}
 
 	@DisplayName("학번을 통해 유저를 조회한다.")
@@ -47,7 +45,8 @@ class UserRepositoryTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(user).isPresent();
-		assertThat(user.get().getStudentNumber()).isEqualTo(studentNumber);
+		assertThat(user.get()
+			.getStudentNumber()).isEqualTo(studentNumber);
 	}
 
 	@DisplayName("아이디가 이미 존재하는지 확인한다.")
@@ -59,7 +58,7 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		userRepository.save(user);
 
 		//when
-		boolean check= userRepository.existsByAuthId(authId);
+		boolean check = userRepository.existsByAuthId(authId);
 
 		//then
 		assertThat(check).isTrue();
@@ -74,7 +73,7 @@ class UserRepositoryTest extends PersistenceTestSupport {
 		userRepository.save(user);
 
 		//when
-		boolean check= userRepository.existsByStudentNumber(studentNumber);
+		boolean check = userRepository.existsByStudentNumber(studentNumber);
 
 		//then
 		assertThat(check).isTrue();

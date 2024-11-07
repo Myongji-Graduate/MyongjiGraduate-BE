@@ -2,17 +2,15 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class TakenLectureInventoryTest {
 
@@ -27,7 +25,8 @@ class TakenLectureInventoryTest {
 		Set<TakenLecture> cultureLectures = takenLectureInventory.getCultureLectures();
 
 		//then
-		assertThat(cultureLectures).hasSize(takenLectureInventory.getTakenLectures().size());
+		assertThat(cultureLectures).hasSize(takenLectureInventory.getTakenLectures()
+			.size());
 	}
 
 	@DisplayName("수강과목 목록에서 처리 완료된 수강과목들을 제거한다.")
@@ -35,7 +34,8 @@ class TakenLectureInventoryTest {
 	void handleFinishedTakenLectures() {
 		//given
 		TakenLectureInventory takenLectureInventory = getTakenLectureInventory();
-		int beforeHandleSize = takenLectureInventory.getTakenLectures().size();
+		int beforeHandleSize = takenLectureInventory.getTakenLectures()
+			.size();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>(Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
@@ -77,7 +77,8 @@ class TakenLectureInventoryTest {
 	void sync() {
 		//given
 		TakenLectureInventory takenLectureInventory = getTakenLectureInventory();
-		int beforeHandleSize = takenLectureInventory.getTakenLectures().size();
+		int beforeHandleSize = takenLectureInventory.getTakenLectures()
+			.size();
 		Set<Lecture> finishedLectures = new HashSet<>(Set.of(
 			mockLectureMap.get("KMA00101"),
 			mockLectureMap.get("KMA02102")

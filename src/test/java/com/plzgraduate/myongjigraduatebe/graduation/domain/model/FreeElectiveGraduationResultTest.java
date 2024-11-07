@@ -2,16 +2,8 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.FREE_ELECTIVE;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.*;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.SCIENCE_TECHNOLOGY;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
@@ -20,6 +12,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class FreeElectiveGraduationResultTest {
 
@@ -44,20 +42,26 @@ class FreeElectiveGraduationResultTest {
 			.detailCategory(List.of(
 				DetailCategoryResult.builder()
 					.detailCategoryName(CHRISTIAN_A.getName())
-					.freeElectiveLeftCredit(3).build(),
+					.freeElectiveLeftCredit(3)
+					.build(),
 				DetailCategoryResult.builder()
 					.detailCategoryName(SCIENCE_TECHNOLOGY.getName())
-					.freeElectiveLeftCredit(3).build()
-			)).build();
+					.freeElectiveLeftCredit(3)
+					.build()
+			))
+			.build();
 
-		int remainCreditByTakenLectures = takenLectureInventory.getTakenLectures().stream()
-			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
+		int remainCreditByTakenLectures = takenLectureInventory.getTakenLectures()
+			.stream()
+			.mapToInt(takenLecture -> takenLecture.getLecture()
+				.getCredit())
 			.sum();
 		int freeElectiveLeftCredit = detailGraduationResult.getFreeElectiveLeftCredit();
 		int leftNormalCultureCredit = 5;
 
 		//when
-		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(7,
+		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
+			7,
 			takenLectureInventory, List.of(detailGraduationResult),
 			leftNormalCultureCredit);
 

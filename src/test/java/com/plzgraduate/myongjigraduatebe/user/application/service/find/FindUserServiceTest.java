@@ -5,8 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 @ExtendWith(MockitoExtension.class)
 class FindUserServiceTest {
+
 	@Mock
 	private FindUserPort findUserPort;
 
@@ -110,10 +109,12 @@ class FindUserServiceTest {
 	@Test
 	void findNonUserByStudentNumber() {
 		//given
-		given(findUserPort.findUserByStudentNumber("")).willThrow(new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+		given(findUserPort.findUserByStudentNumber("")).willThrow(
+			new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
 		//when //then
-		assertThatThrownBy(() -> findUserService.findUserByStudentNumber("")).isInstanceOf(IllegalArgumentException.class)
+		assertThatThrownBy(() -> findUserService.findUserByStudentNumber("")).isInstanceOf(
+				IllegalArgumentException.class)
 			.hasMessage("해당 사용자를 찾을 수 없습니다.");
 	}
 }

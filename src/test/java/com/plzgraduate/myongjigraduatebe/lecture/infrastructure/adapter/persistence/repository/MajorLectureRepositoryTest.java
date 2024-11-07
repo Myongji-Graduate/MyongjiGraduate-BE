@@ -2,17 +2,13 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.MajorLectureRepository;
-import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class MajorLectureRepositoryTest extends PersistenceTestSupport {
 
@@ -25,7 +21,7 @@ class MajorLectureRepositoryTest extends PersistenceTestSupport {
 	@DisplayName("유저의 전공에 해당하는 전공 과목을 조회한다.")
 	@Test
 	void findAllByMajor() {
-	    //given
+		//given
 		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
 			.lectureCode("TEST")
 			.build();
@@ -33,15 +29,17 @@ class MajorLectureRepositoryTest extends PersistenceTestSupport {
 
 		MajorLectureJpaEntity majorLectureJpaEntityA = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntity)
-			.major("응용소프트웨어").build();
+			.major("응용소프트웨어")
+			.build();
 		MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntity)
-			.major("데이터테크놀로지").build();
+			.major("데이터테크놀로지")
+			.build();
 		majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
 
 		String major = "응용소프트웨어";
 
-	    //when
+		//when
 		List<MajorLectureJpaEntity> majorLectures = majorLectureRepository.findAllByMajor(major);
 
 		//then

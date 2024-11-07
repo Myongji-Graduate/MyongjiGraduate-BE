@@ -2,14 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademi
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.BasicAcademicalLectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
@@ -21,6 +13,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("사회과학대의 학문기초교양 결과를 반환한다.")
 class SocialScienceBasicAcademicManagerTest {
@@ -28,6 +26,7 @@ class SocialScienceBasicAcademicManagerTest {
 	@DisplayName("2023년도 1학기 이후 교과목을 포함한다.")
 	@Nested
 	class 이십삼년도_이후_교과목_포함 {
+
 		User user = UserFixture.행정학과_21학번();
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.사회과학대_학문기초교양();
@@ -46,10 +45,12 @@ class SocialScienceBasicAcademicManagerTest {
 			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+				user,
 				takenLectureInventory, basicAcademicalLectures, 12);
 
-			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
+			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory()
+				.get(0);
 
 			//then
 			assertThat(detailGraduationResult)
@@ -79,9 +80,11 @@ class SocialScienceBasicAcademicManagerTest {
 			BasicAcademicalGraduationManager manager = new SocialScienceBasicAcademicGraduationManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+				user,
 				takenLectureInventory, basicAcademicalLectures, 12);
-			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
+			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory()
+				.get(0);
 
 			//then
 			assertThat(detailGraduationResult)

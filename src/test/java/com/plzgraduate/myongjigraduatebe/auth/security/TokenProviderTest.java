@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.auth.security;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class TokenProviderTest {
+
 	@Mock
 	private JwtProperties jwtProperties;
 	@InjectMocks

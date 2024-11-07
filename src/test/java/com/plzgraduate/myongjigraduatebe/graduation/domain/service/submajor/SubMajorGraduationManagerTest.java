@@ -4,12 +4,6 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
@@ -19,6 +13,10 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class SubMajorGraduationManagerTest {
 
@@ -28,13 +26,34 @@ class SubMajorGraduationManagerTest {
 		//given
 		User user = UserFixture.응용소프트웨어학과_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01313").credit(3).build(), 2019, Semester.FIRST),
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01310").credit(3).build(), 2020, Semester.FIRST),
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01309").credit(3).build(), 2021, Semester.FIRST),
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01306").credit(3).build(), 2021, Semester.SECOND),
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01304").credit(3).build(), 2022, Semester.FIRST),
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01212").credit(3).build(), 2023, Semester.FIRST),
-			TakenLecture.of(user, Lecture.builder().lectureCode("HEC01209").credit(3).build(), 2023, Semester.SECOND)
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01313")
+				.credit(3)
+				.build(), 2019, Semester.FIRST),
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01310")
+				.credit(3)
+				.build(), 2020, Semester.FIRST),
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01309")
+				.credit(3)
+				.build(), 2021, Semester.FIRST),
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01306")
+				.credit(3)
+				.build(), 2021, Semester.SECOND),
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01304")
+				.credit(3)
+				.build(), 2022, Semester.FIRST),
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01212")
+				.credit(3)
+				.build(), 2023, Semester.FIRST),
+			TakenLecture.of(user, Lecture.builder()
+				.lectureCode("HEC01209")
+				.credit(3)
+				.build(), 2023, Semester.SECOND)
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> graduationLectures = lectureSet();
@@ -44,18 +63,22 @@ class SubMajorGraduationManagerTest {
 		GraduationManager<MajorLecture> subMajorManager = new SubMajorGraduationManager();
 
 		//when
-		DetailGraduationResult detailGraduationResult = subMajorManager.createDetailGraduationResult(user,
+		DetailGraduationResult detailGraduationResult = subMajorManager.createDetailGraduationResult(
+			user,
 			takenLectureInventory, graduationLectures, subMajorGraduationCredit);
 
 		//then
 		int majorCredit = 3;
 		assertThat(detailGraduationResult.getDetailCategory()).hasSize(1)
-			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
+			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits",
+				"takenCredits")
 			.contains(
-				tuple("전공선택", true, true, subMajorGraduationCredit, majorCredit * takenLecturesCount));
+				tuple("전공선택", true, true, subMajorGraduationCredit,
+					majorCredit * takenLecturesCount));
 		assertThat(detailGraduationResult)
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
-			.contains(SUB_MAJOR, true, subMajorGraduationCredit, (double)majorCredit * takenLecturesCount);
+			.contains(SUB_MAJOR, true, subMajorGraduationCredit,
+				(double) majorCredit * takenLecturesCount);
 
 	}
 

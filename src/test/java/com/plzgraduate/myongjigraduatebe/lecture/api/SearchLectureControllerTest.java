@@ -11,15 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.SearchedLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class SearchLectureControllerTest extends WebAdaptorTestSupport {
 
@@ -28,8 +26,10 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 	@Test
 	void searchLecture() throws Exception {
 		//given
-		List<SearchedLectureDto> searchedLectures = List.of(SearchedLectureDto.of(true, Lecture.from("code")));
-		given(searchLectureUseCase.searchLectures(anyLong(), any(), any())).willReturn(searchedLectures);
+		List<SearchedLectureDto> searchedLectures = List.of(
+			SearchedLectureDto.of(true, Lecture.from("code")));
+		given(searchLectureUseCase.searchLectures(anyLong(), any(), any())).willReturn(
+			searchedLectures);
 
 		//when //then
 		mockMvc.perform(get("/api/v1/lectures")
@@ -40,7 +40,8 @@ class SearchLectureControllerTest extends WebAdaptorTestSupport {
 			.andExpect(jsonPath("$", hasSize(searchedLectures.size())))
 			.andExpect(jsonPath("$.[0].taken").value(true));
 
-		then(searchLectureUseCase).should(times(1)).searchLectures(anyLong(), any(), any());
+		then(searchLectureUseCase).should(times(1))
+			.searchLectures(anyLong(), any(), any());
 	}
 
 	@WithMockAuthenticationUser

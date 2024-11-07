@@ -2,12 +2,6 @@ package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
@@ -16,6 +10,10 @@ import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
+import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 
@@ -61,7 +59,7 @@ class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 	@DisplayName("유저의 ParsingHistory를 삭제한다.")
 	@Test
 	void deleteUserParsingTextHistory() {
-	    //given
+		//given
 		UserJpaEntity userJpaEntity = userRepository.save(UserJpaEntity.builder()
 			.studentNumber("test")
 			.authId("test")
@@ -83,7 +81,7 @@ class ParsingTextHistoryAdapterTest extends PersistenceTestSupport {
 		//when
 		parsingTextHistoryAdapter.deleteUserParsingTextHistory(user);
 
-	    //then
+		//then
 		assertThat(parsingTextRepository.findAll()).isEmpty();
 	}
 }

@@ -1,15 +1,15 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
+import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 import java.util.Collections;
-
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
-import com.plzgraduate.myongjigraduatebe.auth.security.JwtAuthenticationToken;
 
 public class WithMockAuthenticationUserSecurityContext
 	implements WithSecurityContextFactory<WithMockAuthenticationUser> {
+
 	@Override
 	public SecurityContext createSecurityContext(WithMockAuthenticationUser annotation) {
 		SecurityContext context = SecurityContextHolder.createEmptyContext();

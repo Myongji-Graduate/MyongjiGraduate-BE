@@ -4,22 +4,19 @@ import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory.SOCIETY_COMMUNITY;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.FindCoreCulturePersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CoreCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CoreCultureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class FindCoreCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
@@ -48,12 +45,14 @@ class FindCoreCulturePersistenceAdapterTest extends PersistenceTestSupport {
 			.lectureJpaEntity(lectureJpaEntityA)
 			.coreCultureCategory(CULTURE_ART)
 			.startEntryYear(16)
-			.endEntryYear(18).build();
+			.endEntryYear(18)
+			.build();
 		CoreCultureJpaEntity coreCultureJpaEntityB = CoreCultureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
 			.coreCultureCategory(SOCIETY_COMMUNITY)
 			.startEntryYear(19)
-			.endEntryYear(23).build();
+			.endEntryYear(23)
+			.build();
 		coreCultureRepository.saveAll(List.of(coreCultureJpaEntityA, coreCultureJpaEntityB));
 
 		//when

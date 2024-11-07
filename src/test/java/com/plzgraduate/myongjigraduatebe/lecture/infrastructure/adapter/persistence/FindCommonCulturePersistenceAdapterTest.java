@@ -3,13 +3,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
@@ -18,6 +11,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
@@ -40,7 +38,8 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 		createCommonCultures();
 
 		//when
-		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(basicEngUser);
+		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(
+			basicEngUser);
 
 		//then
 		assertThat(commonCultures).hasSize(2)
@@ -56,7 +55,8 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 		createCommonCultures();
 
 		//when
-		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(eng12User);
+		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(
+			eng12User);
 
 		//then
 		assertThat(commonCultures).hasSize(1)
@@ -72,7 +72,8 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 		createCommonCultures();
 
 		//when
-		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(eng34User);
+		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(
+			eng34User);
 
 		//then
 		assertThat(commonCultures).hasSize(1)
@@ -88,7 +89,8 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 		createCommonCultures();
 
 		//when
-		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(engFreeUser);
+		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(
+			engFreeUser);
 
 		//then
 		assertThat(commonCultures).hasSize(0);
@@ -110,17 +112,20 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 			.lectureJpaEntity(lectureJpaEntityA)
 			.commonCultureCategory(ENGLISH)
 			.startEntryYear(18)
-			.endEntryYear(23).build();
+			.endEntryYear(23)
+			.build();
 		CommonCultureJpaEntity commonCultureJpaEntityB = CommonCultureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityB)
 			.commonCultureCategory(ENGLISH)
 			.startEntryYear(16)
-			.endEntryYear(17).build();
+			.endEntryYear(17)
+			.build();
 		CommonCultureJpaEntity commonCultureJpaEntityC = CommonCultureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityC)
 			.commonCultureCategory(ENGLISH)
 			.startEntryYear(16)
-			.endEntryYear(99).build();
+			.endEntryYear(99)
+			.build();
 		commonCultureRepository.saveAll(
 			List.of(commonCultureJpaEntityA, commonCultureJpaEntityB, commonCultureJpaEntityC));
 	}

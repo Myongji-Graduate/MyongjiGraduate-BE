@@ -1,17 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.check;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.StudentNumberDuplicationResponse;
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.StudentNumberDuplicationResponse;
-import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
 
 @ExtendWith(MockitoExtension.class)
 class CheckStudentNumberDuplicationServiceTest {
@@ -28,7 +27,8 @@ class CheckStudentNumberDuplicationServiceTest {
 		//given
 		String studentNumber = "60191656";
 		boolean studentNumberDuplication = true;
-		given(checkUserPort.checkDuplicateStudentNumber(studentNumber)).willReturn(studentNumberDuplication);
+		given(checkUserPort.checkDuplicateStudentNumber(studentNumber)).willReturn(
+			studentNumberDuplication);
 
 		//when
 		StudentNumberDuplicationResponse studentNumberDuplicationResponse = checkStudentNumberDuplicationService.checkStudentNumberDuplication(

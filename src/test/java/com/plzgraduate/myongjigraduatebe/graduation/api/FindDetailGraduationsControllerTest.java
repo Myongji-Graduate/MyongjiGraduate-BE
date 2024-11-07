@@ -12,17 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 
@@ -32,10 +28,14 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 	void getCommonDetailGraduations() throws Exception {
 		//given
 		List<DetailCategoryResult> detailCategories = List.of(
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build()
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build()
 		);
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.graduationCategory(COMMON_CULTURE)
@@ -65,10 +65,14 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 	void getCoreDetailGraduations() throws Exception {
 		//given
 		List<DetailCategoryResult> detailCategories = List.of(
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build()
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build()
 		);
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.graduationCategory(CORE_CULTURE)
@@ -98,10 +102,14 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 	void getPrimaryMandatoryMajorDetailGraduations() throws Exception {
 		//given
 		List<DetailCategoryResult> detailCategories = List.of(
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build()
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build()
 		);
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.graduationCategory(PRIMARY_MANDATORY_MAJOR)
@@ -131,10 +139,14 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 	void getPrimaryElectiveMajorDetailGraduations() throws Exception {
 		//given
 		List<DetailCategoryResult> detailCategories = List.of(
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build()
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build()
 		);
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.graduationCategory(PRIMARY_ELECTIVE_MAJOR)
@@ -164,10 +176,14 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 	void getPrimaryBasicAcademicalCultureMajorDetailGraduations() throws Exception {
 		//given
 		List<DetailCategoryResult> detailCategories = List.of(
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build(),
-			DetailCategoryResult.builder().build()
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build(),
+			DetailCategoryResult.builder()
+				.build()
 		);
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
 			.graduationCategory(PRIMARY_BASIC_ACADEMICAL_CULTURE)

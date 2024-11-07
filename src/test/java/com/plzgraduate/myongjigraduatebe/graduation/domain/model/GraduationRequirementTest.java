@@ -1,13 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.DualMajorGraduationRequirementType.*;
-import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.*;
-import static org.assertj.core.api.Assertions.*;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.DualMajorGraduationRequirementType.BUSINESS;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.DualMajorGraduationRequirementType.ICT;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class GraduationRequirementTest {
 
@@ -19,7 +19,8 @@ class GraduationRequirementTest {
 		int beforeTransferNormalCultureCredit = 0;
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
 			.commonCultureCredit(beforeTransferCommonCultureCredit)
-			.normalCultureCredit(beforeTransferNormalCultureCredit).build();
+			.normalCultureCredit(beforeTransferNormalCultureCredit)
+			.build();
 
 		//when
 		graduationRequirement.transferEnglishCreditCommonToNormal();
@@ -49,7 +50,8 @@ class GraduationRequirementTest {
 			.primaryBasicAcademicalCultureCredit(10)
 			.dualBasicAcademicalCultureCredit(10)
 			.normalCultureCredit(10)
-			.freeElectiveCredit(10).build();
+			.freeElectiveCredit(10)
+			.build();
 
 		//when
 		graduationRequirement.modifyCreditForDualMajor(user);
@@ -68,7 +70,8 @@ class GraduationRequirementTest {
 	void deleteFreeElectiveCredit() {
 		//given
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
-			.freeElectiveCredit(10).build();
+			.freeElectiveCredit(10)
+			.build();
 
 		//when
 		graduationRequirement.modifyCreditForSubMajor();

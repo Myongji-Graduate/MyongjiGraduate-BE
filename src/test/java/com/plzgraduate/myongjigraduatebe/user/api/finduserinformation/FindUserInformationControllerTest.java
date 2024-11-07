@@ -6,13 +6,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 
@@ -34,7 +33,8 @@ class FindUserInformationControllerTest extends WebAdaptorTestSupport {
 			.studentCategory(StudentCategory.NORMAL)
 			.totalCredit(134)
 			.takenCredit(130.0)
-			.graduated(false).build();
+			.graduated(false)
+			.build();
 
 		given(findUserInformationUseCase.findUserInformation(userId)).willReturn(user);
 

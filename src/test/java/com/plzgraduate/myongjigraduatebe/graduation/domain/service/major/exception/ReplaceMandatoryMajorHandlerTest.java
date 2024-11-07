@@ -2,13 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.except
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
@@ -20,9 +13,15 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("21학번 이전 철학과 학생의 경우 폐지된 전공필수의 대체 과목을 인정한다.")
 class ReplaceMandatoryMajorHandlerTest {
+
 	private static final User user = UserFixture.철학과_20학번();
 	private static final MajorType MAJOR_TYPE = MajorType.PRIMARY;
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
@@ -94,8 +93,10 @@ class ReplaceMandatoryMajorHandlerTest {
 		//then
 		assertThat(isCompleteMandatorySpecialCase).isTrue();
 		assertThat(removedMandatoryTotalCredit).isZero();
-		assertThat(mandatoryLectures).hasSize(5).contains(mockLectureMap.get("HAI01348"));
-		assertThat(electiveLectures).hasSize(1).contains(mockLectureMap.get("HAI01247"));
+		assertThat(mandatoryLectures).hasSize(5)
+			.contains(mockLectureMap.get("HAI01348"));
+		assertThat(electiveLectures).hasSize(1)
+			.contains(mockLectureMap.get("HAI01247"));
 	}
 
 	@DisplayName("답사1,답사2를 수강했을 못했고, 대체과목을 수강하지 못했을 경우 대체과목은 전공필수 과목으로 이동한다.")
