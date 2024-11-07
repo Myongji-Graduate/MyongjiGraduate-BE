@@ -3,13 +3,12 @@ package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persist
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.entity.CompletedCreditJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class CompletedCreditPersistenceMapperTest {
 
@@ -72,5 +71,4 @@ class CompletedCreditPersistenceMapperTest {
 		assertThat(completedCreditJpaEntity.getTakenCredit()).isEqualTo(
 			completedCredit.getTakenCredit());
 	}
-
 }

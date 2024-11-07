@@ -104,7 +104,6 @@ class GenerateOrModifyCompletedCreditServiceTest {
 					(double) eachDetailGraduationResultTakenCredit),
 				tuple(GraduationCategory.FREE_ELECTIVE, eachDetailGraduationResultTotalCredit,
 					(double) eachDetailGraduationResultTakenCredit));
-
 	}
 
 	private List<DetailGraduationResult> createDetailGraduationResults(int totalCredit,

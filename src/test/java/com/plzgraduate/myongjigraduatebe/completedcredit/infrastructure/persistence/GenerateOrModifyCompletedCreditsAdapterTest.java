@@ -60,5 +60,4 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 			.extracting("userJpaEntity.id")
 			.contains(user.getId());
 	}
-
 }

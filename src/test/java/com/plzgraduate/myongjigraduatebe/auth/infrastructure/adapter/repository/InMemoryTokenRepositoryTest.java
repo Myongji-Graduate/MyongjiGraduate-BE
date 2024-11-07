@@ -49,5 +49,4 @@ class InMemoryTokenRepositoryTest {
 		assertThat(userIdFromCache).isPresent();
 		assertThat(userId2).isEqualTo(userIdFromCache.get());
 	}
-
 }

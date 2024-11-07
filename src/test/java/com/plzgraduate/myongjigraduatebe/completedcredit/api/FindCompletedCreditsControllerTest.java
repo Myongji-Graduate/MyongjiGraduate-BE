@@ -47,9 +47,7 @@ class FindCompletedCreditsControllerTest extends WebAdaptorTestSupport {
 			.andExpect(jsonPath("$[1].totalCredit").value(10))
 			.andExpect(jsonPath("$[1].takenCredit").value(5))
 			.andExpect(jsonPath("$[1].completed").value(false));
-
 	}
-
 
 	@WithMockAuthenticationUser
 	@DisplayName("유저의 이수 학점을 조회 시 totalCredit이 0인 CompletedCredit은 조회하지 않는다.")

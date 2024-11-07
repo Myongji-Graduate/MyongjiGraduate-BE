@@ -73,7 +73,6 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		assertFalse(calculateBasicAcademicalCultureGraduationService.supports(COMMON_CULTURE));
 	}
 
-
 	@DisplayName("카테고리별 계산 시 유저의 핵심교양 상세 졸업결과를 계산한다.")
 	@Test
 	void shouldCalculateSingleDetailGraduationIfPrimaryCategory() {

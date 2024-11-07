@@ -88,5 +88,4 @@ class CalculateCommonCultureGraduationServiceTest {
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 			.contains(COMMON_CULTURE, false, 17, 2.0);
 	}
-
 }

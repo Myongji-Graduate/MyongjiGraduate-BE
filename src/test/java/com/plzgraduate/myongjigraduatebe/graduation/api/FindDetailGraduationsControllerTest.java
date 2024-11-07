@@ -221,5 +221,4 @@ class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.errorCode").value(INVALIDATED_GRADUATION_CATEGORY.toString()));
 	}
-
 }

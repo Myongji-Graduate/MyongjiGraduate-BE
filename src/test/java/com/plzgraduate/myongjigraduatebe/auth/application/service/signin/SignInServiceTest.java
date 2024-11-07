@@ -33,7 +33,6 @@ class SignInServiceTest {
 	@InjectMocks
 	private SignInService signInService;
 
-
 	@DisplayName("로그인을 진행한다.")
 	@Test
 	void singIn() {
@@ -61,5 +60,4 @@ class SignInServiceTest {
 		assertThat(tokenResponse.getAccessToken()).isEqualTo(accessToken);
 		assertThat(tokenResponse.getRefreshToken()).isEqualTo(refreshToken);
 	}
-
 }

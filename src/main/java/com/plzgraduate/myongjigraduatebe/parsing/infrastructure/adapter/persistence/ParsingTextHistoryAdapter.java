@@ -7,7 +7,6 @@ import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.mapper.ParsingTextHistoryMapper;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter

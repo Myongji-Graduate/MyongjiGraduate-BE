@@ -65,6 +65,5 @@ class TokenControllerTest extends WebAdaptorTestSupport {
 			.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.errorCode", is("유효하지 않은 토큰입니다.")));
-		;
 	}
 }

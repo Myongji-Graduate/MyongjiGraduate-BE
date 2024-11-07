@@ -84,5 +84,4 @@ class CalculateCoreCultureGraduationServiceTest {
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 			.contains(CORE_CULTURE, false, 12, 3.0);
 	}
-
 }

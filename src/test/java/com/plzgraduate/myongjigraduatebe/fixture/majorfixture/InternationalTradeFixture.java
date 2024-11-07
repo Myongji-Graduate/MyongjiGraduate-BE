@@ -7,6 +7,4 @@ import java.util.Map;
 public class InternationalTradeFixture {
 
 	public static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-
-
 }

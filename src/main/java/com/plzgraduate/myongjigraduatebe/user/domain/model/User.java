@@ -19,6 +19,7 @@ public class User {
 	private final String studentNumber;
 	private final int entryYear;
 	private final Instant createdAt;
+	private final Instant updatedAt;
 	private String password;
 	private String name;
 	private String primaryMajor;
@@ -28,7 +29,6 @@ public class User {
 	private int totalCredit;
 	private double takenCredit;
 	private boolean graduated;
-	private Instant updatedAt;
 
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name,

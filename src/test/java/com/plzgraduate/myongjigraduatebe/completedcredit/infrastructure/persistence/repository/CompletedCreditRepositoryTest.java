@@ -93,5 +93,4 @@ class CompletedCreditRepositoryTest extends PersistenceTestSupport {
 			userJpaEntity);
 		assertThat(foundCompletedCredits).isEmpty();
 	}
-
 }

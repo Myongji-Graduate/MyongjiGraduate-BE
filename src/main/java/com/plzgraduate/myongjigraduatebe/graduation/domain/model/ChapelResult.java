@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-
 import lombok.Builder;
 import lombok.Getter;
 

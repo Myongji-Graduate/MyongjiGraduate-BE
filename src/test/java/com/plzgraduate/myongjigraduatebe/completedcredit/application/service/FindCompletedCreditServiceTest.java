@@ -48,5 +48,4 @@ class FindCompletedCreditServiceTest {
 		//then
 		assertThat(result).hasSize(3);
 	}
-
 }
