@@ -17,7 +17,8 @@ public class TakenLectureInformation {
 		this.semester = semester;
 	}
 
-	public static TakenLectureInformation createTakenLectureInformation(String lectureCode, int year, Semester semester) {
+	public static TakenLectureInformation createTakenLectureInformation(String lectureCode,
+		int year, Semester semester) {
 		return TakenLectureInformation.builder()
 			.lectureCode(lectureCode)
 			.year(year)

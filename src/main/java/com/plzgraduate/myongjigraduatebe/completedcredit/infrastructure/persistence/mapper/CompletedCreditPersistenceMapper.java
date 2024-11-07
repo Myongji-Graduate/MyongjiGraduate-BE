@@ -1,11 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.mapper;
 
-import org.springframework.stereotype.Component;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.entity.CompletedCreditJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CompletedCreditPersistenceMapper {
@@ -15,7 +14,8 @@ public class CompletedCreditPersistenceMapper {
 			.id(completedCreditJpaEntity.getId())
 			.graduationCategory(completedCreditJpaEntity.getGraduationCategory())
 			.totalCredit(completedCreditJpaEntity.getTotalCredit())
-			.takenCredit(completedCreditJpaEntity.getTakenCredit()).build();
+			.takenCredit(completedCreditJpaEntity.getTakenCredit())
+			.build();
 	}
 
 	public CompletedCreditJpaEntity mapToJpaEntity(User user, CompletedCredit completedCredit) {
@@ -26,6 +26,7 @@ public class CompletedCreditPersistenceMapper {
 				.id(user.getId())
 				.build())
 			.totalCredit(completedCredit.getTotalCredit())
-			.takenCredit(completedCredit.getTakenCredit()).build();
+			.takenCredit(completedCredit.getTakenCredit())
+			.build();
 	}
 }

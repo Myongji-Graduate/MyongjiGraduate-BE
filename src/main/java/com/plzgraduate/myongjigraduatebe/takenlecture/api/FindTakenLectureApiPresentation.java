@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.api;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.response.FindTakenLectureResponse;
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

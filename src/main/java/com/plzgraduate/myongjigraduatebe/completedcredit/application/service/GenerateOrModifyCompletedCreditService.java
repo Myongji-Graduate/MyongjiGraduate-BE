@@ -5,15 +5,6 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.FREE_ELECTIVE;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.NORMAL_CULTURE;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.GenerateOrModifyCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
@@ -24,8 +15,14 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @Transactional
@@ -43,23 +40,29 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		GraduationResult graduationResult = calculateGraduationUseCase.calculateGraduation(user);
 		List<DetailGraduationResult> detailGraduationResults = graduationResult.getDetailGraduationResults();
 
-		List<CompletedCredit> updatedCompletedCredits = createGeneralCompletedCreditModel(completedCredits,
+		List<CompletedCredit> updatedCompletedCredits = createGeneralCompletedCreditModel(
+			completedCredits,
 			detailGraduationResults);
-		CompletedCredit chapelCompletedCreditModel = createOrUpdateChapelCompletedCreditModel(completedCredits,
+		CompletedCredit chapelCompletedCreditModel = createOrUpdateChapelCompletedCreditModel(
+			completedCredits,
 			graduationResult);
 		CompletedCredit normalCultureCompletedCreditModel = createOrUpdateNormalCultureCompletedCreditModel(
 			completedCredits, graduationResult);
 		CompletedCredit freeElectiveCompletedCreditModel = createOrUpdateFreeElectiveCompletedCreditModel(
 			completedCredits, graduationResult);
 
-		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(updatedCompletedCredits);
+		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(
+			updatedCompletedCredits);
 		allCompletedCreditModels.addAll(
-			List.of(chapelCompletedCreditModel, normalCultureCompletedCreditModel, freeElectiveCompletedCreditModel));
-		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, allCompletedCreditModels);
+			List.of(chapelCompletedCreditModel, normalCultureCompletedCreditModel,
+				freeElectiveCompletedCreditModel));
+		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user,
+			allCompletedCreditModels);
 	}
 
 	private List<CompletedCredit> createGeneralCompletedCreditModel(
-		List<CompletedCredit> completedCredits, List<DetailGraduationResult> detailGraduationResults) {
+		List<CompletedCredit> completedCredits,
+		List<DetailGraduationResult> detailGraduationResults) {
 		Map<DetailGraduationResult, Optional<CompletedCredit>> resultMap = detailGraduationResults.stream()
 			.collect(Collectors.toMap(
 				Function.identity(),
@@ -68,54 +71,72 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 						.equals(detailGraduationResult.getGraduationCategory()))
 					.findFirst()
 			));
-		return resultMap.keySet().stream()
+		return resultMap.keySet()
+			.stream()
 			.map(detailGraduationResult -> createCompletedCreditModel(detailGraduationResult,
 				resultMap.get(detailGraduationResult)))
 			.collect(Collectors.toList());
 	}
 
-	private CompletedCredit createCompletedCreditModel(DetailGraduationResult detailGraduationResult,
+	private CompletedCredit createCompletedCreditModel(
+		DetailGraduationResult detailGraduationResult,
 		Optional<CompletedCredit> completedCredit) {
 		return CompletedCredit.builder()
-			.id(completedCredit.map(CompletedCredit::getId).orElse(null))
+			.id(completedCredit.map(CompletedCredit::getId)
+				.orElse(null))
 			.totalCredit(detailGraduationResult.getTotalCredit())
 			.takenCredit(detailGraduationResult.getTakenCredit())
 			.graduationCategory(detailGraduationResult.getGraduationCategory())
 			.build();
 	}
 
-	private CompletedCredit createOrUpdateChapelCompletedCreditModel(List<CompletedCredit> completedCredits,
+	private CompletedCredit createOrUpdateChapelCompletedCreditModel(
+		List<CompletedCredit> completedCredits,
 		GraduationResult graduationResult) {
-		Optional<CompletedCredit> chapelCompletedCredit = findCompletedCreditByCategory(completedCredits, CHAPEL);
+		Optional<CompletedCredit> chapelCompletedCredit = findCompletedCreditByCategory(
+			completedCredits, CHAPEL);
 		return chapelCompletedCredit.map(
 				completedCredit -> updateCompletedCredit(completedCredit, GRADUATION_COUNT / 2,
-					graduationResult.getChapelResult().getTakenChapelCredit()))
-			.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(graduationResult.getChapelResult()));
+					graduationResult.getChapelResult()
+						.getTakenChapelCredit()))
+			.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
+				graduationResult.getChapelResult()));
 	}
 
-	private CompletedCredit createOrUpdateNormalCultureCompletedCreditModel(List<CompletedCredit> completedCredits,
+	private CompletedCredit createOrUpdateNormalCultureCompletedCreditModel(
+		List<CompletedCredit> completedCredits,
 		GraduationResult graduationResult) {
-		Optional<CompletedCredit> normalCultureCompletedCredit = findCompletedCreditByCategory(completedCredits,
+		Optional<CompletedCredit> normalCultureCompletedCredit = findCompletedCreditByCategory(
+			completedCredits,
 			NORMAL_CULTURE);
-		return normalCultureCompletedCredit.map(completedCredit -> updateCompletedCredit(completedCredit,
-				graduationResult.getNormalCultureGraduationResult().getTotalCredit(),
-				graduationResult.getNormalCultureGraduationResult().getTakenCredit()))
+		return normalCultureCompletedCredit.map(
+				completedCredit -> updateCompletedCredit(completedCredit,
+					graduationResult.getNormalCultureGraduationResult()
+						.getTotalCredit(),
+					graduationResult.getNormalCultureGraduationResult()
+						.getTakenCredit()))
 			.orElseGet(() -> CompletedCredit.createNormalCultureCompletedCreditModel(
 				graduationResult.getNormalCultureGraduationResult()));
 	}
 
-	private CompletedCredit createOrUpdateFreeElectiveCompletedCreditModel(List<CompletedCredit> completedCredits,
+	private CompletedCredit createOrUpdateFreeElectiveCompletedCreditModel(
+		List<CompletedCredit> completedCredits,
 		GraduationResult graduationResult) {
-		Optional<CompletedCredit> freeElectiveCompletedCredit = findCompletedCreditByCategory(completedCredits,
+		Optional<CompletedCredit> freeElectiveCompletedCredit = findCompletedCreditByCategory(
+			completedCredits,
 			FREE_ELECTIVE);
-		return freeElectiveCompletedCredit.map(completedCredit -> updateCompletedCredit(completedCredit,
-				graduationResult.getFreeElectiveGraduationResult().getTotalCredit(),
-				graduationResult.getFreeElectiveGraduationResult().getTakenCredit()))
+		return freeElectiveCompletedCredit.map(
+				completedCredit -> updateCompletedCredit(completedCredit,
+					graduationResult.getFreeElectiveGraduationResult()
+						.getTotalCredit(),
+					graduationResult.getFreeElectiveGraduationResult()
+						.getTakenCredit()))
 			.orElseGet(() -> CompletedCredit.createFreeElectiveCompletedCreditModel(
 				graduationResult.getFreeElectiveGraduationResult()));
 	}
 
-	private Optional<CompletedCredit> findCompletedCreditByCategory(List<CompletedCredit> completedCredits,
+	private Optional<CompletedCredit> findCompletedCreditByCategory(
+		List<CompletedCredit> completedCredits,
 		GraduationCategory category) {
 		return completedCredits.stream()
 			.filter(completedCredit -> completedCredit.getGraduationCategory() == category)

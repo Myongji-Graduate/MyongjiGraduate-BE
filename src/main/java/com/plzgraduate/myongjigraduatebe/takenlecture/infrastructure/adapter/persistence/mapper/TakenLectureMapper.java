@@ -1,13 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.mapper;
 
-import org.springframework.stereotype.Component;
-
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TakenLectureMapper {

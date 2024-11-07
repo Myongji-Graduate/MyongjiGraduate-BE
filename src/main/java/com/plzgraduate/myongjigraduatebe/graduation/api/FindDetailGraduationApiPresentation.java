@@ -1,14 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.graduation.api.dto.response.DetailGraduationResultResponse;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Graduations")
 public interface FindDetailGraduationApiPresentation {

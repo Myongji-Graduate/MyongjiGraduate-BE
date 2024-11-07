@@ -3,12 +3,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademi
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.SOCIAL_SCIENCE;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.findBelongingCollege;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.stereotype.Component;
-
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
@@ -16,9 +10,14 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.springframework.stereotype.Component;
 
 @Component
-public class SocialScienceBasicAcademicGraduationManager implements BasicAcademicalGraduationManager {
+public class SocialScienceBasicAcademicGraduationManager implements
+	BasicAcademicalGraduationManager {
 
 	private static final int TWENTY_THREE_YEAR = 2023;
 	private static final Set<Lecture> lecturesAcceptTakenAfter2023 = Set.of(
@@ -40,14 +39,16 @@ public class SocialScienceBasicAcademicGraduationManager implements BasicAcademi
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, Set<BasicAcademicalCultureLecture> graduationLectures,
+		TakenLectureInventory takenLectureInventory,
+		Set<BasicAcademicalCultureLecture> graduationLectures,
 		int basicAcademicalCredit) {
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 
-		takenLectureInventory.getTakenLectures().stream()
+		takenLectureInventory.getTakenLectures()
+			.stream()
 			.filter(takenLecture -> basicAcademicalLectures.contains(takenLecture.getLecture()))
 			.filter(takenLecture -> lecturesAcceptTakenAfter2023.contains(takenLecture.getLecture())
 				&& !takenLecture.takenAfter(TWENTY_THREE_YEAR))

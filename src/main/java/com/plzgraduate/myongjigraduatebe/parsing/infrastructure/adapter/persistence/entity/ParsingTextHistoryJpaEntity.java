@@ -1,5 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity;
 
+import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,11 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
-import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
@@ -21,8 +16,10 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateS
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @Transactional
@@ -40,13 +37,15 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	@Override
 	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
+		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
+			user.getId());
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
 			takenLectureInventory, graduationRequirement);
 
-		GraduationResult graduationResult = generateGraduationResult(chapelResult, detailGraduationResults,
+		GraduationResult graduationResult = generateGraduationResult(chapelResult,
+			detailGraduationResults,
 			takenLectureInventory, graduationRequirement);
 		handleDuplicatedTakenCredit(user, graduationResult);
 		updateUserGraduationInformation(user, graduationResult);
@@ -101,14 +100,17 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private List<DetailGraduationResult> generateMajorDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculateMajorGraduationService.calculateAllDetailGraduation(user, takenLectureInventory,
+		return calculateMajorGraduationService.calculateAllDetailGraduation(user,
+			takenLectureInventory,
 			graduationRequirement);
 	}
 
 	private GraduationResult generateGraduationResult(ChapelResult chapelResult,
-		List<DetailGraduationResult> detailGraduationResults, TakenLectureInventory takenLectureInventory,
+		List<DetailGraduationResult> detailGraduationResults,
+		TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
-		GraduationResult graduationResult = GraduationResult.create(chapelResult, detailGraduationResults);
+		GraduationResult graduationResult = GraduationResult.create(chapelResult,
+			detailGraduationResults);
 		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
 		graduationResult.checkGraduated(graduationRequirement);
 		return graduationResult;
@@ -117,15 +119,18 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private void handleDuplicatedTakenCredit(User user, GraduationResult graduationResult) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			int duplicatedBasicAcademicalCultureCredit =
-				findBasicAcademicalCulturePort.findDuplicatedLecturesBetweenMajors(user).stream()
-					.mapToInt(basicAcademicalCulture -> basicAcademicalCulture.getLecture().getCredit())
+				findBasicAcademicalCulturePort.findDuplicatedLecturesBetweenMajors(user)
+					.stream()
+					.mapToInt(basicAcademicalCulture -> basicAcademicalCulture.getLecture()
+						.getCredit())
 					.sum();
 			graduationResult.deductDuplicatedCredit(duplicatedBasicAcademicalCultureCredit);
 		}
 	}
 
 	private void updateUserGraduationInformation(User user, GraduationResult graduationResult) {
-		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(user,
+		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(
+			user,
 			graduationResult);
 		updateStudentInformationUseCase.updateUser(updateStudentInformationCommand);
 	}

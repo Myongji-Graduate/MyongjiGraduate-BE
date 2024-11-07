@@ -24,7 +24,17 @@ public class ChapelResult {
 	public static ChapelResult create(TakenLectureInventory takenLectureInventory) {
 		return ChapelResult.builder()
 			.takenCount(countTakenChapel(takenLectureInventory))
-			.isCompleted(false).build();
+			.isCompleted(false)
+			.build();
+	}
+
+	private static int countTakenChapel(TakenLectureInventory takenLectureInventory) {
+		return (int) takenLectureInventory.getTakenLectures()
+			.stream()
+			.filter(takenLecture -> takenLecture.getLecture()
+				.getLectureCode()
+				.equals(CHAPEL_LECTURE_CODE))
+			.count();
 	}
 
 	public void checkCompleted() {
@@ -33,11 +43,5 @@ public class ChapelResult {
 
 	public double getTakenChapelCredit() {
 		return takenCount * CHAPEL_CREDIT;
-	}
-
-	private static int countTakenChapel(TakenLectureInventory takenLectureInventory) {
-		return (int)takenLectureInventory.getTakenLectures().stream()
-			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals(CHAPEL_LECTURE_CODE))
-			.count();
 	}
 }

@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
 import java.util.Objects;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +17,8 @@ public class Lecture {
 	private final int isRevoked;
 
 	@Builder
-	private Lecture(Long id, String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+	private Lecture(Long id, String lectureCode, String name, int credit, int isRevoked,
+		String duplicateCode) {
 		this.id = id;
 		this.lectureCode = lectureCode;
 		this.name = name;
@@ -33,7 +33,8 @@ public class Lecture {
 			.build();
 	}
 
-	public static Lecture of(String lectureCode, String name, int credit, int isRevoked, String duplicateCode) {
+	public static Lecture of(String lectureCode, String name, int credit, int isRevoked,
+		String duplicateCode) {
 		return Lecture.builder()
 			.lectureCode(lectureCode)
 			.name(name)
@@ -49,11 +50,13 @@ public class Lecture {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (o == null || getClass() != o.getClass()) {
 			return false;
-		Lecture lecture = (Lecture)o;
+		}
+		Lecture lecture = (Lecture) o;
 		return Objects.equals(lectureCode, lecture.lectureCode);
 	}
 

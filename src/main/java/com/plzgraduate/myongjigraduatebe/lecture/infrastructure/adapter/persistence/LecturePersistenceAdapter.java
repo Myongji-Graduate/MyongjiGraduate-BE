@@ -1,8 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.SearchLecturePort;
@@ -11,7 +8,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.mapper.LectureMapper;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureQueryRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -25,7 +23,8 @@ public class LecturePersistenceAdapter implements FindLecturePort, SearchLecture
 
 	@Override
 	public List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes) {
-		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByLectureCodeIn(lectureCodes);
+		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByLectureCodeIn(
+			lectureCodes);
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());
@@ -48,7 +47,8 @@ public class LecturePersistenceAdapter implements FindLecturePort, SearchLecture
 
 	@Override
 	public List<Lecture> searchLectureByNameOrCode(String type, String keyword) {
-		List<LectureJpaEntity> lectureJpaEntities = lectureQueryRepository.searchByNameOrCode(type, keyword);
+		List<LectureJpaEntity> lectureJpaEntities = lectureQueryRepository.searchByNameOrCode(type,
+			keyword);
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());

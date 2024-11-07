@@ -5,6 +5,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCateg
 
 public interface CalculateSingleDetailGraduationUseCase {
 
-	DetailGraduationResult calculateSingleDetailGraduation(Long userId, GraduationCategory graduationCategory);
+	DetailGraduationResult calculateSingleDetailGraduation(Long userId,
+		GraduationCategory graduationCategory);
 
 }

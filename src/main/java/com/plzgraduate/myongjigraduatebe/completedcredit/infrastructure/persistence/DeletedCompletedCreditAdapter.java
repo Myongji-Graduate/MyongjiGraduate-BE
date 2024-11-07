@@ -1,14 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.DeleteCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.repository.CompletedCreditRepository;
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper.UserMapper;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @PersistenceAdapter
 @Transactional

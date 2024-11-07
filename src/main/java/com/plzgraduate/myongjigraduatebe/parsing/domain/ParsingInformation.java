@@ -1,17 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
-
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class ParsingInformation {
+
 	private final String studentName;
 	private final String studentNumber;
 	private final String major;
@@ -23,8 +22,10 @@ public class ParsingInformation {
 	private final List<ParsingTakenLectureDto> takenLectureInformation;
 
 	@Builder
-	public ParsingInformation(String studentName, String studentNumber, String major, String changeMajor, String subMajor, String dualMajor,
-		String associatedMajor, StudentCategory studentCategory, List<ParsingTakenLectureDto> takenLectureInformation) {
+	public ParsingInformation(String studentName, String studentNumber, String major,
+		String changeMajor, String subMajor, String dualMajor,
+		String associatedMajor, StudentCategory studentCategory,
+		List<ParsingTakenLectureDto> takenLectureInformation) {
 		this.studentName = studentName;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -84,9 +85,9 @@ public class ParsingInformation {
 		List<String> categories = new ArrayList<>();
 		String[] parts = secondLineText.split(", ");
 		String[] thirdLineParts = thirdLineText.split(", ");
-		if(thirdLineParts.length == 4) {
+		if (thirdLineParts.length == 4) {
 			String part = thirdLineParts[3];
-			if(part.startsWith("전과내역 -")) {
+			if (part.startsWith("전과내역 -")) {
 				categories.add("전과");
 				changeMajor = part.substring("전과내역 - ".length());
 			}
@@ -105,13 +106,15 @@ public class ParsingInformation {
 			}
 		}
 		studentCategory = StudentCategory.from(categories);
-		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor, studentCategory);
+		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor,
+			studentCategory);
 	}
 
 	private static List<ParsingTakenLectureDto> parseTakenLectureInformation(String[] splitText) {
 		List<ParsingTakenLectureDto> takenLectureInformation = new ArrayList<>();
 		for (int i = 16; i < splitText.length; i += 7) {
-			if (i + 3 < splitText.length && !Pattern.matches("^[A-Z]+$", splitText[i + 3].substring(0, 1))) {
+			if (i + 3 < splitText.length && !Pattern.matches("^[A-Z]+$",
+				splitText[i + 3].substring(0, 1))) {
 				return takenLectureInformation;
 			}
 			int year = Integer.parseInt(splitText[i + 1].split(" ")[0].substring(0, 4));
@@ -119,7 +122,8 @@ public class ParsingInformation {
 			String code = splitText[i + 3];
 			char grade = splitText[i + 6].charAt(0);
 			if (grade != 'F' && grade != 'N' && grade != 'R') {
-				takenLectureInformation.add(ParsingTakenLectureDto.of(code, year, Semester.of(semester)));
+				takenLectureInformation.add(
+					ParsingTakenLectureDto.of(code, year, Semester.of(semester)));
 			}
 			if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
 				i++;
@@ -131,9 +135,9 @@ public class ParsingInformation {
 	private static int getIndexStudentNameAndNumber(String text) {
 		String[] parts = text.split(", ");
 		int index = 0;
-		for(String part: parts) {
-			if(part.startsWith("현학적 -")) {
-				return index-1;
+		for (String part : parts) {
+			if (part.startsWith("현학적 -")) {
+				return index - 1;
 			}
 			index++;
 		}

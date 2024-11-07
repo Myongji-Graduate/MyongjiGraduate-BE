@@ -1,9 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import java.util.List;
-
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,7 +17,8 @@ public class GraduationResult {
 	private boolean graduated;
 
 	@Builder
-	private GraduationResult(ChapelResult chapelResult, List<DetailGraduationResult> detailGraduationResults,
+	private GraduationResult(ChapelResult chapelResult,
+		List<DetailGraduationResult> detailGraduationResults,
 		NormalCultureGraduationResult normalCultureGraduationResult,
 		FreeElectiveGraduationResult freeElectiveGraduationResult, int totalCredit, int takenCredit,
 		boolean graduated) {
@@ -56,7 +55,8 @@ public class GraduationResult {
 		boolean isAllDetailGraduationResultCompleted = detailGraduationResults.stream()
 			.allMatch(DetailGraduationResult::isCompleted);
 		this.graduated = chapelResult.isCompleted() && isAllDetailGraduationResultCompleted
-			&& normalCultureGraduationResult.isCompleted() && freeElectiveGraduationResult.isCompleted();
+			&& normalCultureGraduationResult.isCompleted()
+			&& freeElectiveGraduationResult.isCompleted();
 	}
 
 	public void deductDuplicatedCredit(int duplicatedCredit) {
@@ -88,7 +88,8 @@ public class GraduationResult {
 	private void handleLeftTakenNormaCulture(TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement) {
 		this.normalCultureGraduationResult = NormalCultureGraduationResult.create(
-			graduationRequirement.getNormalCultureCredit(), takenLectureInventory, detailGraduationResults);
+			graduationRequirement.getNormalCultureCredit(), takenLectureInventory,
+			detailGraduationResults);
 
 		normalCultureGraduationResult.checkCompleted();
 	}
@@ -97,7 +98,8 @@ public class GraduationResult {
 		GraduationRequirement graduationRequirement) {
 		int leftNormalCultureCredit = normalCultureGraduationResult.getLeftCredit();
 		this.freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
-			graduationRequirement.getFreeElectiveCredit(), takenLectureInventory, detailGraduationResults,
+			graduationRequirement.getFreeElectiveCredit(), takenLectureInventory,
+			detailGraduationResults,
 			leftNormalCultureCredit);
 
 		freeElectiveGraduationResult.checkCompleted();

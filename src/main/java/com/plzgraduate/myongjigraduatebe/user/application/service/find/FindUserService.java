@@ -1,16 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.find;
 
-import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.NOT_FOUND_AUTHID;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.UNREGISTERED_USER;
 
-import org.springframework.transaction.annotation.Transactional;
-
-import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @RequiredArgsConstructor

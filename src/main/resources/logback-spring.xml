@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProfile name="local">
-        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n</pattern>
-            </encoder>
-        </appender>
-        <root level="INFO">
-            <appender-ref ref="STDOUT"/>
-        </root>
-    </springProfile>
+  <springProfile name="local">
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+      <encoder>
+        <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %green([%thread]) %highlight(%-5level)
+          %boldWhite([%C.%M:%yellow(%L)]) - %msg%n
+        </pattern>
+      </encoder>
+    </appender>
+    <root level="INFO">
+      <appender-ref ref="STDOUT"/>
+    </root>
+  </springProfile>
 
-    <springProfile name="dev,prod">
-        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n</pattern>
-            </encoder>
-        </appender>
-        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>app.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>app.%d{yyyy-MM-dd}.log</fileNamePattern>
-                <maxHistory>20</maxHistory>
-            </rollingPolicy>
-            <encoder>
-                <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n</pattern>
-            </encoder>
-        </appender>
-        <logger name="plzgraduate.myongjigraduatebe" level="INFO"/>
-        <logger name="org.hibernate.jpa" level="DEBUG"/>
+  <springProfile name="dev,prod">
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+      <encoder>
+        <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %green([%thread]) %highlight(%-5level)
+          %boldWhite([%C.%M:%yellow(%L)]) - %msg%n
+        </pattern>
+      </encoder>
+    </appender>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE">
+      <encoder>
+        <pattern>[%d{yyyy-MM-dd HH:mm:ss}] %green([%thread]) %highlight(%-5level)
+          %boldWhite([%C.%M:%yellow(%L)]) - %msg%n
+        </pattern>
+      </encoder>
+      <file>app.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>app.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <maxHistory>20</maxHistory>
+      </rollingPolicy>
+    </appender>
+    <logger level="INFO" name="plzgraduate.myongjigraduatebe"/>
+    <logger level="DEBUG" name="org.hibernate.jpa"/>
 
-        <root level="INFO">
-            <appender-ref ref="STDOUT"/>
-        </root>
-    </springProfile>
+    <root level="INFO">
+      <appender-ref ref="STDOUT"/>
+    </root>
+  </springProfile>
 
 </configuration>

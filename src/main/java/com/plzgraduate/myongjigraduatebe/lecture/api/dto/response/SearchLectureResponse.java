@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api.dto.response;
 
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.SearchedLectureDto;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,8 @@ public class SearchLectureResponse {
 	private final boolean taken;
 
 	@Builder
-	private SearchLectureResponse(Long id, String lectureCode, String name, int credit, boolean revoked,
+	private SearchLectureResponse(Long id, String lectureCode, String name, int credit,
+		boolean revoked,
 		boolean taken) {
 		this.id = id;
 		this.lectureCode = lectureCode;
@@ -35,11 +35,16 @@ public class SearchLectureResponse {
 
 	public static SearchLectureResponse from(SearchedLectureDto searchedLectureDto) {
 		return SearchLectureResponse.builder()
-			.id(searchedLectureDto.getLecture().getId())
-			.lectureCode(searchedLectureDto.getLecture().getLectureCode())
-			.name(searchedLectureDto.getLecture().getName())
-			.credit(searchedLectureDto.getLecture().getCredit())
-			.revoked(searchedLectureDto.getLecture().getIsRevoked() != 0)
+			.id(searchedLectureDto.getLecture()
+				.getId())
+			.lectureCode(searchedLectureDto.getLecture()
+				.getLectureCode())
+			.name(searchedLectureDto.getLecture()
+				.getName())
+			.credit(searchedLectureDto.getLecture()
+				.getCredit())
+			.revoked(searchedLectureDto.getLecture()
+				.getIsRevoked() != 0)
 			.taken(searchedLectureDto.isAddable())
 			.build();
 	}

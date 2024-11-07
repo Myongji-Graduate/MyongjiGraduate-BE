@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import java.util.Arrays;
 import java.util.Objects;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort, DeleteParsingTextHistoryPort {
+public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort,
+	DeleteParsingTextHistoryPort {
 
 	private final ParsingTextRepository parsingTextRepository;
 	private final ParsingTextHistoryMapper parsingTextHistoryMapper;
+
 	@Override
 	public void saveParsingTextHistory(ParsingTextHistory parsingTextHistory) {
 		parsingTextRepository.save(parsingTextHistoryMapper.mapToJpaEntity(parsingTextHistory));

@@ -1,25 +1,24 @@
 package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence;
 
-import java.util.Optional;
-
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.SaveUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper.UserMapper;
-
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @PersistenceAdapter
 @Slf4j
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, CheckUserPort, UpdateUserPort, DeleteUserPort {
+public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, CheckUserPort,
+	UpdateUserPort, DeleteUserPort {
 
 	private final UserMapper userMapper;
 
@@ -32,8 +31,9 @@ public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, Check
 
 	@Override
 	public Optional<User> findUserById(Long id) {
-		UserJpaEntity userJpaEntity = userRepository.findById(id).orElse(null);
-		if(userJpaEntity == null) {
+		UserJpaEntity userJpaEntity = userRepository.findById(id)
+			.orElse(null);
+		if (userJpaEntity == null) {
 			return Optional.empty();
 		}
 		return Optional.of(userMapper.mapToDomainEntity(userJpaEntity));
@@ -41,8 +41,9 @@ public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, Check
 
 	@Override
 	public Optional<User> findUserByAuthId(String authId) {
-		UserJpaEntity userJpaEntity = userRepository.findByAuthId(authId).orElse(null);
-		if(userJpaEntity == null) {
+		UserJpaEntity userJpaEntity = userRepository.findByAuthId(authId)
+			.orElse(null);
+		if (userJpaEntity == null) {
 			return Optional.empty();
 		}
 		return Optional.of(userMapper.mapToDomainEntity(userJpaEntity));
@@ -50,7 +51,8 @@ public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, Check
 
 	@Override
 	public Optional<User> findUserByStudentNumber(String studentNumber) {
-		return userRepository.findByStudentNumber(studentNumber).map(userMapper::mapToDomainEntity);
+		return userRepository.findByStudentNumber(studentNumber)
+			.map(userMapper::mapToDomainEntity);
 	}
 
 	@Override

@@ -1,13 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CHAPEL;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.FREE_ELECTIVE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.NORMAL_CULTURE;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.FreeElectiveGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.NormalCultureGraduationResult;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -32,14 +33,16 @@ public class CompletedCredit {
 		return CompletedCredit.builder()
 			.graduationCategory(detailGraduationResults.getGraduationCategory())
 			.totalCredit(detailGraduationResults.getTotalCredit())
-			.takenCredit(detailGraduationResults.getTakenCredit()).build();
+			.takenCredit(detailGraduationResults.getTakenCredit())
+			.build();
 	}
 
 	public static CompletedCredit createChapelCompletedCreditModel(ChapelResult chapelResult) {
 		return CompletedCredit.builder()
 			.graduationCategory(CHAPEL)
 			.totalCredit(ChapelResult.GRADUATION_COUNT / 2)
-			.takenCredit(chapelResult.getTakenChapelCredit()).build();
+			.takenCredit(chapelResult.getTakenChapelCredit())
+			.build();
 	}
 
 	public static CompletedCredit createNormalCultureCompletedCreditModel(
@@ -47,7 +50,8 @@ public class CompletedCredit {
 		return CompletedCredit.builder()
 			.graduationCategory(NORMAL_CULTURE)
 			.totalCredit(normalCultureGraduationResult.getTotalCredit())
-			.takenCredit(normalCultureGraduationResult.getTakenCredit()).build();
+			.takenCredit(normalCultureGraduationResult.getTakenCredit())
+			.build();
 	}
 
 	public static CompletedCredit createFreeElectiveCompletedCreditModel(
@@ -55,7 +59,8 @@ public class CompletedCredit {
 		return CompletedCredit.builder()
 			.graduationCategory(FREE_ELECTIVE)
 			.totalCredit(freeElectiveGraduationResult.getTotalCredit())
-			.takenCredit(freeElectiveGraduationResult.getTakenCredit()).build();
+			.takenCredit(freeElectiveGraduationResult.getTakenCredit())
+			.build();
 	}
 
 	public void updateCredit(int totalCredit, double takenCredit) {

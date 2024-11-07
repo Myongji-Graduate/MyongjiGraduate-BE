@@ -1,15 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.api;
 
-import javax.validation.Valid;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateCustomizedTakenLectureRequest;
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.Valid;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "UpdateTakenLecture", description = "수강과목을 수정하는 API")
 public interface UpdateTakenLectureApiPresentation {

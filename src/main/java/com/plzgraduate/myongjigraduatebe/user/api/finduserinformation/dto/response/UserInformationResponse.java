@@ -1,11 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response;
 
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,7 +21,8 @@ public class UserInformationResponse {
 	private final boolean graduated;
 
 	@Builder
-	private UserInformationResponse(String studentNumber, String studentName, int totalCredit, double takenCredit,
+	private UserInformationResponse(String studentNumber, String studentName, int totalCredit,
+		double takenCredit,
 		boolean graduated) {
 		this.studentNumber = studentNumber;
 		this.studentName = studentName;
@@ -41,13 +40,16 @@ public class UserInformationResponse {
 			.graduated(user.isGraduated())
 			.build();
 		if (user.getPrimaryMajor() != null) {
-			userInformation.getCompleteDivision().add(CompleteDivisionResponse.of("PRIMARY", user.getPrimaryMajor()));
+			userInformation.getCompleteDivision()
+				.add(CompleteDivisionResponse.of("PRIMARY", user.getPrimaryMajor()));
 		}
 		if (user.getDualMajor() != null) {
-			userInformation.getCompleteDivision().add(CompleteDivisionResponse.of("DUAL", user.getDualMajor()));
+			userInformation.getCompleteDivision()
+				.add(CompleteDivisionResponse.of("DUAL", user.getDualMajor()));
 		}
 		if (user.getSubMajor() != null) {
-			userInformation.getCompleteDivision().add(CompleteDivisionResponse.of("SUB", user.getSubMajor()));
+			userInformation.getCompleteDivision()
+				.add(CompleteDivisionResponse.of("SUB", user.getSubMajor()));
 		}
 		return userInformation;
 	}

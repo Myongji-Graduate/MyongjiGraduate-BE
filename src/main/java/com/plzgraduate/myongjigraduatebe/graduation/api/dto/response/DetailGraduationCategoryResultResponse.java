@@ -1,11 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api.dto.response;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,8 +22,10 @@ public class DetailGraduationCategoryResultResponse {
 	private final boolean completed;
 
 	@Builder
-	private DetailGraduationCategoryResultResponse(String categoryName, int totalCredit, int takenCredit,
-		List<LectureResponse> takenLectures, List<LectureResponse> haveToLectures, boolean completed) {
+	private DetailGraduationCategoryResultResponse(String categoryName, int totalCredit,
+		int takenCredit,
+		List<LectureResponse> takenLectures, List<LectureResponse> haveToLectures,
+		boolean completed) {
 		this.categoryName = categoryName;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -34,17 +34,21 @@ public class DetailGraduationCategoryResultResponse {
 		this.completed = completed;
 	}
 
-	public static DetailGraduationCategoryResultResponse from(DetailCategoryResult detailCategoryResult) {
+	public static DetailGraduationCategoryResultResponse from(
+		DetailCategoryResult detailCategoryResult) {
 		return DetailGraduationCategoryResultResponse.builder()
 			.categoryName(detailCategoryResult.getDetailCategoryName())
 			.totalCredit(detailCategoryResult.getTotalCredits())
 			.takenCredit(detailCategoryResult.getTakenCredits())
-			.takenLectures(detailCategoryResult.getTakenLectures().stream()
+			.takenLectures(detailCategoryResult.getTakenLectures()
+				.stream()
 				.map(LectureResponse::from)
 				.collect(Collectors.toList()))
-			.haveToLectures(detailCategoryResult.getHaveToLectures().stream()
+			.haveToLectures(detailCategoryResult.getHaveToLectures()
+				.stream()
 				.map(LectureResponse::from)
 				.collect(Collectors.toList()))
-			.completed(detailCategoryResult.isCompleted()).build();
+			.completed(detailCategoryResult.isCompleted())
+			.build();
 	}
 }
