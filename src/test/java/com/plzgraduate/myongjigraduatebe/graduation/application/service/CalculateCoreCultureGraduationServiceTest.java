@@ -64,7 +64,7 @@ class CalculateCoreCultureGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("KMA02128")
+						.id("KMA02128")
 						.credit(3)
 						.build())
 					.build()));

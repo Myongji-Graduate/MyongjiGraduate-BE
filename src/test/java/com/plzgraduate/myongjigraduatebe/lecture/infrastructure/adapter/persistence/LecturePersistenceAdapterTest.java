@@ -49,7 +49,7 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		//then
 		assertThat(lectures)
 			.hasSize(2)
-			.extracting("lectureCode", "name")
+			.extracting("id", "name")
 			.containsExactlyInAnyOrder(
 				tuple("code1", "name1"),
 				tuple("code3", "name3")
@@ -117,7 +117,7 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		//then
 		assertThat(lectures)
 			.hasSize(2)
-			.extracting("lectureCode", "name")
+			.extracting("id", "name")
 			.containsExactlyInAnyOrder(
 				tuple("code1", "name1"),
 				tuple("code2", "name2")

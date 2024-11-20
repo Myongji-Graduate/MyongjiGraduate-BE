@@ -35,7 +35,7 @@ class TakenLectureRepositoryTest extends PersistenceTestSupport {
 		userRepository.save(user);
 
 		LectureJpaEntity lecture = LectureJpaEntity.builder()
-			.lectureCode("KMA02105")
+			.id("KMA02105")
 			.build();
 		lectureRepository.save(lecture);
 

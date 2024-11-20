@@ -21,7 +21,7 @@ class UpdateTakenLectureControllerTest extends WebAdaptorTestSupport {
 	void generateTakenLecture() throws Exception {
 		//given
 		GenerateCustomizedTakenLectureRequest request = GenerateCustomizedTakenLectureRequest.builder()
-			.lectureId(1L)
+			.lectureId("KMA02137")
 			.build();
 
 		//when //then

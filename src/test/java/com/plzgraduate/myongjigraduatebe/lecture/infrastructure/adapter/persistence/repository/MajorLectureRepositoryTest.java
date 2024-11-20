@@ -23,7 +23,7 @@ class MajorLectureRepositoryTest extends PersistenceTestSupport {
 	void findAllByMajor() {
 		//given
 		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
-			.lectureCode("TEST")
+			.id("TEST")
 			.build();
 		lectureRepository.save(lectureJpaEntity);
 

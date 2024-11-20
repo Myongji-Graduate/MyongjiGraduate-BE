@@ -86,7 +86,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("KMA02128")
+						.id("KMA02128")
 						.credit(3)
 						.build())
 					.build()));
@@ -117,7 +117,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("KMA02128")
+						.id("KMA02128")
 						.credit(3)
 						.build())
 					.build()));

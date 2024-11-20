@@ -40,13 +40,13 @@ class FindTakenLectureServiceTest {
 		User user = User.builder()
 			.id(1L)
 			.build();
-		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
-		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1", 2);
-		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2", 2);
-		Lecture 글쓰기 = createLecture(4L, "KMA02104", "글쓰기", 3);
-		Lecture 세계화와사회변화 = createLecture(5L, "KMA02113", "세계화와사회변화", 3);
-		Lecture 고전으로읽는인문학 = createLecture(6L, "KMA02130", "고전으로읽는인문학", 3);
-		Lecture 사차산업혁명과미래사회진로선택 = createLecture(7L, "KMA02141", "4차산업혁명과미래사회진로선택", 2);
+		Lecture 채플 = createLecture("KMA02101", "채플", 0);
+		Lecture 영어1 = createLecture("KMA02106", "영어1", 2);
+		Lecture 영어2 = createLecture("KMA02107", "영어2", 2);
+		Lecture 글쓰기 = createLecture("KMA02104", "글쓰기", 3);
+		Lecture 세계화와사회변화 = createLecture("KMA02113", "세계화와사회변화", 3);
+		Lecture 고전으로읽는인문학 = createLecture("KMA02130", "고전으로읽는인문학", 3);
+		Lecture 사차산업혁명과미래사회진로선택 = createLecture("KMA02141", "4차산업혁명과미래사회진로선택", 2);
 
 		Instant basicTime = Instant.parse("2022-02-15T00:00:00.00Z");
 		Instant customTime2 = Instant.parse("2022-12-15T00:10:00.00Z");
@@ -93,13 +93,13 @@ class FindTakenLectureServiceTest {
 		User user = User.builder()
 			.id(1L)
 			.build();
-		Lecture 채플 = createLecture(1L, "KMA02101", "채플", 0);
-		Lecture 영어1 = createLecture(2L, "KMA02106", "영어1", 2);
-		Lecture 영어2 = createLecture(3L, "KMA02107", "영어2", 2);
-		Lecture 글쓰기 = createLecture(4L, "KMA02104", "글쓰기", 3);
-		Lecture 세계화와사회변화 = createLecture(5L, "KMA02113", "세계화와사회변화", 3);
-		Lecture 고전으로읽는인문학 = createLecture(6L, "KMA02130", "고전으로읽는인문학", 3);
-		Lecture 사차산업혁명과미래사회진로선택 = createLecture(7L, "KMA02141", "4차산업혁명과미래사회진로선택", 2);
+		Lecture 채플 = createLecture("KMA02101", "채플", 0);
+		Lecture 영어1 = createLecture("KMA02106", "영어1", 2);
+		Lecture 영어2 = createLecture("KMA02107", "영어2", 2);
+		Lecture 글쓰기 = createLecture("KMA02104", "글쓰기", 3);
+		Lecture 세계화와사회변화 = createLecture("KMA02113", "세계화와사회변화", 3);
+		Lecture 고전으로읽는인문학 = createLecture("KMA02130", "고전으로읽는인문학", 3);
+		Lecture 사차산업혁명과미래사회진로선택 = createLecture("KMA02141", "4차산업혁명과미래사회진로선택", 2);
 
 		Instant basicTime = Instant.parse("2022-02-15T00:00:00.00Z");
 		Instant customTime1 = Instant.parse("2022-12-15T00:00:00.00Z");
@@ -141,10 +141,9 @@ class FindTakenLectureServiceTest {
 			.build();
 	}
 
-	private Lecture createLecture(Long id, String lectureCode, String name, int credit) {
+	private Lecture createLecture(String lectureCode, String name, int credit) {
 		return Lecture.builder()
-			.id(id)
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.isRevoked(0)
 			.duplicateCode(null)

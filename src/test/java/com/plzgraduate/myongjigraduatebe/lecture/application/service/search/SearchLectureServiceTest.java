@@ -36,8 +36,8 @@ class SearchLectureServiceTest {
 		Long userId = 1L;
 		String type = "name";
 		String keyword = "기초";
-		Lecture takenLecture = createLecture(1L, "code1", "기초웹프로그래밍", 3, 0);
-		Lecture nonTakenLecture = createLecture(2L, "code2", "앱과웹기초", 2, 1);
+		Lecture takenLecture = createLecture("code1", "기초웹프로그래밍", 3, 0);
+		Lecture nonTakenLecture = createLecture( "code2", "앱과웹기초", 2, 1);
 		List<Lecture> lectures = List.of(takenLecture, nonTakenLecture);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(
 			Set.of(TakenLecture.builder()
@@ -63,11 +63,10 @@ class SearchLectureServiceTest {
 			);
 	}
 
-	private Lecture createLecture(Long id, String lectureCode, String name, int credit,
+	private Lecture createLecture(String lectureCode, String name, int credit,
 		int isRevoked) {
 		return Lecture.builder()
-			.id(id)
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.credit(credit)
 			.isRevoked(isRevoked)

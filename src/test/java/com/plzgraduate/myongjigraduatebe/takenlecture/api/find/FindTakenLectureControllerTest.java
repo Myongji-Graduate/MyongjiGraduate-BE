@@ -28,7 +28,7 @@ class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 		HashSet<TakenLecture> takenLectures = new HashSet<>(Set.of(
 			TakenLecture.builder()
 				.lecture(Lecture.builder()
-					.lectureCode("KMA")
+					.id("KMA")
 					.credit(4)
 					.build())
 				.year(2020)
@@ -36,7 +36,7 @@ class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 				.build(),
 			TakenLecture.builder()
 				.lecture(Lecture.builder()
-					.lectureCode("KMB")
+					.id("KMB")
 					.credit(3)
 					.build())
 				.year(2020)
@@ -44,7 +44,7 @@ class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 				.build(),
 			TakenLecture.builder()
 				.lecture(Lecture.builder()
-					.lectureCode("KMC")
+					.id("KMC")
 					.credit(3)
 					.build())
 				.year(2021)
