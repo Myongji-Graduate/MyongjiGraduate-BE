@@ -46,7 +46,7 @@ public class CommonGraduationManager implements GraduationManager<CommonCulture>
 		int chapelCount = (int) takenLectureInventory.getTakenLectures()
 			.stream()
 			.filter(takenLecture -> takenLecture.getLecture()
-				.getLectureCode()
+				.getId()
 				.equals(CHAPEL_LECTURE_CODE))
 			.count();
 		return chapelCount * CHAPEL_CREDIT;

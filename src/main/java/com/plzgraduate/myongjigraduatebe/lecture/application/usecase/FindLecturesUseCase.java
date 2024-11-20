@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface FindLecturesUseCase {
 
-	List<Lecture> findLecturesByIds(List<Long> lectureIds);
+	List<Lecture> findLecturesByIds(List<String> lectureIds);
 
 	List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes);
 }

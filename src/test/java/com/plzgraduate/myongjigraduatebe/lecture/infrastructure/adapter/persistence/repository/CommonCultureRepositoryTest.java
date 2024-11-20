@@ -47,7 +47,7 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
 			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity()
-				.getLectureCode())
+				.getId())
 			.collect(Collectors.toList());
 		assertThat(lectureCodes).contains(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH3_CODE);
@@ -74,7 +74,7 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
 			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity()
-				.getLectureCode())
+				.getId())
 			.collect(Collectors.toList());
 		assertThat(lectureCodes).doesNotContain(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH3_CODE);
@@ -101,7 +101,7 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
 		List<String> lectureCodes = commonCultureGraduationLectures.stream()
 			.map(commonCultureJpaEntity -> commonCultureJpaEntity.getLectureJpaEntity()
-				.getLectureCode())
+				.getId())
 			.collect(Collectors.toList());
 		assertThat(lectureCodes).doesNotContain(BASIC_ENGLISH_CODE);
 		assertThat(lectureCodes).doesNotContain(ENGLISH1_CODE);
@@ -127,31 +127,31 @@ class CommonCultureRepositoryTest extends PersistenceTestSupport {
 
 	private void saveEnglishLectures() {
 		LectureJpaEntity 기초영어 = LectureJpaEntity.builder()
-			.lectureCode(BASIC_ENGLISH_CODE)
+			.id(BASIC_ENGLISH_CODE)
 			.build();
 		LectureJpaEntity 영어1 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH1_CODE)
+			.id(ENGLISH1_CODE)
 			.build();
 		LectureJpaEntity 영어2 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH2_CODE)
+			.id(ENGLISH2_CODE)
 			.build();
 		LectureJpaEntity 영어3 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH3_CODE)
+			.id(ENGLISH3_CODE)
 			.build();
 		LectureJpaEntity 영어4 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH4_CODE)
+			.id(ENGLISH4_CODE)
 			.build();
 		LectureJpaEntity 영어회화1 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH_CONVERSATION1_CODE)
+			.id(ENGLISH_CONVERSATION1_CODE)
 			.build();
 		LectureJpaEntity 영어회화2 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH_CONVERSATION2_CODE)
+			.id(ENGLISH_CONVERSATION2_CODE)
 			.build();
 		LectureJpaEntity 영어회화3 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH_CONVERSATION3_CODE)
+			.id(ENGLISH_CONVERSATION3_CODE)
 			.build();
 		LectureJpaEntity 영어회화4 = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH_CONVERSATION4_CODE)
+			.id(ENGLISH_CONVERSATION4_CODE)
 			.build();
 		List<LectureJpaEntity> englishLectures = List.of(기초영어, 영어1, 영어2, 영어3, 영어4, 영어회화1, 영어회화2,
 			영어회화3, 영어회화4);

@@ -85,11 +85,11 @@ class CalculateMajorGraduationServiceTest {
 		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
 			Set.of(
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01211")
+					.id("HEC01211")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 1, 16, 23),
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01204")
+					.id("HEC01204")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 1, 16, 23)));
 		given(findMajorPort.findMajor(user.getPrimaryMajor())).willReturn(graduationMajorLectures);
@@ -98,13 +98,13 @@ class CalculateMajorGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01211") //전공 필수
+						.id("HEC01211") //전공 필수
 						.credit(3)
 						.build())
 					.build(),
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01305") //전공 선택
+						.id("HEC01305") //전공 선택
 						.credit(3)
 						.build())
 					.build()));
@@ -137,17 +137,17 @@ class CalculateMajorGraduationServiceTest {
 			Set.of(
 				// 전공 필수
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01211")
+					.id("HEC01211")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 1, 16, 23),
 				// 전공 선택
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01305")
+					.id("HEC01305")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 0, 16, 23),
 				// 전공 선택
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01318")
+					.id("HEC01318")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 0, 16, 23)));
 		given(findMajorPort.findMajor(user.getPrimaryMajor())).willReturn(graduationMajorLectures);
@@ -156,13 +156,13 @@ class CalculateMajorGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01211") //전공 필수
+						.id("HEC01211") //전공 필수
 						.credit(3)
 						.build())
 					.build(),
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01305") //전공 선택
+						.id("HEC01305") //전공 선택
 						.credit(3)
 						.build())
 					.build()));
@@ -194,11 +194,11 @@ class CalculateMajorGraduationServiceTest {
 		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
 			Set.of(
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01211")
+					.id("HEC01211")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 1, 16, 23),
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01204")
+					.id("HEC01204")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 1, 16, 23)));
 		given(findMajorPort.findMajor(user.getDualMajor())).willReturn(graduationMajorLectures);
@@ -207,13 +207,13 @@ class CalculateMajorGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01211") //전공 필수
+						.id("HEC01211") //전공 필수
 						.credit(3)
 						.build())
 					.build(),
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01305") //전공 선택
+						.id("HEC01305") //전공 선택
 						.credit(3)
 						.build())
 					.build()));
@@ -245,11 +245,11 @@ class CalculateMajorGraduationServiceTest {
 		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
 			Set.of(
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01211")
+					.id("HEC01211")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 1, 16, 23),
 				MajorLecture.of(Lecture.builder()
-					.lectureCode("HEC01304")
+					.id("HEC01304")
 					.credit(3)
 					.build(), "응용소프트웨어전공", 0, 16, 23)));
 		given(findMajorPort.findMajor(user.getDualMajor())).willReturn(graduationMajorLectures);
@@ -258,13 +258,13 @@ class CalculateMajorGraduationServiceTest {
 			Set.of(
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01211") //전공 필수
+						.id("HEC01211") //전공 필수
 						.credit(3)
 						.build())
 					.build(),
 				TakenLecture.builder()
 					.lecture(Lecture.builder()
-						.lectureCode("HEC01304") //전공 선택
+						.id("HEC01304") //전공 선택
 						.credit(3)
 						.build())
 					.build()));

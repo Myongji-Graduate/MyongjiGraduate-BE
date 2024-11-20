@@ -27,31 +27,31 @@ class SubMajorGraduationManagerTest {
 		User user = UserFixture.응용소프트웨어학과_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01313")
+				.id("HEC01313")
 				.credit(3)
 				.build(), 2019, Semester.FIRST),
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01310")
+				.id("HEC01310")
 				.credit(3)
 				.build(), 2020, Semester.FIRST),
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01309")
+				.id("HEC01309")
 				.credit(3)
 				.build(), 2021, Semester.FIRST),
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01306")
+				.id("HEC01306")
 				.credit(3)
 				.build(), 2021, Semester.SECOND),
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01304")
+				.id("HEC01304")
 				.credit(3)
 				.build(), 2022, Semester.FIRST),
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01212")
+				.id("HEC01212")
 				.credit(3)
 				.build(), 2023, Semester.FIRST),
 			TakenLecture.of(user, Lecture.builder()
-				.lectureCode("HEC01209")
+				.id("HEC01209")
 				.credit(3)
 				.build(), 2023, Semester.SECOND)
 		)));

@@ -98,13 +98,13 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
 	private void createCommonCultures() {
 		LectureJpaEntity lectureJpaEntityA = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH1_CODE)
+			.id(ENGLISH1_CODE)
 			.build();
 		LectureJpaEntity lectureJpaEntityB = LectureJpaEntity.builder()
-			.lectureCode(ENGLISH_CONVERSATION3_CODE)
+			.id(ENGLISH_CONVERSATION3_CODE)
 			.build();
 		LectureJpaEntity lectureJpaEntityC = LectureJpaEntity.builder()
-			.lectureCode(BASIC_ENGLISH_CODE)
+			.id(BASIC_ENGLISH_CODE)
 			.build();
 		lectureRepository.saveAll(List.of(lectureJpaEntityA, lectureJpaEntityB, lectureJpaEntityC));
 

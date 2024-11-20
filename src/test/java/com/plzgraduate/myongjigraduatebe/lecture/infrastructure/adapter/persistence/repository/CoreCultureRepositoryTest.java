@@ -24,7 +24,7 @@ class CoreCultureRepositoryTest extends PersistenceTestSupport {
 	void findAllByEntryYear(int entryYears) {
 		//given
 		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
-			.lectureCode("test")
+			.id("test")
 			.build();
 		lectureRepository.save(lectureJpaEntity);
 

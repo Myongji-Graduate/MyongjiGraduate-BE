@@ -25,6 +25,8 @@ public class User {
 	private String primaryMajor;
 	private String subMajor;
 	private String dualMajor;
+	// 연계전공명
+	// 편입 여부
 	private StudentCategory studentCategory;
 	private int totalCredit;
 	private double takenCredit;

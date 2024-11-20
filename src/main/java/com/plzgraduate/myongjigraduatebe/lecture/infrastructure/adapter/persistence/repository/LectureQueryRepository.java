@@ -23,7 +23,7 @@ public class LectureQueryRepository {
 
 	private BooleanExpression equalsType(String type, String keyword) {
 		if (type.equals("code")) {
-			return lecture.lectureCode.contains(keyword);
+			return lecture.id.contains(keyword);
 		}
 		return lecture.name.contains(keyword);
 	}

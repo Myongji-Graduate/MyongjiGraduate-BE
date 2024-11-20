@@ -65,7 +65,7 @@ public class TakenLectureInventory {
 		long chapelCount = takenLectures
 			.stream()
 			.filter(takenLecture -> takenLecture.getLecture()
-				.getLectureCode()
+				.getId()
 				.equals("KMA02101"))
 			.count();
 		return chapelCount >= 4;

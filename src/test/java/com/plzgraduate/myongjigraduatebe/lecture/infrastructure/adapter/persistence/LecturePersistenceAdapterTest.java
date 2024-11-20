@@ -29,9 +29,6 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 	@AfterEach
 	void afterEach() {
 		this.lectureRepository.deleteAllInBatch();
-		this.entityManager
-			.createNativeQuery("ALTER TABLE lecture auto_increment 1")
-			.executeUpdate();
 	}
 
 	@DisplayName("과목코드 리스트에 속해있는 과목들을 모두 찾는다.")
@@ -52,7 +49,7 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		//then
 		assertThat(lectures)
 			.hasSize(2)
-			.extracting("lectureCode", "name")
+			.extracting("id", "name")
 			.containsExactlyInAnyOrder(
 				tuple("code1", "name1"),
 				tuple("code3", "name3")
@@ -63,7 +60,7 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void findLecturesByIds() {
 		//given
-		List<Long> lectureIds = new ArrayList<>(List.of(1L, 2L));
+		List<String> lectureIds = new ArrayList<>(List.of("code1", "code2"));
 
 		lectureRepository.saveAll(List.of(
 			createLectureJpaEntity("code1", "name1"),
@@ -78,10 +75,10 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		//then
 		assertThat(lectures)
 			.hasSize(2)
-			.extracting("id", "lectureCode", "name")
+			.extracting("id", "name")
 			.containsExactlyInAnyOrder(
-				tuple(1L, "code1", "name1"),
-				tuple(2L, "code2", "name2")
+				tuple("code1", "name1"),
+				tuple("code2", "name2")
 			);
 	}
 
@@ -98,11 +95,9 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		Lecture lecture = lecturePersistenceAdapter.findLectureById(lectureJpaEntity.getId());
 
 		//then
-		Long expectedLectureId = lectureJpaEntity.getId();
-		String expectedLectureCode = "code";
+		String expectedLectureId = lectureJpaEntity.getId();
 		String expectedLectureName = "name";
 		assertThat(lecture.getId()).isEqualTo(expectedLectureId);
-		assertThat(lecture.getLectureCode()).isEqualTo(expectedLectureCode);
 		assertThat(lecture.getName()).isEqualTo(expectedLectureName);
 	}
 
@@ -122,27 +117,16 @@ class LecturePersistenceAdapterTest extends PersistenceTestSupport {
 		//then
 		assertThat(lectures)
 			.hasSize(2)
-			.extracting("lectureCode", "name")
+			.extracting("id", "name")
 			.containsExactlyInAnyOrder(
 				tuple("code1", "name1"),
 				tuple("code2", "name2")
 			);
 	}
 
-	private Lecture createLecture(String lectureCode, String name, int credit, int isRevoked,
-		String duplicateCode) {
-		return Lecture.builder()
-			.lectureCode(lectureCode)
-			.name(name)
-			.credit(credit)
-			.isRevoked(isRevoked)
-			.duplicateCode(duplicateCode)
-			.build();
-	}
-
 	private LectureJpaEntity createLectureJpaEntity(String lectureCode, String name) {
 		return LectureJpaEntity.builder()
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.build();
 	}

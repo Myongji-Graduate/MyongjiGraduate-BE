@@ -28,7 +28,7 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 		UserJpaEntity userJpaEntity = createUserJpaEntity(1L, "mju1000", "mju1000!",
 			EnglishLevel.ENG12, "김명지",
 			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
-		LectureJpaEntity lectureJpaEntity = createLectureJpaEntity(1L, "HEB01102", "기초프로그래밍", 3, 0,
+		LectureJpaEntity lectureJpaEntity = createLectureJpaEntity("HEB01102", "기초프로그래밍", 3, 0,
 			null);
 		TakenLectureJpaEntity takenLectureJpaEntity = createTakenLectureJpaEntity(1L, userJpaEntity,
 			lectureJpaEntity,
@@ -50,7 +50,7 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 		//given
 		User user = createUser(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 			"60211111", 21, "경영학과", null, StudentCategory.NORMAL);
-		Lecture lecture = createLecture(1L, "HEB01102", "기초프로그래밍", 3, 0, null);
+		Lecture lecture = createLecture("HEB01102", "기초프로그래밍", 3, 0, null);
 		TakenLecture takenLecture = createTakenLecture(null, user, lecture, 2020, Semester.FIRST);
 
 		//when
@@ -139,11 +139,10 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private Lecture createLecture(Long id, String lectureCode, String name, int credit,
+	private Lecture createLecture(String lectureCode, String name, int credit,
 		int isRevoked, String duplicateCode) {
 		return Lecture.builder()
-			.id(id)
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.credit(credit)
 			.isRevoked(isRevoked)
@@ -151,11 +150,10 @@ class TakenLectureMapperTest extends PersistenceTestSupport {
 			.build();
 	}
 
-	private LectureJpaEntity createLectureJpaEntity(Long id, String lectureCode, String name,
+	private LectureJpaEntity createLectureJpaEntity(String lectureCode, String name,
 		int credit, int isRevoked, String duplicateCode) {
 		return LectureJpaEntity.builder()
-			.id(id)
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.credit(credit)
 			.isRevoked(isRevoked)

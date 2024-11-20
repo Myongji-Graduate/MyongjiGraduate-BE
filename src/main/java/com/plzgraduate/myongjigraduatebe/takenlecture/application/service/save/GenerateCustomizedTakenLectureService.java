@@ -24,7 +24,7 @@ public class GenerateCustomizedTakenLectureService implements
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 
 	@Override
-	public void generateCustomizedTakenLecture(final Long userId, final Long addedTakenLectureId) {
+	public void generateCustomizedTakenLecture(final Long userId, final String addedTakenLectureId) {
 		User user = findUserUseCase.findUserById(userId);
 		Lecture lecture = findLecturePort.findLectureById(addedTakenLectureId);
 		addCustomTakenLecture(user, lecture);

@@ -37,7 +37,7 @@ class LectureQueryRepositoryTest extends PersistenceTestSupport {
 		//then
 		assertThat(byCode)
 			.hasSize(2)
-			.extracting("lectureCode")
+			.extracting("id")
 			.containsExactlyInAnyOrder("KMI02118", "KMI02123");
 
 	}
@@ -67,7 +67,7 @@ class LectureQueryRepositoryTest extends PersistenceTestSupport {
 
 	private LectureJpaEntity createLectureJpaEntity(String lectureCode, String name) {
 		return LectureJpaEntity.builder()
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.build();
 	}

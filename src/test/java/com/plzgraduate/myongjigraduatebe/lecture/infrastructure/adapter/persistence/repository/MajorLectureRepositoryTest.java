@@ -12,40 +12,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class MajorLectureRepositoryTest extends PersistenceTestSupport {
 
-	@Autowired
-	private LectureRepository lectureRepository;
-	@Autowired
-	private MajorLectureRepository majorLectureRepository;
+    @Autowired
+    private LectureRepository lectureRepository;
+    @Autowired
+    private MajorLectureRepository majorLectureRepository;
 
 
-	@DisplayName("유저의 전공에 해당하는 전공 과목을 조회한다.")
-	@Test
-	void findAllByMajor() {
-		//given
-		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
-			.lectureCode("TEST")
-			.build();
-		lectureRepository.save(lectureJpaEntity);
+    @DisplayName("유저의 전공에 해당하는 전공 과목을 조회한다.")
+    @Test
+    void findAllByMajor() {
+        //given
+        LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
+                .id("TEST")
+                .build();
+        lectureRepository.save(lectureJpaEntity);
 
-		MajorLectureJpaEntity majorLectureJpaEntityA = MajorLectureJpaEntity.builder()
-			.lectureJpaEntity(lectureJpaEntity)
-			.major("응용소프트웨어")
-			.build();
-		MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
-			.lectureJpaEntity(lectureJpaEntity)
-			.major("데이터테크놀로지")
-			.build();
-		majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB));
+        MajorLectureJpaEntity majorLectureJpaEntityA = MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(lectureJpaEntity)
+                .major("응용소프트웨어")
+                .build();
+        MajorLectureJpaEntity majorLectureJpaEntityB = MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(lectureJpaEntity)
+                .major("데이터테크놀로지")
+                .build();
+        MajorLectureJpaEntity majorLectureJpaEntityC = MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(lectureJpaEntity)
+                .major("실습")
+                .build();
+        majorLectureRepository.saveAll(List.of(majorLectureJpaEntityA, majorLectureJpaEntityB, majorLectureJpaEntityC));
 
-		String major = "응용소프트웨어";
+        String major = "응용소프트웨어";
 
-		//when
-		List<MajorLectureJpaEntity> majorLectures = majorLectureRepository.findAllByMajor(major);
+        //when
+        List<MajorLectureJpaEntity> majorLectures = majorLectureRepository.findAllByMajor(major);
 
-		//then
-		assertThat(majorLectures).hasSize(1)
-			.extracting("major")
-			.contains(major);
-	}
+        //then
+        assertThat(majorLectures).hasSize(2)
+                .extracting("major")
+                .containsExactlyInAnyOrder(major, "실습");
+    }
 
 }

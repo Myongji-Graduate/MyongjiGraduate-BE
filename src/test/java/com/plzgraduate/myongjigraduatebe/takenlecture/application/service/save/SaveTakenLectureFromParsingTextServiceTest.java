@@ -102,7 +102,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 
 	private Lecture createLecture(String lectureCode) {
 		return Lecture.builder()
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.build();
 	}
 }

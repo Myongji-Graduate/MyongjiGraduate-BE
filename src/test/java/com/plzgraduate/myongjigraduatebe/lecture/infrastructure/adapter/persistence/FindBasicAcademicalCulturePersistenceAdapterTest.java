@@ -33,10 +33,10 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 		//given
 		User user = UserFixture.응용소프트웨어학과_19학번();
 		LectureJpaEntity lectureJpaEntityA = LectureJpaEntity.builder()
-			.lectureCode("testA")
+			.id("testA")
 			.build();
 		LectureJpaEntity lectureJpaEntityB = LectureJpaEntity.builder()
-			.lectureCode("testB")
+			.id("testB")
 			.build();
 		lectureRepository.saveAll(List.of(lectureJpaEntityA, lectureJpaEntityB));
 

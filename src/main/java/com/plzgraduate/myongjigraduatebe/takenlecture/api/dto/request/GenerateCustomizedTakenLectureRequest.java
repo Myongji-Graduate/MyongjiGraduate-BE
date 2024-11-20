@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GenerateCustomizedTakenLectureRequest {
 
-	@Schema(name = "lectureId", example = "103")
-	private Long lectureId;
+	@Schema(name = "lectureId", example = "KMA02137")
+	private String lectureId;
 
 	@Builder
-	private GenerateCustomizedTakenLectureRequest(Long lectureId) {
+	private GenerateCustomizedTakenLectureRequest(String lectureId) {
 		this.lectureId = lectureId;
 	}
 }

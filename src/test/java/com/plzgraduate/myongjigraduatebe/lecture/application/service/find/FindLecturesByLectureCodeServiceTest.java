@@ -29,9 +29,9 @@ class FindLecturesByLectureCodeServiceTest {
 		//given
 		List<String> lectureCodes = List.of("KMA00101", "KMA02104", "KMA02106");
 		List<Lecture> lectures = List.of(
-			createLecture(1L, "KMA00101", "성서와 인간이해", 2, 0, null),
-			createLecture(2L, "KMA02104", "글쓰기", 3, 0, null),
-			createLecture(3L, "KMA02106", "영어1", 2, 0, null)
+			createLecture("KMA00101", "성서와 인간이해", 2, 0, null),
+			createLecture("KMA02104", "글쓰기", 3, 0, null),
+			createLecture("KMA02106", "영어1", 2, 0, null)
 		);
 		given(findLecturePort.findLecturesByLectureCodes(lectureCodes)).willReturn(lectures);
 
@@ -42,11 +42,10 @@ class FindLecturesByLectureCodeServiceTest {
 		assertThat(result).isEqualTo(lectures);
 	}
 
-	private Lecture createLecture(Long id, String lectureCode, String name, int credit,
+	private Lecture createLecture(String lectureCode, String name, int credit,
 		int isRevoked, String duplicateCode) {
 		return Lecture.builder()
-			.id(id)
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.name(name)
 			.credit(credit)
 			.isRevoked(isRevoked)

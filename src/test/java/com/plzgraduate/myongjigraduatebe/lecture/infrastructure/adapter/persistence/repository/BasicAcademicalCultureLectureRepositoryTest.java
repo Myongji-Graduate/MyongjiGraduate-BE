@@ -35,7 +35,7 @@ class BasicAcademicalCultureLectureRepositoryTest extends PersistenceTestSupport
 	void findByCollege(String college) {
 		//given
 		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
-			.lectureCode("TEST")
+			.id("TEST")
 			.build();
 		lectureRepository.save(lectureJpaEntity);
 
@@ -65,10 +65,10 @@ class BasicAcademicalCultureLectureRepositoryTest extends PersistenceTestSupport
 			.build());
 
 		LectureJpaEntity lectureJpaEntityA = LectureJpaEntity.builder()
-			.lectureCode("TESTA")
+			.id("TESTA")
 			.build();
 		LectureJpaEntity lectureJpaEntityB = LectureJpaEntity.builder()
-			.lectureCode("TESTB")
+			.id("TESTB")
 			.build();
 		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.saveAll(
 			List.of(lectureJpaEntityA, lectureJpaEntityB));
