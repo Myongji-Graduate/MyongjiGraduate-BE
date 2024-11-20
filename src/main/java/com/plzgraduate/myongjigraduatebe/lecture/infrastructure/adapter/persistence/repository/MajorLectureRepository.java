@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface MajorLectureRepository extends JpaRepository<MajorLectureJpaEntity, Long> {
 
-	@Query("select m from MajorLectureJpaEntity m join fetch m.lectureJpaEntity where m.major = :major")
+	@Query("select m from MajorLectureJpaEntity m join fetch m.lectureJpaEntity where m.major = :major or m.major = '실습'")
 	List<MajorLectureJpaEntity> findAllByMajor(@Param("major") String major);
 }
