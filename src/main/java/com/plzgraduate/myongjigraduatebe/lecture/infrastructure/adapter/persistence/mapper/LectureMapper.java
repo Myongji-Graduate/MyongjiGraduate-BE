@@ -19,7 +19,6 @@ public class LectureMapper {
 
 		return Lecture.builder()
 			.id(lecture.getId())
-			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
 			.isRevoked(lecture.getIsRevoked())
@@ -33,7 +32,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -50,7 +48,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -68,7 +65,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -85,7 +81,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())

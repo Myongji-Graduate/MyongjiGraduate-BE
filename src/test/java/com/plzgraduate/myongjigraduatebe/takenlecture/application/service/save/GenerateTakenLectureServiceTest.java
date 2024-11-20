@@ -39,15 +39,15 @@ class GenerateTakenLectureServiceTest {
 		User user = User.builder()
 			.id(1L)
 			.build();
-		Lecture lecture = createLecture(1L);
-		given(findLecturePort.findLectureById(1L))
+		Lecture lecture = createLecture("code");
+		given(findLecturePort.findLectureById("code"))
 			.willReturn(lecture);
 
 		ArgumentCaptor<TakenLecture> takenLectureCaptor = ArgumentCaptor.forClass(
 			TakenLecture.class);
 
 		//when
-		generateTakenLectureService.generateCustomizedTakenLecture(user.getId(), 1L);
+		generateTakenLectureService.generateCustomizedTakenLecture(user.getId(), "code");
 		generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
 
 		//then
@@ -55,7 +55,7 @@ class GenerateTakenLectureServiceTest {
 			.saveTakenLecture(takenLectureCaptor.capture());
 	}
 
-	private Lecture createLecture(Long id) {
+	private Lecture createLecture(String id) {
 		return Lecture.builder()
 			.id(id)
 			.build();

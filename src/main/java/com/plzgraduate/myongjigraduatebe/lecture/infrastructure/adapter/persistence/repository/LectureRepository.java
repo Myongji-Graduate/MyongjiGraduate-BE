@@ -4,9 +4,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LectureRepository extends JpaRepository<LectureJpaEntity, Long> {
+public interface LectureRepository extends JpaRepository<LectureJpaEntity, String> {
 
-	List<LectureJpaEntity> findByLectureCodeIn(List<String> lectureCodes);
+	List<LectureJpaEntity> findByIdIn(List<String> lectureIds);
 
-	List<LectureJpaEntity> findByIdIn(List<Long> ids);
 }

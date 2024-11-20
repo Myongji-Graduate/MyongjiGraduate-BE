@@ -66,6 +66,6 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 			.collect(Collectors.toList());
 		List<Lecture> lectures = findLecturesUseCase.findLecturesByLectureCodes(lectureCodes);
 		return lectures.stream()
-			.collect(Collectors.toMap(Lecture::getLectureCode, Function.identity()));
+			.collect(Collectors.toMap(Lecture::getId, Function.identity()));
 	}
 }

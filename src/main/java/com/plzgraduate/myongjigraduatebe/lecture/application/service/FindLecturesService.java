@@ -16,7 +16,7 @@ public class FindLecturesService implements FindLecturesUseCase {
 	private final FindLecturePort findLecturePort;
 
 	@Override
-	public List<Lecture> findLecturesByIds(List<Long> lectureIds) {
+	public List<Lecture> findLecturesByIds(List<String> lectureIds) {
 		return findLecturePort.findLecturesByIds(lectureIds);
 	}
 

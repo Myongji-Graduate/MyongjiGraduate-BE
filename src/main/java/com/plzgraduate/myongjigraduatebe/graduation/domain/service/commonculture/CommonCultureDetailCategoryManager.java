@@ -77,8 +77,7 @@ class CommonCultureDetailCategoryManager {
 				.stream()
 				.anyMatch(
 					takenLecture -> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST
-						.contains(takenLecture.getLecture()
-							.getLectureCode()));
+						.contains(takenLecture.getLecture().getId()));
 		}
 		if (user.getEnglishLevel() == BASIC && category == ENGLISH) {
 			return isTakenBasicEnglish(takenLectureInventory) && checkEnglish12Satisfaction(
@@ -96,8 +95,7 @@ class CommonCultureDetailCategoryManager {
 	private boolean isTakenBasicEnglish(TakenLectureInventory takenLectureInventory) {
 		return takenLectureInventory.getCultureLectures()
 			.stream()
-			.map(takenLecture -> takenLecture.getLecture()
-				.getLectureCode())
+			.map(takenLecture -> takenLecture.getLecture().getId())
 			.collect(Collectors.toList())
 			.contains(BASIC_ENGLISH_LECTURE_CODE);
 	}
@@ -106,8 +104,7 @@ class CommonCultureDetailCategoryManager {
 		for (String lectureCode : ENGLISH_12_MANDATORY_LECTURE_CODE_LIST) {
 			if (!takenLectureInventory.getCultureLectures()
 				.stream()
-				.map(takenLecture -> takenLecture.getLecture()
-					.getLectureCode())
+				.map(takenLecture -> takenLecture.getLecture().getId())
 				.collect(Collectors.toList())
 				.contains(lectureCode)) {
 				return false;
@@ -120,8 +117,7 @@ class CommonCultureDetailCategoryManager {
 		for (String lectureCode : ENGLISH_34_MANDATORY_LECTURE_CODE_LIST) {
 			if (!takenLectureInventory.getCultureLectures()
 				.stream()
-				.map(takenLecture -> takenLecture.getLecture()
-					.getLectureCode())
+				.map(takenLecture -> takenLecture.getLecture().getId())
 				.collect(Collectors.toList())
 				.contains(lectureCode)) {
 				return false;

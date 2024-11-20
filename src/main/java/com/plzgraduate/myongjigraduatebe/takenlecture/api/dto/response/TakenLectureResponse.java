@@ -41,7 +41,7 @@ public class TakenLectureResponse {
 			.semester(takenLecture.getSemester() == null ? "CUSTOM" : takenLecture.getSemester()
 				.getName())
 			.lectureCode(takenLecture.getLecture()
-				.getLectureCode())
+				.getId())
 			.lectureName(takenLecture.getLecture()
 				.getName())
 			.credit(takenLecture.getLecture()

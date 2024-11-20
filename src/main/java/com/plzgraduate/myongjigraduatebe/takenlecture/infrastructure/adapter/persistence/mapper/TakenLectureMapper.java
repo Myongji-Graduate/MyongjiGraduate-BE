@@ -74,7 +74,6 @@ public class TakenLectureMapper {
 
 		return Lecture.builder()
 			.id(lecture.getId())
-			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
 			.isRevoked(lecture.getIsRevoked())
@@ -86,7 +85,6 @@ public class TakenLectureMapper {
 
 		return LectureJpaEntity.builder()
 			.id(lecture.getId())
-			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
 			.isRevoked(lecture.getIsRevoked())

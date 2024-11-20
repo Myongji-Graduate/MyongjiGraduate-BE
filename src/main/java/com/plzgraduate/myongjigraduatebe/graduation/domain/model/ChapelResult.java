@@ -31,7 +31,7 @@ public class ChapelResult {
 		return (int) takenLectureInventory.getTakenLectures()
 			.stream()
 			.filter(takenLecture -> takenLecture.getLecture()
-				.getLectureCode()
+				.getId()
 				.equals(CHAPEL_LECTURE_CODE))
 			.count();
 	}
