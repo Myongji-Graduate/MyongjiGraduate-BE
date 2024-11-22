@@ -19,12 +19,14 @@ public class UserMapper {
 			.primaryMajor(user.getMajor())
 			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
+			.associatedMajor(user.getAssociatedMajor())
 			.studentCategory(user.getStudentCategory())
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
 			.graduated(user.isGraduated())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
+			.transferStatus(user.getTransferStatus())
 			.build();
 	}
 
@@ -41,12 +43,14 @@ public class UserMapper {
 			.major(user.getPrimaryMajor())
 			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
+			.associatedMajor(user.getAssociatedMajor())
 			.studentCategory(user.getStudentCategory())
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
 			.graduated(user.isGraduated())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
+			.transferStatus(user.getTransferStatus())
 			.build();
 	}
 
