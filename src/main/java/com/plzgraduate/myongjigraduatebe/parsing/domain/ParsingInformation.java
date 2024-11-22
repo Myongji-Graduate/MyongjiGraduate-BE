@@ -18,14 +18,15 @@ public class ParsingInformation {
 	private final String subMajor;
 	private final String dualMajor;
 	private final String associatedMajor;
+	private final String transferStatus;
 	private final StudentCategory studentCategory;
 	private final List<ParsingTakenLectureDto> takenLectureInformation;
 
 	@Builder
 	public ParsingInformation(String studentName, String studentNumber, String major,
-		String changeMajor, String subMajor, String dualMajor,
-		String associatedMajor, StudentCategory studentCategory,
-		List<ParsingTakenLectureDto> takenLectureInformation) {
+                              String changeMajor, String subMajor, String dualMajor,
+                              String associatedMajor, String transferStatus, StudentCategory studentCategory,
+                              List<ParsingTakenLectureDto> takenLectureInformation) {
 		this.studentName = studentName;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -33,7 +34,8 @@ public class ParsingInformation {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
-		this.studentCategory = studentCategory;
+        this.transferStatus = transferStatus;
+        this.studentCategory = studentCategory;
 		this.takenLectureInformation = takenLectureInformation;
 	}
 
@@ -48,6 +50,7 @@ public class ParsingInformation {
 			.changeMajor(parsingStudentCategoryDto.getChangeMajor())
 			.subMajor(parsingStudentCategoryDto.getSubMajor())
 			.associatedMajor(parsingStudentCategoryDto.getAssociatedMajor())
+			.transferStatus(parsingStudentCategoryDto.getTransferStatus())
 			.studentCategory(parsingStudentCategoryDto.getStudentCategory())
 			.takenLectureInformation(parseTakenLectureInformation(splitText))
 			.build();
@@ -79,6 +82,7 @@ public class ParsingInformation {
 		String dualMajor = null;
 		String subMajor = null;
 		String associatedMajor = null;
+		String transferStatus = null;
 		StudentCategory studentCategory;
 		String secondLineText = splitText[2];
 		String thirdLineText = splitText[3];
@@ -103,10 +107,13 @@ public class ParsingInformation {
 			} else if (part.startsWith("연계전공 - ")) {
 				categories.add("연계전공");
 				associatedMajor = part.substring("연계전공 - ".length());
+			}else if (part.contains("편입")) {
+				categories.add("편입");
+				transferStatus = part.split("편입")[0].replace("입학 - ", "").trim();
 			}
 		}
 		studentCategory = StudentCategory.from(categories);
-		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor,
+		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor, transferStatus,
 			studentCategory);
 	}
 

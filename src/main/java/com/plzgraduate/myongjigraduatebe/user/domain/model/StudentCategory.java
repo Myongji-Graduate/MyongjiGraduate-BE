@@ -11,6 +11,10 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.ASSOCIATED_MANDATORY_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.ASSOCIATED_ELECTIVE_CULTURE;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.ASSOCIATED_MANDATORY_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.ASSOCIATED_ELECTIVE_MAJOR;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
@@ -45,9 +49,15 @@ public enum StudentCategory {
 			FREE_ELECTIVE, CHAPEL)),
 	ASSOCIATED_MAJOR(List.of("연계전공"),
 		// 현재 미지원
-		List.of(COMMON_CULTURE, CORE_CULTURE, PRIMARY_BASIC_ACADEMICAL_CULTURE,
-			PRIMARY_MANDATORY_MAJOR,
-			PRIMARY_ELECTIVE_MAJOR, NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL)),
+			List.of(COMMON_CULTURE, CORE_CULTURE, PRIMARY_BASIC_ACADEMICAL_CULTURE,
+					ASSOCIATED_MANDATORY_CULTURE, ASSOCIATED_ELECTIVE_CULTURE,
+					PRIMARY_MANDATORY_MAJOR, PRIMARY_ELECTIVE_MAJOR, ASSOCIATED_MANDATORY_MAJOR,
+					ASSOCIATED_ELECTIVE_MAJOR, NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL
+			)),
+	TRANSFER(List.of("편입"),
+		//현재 미지원
+	    List.of(COMMON_CULTURE, CORE_CULTURE, PRIMARY_BASIC_ACADEMICAL_CULTURE,
+            PRIMARY_MANDATORY_MAJOR, PRIMARY_ELECTIVE_MAJOR, NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL)),
 	DOUBLE_SUB(List.of("복수전공", "부전공"),
 		// 현재 미지원
 		List.of(COMMON_CULTURE, CORE_CULTURE, PRIMARY_BASIC_ACADEMICAL_CULTURE,
