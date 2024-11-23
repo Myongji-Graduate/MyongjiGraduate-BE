@@ -14,7 +14,7 @@ class GraduationCategoryTest {
 	@ParameterizedTest
 	void checkMandatoryOrElective(GraduationCategory graduationCategory, boolean isMandatory) {
 		//when
-		boolean result = graduationCategory.checkMandatoryIfSeperatedByMandatoryAndElective();
+		boolean result = graduationCategory.checkMandatoryIfSeparatedByMandatoryAndElective();
 
 		//then
 		assertThat(result).isEqualTo(isMandatory);
