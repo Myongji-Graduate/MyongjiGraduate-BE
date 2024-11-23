@@ -94,7 +94,7 @@ public class ParsingInformation {
 		String subMajor = null;
 		String associatedMajor = null;
 		StudentCategory studentCategory;
-		TransferCredit transferCredit = null;
+		TransferCredit transferCredit;
 		String secondLineText = splitText[2];
 		String thirdLineText = splitText[3];
 		String fourthLineText = splitText[4];
@@ -129,7 +129,7 @@ public class ParsingInformation {
 		transferCredit = TransferCredit.from(Arrays.stream(fourthLine.split(","))
 			.map(s -> s.replaceAll("[^0-9]", ""))
 			.collect(Collectors.joining("/")));
-		
+
 		return ParsingStudentCategoryDto.of(
 			changeMajor, subMajor, dualMajor, associatedMajor, studentCategory, transferCredit
 		);
