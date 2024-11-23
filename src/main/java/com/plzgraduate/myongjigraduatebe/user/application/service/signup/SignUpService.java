@@ -29,9 +29,12 @@ class SignUpService implements SignUpUseCase {
 	public void signUp(SignUpCommand signUpCommand) {
 		checkDuplicateUser(signUpCommand);
 		String encodedPassword = passwordEncoder.encode(signUpCommand.getPassword());
-		User newUser = User.create(signUpCommand.getAuthId(), encodedPassword,
+		User newUser = User.create(
+			signUpCommand.getAuthId(),
+			encodedPassword,
 			signUpCommand.getEngLv(),
-			signUpCommand.getStudentNumber());
+			signUpCommand.getStudentNumber()
+		);
 		checkStudentNumberOver16(newUser);
 		saveUserPort.saveUser(newUser);
 	}

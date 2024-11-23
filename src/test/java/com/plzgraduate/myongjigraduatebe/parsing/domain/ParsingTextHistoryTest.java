@@ -35,6 +35,5 @@ class ParsingTextHistoryTest {
 		assertThat(parsingTextHistory)
 			.extracting("parsingText", "parsingResult")
 			.contains(text, ParsingResult.FAIL);
-
 	}
 }
