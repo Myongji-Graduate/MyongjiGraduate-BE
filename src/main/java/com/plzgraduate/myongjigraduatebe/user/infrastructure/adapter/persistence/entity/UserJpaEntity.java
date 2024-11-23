@@ -58,4 +58,5 @@ public class UserJpaEntity extends TimeBaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	private StudentCategory studentCategory;
 
+	private String transferCredit;
 }

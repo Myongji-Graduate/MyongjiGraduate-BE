@@ -20,6 +20,8 @@ public class User {
 	private final int entryYear;
 	private final Instant createdAt;
 	private final Instant updatedAt;
+	private final String transferStatus;
+	private final TransferCredit transferCredit;
 	private String password;
 	private String name;
 	private String primaryMajor;
@@ -31,12 +33,26 @@ public class User {
 	private boolean graduated;
 
 	@Builder
-	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name,
+	private User(
+		Long id,
+		String authId,
+		String password,
+		EnglishLevel englishLevel,
+		String name,
 		String studentNumber,
-		int entryYear, String primaryMajor, String subMajor, String dualMajor,
+		int entryYear,
+		String primaryMajor,
+		String subMajor,
+		String dualMajor,
 		StudentCategory studentCategory,
-		int totalCredit, double takenCredit, boolean graduated, Instant createdAt,
-		Instant updatedAt) {
+		String transferStatus,
+		TransferCredit transferCredit,
+		int totalCredit,
+		double takenCredit,
+		boolean graduated,
+		Instant createdAt,
+		Instant updatedAt
+	) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -48,6 +64,8 @@ public class User {
 		this.subMajor = subMajor;
 		this.dualMajor = dualMajor;
 		this.studentCategory = studentCategory;
+		this.transferStatus = transferStatus;
+		this.transferCredit = transferCredit;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
@@ -55,27 +73,28 @@ public class User {
 		this.updatedAt = updatedAt;
 	}
 
-	public static User create(String authId, String password, EnglishLevel englishLevel,
-		String studentNumber) {
-		return User.builder()
-			.authId(authId)
-			.password(password)
-			.englishLevel(englishLevel)
-			.studentNumber(studentNumber)
-			.entryYear(parseEntryYearInStudentNumber(studentNumber))
-			.totalCredit(0)
-			.takenCredit(0)
-			.graduated(false)
-			.build();
+	public static User create(
+		String authId, String password, EnglishLevel englishLevel, String studentNumber
+	) {
+		return User.builder().authId(authId).password(password).englishLevel(englishLevel)
+			.studentNumber(studentNumber).entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.totalCredit(0).takenCredit(0).graduated(false).build();
 	}
 
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}
 
-	public void updateStudentInformation(String name, String major, String dualMajor,
+	public void updateStudentInformation(
+		String name,
+		String major,
+		String dualMajor,
 		String subMajor,
-		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
+		StudentCategory studentCategory,
+		int totalCredit,
+		double takenCredit,
+		boolean graduate
+	) {
 		this.name = name;
 		this.primaryMajor = major;
 		this.dualMajor = dualMajor;
@@ -132,8 +151,8 @@ public class User {
 			return false;
 		}
 		User user = (User) o;
-		return Objects.equals(authId, user.authId) && Objects.equals(studentNumber,
-			user.studentNumber);
+		return Objects.equals(authId, user.authId)
+			&& Objects.equals(studentNumber, user.studentNumber);
 	}
 
 	@Override
