@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper;
 
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class UserMapper {
 			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
+			.transferCredit(TransferCredit.from(user.getTransferCredit()))
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
 			.graduated(user.isGraduated())
@@ -42,6 +44,7 @@ public class UserMapper {
 			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
 			.studentCategory(user.getStudentCategory())
+			.transferCredit(user.getTransferCredit().toString())
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
 			.graduated(user.isGraduated())
@@ -49,5 +52,4 @@ public class UserMapper {
 			.updatedAt(user.getUpdatedAt())
 			.build();
 	}
-
 }

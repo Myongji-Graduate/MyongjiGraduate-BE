@@ -2,9 +2,12 @@ package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,13 +22,22 @@ public class ParsingInformation {
 	private final String dualMajor;
 	private final String associatedMajor;
 	private final StudentCategory studentCategory;
+	private final TransferCredit transferCredit;
 	private final List<ParsingTakenLectureDto> takenLectureInformation;
 
 	@Builder
-	public ParsingInformation(String studentName, String studentNumber, String major,
-		String changeMajor, String subMajor, String dualMajor,
-		String associatedMajor, StudentCategory studentCategory,
-		List<ParsingTakenLectureDto> takenLectureInformation) {
+	public ParsingInformation(
+		String studentName,
+		String studentNumber,
+		String major,
+		String changeMajor,
+		String subMajor,
+		String dualMajor,
+		String associatedMajor,
+		StudentCategory studentCategory,
+		TransferCredit transferCredit,
+		List<ParsingTakenLectureDto> takenLectureInformation
+	) {
 		this.studentName = studentName;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -34,6 +46,7 @@ public class ParsingInformation {
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
+		this.transferCredit = transferCredit;
 		this.takenLectureInformation = takenLectureInformation;
 	}
 
@@ -49,6 +62,7 @@ public class ParsingInformation {
 			.subMajor(parsingStudentCategoryDto.getSubMajor())
 			.associatedMajor(parsingStudentCategoryDto.getAssociatedMajor())
 			.studentCategory(parsingStudentCategoryDto.getStudentCategory())
+			.transferCredit(parsingStudentCategoryDto.getTransferCredit())
 			.takenLectureInformation(parseTakenLectureInformation(splitText))
 			.build();
 	}
@@ -80,11 +94,14 @@ public class ParsingInformation {
 		String subMajor = null;
 		String associatedMajor = null;
 		StudentCategory studentCategory;
+		TransferCredit transferCredit = null;
 		String secondLineText = splitText[2];
 		String thirdLineText = splitText[3];
+		String fourthLineText = splitText[4];
 		List<String> categories = new ArrayList<>();
 		String[] parts = secondLineText.split(", ");
 		String[] thirdLineParts = thirdLineText.split(", ");
+
 		if (thirdLineParts.length == 4) {
 			String part = thirdLineParts[3];
 			if (part.startsWith("전과내역 -")) {
@@ -105,16 +122,26 @@ public class ParsingInformation {
 				associatedMajor = part.substring("연계전공 - ".length());
 			}
 		}
+
 		studentCategory = StudentCategory.from(categories);
-		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor,
-			studentCategory);
+
+		String fourthLine = fourthLineText.substring("편입생 인정학점 - ".length());
+		transferCredit = TransferCredit.from(Arrays.stream(fourthLine.split(","))
+			.map(s -> s.replaceAll("[^0-9]", ""))
+			.collect(Collectors.joining("/")));
+		
+		return ParsingStudentCategoryDto.of(
+			changeMajor, subMajor, dualMajor, associatedMajor, studentCategory, transferCredit
+		);
 	}
 
 	private static List<ParsingTakenLectureDto> parseTakenLectureInformation(String[] splitText) {
 		List<ParsingTakenLectureDto> takenLectureInformation = new ArrayList<>();
 		for (int i = 16; i < splitText.length; i += 7) {
-			if (i + 3 < splitText.length && !Pattern.matches("^[A-Z]+$",
-				splitText[i + 3].substring(0, 1))) {
+			if (i + 3 < splitText.length && !Pattern.matches(
+				"^[A-Z]+$",
+				splitText[i + 3].substring(0, 1)
+			)) {
 				return takenLectureInformation;
 			}
 			int year = Integer.parseInt(splitText[i + 1].split(" ")[0].substring(0, 4));

@@ -35,7 +35,6 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
-
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 
 	@Override
@@ -63,20 +62,19 @@ class ParsingTextService implements ParsingTextUseCase {
 
 	private void saveTakenLectures(User user, ParsingInformation parsingInformation) {
 		List<ParsingTakenLectureDto> parsingTakenLectureDtoList = parsingInformation.getTakenLectureInformation();
-		List<TakenLectureInformation> saveTakenLectureCommand = getSaveTakenLectureCommand(
-			parsingTakenLectureDtoList);
+		List<TakenLectureInformation> saveTakenLectureCommand =
+			getSaveTakenLectureCommand(parsingTakenLectureDtoList);
 		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
 	private User updateUser(User user, ParsingInformation parsingInformation) {
-		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(
-			user, parsingInformation);
+		UpdateStudentInformationCommand updateStudentInfoCommand =
+			UpdateStudentInformationCommand.of(user, parsingInformation);
 		return updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
 	private void validateParsingText(String parsingText) {
-		if (parsingText.trim()
-			.isEmpty()) {
+		if (parsingText.trim().isEmpty()) {
 			throw new InvalidPdfException("PDF를 인식하지 못했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}
@@ -88,13 +86,15 @@ class ParsingTextService implements ParsingTextUseCase {
 	}
 
 	private List<TakenLectureInformation> getSaveTakenLectureCommand(
-		List<ParsingTakenLectureDto> parsingTakenLectureDtoList) {
+		List<ParsingTakenLectureDto> parsingTakenLectureDtoList
+	) {
 		return parsingTakenLectureDtoList.stream()
 			.map(parsingTakenLectureDto ->
 				TakenLectureInformation.createTakenLectureInformation(
 					parsingTakenLectureDto.getLectureCode(),
 					parsingTakenLectureDto.getYear(),
-					parsingTakenLectureDto.getSemester())
+					parsingTakenLectureDto.getSemester()
+				)
 			)
 			.collect(Collectors.toList());
 	}
@@ -105,5 +105,4 @@ class ParsingTextService implements ParsingTextUseCase {
 			throw new IllegalArgumentException(ErrorCode.UNSUPPORTED_STUDENT_CATEGORY.toString());
 		}
 	}
-
 }
