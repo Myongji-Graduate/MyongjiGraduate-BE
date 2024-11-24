@@ -31,7 +31,6 @@ public class UserMapper {
 	}
 
 	public UserJpaEntity mapToJpaEntity(User user) {
-
 		return UserJpaEntity.builder()
 			.id(user.getId())
 			.authId(user.getAuthId())

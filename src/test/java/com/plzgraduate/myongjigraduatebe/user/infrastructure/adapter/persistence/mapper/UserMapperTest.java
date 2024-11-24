@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import org.junit.jupiter.api.DisplayName;
@@ -26,13 +27,35 @@ class UserMapperTest extends PersistenceTestSupport {
 		User user = userMapper.mapToDomainEntity(userJpaEntity);
 
 		//then
-		assertThat(user)
-			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber",
-				"entryYear",
-				"primaryMajor", "subMajor", "studentCategory", "totalCredit", "takenCredit",
-				"graduated")
-			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
+		assertThat(user).extracting(
+			"id",
+			"authId",
+			"password",
+			"englishLevel",
+			"name",
+			"studentNumber",
+			"entryYear",
+			"primaryMajor",
+			"subMajor",
+			"studentCategory",
+			"totalCredit",
+			"takenCredit",
+			"graduated"
+		).contains(
+			1L,
+			"mju1000",
+			"mju1000!",
+			EnglishLevel.ENG12,
+			"김명지",
+			"60211111",
+			21,
+			"경영",
+			null,
+			StudentCategory.NORMAL,
+			100,
+			40.0,
+			false
+		);
 	}
 
 	@DisplayName("도메인 엔티티를 JPA 엔티티 변환한다.")
@@ -45,12 +68,35 @@ class UserMapperTest extends PersistenceTestSupport {
 		UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
 
 		//then
-		assertThat(userJpaEntity)
-			.extracting("id", "authId", "password", "englishLevel", "name", "studentNumber",
-				"entryYear", "major",
-				"subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
-			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
-				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
+		assertThat(userJpaEntity).extracting(
+			"id",
+			"authId",
+			"password",
+			"englishLevel",
+			"name",
+			"studentNumber",
+			"entryYear",
+			"major",
+			"subMajor",
+			"studentCategory",
+			"totalCredit",
+			"takenCredit",
+			"graduated"
+		).contains(
+			1L,
+			"mju1000",
+			"mju1000!",
+			EnglishLevel.ENG12,
+			"김명지",
+			"60211111",
+			21,
+			"경영",
+			null,
+			StudentCategory.NORMAL,
+			100,
+			40.0,
+			false
+		);
 	}
 
 	private User createUser() {
@@ -65,6 +111,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.primaryMajor("경영")
 			.dualMajor(null)
 			.subMajor(null)
+			.transferCredit(TransferCredit.empty())
 			.totalCredit(100)
 			.takenCredit(40)
 			.graduated(false)
@@ -83,6 +130,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.englishLevel(EnglishLevel.ENG12)
 			.major("경영")
 			.dualMajor("복수전공")
+			.transferCredit(TransferCredit.empty().toString())
 			.totalCredit(100)
 			.takenCredit(40)
 			.graduated(false)

@@ -44,7 +44,6 @@ public class User {
 		String subMajor,
 		String dualMajor,
 		StudentCategory studentCategory,
-		String transferStatus,
 		TransferCredit transferCredit,
 		int totalCredit,
 		double takenCredit,
@@ -63,7 +62,7 @@ public class User {
 		this.subMajor = subMajor;
 		this.dualMajor = dualMajor;
 		this.studentCategory = studentCategory;
-		this.transferCredit = transferCredit;
+		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
@@ -80,7 +79,6 @@ public class User {
 			.englishLevel(englishLevel)
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
-			.transferCredit(TransferCredit.from("0/0/0/0"))
 			.totalCredit(0)
 			.takenCredit(0)
 			.graduated(false)

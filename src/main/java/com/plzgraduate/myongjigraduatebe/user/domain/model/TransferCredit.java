@@ -1,17 +1,23 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
 import java.util.Objects;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransferCredit {
 
-	private final int normalCulture;
-	private final int majorLecture;
-	private final int freeElective;
-	private final int christianLecture;
+	private int normalCulture;
+	private int majorLecture;
+	private int freeElective;
+	private int christianLecture;
+
+	public static TransferCredit empty() {
+		return new TransferCredit(0, 0, 0, 0);
+	}
 
 	public static TransferCredit from(String input) {
 		if (isValid(input)) {

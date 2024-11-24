@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistenc
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
@@ -110,8 +111,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	}
 
 	private User createUser(String authId, String password, String studentNumber) {
-		return User
-			.builder()
+		return User.builder()
 			.authId(authId)
 			.password(password)
 			.studentNumber(studentNumber)
@@ -119,11 +119,11 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	}
 
 	private UserJpaEntity createUserEntity(String authId, String password, String studentNumber) {
-		return UserJpaEntity
-			.builder()
+		return UserJpaEntity.builder()
 			.authId(authId)
 			.password(password)
 			.studentNumber(studentNumber)
+			.transferCredit(TransferCredit.empty().toString())
 			.build();
 	}
 }
