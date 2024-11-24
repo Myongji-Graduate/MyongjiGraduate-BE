@@ -24,8 +24,6 @@ public class UpdateStudentInformationCommand {
 
 	private String associatedMajor;
 
-	private String transferStatus;
-
 	private StudentCategory studentCategory;
 
 	private int totalCredit;
@@ -36,7 +34,7 @@ public class UpdateStudentInformationCommand {
 
 	@Builder
 	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
-		String subMajor, String associatedMajor, String transferStatus, StudentCategory studentCategory, int totalCredit, double takenCredit,
+		String subMajor, String associatedMajor, StudentCategory studentCategory, int totalCredit, double takenCredit,
 		boolean graduate) {
 		this.user = user;
 		this.name = name;
@@ -44,7 +42,6 @@ public class UpdateStudentInformationCommand {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
-		this.transferStatus = transferStatus;
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -60,7 +57,6 @@ public class UpdateStudentInformationCommand {
 			.dualMajor(parsingInformation.getDualMajor())
 			.subMajor(parsingInformation.getSubMajor())
 			.associatedMajor(parsingInformation.getAssociatedMajor())
-			.transferStatus(parsingInformation.getTransferStatus())
 			.studentCategory(parsingInformation.getStudentCategory())
 			.build();
 	}
@@ -75,7 +71,6 @@ public class UpdateStudentInformationCommand {
 			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
 			.associatedMajor(user.getAssociatedMajor())
-			.transferStatus(user.getTransferStatus())
 			.totalCredit(graduationResult.getTotalCredit())
 			.takenCredit(graduationResult.getTakenCredit())
 			.graduate(graduationResult.isGraduated())

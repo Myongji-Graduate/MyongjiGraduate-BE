@@ -143,26 +143,4 @@ class ParsingInformationTest {
 							"studentCategory")
 					.contains("장예지", "60191363", "경영정보학과", "프로세스 자동화 경영", StudentCategory.ASSOCIATED_MAJOR);
 		}
-
-	@DisplayName("편입을 할 경우 StudentCategory는 TRANSFER이며, 편입 정보 transfer_status에 편입정보가 입력된다.")
-	@Test
-	void 편입생_확인() {
-		//given
-		String parsingText = "출력일자 : 2024/11/21|1/1"
-				+ "|사회과학대학 경제학과, 최나영(60195521), 현학적 - 재학, 이수 - 7, 입학 - 일반3/1편입(2021/03/02)"
-				+ "|토익 - , 영어교과목면제 - 면제없음, 최종학적변동 - 일반복학(2024/07/08)"
-				+ "|편입생 인정학점 - 교양 51, 전공 0, 자유선택 13, 성경과인간이해 0"
-				+ "|교환학생 인정학점 - 학문기초교양 0, 일반교양 0, 전공 0, 복수전공 0, 융합전공 0, 부전공 0, 자유선택 0"
-				+ "|공통교양 2.5, 핵심교양 0, 학문기초교양 0, 일반교양 3, 전공 54, 복수전공 0, 융합전공 0, 부전공 0, 교직 0, 자유선택 0"
-				+ "|총 취득학점 - 59.5, 총점 - 224.0, 평균평점 - 3.96"
-				+ "|이수구분|수강년도/학기|한글코드|과목코드|과목명|학점|등급|중복|공통교양|2021년 1학기|교필127|KMA00101|성서와인간이해|2|A0";
-
-		//when
-		ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
-
-		//then
-		assertThat(parsingInformation)
-				.extracting("studentName", "studentNumber", "major", "transferStatus", "studentCategory")
-				.contains("최나영", "60195521", "경제학과", "일반3/1", StudentCategory.TRANSFER);
-	}
 }

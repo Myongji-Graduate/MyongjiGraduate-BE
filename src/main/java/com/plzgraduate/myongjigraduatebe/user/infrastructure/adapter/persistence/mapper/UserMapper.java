@@ -26,7 +26,6 @@ public class UserMapper {
 			.graduated(user.isGraduated())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
-			.transferStatus(user.getTransferStatus())
 			.build();
 	}
 
@@ -50,7 +49,6 @@ public class UserMapper {
 			.graduated(user.isGraduated())
 			.createdAt(user.getCreatedAt())
 			.updatedAt(user.getUpdatedAt())
-			.transferStatus(user.getTransferStatus())
 			.build();
 	}
 

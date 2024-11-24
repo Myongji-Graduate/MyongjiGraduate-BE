@@ -26,7 +26,6 @@ public class User {
 	private String subMajor;
 	private String dualMajor;
 	private String associatedMajor;
-	private String transferStatus;
 	private StudentCategory studentCategory;
 	private int totalCredit;
 	private double takenCredit;
@@ -35,7 +34,7 @@ public class User {
 	@Builder
 	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name,
 		String studentNumber,
-		int entryYear, String primaryMajor, String subMajor, String dualMajor, String associatedMajor, String transferStatus,
+		int entryYear, String primaryMajor, String subMajor, String dualMajor, String associatedMajor,
 		StudentCategory studentCategory,
 		int totalCredit, double takenCredit, boolean graduated, Instant createdAt,
 		Instant updatedAt) {
@@ -50,7 +49,6 @@ public class User {
 		this.subMajor = subMajor;
 		this.dualMajor = dualMajor;
 		this.associatedMajor = associatedMajor;
-		this.transferStatus = transferStatus;
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -78,14 +76,13 @@ public class User {
 	}
 
 	public void updateStudentInformation(String name, String major, String dualMajor,
-		String subMajor, String associatedMajor, String transferStatus,
+		String subMajor, String associatedMajor,
 		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
 		this.name = name;
 		this.primaryMajor = major;
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
-		this.transferStatus = transferStatus;
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
