@@ -98,7 +98,6 @@ class ParsingInformationTest {
 				StudentCategory.SUB_MAJOR);
 	}
 
-
 	@DisplayName("재수강, F학점, Non pass인 경우 수강 정보를 추출하지 않는다.")
 	@Test
 	void RFN인경우_수강정보제외() {
@@ -121,4 +120,27 @@ class ParsingInformationTest {
 		assertThat(parsingInformation.getTakenLectureInformation()).hasSize(46);
 	}
 
+		@DisplayName("연계전공을 할 경우 StudentCategory는 ASSOCIATED_MAJOR이며, associated_major에 연계전공명이 입력된다.")
+		@Test
+		void 연계전공생_확인() {
+			//given
+			String parsingText = "출력일자 :  2022/11/14|1/1"
+					+ "|경영대학 경영정보학과, 연계전공 - 프로세스 자동화 경영, 장예지(60191363), 현학적 - 재학, 이수 - 7, 입학 - 신입학(2019/03/04)"
+					+ "|토익 - 410, 영어교과목면제 - 면제없음, 최종학적변동 - 신입학(2019/03/04)"
+					+ "|편입생 인정학점 - 교양 0, 전공 0, 자유선택 0, 성경과인간이해 0"
+					+ "|교환학생 인정학점 - 학문기초교양 0, 일반교양 0, 전공 0, 복수전공학문기초교양 0, 복수전공 0, 연계전공 0, 부전공 0, 자유선택 0"
+					+ "|공통교양 17, 핵심교양 12, 학문기초교양 6, 일반교양 18, 전공 48, 복수전공 0, 연계전공 9, 부전공 0, 교직 0, 자유선택 9"
+					+ "|총 취득학점 - 119, 총점 - 436.5, 평균평점 - 3.83"
+					+ "|이수구분|수강년도/학기|한글코드|과목코드|과목명|학점|등급|중복|공통교양 (구 필수교양)|2021년 1학기|교필141|KMA02141|4차산업혁명과미래사회진로선택|2|P"
+					+ "|공통교양 (구 필수교양)|2019년 1학기|교필105|KMA02105|발표와토의|3|B0";
+
+			//when
+			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
+
+			//then
+			assertThat(parsingInformation)
+					.extracting("studentName", "studentNumber", "major", "associatedMajor",
+							"studentCategory")
+					.contains("장예지", "60191363", "경영정보학과", "프로세스 자동화 경영", StudentCategory.ASSOCIATED_MAJOR);
+		}
 }

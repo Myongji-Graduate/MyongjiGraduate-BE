@@ -23,9 +23,9 @@ public class ParsingInformation {
 
 	@Builder
 	public ParsingInformation(String studentName, String studentNumber, String major,
-		String changeMajor, String subMajor, String dualMajor,
-		String associatedMajor, StudentCategory studentCategory,
-		List<ParsingTakenLectureDto> takenLectureInformation) {
+                              String changeMajor, String subMajor, String dualMajor,
+                              String associatedMajor, StudentCategory studentCategory,
+                              List<ParsingTakenLectureDto> takenLectureInformation) {
 		this.studentName = studentName;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -33,7 +33,7 @@ public class ParsingInformation {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
-		this.studentCategory = studentCategory;
+        this.studentCategory = studentCategory;
 		this.takenLectureInformation = takenLectureInformation;
 	}
 

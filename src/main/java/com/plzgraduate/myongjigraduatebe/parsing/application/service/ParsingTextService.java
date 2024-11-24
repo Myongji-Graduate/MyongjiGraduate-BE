@@ -100,8 +100,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	}
 
 	private void checkUnSupportedUser(ParsingInformation parsingInformation) {
-		if (parsingInformation.getStudentCategory() == ASSOCIATED_MAJOR
-			|| parsingInformation.getStudentCategory() == DOUBLE_SUB) {
+		if (parsingInformation.getStudentCategory() == DOUBLE_SUB) {
 			throw new IllegalArgumentException(ErrorCode.UNSUPPORTED_STUDENT_CATEGORY.toString());
 		}
 	}

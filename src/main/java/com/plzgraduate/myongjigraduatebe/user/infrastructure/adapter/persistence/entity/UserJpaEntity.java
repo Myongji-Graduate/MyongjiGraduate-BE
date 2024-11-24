@@ -49,6 +49,8 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	private String subMajor;
 
+	private String associatedMajor;
+
 	private int totalCredit;
 
 	private double takenCredit;
