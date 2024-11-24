@@ -139,8 +139,7 @@ public class ParsingInformation {
 		List<ParsingTakenLectureDto> takenLectureInformation = new ArrayList<>();
 		for (int i = 16; i < splitText.length; i += 7) {
 			if (i + 3 < splitText.length && !Pattern.matches(
-				"^[A-Z]+$",
-				splitText[i + 3].substring(0, 1)
+				"^[A-Z]+$", splitText[i + 3].substring(0, 1)
 			)) {
 				return takenLectureInformation;
 			}
