@@ -20,7 +20,6 @@ public class User {
 	private final int entryYear;
 	private final Instant createdAt;
 	private final Instant updatedAt;
-	private final String transferStatus;
 	private final TransferCredit transferCredit;
 	private String password;
 	private String name;
@@ -64,7 +63,6 @@ public class User {
 		this.subMajor = subMajor;
 		this.dualMajor = dualMajor;
 		this.studentCategory = studentCategory;
-		this.transferStatus = transferStatus;
 		this.transferCredit = transferCredit;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -76,9 +74,17 @@ public class User {
 	public static User create(
 		String authId, String password, EnglishLevel englishLevel, String studentNumber
 	) {
-		return User.builder().authId(authId).password(password).englishLevel(englishLevel)
-			.studentNumber(studentNumber).entryYear(parseEntryYearInStudentNumber(studentNumber))
-			.totalCredit(0).takenCredit(0).graduated(false).build();
+		return User.builder()
+			.authId(authId)
+			.password(password)
+			.englishLevel(englishLevel)
+			.studentNumber(studentNumber)
+			.entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.transferCredit(TransferCredit.from("0/0/0/0"))
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduated(false)
+			.build();
 	}
 
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
