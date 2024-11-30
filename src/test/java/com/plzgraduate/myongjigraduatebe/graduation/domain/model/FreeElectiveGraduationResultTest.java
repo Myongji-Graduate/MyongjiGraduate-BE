@@ -72,4 +72,56 @@ class FreeElectiveGraduationResultTest {
 				remainCreditByTakenLectures + freeElectiveLeftCredit + leftNormalCultureCredit);
 	}
 
+	@DisplayName("봉사학점을 한 번 들었을 때 자유선택 졸업 결과를 생성한다.")
+	@Test
+	void createFreeElectiveGraduationResult_withOneVolunteerCredit() {
+		//given
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+				TakenLecture.of(user, mockLectureMap.get("KMA02198"), 2021, Semester.FIRST) // 봉사학점
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		int totalFreeElectiveCredit = 7;
+		int leftNormalCultureCredit = 0;
+
+		//when
+		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
+				totalFreeElectiveCredit,
+				takenLectureInventory,
+				List.of(),
+				leftNormalCultureCredit);
+
+		//then
+		assertThat(freeElectiveGraduationResult)
+				.extracting("categoryName", "takenCredit")
+				.contains(FREE_ELECTIVE.getName(), 1); // 봉사학점 1학점 반영
+	}
+
+	@DisplayName("봉사학점을 두 번 들었을 때 자유선택 졸업 결과를 생성한다.")
+	@Test
+	void createFreeElectiveGraduationResult_withTwoVolunteerCredits() {
+		//given
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+				TakenLecture.of(user, mockLectureMap.get("KMA02198"), 2021, Semester.FIRST), // 봉사학점 1
+				TakenLecture.of(user, mockLectureMap.get("KMA02198"), 2022, Semester.SECOND) // 봉사학점 2
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		int totalFreeElectiveCredit = 7;
+		int leftNormalCultureCredit = 0;
+
+		//when
+		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
+				totalFreeElectiveCredit,
+				takenLectureInventory,
+				List.of(),
+				leftNormalCultureCredit);
+
+		//then
+		assertThat(freeElectiveGraduationResult)
+				.extracting("categoryName", "takenCredit")
+				.contains(FREE_ELECTIVE.getName(), 2); // 봉사학점 2학점 반영
+	}
 }
