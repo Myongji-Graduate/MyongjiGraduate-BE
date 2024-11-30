@@ -8,6 +8,7 @@ import lombok.Getter;
 public class Lecture {
 
     private static final String CULTURE_CODE_START_PREFIX = "KM";
+    private static final String VOLUNTEER_CREDIT_CODE = "KMA02198";
 
     private final String id;
     private final String name;
@@ -43,7 +44,7 @@ public class Lecture {
     }
 
     public boolean isCulture() {
-        return id.startsWith(CULTURE_CODE_START_PREFIX);
+        return id.startsWith(CULTURE_CODE_START_PREFIX) && !id.equals(VOLUNTEER_CREDIT_CODE);
     }
 
     @Override
