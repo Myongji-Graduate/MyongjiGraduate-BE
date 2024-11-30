@@ -71,5 +71,27 @@ class NormalCultureGraduationResultTest {
 			.contains(NORMAL_CULTURE.getName(),
 				remainTakenNormalCultureCredit + remainCreditByDetailGraduationResult);
 	}
+	@DisplayName("봉사학점은 일반교양 학점에 포함되지 않는다.")
+	@Test
+	void volunteerCreditIsNotIncludedInNormalCulture() {
+		//given
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+				TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
+				TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
+				TakenLecture.of(user, mockLectureMap.get("KMA02198"), 2021, Semester.FIRST) // 봉사학점
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
+		//when
+		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.create(
+				9,
+				takenLectureInventory,
+				List.of());
+
+		//then
+		assertThat(normalCultureGraduationResult)
+				.extracting("takenCredit")
+				.isEqualTo(4); // 봉사학점(1학점)은 제외되고, 나머지 일반교양 학점만 포함
+	}
 }
