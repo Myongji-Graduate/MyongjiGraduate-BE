@@ -10,13 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request.ResetPasswordRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-
-import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request.ResetPasswordRequest;
 
 class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 
@@ -43,7 +42,8 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		ResetPasswordRequest request = ResetPasswordRequest.builder()
 			.authId("authId")
 			.newPassword("abcd1234@")
-			.passwordCheck("abcd1234@").build();
+			.passwordCheck("abcd1234@")
+			.build();
 
 		//when
 		ResultActions actions = mockMvc.perform(
@@ -64,7 +64,8 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		//given
 		ResetPasswordRequest request = ResetPasswordRequest.builder()
 			.newPassword("abcd1234@")
-			.passwordCheck("abcd1234@").build();
+			.passwordCheck("abcd1234@")
+			.build();
 
 		//when
 		ResultActions actions = mockMvc.perform(
@@ -87,7 +88,8 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		ResetPasswordRequest request = ResetPasswordRequest.builder()
 			.authId("authId")
 			.newPassword("abcd1234")
-			.passwordCheck("abcd1234@").build();
+			.passwordCheck("abcd1234@")
+			.build();
 
 		//when
 		ResultActions actions = mockMvc.perform(
@@ -110,7 +112,8 @@ class ResetPasswordControllerTest extends WebAdaptorTestSupport {
 		ResetPasswordRequest request = ResetPasswordRequest.builder()
 			.authId("authId")
 			.newPassword("abcd123@")
-			.passwordCheck("abcd1234").build();
+			.passwordCheck("abcd1234")
+			.build();
 
 		//when
 		ResultActions actions = mockMvc.perform(

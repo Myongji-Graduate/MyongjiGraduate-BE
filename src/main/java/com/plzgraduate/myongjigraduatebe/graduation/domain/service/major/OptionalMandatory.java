@@ -1,11 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
-
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

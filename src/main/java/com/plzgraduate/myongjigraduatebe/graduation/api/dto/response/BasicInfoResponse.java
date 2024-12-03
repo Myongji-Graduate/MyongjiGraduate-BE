@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.api.dto.response;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,8 @@ public class BasicInfoResponse {
 	private final double takenCredit;
 
 	@Builder
-	private BasicInfoResponse(String name, String studentNumber, MajorInfoResponse major, int totalCredit, double takenCredit) {
+	private BasicInfoResponse(String name, String studentNumber, MajorInfoResponse major,
+		int totalCredit, double takenCredit) {
 		this.name = name;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -35,6 +35,7 @@ public class BasicInfoResponse {
 			.studentNumber(user.getStudentNumber())
 			.major(MajorInfoResponse.from(user))
 			.totalCredit(graduationResult.getTotalCredit())
-			.takenCredit(graduationResult.getTakenCredit()).build();
+			.takenCredit(graduationResult.getTakenCredit())
+			.build();
 	}
 }

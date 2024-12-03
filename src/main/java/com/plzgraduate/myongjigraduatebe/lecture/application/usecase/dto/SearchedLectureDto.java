@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,6 +19,7 @@ public class SearchedLectureDto {
 	public static SearchedLectureDto of(boolean addable, Lecture lecture) {
 		return SearchedLectureDto.builder()
 			.addable(addable)
-			.lecture(lecture).build();
+			.lecture(lecture)
+			.build();
 	}
 }

@@ -7,31 +7,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request.SignInRequest;
 import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 class SignInControllerTest extends WebAdaptorTestSupport {
 
 	@DisplayName("로그인을 진행한다.")
 	@Test
 	void signIn() throws Exception {
-	    //given
+		//given
 		SignInRequest request = SignInRequest.builder()
 			.authId("mju-graduate")
 			.password("1q2w3e4r!")
 			.build();
 
-	    //when //then
+		//when //then
 		mockMvc.perform(
-			post("/api/v1/auth/sign-in")
-				.content(objectMapper.writeValueAsString(request))
-				.contentType(MediaType.APPLICATION_JSON)
-		)
+				post("/api/v1/auth/sign-in")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(MediaType.APPLICATION_JSON)
+			)
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -82,7 +81,8 @@ class SignInControllerTest extends WebAdaptorTestSupport {
 			.authId("mju-graduate")
 			.password("1q2w3e4r")
 			.build();
-		given(signInUseCase.signIn(any(), any())).willThrow(new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
+		given(signInUseCase.signIn(any(), any())).willThrow(
+			new UnAuthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
 		//when //then
 		mockMvc.perform(
 				post("/api/v1/auth/sign-in")

@@ -7,17 +7,6 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
@@ -25,6 +14,15 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class SaveTakenLectureFromParsingTextServiceTest {
@@ -40,7 +38,9 @@ class SaveTakenLectureFromParsingTextServiceTest {
 	@Test
 	void saveTakenLectures() {
 		//given
-		User user = User.builder().id(1L).build();
+		User user = User.builder()
+			.id(1L)
+			.build();
 		List<TakenLectureInformation> takenLectureInformationList = new ArrayList<>(List.of(
 			createTakenLectureInformation("KMA02122", 2022),
 			createTakenLectureInformation("KMA02135", 2023)
@@ -49,13 +49,15 @@ class SaveTakenLectureFromParsingTextServiceTest {
 		Lecture lecture2 = createLecture("KMA02135");
 		given(findLecturesUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
 			.willReturn(List.of(lecture1, lecture2));
-		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(List.class);
+		ArgumentCaptor<List<TakenLecture>> takenLectureListCaptor = ArgumentCaptor.forClass(
+			List.class);
 
 		//when
 		saveTakenLectureFromParsingTextService.saveTakenLectures(user, takenLectureInformationList);
 
 		//then
-		then(saveTakenLecturePort).should().saveTakenLectures(takenLectureListCaptor.capture());
+		then(saveTakenLecturePort).should()
+			.saveTakenLectures(takenLectureListCaptor.capture());
 		List<TakenLecture> capturesTakenLectures = takenLectureListCaptor.getValue();
 		assertThat(capturesTakenLectures)
 			.hasSize(2)
@@ -70,7 +72,9 @@ class SaveTakenLectureFromParsingTextServiceTest {
 	@Test
 	void lectureDoesNotExist() {
 		//given
-		User user = User.builder().id(1L).build();
+		User user = User.builder()
+			.id(1L)
+			.build();
 		List<TakenLectureInformation> takenLectureInformationList = new ArrayList<>(List.of(
 			createTakenLectureInformation("KMA02122", 2022),
 			createTakenLectureInformation("KMA02135", 2023)
@@ -81,7 +85,8 @@ class SaveTakenLectureFromParsingTextServiceTest {
 
 		//when //then
 		assertThatThrownBy(
-			() -> saveTakenLectureFromParsingTextService.saveTakenLectures(user, takenLectureInformationList))
+			() -> saveTakenLectureFromParsingTextService.saveTakenLectures(user,
+				takenLectureInformationList))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage(NON_EXISTED_LECTURE.toString());
 
@@ -97,7 +102,7 @@ class SaveTakenLectureFromParsingTextServiceTest {
 
 	private Lecture createLecture(String lectureCode) {
 		return Lecture.builder()
-			.lectureCode(lectureCode)
+			.id(lectureCode)
 			.build();
 	}
 }

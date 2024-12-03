@@ -4,13 +4,6 @@ import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.BUSINE
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.College.ICT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
@@ -19,6 +12,11 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
@@ -35,22 +33,25 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 		//given
 		User user = UserFixture.응용소프트웨어학과_19학번();
 		LectureJpaEntity lectureJpaEntityA = LectureJpaEntity.builder()
-			.lectureCode("testA")
+			.id("testA")
 			.build();
 		LectureJpaEntity lectureJpaEntityB = LectureJpaEntity.builder()
-			.lectureCode("testB")
+			.id("testB")
 			.build();
 		lectureRepository.saveAll(List.of(lectureJpaEntityA, lectureJpaEntityB));
 
 		BasicAcademicalCultureLectureJpaEntity basicAcademicalCultureLectureJpaEntityA = BasicAcademicalCultureLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
-			.college(ICT.getName()).build();
+			.college(ICT.getName())
+			.build();
 
 		BasicAcademicalCultureLectureJpaEntity basicAcademicalCultureLectureJpaEntityB = BasicAcademicalCultureLectureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntityA)
-			.college(BUSINESS.getName()).build();
+			.college(BUSINESS.getName())
+			.build();
 		basicAcademicalCultureRepository.saveAll(
-			List.of(basicAcademicalCultureLectureJpaEntityA, basicAcademicalCultureLectureJpaEntityB));
+			List.of(basicAcademicalCultureLectureJpaEntityA,
+				basicAcademicalCultureLectureJpaEntityB));
 
 		//when
 		Set<BasicAcademicalCultureLecture> basicAcademicalCulture = basicAcademicalCulturePersistenceAdapter.findBasicAcademicalCulture(

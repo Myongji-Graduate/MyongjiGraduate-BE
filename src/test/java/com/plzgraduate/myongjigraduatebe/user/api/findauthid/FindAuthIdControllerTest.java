@@ -9,10 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 
 class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 

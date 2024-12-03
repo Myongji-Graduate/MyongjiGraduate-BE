@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import java.util.Arrays;
 import java.util.Objects;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,10 @@ public enum GraduationCategory {
 	SUB_MAJOR("부전공"),
 	PRIMARY_BASIC_ACADEMICAL_CULTURE("주학문기초교양"),
 	DUAL_BASIC_ACADEMICAL_CULTURE("복수학문기초교양"),
+	ASSOCIATED_MANDATORY_MAJOR("연계전공필수"),
+	ASSOCIATED_ELECTIVE_MAJOR("연계전공선택"),
+	ASSOCIATED_MANDATORY_CULTURE("연계전공교양필수"),
+	ASSOCIATED_ELECTIVE_CULTURE("연계전공교양선택"),
 	NORMAL_CULTURE("일반교양"),
 	FREE_ELECTIVE("자유선택"),
 	CHAPEL("채플");

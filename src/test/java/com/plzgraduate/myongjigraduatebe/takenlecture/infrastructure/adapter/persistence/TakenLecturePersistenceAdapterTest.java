@@ -1,17 +1,15 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
+import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class TakenLecturePersistenceAdapterTest extends PersistenceTestSupport {
 
@@ -33,14 +31,16 @@ class TakenLecturePersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	public void deleteTakenLectureById() throws Exception {
 		// given
-		TakenLectureJpaEntity takenLectureJpaEntity = createTakenLectureJpaEntity(2099, Semester.FIRST);
+		TakenLectureJpaEntity takenLectureJpaEntity = createTakenLectureJpaEntity(2099,
+			Semester.FIRST);
 		takenLectureRepository.save(takenLectureJpaEntity);
 
 		// when
 		takenLecturePersistenceAdapter.deleteTakenLectureById(takenLectureJpaEntity.getId());
 
 		// then
-		Optional<TakenLectureJpaEntity> result = takenLectureRepository.findById(takenLectureJpaEntity.getId());
+		Optional<TakenLectureJpaEntity> result = takenLectureRepository.findById(
+			takenLectureJpaEntity.getId());
 		assertThat(result.isPresent()).isFalse();
 	}
 

@@ -8,9 +8,9 @@ public class MajorLecture {
 
 	private final Lecture lecture;
 	private final String major;
-	private int isMandatory;
 	private final int appliedStartEntryYear;
 	private final int appliedEndEntryYear;
+	private int isMandatory;
 
 	@Builder
 	private MajorLecture(Lecture lecture, String major, int isMandatory, int appliedStartEntryYear,
@@ -22,7 +22,8 @@ public class MajorLecture {
 		this.appliedEndEntryYear = appliedEndEntryYear;
 	}
 
-	public static MajorLecture of(Lecture lecture, String major, int isMandatory, int appliedStartEntryYear,
+	public static MajorLecture of(Lecture lecture, String major, int isMandatory,
+		int appliedStartEntryYear,
 		int appliedEndEntryYear) {
 		return MajorLecture.builder()
 			.lecture(lecture)
@@ -40,7 +41,8 @@ public class MajorLecture {
 	}
 
 	private boolean checkMandatoryByEntryYear(int entryYear) {
-		return isMandatory == 1 && !(entryYear >= appliedStartEntryYear && entryYear <= appliedEndEntryYear);
+		return isMandatory == 1 && !(entryYear >= appliedStartEntryYear
+			&& entryYear <= appliedEndEntryYear);
 	}
 
 }

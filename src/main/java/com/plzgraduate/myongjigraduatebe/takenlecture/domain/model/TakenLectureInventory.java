@@ -1,12 +1,10 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-
 import lombok.Builder;
 
 public class TakenLectureInventory {
@@ -16,6 +14,12 @@ public class TakenLectureInventory {
 	@Builder
 	private TakenLectureInventory(Set<TakenLecture> takenLecture) {
 		this.takenLecture = takenLecture;
+	}
+
+	public static TakenLectureInventory from(Set<TakenLecture> takenLectures) {
+		return TakenLectureInventory.builder()
+			.takenLecture(takenLectures)
+			.build();
 	}
 
 	public Set<TakenLecture> getTakenLectures() {
@@ -28,14 +32,9 @@ public class TakenLectureInventory {
 
 	public Set<TakenLecture> getCultureLectures() {
 		return takenLecture.stream()
-			.filter(taken -> taken.getLecture().isCulture())
+			.filter(taken -> taken.getLecture()
+				.isCulture())
 			.collect(Collectors.toSet());
-	}
-
-	public static TakenLectureInventory from(Set<TakenLecture> takenLectures) {
-		return TakenLectureInventory.builder()
-			.takenLecture(takenLectures)
-			.build();
 	}
 
 	public void handleFinishedTakenLectures(Set<TakenLecture> finishedTakenLecture) {
@@ -53,7 +52,8 @@ public class TakenLectureInventory {
 	public int calculateTotalCredit() {
 		int totalCredit = this.takenLecture
 			.stream()
-			.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
+			.mapToInt(takenLecture -> takenLecture.getLecture()
+				.getCredit())
 			.sum();
 		if (checkChapelCountIsFour(this.takenLecture)) {
 			totalCredit += 2;
@@ -64,7 +64,9 @@ public class TakenLectureInventory {
 	private boolean checkChapelCountIsFour(Set<TakenLecture> takenLectures) {
 		long chapelCount = takenLectures
 			.stream()
-			.filter(takenLecture -> takenLecture.getLecture().getLectureCode().equals("KMA02101"))
+			.filter(takenLecture -> takenLecture.getLecture()
+				.getId()
+				.equals("KMA02101"))
 			.count();
 		return chapelCount >= 4;
 	}

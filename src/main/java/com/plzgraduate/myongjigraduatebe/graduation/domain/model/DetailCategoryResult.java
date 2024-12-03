@@ -1,31 +1,31 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class DetailCategoryResult {
 
-	private String detailCategoryName;
-	private boolean isCompleted;
 	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
+	private final List<Lecture> takenLectures = new ArrayList<>();
+	private final List<Lecture> haveToLectures = new ArrayList<>();
+	private String detailCategoryName;
+	private boolean isCompleted;
 	private int takenCredits;
 	private int normalLeftCredit;
 	private int freeElectiveLeftCredit;
-	private final List<Lecture> takenLectures = new ArrayList<>();
-	private final List<Lecture> haveToLectures = new ArrayList<>();
 
 	@Builder
-	private DetailCategoryResult(String detailCategoryName, boolean isCompleted, boolean isSatisfiedMandatory,
+	private DetailCategoryResult(String detailCategoryName, boolean isCompleted,
+		boolean isSatisfiedMandatory,
 		int totalCredits, int takenCredits, int normalLeftCredit, int freeElectiveLeftCredit) {
 		this.detailCategoryName = detailCategoryName;
 		this.isCompleted = isCompleted;
@@ -36,7 +36,8 @@ public class DetailCategoryResult {
 		this.freeElectiveLeftCredit = freeElectiveLeftCredit;
 	}
 
-	public static DetailCategoryResult create(String detailCategoryName, boolean isSatisfiedMandatory,
+	public static DetailCategoryResult create(String detailCategoryName,
+		boolean isSatisfiedMandatory,
 		int totalCredits) {
 		return DetailCategoryResult.builder()
 			.detailCategoryName(detailCategoryName)

@@ -8,13 +8,6 @@ import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
@@ -26,9 +19,16 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateS
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ParsingTextServiceTest{
+class ParsingTextServiceTest {
+
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
@@ -45,7 +45,7 @@ class ParsingTextServiceTest{
 	@DisplayName("파싱 텍스트에서 정보를 추출해 성공적으로 메서드를 호출한다.")
 	@Test
 	void 성공() {
-	    //given
+		//given
 		User user = createUser(
 			"60181666");
 		String parsingText = "출력일자 :  2023/09/01|1/1"
@@ -61,22 +61,25 @@ class ParsingTextServiceTest{
 		//when
 		parsingTextService.enrollParsingText(1L, parsingText);
 
-	    //then
+		//then
 		User updatedUser = then(updateStudentInformationUseCase).should()
 			.updateUser(any(UpdateStudentInformationCommand.class));
-		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(updatedUser);
-		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(), any());
-		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(updatedUser);
+		then(deleteTakenLectureByUserUseCase).should()
+			.deleteAllTakenLecturesByUser(updatedUser);
+		then(saveTakenLectureFromParsingTextUseCase).should()
+			.saveTakenLectures(any(), any());
+		then(generateOrModifyCompletedCreditUseCase).should()
+			.generateOrModifyCompletedCredit(updatedUser);
 	}
 
 	@DisplayName("PDF 파싱 텍스트가 빈 문자열로 오면 InvalidPdfException을 반환한다.")
 	@Test
 	void 파싱_텍스트_빈문자열() {
-	    //given
+		//given
 		String emptyParsingText = " ";
 
-	    //when //then
-	    assertThatThrownBy(() ->  parsingTextService.enrollParsingText(1L, emptyParsingText))
+		//when //then
+		assertThatThrownBy(() -> parsingTextService.enrollParsingText(1L, emptyParsingText))
 			.isInstanceOf(InvalidPdfException.class)
 			.hasMessage("PDF를 인식하지 못했습니다. 채널톡으로 문의 바랍니다.");
 	}
@@ -84,7 +87,7 @@ class ParsingTextServiceTest{
 	@DisplayName("사용자의 학번과 PDF의 학번이 다를때 InvalidPdfException을 반환한다.")
 	@Test
 	void 서로다른_PDF_학번() {
-	    //given
+		//given
 		String parsingText = "출력일자 :  2023/09/01|1/1"
 			+ "|ICT융합대학 융합소프트웨어학부 데이터테크놀로지전공, 정지환(60181666), 현학적 - 재학, 이수 - 7, 입학 - 신입학(2018/03/02)"
 			+ "|토익 - 570, 영어교과목면제 - 면제없음, 최종학적변동 - 불일치복학(2022/07/15)"
@@ -99,7 +102,7 @@ class ParsingTextServiceTest{
 
 		given(findUserUseCase.findUserById(anyLong())).willReturn(user);
 
-	    //when //then
+		//when //then
 
 		assertThatThrownBy(() -> parsingTextService.enrollParsingText(1L, parsingText))
 			.isInstanceOf(InvalidPdfException.class)
@@ -109,7 +112,7 @@ class ParsingTextServiceTest{
 	@DisplayName("RuntimeException이 발생했을 경우 PdfParsingException을 반환한다.")
 	@Test
 	void PDF_파싱_예외처리() {
-	    //given
+		//given
 		String parsingText = "출력일자 :  2023/09/01|1/1"
 			+ "|ICT융합대학 융합소프트웨어학부 데이터테크놀로지전공, 정지환(60181666), 현학적 - 재학, 이수 - 7, 입학 - 신입학(2018/03/02)"
 			+ "|토익 - 570, 영어교과목면제 - 면제없음, 최종학적변동 - 불일치복학(2022/07/15)"
@@ -122,7 +125,7 @@ class ParsingTextServiceTest{
 		User user = createUser(
 			"60181666");
 
-	    //when
+		//when
 		given(findUserUseCase.findUserById(anyLong())).willReturn(user);
 		doThrow(NullPointerException.class).when(saveTakenLectureFromParsingTextUseCase)
 			.saveTakenLectures(any(User.class), any());
@@ -156,9 +159,12 @@ class ParsingTextServiceTest{
 		//then
 		User updatedUser = then(updateStudentInformationUseCase).should()
 			.updateUser(any(UpdateStudentInformationCommand.class));
-		then(deleteTakenLectureByUserUseCase).should().deleteAllTakenLecturesByUser(updatedUser);
-		then(saveTakenLectureFromParsingTextUseCase).should().saveTakenLectures(any(), any());
-		then(generateOrModifyCompletedCreditUseCase).should().generateOrModifyCompletedCredit(updatedUser);
+		then(deleteTakenLectureByUserUseCase).should()
+			.deleteAllTakenLecturesByUser(updatedUser);
+		then(saveTakenLectureFromParsingTextUseCase).should()
+			.saveTakenLectures(any(), any());
+		then(generateOrModifyCompletedCreditUseCase).should()
+			.generateOrModifyCompletedCredit(updatedUser);
 	}
 
 	private User createUser(String studentNumber) {

@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.api.dto.response;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.FreeElectiveGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.NormalCultureGraduationResult;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,7 +28,8 @@ public class RestResultResponse {
 		return RestResultResponse.builder()
 			.totalCredit(normalCultureGraduationResult.getTotalCredit())
 			.takenCredit(normalCultureGraduationResult.getTakenCredit())
-			.completed(normalCultureGraduationResult.isCompleted()).build();
+			.completed(normalCultureGraduationResult.isCompleted())
+			.build();
 	}
 
 	public static RestResultResponse fromFreeElectiveResult(
@@ -37,6 +37,7 @@ public class RestResultResponse {
 		return RestResultResponse.builder()
 			.totalCredit(freeElectiveGraduationResult.getTotalCredit())
 			.takenCredit(freeElectiveGraduationResult.getTakenCredit())
-			.completed(freeElectiveGraduationResult.isCompleted()).build();
+			.completed(freeElectiveGraduationResult.isCompleted())
+			.build();
 	}
 }

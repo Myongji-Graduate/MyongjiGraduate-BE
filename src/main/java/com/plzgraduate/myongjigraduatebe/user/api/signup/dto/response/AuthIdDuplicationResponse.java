@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class AuthIdDuplicationResponse {
+
 	@Schema(name = "authId", example = "plzgraduate")
 	private final String authId;
 	@Schema(name = "notDuplicated", example = "true")

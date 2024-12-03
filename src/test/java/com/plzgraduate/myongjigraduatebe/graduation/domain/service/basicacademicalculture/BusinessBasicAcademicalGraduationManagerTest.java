@@ -2,16 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademi
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.BasicAcademicalLectureFixture;
-
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
@@ -22,6 +13,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("경영대의 학문기초교양 결과를 반환한다.")
 class BusinessBasicAcademicalGraduationManagerTest {
@@ -47,10 +44,12 @@ class BusinessBasicAcademicalGraduationManagerTest {
 			BasicAcademicalGraduationManager manager = new BusinessBasicAcademicalGraduationManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+				user,
 				takenLectureInventory, basicAcademicalLectures, 6);
 
-			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
+			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory()
+				.get(0);
 
 			//then
 			assertThat(detailGraduationResult)
@@ -80,10 +79,12 @@ class BusinessBasicAcademicalGraduationManagerTest {
 			BasicAcademicalGraduationManager manager = new BusinessBasicAcademicalGraduationManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+				user,
 				takenLectureInventory, basicAcademicalLectures, 6);
 
-			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
+			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory()
+				.get(0);
 
 			//then
 			assertThat(detailGraduationResult)

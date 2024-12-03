@@ -1,19 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.stereotype.Component;
-
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +20,8 @@ public class MandatoryMajorManager {
 
 	private final List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers;
 
-	public DetailCategoryResult createDetailCategoryResult(User user, TakenLectureInventory takenLectureInventory,
+	public DetailCategoryResult createDetailCategoryResult(User user,
+		TakenLectureInventory takenLectureInventory,
 		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
@@ -39,20 +37,23 @@ public class MandatoryMajorManager {
 			}
 		}
 
-		takenLectureInventory.getTakenLectures().stream()
+		takenLectureInventory.getTakenLectures()
+			.stream()
 			.filter(takenLecture -> mandatoryLectures.contains(takenLecture.getLecture()))
 			.forEach(takenLecture -> {
 				finishedTakenLecture.add(takenLecture);
 				takenMandatory.add(takenLecture.getLecture());
 			});
-		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create(MANDATORY_MAJOR_NAME, isSatisfiedMandatory,
+		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create(
+			MANDATORY_MAJOR_NAME, isSatisfiedMandatory,
 			calculateTotalCredit(takenMandatory, mandatoryLectures, removeMandatoryTotalCredit));
 		majorMandatoryResult.calculate(takenMandatory, mandatoryLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		return majorMandatoryResult;
 	}
 
-	private int calculateTotalCredit(Set<Lecture> taken, Set<Lecture> mandatoryLectures, int removedCredit) {
+	private int calculateTotalCredit(Set<Lecture> taken, Set<Lecture> mandatoryLectures,
+		int removedCredit) {
 		int totalCredit = 0;
 		for (Lecture lecture : mandatoryLectures) {
 			if (!taken.contains(lecture) && lecture.getIsRevoked() == 1) {

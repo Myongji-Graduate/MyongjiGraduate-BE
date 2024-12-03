@@ -25,14 +25,14 @@ public class LecturePersistenceAdapter implements FindLecturePort, SearchLecture
 
 	@Override
 	public List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes) {
-		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByLectureCodeIn(lectureCodes);
+		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByIdIn(lectureCodes);
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureModel)
 			.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Lecture> findLecturesByIds(List<Long> lectureIds) {
+	public List<Lecture> findLecturesByIds(List<String> lectureIds) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureRepository.findByIdIn(lectureIds);
 		return lectureJpaEntities.stream()
 			.map(lectureMapper::mapToLectureModel)
@@ -40,7 +40,7 @@ public class LecturePersistenceAdapter implements FindLecturePort, SearchLecture
 	}
 
 	@Override
-	public Lecture findLectureById(final Long lectureId) {
+	public Lecture findLectureById(final String lectureId) {
 		LectureJpaEntity lectureJpaEntity = lectureRepository.findById(lectureId)
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_LECTURE_ERROR_MESSAGE));
 		return lectureMapper.mapToLectureModel(lectureJpaEntity);

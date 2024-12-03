@@ -1,17 +1,15 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api.dto.response;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class LectureResponse {
-	@Schema(name = "id", example = "18")
-	private final Long id;
-	@Schema(name = "lectureCode", example = "KMA02137")
-	private final String lectureCode;
+
+	@Schema(name = "id", example = "KMA02137")
+	private final String id;
 	@Schema(name = "name", example = "4차산업혁명시대의진로선택")
 	private final String name;
 	@Schema(name = "credit", example = "2")
@@ -20,9 +18,8 @@ public class LectureResponse {
 	private final boolean isRevoked;
 
 	@Builder
-	private LectureResponse(Long id, String lectureCode, String name, int credit, boolean isRevoked) {
+	private LectureResponse(String id, String name, int credit, boolean isRevoked) {
 		this.id = id;
-		this.lectureCode = lectureCode;
 		this.name = name;
 		this.credit = credit;
 		this.isRevoked = isRevoked;
@@ -31,7 +28,6 @@ public class LectureResponse {
 	public static LectureResponse of(Lecture lecture) {
 		return LectureResponse.builder()
 			.id(lecture.getId())
-			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
 			.isRevoked(lecture.getIsRevoked() != 0)

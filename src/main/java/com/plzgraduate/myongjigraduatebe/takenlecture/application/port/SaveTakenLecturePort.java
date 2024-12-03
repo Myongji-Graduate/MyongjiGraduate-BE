@@ -1,8 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.port;
 
-import java.util.List;
-
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
+import java.util.List;
 
 public interface SaveTakenLecturePort {
 

@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.entity;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,10 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
-import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +39,8 @@ public class CompletedCreditJpaEntity {
 	private double takenCredit;
 
 	@Builder
-	private CompletedCreditJpaEntity(Long id, UserJpaEntity userJpaEntity, GraduationCategory graduationCategory,
+	private CompletedCreditJpaEntity(Long id, UserJpaEntity userJpaEntity,
+		GraduationCategory graduationCategory,
 		int totalCredit, double takenCredit) {
 		this.id = id;
 		this.userJpaEntity = userJpaEntity;

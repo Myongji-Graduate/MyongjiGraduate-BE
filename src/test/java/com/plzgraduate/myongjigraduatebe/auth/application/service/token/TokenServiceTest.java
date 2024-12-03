@@ -8,18 +8,16 @@ import static org.mockito.BDDMockito.never;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 
+import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
+import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenPort;
+import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
-import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenPort;
-import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 
 @ExtendWith(MockitoExtension.class)
 class TokenServiceTest {
@@ -40,7 +38,8 @@ class TokenServiceTest {
 		Long userId = 1L;
 		String refreshToken = "refreshToken";
 		String accessToken = "accessToken";
-		given(findRefreshTokenPort.findByRefreshToken(refreshToken)).willReturn(Optional.of(userId));
+		given(findRefreshTokenPort.findByRefreshToken(refreshToken)).willReturn(
+			Optional.of(userId));
 		given(tokenProvider.generateToken(userId)).willReturn(accessToken);
 
 		//when
@@ -63,7 +62,9 @@ class TokenServiceTest {
 			.hasMessage("유효하지 않은 토큰입니다.");
 
 		//then
-		then(findRefreshTokenPort).should(times(1)).findByRefreshToken(refreshToken);
-		then(tokenProvider).should(never()).generateToken(anyLong());
+		then(findRefreshTokenPort).should(times(1))
+			.findByRefreshToken(refreshToken);
+		then(tokenProvider).should(never())
+			.generateToken(anyLong());
 	}
 }

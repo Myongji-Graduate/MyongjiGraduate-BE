@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,9 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,7 +38,8 @@ public class CoreCultureJpaEntity {
 	private int endEntryYear;
 
 	@Builder
-	private CoreCultureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, CoreCultureCategory coreCultureCategory,
+	private CoreCultureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity,
+		CoreCultureCategory coreCultureCategory,
 		int startEntryYear, int endEntryYear) {
 		this.id = id;
 		this.lectureJpaEntity = lectureJpaEntity;

@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.auth.security;
 
 import java.util.Collection;
-
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -19,7 +18,8 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 		this.credentials = credentials;
 	}
 
-	public JwtAuthenticationToken(Object principal, String credentials, Collection<? extends GrantedAuthority> authorities) {
+	public JwtAuthenticationToken(Object principal, String credentials,
+		Collection<? extends GrantedAuthority> authorities) {
 		super(authorities);
 		super.setAuthenticated(true);
 
@@ -42,5 +42,4 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 		super.eraseCredentials();
 		credentials = null;
 	}
-
 }

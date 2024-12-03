@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +30,8 @@ public class BasicAcademicalCultureLectureJpaEntity {
 	private String college;
 
 	@Builder
-	private BasicAcademicalCultureLectureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String college) {
+	private BasicAcademicalCultureLectureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity,
+		String college) {
 		this.id = id;
 		this.lectureJpaEntity = lectureJpaEntity;
 		this.college = college;

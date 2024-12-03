@@ -2,13 +2,6 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
@@ -17,9 +10,15 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("N개 중에 M개 이상을 수강할 경우 세부조건을 달성한다.")
 class OptionalMandatoryMajorHandlerTest {
+
 	private static final User user = UserFixture.경영학과_19학번_ENG12();
 	private static final MajorType MAJOR_TYPE = MajorType.PRIMARY;
 	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();

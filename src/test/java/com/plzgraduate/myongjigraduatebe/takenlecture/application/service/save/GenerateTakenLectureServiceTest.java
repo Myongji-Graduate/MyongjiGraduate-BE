@@ -1,14 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save;
 
-import static org.mockito.BDDMockito.*;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
@@ -17,9 +10,17 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTaken
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class GenerateTakenLectureServiceTest {
+
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock
@@ -35,22 +36,26 @@ class GenerateTakenLectureServiceTest {
 	@Test
 	void saveTakenLecture() {
 		//given
-		User user = User.builder().id(1L).build();
-		Lecture lecture = createLecture(1L);
-		given(findLecturePort.findLectureById(1L))
+		User user = User.builder()
+			.id(1L)
+			.build();
+		Lecture lecture = createLecture("code");
+		given(findLecturePort.findLectureById("code"))
 			.willReturn(lecture);
 
-		ArgumentCaptor<TakenLecture> takenLectureCaptor = ArgumentCaptor.forClass(TakenLecture.class);
+		ArgumentCaptor<TakenLecture> takenLectureCaptor = ArgumentCaptor.forClass(
+			TakenLecture.class);
 
 		//when
-		generateTakenLectureService.generateCustomizedTakenLecture(user.getId(), 1L);
+		generateTakenLectureService.generateCustomizedTakenLecture(user.getId(), "code");
 		generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
 
 		//then
-		then(saveTakenLecturePort).should().saveTakenLecture(takenLectureCaptor.capture());
+		then(saveTakenLecturePort).should()
+			.saveTakenLecture(takenLectureCaptor.capture());
 	}
 
-	private Lecture createLecture(Long id) {
+	private Lecture createLecture(String id) {
 		return Lecture.builder()
 			.id(id)
 			.build();

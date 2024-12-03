@@ -5,7 +5,6 @@ import com.plzgraduate.myongjigraduatebe.auth.application.port.FindRefreshTokenP
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.auth.security.TokenProvider;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-
 import lombok.RequiredArgsConstructor;
 
 @UseCase
@@ -15,6 +14,7 @@ public class TokenService implements TokenUseCase {
 	private final TokenProvider tokenProvider;
 
 	private final FindRefreshTokenPort findRefreshTokenPort;
+
 	@Override
 	public AccessTokenResponse generateNewToken(String refreshToken) {
 		Long userId = findByRefreshToken(refreshToken);

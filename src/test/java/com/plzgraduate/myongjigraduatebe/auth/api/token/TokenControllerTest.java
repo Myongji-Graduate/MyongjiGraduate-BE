@@ -1,21 +1,20 @@
 package com.plzgraduate.myongjigraduatebe.auth.api.token;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request.TokenRequest;
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 class TokenControllerTest extends WebAdaptorTestSupport {
 
@@ -30,8 +29,8 @@ class TokenControllerTest extends WebAdaptorTestSupport {
 			.build();
 
 		AccessTokenResponse response = AccessTokenResponse.builder()
-				.accessToken(accessToken)
-				.build();
+			.accessToken(accessToken)
+			.build();
 		given(tokenUseCase.generateNewToken(any())).willReturn(response);
 		//when //then
 		mockMvc.perform(
@@ -65,6 +64,6 @@ class TokenControllerTest extends WebAdaptorTestSupport {
 			)
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorCode", is("유효하지 않은 토큰입니다.")));;
+			.andExpect(jsonPath("$.errorCode", is("유효하지 않은 토큰입니다.")));
 	}
 }

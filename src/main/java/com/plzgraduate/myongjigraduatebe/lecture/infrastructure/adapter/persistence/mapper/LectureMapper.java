@@ -1,17 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.mapper;
 
-import org.springframework.stereotype.Component;
-
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CoreCultureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CoreCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity;
+import org.springframework.stereotype.Component;
 
 @Component
 public class LectureMapper {
@@ -20,7 +19,6 @@ public class LectureMapper {
 
 		return Lecture.builder()
 			.id(lecture.getId())
-			.lectureCode(lecture.getLectureCode())
 			.name(lecture.getName())
 			.credit(lecture.getCredit())
 			.isRevoked(lecture.getIsRevoked())
@@ -34,7 +32,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -51,7 +48,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -69,7 +65,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -86,7 +81,6 @@ public class LectureMapper {
 			.lecture(
 				Lecture.builder()
 					.id(lectureJpaEntity.getId())
-					.lectureCode(lectureJpaEntity.getLectureCode())
 					.name(lectureJpaEntity.getName())
 					.credit(lectureJpaEntity.getCredit())
 					.duplicateCode(lectureJpaEntity.getDuplicateCode())
@@ -96,6 +90,7 @@ public class LectureMapper {
 			.major(entity.getMajor())
 			.appliedStartEntryYear(entity.getStartEntryYear())
 			.appliedEndEntryYear(entity.getEndEntryYear())
-			.isMandatory(entity.getMandatory()).build();
+			.isMandatory(entity.getMandatory())
+			.build();
 	}
 }

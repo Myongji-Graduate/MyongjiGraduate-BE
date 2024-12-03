@@ -6,14 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
+import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
+import com.plzgraduate.myongjigraduatebe.user.api.withdraw.dto.request.WithDrawRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-
-import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import com.plzgraduate.myongjigraduatebe.user.api.withdraw.dto.request.WithDrawRequest;
 
 class WithDrawControllerTest extends WebAdaptorTestSupport {
 
@@ -23,7 +22,8 @@ class WithDrawControllerTest extends WebAdaptorTestSupport {
 	void withDraw() throws Exception {
 		//given
 		WithDrawRequest request = WithDrawRequest.builder()
-			.password("abcd1234!").build();
+			.password("abcd1234!")
+			.build();
 
 		//when
 		ResultActions actions = mockMvc.perform(
@@ -32,7 +32,8 @@ class WithDrawControllerTest extends WebAdaptorTestSupport {
 				.contentType(MediaType.APPLICATION_JSON));
 
 		//then
-		then(withDrawUserUseCase).should().withDraw(any(), any(String.class));
+		then(withDrawUserUseCase).should()
+			.withDraw(any(), any(String.class));
 		actions.
 			andDo(print())
 			.andExpect(status().isOk());

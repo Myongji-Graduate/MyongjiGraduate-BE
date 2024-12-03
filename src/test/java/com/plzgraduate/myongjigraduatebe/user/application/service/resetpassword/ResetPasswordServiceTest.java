@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,10 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 
 @ExtendWith(MockitoExtension.class)
 class ResetPasswordServiceTest {
@@ -37,15 +36,18 @@ class ResetPasswordServiceTest {
 		String authId = "test";
 		String newPassword = "testPassword";
 		String passwordCheck = "testPassword";
-		User user = User.builder().build();
+		User user = User.builder()
+			.build();
 		given(findUserUseCase.findUserByAuthId(authId)).willReturn(user);
 
 		//when
 		resetPasswordService.resetPassword(authId, newPassword, passwordCheck);
 
 		//then
-		then(passwordEncoder).should().encode(newPassword);
-		then(updateUserPort).should().updateUser(user);
+		then(passwordEncoder).should()
+			.encode(newPassword);
+		then(updateUserPort).should()
+			.updateUser(user);
 	}
 
 	@DisplayName("변경 비밀번호와 비밀번호 확인이 일치하지 않을 경우 예외가 발생한다.")
@@ -57,7 +59,8 @@ class ResetPasswordServiceTest {
 		String passwordCheck = "differentPassword";
 
 		//when //then
-		assertThatThrownBy(() -> resetPasswordService.resetPassword(authId, newPassword, passwordCheck))
+		assertThatThrownBy(
+			() -> resetPasswordService.resetPassword(authId, newPassword, passwordCheck))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage(MISMATCHED_PASSWORD.toString());
 	}
@@ -73,7 +76,8 @@ class ResetPasswordServiceTest {
 			new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
 		//when //then
-		assertThatThrownBy(() -> resetPasswordService.resetPassword(authId, newPassword, passwordCheck))
+		assertThatThrownBy(
+			() -> resetPasswordService.resetPassword(authId, newPassword, passwordCheck))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("존재하지 않는 아이디입니다.");
 	}

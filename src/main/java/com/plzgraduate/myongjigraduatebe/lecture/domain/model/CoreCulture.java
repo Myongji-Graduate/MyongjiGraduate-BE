@@ -18,6 +18,7 @@ public class CoreCulture {
 	public static CoreCulture of(Lecture lecture, CoreCultureCategory category) {
 		return CoreCulture.builder()
 			.lecture(lecture)
-			.coreCultureCategory(category).build();
+			.coreCultureCategory(category)
+			.build();
 	}
 }

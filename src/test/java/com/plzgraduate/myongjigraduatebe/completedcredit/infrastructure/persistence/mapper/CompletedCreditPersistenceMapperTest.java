@@ -3,13 +3,12 @@ package com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persist
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.entity.CompletedCreditJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class CompletedCreditPersistenceMapperTest {
 
@@ -26,15 +25,20 @@ class CompletedCreditPersistenceMapperTest {
 				.build())
 			.graduationCategory(COMMON_CULTURE)
 			.totalCredit(10)
-			.takenCredit(5).build();
+			.takenCredit(5)
+			.build();
 
 		//when
-		CompletedCredit completedCredit = completedCreditPersistenceMapper.mapToDomainModel(completedCreditJpaEntity);
+		CompletedCredit completedCredit = completedCreditPersistenceMapper.mapToDomainModel(
+			completedCreditJpaEntity);
 
 		//then
-		assertThat(completedCredit.getGraduationCategory()).isEqualTo(completedCreditJpaEntity.getGraduationCategory());
-		assertThat(completedCredit.getTotalCredit()).isEqualTo(completedCreditJpaEntity.getTotalCredit());
-		assertThat(completedCredit.getTakenCredit()).isEqualTo(completedCreditJpaEntity.getTakenCredit());
+		assertThat(completedCredit.getGraduationCategory()).isEqualTo(
+			completedCreditJpaEntity.getGraduationCategory());
+		assertThat(completedCredit.getTotalCredit()).isEqualTo(
+			completedCreditJpaEntity.getTotalCredit());
+		assertThat(completedCredit.getTakenCredit()).isEqualTo(
+			completedCreditJpaEntity.getTakenCredit());
 	}
 
 	@DisplayName("CompletedCredit 도메인 모델을 JpaEntity로 매핑한다.")
@@ -48,18 +52,23 @@ class CompletedCreditPersistenceMapperTest {
 			.id(1L)
 			.graduationCategory(COMMON_CULTURE)
 			.totalCredit(10)
-			.takenCredit(5).build();
+			.takenCredit(5)
+			.build();
 
 		//when
-		CompletedCreditJpaEntity completedCreditJpaEntity = completedCreditPersistenceMapper.mapToJpaEntity(user,
+		CompletedCreditJpaEntity completedCreditJpaEntity = completedCreditPersistenceMapper.mapToJpaEntity(
+			user,
 			completedCredit);
 
 		//then
 		assertThat(completedCreditJpaEntity.getId()).isEqualTo(completedCredit.getId());
-		assertThat(completedCreditJpaEntity.getUserJpaEntity().getId()).isEqualTo(user.getId());
-		assertThat(completedCreditJpaEntity.getGraduationCategory()).isEqualTo(completedCredit.getGraduationCategory());
-		assertThat(completedCreditJpaEntity.getTotalCredit()).isEqualTo(completedCredit.getTotalCredit());
-		assertThat(completedCreditJpaEntity.getTakenCredit()).isEqualTo(completedCredit.getTakenCredit());
+		assertThat(completedCreditJpaEntity.getUserJpaEntity()
+			.getId()).isEqualTo(user.getId());
+		assertThat(completedCreditJpaEntity.getGraduationCategory()).isEqualTo(
+			completedCredit.getGraduationCategory());
+		assertThat(completedCreditJpaEntity.getTotalCredit()).isEqualTo(
+			completedCredit.getTotalCredit());
+		assertThat(completedCreditJpaEntity.getTakenCredit()).isEqualTo(
+			completedCredit.getTakenCredit());
 	}
-
 }

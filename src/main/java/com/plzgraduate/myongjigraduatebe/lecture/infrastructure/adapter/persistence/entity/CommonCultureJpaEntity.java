@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity;
 
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,9 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

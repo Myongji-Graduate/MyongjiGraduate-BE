@@ -1,11 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
-import java.time.Instant;
-import java.util.Objects;
-
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.time.Instant;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,7 +18,8 @@ public class TakenLecture {
 	private final Instant createdAt;
 
 	@Builder
-	private TakenLecture(Long id, User user, Lecture lecture, Integer year, Semester semester, Instant createdAt) {
+	private TakenLecture(Long id, User user, Lecture lecture, Integer year, Semester semester,
+		Instant createdAt) {
 		this.id = id;
 		this.user = user;
 		this.lecture = lecture;
@@ -52,11 +51,13 @@ public class TakenLecture {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (o == null || getClass() != o.getClass()) {
 			return false;
-		TakenLecture that = (TakenLecture)o;
+		}
+		TakenLecture that = (TakenLecture) o;
 		return Objects.equals(user, that.user) && Objects.equals(lecture, that.lecture) &&
 			Objects.equals(year, that.year) && Objects.equals(semester, that.semester);
 	}

@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +36,8 @@ public class MajorLectureJpaEntity {
 	private int endEntryYear;
 
 	@Builder
-	private MajorLectureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String major, int mandatory,
+	private MajorLectureJpaEntity(Long id, LectureJpaEntity lectureJpaEntity, String major,
+		int mandatory,
 		int startEntryYear,
 		int endEntryYear) {
 		this.id = id;

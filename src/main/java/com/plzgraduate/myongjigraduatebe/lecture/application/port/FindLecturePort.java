@@ -1,14 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.port;
 
-import java.util.List;
-
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import java.util.List;
 
 public interface FindLecturePort {
 
 	List<Lecture> findLecturesByLectureCodes(List<String> lectureCodes);
 
-	List<Lecture> findLecturesByIds(List<Long> lectureIds);
+	List<Lecture> findLecturesByIds(List<String> lectureIds);
 
-	Lecture findLectureById(Long lectureId);
+	Lecture findLectureById(String lectureId);
 }

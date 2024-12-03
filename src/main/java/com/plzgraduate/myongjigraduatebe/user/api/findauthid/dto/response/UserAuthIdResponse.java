@@ -23,6 +23,7 @@ public class UserAuthIdResponse {
 	public static UserAuthIdResponse of(String encryptedAutId, String studentNumber) {
 		return UserAuthIdResponse.builder()
 			.authId(encryptedAutId)
-			.studentNumber(studentNumber).build();
+			.studentNumber(studentNumber)
+			.build();
 	}
 }

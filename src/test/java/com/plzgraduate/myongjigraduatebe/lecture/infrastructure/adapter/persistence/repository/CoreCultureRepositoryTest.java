@@ -2,18 +2,14 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CoreCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CoreCultureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CoreCultureRepository;
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureRepository;
-import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 
 class CoreCultureRepositoryTest extends PersistenceTestSupport {
 
@@ -28,18 +24,20 @@ class CoreCultureRepositoryTest extends PersistenceTestSupport {
 	void findAllByEntryYear(int entryYears) {
 		//given
 		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
-			.lectureCode("test")
+			.id("test")
 			.build();
 		lectureRepository.save(lectureJpaEntity);
 
 		CoreCultureJpaEntity coreCultureJpaEntityA = CoreCultureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(16)
-			.endEntryYear(17).build();
+			.endEntryYear(17)
+			.build();
 		CoreCultureJpaEntity coreCultureJpaEntityB = CoreCultureJpaEntity.builder()
 			.lectureJpaEntity(lectureJpaEntity)
 			.startEntryYear(18)
-			.endEntryYear(99).build();
+			.endEntryYear(99)
+			.build();
 
 		coreCultureRepository.saveAll(
 			List.of(coreCultureJpaEntityA, coreCultureJpaEntityB));

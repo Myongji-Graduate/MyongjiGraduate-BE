@@ -1,14 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.BasicAcademicalLectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
@@ -21,6 +13,12 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("기본 단과대에 대해 학문기초교양 결과를 반환한다.")
 class DefaultBasicAcademicalGraduationManagerTest {
@@ -28,6 +26,7 @@ class DefaultBasicAcademicalGraduationManagerTest {
 	@DisplayName("인문대의 학문기초교양을 계산한다.")
 	@Nested
 	class 인문대_학문기초교양 {
+
 		User user = UserFixture.영문학과_18학번();
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
 		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.인문대_학문기초교양();
@@ -47,14 +46,16 @@ class DefaultBasicAcademicalGraduationManagerTest {
 			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+				user,
 				takenLectureInventory, basicAcademicalLectures, 12);
 
-			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
+			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory()
+				.get(0);
 
 			//then
 			assertThat(detailGraduationResult)
-				.extracting( "isCompleted", "totalCredit", "takenCredit")
+				.extracting("isCompleted", "totalCredit", "takenCredit")
 				.contains(true, 12, 12);
 
 			assertThat(detailCategoryResult)
@@ -78,10 +79,12 @@ class DefaultBasicAcademicalGraduationManagerTest {
 			BasicAcademicalGraduationManager manager = new DefaultBasicAcademicalGraduationManager();
 
 			//when
-			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
+			DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+				user,
 				takenLectureInventory, basicAcademicalLectures, 12);
 
-			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory().get(0);
+			DetailCategoryResult detailCategoryResult = detailGraduationResult.getDetailCategory()
+				.get(0);
 
 			//then
 			assertThat(detailGraduationResult)

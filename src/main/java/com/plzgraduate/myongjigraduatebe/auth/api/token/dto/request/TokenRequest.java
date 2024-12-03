@@ -1,8 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request;
 
-import javax.validation.constraints.NotBlank;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +18,4 @@ public class TokenRequest {
 	private TokenRequest(String refreshToken) {
 		this.refreshToken = refreshToken;
 	}
-
 }

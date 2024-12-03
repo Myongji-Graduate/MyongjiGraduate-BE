@@ -4,7 +4,6 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResul
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UpdateStudentInformationCommand {
+
 	private User user;
 
 	private String name;
@@ -21,6 +21,8 @@ public class UpdateStudentInformationCommand {
 	private String dualMajor;
 
 	private String subMajor;
+
+	private String associatedMajor;
 
 	private StudentCategory studentCategory;
 
@@ -32,30 +34,35 @@ public class UpdateStudentInformationCommand {
 
 	@Builder
 	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
-		String subMajor, StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
+		String subMajor, String associatedMajor, StudentCategory studentCategory, int totalCredit, double takenCredit,
+		boolean graduate) {
 		this.user = user;
 		this.name = name;
 		this.major = major;
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
+		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduate = graduate;
 	}
 
-	public static UpdateStudentInformationCommand of(User user, ParsingInformation parsingInformation) {
+	public static UpdateStudentInformationCommand of(User user,
+		ParsingInformation parsingInformation) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
 			.name(parsingInformation.getStudentName())
 			.major(parsingInformation.getMajor())
 			.dualMajor(parsingInformation.getDualMajor())
 			.subMajor(parsingInformation.getSubMajor())
+			.associatedMajor(parsingInformation.getAssociatedMajor())
 			.studentCategory(parsingInformation.getStudentCategory())
 			.build();
 	}
 
-	public static UpdateStudentInformationCommand update(User user, GraduationResult graduationResult) {
+	public static UpdateStudentInformationCommand update(User user,
+		GraduationResult graduationResult) {
 		return UpdateStudentInformationCommand.builder()
 			.user(user)
 			.name(user.getName())
@@ -63,6 +70,7 @@ public class UpdateStudentInformationCommand {
 			.major(user.getPrimaryMajor())
 			.dualMajor(user.getDualMajor())
 			.subMajor(user.getSubMajor())
+			.associatedMajor(user.getAssociatedMajor())
 			.totalCredit(graduationResult.getTotalCredit())
 			.takenCredit(graduationResult.getTakenCredit())
 			.graduate(graduationResult.isGraduated())

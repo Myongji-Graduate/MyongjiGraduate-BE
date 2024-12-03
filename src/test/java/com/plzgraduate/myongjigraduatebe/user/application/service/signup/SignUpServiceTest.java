@@ -10,6 +10,11 @@ import static org.mockito.BDDMockito.never;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.times;
 
+import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.port.SaveUserPort;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,14 +23,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.plzgraduate.myongjigraduatebe.user.application.port.CheckUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.port.SaveUserPort;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.signup.SignUpCommand;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
 @ExtendWith(MockitoExtension.class)
 class SignUpServiceTest {
+
 	@Mock
 	private SaveUserPort saveUserPort;
 	@Mock
@@ -51,8 +51,10 @@ class SignUpServiceTest {
 		signUpService.signUp(command);
 
 		//then
-		then(passwordEncoder).should().encode("1q2w3e4r!");
-		then(saveUserPort).should().saveUser(any(User.class));
+		then(passwordEncoder).should()
+			.encode("1q2w3e4r!");
+		then(saveUserPort).should()
+			.saveUser(any(User.class));
 	}
 
 	@DisplayName("가입하려는 아이디가 이미 존재한다.")
@@ -73,9 +75,12 @@ class SignUpServiceTest {
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage(DUPLICATED_AUTHID.toString());
 
-		then(checkUserPort).should(times(1)).checkDuplicateAuthId(authId);
-		then(checkUserPort).should(never()).checkDuplicateStudentNumber(anyString());
-		then(saveUserPort).should(never()).saveUser(any(User.class));
+		then(checkUserPort).should(times(1))
+			.checkDuplicateAuthId(authId);
+		then(checkUserPort).should(never())
+			.checkDuplicateStudentNumber(anyString());
+		then(saveUserPort).should(never())
+			.saveUser(any(User.class));
 	}
 
 	@DisplayName("가입하려는 학번이 이미 존재한다.")
@@ -97,9 +102,12 @@ class SignUpServiceTest {
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage(DUPLICATED_STUDENT_NUMBER.toString());
 
-		then(checkUserPort).should(times(1)).checkDuplicateAuthId(anyString());
-		then(checkUserPort).should(times(1)).checkDuplicateStudentNumber(studentNumber);
-		then(saveUserPort).should(never()).saveUser(any(User.class));
+		then(checkUserPort).should(times(1))
+			.checkDuplicateAuthId(anyString());
+		then(checkUserPort).should(times(1))
+			.checkDuplicateStudentNumber(studentNumber);
+		then(saveUserPort).should(never())
+			.saveUser(any(User.class));
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.api.signup;
 
-import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.*;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INVALIDATED_AUTHID_TYPE;
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INVALIDATED_PASSWORD_TYPE;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,16 +10,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
-
-import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.request.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.AuthIdDuplicationResponse;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.StudentNumberDuplicationResponse;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 class SignUpControllerTest extends WebAdaptorTestSupport {
 
@@ -118,8 +117,10 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 		boolean notDuplicated = true;
 		AuthIdDuplicationResponse authIdDuplicationResponse = AuthIdDuplicationResponse.builder()
 			.authId(authId)
-			.notDuplicated(notDuplicated).build();
-		given(checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId)).willReturn(authIdDuplicationResponse);
+			.notDuplicated(notDuplicated)
+			.build();
+		given(checkAuthIdDuplicationUseCase.checkAuthIdDuplication(authId)).willReturn(
+			authIdDuplicationResponse);
 
 		//when //then
 		mockMvc.perform(
@@ -140,8 +141,10 @@ class SignUpControllerTest extends WebAdaptorTestSupport {
 		boolean notDuplicated = true;
 		StudentNumberDuplicationResponse studentNumberDuplicationResponse = StudentNumberDuplicationResponse.builder()
 			.studentNumber(studentNumber)
-			.notDuplicated(notDuplicated).build();
-		given(checkStudentNumberDuplicationUseCase.checkStudentNumberDuplication(studentNumber)).willReturn(
+			.notDuplicated(notDuplicated)
+			.build();
+		given(checkStudentNumberDuplicationUseCase.checkStudentNumberDuplication(
+			studentNumber)).willReturn(
 			studentNumberDuplicationResponse);
 
 		//when //then
