@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.parsing.application.service;
 
 import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.INCORRECT_STUDENT_NUMBER;
-import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.ASSOCIATED_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.DOUBLE_SUB;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
@@ -88,13 +87,15 @@ class ParsingTextService implements ParsingTextUseCase {
 	}
 
 	private List<TakenLectureInformation> getSaveTakenLectureCommand(
-		List<ParsingTakenLectureDto> parsingTakenLectureDtoList) {
+		List<ParsingTakenLectureDto> parsingTakenLectureDtoList
+	) {
 		return parsingTakenLectureDtoList.stream()
 			.map(parsingTakenLectureDto ->
 				TakenLectureInformation.createTakenLectureInformation(
 					parsingTakenLectureDto.getLectureCode(),
 					parsingTakenLectureDto.getYear(),
-					parsingTakenLectureDto.getSemester())
+					parsingTakenLectureDto.getSemester()
+				)
 			)
 			.collect(Collectors.toList());
 	}
@@ -104,5 +105,4 @@ class ParsingTextService implements ParsingTextUseCase {
 			throw new IllegalArgumentException(ErrorCode.UNSUPPORTED_STUDENT_CATEGORY.toString());
 		}
 	}
-
 }

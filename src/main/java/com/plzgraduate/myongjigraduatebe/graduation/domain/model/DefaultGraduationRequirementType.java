@@ -35,8 +35,10 @@ public enum DefaultGraduationRequirementType {
 	private final int startEntryYear;
 	private final int endEntryYear;
 
-	public static DefaultGraduationRequirementType determineGraduationRequirement(College college,
-		User user) {
+	public static DefaultGraduationRequirementType determineGraduationRequirement(
+		College college,
+		User user
+	) {
 		return Arrays.stream(DefaultGraduationRequirementType.values())
 			.filter(gr -> gr.getCollageName()
 				.equals(college.getName()))
@@ -65,15 +67,19 @@ public enum DefaultGraduationRequirementType {
 		return graduationRequirement;
 	}
 
-	private void checkIsEnglishFreeUserAndTransferCredit(User user,
-		GraduationRequirement graduationRequirement) {
+	private void checkIsEnglishFreeUserAndTransferCredit(
+		User user,
+		GraduationRequirement graduationRequirement
+	) {
 		if (user.getEnglishLevel() == EnglishLevel.FREE) {
 			graduationRequirement.transferEnglishCreditCommonToNormal();
 		}
 	}
 
-	private void checkIsMultiMajorUserAndTransferCredit(User user,
-		GraduationRequirement graduationRequirement) {
+	private void checkIsMultiMajorUserAndTransferCredit(
+		User user,
+		GraduationRequirement graduationRequirement
+	) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			graduationRequirement.modifyCreditForDualMajor(user);
 		}

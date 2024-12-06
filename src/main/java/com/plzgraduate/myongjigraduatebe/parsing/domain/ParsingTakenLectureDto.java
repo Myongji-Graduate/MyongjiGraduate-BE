@@ -25,5 +25,4 @@ public class ParsingTakenLectureDto {
 			.semester(semester)
 			.build();
 	}
-
 }
