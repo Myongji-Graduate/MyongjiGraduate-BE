@@ -22,10 +22,17 @@ public class ParsingInformation {
 	private final List<ParsingTakenLectureDto> takenLectureInformation;
 
 	@Builder
-	public ParsingInformation(String studentName, String studentNumber, String major,
-                              String changeMajor, String subMajor, String dualMajor,
-                              String associatedMajor, StudentCategory studentCategory,
-                              List<ParsingTakenLectureDto> takenLectureInformation) {
+	public ParsingInformation(
+		String studentName,
+		String studentNumber,
+		String major,
+		String changeMajor,
+		String subMajor,
+		String dualMajor,
+		String associatedMajor,
+		StudentCategory studentCategory,
+		List<ParsingTakenLectureDto> takenLectureInformation
+	) {
 		this.studentName = studentName;
 		this.studentNumber = studentNumber;
 		this.major = major;
@@ -33,24 +40,22 @@ public class ParsingInformation {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
-        this.studentCategory = studentCategory;
+		this.studentCategory = studentCategory;
 		this.takenLectureInformation = takenLectureInformation;
 	}
 
 	public static ParsingInformation parsing(String parsingText) {
 		String[] splitText = splitParsingText(parsingText);
 		ParsingStudentCategoryDto parsingStudentCategoryDto = parseStudentCategory(splitText);
-		return ParsingInformation.builder()
-			.studentName(parseStudentName(splitText))
-			.studentNumber(parseStudentNumber(splitText))
-			.major(parseMajor(splitText))
+
+		return ParsingInformation.builder().studentName(parseStudentName(splitText))
+			.studentNumber(parseStudentNumber(splitText)).major(parseMajor(splitText))
 			.dualMajor(parsingStudentCategoryDto.getDualMajor())
 			.changeMajor(parsingStudentCategoryDto.getChangeMajor())
 			.subMajor(parsingStudentCategoryDto.getSubMajor())
 			.associatedMajor(parsingStudentCategoryDto.getAssociatedMajor())
 			.studentCategory(parsingStudentCategoryDto.getStudentCategory())
-			.takenLectureInformation(parseTakenLectureInformation(splitText))
-			.build();
+			.takenLectureInformation(parseTakenLectureInformation(splitText)).build();
 	}
 
 	private static String[] splitParsingText(String parsingText) {
@@ -106,15 +111,22 @@ public class ParsingInformation {
 			}
 		}
 		studentCategory = StudentCategory.from(categories);
-		return ParsingStudentCategoryDto.of(changeMajor, subMajor, dualMajor, associatedMajor,
-			studentCategory);
+		return ParsingStudentCategoryDto.of(
+			changeMajor,
+			subMajor,
+			dualMajor,
+			associatedMajor,
+			studentCategory
+		);
 	}
 
 	private static List<ParsingTakenLectureDto> parseTakenLectureInformation(String[] splitText) {
 		List<ParsingTakenLectureDto> takenLectureInformation = new ArrayList<>();
 		for (int i = 16; i < splitText.length; i += 7) {
-			if (i + 3 < splitText.length && !Pattern.matches("^[A-Z]+$",
-				splitText[i + 3].substring(0, 1))) {
+			if (i + 3 < splitText.length && !Pattern.matches(
+				"^[A-Z]+$",
+				splitText[i + 3].substring(0, 1)
+			)) {
 				return takenLectureInformation;
 			}
 			int year = Integer.parseInt(splitText[i + 1].split(" ")[0].substring(0, 4));
@@ -122,8 +134,11 @@ public class ParsingInformation {
 			String code = splitText[i + 3];
 			char grade = splitText[i + 6].charAt(0);
 			if (grade != 'F' && grade != 'N' && grade != 'R') {
-				takenLectureInformation.add(
-					ParsingTakenLectureDto.of(code, year, Semester.of(semester)));
+				takenLectureInformation.add(ParsingTakenLectureDto.of(
+					code,
+					year,
+					Semester.of(semester)
+				));
 			}
 			if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {
 				i++;

@@ -34,7 +34,6 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
-
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 
 	@Override
@@ -74,8 +73,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	}
 
 	private void validateParsingText(String parsingText) {
-		if (parsingText.trim()
-			.isEmpty()) {
+		if (parsingText.trim().isEmpty()) {
 			throw new InvalidPdfException("PDF를 인식하지 못했습니다. 채널톡으로 문의 바랍니다.");
 		}
 	}

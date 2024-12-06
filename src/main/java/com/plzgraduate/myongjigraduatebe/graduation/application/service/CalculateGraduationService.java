@@ -38,15 +38,22 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
-			user.getId());
+			user.getId()
+		);
 
 		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
-		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(user,
-			takenLectureInventory, graduationRequirement);
+		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(
+			user,
+			takenLectureInventory,
+			graduationRequirement
+		);
 
-		GraduationResult graduationResult = generateGraduationResult(chapelResult,
+		GraduationResult graduationResult = generateGraduationResult(
+			chapelResult,
 			detailGraduationResults,
-			takenLectureInventory, graduationRequirement);
+			takenLectureInventory,
+			graduationRequirement
+		);
 		handleDuplicatedTakenCredit(user, graduationResult);
 		updateUserGraduationInformation(user, graduationResult);
 		return graduationResult;
@@ -54,8 +61,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private GraduationRequirement determineGraduationRequirement(User user) {
 		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
-		DefaultGraduationRequirementType defaultGraduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(
-			userCollage, user);
+		DefaultGraduationRequirementType defaultGraduationRequirement =
+			DefaultGraduationRequirementType.determineGraduationRequirement(userCollage, user);
 		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
 	}
 
@@ -65,8 +72,10 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		return chapelResult;
 	}
 
-	private List<DetailGraduationResult> generateDetailGraduationResults(User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+	private List<DetailGraduationResult> generateDetailGraduationResults(
+		User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+	) {
 		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>(List.of(
 			generateCommonCultureDetailGraduationResult(
 				user, takenLectureInventory, graduationRequirement),
@@ -80,37 +89,54 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		return detailGraduationResults;
 	}
 
-	private DetailGraduationResult generateCommonCultureDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+	private DetailGraduationResult generateCommonCultureDetailGraduationResult(
+		User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+	) {
 		return calculateCommonCultureGraduationService.calculateSingleDetailGraduation(user,
-			GraduationCategory.COMMON_CULTURE, takenLectureInventory, graduationRequirement);
+			GraduationCategory.COMMON_CULTURE, takenLectureInventory, graduationRequirement
+		);
 	}
 
-	private DetailGraduationResult generateCoreCultureDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+	private DetailGraduationResult generateCoreCultureDetailGraduationResult(
+		User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+	) {
 		return calculateCoreCultureGraduationService.calculateSingleDetailGraduation(user,
-			GraduationCategory.CORE_CULTURE, takenLectureInventory, graduationRequirement);
+			GraduationCategory.CORE_CULTURE, takenLectureInventory, graduationRequirement
+		);
 	}
 
-	private List<DetailGraduationResult> generateBasicAcademicalDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+	private List<DetailGraduationResult> generateBasicAcademicalDetailGraduationResult(
+		User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+	) {
 		return calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(user,
-			takenLectureInventory, graduationRequirement);
+			takenLectureInventory, graduationRequirement
+		);
 	}
 
-	private List<DetailGraduationResult> generateMajorDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
-		return calculateMajorGraduationService.calculateAllDetailGraduation(user,
+	private List<DetailGraduationResult> generateMajorDetailGraduationResult(
+		User user,
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+	) {
+		return calculateMajorGraduationService.calculateAllDetailGraduation(
+			user,
 			takenLectureInventory,
-			graduationRequirement);
+			graduationRequirement
+		);
 	}
 
-	private GraduationResult generateGraduationResult(ChapelResult chapelResult,
+	private GraduationResult generateGraduationResult(
+		ChapelResult chapelResult,
 		List<DetailGraduationResult> detailGraduationResults,
 		TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
-		GraduationResult graduationResult = GraduationResult.create(chapelResult,
-			detailGraduationResults);
+		GraduationRequirement graduationRequirement
+	) {
+		GraduationResult graduationResult = GraduationResult.create(
+			chapelResult,
+			detailGraduationResults
+		);
 		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
 		graduationResult.checkGraduated(graduationRequirement);
 		return graduationResult;
@@ -131,7 +157,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private void updateUserGraduationInformation(User user, GraduationResult graduationResult) {
 		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(
 			user,
-			graduationResult);
+			graduationResult
+		);
 		updateStudentInformationUseCase.updateUser(updateStudentInformationCommand);
 	}
 }
