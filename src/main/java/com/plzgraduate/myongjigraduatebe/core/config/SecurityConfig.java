@@ -48,7 +48,7 @@ public class SecurityConfig {
 				API_V1_PREFIX + "/users/{student-number}/validate", // 유저 검증
 				API_V1_PREFIX + "/users/password", // 비밀번호 재설정
 				API_V1_PREFIX + "/health", // 헬스체크
-				API_V1_PREFIX + "/graduations", // 비로그인 졸업 요건 검사
+				API_V1_PREFIX + "/graduations/check", // 비로그인 졸업 요건 검사
 				"/api-docs",
 				"/swagger-custom-ui.html",
 				"/v3/api-docs/**",
