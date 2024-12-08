@@ -59,33 +59,39 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		return graduationResult;
 	}
 
-	private GraduationRequirement determineGraduationRequirement(User user) {
+	GraduationRequirement determineGraduationRequirement(User user) {
 		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
 		DefaultGraduationRequirementType defaultGraduationRequirement =
 			DefaultGraduationRequirementType.determineGraduationRequirement(userCollage, user);
 		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
 	}
 
-	private ChapelResult generateChapelResult(TakenLectureInventory takenLectureInventory) {
+	ChapelResult generateChapelResult(TakenLectureInventory takenLectureInventory) {
 		ChapelResult chapelResult = ChapelResult.create(takenLectureInventory);
 		chapelResult.checkCompleted();
 		return chapelResult;
 	}
 
-	private List<DetailGraduationResult> generateDetailGraduationResults(
+	List<DetailGraduationResult> generateDetailGraduationResults(
 		User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
 	) {
 		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>(List.of(
 			generateCommonCultureDetailGraduationResult(
-				user, takenLectureInventory, graduationRequirement),
+				user, takenLectureInventory, graduationRequirement
+			),
 			generateCoreCultureDetailGraduationResult(
-				user, takenLectureInventory, graduationRequirement)
+				user, takenLectureInventory, graduationRequirement
+			)
 		));
 		detailGraduationResults.addAll(generateBasicAcademicalDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement));
+			user, takenLectureInventory, graduationRequirement
+		));
 		detailGraduationResults.addAll(generateMajorDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement));
+			user, takenLectureInventory, graduationRequirement
+		));
+
 		return detailGraduationResults;
 	}
 
@@ -111,8 +117,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
 	) {
-		return calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(user,
-			takenLectureInventory, graduationRequirement
+		return calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(
+			user, takenLectureInventory, graduationRequirement
 		);
 	}
 
@@ -127,7 +133,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		);
 	}
 
-	private GraduationResult generateGraduationResult(
+	GraduationResult generateGraduationResult(
 		ChapelResult chapelResult,
 		List<DetailGraduationResult> detailGraduationResults,
 		TakenLectureInventory takenLectureInventory,
@@ -142,7 +148,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		return graduationResult;
 	}
 
-	private void handleDuplicatedTakenCredit(User user, GraduationResult graduationResult) {
+	void handleDuplicatedTakenCredit(User user, GraduationResult graduationResult) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			int duplicatedBasicAcademicalCultureCredit =
 				findBasicAcademicalCulturePort.findDuplicatedLecturesBetweenMajors(user)

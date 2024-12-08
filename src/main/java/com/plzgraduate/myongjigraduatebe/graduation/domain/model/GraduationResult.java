@@ -84,7 +84,6 @@ public class GraduationResult {
 				+ freeElectiveGraduationResult.getTakenCredit();
 	}
 
-
 	private void handleLeftTakenNormaCulture(
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
 	) {
