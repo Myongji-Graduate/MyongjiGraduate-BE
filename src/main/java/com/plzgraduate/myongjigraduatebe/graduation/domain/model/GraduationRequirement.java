@@ -24,12 +24,16 @@ public class GraduationRequirement {
 
 	@Builder
 	private GraduationRequirement(
-		int totalCredit, int primaryMajorCredit, int dualMajorCredit,
+		int totalCredit,
+		int primaryMajorCredit,
+		int dualMajorCredit,
 		int subMajorCredit,
-		int primaryBasicAcademicalCultureCredit, int dualBasicAcademicalCultureCredit,
+		int primaryBasicAcademicalCultureCredit,
+		int dualBasicAcademicalCultureCredit,
 		int commonCultureCredit,
 		int coreCultureCredit,
-		int normalCultureCredit, int freeElectiveCredit
+		int normalCultureCredit,
+		int freeElectiveCredit
 	) {
 		this.totalCredit = totalCredit;
 		this.primaryMajorCredit = primaryMajorCredit;
@@ -56,12 +60,12 @@ public class GraduationRequirement {
 	public void modifyCreditForDualMajor(User user) {
 		DualMajorGraduationRequirementType primaryMajorGraduationRequirementType =
 			findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getPrimaryMajor())
-					.getName());
+				College.findBelongingCollege(user.getPrimaryMajor()).getName()
+			);
 		DualMajorGraduationRequirementType dualMajorGraduationRequirementType =
 			findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getDualMajor())
-					.getName());
+				College.findBelongingCollege(user.getDualMajor()).getName()
+			);
 
 		primaryMajorCredit = primaryMajorGraduationRequirementType.getMajorCredit();
 		dualMajorCredit = dualMajorGraduationRequirementType.getMajorCredit();
@@ -71,10 +75,7 @@ public class GraduationRequirement {
 	}
 
 	private int calculateFreeElectiveCreditWithDualMajorStudent() {
-		int freeElectiveCredit =
-			totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit
-				- dualMajorCredit
-				- primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
+		int freeElectiveCredit = totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit - dualMajorCredit - primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
 		return Math.max(freeElectiveCredit, 0);
 	}
 

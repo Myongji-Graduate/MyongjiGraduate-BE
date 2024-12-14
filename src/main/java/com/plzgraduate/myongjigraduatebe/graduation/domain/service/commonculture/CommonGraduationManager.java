@@ -21,23 +21,29 @@ import org.springframework.stereotype.Component;
 public class CommonGraduationManager implements GraduationManager<CommonCulture> {
 
 	@Override
-	public DetailGraduationResult createDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory, Set<CommonCulture> graduationLectures,
-		int commonCultureGraduationTotalCredit) {
+	public DetailGraduationResult createDetailGraduationResult(
+		User user,
+		TakenLectureInventory takenLectureInventory,
+		Set<CommonCulture> graduationLectures,
+		int commonCultureGraduationTotalCredit
+	) {
 		CommonCultureDetailCategoryManager commonCultureDetailCategoryManager = new CommonCultureDetailCategoryManager();
 		List<DetailCategoryResult> commonCultureDetailCategoryResults = Arrays.stream(
 				CommonCultureCategory.values())
-			.filter(
-				commonCultureCategory -> commonCultureCategory.isContainsEntryYear(
-					user.getEntryYear()))
-			.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(user,
+			.filter(commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
+			.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(
+				user,
 				takenLectureInventory,
-				graduationLectures, commonCultureCategory))
+				graduationLectures,
+				commonCultureCategory
+			))
 			.collect(Collectors.toList());
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.create(
 			COMMON_CULTURE,
-			commonCultureGraduationTotalCredit, commonCultureDetailCategoryResults);
+			commonCultureGraduationTotalCredit,
+			commonCultureDetailCategoryResults
+		);
 		detailGraduationResult.addCredit(getTakenChapelCredits(takenLectureInventory));
 		return detailGraduationResult;
 	}
@@ -50,6 +56,5 @@ public class CommonGraduationManager implements GraduationManager<CommonCulture>
 				.equals(CHAPEL_LECTURE_CODE))
 			.count();
 		return chapelCount * CHAPEL_CREDIT;
-
 	}
 }

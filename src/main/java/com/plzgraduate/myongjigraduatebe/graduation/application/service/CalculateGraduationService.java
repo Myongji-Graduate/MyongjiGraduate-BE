@@ -77,30 +77,37 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement
 	) {
-		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>(List.of(
-			generateCommonCultureDetailGraduationResult(
-				user, takenLectureInventory, graduationRequirement
-			),
-			generateCoreCultureDetailGraduationResult(
+		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>(
+			List.of(
+				generateCommonCultureDetailGraduationResult(
+					user, takenLectureInventory, graduationRequirement
+				),
+				generateCoreCultureDetailGraduationResult(
+					user, takenLectureInventory, graduationRequirement
+				)
+			)
+		);
+		detailGraduationResults.addAll(
+			generateBasicAcademicalDetailGraduationResult(
 				user, takenLectureInventory, graduationRequirement
 			)
-		));
-		detailGraduationResults.addAll(generateBasicAcademicalDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement
-		));
-		detailGraduationResults.addAll(generateMajorDetailGraduationResult(
-			user, takenLectureInventory, graduationRequirement
-		));
+		);
+		detailGraduationResults.addAll(
+			generateMajorDetailGraduationResult(
+				user, takenLectureInventory, graduationRequirement
+			)
+		);
 
 		return detailGraduationResults;
 	}
 
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(
 		User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
 	) {
-		return calculateCommonCultureGraduationService.calculateSingleDetailGraduation(user,
-			GraduationCategory.COMMON_CULTURE, takenLectureInventory, graduationRequirement
+		return calculateCommonCultureGraduationService.calculateSingleDetailGraduation(
+			user, GraduationCategory.COMMON_CULTURE, takenLectureInventory, graduationRequirement
 		);
 	}
 
@@ -108,14 +115,15 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		User user,
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
 	) {
-		return calculateCoreCultureGraduationService.calculateSingleDetailGraduation(user,
-			GraduationCategory.CORE_CULTURE, takenLectureInventory, graduationRequirement
+		return calculateCoreCultureGraduationService.calculateSingleDetailGraduation(
+			user, GraduationCategory.CORE_CULTURE, takenLectureInventory, graduationRequirement
 		);
 	}
 
 	private List<DetailGraduationResult> generateBasicAcademicalDetailGraduationResult(
 		User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
 	) {
 		return calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(
 			user, takenLectureInventory, graduationRequirement

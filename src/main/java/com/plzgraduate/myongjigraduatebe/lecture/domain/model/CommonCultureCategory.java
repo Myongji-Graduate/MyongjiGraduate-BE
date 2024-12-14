@@ -21,5 +21,4 @@ public enum CommonCultureCategory {
 	public boolean isContainsEntryYear(int entryYear) {
 		return containsEntryYears.contains(entryYear);
 	}
-
 }
