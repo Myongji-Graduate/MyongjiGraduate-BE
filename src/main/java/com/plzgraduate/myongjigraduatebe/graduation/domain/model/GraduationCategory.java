@@ -39,4 +39,11 @@ public enum GraduationCategory {
 	public boolean checkMandatoryIfSeperatedByMandatoryAndElective() {
 		return this == PRIMARY_MANDATORY_MAJOR || this == DUAL_MANDATORY_MAJOR;
 	}
+
+	@Override
+	public String toString() {
+		return "GraduationCategory{" +
+			"name='" + name + '\'' +
+			'}';
+	}
 }

@@ -113,7 +113,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateCoreCultureDetailGraduationResult(
 		User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
 	) {
 		return calculateCoreCultureGraduationService.calculateSingleDetailGraduation(
 			user, GraduationCategory.CORE_CULTURE, takenLectureInventory, graduationRequirement
@@ -132,7 +133,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private List<DetailGraduationResult> generateMajorDetailGraduationResult(
 		User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
 	) {
 		return calculateMajorGraduationService.calculateAllDetailGraduation(
 			user,

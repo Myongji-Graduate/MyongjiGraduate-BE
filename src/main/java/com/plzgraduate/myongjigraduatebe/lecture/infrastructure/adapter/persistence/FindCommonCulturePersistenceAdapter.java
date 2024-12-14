@@ -36,32 +36,28 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 	}
 
 	private Set<CommonCulture> findEngBasicCommonCultures(User user) {
-		return commonCultureRepository.findEngBasicGraduationCommonCulturesByEntryYear(
-				user.getEntryYear())
+		return commonCultureRepository.findEngBasicGraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
 			.collect(Collectors.toSet());
 	}
 
 	private Set<CommonCulture> findEng12CommonCultures(User user) {
-		return commonCultureRepository.findEng12GraduationCommonCulturesByEntryYear(
-				user.getEntryYear())
+		return commonCultureRepository.findEng12GraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
 			.collect(Collectors.toSet());
 	}
 
 	private Set<CommonCulture> findEng34CommonCultures(User user) {
-		return commonCultureRepository.findEng34GraduationCommonCulturesByEntryYear(
-				user.getEntryYear())
+		return commonCultureRepository.findEng34GraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
 			.collect(Collectors.toSet());
 	}
 
 	private Set<CommonCulture> findEngFreeCommonCultures(User user) {
-		return commonCultureRepository.findEngFreeGraduationCommonCulturesByEntryYear(
-				user.getEntryYear())
+		return commonCultureRepository.findEngFreeGraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
 			.collect(Collectors.toSet());

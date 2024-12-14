@@ -24,5 +24,4 @@ public class FindCoreCulturePersistenceAdapter implements FindCoreCulturePort {
 			.map(lectureMapper::mapToCoreCultureModel)
 			.collect(Collectors.toSet());
 	}
-
 }

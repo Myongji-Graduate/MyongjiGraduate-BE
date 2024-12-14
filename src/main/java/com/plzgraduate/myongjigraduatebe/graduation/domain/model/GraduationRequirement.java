@@ -94,4 +94,20 @@ public class GraduationRequirement {
 		}
 		return subMajorCredit;
 	}
+
+	@Override
+	public String toString() {
+		return "GraduationRequirement{" +
+			"totalCredit=" + totalCredit +
+			", primaryBasicAcademicalCultureCredit=" + primaryBasicAcademicalCultureCredit +
+			", coreCultureCredit=" + coreCultureCredit +
+			", primaryMajorCredit=" + primaryMajorCredit +
+			", dualMajorCredit=" + dualMajorCredit +
+			", subMajorCredit=" + subMajorCredit +
+			", dualBasicAcademicalCultureCredit=" + dualBasicAcademicalCultureCredit +
+			", commonCultureCredit=" + commonCultureCredit +
+			", normalCultureCredit=" + normalCultureCredit +
+			", freeElectiveCredit=" + freeElectiveCredit +
+			'}';
+	}
 }

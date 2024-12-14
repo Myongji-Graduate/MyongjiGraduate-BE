@@ -119,6 +119,29 @@ public class User {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+			"id=" + id +
+			", authId='" + authId + '\'' +
+			", englishLevel=" + englishLevel +
+			", studentNumber='" + studentNumber + '\'' +
+			", entryYear=" + entryYear +
+			", createdAt=" + createdAt +
+			", updatedAt=" + updatedAt +
+			", password='" + password + '\'' +
+			", name='" + name + '\'' +
+			", primaryMajor='" + primaryMajor + '\'' +
+			", subMajor='" + subMajor + '\'' +
+			", dualMajor='" + dualMajor + '\'' +
+			", associatedMajor='" + associatedMajor + '\'' +
+			", studentCategory=" + studentCategory +
+			", totalCredit=" + totalCredit +
+			", takenCredit=" + takenCredit +
+			", graduated=" + graduated +
+			'}';
+	}
+
 	public void updateStudentInformation(
 		String name, String major, String dualMajor,
 		String subMajor, String associatedMajor,

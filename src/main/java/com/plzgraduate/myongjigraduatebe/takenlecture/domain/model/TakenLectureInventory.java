@@ -70,4 +70,11 @@ public class TakenLectureInventory {
 			.count();
 		return chapelCount >= 4;
 	}
+
+	@Override
+	public String toString() {
+		return "TakenLectureInventory{" +
+			"takenLecture=" + takenLecture +
+			'}';
+	}
 }
