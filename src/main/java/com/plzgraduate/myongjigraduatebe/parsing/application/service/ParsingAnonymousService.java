@@ -66,7 +66,11 @@ public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 	) {
 		Set<TakenLecture> takenLectures = parsingTakenLectureDtoList.stream()
 			.map(parsingTakenLectureDto -> {
-					Lecture lecture = Lecture.from(parsingTakenLectureDto.getLectureCode());
+					Lecture lecture = Lecture.from(
+						parsingTakenLectureDto.getLectureCode(),
+						parsingTakenLectureDto.getLectureName(),
+						parsingTakenLectureDto.getCredit()
+					);
 					return TakenLecture.of(
 						anonymous,
 						lecture,
