@@ -77,9 +77,9 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/plzgraduate/myongjigraduatebe/core/**",
-                    "com/plzgraudate/myongjigraduatebe/*Request*",
+                    "com/plzgraudate/myongjigraduatebe/*Request",
                     "com/plzgraudate/myongjigraduatebe/*Command*",
-                    "com/plzgraudate/myongjigraduatebe/*Response*",
+                    "com/plzgraudate/myongjigraduatebe/*Response",
                     "com/plzgraudate/myongjigraduatebe/*Mapper*"
             ])
         }))
