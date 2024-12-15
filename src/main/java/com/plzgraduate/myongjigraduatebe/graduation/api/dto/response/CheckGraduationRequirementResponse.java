@@ -1,19 +1,19 @@
 package com.plzgraduate.myongjigraduatebe.graduation.api.dto.response;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
 import lombok.Getter;
 
 @Getter
 public class CheckGraduationRequirementResponse {
 
-	private final User anonymous;
+	private final UserInformationResponse user;
 	private final GraduationResult graduationResult;
 
 	public CheckGraduationRequirementResponse(
-		User anonymous, GraduationResult graduationResult
+		UserInformationResponse user, GraduationResult graduationResult
 	) {
-		this.anonymous = anonymous;
+		this.user = user;
 		this.graduationResult = graduationResult;
 	}
 }

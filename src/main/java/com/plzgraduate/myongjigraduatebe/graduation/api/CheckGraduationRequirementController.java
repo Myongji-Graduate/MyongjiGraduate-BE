@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CheckGra
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingAnonymousUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.dto.ParsingAnonymousDto;
+import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class CheckGraduationRequirementController implements CheckGraduationRequ
 		);
 
 		return new CheckGraduationRequirementResponse(
-			anonymous,
+			UserInformationResponse.from(anonymous),
 			graduationResult
 		);
 	}
