@@ -40,7 +40,5 @@ class ParsingAnonymousServiceTest {
 			"takenCredit",
 			"graduated"
 		).contains("anonymous", "김보겸", EnglishLevel.ENG12, "60211648", 21, 0, 0, false);
-		assertThat(parsingAnonymousDto.getTakenLectureInventory().calculateTotalCredit())
-			.isEqualTo(108);
 	}
 }
