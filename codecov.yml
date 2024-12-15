@@ -1,5 +1,11 @@
 codecov:
   require_ci_to_pass: true
+  ignore:
+    - "com/plzgraduate/myongjigraduatebe/core/**"
+    - "com/plzgraudate/myongjigraduatebe/*Request*"
+    - "com/plzgraudate/myongjigraduatebe/*Command*"
+    - "com/plzgraudate/myongjigraduatebe/*Response*"
+    - "com/plzgraudate/myongjigraduatebe/*Mapper*"
 
 comment:
   layout: "reach,diff,flags,files,footer"
