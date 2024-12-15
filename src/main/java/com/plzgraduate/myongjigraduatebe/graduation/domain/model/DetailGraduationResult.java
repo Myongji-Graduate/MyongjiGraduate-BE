@@ -14,10 +14,13 @@ public class DetailGraduationResult {
 	private double takenCredit;
 
 	@Builder
-	private DetailGraduationResult(GraduationCategory graduationCategory, boolean isCompleted,
+	private DetailGraduationResult(
+		GraduationCategory graduationCategory,
+		boolean isCompleted,
 		int totalCredit,
 		double takenCredit,
-		List<DetailCategoryResult> detailCategory) {
+		List<DetailCategoryResult> detailCategory
+	) {
 		this.graduationCategory = graduationCategory;
 		this.isCompleted = isCompleted;
 		this.totalCredit = totalCredit;
@@ -25,9 +28,11 @@ public class DetailGraduationResult {
 		this.detailCategory = detailCategory;
 	}
 
-	public static DetailGraduationResult create(GraduationCategory graduationCategory,
+	public static DetailGraduationResult create(
+		GraduationCategory graduationCategory,
 		int totalCredit,
-		List<DetailCategoryResult> detailCategoryResults) {
+		List<DetailCategoryResult> detailCategoryResults
+	) {
 		return DetailGraduationResult.builder()
 			.graduationCategory(graduationCategory)
 			.isCompleted(checkIsCompleted(detailCategoryResults))
@@ -37,8 +42,10 @@ public class DetailGraduationResult {
 			.build();
 	}
 
-	public static DetailGraduationResult createNonCategorizedGraduationResult(int totalCredit,
-		List<DetailCategoryResult> detailCategoryResults) {
+	public static DetailGraduationResult createNonCategorizedGraduationResult(
+		int totalCredit,
+		List<DetailCategoryResult> detailCategoryResults
+	) {
 		return DetailGraduationResult.builder()
 			.isCompleted(checkIsCompleted(detailCategoryResults))
 			.totalCredit(totalCredit)
@@ -56,6 +63,17 @@ public class DetailGraduationResult {
 		return detailCategoryResults.stream()
 			.mapToInt(DetailCategoryResult::getTakenCredits)
 			.sum();
+	}
+
+	@Override
+	public String toString() {
+		return "DetailGraduationResult{" +
+			"isCompleted=" + isCompleted +
+			", totalCredit=" + totalCredit +
+			", detailCategory=" + detailCategory +
+			", graduationCategory=" + graduationCategory +
+			", takenCredit=" + takenCredit +
+			'}';
 	}
 
 	public void assignGraduationCategory(GraduationCategory graduationCategory) {

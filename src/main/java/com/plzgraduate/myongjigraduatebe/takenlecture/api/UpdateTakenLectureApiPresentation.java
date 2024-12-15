@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UpdateTakenLectureApiPresentation {
 
 	@Parameter(name = "userId", description = "로그인한 유저의 PK값")
-	void generateCustomizedTakenLecture(@LoginUser Long userId,
-		@Valid @RequestBody GenerateCustomizedTakenLectureRequest generateCustomizedTakenLectureRequest);
+	void generateCustomizedTakenLecture(
+		@LoginUser Long userId,
+		@Valid @RequestBody GenerateCustomizedTakenLectureRequest generateCustomizedTakenLectureRequest
+	);
 
 	@Parameter(name = "userId", description = "로그인한 유저의 PK값")
 	@Parameter(name = "takenLectureId", description = "삭제할 수강 과목 ID")
-	void deleteCustomizedTakenLecture(@LoginUser Long userId,
-		@Valid @PathVariable Long takenLectureId);
+	void deleteCustomizedTakenLecture(
+		@LoginUser Long userId,
+		@Valid @PathVariable Long takenLectureId
+	);
 }

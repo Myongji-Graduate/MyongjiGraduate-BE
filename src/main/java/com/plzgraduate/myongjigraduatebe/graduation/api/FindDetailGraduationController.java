@@ -19,10 +19,15 @@ public class FindDetailGraduationController implements FindDetailGraduationApiPr
 	private final CalculateSingleDetailGraduationUseCase calculateSingleDetailGraduationUseCase;
 
 	@GetMapping
-	public DetailGraduationResultResponse getDetailGraduation(@LoginUser Long userId,
-		@RequestParam GraduationCategory graduationCategory) {
+	public DetailGraduationResultResponse getDetailGraduation(
+		@LoginUser Long userId,
+		@RequestParam GraduationCategory graduationCategory
+	) {
 		DetailGraduationResult detailGraduationResult = calculateSingleDetailGraduationUseCase.calculateSingleDetailGraduation(
-			userId, graduationCategory);
+			userId,
+			graduationCategory
+		);
+		
 		return DetailGraduationResultResponse.from(detailGraduationResult);
 	}
 }

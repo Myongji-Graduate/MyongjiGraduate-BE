@@ -30,13 +30,19 @@ public class CalculateCommonCultureGraduationService implements CalculateDetailG
 	}
 
 	@Override
-	public DetailGraduationResult calculateSingleDetailGraduation(User user,
+	public DetailGraduationResult calculateSingleDetailGraduation(
+		User user,
 		GraduationCategory graduationCategory,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
+	) {
 		Set<CommonCulture> graduationCommonCultures = findCommonCulturePort.findCommonCulture(user);
 
 		return commonCultureGraduationManager.createDetailGraduationResult(
-			user, takenLectureInventory, graduationCommonCultures,
-			graduationRequirement.getCommonCultureCredit());
+			user,
+			takenLectureInventory,
+			graduationCommonCultures,
+			graduationRequirement.getCommonCultureCredit()
+		);
 	}
 }

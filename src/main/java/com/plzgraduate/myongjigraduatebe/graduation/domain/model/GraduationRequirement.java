@@ -23,12 +23,18 @@ public class GraduationRequirement {
 	private int freeElectiveCredit;
 
 	@Builder
-	private GraduationRequirement(int totalCredit, int primaryMajorCredit, int dualMajorCredit,
+	private GraduationRequirement(
+		int totalCredit,
+		int primaryMajorCredit,
+		int dualMajorCredit,
 		int subMajorCredit,
-		int primaryBasicAcademicalCultureCredit, int dualBasicAcademicalCultureCredit,
+		int primaryBasicAcademicalCultureCredit,
+		int dualBasicAcademicalCultureCredit,
 		int commonCultureCredit,
 		int coreCultureCredit,
-		int normalCultureCredit, int freeElectiveCredit) {
+		int normalCultureCredit,
+		int freeElectiveCredit
+	) {
 		this.totalCredit = totalCredit;
 		this.primaryMajorCredit = primaryMajorCredit;
 		this.dualMajorCredit = dualMajorCredit;
@@ -54,12 +60,12 @@ public class GraduationRequirement {
 	public void modifyCreditForDualMajor(User user) {
 		DualMajorGraduationRequirementType primaryMajorGraduationRequirementType =
 			findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getPrimaryMajor())
-					.getName());
+				College.findBelongingCollege(user.getPrimaryMajor()).getName()
+			);
 		DualMajorGraduationRequirementType dualMajorGraduationRequirementType =
 			findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getDualMajor())
-					.getName());
+				College.findBelongingCollege(user.getDualMajor()).getName()
+			);
 
 		primaryMajorCredit = primaryMajorGraduationRequirementType.getMajorCredit();
 		dualMajorCredit = dualMajorGraduationRequirementType.getMajorCredit();
@@ -69,10 +75,7 @@ public class GraduationRequirement {
 	}
 
 	private int calculateFreeElectiveCreditWithDualMajorStudent() {
-		int freeElectiveCredit =
-			totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit
-				- dualMajorCredit
-				- primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
+		int freeElectiveCredit = totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit - dualMajorCredit - primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
 		return Math.max(freeElectiveCredit, 0);
 	}
 
@@ -90,5 +93,21 @@ public class GraduationRequirement {
 			return dualMajorCredit;
 		}
 		return subMajorCredit;
+	}
+
+	@Override
+	public String toString() {
+		return "GraduationRequirement{" +
+			"totalCredit=" + totalCredit +
+			", primaryBasicAcademicalCultureCredit=" + primaryBasicAcademicalCultureCredit +
+			", coreCultureCredit=" + coreCultureCredit +
+			", primaryMajorCredit=" + primaryMajorCredit +
+			", dualMajorCredit=" + dualMajorCredit +
+			", subMajorCredit=" + subMajorCredit +
+			", dualBasicAcademicalCultureCredit=" + dualBasicAcademicalCultureCredit +
+			", commonCultureCredit=" + commonCultureCredit +
+			", normalCultureCredit=" + normalCultureCredit +
+			", freeElectiveCredit=" + freeElectiveCredit +
+			'}';
 	}
 }

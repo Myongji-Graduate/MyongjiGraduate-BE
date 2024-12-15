@@ -14,19 +14,27 @@ class ParsingStudentCategoryDto {
 	private final StudentCategory studentCategory;
 
 	@Builder
-	private ParsingStudentCategoryDto(String changeMajor, String dualMajor, String subMajor,
-                                      String associatedMajor,
-                                      StudentCategory studentCategory) {
+	private ParsingStudentCategoryDto(
+		String changeMajor,
+		String dualMajor,
+		String subMajor,
+		String associatedMajor,
+		StudentCategory studentCategory
+	) {
 		this.changeMajor = changeMajor;
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
-        this.studentCategory = studentCategory;
+		this.studentCategory = studentCategory;
 	}
 
-	public static ParsingStudentCategoryDto of(String changeMajor, String subMajor,
+	public static ParsingStudentCategoryDto of(
+		String changeMajor,
+		String subMajor,
 		String dualMajor,
-		String associatedMajor, StudentCategory studentCategory) {
+		String associatedMajor,
+		StudentCategory studentCategory
+	) {
 		return ParsingStudentCategoryDto.builder()
 			.changeMajor(changeMajor)
 			.dualMajor(dualMajor)

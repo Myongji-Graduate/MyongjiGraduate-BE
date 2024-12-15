@@ -18,8 +18,14 @@ public class TakenLecture {
 	private final Instant createdAt;
 
 	@Builder
-	private TakenLecture(Long id, User user, Lecture lecture, Integer year, Semester semester,
-		Instant createdAt) {
+	private TakenLecture(
+		Long id,
+		User user,
+		Lecture lecture,
+		Integer year,
+		Semester semester,
+		Instant createdAt
+	) {
 		this.id = id;
 		this.user = user;
 		this.lecture = lecture;
@@ -43,6 +49,18 @@ public class TakenLecture {
 			.lecture(lecture)
 			.year(2099)
 			.build();
+	}
+
+	@Override
+	public String toString() {
+		return "TakenLecture{" +
+			"id=" + id +
+			", user=" + user +
+			", lecture=" + lecture +
+			", year=" + year +
+			", semester=" + semester +
+			", createdAt=" + createdAt +
+			'}';
 	}
 
 	public boolean takenAfter(int year) {

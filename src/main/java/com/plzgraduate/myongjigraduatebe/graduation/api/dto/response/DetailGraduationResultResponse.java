@@ -19,8 +19,12 @@ public class DetailGraduationResultResponse {
 	private final boolean completed;
 
 	@Builder
-	private DetailGraduationResultResponse(int totalCredit, double takenCredit,
-		List<DetailGraduationCategoryResultResponse> detailCategory, boolean completed) {
+	private DetailGraduationResultResponse(
+		int totalCredit,
+		double takenCredit,
+		List<DetailGraduationCategoryResultResponse> detailCategory,
+		boolean completed
+	) {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.detailCategory = detailCategory;
@@ -28,15 +32,15 @@ public class DetailGraduationResultResponse {
 	}
 
 	public static DetailGraduationResultResponse from(
-		DetailGraduationResult detailGraduationResult) {
+		DetailGraduationResult detailGraduationResult
+	) {
 		return DetailGraduationResultResponse.builder()
 			.totalCredit(detailGraduationResult.getTotalCredit())
 			.takenCredit(detailGraduationResult.getTakenCredit())
-			.detailCategory(detailGraduationResult.getDetailCategory()
-				.stream()
-				.map(DetailGraduationCategoryResultResponse::from)
-				.collect(Collectors.toList()))
-			.completed(detailGraduationResult.isCompleted())
-			.build();
+			.detailCategory(
+				detailGraduationResult.getDetailCategory().stream()
+					.map(DetailGraduationCategoryResultResponse::from).collect(Collectors.toList())
+			)
+			.completed(detailGraduationResult.isCompleted()).build();
 	}
 }
