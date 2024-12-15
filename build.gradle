@@ -73,7 +73,7 @@ tasks.named('test') {
 
 jacocoTestReport {
     dependsOn test
-    afterEvaluate {
+    doLast {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/plzgraduate/myongjigraduatebe/core/**",
