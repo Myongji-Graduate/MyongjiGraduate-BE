@@ -58,7 +58,15 @@ public enum StudentCategory {
 		// 현재 미지원
 		List.of(COMMON_CULTURE, CORE_CULTURE, PRIMARY_BASIC_ACADEMICAL_CULTURE,
 			PRIMARY_MANDATORY_MAJOR,
-			PRIMARY_ELECTIVE_MAJOR, NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL));
+			PRIMARY_ELECTIVE_MAJOR, NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL
+		)),
+	TRANSFER(
+			List.of("편입"),
+			List.of(
+					COMMON_CULTURE, PRIMARY_MANDATORY_MAJOR,
+					PRIMARY_ELECTIVE_MAJOR, NORMAL_CULTURE,
+					FREE_ELECTIVE, CHAPEL
+			));
 
 	private final List<String> categories;
 	private final List<GraduationCategory> includedGraduationCategories;
@@ -75,5 +83,4 @@ public enum StudentCategory {
 			throw new IllegalArgumentException(ErrorCode.UNFITTED_GRADUATION_CATEGORY.toString());
 		}
 	}
-
 }
