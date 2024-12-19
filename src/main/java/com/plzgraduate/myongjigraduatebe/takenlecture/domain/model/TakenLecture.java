@@ -67,6 +67,7 @@ public class TakenLecture {
 		return this.year >= year;
 	}
 
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -84,4 +85,6 @@ public class TakenLecture {
 	public int hashCode() {
 		return Objects.hash(user, lecture, year, semester);
 	}
+
+
 }
