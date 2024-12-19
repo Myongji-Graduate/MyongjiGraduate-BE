@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.Collections;
 import java.util.HashSet;

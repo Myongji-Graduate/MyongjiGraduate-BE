@@ -21,6 +21,8 @@ public class GraduationRequirement {
 	private int commonCultureCredit;
 	private int normalCultureCredit;
 	private int freeElectiveCredit;
+	private int christianCredit;
+	private int combinedCultureCredit;
 
 	@Builder
 	private GraduationRequirement(
@@ -33,7 +35,9 @@ public class GraduationRequirement {
 		int commonCultureCredit,
 		int coreCultureCredit,
 		int normalCultureCredit,
-		int freeElectiveCredit
+		int freeElectiveCredit,
+		int christianCredit,
+		int combinedCultureCredit
 	) {
 		this.totalCredit = totalCredit;
 		this.primaryMajorCredit = primaryMajorCredit;
@@ -45,6 +49,8 @@ public class GraduationRequirement {
 		this.coreCultureCredit = coreCultureCredit;
 		this.normalCultureCredit = normalCultureCredit;
 		this.freeElectiveCredit = freeElectiveCredit;
+		this.christianCredit = christianCredit;
+		this.combinedCultureCredit = combinedCultureCredit;
 	}
 
 	public void transferEnglishCreditCommonToNormal() {
