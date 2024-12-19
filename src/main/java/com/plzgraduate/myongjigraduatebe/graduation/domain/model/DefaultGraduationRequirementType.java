@@ -79,13 +79,16 @@ public enum DefaultGraduationRequirementType {
 		TransferGraduationRequirementType transferRequirement =
 				TransferGraduationRequirementType.findByCollegeName(userCollege.getName());
 
-		return GraduationRequirement.builder()
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
 				.totalCredit(this.totalCredit)
 				.primaryMajorCredit(this.majorLectureCredit)
 				.combinedCultureCredit(transferRequirement.getCombinedCultureCredit())
 				.christianCredit(transferRequirement.getChristianCredit())
 				.freeElectiveCredit(this.freeElectiveLectureCredit)
 				.build();
+
+
+		return graduationRequirement;
 	}
 
 	private void checkIsEnglishFreeUserAndTransferCredit(

@@ -2,12 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.*;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -47,7 +42,14 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			takenLectureInventory,
 			graduationRequirement
 		);
-
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			detailGraduationResults.add(
+					generateTransferCombinedCultureDetailGraduationResult(user, takenLectureInventory, graduationRequirement)
+			);
+			detailGraduationResults.add(
+					generateTransferChristianDetailGraduationResult(user, takenLectureInventory, graduationRequirement)
+			);
+		}
 		GraduationResult graduationResult = generateGraduationResult(
 			chapelResult,
 			detailGraduationResults,
@@ -57,6 +59,35 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		handleDuplicatedTakenCredit(user, graduationResult);
 		updateUserGraduationInformation(user, graduationResult);
 		return graduationResult;
+	}
+	private DetailGraduationResult generateTransferCombinedCultureDetailGraduationResult(
+			User user,
+			TakenLectureInventory takenLectureInventory,
+			GraduationRequirement graduationRequirement
+	) {
+		return DetailGraduationResult.create(
+				GraduationCategory.TRANSFER_COMBINED_CULTURE,
+				graduationRequirement.getCombinedCultureCredit(),
+				calculateDetailCategoryResults(takenLectureInventory, GraduationCategory.TRANSFER_COMBINED_CULTURE)
+		);
+	}
+
+	private DetailGraduationResult generateTransferChristianDetailGraduationResult(
+			User user,
+			TakenLectureInventory takenLectureInventory,
+			GraduationRequirement graduationRequirement
+	) {
+		return DetailGraduationResult.create(
+				GraduationCategory.TRANSFER_CHRISTIAN,
+				graduationRequirement.getChristianCredit(),
+				calculateDetailCategoryResults(takenLectureInventory, GraduationCategory.TRANSFER_CHRISTIAN)
+		);
+	}
+	private List<DetailCategoryResult> calculateDetailCategoryResults(
+			TakenLectureInventory takenLectureInventory,
+			GraduationCategory graduationCategory
+	) {
+		return List.of();
 	}
 
 	GraduationRequirement determineGraduationRequirement(User user) {
