@@ -9,6 +9,8 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.FreeElectiveGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.NormalCultureGraduationResult;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,11 +19,11 @@ public class CompletedCredit {
 
 	private final Long id;
 	private final GraduationCategory graduationCategory;
-	private int totalCredit;
+	private double totalCredit;
 	private double takenCredit;
 
 	@Builder
-	private CompletedCredit(Long id, GraduationCategory graduationCategory, int totalCredit,
+	private CompletedCredit(Long id, GraduationCategory graduationCategory, double totalCredit,
 		double takenCredit) {
 		this.id = id;
 		this.graduationCategory = graduationCategory;
@@ -37,13 +39,18 @@ public class CompletedCredit {
 			.build();
 	}
 
-	public static CompletedCredit createChapelCompletedCreditModel(ChapelResult chapelResult) {
+	public static CompletedCredit createChapelCompletedCreditModel(ChapelResult chapelResult, User user) {
+		double totalCredit = user.getStudentCategory() == StudentCategory.TRANSFER
+				? 0.5 // 편입생일 경우 채플 이수 요건은 1회
+				: ChapelResult.GRADUATION_COUNT / 2; // 일반 학생일 경우 기본 채플 이수 요건
+
 		return CompletedCredit.builder()
-			.graduationCategory(CHAPEL)
-			.totalCredit(ChapelResult.GRADUATION_COUNT / 2)
-			.takenCredit(chapelResult.getTakenChapelCredit())
-			.build();
+				.graduationCategory(CHAPEL)
+				.totalCredit(totalCredit)
+				.takenCredit(chapelResult.getTakenChapelCredit())
+				.build();
 	}
+
 
 	public static CompletedCredit createNormalCultureCompletedCreditModel(
 		NormalCultureGraduationResult normalCultureGraduationResult) {
@@ -63,7 +70,7 @@ public class CompletedCredit {
 			.build();
 	}
 
-	public void updateCredit(int totalCredit, double takenCredit) {
+	public void updateCredit(double totalCredit, double takenCredit) {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 	}

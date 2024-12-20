@@ -61,12 +61,14 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		updateUserGraduationInformation(user, graduationResult);
 		return graduationResult;
 	}
+
 	private DetailGraduationResult generateTransferCombinedCultureDetailGraduationResult(
 			User user,
 			GraduationRequirement graduationRequirement
 	) {
 
-		double totalTakenCredits = (int) calculateCultureTakenCredits(user);
+		double totalTakenCredits = (int) calculateCultureTakenCredits(user)+
+		user.getTransferCredit().getNormalCulture();
 
 		return DetailGraduationResult.create(
 				GraduationCategory.TRANSFER_COMBINED_CULTURE,
@@ -83,7 +85,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			User user,
 			GraduationRequirement graduationRequirement
 	) {
-		double totalTakenCredits = (int) calculateChritianTakenCredits(user);
+		double totalTakenCredits = (int) calculateChritianTakenCredits(user)+
+				user.getTransferCredit().getChristianLecture();
 
 		return DetailGraduationResult.create(
 				GraduationCategory.TRANSFER_CHRISTIAN,

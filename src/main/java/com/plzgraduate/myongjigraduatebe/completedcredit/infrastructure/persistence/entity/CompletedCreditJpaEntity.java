@@ -34,14 +34,14 @@ public class CompletedCreditJpaEntity {
 	@Enumerated(value = EnumType.STRING)
 	private GraduationCategory graduationCategory;
 
-	private int totalCredit;
+	private double totalCredit;
 
 	private double takenCredit;
 
 	@Builder
 	private CompletedCreditJpaEntity(Long id, UserJpaEntity userJpaEntity,
 		GraduationCategory graduationCategory,
-		int totalCredit, double takenCredit) {
+		double totalCredit, double takenCredit) {
 		this.id = id;
 		this.userJpaEntity = userJpaEntity;
 		this.graduationCategory = graduationCategory;

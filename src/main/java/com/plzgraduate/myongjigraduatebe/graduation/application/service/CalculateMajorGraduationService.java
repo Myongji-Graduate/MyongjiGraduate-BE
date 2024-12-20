@@ -107,6 +107,28 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 				primaryElectiveMajorDetailGraduationResult
 			));
 
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			int transferMajorCredits = user.getTransferCredit().getMajorLecture();
+			int updatedTakenCredits = primaryElectiveMajorDetailGraduationResult.getDetailCategory().stream()
+					.mapToInt(DetailCategoryResult::getTakenCredits)
+					.sum() + transferMajorCredits;
+
+			boolean isCompleted = updatedTakenCredits >= graduationRequirement.getMajorCreditByMajorType(MajorType.PRIMARY);
+
+			DetailCategoryResult updatedElectiveMajorResult = DetailCategoryResult.builder()
+					.takenCredits(updatedTakenCredits)
+					.isCompleted(isCompleted)
+					.build();
+
+			primaryElectiveMajorDetailGraduationResult = DetailGraduationResult.create(
+					PRIMARY_ELECTIVE_MAJOR,
+					graduationRequirement.getMajorCreditByMajorType(MajorType.PRIMARY),
+					List.of(updatedElectiveMajorResult)
+			);
+
+			majorGraduationResults.set(1, primaryElectiveMajorDetailGraduationResult);
+		}
+
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			DetailGraduationResult dualMajorDetailGraduationResult = generateMajorDetailGraduationResult(
 				user,

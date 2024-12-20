@@ -14,6 +14,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.Calculat
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +48,13 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		);
 		CompletedCredit chapelCompletedCreditModel = createOrUpdateChapelCompletedCreditModel(
 			completedCredits,
-			graduationResult
+			graduationResult,
+			user
 		);
 		CompletedCredit normalCultureCompletedCreditModel = createOrUpdateNormalCultureCompletedCreditModel(
 			completedCredits, graduationResult);
 		CompletedCredit freeElectiveCompletedCreditModel = createOrUpdateFreeElectiveCompletedCreditModel(
-			completedCredits, graduationResult);
+			completedCredits, graduationResult, user);
 
 		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(
 			updatedCompletedCredits);
@@ -101,19 +103,28 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 	}
 
 	private CompletedCredit createOrUpdateChapelCompletedCreditModel(
-		List<CompletedCredit> completedCredits,
-		GraduationResult graduationResult
+			List<CompletedCredit> completedCredits,
+			GraduationResult graduationResult,
+			User user
 	) {
 		Optional<CompletedCredit> chapelCompletedCredit = findCompletedCreditByCategory(
-			completedCredits, CHAPEL);
+				completedCredits, CHAPEL);
+
+		// 편입생 여부 확인
+		double totalCredit = user.getStudentCategory() == StudentCategory.TRANSFER
+				? 0.5 // 편입생일 경우 채플 이수 요건은 1회
+				: GRADUATION_COUNT / 2; // 일반 학생일 경우 기본 채플 이수 요건
+
 		return chapelCompletedCredit.map(
-				completedCredit -> updateCompletedCredit(completedCredit, GRADUATION_COUNT / 2,
-					graduationResult.getChapelResult()
-						.getTakenChapelCredit()
-				))
-			.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
-				graduationResult.getChapelResult()));
+						completedCredit -> updateCompletedCredit(
+								completedCredit,
+								totalCredit,
+								graduationResult.getChapelResult().getTakenChapelCredit()
+						))
+				.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
+						graduationResult.getChapelResult(), user)); // User 전달
 	}
+
 
 	private CompletedCredit createOrUpdateNormalCultureCompletedCreditModel(
 		List<CompletedCredit> completedCredits,
@@ -137,19 +148,26 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 	private CompletedCredit createOrUpdateFreeElectiveCompletedCreditModel(
 		List<CompletedCredit> completedCredits,
-		GraduationResult graduationResult
+		GraduationResult graduationResult,
+		User user
 	) {
 		Optional<CompletedCredit> freeElectiveCompletedCredit = findCompletedCreditByCategory(
 			completedCredits,
 			FREE_ELECTIVE
 		);
+		int transferFreeElectiveCredits = 0;
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			transferFreeElectiveCredits = user.getTransferCredit().getFreeElective();
+		}
+
+		int finalTakenCredit = graduationResult.getFreeElectiveGraduationResult()
+				.getTakenCredit() + transferFreeElectiveCredits;
 		return freeElectiveCompletedCredit.map(
 				completedCredit -> updateCompletedCredit(
 					completedCredit,
 					graduationResult.getFreeElectiveGraduationResult()
 						.getTotalCredit(),
-					graduationResult.getFreeElectiveGraduationResult()
-						.getTakenCredit()
+						finalTakenCredit
 				))
 			.orElseGet(() -> CompletedCredit.createFreeElectiveCompletedCreditModel(
 				graduationResult.getFreeElectiveGraduationResult()));
@@ -166,7 +184,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 	private CompletedCredit updateCompletedCredit(
 		CompletedCredit completedCredit,
-		int totalCredit, double takenCredit
+		double totalCredit, double takenCredit
 	) {
 		completedCredit.updateCredit(totalCredit, takenCredit);
 		return completedCredit;
