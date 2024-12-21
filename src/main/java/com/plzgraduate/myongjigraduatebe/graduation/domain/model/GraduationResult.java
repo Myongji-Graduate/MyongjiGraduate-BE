@@ -83,7 +83,7 @@ public class GraduationResult {
 	private void addUpTakenCredit(User user) {
 		this.takenCredit = detailGraduationResults.stream()
 				.filter(result ->
-						result.getGraduationCategory() != GraduationCategory.TRANSFER_COMBINED_CULTURE &&
+//						result.getGraduationCategory() != GraduationCategory.TRANSFER_COMBINED_CULTURE &&
 								result.getGraduationCategory() != GraduationCategory.TRANSFER_CHRISTIAN &&
 								result.getGraduationCategory() != GraduationCategory.FREE_ELECTIVE
 				)
@@ -96,11 +96,11 @@ public class GraduationResult {
 
 		double freeElectiveCredits = freeElectiveGraduationResult.getTakenCredit();
 		double normalCultureCredits = normalCultureGraduationResult.getTakenCredit();
-		double transferCredits = calculateTransferCredits();
+		//double transferCredits = calculateTransferCredits();
 
 		System.out.println("Free Elective Graduation Result Taken Credit: " + freeElectiveCredits);
 		System.out.println("Normal Culture Graduation Result Taken Credit: " + normalCultureCredits);
-		System.out.println("Transfer Combined Culture Credits: " + transferCredits);
+		//System.out.println("Transfer Combined Culture Credits: " + transferCredits);
 
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			double transferChristianCredit = user.getTransferCredit().getChristianLecture();
@@ -112,7 +112,7 @@ public class GraduationResult {
 			this.takenCredit += transferChristianCredit + transferFreeElectiveCredit;
 		}
 
-		this.takenCredit += freeElectiveCredits + normalCultureCredits + transferCredits;
+		this.takenCredit += freeElectiveCredits + normalCultureCredits;
 
 		System.out.println("Total Taken Credit (including additional categories): " + this.takenCredit);
 	}

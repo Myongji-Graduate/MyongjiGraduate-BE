@@ -93,8 +93,8 @@ public class User {
 		String subMajor,
 		String dualMajor,
 		String associatedMajor,
-		StudentCategory studentCategory
-	) {
+		StudentCategory studentCategory,
+        TransferCredit transferCredit) {
 		return User.builder()
 			.authId("anonymous")
 			.name(name)
@@ -109,6 +109,7 @@ public class User {
 			.totalCredit(0)
 			.takenCredit(0)
 			.graduated(false)
+			.transferCredit(transferCredit)
 			.build();
 	}
 

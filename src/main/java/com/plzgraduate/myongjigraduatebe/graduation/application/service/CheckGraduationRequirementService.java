@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResul
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,14 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			takenLectureInventoryWithDuplicateCode,
 			graduationRequirement
 		);
+		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
+			detailGraduationResults.add(
+					calculateGraduationService.generateTransferCombinedCultureDetailGraduationResult(anonymous, graduationRequirement,detailGraduationResults,takenLectureInventory)
+			);
+			detailGraduationResults.add(
+					calculateGraduationService.generateTransferChristianDetailGraduationResult(anonymous, graduationRequirement, takenLectureInventory)
+			);
+		}
 
 		GraduationResult graduationResult = calculateGraduationService.generateGraduationResult(
 			chapelResult,
@@ -60,7 +69,10 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			anonymous
 		);
 
+
+
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);
+
 
 		return graduationResult;
 	}
