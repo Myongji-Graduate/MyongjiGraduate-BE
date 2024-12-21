@@ -56,7 +56,8 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			chapelResult,
 			detailGraduationResults,
 			takenLectureInventoryWithDuplicateCode,
-			graduationRequirement
+			graduationRequirement,
+			anonymous
 		);
 
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);

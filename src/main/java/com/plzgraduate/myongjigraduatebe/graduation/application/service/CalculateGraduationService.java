@@ -45,7 +45,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		);
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			detailGraduationResults.add(
-					generateTransferCombinedCultureDetailGraduationResult(user, graduationRequirement)
+					generateTransferCombinedCultureDetailGraduationResult(user, graduationRequirement,detailGraduationResults)
 			);
 			detailGraduationResults.add(
 					generateTransferChristianDetailGraduationResult(user, graduationRequirement)
@@ -55,7 +55,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			chapelResult,
 			detailGraduationResults,
 			takenLectureInventory,
-			graduationRequirement
+			graduationRequirement,
+			user
 		);
 		handleDuplicatedTakenCredit(user, graduationResult);
 		updateUserGraduationInformation(user, graduationResult);
@@ -64,29 +65,54 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	private DetailGraduationResult generateTransferCombinedCultureDetailGraduationResult(
 			User user,
-			GraduationRequirement graduationRequirement
+			GraduationRequirement graduationRequirement,
+			List<DetailGraduationResult> detailGraduationResults
 	) {
+		double totalTakenCredits = calculateCultureTakenCredits(user) +
+				user.getTransferCredit().getNormalCulture();
+		double combinedCultureCreditRequirement = graduationRequirement.getCombinedCultureCredit();
 
-		double totalTakenCredits = (int) calculateCultureTakenCredits(user)+
-		user.getTransferCredit().getNormalCulture();
+		double excessCredits = 0;
+		if (totalTakenCredits > combinedCultureCreditRequirement) {
+			excessCredits = totalTakenCredits - combinedCultureCreditRequirement;
+			totalTakenCredits = combinedCultureCreditRequirement;
+		}
+
+			detailGraduationResults.add(
+					DetailGraduationResult.create(
+							GraduationCategory.FREE_ELECTIVE,
+							0,
+							List.of(DetailCategoryResult.builder()
+									.takenCredits((int) excessCredits)
+									.isCompleted(false)
+									.build()
+							)
+					)
+			);
 
 		return DetailGraduationResult.create(
 				GraduationCategory.TRANSFER_COMBINED_CULTURE,
-				graduationRequirement.getCombinedCultureCredit(),
+                (int) combinedCultureCreditRequirement,
 				List.of(DetailCategoryResult.builder()
 						.takenCredits((int) totalTakenCredits)
-						.isCompleted(totalTakenCredits >= graduationRequirement.getCombinedCultureCredit())
+						.isCompleted(totalTakenCredits >= combinedCultureCreditRequirement)
 						.build()
 				)
 		);
 	}
 
+
 	private DetailGraduationResult generateTransferChristianDetailGraduationResult(
 			User user,
 			GraduationRequirement graduationRequirement
 	) {
+		double christianCreditRequirement = graduationRequirement.getChristianCredit();
 		double totalTakenCredits = (int) calculateChritianTakenCredits(user)+
 				user.getTransferCredit().getChristianLecture();
+
+		if (totalTakenCredits > christianCreditRequirement) {
+			totalTakenCredits = christianCreditRequirement;
+		}
 
 		return DetailGraduationResult.create(
 				GraduationCategory.TRANSFER_CHRISTIAN,
@@ -111,16 +137,9 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
 				user.getId()
 		);
-
 		return takenLectureInventory.getCultureLectures().stream()
 				.mapToDouble(taken -> taken.getLecture().getCredit())
 				.sum();
-	}
-	private List<DetailCategoryResult> calculateDetailCategoryResults(
-			TakenLectureInventory takenLectureInventory,
-			GraduationCategory graduationCategory
-	) {
-		return List.of();
 	}
 
 	GraduationRequirement determineGraduationRequirement(User user) {
@@ -211,14 +230,15 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		ChapelResult chapelResult,
 		List<DetailGraduationResult> detailGraduationResults,
 		TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement
+		GraduationRequirement graduationRequirement,
+		User user
 	) {
 		GraduationResult graduationResult = GraduationResult.create(
 			chapelResult,
 			detailGraduationResults
 		);
 		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
-		graduationResult.checkGraduated(graduationRequirement);
+		graduationResult.checkGraduated(graduationRequirement,user);
 		return graduationResult;
 	}
 

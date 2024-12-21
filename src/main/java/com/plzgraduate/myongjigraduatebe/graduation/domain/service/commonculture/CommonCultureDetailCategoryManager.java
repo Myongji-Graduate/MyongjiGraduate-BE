@@ -8,11 +8,13 @@ import static com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.E
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.FREE;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +35,12 @@ class CommonCultureDetailCategoryManager {
 
 	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category) {
+
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			return DetailCategoryResult.create(
+					category.getName(), true, 0
+			);
+		}
 		Set<Lecture> graduationCommonCultureLectures = categorizeCommonCultures(graduationLectures,
 			category);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();

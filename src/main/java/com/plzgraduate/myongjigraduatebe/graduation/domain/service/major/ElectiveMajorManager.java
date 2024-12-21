@@ -6,6 +6,8 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
