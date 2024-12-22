@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import java.time.Instant;
 import java.util.Objects;
@@ -217,6 +218,16 @@ public class User {
 	@Override
 	public int hashCode() {
 		return Objects.hash(authId, studentNumber);
+	}
+
+	@VisibleForTesting
+	public void setStudentCategory(StudentCategory studentCategory) {
+		this.studentCategory = studentCategory;
+	}
+
+	@VisibleForTesting
+	public void setTransferCredit(TransferCredit transferCredit) {
+		this.transferCredit = transferCredit;
 	}
 
 }

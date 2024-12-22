@@ -83,51 +83,26 @@ public class GraduationResult {
 	private void addUpTakenCredit(User user) {
 		this.takenCredit = detailGraduationResults.stream()
 				.filter(result ->
-//						result.getGraduationCategory() != GraduationCategory.TRANSFER_COMBINED_CULTURE &&
 								result.getGraduationCategory() != GraduationCategory.TRANSFER_CHRISTIAN &&
 								result.getGraduationCategory() != GraduationCategory.FREE_ELECTIVE
 				)
 				.mapToDouble(result -> {
-					System.out.println("Category: " + result.getGraduationCategory());
-					System.out.println("Taken Credit: " + result.getTakenCredit());
+				result.getGraduationCategory();
+					result.getTakenCredit();
 					return result.getTakenCredit();
 				})
 				.sum();
 
 		double freeElectiveCredits = freeElectiveGraduationResult.getTakenCredit();
 		double normalCultureCredits = normalCultureGraduationResult.getTakenCredit();
-		//double transferCredits = calculateTransferCredits();
-
-		System.out.println("Free Elective Graduation Result Taken Credit: " + freeElectiveCredits);
-		System.out.println("Normal Culture Graduation Result Taken Credit: " + normalCultureCredits);
-		//System.out.println("Transfer Combined Culture Credits: " + transferCredits);
 
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			double transferChristianCredit = user.getTransferCredit().getChristianLecture();
 			double transferFreeElectiveCredit = user.getTransferCredit().getFreeElective();
-
-			System.out.println("Transfer Christian Credit: " + transferChristianCredit);
-			System.out.println("Transfer Free Elective Credit: " + transferFreeElectiveCredit);
-
 			this.takenCredit += transferChristianCredit;
 		}
-
 		this.takenCredit += freeElectiveCredits + normalCultureCredits;
-
-		System.out.println("Total Taken Credit (including additional categories): " + this.takenCredit);
 	}
-
-
-
-	private double calculateTransferCredits() {
-		return detailGraduationResults.stream()
-				.filter(result ->
-						result.getGraduationCategory() == GraduationCategory.TRANSFER_COMBINED_CULTURE
-				)
-				.mapToDouble(DetailGraduationResult::getTakenCredit)
-				.sum();
-	}
-
 
 	private void handleLeftTakenNormaCulture(
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement

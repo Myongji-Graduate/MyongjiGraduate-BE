@@ -16,7 +16,7 @@ public class TakenLectureInventory {
 
 	@Builder
 	private TakenLectureInventory(Set<TakenLecture> takenLecture) {
-		this.takenLecture = takenLecture;
+		this.takenLecture = new HashSet<>(takenLecture);
 	}
 
 	public static TakenLectureInventory from(Set<TakenLecture> takenLectures) {
@@ -41,7 +41,7 @@ public class TakenLectureInventory {
 	}
 
 	public void handleFinishedTakenLectures(Set<TakenLecture> finishedTakenLecture) {
-		takenLecture.removeAll(finishedTakenLecture);
+		this.takenLecture.removeAll(finishedTakenLecture);
 	}
 
 	public void sync(Set<Lecture> finishedLectures) {

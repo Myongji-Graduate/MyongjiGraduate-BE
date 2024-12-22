@@ -11,6 +11,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
 import java.util.List;
@@ -63,7 +65,7 @@ class FreeElectiveGraduationResultTest {
 		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
 			7,
 			takenLectureInventory, List.of(detailGraduationResult),
-			leftNormalCultureCredit);
+			leftNormalCultureCredit,user);
 
 		//then
 		assertThat(freeElectiveGraduationResult)
@@ -90,7 +92,8 @@ class FreeElectiveGraduationResultTest {
 				totalFreeElectiveCredit,
 				takenLectureInventory,
 				List.of(),
-				leftNormalCultureCredit);
+				leftNormalCultureCredit,
+				user);
 
 		//then
 		assertThat(freeElectiveGraduationResult)
@@ -117,11 +120,90 @@ class FreeElectiveGraduationResultTest {
 				totalFreeElectiveCredit,
 				takenLectureInventory,
 				List.of(),
-				leftNormalCultureCredit);
+				leftNormalCultureCredit,
+				user);
 
 		//then
 		assertThat(freeElectiveGraduationResult)
 				.extracting("categoryName", "takenCredit")
 				.contains(FREE_ELECTIVE.getName(), 2); // 봉사학점 2학점 반영
 	}
+//	@DisplayName("편입생의 자유선택 졸업 결과를 생성한다.")
+//	@Test
+//	void createFreeElectiveGraduationResult_forTransferStudent() {
+//		// given
+//		User user = UserFixture.경제학과_20학번_편입();
+//		user.setStudentCategory(StudentCategory.TRANSFER);
+//		user.setTransferCredit(new TransferCredit(51, 0, 3,0)); // 편입 학점 설정
+//
+//		// Taken lectures (총 9학점)
+//		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
+//				TakenLecture.of(user, mockLectureMap.get("HBX01104"), 2019, Semester.FIRST), // 회계원리
+//				TakenLecture.of(user, mockLectureMap.get("HBX01113"), 2019, Semester.FIRST), // 인적자원관리
+//				TakenLecture.of(user, mockLectureMap.get("HBX01106"), 2020, Semester.FIRST)  // 마케팅원론
+//		));
+//		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+//
+//		// 통합 교양 초과분 (남은 4학점이 자유선택으로 넘어가야 함)
+//		DetailGraduationResult combinedCultureGraduationResult = DetailGraduationResult.builder()
+//				.graduationCategory(GraduationCategory.TRANSFER_COMBINED_CULTURE)
+//				.detailCategory(List.of(
+//						DetailCategoryResult.builder()
+//								.detailCategoryName("통합 교양")
+//								.freeElectiveLeftCredit(4) // 초과된 통합 교양 학점
+//								.build()
+//				))
+//				.build();
+//
+//		int leftNormalCultureCredit = 0;//편입일시 일반학점 없음
+//
+//		// when
+//		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
+//				14,
+//				takenLectureInventory,
+//				List.of(combinedCultureGraduationResult),
+//				leftNormalCultureCredit,
+//				user
+//		);
+//
+//		// then
+//		assertThat(freeElectiveGraduationResult)
+//				.extracting("categoryName", "takenCredit")
+//				.contains(FREE_ELECTIVE.getName(),
+//						7); // 편입 학점 포함 계산
+//	}
+
+	@DisplayName("편입생 봉사학점을 포함한 자유선택 졸업 결과를 생성한다.")
+	@Test
+	void createFreeElectiveGraduationResult_withVolunteerCredits_forTransferStudent() {
+		// given
+		User user = UserFixture.경제학과_20학번_편입();
+		user.setStudentCategory(StudentCategory.TRANSFER);
+		user.setTransferCredit(new TransferCredit(0, 0, 3,0)); // 편입 학점 설정
+
+		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
+				TakenLecture.of(user, mockLectureMap.get("KMA02198"), 2021, Semester.FIRST), // 봉사학점 1
+				TakenLecture.of(user, mockLectureMap.get("KMA02198"), 2022, Semester.SECOND) // 봉사학점 2
+		));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		int totalFreeElectiveCredit = 14;
+		int leftNormalCultureCredit = 0;
+
+		// when
+		FreeElectiveGraduationResult freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
+				totalFreeElectiveCredit,
+				takenLectureInventory,
+				List.of(),
+				leftNormalCultureCredit,
+				user
+		);
+
+		// then
+		assertThat(freeElectiveGraduationResult)
+				.extracting("categoryName", "takenCredit")
+				.contains(FREE_ELECTIVE.getName(), 5); // 봉사학점 2 + 편입 학점 3 + 기타 계산
+	}
 }
+
+
