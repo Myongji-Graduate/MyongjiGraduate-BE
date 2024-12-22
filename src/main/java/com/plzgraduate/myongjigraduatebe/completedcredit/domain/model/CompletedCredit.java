@@ -31,7 +31,7 @@ public class CompletedCredit {
 		this.takenCredit = takenCredit;
 	}
 
-	public static CompletedCredit from(DetailGraduationResult detailGraduationResults) {
+	public CompletedCredit from(DetailGraduationResult detailGraduationResults) {
 		return CompletedCredit.builder()
 			.graduationCategory(detailGraduationResults.getGraduationCategory())
 			.totalCredit(detailGraduationResults.getTotalCredit())
@@ -53,7 +53,8 @@ public class CompletedCredit {
 
 
 	public static CompletedCredit createNormalCultureCompletedCreditModel(
-		NormalCultureGraduationResult normalCultureGraduationResult) {
+		NormalCultureGraduationResult normalCultureGraduationResult
+	) {
 		return CompletedCredit.builder()
 			.graduationCategory(NORMAL_CULTURE)
 			.totalCredit(normalCultureGraduationResult.getTotalCredit())

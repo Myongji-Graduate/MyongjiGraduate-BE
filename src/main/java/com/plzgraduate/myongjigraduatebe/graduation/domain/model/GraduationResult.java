@@ -49,7 +49,7 @@ public class GraduationResult {
 	public void handleLeftTakenLectures(
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
 	) {
-		handleLeftTakenNormaCulture(takenLectureInventory, graduationRequirement);
+		handleLeftTakenNormaCulture(takenLectureInventory, graduationRequirement, user);
 		handleLeftTakenFreeElective(takenLectureInventory, graduationRequirement, user);
 	}
 
@@ -82,33 +82,33 @@ public class GraduationResult {
 
 	private void addUpTakenCredit(User user) {
 		this.takenCredit = detailGraduationResults.stream()
-				.filter(result ->
-								result.getGraduationCategory() != GraduationCategory.TRANSFER_CHRISTIAN &&
-								result.getGraduationCategory() != GraduationCategory.FREE_ELECTIVE
-				)
-				.mapToDouble(result -> {
-				result.getGraduationCategory();
-					result.getTakenCredit();
-					return result.getTakenCredit();
-				})
-				.sum();
+			.filter(result ->
+				result.getGraduationCategory() != GraduationCategory.TRANSFER_CHRISTIAN &&
+					result.getGraduationCategory() != GraduationCategory.FREE_ELECTIVE
+			)
+			.mapToDouble(DetailGraduationResult::getTakenCredit
+			)
+			.sum();
 
 		double freeElectiveCredits = freeElectiveGraduationResult.getTakenCredit();
 		double normalCultureCredits = normalCultureGraduationResult.getTakenCredit();
 
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			double transferChristianCredit = user.getTransferCredit().getChristianLecture();
-			double transferFreeElectiveCredit = user.getTransferCredit().getFreeElective();
-			this.takenCredit += transferChristianCredit;
+			this.takenCredit += chapelResult.getTakenChapelCredit();
 		}
 		this.takenCredit += freeElectiveCredits + normalCultureCredits;
 	}
 
 	private void handleLeftTakenNormaCulture(
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
 	) {
+		int acknowledgedCredit = 0;
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			acknowledgedCredit = user.getTransferCredit().getNormalCulture();
+		}
 		this.normalCultureGraduationResult = NormalCultureGraduationResult.create(
 			graduationRequirement.getNormalCultureCredit(),
+			acknowledgedCredit,
 			takenLectureInventory,
 			detailGraduationResults
 		);
@@ -127,7 +127,6 @@ public class GraduationResult {
 			leftNormalCultureCredit,
 			user
 		);
-
 		freeElectiveGraduationResult.checkCompleted();
 	}
 }

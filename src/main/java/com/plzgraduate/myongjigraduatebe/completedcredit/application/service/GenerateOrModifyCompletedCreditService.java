@@ -56,16 +56,14 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		CompletedCredit freeElectiveCompletedCreditModel = createOrUpdateFreeElectiveCompletedCreditModel(
 			completedCredits, graduationResult, user, detailGraduationResults);
 
-		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(
-			updatedCompletedCredits);
+		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(updatedCompletedCredits);
 		allCompletedCreditModels.addAll(
-			List.of(chapelCompletedCreditModel, normalCultureCompletedCreditModel,
+			List.of(
+				chapelCompletedCreditModel,
+				normalCultureCompletedCreditModel,
 				freeElectiveCompletedCreditModel
 			));
-		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(
-			user,
-			allCompletedCreditModels
-		);
+		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, allCompletedCreditModels);
 	}
 
 	private List<CompletedCredit> createGeneralCompletedCreditModel(
@@ -103,25 +101,25 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 	}
 
 	private CompletedCredit createOrUpdateChapelCompletedCreditModel(
-			List<CompletedCredit> completedCredits,
-			GraduationResult graduationResult,
-			User user
+		List<CompletedCredit> completedCredits,
+		GraduationResult graduationResult,
+		User user
 	) {
 		Optional<CompletedCredit> chapelCompletedCredit = findCompletedCreditByCategory(
-				completedCredits, CHAPEL);
+			completedCredits, CHAPEL);
 
 		double totalCredit = user.getStudentCategory() == StudentCategory.TRANSFER
-				? 0.5
-				: GRADUATION_COUNT / 2;
+			? 0.5
+			: GRADUATION_COUNT / 2;
 
 		return chapelCompletedCredit.map(
-						completedCredit -> updateCompletedCredit(
-								completedCredit,
-								totalCredit,
-								graduationResult.getChapelResult().getTakenChapelCredit()
-						))
-				.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
-						graduationResult.getChapelResult(), user));
+				completedCredit -> updateCompletedCredit(
+					completedCredit,
+					totalCredit,
+					graduationResult.getChapelResult().getTakenChapelCredit()
+				))
+			.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
+				graduationResult.getChapelResult(), user));
 	}
 
 
@@ -155,31 +153,15 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			completedCredits,
 			FREE_ELECTIVE
 		);
-		int excessCredits = detailGraduationResults.stream()
-				.filter(result -> result.getGraduationCategory() == GraduationCategory.FREE_ELECTIVE)
-				.mapToDouble(DetailGraduationResult::getTakenCredit)
-				.mapToInt(credit -> (int) credit)
-				.sum();
-		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			return freeElectiveCompletedCredit.map(
-							completedCredit -> updateCompletedCredit(
-									completedCredit,
-									graduationResult.getFreeElectiveGraduationResult()
-											.getTotalCredit(),
-									user.getTransferCredit().getFreeElective()+excessCredits
-							))
-					.orElseGet(() -> CompletedCredit.createFreeElectiveCompletedCreditModel(
-							graduationResult.getFreeElectiveGraduationResult()));
-		}
 
 		int finalTakenCredit = graduationResult.getFreeElectiveGraduationResult()
-				.getTakenCredit();
+			.getTakenCredit();
 		return freeElectiveCompletedCredit.map(
 				completedCredit -> updateCompletedCredit(
 					completedCredit,
 					graduationResult.getFreeElectiveGraduationResult()
 						.getTotalCredit(),
-						finalTakenCredit
+					finalTakenCredit
 				))
 			.orElseGet(() -> CompletedCredit.createFreeElectiveCompletedCreditModel(
 				graduationResult.getFreeElectiveGraduationResult()));
