@@ -7,6 +7,9 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -73,11 +76,13 @@ public class DetailCategoryResult {
 	}
 
 	public void calculate(Set<Lecture> taken, Set<Lecture> graduationLectures) {
-		addTakenLectures(taken);
-		calculateLeftCredit();
-		if (!checkCompleted()) {
-			addMandatoryLectures(taken, graduationLectures);
-		}
+
+			addTakenLectures(taken);
+			calculateLeftCredit();
+			if (!checkCompleted()) {
+				addMandatoryLectures(taken, graduationLectures);
+			}
+
 	}
 
 	public void addNormalLeftCredit(int normalLeftCredit) {

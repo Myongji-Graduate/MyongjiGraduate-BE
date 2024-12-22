@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResul
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 					takenLecture.getSemester()
 				)
 			).collect(Collectors.toSet());
-		
+
 		TakenLectureInventory takenLectureInventoryWithDuplicateCode = TakenLectureInventory.from(
 			takenLectureWithDuplicateCode);
 
@@ -45,22 +46,23 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 
 		ChapelResult chapelResult =
 			calculateGraduationService.generateChapelResult(takenLectureInventoryWithDuplicateCode);
+		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
+			chapelResult.checkAnonymousTransferUserChapelCount();
+		}
 
 		List<DetailGraduationResult> detailGraduationResults = calculateGraduationService.generateDetailGraduationResults(
 			anonymous,
 			takenLectureInventoryWithDuplicateCode,
 			graduationRequirement
 		);
-
 		GraduationResult graduationResult = calculateGraduationService.generateGraduationResult(
 			chapelResult,
 			detailGraduationResults,
 			takenLectureInventoryWithDuplicateCode,
-			graduationRequirement
+			graduationRequirement,
+			anonymous
 		);
-
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);
-
 		return graduationResult;
 	}
 }

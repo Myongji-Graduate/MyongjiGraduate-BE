@@ -1,6 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +16,7 @@ public class TakenLectureInventory {
 
 	@Builder
 	private TakenLectureInventory(Set<TakenLecture> takenLecture) {
-		this.takenLecture = takenLecture;
+		this.takenLecture = new HashSet<>(takenLecture);
 	}
 
 	public static TakenLectureInventory from(Set<TakenLecture> takenLectures) {
@@ -38,7 +41,7 @@ public class TakenLectureInventory {
 	}
 
 	public void handleFinishedTakenLectures(Set<TakenLecture> finishedTakenLecture) {
-		takenLecture.removeAll(finishedTakenLecture);
+		this.takenLecture.removeAll(finishedTakenLecture);
 	}
 
 	public void sync(Set<Lecture> finishedLectures) {
@@ -77,4 +80,25 @@ public class TakenLectureInventory {
 			"takenLecture=" + takenLecture +
 			'}';
 	}
+
+	private static final Set<String> CHRISTIAN_COURSE_CODES = Set.of(
+			"KMA00101", // 성서와인간이해
+			"KMA02102", // 현대사회와기독교윤리
+			"KMA02103", // 종교와과학
+			"KMA02122"  // 기독교와문화
+	);
+
+	public Set<Lecture> getChristianLectures() {
+		return takenLecture.stream()
+				.filter(taken -> CHRISTIAN_COURSE_CODES.contains(taken.getLecture().getId()))
+				.map(TakenLecture::getLecture)
+				.collect(Collectors.toSet());
+	}
+
+	public double calculateChristianCredits() {
+		return getChristianLectures().stream()
+				.mapToDouble(Lecture::getCredit)
+				.sum();
+	}
+
 }

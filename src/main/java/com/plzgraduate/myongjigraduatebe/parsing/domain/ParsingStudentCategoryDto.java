@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.domain;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,6 +13,8 @@ class ParsingStudentCategoryDto {
 	private final String subMajor;
 	private final String associatedMajor;
 	private final StudentCategory studentCategory;
+	private final TransferCredit transferCredit;
+
 
 	@Builder
 	private ParsingStudentCategoryDto(
@@ -19,13 +22,15 @@ class ParsingStudentCategoryDto {
 		String dualMajor,
 		String subMajor,
 		String associatedMajor,
-		StudentCategory studentCategory
+		StudentCategory studentCategory,
+		TransferCredit transferCredit
 	) {
 		this.changeMajor = changeMajor;
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
+		this.transferCredit = transferCredit;
 	}
 
 	public static ParsingStudentCategoryDto of(
@@ -33,7 +38,8 @@ class ParsingStudentCategoryDto {
 		String subMajor,
 		String dualMajor,
 		String associatedMajor,
-		StudentCategory studentCategory
+		StudentCategory studentCategory,
+		TransferCredit transferCredit
 	) {
 		return ParsingStudentCategoryDto.builder()
 			.changeMajor(changeMajor)
@@ -41,6 +47,7 @@ class ParsingStudentCategoryDto {
 			.subMajor(subMajor)
 			.associatedMajor(associatedMajor)
 			.studentCategory(studentCategory)
+			.transferCredit(transferCredit)
 			.build();
 	}
 }

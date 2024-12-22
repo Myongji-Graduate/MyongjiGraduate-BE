@@ -14,6 +14,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.Calculat
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,23 +48,22 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		);
 		CompletedCredit chapelCompletedCreditModel = createOrUpdateChapelCompletedCreditModel(
 			completedCredits,
-			graduationResult
+			graduationResult,
+			user
 		);
 		CompletedCredit normalCultureCompletedCreditModel = createOrUpdateNormalCultureCompletedCreditModel(
 			completedCredits, graduationResult);
 		CompletedCredit freeElectiveCompletedCreditModel = createOrUpdateFreeElectiveCompletedCreditModel(
 			completedCredits, graduationResult);
 
-		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(
-			updatedCompletedCredits);
+		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(updatedCompletedCredits);
 		allCompletedCreditModels.addAll(
-			List.of(chapelCompletedCreditModel, normalCultureCompletedCreditModel,
+			List.of(
+				chapelCompletedCreditModel,
+				normalCultureCompletedCreditModel,
 				freeElectiveCompletedCreditModel
 			));
-		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(
-			user,
-			allCompletedCreditModels
-		);
+		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, allCompletedCreditModels);
 	}
 
 	private List<CompletedCredit> createGeneralCompletedCreditModel(
@@ -102,18 +102,26 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 	private CompletedCredit createOrUpdateChapelCompletedCreditModel(
 		List<CompletedCredit> completedCredits,
-		GraduationResult graduationResult
+		GraduationResult graduationResult,
+		User user
 	) {
 		Optional<CompletedCredit> chapelCompletedCredit = findCompletedCreditByCategory(
 			completedCredits, CHAPEL);
+
+		double totalCredit = user.getStudentCategory() == StudentCategory.TRANSFER
+			? 0.5
+			: (double) GRADUATION_COUNT / 2;
+
 		return chapelCompletedCredit.map(
-				completedCredit -> updateCompletedCredit(completedCredit, GRADUATION_COUNT / 2,
-					graduationResult.getChapelResult()
-						.getTakenChapelCredit()
+				completedCredit -> updateCompletedCredit(
+					completedCredit,
+					totalCredit,
+					graduationResult.getChapelResult().getTakenChapelCredit()
 				))
 			.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
-				graduationResult.getChapelResult()));
+				graduationResult.getChapelResult(), user));
 	}
+
 
 	private CompletedCredit createOrUpdateNormalCultureCompletedCreditModel(
 		List<CompletedCredit> completedCredits,
@@ -143,13 +151,15 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			completedCredits,
 			FREE_ELECTIVE
 		);
+
+		int finalTakenCredit = graduationResult.getFreeElectiveGraduationResult()
+			.getTakenCredit();
 		return freeElectiveCompletedCredit.map(
 				completedCredit -> updateCompletedCredit(
 					completedCredit,
 					graduationResult.getFreeElectiveGraduationResult()
 						.getTotalCredit(),
-					graduationResult.getFreeElectiveGraduationResult()
-						.getTakenCredit()
+					finalTakenCredit
 				))
 			.orElseGet(() -> CompletedCredit.createFreeElectiveCompletedCreditModel(
 				graduationResult.getFreeElectiveGraduationResult()));
@@ -166,7 +176,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 	private CompletedCredit updateCompletedCredit(
 		CompletedCredit completedCredit,
-		int totalCredit, double takenCredit
+		double totalCredit, double takenCredit
 	) {
 		completedCredit.updateCredit(totalCredit, takenCredit);
 		return completedCredit;

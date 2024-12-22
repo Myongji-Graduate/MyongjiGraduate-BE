@@ -51,6 +51,8 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	private String associatedMajor;
 
+	private String transferCredit;
+
 	private int totalCredit;
 
 	private double takenCredit;
@@ -59,5 +61,4 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	@Enumerated(value = EnumType.STRING)
 	private StudentCategory studentCategory;
-
 }

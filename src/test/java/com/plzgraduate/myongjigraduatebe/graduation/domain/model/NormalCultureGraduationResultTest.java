@@ -62,6 +62,7 @@ class NormalCultureGraduationResultTest {
 		//when
 		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.create(
 			15,
+			0,
 			takenLectureInventory,
 			List.of(detailGraduationResult));
 
@@ -86,6 +87,7 @@ class NormalCultureGraduationResultTest {
 		//when
 		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.create(
 				9,
+				0,
 				takenLectureInventory,
 				List.of());
 
