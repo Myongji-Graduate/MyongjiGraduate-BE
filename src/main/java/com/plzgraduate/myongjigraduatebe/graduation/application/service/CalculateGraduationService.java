@@ -31,7 +31,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 
 	@Override
-	public GraduationResult calculateGraduation(User user) {
+	public  GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
 			user.getId()
@@ -62,7 +62,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		TakenLectureInventory takenLectureInventory
 	) {
 		double christianCreditRequirement = graduationRequirement.getChristianCredit();
-		double totalTakenCredits = (int) calculateChristianTakenCredits(user, takenLectureInventory) +
+		double totalTakenCredits = calculateChristianTakenCredits(user, takenLectureInventory) +
 			user.getTransferCredit().getChristianLecture();
 
 		if (totalTakenCredits > christianCreditRequirement) {

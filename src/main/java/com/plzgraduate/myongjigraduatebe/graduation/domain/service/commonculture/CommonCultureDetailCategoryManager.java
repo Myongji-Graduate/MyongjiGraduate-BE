@@ -8,7 +8,6 @@ import static com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.E
 import static com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.FREE;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
