@@ -1,17 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CHAPEL;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.COMMON_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.CORE_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_ELECTIVE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_MANDATORY_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.FREE_ELECTIVE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.NORMAL_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
-import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
-
 import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
@@ -20,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -66,6 +56,17 @@ public enum StudentCategory {
 			PRIMARY_MANDATORY_MAJOR,
 			PRIMARY_ELECTIVE_MAJOR, NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL
 		)
+	),
+	TRANSFER(
+		List.of("편입"),
+		List.of(
+			PRIMARY_MANDATORY_MAJOR,
+			PRIMARY_ELECTIVE_MAJOR,
+			TRANSFER_CHRISTIAN,
+			NORMAL_CULTURE,
+			FREE_ELECTIVE,
+			CHAPEL
+		)
 	);
 
 	private final List<String> categories;
@@ -83,5 +84,4 @@ public enum StudentCategory {
 			throw new IllegalArgumentException(ErrorCode.UNFITTED_GRADUATION_CATEGORY.toString());
 		}
 	}
-
 }

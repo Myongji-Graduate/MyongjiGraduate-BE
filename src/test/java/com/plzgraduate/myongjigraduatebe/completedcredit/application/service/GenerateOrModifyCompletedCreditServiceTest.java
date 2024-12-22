@@ -40,71 +40,73 @@ class GenerateOrModifyCompletedCreditServiceTest {
 	@DisplayName("새로운 기이수 학점을 저장한다.")
 	@Test
 	void generateOrModifyCompletedCreditPort() {
-		//given
+		// given
 		User user = User.builder()
-			.id(1L)
-			.build();
+				.id(1L)
+				.build();
 		given(findCompletedCreditPort.findCompletedCredit(user)).willReturn(List.of());
 
-		int eachDetailGraduationResultTotalCredit = 10;
-		int eachDetailGraduationResultTakenCredit = 5;
+		double eachDetailGraduationResultTotalCredit = 10.0;
+		double eachDetailGraduationResultTakenCredit = 5.0;
 
 		List<DetailGraduationResult> detailGraduationResults = createDetailGraduationResults(
-			eachDetailGraduationResultTotalCredit, eachDetailGraduationResultTakenCredit);
+				(int) eachDetailGraduationResultTotalCredit, (int) eachDetailGraduationResultTakenCredit);
 
 		GraduationResult graduationResult = GraduationResult.builder()
-			.detailGraduationResults(detailGraduationResults)
-			.chapelResult(
-				ChapelResult.builder()
-					.takenCount(3)
-					.build())
-			.normalCultureGraduationResult(
-				NormalCultureGraduationResult.builder()
-					.totalCredit(eachDetailGraduationResultTotalCredit)
-					.takenCredit(eachDetailGraduationResultTakenCredit)
-					.build())
-			.freeElectiveGraduationResult(
-				FreeElectiveGraduationResult.builder()
-					.totalCredit(eachDetailGraduationResultTotalCredit)
-					.takenCredit(eachDetailGraduationResultTakenCredit)
-					.build())
-			.build();
+				.detailGraduationResults(detailGraduationResults)
+				.chapelResult(
+						ChapelResult.builder()
+								.takenCount(3)
+								.build())
+				.normalCultureGraduationResult(
+						NormalCultureGraduationResult.builder()
+								.totalCredit((int) eachDetailGraduationResultTotalCredit)
+								.takenCredit((int) eachDetailGraduationResultTakenCredit)
+								.build())
+				.freeElectiveGraduationResult(
+						FreeElectiveGraduationResult.builder()
+								.totalCredit((int) eachDetailGraduationResultTotalCredit)
+								.takenCredit((int) eachDetailGraduationResultTakenCredit)
+								.build())
+				.build();
 		given(calculateGraduationUseCase.calculateGraduation(user)).willReturn(graduationResult);
+
 		ArgumentCaptor<List<CompletedCredit>> completedCreditArgumentCaptor = ArgumentCaptor.forClass(
-			List.class);
+				List.class);
 		ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
-		//when
+		// when
 		generateOrModifyCompletedCreditService.generateOrModifyCompletedCredit(user);
 
-		//then
+		// then
 		then(generateOrModifyCompletedCreditPort).should()
-			.generateOrModifyCompletedCredits(userArgumentCaptor.capture(),
-				completedCreditArgumentCaptor.capture());
+				.generateOrModifyCompletedCredits(userArgumentCaptor.capture(),
+						completedCreditArgumentCaptor.capture());
 		List<CompletedCredit> savedCompletedCredits = completedCreditArgumentCaptor.getValue();
 		Assertions.assertThat(savedCompletedCredits)
-			.hasSize(detailGraduationResults.size() + 3)
-			.extracting("graduationCategory", "totalCredit", "takenCredit")
-			.containsOnly(
-				tuple(GraduationCategory.COMMON_CULTURE, eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.CORE_CULTURE, eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.PRIMARY_MANDATORY_MAJOR,
-					eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.PRIMARY_ELECTIVE_MAJOR,
-					eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE,
-					eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.CHAPEL, 2, 1.5),
-				tuple(GraduationCategory.NORMAL_CULTURE, eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit),
-				tuple(GraduationCategory.FREE_ELECTIVE, eachDetailGraduationResultTotalCredit,
-					(double) eachDetailGraduationResultTakenCredit));
+				.hasSize(detailGraduationResults.size() + 3)
+				.extracting("graduationCategory", "totalCredit", "takenCredit")
+				.containsOnly(
+						tuple(GraduationCategory.COMMON_CULTURE, eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit),
+						tuple(GraduationCategory.CORE_CULTURE, eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit),
+						tuple(GraduationCategory.PRIMARY_MANDATORY_MAJOR,
+								eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit),
+						tuple(GraduationCategory.PRIMARY_ELECTIVE_MAJOR,
+								eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit),
+						tuple(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE,
+								eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit),
+						tuple(GraduationCategory.CHAPEL, 2.0, 1.5),
+						tuple(GraduationCategory.NORMAL_CULTURE, eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit),
+						tuple(GraduationCategory.FREE_ELECTIVE, eachDetailGraduationResultTotalCredit,
+								eachDetailGraduationResultTakenCredit));
 	}
+
 
 	private List<DetailGraduationResult> createDetailGraduationResults(int totalCredit,
 		int takenCredit) {

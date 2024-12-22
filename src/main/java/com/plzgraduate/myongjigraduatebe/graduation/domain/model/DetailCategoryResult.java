@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -77,7 +78,7 @@ public class DetailCategoryResult {
 		addTakenLectures(taken);
 		calculateLeftCredit();
 		if (!checkCompleted()) {
-			addHaveToLectures(taken, graduationLectures);
+			addMandatoryLectures(taken, graduationLectures);
 		}
 	}
 
@@ -110,11 +111,12 @@ public class DetailCategoryResult {
 		}
 	}
 
-	private void addHaveToLectures(Set<Lecture> taken, Set<Lecture> graduationLectures) {
+	private void addMandatoryLectures(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		graduationLectures.removeAll(taken);
 		graduationLectures.stream()
 			.filter(graduationLecture -> graduationLecture.getIsRevoked() == 0)
 			.forEach(haveToLectures::add);
+
 	}
 
 	private boolean checkCompleted() {

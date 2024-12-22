@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,9 @@ public class MajorGraduationManager {
 
 		int electiveMajorTotalCredit =
 			graduationResultTotalCredit - mandantoryDetailCategoryResult.getTotalCredits();
+		if(user.getStudentCategory() == StudentCategory.TRANSFER){
+			electiveMajorTotalCredit+=user.getTransferCredit().getMajorLecture();
+		}
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
 			takenLectureInventory, electiveLectures, electiveMajorTotalCredit);
 

@@ -19,6 +19,7 @@ public enum GraduationCategory {
 	SUB_MAJOR("부전공"),
 	PRIMARY_BASIC_ACADEMICAL_CULTURE("주학문기초교양"),
 	DUAL_BASIC_ACADEMICAL_CULTURE("복수학문기초교양"),
+	TRANSFER_CHRISTIAN("편입기독교"),
 	NORMAL_CULTURE("일반교양"),
 	FREE_ELECTIVE("자유선택"),
 	CHAPEL("채플");

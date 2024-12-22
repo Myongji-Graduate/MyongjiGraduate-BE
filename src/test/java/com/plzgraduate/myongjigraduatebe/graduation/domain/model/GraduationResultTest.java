@@ -124,7 +124,7 @@ class GraduationResultTest {
 			.build();
 
 		//when
-		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
+		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement, user);
 
 		//then
 		assertThat(graduationResult.getNormalCultureGraduationResult())
@@ -142,6 +142,7 @@ class GraduationResultTest {
 	@DisplayName("채플 졸업 결과, 모든 세부 졸업 결과, 일반교양 졸업 결과, 자유선택 졸업 결과가 이수 완료일 시 전체 졸업 결과가 이수 완료이다.")
 	@Test
 	void checkCompletedGraduated() {
+		User user = UserFixture.데이터테크놀로지학과_19학번();
 		//given
 		int detailCategoryTotalCredit = 10;
 		int detailCategoryTakenCredit = 10;
@@ -181,7 +182,7 @@ class GraduationResultTest {
 		//when
 		graduationResult.checkGraduated(GraduationRequirement.builder()
 			.totalCredit(134)
-			.build());
+			.build(), user);
 
 		//then
 		assertThat(graduationResult.isGraduated()).isTrue();
@@ -199,6 +200,7 @@ class GraduationResultTest {
 		NormalCultureGraduationResult normalCultureGraduationResult,
 		FreeElectiveGraduationResult freeElectiveGraduationResult) {
 		//given
+		User user = UserFixture.데이터테크놀로지학과_19학번();
 		GraduationResult graduationResult = GraduationResult.builder()
 			.chapelResult(chapelResult)
 			.detailGraduationResults(detailGraduationResults)
@@ -209,10 +211,9 @@ class GraduationResultTest {
 		//when
 		graduationResult.checkGraduated(GraduationRequirement.builder()
 			.totalCredit(134)
-			.build());
+			.build(), user);
 
 		//then
 		assertThat(graduationResult.isGraduated()).isFalse();
 	}
-
 }

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,10 @@ class UserMapperTest extends PersistenceTestSupport {
 				"graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
+		assertThat(user.getTransferCredit())
+				.extracting("normalCulture", "majorLecture", "freeElective", "christianLecture")
+				.containsExactly(0, 0, 0, 0);
+
 	}
 
 	@DisplayName("도메인 엔티티를 JPA 엔티티 변환한다.")
@@ -51,6 +56,8 @@ class UserMapperTest extends PersistenceTestSupport {
 				"subMajor", "studentCategory", "totalCredit", "takenCredit", "graduated")
 			.contains(1L, "mju1000", "mju1000!", EnglishLevel.ENG12, "김명지",
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
+		assertThat(userJpaEntity.getTransferCredit())
+				.isEqualTo("0/0/0/0");
 	}
 
 	private User createUser() {
@@ -65,6 +72,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.primaryMajor("경영")
 			.dualMajor(null)
 			.subMajor(null)
+			.transferCredit(TransferCredit.from("0/0/0/0"))
 			.totalCredit(100)
 			.takenCredit(40)
 			.graduated(false)
@@ -74,20 +82,22 @@ class UserMapperTest extends PersistenceTestSupport {
 
 	private UserJpaEntity createUserJpaEntity() {
 		return UserJpaEntity.builder()
-			.id(1L)
-			.authId("mju1000")
-			.password("mju1000!")
-			.name("김명지")
-			.studentNumber("60211111")
-			.entryYear(21)
-			.englishLevel(EnglishLevel.ENG12)
-			.major("경영")
-			.dualMajor("복수전공")
-			.totalCredit(100)
-			.takenCredit(40)
-			.graduated(false)
-			.subMajor(null)
-			.studentCategory(StudentCategory.NORMAL)
-			.build();
+				.id(1L)
+				.authId("mju1000")
+				.password("mju1000!")
+				.name("김명지")
+				.studentNumber("60211111")
+				.entryYear(21)
+				.englishLevel(EnglishLevel.ENG12)
+				.major("경영")
+				.dualMajor(null) // 복수전공을 null로 설정
+				.subMajor(null)
+				.associatedMajor(null)
+				.transferCredit("0/0/0/0") // 기본값 설정
+				.studentCategory(StudentCategory.NORMAL)
+				.totalCredit(100)
+				.takenCredit(40.0)
+				.graduated(false)
+				.build();
 	}
 }

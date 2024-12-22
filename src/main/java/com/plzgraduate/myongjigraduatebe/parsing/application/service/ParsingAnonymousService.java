@@ -29,6 +29,7 @@ public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 		ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
 		checkUnSupportedUser(parsingInformation);
 
+
 		User anonymous = User.createAnonymous(
 			englishLevel,
 			parsingInformation.getStudentName(),
@@ -37,7 +38,8 @@ public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 			parsingInformation.getSubMajor(),
 			parsingInformation.getDualMajor(),
 			parsingInformation.getAssociatedMajor(),
-			parsingInformation.getStudentCategory()
+			parsingInformation.getStudentCategory(),
+			parsingInformation.getTransferCredit()
 		);
 
 		TakenLectureInventory takenLectureInventory = getTakenLectureInventory(

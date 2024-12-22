@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.application.usecase.update;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class UpdateStudentInformationCommand {
 
 	private String associatedMajor;
 
+	private TransferCredit transferCredit;
+
 	private StudentCategory studentCategory;
 
 	private int totalCredit;
@@ -34,7 +37,7 @@ public class UpdateStudentInformationCommand {
 
 	@Builder
 	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
-		String subMajor, String associatedMajor, StudentCategory studentCategory, int totalCredit, double takenCredit,
+		String subMajor, String associatedMajor,  TransferCredit transferCredit, StudentCategory studentCategory, int totalCredit, double takenCredit,
 		boolean graduate) {
 		this.user = user;
 		this.name = name;
@@ -42,6 +45,7 @@ public class UpdateStudentInformationCommand {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
+		this.transferCredit = transferCredit;
 		this.studentCategory = studentCategory;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -57,6 +61,7 @@ public class UpdateStudentInformationCommand {
 			.dualMajor(parsingInformation.getDualMajor())
 			.subMajor(parsingInformation.getSubMajor())
 			.associatedMajor(parsingInformation.getAssociatedMajor())
+			.transferCredit(parsingInformation.getTransferCredit())
 			.studentCategory(parsingInformation.getStudentCategory())
 			.build();
 	}

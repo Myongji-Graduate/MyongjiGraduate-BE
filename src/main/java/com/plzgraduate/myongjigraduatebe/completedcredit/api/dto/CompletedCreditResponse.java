@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 public class CompletedCreditResponse {
 
 	private String category;
-	private int totalCredit;
+	private double totalCredit;
 	private double takenCredit;
 	private boolean completed;
 
 	@Builder
-	private CompletedCreditResponse(String category, int totalCredit, double takenCredit,
+	private CompletedCreditResponse(String category, double totalCredit, double takenCredit,
 		boolean completed) {
 		this.category = category;
 		this.totalCredit = totalCredit;

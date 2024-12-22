@@ -35,6 +35,7 @@ public class NormalCultureGraduationResult {
 
 	public static NormalCultureGraduationResult create(
 		int totalCredit,
+		int acknowledgedCredit,
 		TakenLectureInventory takenLectureInventory,
 		List<DetailGraduationResult> detailGraduationResults
 	) {
@@ -42,15 +43,16 @@ public class NormalCultureGraduationResult {
 			.categoryName(NORMAL_CULTURE.getName())
 			.isCompleted(false)
 			.totalCredit(totalCredit)
-			.takenCredit(calculateTakenCredit(takenLectureInventory, detailGraduationResults))
+			.takenCredit(calculateTakenCredit(acknowledgedCredit, takenLectureInventory, detailGraduationResults))
 			.build();
 	}
 
 	private static int calculateTakenCredit(
+		int acknowledgedCredit,
 		TakenLectureInventory takenLectureInventory,
 		List<DetailGraduationResult> detailGraduationResults
 	) {
-		int remainCreditByDetailGraduationResult = detailGraduationResults.stream()
+		int remainCreditByDetailGraduationResult = acknowledgedCredit + detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getNormalLeftCredit)
 			.sum();
 		Set<TakenLecture> remainTakenNormalCultures = takenLectureInventory.getCultureLectures()
