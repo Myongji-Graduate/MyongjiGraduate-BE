@@ -13,15 +13,6 @@ import lombok.Getter;
 @Getter
 public class DetailCategoryResult {
 
-	// 현장실습과목(haveToLectrue 제외)
-	private static final List<String> EXCLUDED_HAVE_TO_LECTURE_CODES = List.of(
-		"KMR01801", "KMR01802", "KMR01804", "KMR01805", "KMR01851", "KMR01852", "HAH01371", "HFC01412",
-		"HFM01404", "JDC01361", "JEE01356", "JEE01357", "JEH01493", "JEH01494", "JEI01430", "JEI01467", "JEJ02549",
-		"JEJ02554", "JEJ02558", "JEJ02559", "JEJ02560", "JEJ02561", "KMD02902", "KMD02903", "KMR01551", "KMR01552",
-		"KMR01553", "KMR01554", "KMR01555", "KMR01560", "KMR01561", "KMR01562", "KMR01563", "KMR01564", "KMR01566",
-		"KMR01567", "KMR01703", "KMR01705", "KMR01710", "KMR01712", "KMR01803", "KMR01817"
-	);
-
 	private final boolean isSatisfiedMandatory;
 	private final int totalCredits;
 	private final List<Lecture> takenLectures = new ArrayList<>();
@@ -122,10 +113,8 @@ public class DetailCategoryResult {
 	private void addHaveToLectures(Set<Lecture> taken, Set<Lecture> graduationLectures) {
 		graduationLectures.removeAll(taken);
 		graduationLectures.stream()
-			.filter(graduationLecture ->
-				graduationLecture.getIsRevoked() == 0 && !EXCLUDED_HAVE_TO_LECTURE_CODES.contains(graduationLecture.getId()))
+			.filter(graduationLecture -> graduationLecture.getIsRevoked() == 0)
 			.forEach(haveToLectures::add);
-
 	}
 
 	private boolean checkCompleted() {
