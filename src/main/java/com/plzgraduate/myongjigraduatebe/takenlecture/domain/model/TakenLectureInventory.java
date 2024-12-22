@@ -1,9 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -90,8 +87,8 @@ public class TakenLectureInventory {
 
 	public Set<Lecture> getChristianLectures() {
 		return takenLecture.stream()
-				.filter(taken -> CHRISTIAN_COURSE_CODES.contains(taken.getLecture().getId()))
 				.map(TakenLecture::getLecture)
+				.filter(lecture -> CHRISTIAN_COURSE_CODES.contains(lecture.getId()))
 				.collect(Collectors.toSet());
 	}
 
