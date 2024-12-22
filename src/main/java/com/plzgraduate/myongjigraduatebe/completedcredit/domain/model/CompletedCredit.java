@@ -42,7 +42,7 @@ public class CompletedCredit {
 	public static CompletedCredit createChapelCompletedCreditModel(ChapelResult chapelResult, User user) {
 		double totalCredit = user.getStudentCategory() == StudentCategory.TRANSFER
 				? 0.5 // 편입생일 경우 채플 이수 요건은 1회
-				: ChapelResult.GRADUATION_COUNT / 2; // 일반 학생일 경우 기본 채플 이수 요건
+				: (double) ChapelResult.GRADUATION_COUNT / 2; // 일반 학생일 경우 기본 채플 이수 요건
 
 		return CompletedCredit.builder()
 				.graduationCategory(CHAPEL)

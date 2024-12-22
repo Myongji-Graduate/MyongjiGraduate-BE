@@ -21,7 +21,7 @@ public class GraduationRequirement {
 	private int commonCultureCredit;
 	private int normalCultureCredit;
 	private int freeElectiveCredit;
-	private int christianCredit;
+	private final int christianCredit;
 
 	@Builder
 	private GraduationRequirement(

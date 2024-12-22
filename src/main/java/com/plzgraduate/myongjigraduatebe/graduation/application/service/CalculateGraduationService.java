@@ -81,9 +81,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	private double calculateChristianTakenCredits(User user, TakenLectureInventory takenLectureInventory) {
-		if ("anonymous".equals(user.getAuthId())) {
-			takenLectureInventory = takenLectureInventory;
-		} else {
+		if (!user.getAuthId().equals("anonymous")) {
 			takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
 		}
 		return takenLectureInventory.calculateChristianCredits();

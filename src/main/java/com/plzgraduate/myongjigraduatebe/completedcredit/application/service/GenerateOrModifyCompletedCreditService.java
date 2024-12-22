@@ -54,7 +54,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 		CompletedCredit normalCultureCompletedCreditModel = createOrUpdateNormalCultureCompletedCreditModel(
 			completedCredits, graduationResult);
 		CompletedCredit freeElectiveCompletedCreditModel = createOrUpdateFreeElectiveCompletedCreditModel(
-			completedCredits, graduationResult, user, detailGraduationResults);
+			completedCredits, graduationResult);
 
 		ArrayList<CompletedCredit> allCompletedCreditModels = new ArrayList<>(updatedCompletedCredits);
 		allCompletedCreditModels.addAll(
@@ -145,9 +145,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 	private CompletedCredit createOrUpdateFreeElectiveCompletedCreditModel(
 		List<CompletedCredit> completedCredits,
-		GraduationResult graduationResult,
-		User user,
-		List<DetailGraduationResult> detailGraduationResults
+		GraduationResult graduationResult
 	) {
 		Optional<CompletedCredit> freeElectiveCompletedCredit = findCompletedCreditByCategory(
 			completedCredits,
