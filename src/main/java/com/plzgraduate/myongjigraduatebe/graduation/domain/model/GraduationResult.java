@@ -47,10 +47,10 @@ public class GraduationResult {
 	}
 
 	public void handleLeftTakenLectures(
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
 	) {
 		handleLeftTakenNormaCulture(takenLectureInventory, graduationRequirement);
-		handleLeftTakenFreeElective(takenLectureInventory, graduationRequirement);
+		handleLeftTakenFreeElective(takenLectureInventory, graduationRequirement, user);
 	}
 
 	public void checkGraduated(GraduationRequirement graduationRequirement, User user) {
@@ -109,7 +109,7 @@ public class GraduationResult {
 			System.out.println("Transfer Christian Credit: " + transferChristianCredit);
 			System.out.println("Transfer Free Elective Credit: " + transferFreeElectiveCredit);
 
-			this.takenCredit += transferChristianCredit + transferFreeElectiveCredit;
+			this.takenCredit += transferChristianCredit;
 		}
 
 		this.takenCredit += freeElectiveCredits + normalCultureCredits;
@@ -142,14 +142,15 @@ public class GraduationResult {
 	}
 
 	private void handleLeftTakenFreeElective(
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
 	) {
 		int leftNormalCultureCredit = normalCultureGraduationResult.getLeftCredit();
 		this.freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
 			graduationRequirement.getFreeElectiveCredit(),
 			takenLectureInventory,
 			detailGraduationResults,
-			leftNormalCultureCredit
+			leftNormalCultureCredit,
+			user
 		);
 
 		freeElectiveGraduationResult.checkCompleted();

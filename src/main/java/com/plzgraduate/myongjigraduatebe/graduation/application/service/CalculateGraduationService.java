@@ -244,7 +244,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			chapelResult,
 			detailGraduationResults
 		);
-		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement);
+		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement, user);
 		graduationResult.checkGraduated(graduationRequirement,user);
 		return graduationResult;
 	}
