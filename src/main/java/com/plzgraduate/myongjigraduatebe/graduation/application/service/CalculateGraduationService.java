@@ -56,46 +56,6 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		return graduationResult;
 	}
 
-	DetailGraduationResult generateTransferCombinedCultureDetailGraduationResult(
-		User user,
-		GraduationRequirement graduationRequirement,
-		List<DetailGraduationResult> detailGraduationResults,
-		TakenLectureInventory takenLectureInventory
-	) {
-		double totalTakenCredits = calculateCultureTakenCredits(user, takenLectureInventory) +
-			user.getTransferCredit().getNormalCulture();
-		double combinedCultureCreditRequirement = graduationRequirement.getCombinedCultureCredit();
-
-		double excessCredits = 0;
-		if (totalTakenCredits > combinedCultureCreditRequirement) {
-			excessCredits = totalTakenCredits - combinedCultureCreditRequirement;
-			totalTakenCredits = combinedCultureCreditRequirement;
-		}
-
-		detailGraduationResults.add(
-			DetailGraduationResult.create(
-				GraduationCategory.FREE_ELECTIVE,
-				0,
-				List.of(DetailCategoryResult.builder()
-					.takenCredits((int) excessCredits)
-					.isCompleted(false)
-					.build()
-				)
-			)
-		);
-
-		return DetailGraduationResult.create(
-			GraduationCategory.TRANSFER_COMBINED_CULTURE,
-			(int) combinedCultureCreditRequirement,
-			List.of(DetailCategoryResult.builder()
-				.takenCredits((int) totalTakenCredits)
-				.isCompleted(totalTakenCredits >= combinedCultureCreditRequirement)
-				.build()
-			)
-		);
-	}
-
-
 	DetailGraduationResult generateTransferChristianDetailGraduationResult(
 		User user,
 		GraduationRequirement graduationRequirement,
@@ -130,20 +90,6 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	}
 
-	private double calculateCultureTakenCredits(User user, TakenLectureInventory givenTakenLectureInventory) {
-		TakenLectureInventory takenLectureInventory;
-
-		if ("anonymous".equals(user.getAuthId())) {
-			takenLectureInventory = givenTakenLectureInventory;
-		} else {
-			takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
-		}
-
-		return takenLectureInventory.getCultureLectures().stream()
-			.mapToDouble(taken -> taken.getLecture().getCredit())
-			.sum();
-	}
-
 	GraduationRequirement determineGraduationRequirement(User user) {
 		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
 		DefaultGraduationRequirementType defaultGraduationRequirement =
@@ -176,12 +122,12 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 					user, takenLectureInventory, graduationRequirement
 				)
 			));
+			detailGraduationResults.addAll(
+				generateBasicAcademicalDetailGraduationResult(
+					user, takenLectureInventory, graduationRequirement
+				)
+			);
 		}
-		detailGraduationResults.addAll(
-			generateBasicAcademicalDetailGraduationResult(
-				user, takenLectureInventory, graduationRequirement
-			)
-		);
 		detailGraduationResults.addAll(
 			generateMajorDetailGraduationResult(
 				user, takenLectureInventory, graduationRequirement

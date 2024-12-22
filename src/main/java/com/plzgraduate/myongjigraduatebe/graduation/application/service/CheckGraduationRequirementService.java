@@ -37,7 +37,7 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 					takenLecture.getSemester()
 				)
 			).collect(Collectors.toSet());
-		
+
 		TakenLectureInventory takenLectureInventoryWithDuplicateCode = TakenLectureInventory.from(
 			takenLectureWithDuplicateCode);
 
@@ -46,21 +46,15 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 
 		ChapelResult chapelResult =
 			calculateGraduationService.generateChapelResult(takenLectureInventoryWithDuplicateCode);
+		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
+			chapelResult.checkAnonymousTransferUserChapelCount();
+		}
 
 		List<DetailGraduationResult> detailGraduationResults = calculateGraduationService.generateDetailGraduationResults(
 			anonymous,
 			takenLectureInventoryWithDuplicateCode,
 			graduationRequirement
 		);
-		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
-			detailGraduationResults.add(
-					calculateGraduationService.generateTransferCombinedCultureDetailGraduationResult(anonymous, graduationRequirement,detailGraduationResults,takenLectureInventory)
-			);
-			detailGraduationResults.add(
-					calculateGraduationService.generateTransferChristianDetailGraduationResult(anonymous, graduationRequirement, takenLectureInventory)
-			);
-		}
-
 		GraduationResult graduationResult = calculateGraduationService.generateGraduationResult(
 			chapelResult,
 			detailGraduationResults,
@@ -68,12 +62,7 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			graduationRequirement,
 			anonymous
 		);
-
-
-
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);
-
-
 		return graduationResult;
 	}
 }

@@ -110,7 +110,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 
 		double totalCredit = user.getStudentCategory() == StudentCategory.TRANSFER
 			? 0.5
-			: GRADUATION_COUNT / 2;
+			: (double) GRADUATION_COUNT / 2;
 
 		return chapelCompletedCredit.map(
 				completedCredit -> updateCompletedCredit(

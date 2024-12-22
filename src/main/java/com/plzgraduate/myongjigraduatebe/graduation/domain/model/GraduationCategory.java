@@ -23,7 +23,6 @@ public enum GraduationCategory {
 	ASSOCIATED_ELECTIVE_MAJOR("연계전공선택"),
 	ASSOCIATED_MANDATORY_CULTURE("연계전공교양필수"),
 	ASSOCIATED_ELECTIVE_CULTURE("연계전공교양선택"),
-	TRANSFER_COMBINED_CULTURE("편입교양"),
 	TRANSFER_CHRISTIAN("편입기독교"),
 	NORMAL_CULTURE("일반교양"),
 	FREE_ELECTIVE("자유선택"),
