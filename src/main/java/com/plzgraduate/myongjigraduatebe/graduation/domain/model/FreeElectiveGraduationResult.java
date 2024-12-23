@@ -4,6 +4,9 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import java.util.List;
+
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,19 +29,19 @@ public class FreeElectiveGraduationResult {
 
 	public static FreeElectiveGraduationResult create(int totalCredit,
 		TakenLectureInventory takenLectureInventory,
-		List<DetailGraduationResult> detailGraduationResults, int leftNormalCultureCredit) {
+		List<DetailGraduationResult> detailGraduationResults, int leftNormalCultureCredit, User user) {
 		return FreeElectiveGraduationResult.builder()
 			.categoryName(FREE_ELECTIVE.getName())
 			.isCompleted(false)
 			.totalCredit(totalCredit)
 			.takenCredit(
 				calculateTakenCredit(takenLectureInventory, detailGraduationResults,
-					leftNormalCultureCredit))
+					leftNormalCultureCredit, user))
 			.build();
 	}
 
 	private static int calculateTakenCredit(TakenLectureInventory takenLectureInventory,
-		List<DetailGraduationResult> detailGraduationResults, int leftNormalCultureCredit) {
+		List<DetailGraduationResult> detailGraduationResults, int leftNormalCultureCredit, User user) {
 		int remainCreditByDetailGraduationResult = detailGraduationResults.stream()
 			.mapToInt(DetailGraduationResult::getFreeElectiveLeftCredit)
 			.sum();
@@ -49,8 +52,14 @@ public class FreeElectiveGraduationResult {
 				.getCredit())
 			.sum();
 
+		int transferFreeElectiveCredit = 0;
+
+		// 편입생일 경우 추가 학점을 계산
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			transferFreeElectiveCredit = user.getTransferCredit().getFreeElective();
+		}
 		return remainCreditByDetailGraduationResult + remainCreditByTakenLectures
-			+ leftNormalCultureCredit;
+			+ leftNormalCultureCredit+transferFreeElectiveCredit;
 	}
 
 	public void checkCompleted() {

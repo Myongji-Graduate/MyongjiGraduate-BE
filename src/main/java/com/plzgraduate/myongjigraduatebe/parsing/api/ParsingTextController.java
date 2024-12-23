@@ -20,15 +20,21 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 
 	@PostMapping
-	public void enrollParsingText(@LoginUser Long userId,
-		@Valid @RequestBody ParsingTextRequest parsingTextRequest) {
+	public void enrollParsingText(
+		@LoginUser Long userId,
+		@Valid @RequestBody ParsingTextRequest parsingTextRequest
+	) {
 		try {
 			parsingTextUseCase.enrollParsingText(userId, parsingTextRequest.getParsingText());
-			parsingTextHistoryUseCase.generateSucceedParsingTextHistory(userId,
-				parsingTextRequest.getParsingText());
+			parsingTextHistoryUseCase.generateSucceedParsingTextHistory(
+				userId,
+				parsingTextRequest.getParsingText()
+			);
 		} catch (Exception e) {
-			parsingTextHistoryUseCase.generateFailedParsingTextHistory(userId,
-				parsingTextRequest.getParsingText());
+			parsingTextHistoryUseCase.generateFailedParsingTextHistory(
+				userId,
+				parsingTextRequest.getParsingText()
+			);
 			throw e;
 		}
 	}

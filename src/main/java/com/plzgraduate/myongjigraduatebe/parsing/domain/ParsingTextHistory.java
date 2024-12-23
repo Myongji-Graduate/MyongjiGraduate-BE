@@ -13,8 +13,12 @@ public class ParsingTextHistory {
 	private final ParsingResult parsingResult;
 
 	@Builder
-	private ParsingTextHistory(Long id, User user, String parsingText,
-		ParsingResult parsingResult) {
+	private ParsingTextHistory(
+		Long id,
+		User user,
+		String parsingText,
+		ParsingResult parsingResult
+	) {
 		this.id = id;
 		this.user = user;
 		this.parsingText = parsingText;
@@ -36,5 +40,4 @@ public class ParsingTextHistory {
 			.parsingResult(ParsingResult.FAIL)
 			.build();
 	}
-
 }

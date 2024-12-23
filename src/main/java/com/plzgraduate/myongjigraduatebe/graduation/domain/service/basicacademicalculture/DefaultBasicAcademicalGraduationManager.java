@@ -11,6 +11,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCul
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,13 @@ public class DefaultBasicAcademicalGraduationManager implements BasicAcademicalG
 	public DetailGraduationResult createDetailGraduationResult(User user,
 		TakenLectureInventory takenLectureInventory,
 		Set<BasicAcademicalCultureLecture> graduationLectures, int basicAcademicalCredit) {
-		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
+
+		if(user.getStudentCategory() == StudentCategory.TRANSFER) {
+			return DetailGraduationResult.createNonCategorizedGraduationResult(
+					basicAcademicalCredit, List.of()
+			);
+		}
+			Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
 
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();

@@ -21,4 +21,12 @@ public class CommonCulture {
 			.commonCultureCategory(category)
 			.build();
 	}
+
+	@Override
+	public String toString() {
+		return "CommonCulture{" +
+			"lecture=" + lecture +
+			", commonCultureCategory=" + commonCultureCategory +
+			'}';
+	}
 }

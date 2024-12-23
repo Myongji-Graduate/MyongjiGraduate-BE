@@ -109,4 +109,32 @@ class TakenLectureInventoryTest {
 			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
 		)));
 	}
+	@DisplayName("크리스천 과목 목록을 반환한다.")
+	@Test
+	void getChristianLectures() {
+		// given
+		TakenLectureInventory takenLectureInventory = getTakenLectureInventory();
+
+		// when
+		Set<Lecture> christianLectures = takenLectureInventory.getChristianLectures();
+
+		// then
+		assertThat(christianLectures)
+				.hasSize(3) // 크리스천 과목 3개
+				.extracting("id")
+				.containsExactlyInAnyOrder("KMA00101", "KMA02102", "KMA02122"); // 예상 ID
+	}
+
+	@DisplayName("크리스천 과목 학점 합계를 계산한다.")
+	@Test
+	void calculateChristianCredits() {
+		// given
+		TakenLectureInventory takenLectureInventory = getTakenLectureInventory();
+
+		// when
+		double christianCredits = takenLectureInventory.calculateChristianCredits();
+
+		// then
+		assertThat(christianCredits).isEqualTo(6.0); // 각 과목 2학점, 총 3개 과목
+	}
 }

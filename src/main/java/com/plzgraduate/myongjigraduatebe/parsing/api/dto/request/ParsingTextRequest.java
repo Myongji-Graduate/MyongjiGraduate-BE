@@ -18,5 +18,4 @@ public class ParsingTextRequest {
 	private ParsingTextRequest(String parsingText) {
 		this.parsingText = parsingText;
 	}
-
 }

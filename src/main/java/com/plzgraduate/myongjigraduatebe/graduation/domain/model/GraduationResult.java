@@ -2,6 +2,9 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.model;
 
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import java.util.List;
+
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,11 +20,15 @@ public class GraduationResult {
 	private boolean graduated;
 
 	@Builder
-	private GraduationResult(ChapelResult chapelResult,
+	private GraduationResult(
+		ChapelResult chapelResult,
 		List<DetailGraduationResult> detailGraduationResults,
 		NormalCultureGraduationResult normalCultureGraduationResult,
-		FreeElectiveGraduationResult freeElectiveGraduationResult, int totalCredit, int takenCredit,
-		boolean graduated) {
+		FreeElectiveGraduationResult freeElectiveGraduationResult,
+		int totalCredit,
+		int takenCredit,
+		boolean graduated
+	) {
 		this.chapelResult = chapelResult;
 		this.detailGraduationResults = detailGraduationResults;
 		this.normalCultureGraduationResult = normalCultureGraduationResult;
@@ -31,26 +38,24 @@ public class GraduationResult {
 		this.graduated = graduated;
 	}
 
-	public static GraduationResult create(ChapelResult chapelResult,
-		List<DetailGraduationResult> detailGraduationResults) {
-		return GraduationResult.builder()
-			.chapelResult(chapelResult)
-			.detailGraduationResults(detailGraduationResults)
-			.totalCredit(0)
-			.takenCredit(0)
-			.graduated(false)
-			.build();
+	public static GraduationResult create(
+		ChapelResult chapelResult, List<DetailGraduationResult> detailGraduationResults
+	) {
+		return GraduationResult.builder().chapelResult(chapelResult)
+			.detailGraduationResults(detailGraduationResults).totalCredit(0).takenCredit(0)
+			.graduated(false).build();
 	}
 
-	public void handleLeftTakenLectures(TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
-		handleLeftTakenNormaCulture(takenLectureInventory, graduationRequirement);
-		handleLeftTakenFreeElective(takenLectureInventory, graduationRequirement);
+	public void handleLeftTakenLectures(
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
+	) {
+		handleLeftTakenNormaCulture(takenLectureInventory, graduationRequirement, user);
+		handleLeftTakenFreeElective(takenLectureInventory, graduationRequirement, user);
 	}
 
-	public void checkGraduated(GraduationRequirement graduationRequirement) {
+	public void checkGraduated(GraduationRequirement graduationRequirement, User user) {
 		addUpTotalCredit(graduationRequirement.getTotalCredit());
-		addUpTakenCredit();
+		addUpTakenCredit(user);
 
 		boolean isAllDetailGraduationResultCompleted = detailGraduationResults.stream()
 			.allMatch(DetailGraduationResult::isCompleted);
@@ -64,11 +69,10 @@ public class GraduationResult {
 	}
 
 	private void addUpTotalCredit(int originTotalCredit) {
-		int combinedScore = detailGraduationResults.stream()
-			.mapToInt(DetailGraduationResult::getTotalCredit)
-			.sum()
-			+ normalCultureGraduationResult.getTotalCredit()
-			+ freeElectiveGraduationResult.getTotalCredit();
+		int combinedScore =
+			detailGraduationResults.stream().mapToInt(DetailGraduationResult::getTotalCredit).sum()
+				+ normalCultureGraduationResult.getTotalCredit()
+				+ freeElectiveGraduationResult.getTotalCredit();
 		if (originTotalCredit < combinedScore) {
 			this.totalCredit = originTotalCredit;
 			return;
@@ -76,32 +80,53 @@ public class GraduationResult {
 		this.totalCredit = combinedScore;
 	}
 
-	private void addUpTakenCredit() {
+	private void addUpTakenCredit(User user) {
 		this.takenCredit = detailGraduationResults.stream()
-			.mapToDouble(DetailGraduationResult::getTakenCredit)
-			.sum()
-			+ normalCultureGraduationResult.getTakenCredit()
-			+ freeElectiveGraduationResult.getTakenCredit();
+			.filter(result ->
+				result.getGraduationCategory() != GraduationCategory.TRANSFER_CHRISTIAN &&
+					result.getGraduationCategory() != GraduationCategory.FREE_ELECTIVE
+			)
+			.mapToDouble(DetailGraduationResult::getTakenCredit
+			)
+			.sum();
+
+		double freeElectiveCredits = freeElectiveGraduationResult.getTakenCredit();
+		double normalCultureCredits = normalCultureGraduationResult.getTakenCredit();
+
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			this.takenCredit += chapelResult.getTakenChapelCredit();
+		}
+		this.takenCredit += freeElectiveCredits + normalCultureCredits;
 	}
 
-
-	private void handleLeftTakenNormaCulture(TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
+	private void handleLeftTakenNormaCulture(
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
+	) {
+		int acknowledgedCredit = 0;
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			acknowledgedCredit = user.getTransferCredit().getNormalCulture();
+		}
 		this.normalCultureGraduationResult = NormalCultureGraduationResult.create(
-			graduationRequirement.getNormalCultureCredit(), takenLectureInventory,
-			detailGraduationResults);
+			graduationRequirement.getNormalCultureCredit(),
+			acknowledgedCredit,
+			takenLectureInventory,
+			detailGraduationResults
+		);
 
 		normalCultureGraduationResult.checkCompleted();
 	}
 
-	private void handleLeftTakenFreeElective(TakenLectureInventory takenLectureInventory,
-		GraduationRequirement graduationRequirement) {
+	private void handleLeftTakenFreeElective(
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
+	) {
 		int leftNormalCultureCredit = normalCultureGraduationResult.getLeftCredit();
 		this.freeElectiveGraduationResult = FreeElectiveGraduationResult.create(
-			graduationRequirement.getFreeElectiveCredit(), takenLectureInventory,
+			graduationRequirement.getFreeElectiveCredit(),
+			takenLectureInventory,
 			detailGraduationResults,
-			leftNormalCultureCredit);
-
+			leftNormalCultureCredit,
+			user
+		);
 		freeElectiveGraduationResult.checkCompleted();
 	}
 }

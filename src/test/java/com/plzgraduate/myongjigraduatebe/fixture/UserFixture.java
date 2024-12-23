@@ -85,6 +85,11 @@ public class UserFixture {
 			null,
 			StudentCategory.NORMAL);
 	}
+	public static User 경제학과_20학번_편입() {
+		return createUser("mj1003", "1234", EnglishLevel.FREE, "최편입", "60191666", 19, "경제학과",
+				null,
+				StudentCategory.NORMAL);
+	}
 
 	public static User 응용소프트웨어학과_17학번() {
 		return createUser("mj22", "1234", EnglishLevel.ENG34, "김응용", "60171022", 17, "응용소프트웨어전공",

@@ -35,45 +35,72 @@ public enum DefaultGraduationRequirementType {
 	private final int startEntryYear;
 	private final int endEntryYear;
 
-	public static DefaultGraduationRequirementType determineGraduationRequirement(College college,
-		User user) {
+	public static DefaultGraduationRequirementType determineGraduationRequirement(
+			College college,
+			User user
+	) {
 		return Arrays.stream(DefaultGraduationRequirementType.values())
-			.filter(gr -> gr.getCollageName()
-				.equals(college.getName()))
-			.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear()
-				&& gr.getEndEntryYear() >= user.getEntryYear())
-			.findFirst()
-			.orElseThrow(() -> new NoSuchElementException("일치하는 졸업 요건이 존재하지 않습니다."));
+				.filter(gr -> gr.getCollageName().equals(college.getName()))
+				.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear()
+						&& gr.getEndEntryYear() >= user.getEntryYear())
+				.findFirst()
+				.orElseThrow(() -> new NoSuchElementException("일치하는 졸업 요건이 존재하지 않습니다."));
 	}
 
 	public GraduationRequirement convertToProfitGraduationRequirement(User user) {
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			return createTransferGraduationRequirement(user);
+		}
+		return createDefaultGraduationRequirement(user);
+	}
+
+	private GraduationRequirement createDefaultGraduationRequirement(User user) {
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
-			.totalCredit(this.totalCredit)
-			.primaryMajorCredit(this.majorLectureCredit)
-			.dualMajorCredit(0)
-			.subMajorCredit(0)
-			.primaryBasicAcademicalCultureCredit(this.basicAcademicalLectureCredit)
-			.dualBasicAcademicalCultureCredit(0)
-			.commonCultureCredit(this.commonCultureCredit)
-			.coreCultureCredit(this.coreCultureCredit)
-			.normalCultureCredit(this.normalLectureCredit)
-			.freeElectiveCredit(this.freeElectiveLectureCredit)
-			.build();
+				.totalCredit(this.totalCredit)
+				.primaryMajorCredit(this.majorLectureCredit)
+				.dualMajorCredit(0)
+				.subMajorCredit(0)
+				.primaryBasicAcademicalCultureCredit(this.basicAcademicalLectureCredit)
+				.dualBasicAcademicalCultureCredit(0)
+				.commonCultureCredit(this.commonCultureCredit)
+				.coreCultureCredit(this.coreCultureCredit)
+				.normalCultureCredit(this.normalLectureCredit)
+				.freeElectiveCredit(this.freeElectiveLectureCredit)
+				.build();
 
 		checkIsEnglishFreeUserAndTransferCredit(user, graduationRequirement);
 		checkIsMultiMajorUserAndTransferCredit(user, graduationRequirement);
+
 		return graduationRequirement;
 	}
 
-	private void checkIsEnglishFreeUserAndTransferCredit(User user,
-		GraduationRequirement graduationRequirement) {
+	private GraduationRequirement createTransferGraduationRequirement(User user) {
+		College userCollege = College.findBelongingCollege(user.getPrimaryMajor());
+		TransferGraduationRequirementType transferRequirement =
+				TransferGraduationRequirementType.findByCollegeName(userCollege.getName());
+
+		return GraduationRequirement.builder()
+				.totalCredit(this.totalCredit)
+				.primaryMajorCredit(this.majorLectureCredit)
+				.normalCultureCredit(transferRequirement.getCombinedCultureCredit())
+				.christianCredit(transferRequirement.getChristianCredit())
+				.freeElectiveCredit(this.freeElectiveLectureCredit)
+				.build();
+	}
+
+	private void checkIsEnglishFreeUserAndTransferCredit(
+			User user,
+			GraduationRequirement graduationRequirement
+	) {
 		if (user.getEnglishLevel() == EnglishLevel.FREE) {
 			graduationRequirement.transferEnglishCreditCommonToNormal();
 		}
 	}
 
-	private void checkIsMultiMajorUserAndTransferCredit(User user,
-		GraduationRequirement graduationRequirement) {
+	private void checkIsMultiMajorUserAndTransferCredit(
+			User user,
+			GraduationRequirement graduationRequirement
+	) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			graduationRequirement.modifyCreditForDualMajor(user);
 		}

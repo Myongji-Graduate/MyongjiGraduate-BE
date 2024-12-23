@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistenc
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
@@ -22,7 +24,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void 사용자_저장() {
 		//given
-		User user = createUser("mju1001", "1q2w3e4r!", "60181666");
+		User user = createUser();
 		//when
 		userPersistenceAdapter.saveUser(user);
 		//then
@@ -34,7 +36,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	void 아아디_사용자_조회() {
 		//given
 		String authId = "mju1001";
-		UserJpaEntity userEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
+		UserJpaEntity userEntity = createUserEntity(authId, "60181666");
 		userRepository.save(userEntity);
 		//when
 		Optional<User> user = userPersistenceAdapter.findUserByAuthId(authId);
@@ -50,7 +52,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	void findUserByStudentNumber() {
 		//given
 		String studentNumber = "60181666";
-		UserJpaEntity userJpaEntity = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
+		UserJpaEntity userJpaEntity = createUserEntity("mju1001", studentNumber);
 		userRepository.save(userJpaEntity);
 
 		//when
@@ -67,7 +69,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	void 중복_아이디_확인() {
 		//given
 		String authId = "mju1001";
-		UserJpaEntity user = createUserEntity(authId, "1q2w3e4r!", "60181666");
+		UserJpaEntity user = createUserEntity(authId, "60181666");
 		userRepository.save(user);
 		//when
 		boolean check = userPersistenceAdapter.checkDuplicateAuthId(authId);
@@ -81,7 +83,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	void 중복_학번_확인() {
 		//given
 		String studentNumber = "60181666";
-		UserJpaEntity user = createUserEntity("mju1001", "1q2w3e4r!", studentNumber);
+		UserJpaEntity user = createUserEntity("mju1001", studentNumber);
 		userRepository.save(user);
 		//when
 		boolean check = userPersistenceAdapter.checkDuplicateStudentNumber(studentNumber);
@@ -95,7 +97,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 	void deleteUser() {
 		//given
 		String authId = "mju1000";
-		UserJpaEntity userJpaEntity = createUserEntity(authId, "1q2w3e4r!", "60181666");
+		UserJpaEntity userJpaEntity = createUserEntity(authId, "60181666");
 		UserJpaEntity savedUserJpaEntity = userRepository.save(userJpaEntity);
 		User user = User.builder()
 			.id(savedUserJpaEntity.getId())
@@ -109,21 +111,27 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 		assertThat(foundUser.isPresent()).isFalse();
 	}
 
-	private User createUser(String authId, String password, String studentNumber) {
+	private User createUser() {
 		return User
-			.builder()
-			.authId(authId)
-			.password(password)
-			.studentNumber(studentNumber)
-			.build();
+				.builder()
+				.authId("mju1001")
+				.password("1q2w3e4r!")
+				.studentNumber("60181666")
+				.transferCredit(new TransferCredit(0, 0, 0, 0))
+				.studentCategory(StudentCategory.NORMAL)
+				.build();
 	}
 
-	private UserJpaEntity createUserEntity(String authId, String password, String studentNumber) {
+
+	private UserJpaEntity createUserEntity(String authId, String studentNumber) {
 		return UserJpaEntity
-			.builder()
-			.authId(authId)
-			.password(password)
-			.studentNumber(studentNumber)
-			.build();
+				.builder()
+				.authId(authId)
+				.password("1q2w3e4r!")
+				.studentNumber(studentNumber)
+				.transferCredit("0/0/0/0")
+				.studentCategory(StudentCategory.NORMAL)
+				.build();
 	}
+
 }

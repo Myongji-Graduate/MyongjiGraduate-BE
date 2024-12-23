@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,9 +25,11 @@ public class DetailCategoryResult {
 	private int freeElectiveLeftCredit;
 
 	@Builder
-	private DetailCategoryResult(String detailCategoryName, boolean isCompleted,
+	private DetailCategoryResult(
+		String detailCategoryName, boolean isCompleted,
 		boolean isSatisfiedMandatory,
-		int totalCredits, int takenCredits, int normalLeftCredit, int freeElectiveLeftCredit) {
+		int totalCredits, int takenCredits, int normalLeftCredit, int freeElectiveLeftCredit
+	) {
 		this.detailCategoryName = detailCategoryName;
 		this.isCompleted = isCompleted;
 		this.isSatisfiedMandatory = isSatisfiedMandatory;
@@ -36,9 +39,11 @@ public class DetailCategoryResult {
 		this.freeElectiveLeftCredit = freeElectiveLeftCredit;
 	}
 
-	public static DetailCategoryResult create(String detailCategoryName,
+	public static DetailCategoryResult create(
+		String detailCategoryName,
 		boolean isSatisfiedMandatory,
-		int totalCredits) {
+		int totalCredits
+	) {
 		return DetailCategoryResult.builder()
 			.detailCategoryName(detailCategoryName)
 			.isCompleted(false)
@@ -48,6 +53,21 @@ public class DetailCategoryResult {
 			.normalLeftCredit(0)
 			.freeElectiveLeftCredit(0)
 			.build();
+	}
+
+	@Override
+	public String toString() {
+		return "DetailCategoryResult{" +
+			"isSatisfiedMandatory=" + isSatisfiedMandatory +
+			", totalCredits=" + totalCredits +
+			", takenLectures=" + takenLectures +
+			", haveToLectures=" + haveToLectures +
+			", detailCategoryName='" + detailCategoryName + '\'' +
+			", isCompleted=" + isCompleted +
+			", takenCredits=" + takenCredits +
+			", normalLeftCredit=" + normalLeftCredit +
+			", freeElectiveLeftCredit=" + freeElectiveLeftCredit +
+			'}';
 	}
 
 	public void assignDetailCategoryName(String detailCategoryName) {

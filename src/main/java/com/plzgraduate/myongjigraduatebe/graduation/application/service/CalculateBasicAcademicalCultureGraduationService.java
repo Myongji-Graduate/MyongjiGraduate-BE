@@ -40,9 +40,11 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 	}
 
 	@Override
-	public DetailGraduationResult calculateSingleDetailGraduation(User user,
+	public DetailGraduationResult calculateSingleDetailGraduation(
+		User user,
 		GraduationCategory graduationCategory,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement
+	) {
 		MajorType majorType = MajorType.from(graduationCategory);
 		String userMajor = user.getMajorByMajorType(majorType);
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures =
@@ -51,29 +53,39 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 			determineBasicAcademicalCultureGraduationManager(userMajor);
 		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
-			graduationRequirement.getBasicCreditByMajorType(majorType));
+			graduationRequirement.getBasicCreditByMajorType(majorType)
+		);
 		detailGraduationResult.assignGraduationCategory(graduationCategory);
 		return detailGraduationResult;
 	}
 
-	public List<DetailGraduationResult> calculateAllDetailGraduation(User user,
-		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement) {
+	public List<DetailGraduationResult> calculateAllDetailGraduation(
+		User user,
+		TakenLectureInventory takenLectureInventory,
+		GraduationRequirement graduationRequirement
+	) {
 		if (user.getStudentCategory() == StudentCategory.DUAL_MAJOR) {
 			TakenLectureInventory copiedTakenLectureForPrimaryBasicAcademicalCulture = takenLectureInventory.copy();
 			TakenLectureInventory copiedTakenLectureForDualBasicAcademicalCulture = takenLectureInventory.copy();
 			DetailGraduationResult primaryBasicAcademicalCultureDetailGraduationResult = calculateSingleDetailGraduation(
 				user, PRIMARY_BASIC_ACADEMICAL_CULTURE,
 				copiedTakenLectureForPrimaryBasicAcademicalCulture,
-				graduationRequirement);
+				graduationRequirement
+			);
 			DetailGraduationResult dualBasicAcademicalCultureDetailGraduationResult = calculateSingleDetailGraduation(
 				user, DUAL_BASIC_ACADEMICAL_CULTURE,
 				copiedTakenLectureForDualBasicAcademicalCulture,
-				graduationRequirement);
-			syncOriginalTakenLectureInventory(takenLectureInventory,
+				graduationRequirement
+			);
+			syncOriginalTakenLectureInventory(
+				takenLectureInventory,
 				primaryBasicAcademicalCultureDetailGraduationResult,
-				dualBasicAcademicalCultureDetailGraduationResult);
-			return List.of(primaryBasicAcademicalCultureDetailGraduationResult,
-				dualBasicAcademicalCultureDetailGraduationResult);
+				dualBasicAcademicalCultureDetailGraduationResult
+			);
+			return List.of(
+				primaryBasicAcademicalCultureDetailGraduationResult,
+				dualBasicAcademicalCultureDetailGraduationResult
+			);
 		}
 		DetailGraduationResult primaryBasicAcademicalCultureGraduationResult = calculateSingleDetailGraduation(
 			user, PRIMARY_BASIC_ACADEMICAL_CULTURE, takenLectureInventory, graduationRequirement);
@@ -81,7 +93,8 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 	}
 
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
-		String userMajor) {
+		String userMajor
+	) {
 		return basicAcademicalGraduationManagers.stream()
 			.filter(basicAcademicalManager -> basicAcademicalManager.isSatisfied(userMajor))
 			.findFirst()
@@ -91,7 +104,8 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 	private void syncOriginalTakenLectureInventory(
 		TakenLectureInventory originalTakenLectureInventory,
 		DetailGraduationResult primaryBasicAcademicalCultureDetailGraduationResult,
-		DetailGraduationResult dualBasicAcademicalCultureDetailGraduationResult) {
+		DetailGraduationResult dualBasicAcademicalCultureDetailGraduationResult
+	) {
 		List<Lecture> primaryBasicAcademicalCultureTakenLectures =
 			primaryBasicAcademicalCultureDetailGraduationResult.getDetailCategory()
 				.get(0)

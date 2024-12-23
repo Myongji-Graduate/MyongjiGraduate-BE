@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.domain.model;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.DUAL;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import java.time.Instant;
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class User {
 	private final int entryYear;
 	private final Instant createdAt;
 	private final Instant updatedAt;
+	private TransferCredit transferCredit;
 	private String password;
 	private String name;
 	private String primaryMajor;
@@ -32,12 +34,26 @@ public class User {
 	private boolean graduated;
 
 	@Builder
-	private User(Long id, String authId, String password, EnglishLevel englishLevel, String name,
-		String studentNumber,
-		int entryYear, String primaryMajor, String subMajor, String dualMajor, String associatedMajor,
-		StudentCategory studentCategory,
-		int totalCredit, double takenCredit, boolean graduated, Instant createdAt,
-		Instant updatedAt) {
+	private User(
+            Long id,
+            String authId,
+            String password,
+            EnglishLevel englishLevel,
+            String name,
+            String studentNumber,
+            int entryYear,
+            String primaryMajor,
+            String subMajor,
+            String dualMajor,
+            String associatedMajor,
+			TransferCredit transferCredit,
+			StudentCategory studentCategory,
+            int totalCredit,
+            double takenCredit,
+            boolean graduated,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
 		this.id = id;
 		this.authId = authId;
 		this.password = password;
@@ -50,24 +66,51 @@ public class User {
 		this.dualMajor = dualMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
+		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+    }
+
+	public static User create(
+		String authId,
+		String password,
+		EnglishLevel englishLevel,
+		String studentNumber
+	) {
+		return User.builder()
+			.authId(authId).password(password).englishLevel(englishLevel)
+			.studentNumber(studentNumber).entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.totalCredit(0).takenCredit(0).graduated(false).build();
 	}
 
-	public static User create(String authId, String password, EnglishLevel englishLevel,
-		String studentNumber) {
+	public static User createAnonymous(
+		EnglishLevel englishLevel,
+		String name,
+		String studentNumber,
+		String primaryMajor,
+		String subMajor,
+		String dualMajor,
+		String associatedMajor,
+		StudentCategory studentCategory,
+        TransferCredit transferCredit) {
 		return User.builder()
-			.authId(authId)
-			.password(password)
+			.authId("anonymous")
+			.name(name)
 			.englishLevel(englishLevel)
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.primaryMajor(primaryMajor)
+			.subMajor(subMajor)
+			.dualMajor(dualMajor)
+			.associatedMajor(associatedMajor)
+			.studentCategory(studentCategory)
 			.totalCredit(0)
 			.takenCredit(0)
 			.graduated(false)
+			.transferCredit(transferCredit)
 			.build();
 	}
 
@@ -75,9 +118,35 @@ public class User {
 		return Integer.parseInt(studentNumber.substring(2, 4));
 	}
 
-	public void updateStudentInformation(String name, String major, String dualMajor,
+	@Override
+	public String toString() {
+		return "User{" +
+			"id=" + id +
+			", authId='" + authId + '\'' +
+			", englishLevel=" + englishLevel +
+			", studentNumber='" + studentNumber + '\'' +
+			", entryYear=" + entryYear +
+			", createdAt=" + createdAt +
+			", updatedAt=" + updatedAt +
+			", password='" + password + '\'' +
+			", name='" + name + '\'' +
+			", primaryMajor='" + primaryMajor + '\'' +
+			", subMajor='" + subMajor + '\'' +
+			", dualMajor='" + dualMajor + '\'' +
+			", associatedMajor='" + associatedMajor + '\'' +
+			", transferCredit=" + transferCredit +
+			", studentCategory=" + studentCategory +
+			", totalCredit=" + totalCredit +
+			", takenCredit=" + takenCredit +
+			", graduated=" + graduated +
+			'}';
+	}
+
+	public void updateStudentInformation(
+		String name, String major, String dualMajor,
 		String subMajor, String associatedMajor,
-		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate) {
+		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate
+	) {
 		this.name = name;
 		this.primaryMajor = major;
 		this.dualMajor = dualMajor;
@@ -89,6 +158,11 @@ public class User {
 		this.graduated = graduate;
 	}
 
+	public void updateTransferCredit(TransferCredit transferCredit) {
+		if (transferCredit != null) {
+			this.transferCredit = transferCredit;
+		}
+	}
 	public boolean checkBeforeEntryYear(int entryYear) {
 		return this.entryYear < entryYear;
 	}
@@ -135,12 +209,25 @@ public class User {
 			return false;
 		}
 		User user = (User) o;
-		return Objects.equals(authId, user.authId) && Objects.equals(studentNumber,
-			user.studentNumber);
+		return Objects.equals(authId, user.authId) && Objects.equals(
+			studentNumber,
+			user.studentNumber
+		);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(authId, studentNumber);
 	}
+
+	@VisibleForTesting
+	public void setStudentCategory(StudentCategory studentCategory) {
+		this.studentCategory = studentCategory;
+	}
+
+	@VisibleForTesting
+	public void setTransferCredit(TransferCredit transferCredit) {
+		this.transferCredit = transferCredit;
+	}
+
 }

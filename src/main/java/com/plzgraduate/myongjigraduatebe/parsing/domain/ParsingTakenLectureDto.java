@@ -12,7 +12,11 @@ public class ParsingTakenLectureDto {
 	private final Semester semester;
 
 	@Builder
-	private ParsingTakenLectureDto(String lectureCode, int year, Semester semester) {
+	private ParsingTakenLectureDto(
+		String lectureCode,
+		int year,
+		Semester semester
+	) {
 		this.lectureCode = lectureCode;
 		this.year = year;
 		this.semester = semester;
@@ -25,5 +29,4 @@ public class ParsingTakenLectureDto {
 			.semester(semester)
 			.build();
 	}
-
 }
