@@ -44,9 +44,7 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 		int basicAcademicalCredit) {
 
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			return DetailGraduationResult.createNonCategorizedGraduationResult(
-					basicAcademicalCredit, List.of()
-			);
+			return handleTransferStudentGraduation(basicAcademicalCredit);
 		}
 
 		Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
@@ -73,6 +71,12 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 
 		return DetailGraduationResult.createNonCategorizedGraduationResult(basicAcademicalCredit,
 			List.of(detailCategoryResult));
+	}
+
+	private static DetailGraduationResult handleTransferStudentGraduation(int basicAcademicalCredit) {
+		return DetailGraduationResult.createNonCategorizedGraduationResult(
+				basicAcademicalCredit, List.of()
+		);
 	}
 
 	private Set<Lecture> resetBasicAcademicalLectureSet(Set<Lecture> basicAcademicalLectures,

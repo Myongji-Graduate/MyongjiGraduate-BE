@@ -41,16 +41,19 @@ public class ElectiveMajorManager {
 		DetailCategoryResult electiveMajorResult = DetailCategoryResult.create(ELECTIVE_MAJOR_NAME,
 			true, electiveMajorTotalCredit
 		);
-		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			int transferCredit = user.getTransferCredit().getMajorLecture();
-			electiveMajorResult.addTakenCredits(transferCredit);
-		}
+		processTransferStudent(user, electiveMajorResult);
+
 		excludePracticeLectureForHaveToLecture(electiveLectures);
 		electiveMajorResult.calculate(takenElective, electiveLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		return electiveMajorResult;
 	}
-
+	private void processTransferStudent(User user, DetailCategoryResult electiveMajorResult) {
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			int transferCredit = user.getTransferCredit().getMajorLecture();
+			electiveMajorResult.addTakenCredits(transferCredit);
+		}
+	}
 	private void excludePracticeLectureForHaveToLecture(Set<Lecture> electiveLectures) {
 		electiveLectures.removeIf(lecture -> PRACTICE_LECTURE_CODES.contains(lecture.getId()));
 	}

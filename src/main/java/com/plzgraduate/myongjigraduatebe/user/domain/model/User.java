@@ -159,7 +159,7 @@ public class User {
 		this.graduated = graduate;
 	}
 
-	public void updateTransferCredit(TransferCredit transferCredit) {
+	private void updateTransferCredit(TransferCredit transferCredit) {
 		if (transferCredit != null) {
 			this.transferCredit = transferCredit;
 		}
