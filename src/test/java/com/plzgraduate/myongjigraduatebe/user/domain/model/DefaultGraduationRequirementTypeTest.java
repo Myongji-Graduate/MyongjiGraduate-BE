@@ -111,8 +111,8 @@ class DefaultGraduationRequirementTypeTest {
 
 		assertThat(graduationRequirement.getTotalCredit()).isEqualTo(defaultGraduationRequirementType.getTotalCredit());
 		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
-		assertThat(51).isEqualTo(transferRequirement.getCombinedCultureCredit());
-		assertThat(2).isEqualTo(transferRequirement.getChristianCredit());
+		assertThat(transferRequirement.getCombinedCultureCredit()).isEqualTo(51);
+		assertThat(transferRequirement.getChristianCredit()).isEqualTo(2);
 		assertThat(graduationRequirement.getFreeElectiveCredit()).isEqualTo(defaultGraduationRequirementType.getFreeElectiveLectureCredit());
 	}
 }
