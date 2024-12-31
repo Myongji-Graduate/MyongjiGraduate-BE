@@ -45,11 +45,8 @@ public class MajorGraduationManager {
 
 		int electiveMajorTotalCredit =
 			graduationResultTotalCredit - mandantoryDetailCategoryResult.getTotalCredits();
-		if(user.getStudentCategory() == StudentCategory.TRANSFER){
-			electiveMajorTotalCredit+=user.getTransferCredit().getMajorLecture();
-		}
 		DetailCategoryResult electiveDetailCategoryResult = electiveMajorManager.createDetailCategoryResult(
-			takenLectureInventory, electiveLectures, electiveMajorTotalCredit);
+			takenLectureInventory, electiveLectures, electiveMajorTotalCredit, user);
 
 		return DetailGraduationResult.createNonCategorizedGraduationResult(
 			graduationResultTotalCredit,

@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +27,7 @@ public class ElectiveMajorManager {
 
 	public DetailCategoryResult createDetailCategoryResult(
 		TakenLectureInventory takenLectureInventory,
-		Set<Lecture> electiveLectures, int electiveMajorTotalCredit
+		Set<Lecture> electiveLectures, int electiveMajorTotalCredit, User user
 	) {
 		Set<Lecture> takenElective = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
@@ -39,6 +41,10 @@ public class ElectiveMajorManager {
 		DetailCategoryResult electiveMajorResult = DetailCategoryResult.create(ELECTIVE_MAJOR_NAME,
 			true, electiveMajorTotalCredit
 		);
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			int transferCredit = user.getTransferCredit().getMajorLecture();
+			electiveMajorResult.addTakenCredits(transferCredit);
+		}
 		excludePracticeLectureForHaveToLecture(electiveLectures);
 		electiveMajorResult.calculate(takenElective, electiveLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
