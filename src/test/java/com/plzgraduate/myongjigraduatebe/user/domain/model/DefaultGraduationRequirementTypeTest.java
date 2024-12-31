@@ -8,6 +8,8 @@ import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import java.util.NoSuchElementException;
+
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.TransferGraduationRequirementType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -90,5 +92,27 @@ class DefaultGraduationRequirementTypeTest {
 		// then
 		assertThat(graduationRequirement.getFreeElectiveCredit()).isZero();
 
+	}
+	@DisplayName("편입학생의 졸업요건을 결정한다.")
+	@Test()
+	void convertToProfitGraduationRequirementWithTransferStudent() {
+		//given
+		User transferStudent = UserFixture.경제학과_20학번_편입();
+		College socialScience = College.SOCIAL_SCIENCE;
+		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
+				socialScience, transferStudent);
+
+		//when
+		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(
+				transferStudent);
+
+		// then
+		TransferGraduationRequirementType transferRequirement = TransferGraduationRequirementType.findByCollegeName(socialScience.getName());
+
+		assertThat(graduationRequirement.getTotalCredit()).isEqualTo(defaultGraduationRequirementType.getTotalCredit());
+		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
+		assertThat(51).isEqualTo(transferRequirement.getCombinedCultureCredit());
+		assertThat(2).isEqualTo(transferRequirement.getChristianCredit());
+		assertThat(graduationRequirement.getFreeElectiveCredit()).isEqualTo(defaultGraduationRequirementType.getFreeElectiveLectureCredit());
 	}
 }

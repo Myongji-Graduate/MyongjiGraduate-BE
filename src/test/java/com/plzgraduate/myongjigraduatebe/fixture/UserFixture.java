@@ -86,7 +86,7 @@ public class UserFixture {
 			StudentCategory.NORMAL);
 	}
 	public static User 경제학과_20학번_편입() {
-		return createUser("mj1003", "1234", EnglishLevel.FREE, "최편입", "60191666", 19, "경제학과",
+		return createUser("mj1003", "1234", EnglishLevel.FREE, "최편입", "60191666", 20, "경제학과",
 				null,
 				StudentCategory.NORMAL);
 	}
