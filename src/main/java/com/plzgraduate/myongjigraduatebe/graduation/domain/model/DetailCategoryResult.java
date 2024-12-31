@@ -123,4 +123,8 @@ public class DetailCategoryResult {
 		isCompleted = totalCredits <= takenCredits && isSatisfiedMandatory;
 		return isCompleted;
 	}
+	public void addTakenCredits(int credits) {
+		this.takenCredits += credits;
+	}
+
 }

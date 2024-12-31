@@ -145,7 +145,7 @@ public class User {
 	public void updateStudentInformation(
 		String name, String major, String dualMajor,
 		String subMajor, String associatedMajor,
-		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate
+		StudentCategory studentCategory, TransferCredit transferCredit, int totalCredit, double takenCredit, boolean graduate
 	) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -153,12 +153,13 @@ public class User {
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
+		updateTransferCredit(transferCredit);
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduate;
 	}
 
-	public void updateTransferCredit(TransferCredit transferCredit) {
+	private void updateTransferCredit(TransferCredit transferCredit) {
 		if (transferCredit != null) {
 			this.transferCredit = transferCredit;
 		}
