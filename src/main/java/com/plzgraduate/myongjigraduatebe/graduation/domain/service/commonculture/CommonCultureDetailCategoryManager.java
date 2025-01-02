@@ -28,7 +28,7 @@ class CommonCultureDetailCategoryManager {
 		"KMA00100",
 		"KMA00101"
 	); // 성경개론, 성서의이해, 성서와인간이해
-	private static final String BASIC_ENGLISH_LECTURE_CODE = "KMP02126";
+	private static final String BASIC_ENGLISH_LECTURE_CODE = "KMP02126"; // 기초영어
 	private static final List<String> ENGLISH_12_MANDATORY_LECTURE_CODE_LIST = List.of(
 		"KMA02106",
 		"KMA02107",
