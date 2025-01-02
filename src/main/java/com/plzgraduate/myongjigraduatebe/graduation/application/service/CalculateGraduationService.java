@@ -2,7 +2,13 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.*;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -31,7 +37,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 
 	@Override
-	public  GraduationResult calculateGraduation(User user) {
+	public GraduationResult calculateGraduation(User user) {
 		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
 			user.getId()
@@ -80,8 +86,11 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		);
 	}
 
-	private double calculateChristianTakenCredits(User user, TakenLectureInventory takenLectureInventory) {
-		if (!user.getAuthId().equals("anonymous")) {
+	private double calculateChristianTakenCredits(
+		User user,
+		TakenLectureInventory takenLectureInventory
+	) {
+		if (!user.isAnonymous()) {
 			takenLectureInventory = findTakenLectureUseCase.findTakenLectures(user.getId());
 		}
 		return takenLectureInventory.calculateChristianCredits();
@@ -109,7 +118,11 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>();
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			detailGraduationResults.add(
-				generateTransferChristianDetailGraduationResult(user, graduationRequirement, takenLectureInventory)
+				generateTransferChristianDetailGraduationResult(
+					user,
+					graduationRequirement,
+					takenLectureInventory
+				)
 			);
 		} else {
 			detailGraduationResults.addAll(List.of(
@@ -188,7 +201,11 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			chapelResult,
 			detailGraduationResults
 		);
-		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement, user);
+		graduationResult.handleLeftTakenLectures(
+			takenLectureInventory,
+			graduationRequirement,
+			user
+		);
 		graduationResult.checkGraduated(graduationRequirement, user);
 		return graduationResult;
 	}

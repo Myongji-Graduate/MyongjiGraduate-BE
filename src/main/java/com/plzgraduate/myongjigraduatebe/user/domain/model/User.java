@@ -213,6 +213,10 @@ public class User {
 		return this.authId.equals(authId);
 	}
 
+	public boolean isAnonymous() {
+		return this.authId.equals("anonymous");
+	}
+
 	public String getMajorByMajorType(MajorType majorType) {
 		if (majorType == PRIMARY) {
 			return primaryMajor;
