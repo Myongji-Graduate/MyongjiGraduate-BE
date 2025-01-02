@@ -164,6 +164,7 @@ public class User {
 		String subMajor,
 		String associatedMajor,
 		StudentCategory studentCategory,
+		TransferCredit transferCredit,
 		int totalCredit,
 		double takenCredit,
 		boolean graduate

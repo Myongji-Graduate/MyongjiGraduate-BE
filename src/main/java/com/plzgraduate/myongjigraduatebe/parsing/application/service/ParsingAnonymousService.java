@@ -13,6 +13,7 @@ import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.Set;
@@ -24,14 +25,18 @@ import lombok.RequiredArgsConstructor;
 public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 
 	@Override
-	public ParsingAnonymousDto parseAnonymous(EnglishLevel englishLevel, String parsingText) {
+	public ParsingAnonymousDto parseAnonymous(
+		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
+		String parsingText
+	) {
 		validateParsingText(parsingText);
 		ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
 		checkUnSupportedUser(parsingInformation);
 
-
 		User anonymous = User.createAnonymous(
 			englishLevel,
+			koreanLevel,
 			parsingInformation.getStudentName(),
 			parsingInformation.getStudentNumber(),
 			parsingInformation.getMajor(),
