@@ -24,11 +24,11 @@ class UpdateStudentInformationService implements UpdateStudentInformationUseCase
 			updateStudentInformationCommand.getSubMajor(),
 			updateStudentInformationCommand.getAssociatedMajor(),
 			updateStudentInformationCommand.getStudentCategory(),
+			updateStudentInformationCommand.getTransferCredit(),
 			updateStudentInformationCommand.getTotalCredit(),
 			updateStudentInformationCommand.getTakenCredit(),
 			updateStudentInformationCommand.isGraduate()
 		);
-		user.updateTransferCredit(updateStudentInformationCommand.getTransferCredit());
 		updateUserPort.updateUser(user);
 		return user;
 	}

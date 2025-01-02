@@ -24,12 +24,12 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
 	private static final String INTERNATIONAL_TRADE = "국제통상학과";
 	private static final Set<Lecture> businessBefore20 = Set.of(
-		Lecture.of("KMD02114", "미시경제학원론", 3, 0, null),
-		Lecture.of("KMD02107", "경상통계학", 3, 0, null)
+			Lecture.of("KMD02114", "미시경제학원론", 3, 0, null),
+			Lecture.of("KMD02107", "경상통계학", 3, 0, null)
 	);
 	private static final Set<Lecture> internationBefore20 = Set.of(
-		Lecture.of("KMD02114", "미시경제학원론", 3, 0, null),
-		Lecture.of("KMD02115", "거시경제학원론", 3, 0, null)
+			Lecture.of("KMD02114", "미시경제학원론", 3, 0, null),
+			Lecture.of("KMD02115", "거시경제학원론", 3, 0, null)
 	);
 
 	@Override
@@ -39,9 +39,9 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(User user,
-		TakenLectureInventory takenLectureInventory,
-		Set<BasicAcademicalCultureLecture> graduationLectures,
-		int basicAcademicalCredit) {
+															   TakenLectureInventory takenLectureInventory,
+															   Set<BasicAcademicalCultureLecture> graduationLectures,
+															   int basicAcademicalCredit) {
 
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			return DetailGraduationResult.createNonCategorizedGraduationResult(
@@ -54,29 +54,29 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 		Set<Lecture> finalBasicAcademicalLectures = resetBasicAcademicalLectureSet(
-			basicAcademicalLectures,
-			user);
+				basicAcademicalLectures,
+				user);
 
 		takenLectureInventory.getTakenLectures()
-			.stream()
-			.filter(
-				takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
-			.forEach(takenLecture -> {
-				finishedTakenLecture.add(takenLecture);
-				taken.add(takenLecture.getLecture());
-			});
+				.stream()
+				.filter(
+						takenLecture -> finalBasicAcademicalLectures.contains(takenLecture.getLecture()))
+				.forEach(takenLecture -> {
+					finishedTakenLecture.add(takenLecture);
+					taken.add(takenLecture.getLecture());
+				});
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
-			"학문기초교양", true, basicAcademicalCredit);
+				"학문기초교양", true, basicAcademicalCredit);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 
 		return DetailGraduationResult.createNonCategorizedGraduationResult(basicAcademicalCredit,
-			List.of(detailCategoryResult));
+				List.of(detailCategoryResult));
 	}
 
 	private Set<Lecture> resetBasicAcademicalLectureSet(Set<Lecture> basicAcademicalLectures,
-		User user) {
+														User user) {
 		if (!user.checkBeforeEntryYear(TWENTY)) {
 			return basicAcademicalLectures;
 		}

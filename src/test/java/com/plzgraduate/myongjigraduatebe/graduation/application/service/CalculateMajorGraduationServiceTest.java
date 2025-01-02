@@ -337,5 +337,57 @@ class CalculateMajorGraduationServiceTest {
 				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 				.contains(PRIMARY_MANDATORY_MAJOR, false, 6, 3.0);
 	}
+	@DisplayName("편입생 주전공선택 졸업결과를 계산한다.")
+	@Test
+	void calculateSingleDetailGraduationForTransferPrimaryElective() {
+		// given
+		User user = User.builder()
+				.id(1L)
+				.primaryMajor("응용소프트웨어전공")
+				.entryYear(19)
+				.studentCategory(StudentCategory.TRANSFER)
+				.transferCredit(TransferCredit.from("0/15/0/0")) // 15 전공 선택 학점
+				.build();
 
+		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
+				Set.of(
+						// 전공 필수
+						MajorLecture.of(Lecture.builder()
+								.id("HEC01211")
+								.credit(3)
+								.build(), "응용소프트웨어전공", 1, 16, 23),
+						// 전공 선택
+						MajorLecture.of(Lecture.builder()
+								.id("HEC01305")
+								.credit(3)
+								.build(), "응용소프트웨어전공", 0, 16, 23)
+				)
+		);
+		given(findMajorPort.findMajor(user.getPrimaryMajor())).willReturn(graduationMajorLectures);
+
+		HashSet<TakenLecture> takenLectures = new HashSet<>(
+				Set.of(
+						TakenLecture.builder()
+								.lecture(Lecture.builder()
+										.id("HEC01305") // 전공 선택
+										.credit(3)
+										.build())
+								.build()
+				)
+		);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
+				.primaryMajorCredit(70) // 전공 학점 총합
+				.build();
+
+		// when
+		DetailGraduationResult detailPrimaryElectiveMajorGraduationResult = calculateMajorGraduationService.calculateSingleDetailGraduation(
+				user, PRIMARY_ELECTIVE_MAJOR, takenLectureInventory, graduationRequirement);
+
+		// then
+		assertThat(detailPrimaryElectiveMajorGraduationResult)
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.contains(PRIMARY_ELECTIVE_MAJOR, 18.0); // 15 (편입 학점) + 3 (수강 학점)
+	}
 }

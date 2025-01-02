@@ -174,12 +174,13 @@ public class User {
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
+		updateTransferCredit(transferCredit);
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduate;
 	}
 
-	public void updateTransferCredit(TransferCredit transferCredit) {
+	private void updateTransferCredit(TransferCredit transferCredit) {
 		if (transferCredit != null) {
 			this.transferCredit = transferCredit;
 		}
