@@ -17,6 +17,7 @@ public class User {
 	private final Long id;
 	private final String authId;
 	private final EnglishLevel englishLevel;
+	private final KoreanLevel koreanLevel;
 	private final String studentNumber;
 	private final int entryYear;
 	private final Instant createdAt;
@@ -35,27 +36,29 @@ public class User {
 
 	@Builder
 	private User(
-            Long id,
-            String authId,
-            String password,
-            EnglishLevel englishLevel,
-            String name,
-            String studentNumber,
-            int entryYear,
-            String primaryMajor,
-            String subMajor,
-            String dualMajor,
-            String associatedMajor,
-			TransferCredit transferCredit,
-			StudentCategory studentCategory,
-            int totalCredit,
-            double takenCredit,
-            boolean graduated,
-            Instant createdAt,
-            Instant updatedAt
-    ) {
+		Long id,
+		String authId,
+		String password,
+		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
+		String name,
+		String studentNumber,
+		int entryYear,
+		String primaryMajor,
+		String subMajor,
+		String dualMajor,
+		String associatedMajor,
+		TransferCredit transferCredit,
+		StudentCategory studentCategory,
+		int totalCredit,
+		double takenCredit,
+		boolean graduated,
+		Instant createdAt,
+		Instant updatedAt
+	) {
 		this.id = id;
 		this.authId = authId;
+		this.koreanLevel = koreanLevel;
 		this.password = password;
 		this.englishLevel = englishLevel;
 		this.name = name;
@@ -72,22 +75,31 @@ public class User {
 		this.graduated = graduated;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-    }
+	}
 
 	public static User create(
 		String authId,
 		String password,
 		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
 		String studentNumber
 	) {
 		return User.builder()
-			.authId(authId).password(password).englishLevel(englishLevel)
-			.studentNumber(studentNumber).entryYear(parseEntryYearInStudentNumber(studentNumber))
-			.totalCredit(0).takenCredit(0).graduated(false).build();
+			.authId(authId)
+			.password(password)
+			.englishLevel(englishLevel)
+			.koreanLevel(koreanLevel)
+			.studentNumber(studentNumber)
+			.entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduated(false)
+			.build();
 	}
 
 	public static User createAnonymous(
 		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
 		String name,
 		String studentNumber,
 		String primaryMajor,
@@ -95,11 +107,13 @@ public class User {
 		String dualMajor,
 		String associatedMajor,
 		StudentCategory studentCategory,
-        TransferCredit transferCredit) {
+		TransferCredit transferCredit
+	) {
 		return User.builder()
 			.authId("anonymous")
 			.name(name)
 			.englishLevel(englishLevel)
+			.koreanLevel(koreanLevel)
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
 			.primaryMajor(primaryMajor)
@@ -124,6 +138,7 @@ public class User {
 			"id=" + id +
 			", authId='" + authId + '\'' +
 			", englishLevel=" + englishLevel +
+			", koreanLevel=" + koreanLevel +
 			", studentNumber='" + studentNumber + '\'' +
 			", entryYear=" + entryYear +
 			", createdAt=" + createdAt +
@@ -143,9 +158,15 @@ public class User {
 	}
 
 	public void updateStudentInformation(
-		String name, String major, String dualMajor,
-		String subMajor, String associatedMajor,
-		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate
+		String name,
+		String major,
+		String dualMajor,
+		String subMajor,
+		String associatedMajor,
+		StudentCategory studentCategory,
+		int totalCredit,
+		double takenCredit,
+		boolean graduate
 	) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -163,6 +184,7 @@ public class User {
 			this.transferCredit = transferCredit;
 		}
 	}
+
 	public boolean checkBeforeEntryYear(int entryYear) {
 		return this.entryYear < entryYear;
 	}
@@ -229,5 +251,4 @@ public class User {
 	public void setTransferCredit(TransferCredit transferCredit) {
 		this.transferCredit = transferCredit;
 	}
-
 }
