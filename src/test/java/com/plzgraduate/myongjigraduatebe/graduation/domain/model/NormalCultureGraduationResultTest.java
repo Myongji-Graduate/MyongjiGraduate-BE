@@ -96,4 +96,52 @@ class NormalCultureGraduationResultTest {
 				.extracting("takenCredit")
 				.isEqualTo(4); // 봉사학점(1학점)은 제외되고, 나머지 일반교양 학점만 포함
 	}
+	@DisplayName("일반교양 학점에 교환학생 인정 학점을 포함하여 결과를 계산한다.")
+	@Test
+	void includeExchangeCreditsInNormalCulture() {
+		// given
+		User user = UserFixture.경영학과_19학번_ENG34_교환학생_일반학점_3();
+
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+				TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
+				TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST)
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		DetailGraduationResult detailGraduationResult = DetailGraduationResult.builder()
+				.graduationCategory(NORMAL_CULTURE)
+				.detailCategory(List.of(
+						DetailCategoryResult.builder()
+								.detailCategoryName(CHRISTIAN_A.getName())
+								.normalLeftCredit(3)
+								.build(),
+						DetailCategoryResult.builder()
+								.detailCategoryName(CAREER.getName())
+								.normalLeftCredit(3)
+								.build()
+				))
+				.build();
+
+		int takenNormalCultureCredit = takenLectureInventory.getCultureLectures()
+				.stream()
+				.mapToInt(takenLecture -> takenLecture.getLecture().getCredit())
+				.sum();
+		int remainCredit = detailGraduationResult.getNormalLeftCredit();
+		int exchangeCredit = user.getExchangeCredit().getNormalCulture();
+
+		int acknowledgedCredit = user.getExchangeCredit().getNormalCulture();
+		// when
+		NormalCultureGraduationResult normalCultureGraduationResult = NormalCultureGraduationResult.create(
+				15,
+				acknowledgedCredit,
+				takenLectureInventory,
+				List.of(detailGraduationResult));
+
+
+		// then
+		assertThat(normalCultureGraduationResult)
+				.extracting("categoryName", "takenCredit")
+				.contains(NORMAL_CULTURE.getName(),
+						takenNormalCultureCredit + remainCredit + exchangeCredit);
+	}
 }
