@@ -38,7 +38,8 @@ public class ParsingInformation {
 			String dualMajor,
 			String associatedMajor,
 			StudentCategory studentCategory,
-			TransferCredit transferCredit, ExchangeCredit exchangeCredit,
+			TransferCredit transferCredit,
+			ExchangeCredit exchangeCredit,
 			List<ParsingTakenLectureDto> takenLectureInformation
 	) {
 		this.studentName = studentName;
@@ -129,7 +130,7 @@ public class ParsingInformation {
 			}
 		}
 
-		studentCategory = StudentCategory.from(categories);
+
 		String fourthLine = fourthLineText.substring("편입생 인정학점 - ".length());
 		transferCredit = TransferCredit.from(Arrays.stream(fourthLine.split(","))
 				.map(s -> s.replaceAll("\\D", ""))
@@ -140,6 +141,7 @@ public class ParsingInformation {
 				.map(s -> s.replaceAll("\\D", ""))
 				.collect(Collectors.joining("/")));
 
+		studentCategory = StudentCategory.from(categories);
 		return ParsingStudentCategoryDto.of(
 				changeMajor, subMajor, dualMajor, associatedMajor, studentCategory, transferCredit, exchangeCredit
 		);

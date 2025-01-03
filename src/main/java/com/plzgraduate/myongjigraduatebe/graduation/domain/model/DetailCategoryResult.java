@@ -125,6 +125,7 @@ public class DetailCategoryResult {
 	}
 	public void addTakenCredits(int credits) {
 		this.takenCredits += credits;
+		checkCompleted();
 	}
 
 }

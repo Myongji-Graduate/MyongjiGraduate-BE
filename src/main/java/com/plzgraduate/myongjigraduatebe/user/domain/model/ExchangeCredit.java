@@ -47,6 +47,12 @@ public class ExchangeCredit {
         return input.matches("^\\d+/\\d+/\\d+/\\d+/\\d+/\\d+/\\d+/\\d+$");
     }
 
+    public boolean hasExchange() {
+        return basicAcademicalCulture != 0 || normalCulture != 0 || major != 0 ||
+                dualBasicAcademicalCulture != 0 || dualMajor != 0 || fusionMajor != 0 ||
+                subMajor != 0 || freeElective != 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
