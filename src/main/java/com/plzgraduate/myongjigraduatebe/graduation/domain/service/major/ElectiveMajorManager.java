@@ -42,12 +42,19 @@ public class ElectiveMajorManager {
 			true, electiveMajorTotalCredit
 		);
 		processTransferStudent(user, electiveMajorResult);
+		processExchangeStudent(user, electiveMajorResult);
 
 		excludePracticeLectureForHaveToLecture(electiveLectures);
 		electiveMajorResult.calculate(takenElective, electiveLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		return electiveMajorResult;
 	}
+
+	private void processExchangeStudent(User user, DetailCategoryResult electiveMajorResult) {
+			int exchangeCredit = user.getExchangeCredit().getMajor();
+			electiveMajorResult.addTakenCredits(exchangeCredit);
+	}
+
 	private void processTransferStudent(User user, DetailCategoryResult electiveMajorResult) {
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			int transferCredit = user.getTransferCredit().getMajorLecture();

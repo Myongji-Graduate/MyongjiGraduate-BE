@@ -104,8 +104,9 @@ public class GraduationResult {
 	) {
 		int acknowledgedCredit = 0;
 		if (isTransferStudent(user)) {
-			acknowledgedCredit = user.getTransferCredit().getNormalCulture();
+			acknowledgedCredit += user.getTransferCredit().getNormalCulture();
 		}
+			acknowledgedCredit += user.getExchangeCredit().getNormalCulture();
 		this.normalCultureGraduationResult = NormalCultureGraduationResult.create(
 			graduationRequirement.getNormalCultureCredit(),
 			acknowledgedCredit,

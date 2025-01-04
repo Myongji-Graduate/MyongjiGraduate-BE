@@ -5,6 +5,7 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.ExchangeCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -71,5 +72,32 @@ class UpdateStudentInformationServiceTest {
 
 		// Assert TransferCredit is updated
 		assertEquals(newTransferCredit, user.getTransferCredit());
+	}
+
+	@DisplayName("User의 ExchangeCredit 정보를 수정한다.")
+	@Test
+	void updateUserExchangeCredit() {
+		// given
+		User user = User.builder()
+				.exchangeCredit(ExchangeCredit.empty())
+				.build();
+
+		ExchangeCredit exchangeCredit = new ExchangeCredit(3,3,3,3,3,3,3,3);
+
+		UpdateStudentInformationCommand command = UpdateStudentInformationCommand.builder()
+				.user(user)
+				.name("정지환")
+				.major("응용소프트웨어학과")
+				.exchangeCredit(exchangeCredit)
+				.build();
+
+		// when
+		updateStudentInformationService.updateUser(command);
+
+		// then
+		then(updateUserPort).should()
+				.updateUser(user);
+
+		assertEquals(exchangeCredit, user.getExchangeCredit());
 	}
 }

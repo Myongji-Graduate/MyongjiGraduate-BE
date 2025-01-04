@@ -22,6 +22,7 @@ public class User {
 	private final Instant createdAt;
 	private final Instant updatedAt;
 	private TransferCredit transferCredit;
+	private ExchangeCredit exchangeCredit;
 	private String password;
 	private String name;
 	private String primaryMajor;
@@ -47,6 +48,7 @@ public class User {
             String dualMajor,
             String associatedMajor,
 			TransferCredit transferCredit,
+			ExchangeCredit exchangeCredit,
 			StudentCategory studentCategory,
             int totalCredit,
             double takenCredit,
@@ -67,6 +69,7 @@ public class User {
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
+		this.exchangeCredit = exchangeCredit != null ? exchangeCredit : ExchangeCredit.empty();
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
@@ -95,7 +98,9 @@ public class User {
 		String dualMajor,
 		String associatedMajor,
 		StudentCategory studentCategory,
-        TransferCredit transferCredit) {
+        TransferCredit transferCredit,
+		ExchangeCredit exchangeCredit) {
+
 		return User.builder()
 			.authId("anonymous")
 			.name(name)
@@ -111,6 +116,7 @@ public class User {
 			.takenCredit(0)
 			.graduated(false)
 			.transferCredit(transferCredit)
+			.exchangeCredit(exchangeCredit)
 			.build();
 	}
 
@@ -135,6 +141,7 @@ public class User {
 			", dualMajor='" + dualMajor + '\'' +
 			", associatedMajor='" + associatedMajor + '\'' +
 			", transferCredit=" + transferCredit +
+			", exchangeCredit=" + exchangeCredit +
 			", studentCategory=" + studentCategory +
 			", totalCredit=" + totalCredit +
 			", takenCredit=" + takenCredit +
@@ -145,7 +152,7 @@ public class User {
 	public void updateStudentInformation(
 		String name, String major, String dualMajor,
 		String subMajor, String associatedMajor,
-		StudentCategory studentCategory, TransferCredit transferCredit, int totalCredit, double takenCredit, boolean graduate
+		StudentCategory studentCategory, TransferCredit transferCredit,  ExchangeCredit exchangeCredit, int totalCredit, double takenCredit, boolean graduate
 	) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -154,6 +161,7 @@ public class User {
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		updateTransferCredit(transferCredit);
+		updateExchangeCredit(exchangeCredit);
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduate;
@@ -162,6 +170,11 @@ public class User {
 	private void updateTransferCredit(TransferCredit transferCredit) {
 		if (transferCredit != null) {
 			this.transferCredit = transferCredit;
+		}
+	}
+	private void updateExchangeCredit(ExchangeCredit exchangeCredit) {
+		if (exchangeCredit != null) {
+			this.exchangeCredit = exchangeCredit;
 		}
 	}
 	public boolean checkBeforeEntryYear(int entryYear) {
