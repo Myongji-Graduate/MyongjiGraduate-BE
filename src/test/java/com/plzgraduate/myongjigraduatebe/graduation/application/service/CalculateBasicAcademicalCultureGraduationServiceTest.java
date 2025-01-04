@@ -14,6 +14,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicalGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BusinessBasicAcademicalGraduationManager;
@@ -55,6 +56,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 				new SocialScienceBasicAcademicGraduationManager());
 		calculateBasicAcademicalCultureGraduationService = new CalculateBasicAcademicalCultureGraduationService(
 			findBasicAcademicalCulturePort, basicAcademicalGraduationManagers);
+
 		user = User.builder()
 			.id(1L)
 			.primaryMajor("응용소프트웨어전공")
@@ -188,4 +190,38 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 				.contains(DUAL_BASIC_ACADEMICAL_CULTURE, false, 18, 9.0); // 교환학점 6 + 수강학점 3 = 9
 
 	}
+	@Test
+	@DisplayName("복수전공 사용자의 모든 졸업 결과를 계산해야 한다.")
+	void shouldCalculateAllResultsForDualMajor() {
+		Set<BasicAcademicalCultureLecture> primaryLectures = Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02128"), "ICT"));
+		Set<BasicAcademicalCultureLecture> dualLectures = Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02129"), "BUSINESS"));
+
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공")).willReturn(primaryLectures);
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("경영학과")).willReturn(dualLectures);
+
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+				TakenLecture.builder().lecture(Lecture.builder().id("KMA02128").credit(3).build()).build(),
+				TakenLecture.builder().lecture(Lecture.builder().id("KMA02129").credit(3).build()).build()
+		));
+
+		GraduationRequirement requirement = GraduationRequirement.builder()
+				.primaryBasicAcademicalCultureCredit(18)
+				.dualBasicAcademicalCultureCredit(18)
+				.build();
+
+		List<DetailGraduationResult> results = calculateBasicAcademicalCultureGraduationService.calculateAllDetailGraduation(user2, inventory, requirement);
+
+		assertThat(results).hasSize(2);
+
+		DetailGraduationResult primaryResult = results.get(0);
+		assertThat(primaryResult)
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.containsExactly(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE, false, 18, 3.0);
+
+		DetailGraduationResult dualResult = results.get(1);
+		assertThat(dualResult)
+				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+				.containsExactly(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE, false, 18, 9.0);
+	}
+
 }
