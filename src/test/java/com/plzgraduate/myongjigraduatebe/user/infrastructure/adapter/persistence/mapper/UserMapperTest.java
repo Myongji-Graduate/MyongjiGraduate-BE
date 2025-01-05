@@ -3,10 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistenc
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
-import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.*;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +34,9 @@ class UserMapperTest extends PersistenceTestSupport {
 		assertThat(user.getTransferCredit())
 				.extracting("normalCulture", "majorLecture", "freeElective", "christianLecture")
 				.containsExactly(0, 0, 0, 0);
+		assertThat(user.getExchangeCredit())
+				.extracting("basicAcademicalCulture", "normalCulture", "major", "dualBasicAcademicalCulture", "dualMajor", "fusionMajor", "subMajor", "freeElective")
+				.containsExactly(0, 0, 0, 0, 0, 0, 0, 0);
 
 	}
 
@@ -58,6 +58,8 @@ class UserMapperTest extends PersistenceTestSupport {
 				"60211111", 21, "경영", null, StudentCategory.NORMAL, 100, 40.0, false);
 		assertThat(userJpaEntity.getTransferCredit())
 				.isEqualTo("0/0/0/0");
+		assertThat(userJpaEntity.getExchangeCredit())
+				.isEqualTo("0/0/0/0/0/0/0/0");
 	}
 
 	private User createUser() {
@@ -73,6 +75,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.dualMajor(null)
 			.subMajor(null)
 			.transferCredit(TransferCredit.from("0/0/0/0"))
+			.exchangeCredit(ExchangeCredit.from("0/0/0/0/0/0/0/0"))
 			.totalCredit(100)
 			.takenCredit(40)
 			.graduated(false)
@@ -94,6 +97,7 @@ class UserMapperTest extends PersistenceTestSupport {
 				.subMajor(null)
 				.associatedMajor(null)
 				.transferCredit("0/0/0/0") // 기본값 설정
+				.exchangeCredit("0/0/0/0/0/0/0/0") //기본값 설정
 				.studentCategory(StudentCategory.NORMAL)
 				.totalCredit(100)
 				.takenCredit(40.0)

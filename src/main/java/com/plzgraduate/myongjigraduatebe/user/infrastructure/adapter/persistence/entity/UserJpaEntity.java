@@ -53,6 +53,8 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	private String transferCredit;
 
+	private String exchangeCredit;
+
 	private int totalCredit;
 
 	private double takenCredit;
