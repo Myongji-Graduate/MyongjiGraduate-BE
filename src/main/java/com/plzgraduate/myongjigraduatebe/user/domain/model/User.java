@@ -249,9 +249,9 @@ public class User {
 	}
 
 	public boolean isAnyMajorMatched(String major) {
-		return this.primaryMajor.equals(major)
-			|| this.dualMajor.equals(major)
-			|| this.subMajor.equals(major);
+		return (this.primaryMajor.equals(major))
+			|| (this.dualMajor != null && this.dualMajor.equals(major))
+			|| (this.subMajor != null && this.subMajor.equals(major));
 	}
 
 	@Override
