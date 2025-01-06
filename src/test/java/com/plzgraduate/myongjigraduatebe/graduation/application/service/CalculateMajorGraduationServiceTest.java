@@ -403,115 +403,122 @@ class CalculateMajorGraduationServiceTest {
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 			.contains(PRIMARY_ELECTIVE_MAJOR, 18.0); // 15 (편입 학점) + 3 (수강 학점)
 	}
-  
+
 	@DisplayName("교환학생 전공선택 학점 졸업 결과를 계산한다.")
 	@Test
 	void calculateSingleDetailGraduationForExchangePrimaryElective() {
 		// given
 		User user = User.builder()
-				.id(1L)
-				.primaryMajor("응용소프트웨어전공")
-				.entryYear(19)
-				.studentCategory(StudentCategory.NORMAL)
-				.exchangeCredit(ExchangeCredit.from("0/0/3/0/0/0/0/0")) // 3 전공 선택 학점
-				.build();
+			.id(1L)
+			.primaryMajor("응용소프트웨어전공")
+			.entryYear(19)
+			.studentCategory(StudentCategory.NORMAL)
+			.exchangeCredit(ExchangeCredit.from("0/0/3/0/0/0/0/0")) // 3 전공 선택 학점
+			.build();
 
 		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
-				Set.of(
-						MajorLecture.of(Lecture.builder()
-								.id("HEC01211")
-								.credit(3)
-								.build(), "응용소프트웨어전공", 1, 16, 23),
-						MajorLecture.of(Lecture.builder()
-								.id("HEC01305")
-								.credit(3)
-								.build(), "응용소프트웨어전공", 0, 16, 23)
-				)
+			Set.of(
+				MajorLecture.of(Lecture.builder()
+					.id("HEC01211")
+					.credit(3)
+					.build(), "응용소프트웨어전공", 1, 16, 23),
+				MajorLecture.of(Lecture.builder()
+					.id("HEC01305")
+					.credit(3)
+					.build(), "응용소프트웨어전공", 0, 16, 23)
+			)
 		);
 		given(findMajorPort.findMajor(user.getPrimaryMajor())).willReturn(graduationMajorLectures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
-				Set.of(
-						TakenLecture.builder()
-								.lecture(Lecture.builder()
-										.id("HEC01305") // 전공 선택
-										.credit(3)
-										.build())
-								.build()
-				)
+			Set.of(
+				TakenLecture.builder()
+					.lecture(Lecture.builder()
+						.id("HEC01305") // 전공 선택
+						.credit(3)
+						.build())
+					.build()
+			)
 		);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
-				.primaryMajorCredit(70) // 전공 학점 총합
-				.build();
+			.primaryMajorCredit(70) // 전공 학점 총합
+			.build();
 
 		// when
 		DetailGraduationResult detailPrimaryElectiveMajorGraduationResult = calculateMajorGraduationService.calculateSingleDetailGraduation(
-				user, PRIMARY_ELECTIVE_MAJOR, takenLectureInventory, graduationRequirement);
+			user, PRIMARY_ELECTIVE_MAJOR, takenLectureInventory, graduationRequirement);
 
 		// then
 		assertThat(detailPrimaryElectiveMajorGraduationResult)
-				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
-				.contains(PRIMARY_ELECTIVE_MAJOR, false, 67, 6.0); // 3 (교환 학점) + 3 (교환학생 인정 학점)
+			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+			.contains(PRIMARY_ELECTIVE_MAJOR, false, 67, 6.0); // 3 (교환 학점) + 3 (교환학생 인정 학점)
 	}
-  
+
 	@DisplayName("교환 학생 유저의 복수전공선택 졸업결과를 계산한다.")
 	@Test
 	void calculateDualMajorWithExchangeCredits() {
 		//given
 		User user = User.builder()
-				.id(1L)
-				.studentCategory(StudentCategory.DUAL_MAJOR)
-				.dualMajor("응용소프트웨어전공")
-				.entryYear(19)
-				.exchangeCredit(ExchangeCredit.from("0/0/0/0/15/0/0/0")) // 교환 학점 15 설정
-				.build();
+			.id(1L)
+			.studentCategory(StudentCategory.DUAL_MAJOR)
+			.primaryMajor("")
+			.dualMajor("응용소프트웨어전공")
+			.entryYear(19)
+			.exchangeCredit(ExchangeCredit.from("0/0/0/0/15/0/0/0")) // 교환 학점 15 설정
+			.build();
 
 		HashSet<MajorLecture> graduationMajorLectures = new HashSet<>(
-				Set.of(
-						MajorLecture.of(Lecture.builder()
-								.id("HEC01211")
-								.credit(3)
-								.build(), "응용소프트웨어전공", 1, 16, 23),
-						MajorLecture.of(Lecture.builder()
-								.id("HEC01304")
-								.credit(3)
-								.build(), "응용소프트웨어전공", 0, 16, 23)));
+			Set.of(
+				MajorLecture.of(Lecture.builder()
+					.id("HEC01211")
+					.credit(3)
+					.build(), "응용소프트웨어전공", 1, 16, 23),
+				MajorLecture.of(Lecture.builder()
+					.id("HEC01304")
+					.credit(3)
+					.build(), "응용소프트웨어전공", 0, 16, 23)
+			));
 
 		given(findMajorPort.findMajor(user.getDualMajor())).willReturn(graduationMajorLectures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
-				Set.of(
-						TakenLecture.builder()
-								.lecture(Lecture.builder()
-										.id("HEC01211") // 전공 필수
-										.credit(3)
-										.build())
-								.build(),
-						TakenLecture.builder()
-								.lecture(Lecture.builder()
-										.id("HEC01304") // 전공 선택
-										.credit(3)
-										.build())
-								.build()));
+			Set.of(
+				TakenLecture.builder()
+					.lecture(Lecture.builder()
+						.id("HEC01211") // 전공 필수
+						.credit(3)
+						.build())
+					.build(),
+				TakenLecture.builder()
+					.lecture(Lecture.builder()
+						.id("HEC01304") // 전공 선택
+						.credit(3)
+						.build())
+					.build()
+			));
 
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
-				.dualMajorCredit(70)
-				.build();
+			.dualMajorCredit(70)
+			.build();
 
 		//when
 		DetailGraduationResult detailDualElectiveMajorGraduationResult = calculateMajorGraduationService.calculateSingleDetailGraduation(
-				user, DUAL_ELECTIVE_MAJOR, takenLectureInventory, graduationRequirement);
+			user,
+			DUAL_ELECTIVE_MAJOR,
+			takenLectureInventory,
+			graduationRequirement
+		);
 
 		int additionalCredits = user.getExchangeCredit().getDualMajor();
 		detailDualElectiveMajorGraduationResult.addCredit(additionalCredits);
 
 		//then
 		assertThat(detailDualElectiveMajorGraduationResult)
-				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
-				.contains(DUAL_ELECTIVE_MAJOR, false, 67, 18.0); // 교환학생 인점 학점 15 + 전공 선택 수강 학점 3 = 18
+			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
+			.contains(DUAL_ELECTIVE_MAJOR, false, 67, 18.0); // 교환학생 인점 학점 15 + 전공 선택 수강 학점 3 = 18
 	}
 }

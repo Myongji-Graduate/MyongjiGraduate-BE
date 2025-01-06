@@ -51,7 +51,7 @@ public class User {
 		String dualMajor,
 		String associatedMajor,
 		TransferCredit transferCredit,
-    ExchangeCredit exchangeCredit,
+		ExchangeCredit exchangeCredit,
 		StudentCategory studentCategory,
 		boolean isChapleReplaced,
 		int totalCredit,
@@ -74,7 +74,7 @@ public class User {
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
-    this.exchangeCredit = exchangeCredit != null ? exchangeCredit : ExchangeCredit.empty();
+		this.exchangeCredit = exchangeCredit != null ? exchangeCredit : ExchangeCredit.empty();
 		this.isChapleReplaced = isChapleReplaced;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
@@ -115,7 +115,7 @@ public class User {
 		String associatedMajor,
 		StudentCategory studentCategory,
 		TransferCredit transferCredit,
-    ExchangeCredit exchangeCredit
+		ExchangeCredit exchangeCredit
 	) {
 		return User.builder()
 			.authId("anonymous")
@@ -175,7 +175,7 @@ public class User {
 		String associatedMajor,
 		StudentCategory studentCategory,
 		TransferCredit transferCredit,
-    ExchangeCredit exchangeCredit,
+		ExchangeCredit exchangeCredit,
 		int totalCredit,
 		double takenCredit,
 		boolean graduate
@@ -204,7 +204,7 @@ public class User {
 			this.exchangeCredit = exchangeCredit;
 		}
 	}
-  
+
 	public boolean checkBeforeEntryYear(int entryYear) {
 		return this.entryYear < entryYear;
 	}
