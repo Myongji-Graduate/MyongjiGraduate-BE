@@ -51,8 +51,7 @@ public class User {
 		String associatedMajor,
 		TransferCredit transferCredit,
 		StudentCategory studentCategory,
-		boolean isChapleReplaced
-		,
+		boolean isChapleReplaced,
 		int totalCredit,
 		double takenCredit,
 		boolean graduated,
@@ -73,9 +72,7 @@ public class User {
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
-		this.isChapleReplaced
-			= isChapleReplaced
-		;
+		this.isChapleReplaced = isChapleReplaced;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
@@ -100,8 +97,7 @@ public class User {
 			.totalCredit(0)
 			.takenCredit(0)
 			.graduated(false)
-			.isChapleReplaced
-				(false)
+			.isChapleReplaced(false)
 			.build();
 	}
 
