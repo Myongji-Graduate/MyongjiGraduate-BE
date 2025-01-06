@@ -199,6 +199,10 @@ public class User {
 		return this.entryYear < entryYear;
 	}
 
+	public boolean checkAfterEntryYear(int entryYear) {
+		return entryYear <= this.entryYear;
+	}
+
 	public boolean checkMajor(String major) {
 		return this.primaryMajor.equals(major);
 	}
@@ -231,9 +235,8 @@ public class User {
 		return this.koreanLevel != KoreanLevel.FREE;
 	}
 
-	public void replacedChapleForForgeiner() {
-		this.isChapleReplaced
-			= true;
+	public void replaceChaple() {
+		this.isChapleReplaced = true;
 	}
 
 	public String getMajorByMajorType(MajorType majorType) {
@@ -243,6 +246,12 @@ public class User {
 			return dualMajor;
 		}
 		return subMajor;
+	}
+
+	public boolean isAnyMajorMatched(String major) {
+		return this.primaryMajor.equals(major)
+			|| this.dualMajor.equals(major)
+			|| this.subMajor.equals(major);
 	}
 
 	@Override

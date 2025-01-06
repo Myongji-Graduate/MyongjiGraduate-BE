@@ -101,7 +101,7 @@ class CommonCultureDetailCategoryManager {
 	) {
 		if (user.isForeignerStudent() && (category == CHRISTIAN_A || category == CHRISTIAN_B)) {
 			if (taken.size() == 3) {
-				user.replacedChapleForForgeiner();
+				user.replaceChaple();
 				commonCultureDetailCategoryResult.addChapleCreditToChritain();
 			}
 		}

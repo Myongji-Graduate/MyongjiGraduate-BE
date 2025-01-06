@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MajorGraduationManager {
+
+	private static final int 경영학과_외국인학생_전공필수_학번 = 22;
+	private static final List<String> 국제학생을위한경영학개론_과목코드 = Arrays.asList("HCA02507", "HCA02508");
 
 	private final MandatoryMajorManager mandatoryMajorManager;
 	private final ElectiveMajorManager electiveMajorManager;
@@ -29,15 +33,27 @@ public class MajorGraduationManager {
 	 * @param graduationResultTotalCredit 해당 사용자의 전공 졸업 학점
 	 * @return 전공 카테고리에 대한 졸업 결과 반환
 	 */
-	public DetailGraduationResult createDetailGraduationResult(User user, MajorType majorType,
+	public DetailGraduationResult createDetailGraduationResult(
+		User user, MajorType majorType,
 		TakenLectureInventory takenLectureInventory, Set<MajorLecture> majorLectures,
-		int graduationResultTotalCredit) {
+		int graduationResultTotalCredit
+	) {
 
 		removeDuplicateLectureIfTaken(takenLectureInventory, majorLectures);
 		changeMandatoryToElectiveByMajorRange(user, majorLectures);
 
 		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
 		Set<Lecture> electiveLectures = filterElectiveLectures(majorLectures);
+
+		if (user.isForeignerStudent()
+			&& user.isAnyMajorMatched("경영학과")
+			&& user.checkAfterEntryYear(경영학과_외국인학생_전공필수_학번)) {
+			Set<Lecture> 국제학생을위한경영학개론 = electiveLectures.stream()
+				.filter(lecture -> 국제학생을위한경영학개론_과목코드.contains(lecture.getId()))
+				.collect(Collectors.toSet());
+			mandatoryLectures.addAll(국제학생을위한경영학개론);
+			electiveLectures.removeAll(국제학생을위한경영학개론);
+		}
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(
 			user, takenLectureInventory, mandatoryLectures, electiveLectures, majorType);
@@ -49,7 +65,8 @@ public class MajorGraduationManager {
 
 		return DetailGraduationResult.createNonCategorizedGraduationResult(
 			graduationResultTotalCredit,
-			List.of(mandantoryDetailCategoryResult, electiveDetailCategoryResult));
+			List.of(mandantoryDetailCategoryResult, electiveDetailCategoryResult)
+		);
 	}
 
 	/**
@@ -77,8 +94,10 @@ public class MajorGraduationManager {
 	 * 사용자가 B과목을 들었다면 A,C는 전공과목에서 삭제한다. 사용자가 B과목을 들었다면 A,C는 전공과목에서 삭제한다. B과목만 takenLectures(수강했던
 	 * 전공과목)에 넣어주면 되고 A,C 과목은 haveToTLectures(들어야하는 전공과목)에 넣어주면 안되기 떄문이다.
 	 */
-	private void removeDuplicateLectureIfTaken(TakenLectureInventory takenLectureInventory,
-		Set<MajorLecture> graduationLectures) {
+	private void removeDuplicateLectureIfTaken(
+		TakenLectureInventory takenLectureInventory,
+		Set<MajorLecture> graduationLectures
+	) {
 		Set<Lecture> duplicatedTakenLectures = findDuplicatedTakenLecture(takenLectureInventory);
 		graduationLectures.removeIf(graduationLecture ->
 			duplicatedTakenLectures.stream()
@@ -102,8 +121,10 @@ public class MajorGraduationManager {
 			.collect(Collectors.toSet());
 	}
 
-	private void changeMandatoryToElectiveByMajorRange(User user,
-		Set<MajorLecture> majorsLectures) {
+	private void changeMandatoryToElectiveByMajorRange(
+		User user,
+		Set<MajorLecture> majorsLectures
+	) {
 		majorsLectures.forEach(major ->
 			major.changeMandatoryToElectiveByEntryYearRange(user.getEntryYear()));
 	}
