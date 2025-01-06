@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_B;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.KOREAN;
 
@@ -87,8 +88,23 @@ class CommonCultureDetailCategoryManager {
 			isSatisfiedMandatory,
 			checkCategoryTotalCredit(user, category)
 		);
+		checkForignerStudentChristian(user, taken, category, commonCultureDetailCategoryResult);
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
 		return commonCultureDetailCategoryResult;
+	}
+
+	private void checkForignerStudentChristian(
+		User user,
+		Set<Lecture> taken,
+		CommonCultureCategory category,
+		DetailCategoryResult commonCultureDetailCategoryResult
+	) {
+		if (user.isForeignerStudent() && (category == CHRISTIAN_A || category == CHRISTIAN_B)) {
+			if (taken.size() == 3) {
+				user.replacedChapleForForgeiner();
+				commonCultureDetailCategoryResult.addChapleCreditToChritain();
+			}
+		}
 	}
 
 	private int checkCategoryTotalCredit(User user, CommonCultureCategory commonCultureCategory) {

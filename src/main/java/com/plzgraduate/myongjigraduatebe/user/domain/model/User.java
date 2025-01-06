@@ -22,6 +22,7 @@ public class User {
 	private final int entryYear;
 	private final Instant createdAt;
 	private final Instant updatedAt;
+	private boolean isChapleReplaced;
 	private TransferCredit transferCredit;
 	private String password;
 	private String name;
@@ -50,6 +51,8 @@ public class User {
 		String associatedMajor,
 		TransferCredit transferCredit,
 		StudentCategory studentCategory,
+		boolean isChapleReplaced
+		,
 		int totalCredit,
 		double takenCredit,
 		boolean graduated,
@@ -70,6 +73,9 @@ public class User {
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
+		this.isChapleReplaced
+			= isChapleReplaced
+		;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
@@ -94,6 +100,8 @@ public class User {
 			.totalCredit(0)
 			.takenCredit(0)
 			.graduated(false)
+			.isChapleReplaced
+				(false)
 			.build();
 	}
 
@@ -217,6 +225,15 @@ public class User {
 
 	public boolean isAnonymous() {
 		return this.authId.equals("anonymous");
+	}
+
+	public boolean isForeignerStudent() {
+		return this.koreanLevel != KoreanLevel.FREE;
+	}
+
+	public void replacedChapleForForgeiner() {
+		this.isChapleReplaced
+			= true;
 	}
 
 	public String getMajorByMajorType(MajorType majorType) {

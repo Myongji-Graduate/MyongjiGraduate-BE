@@ -43,12 +43,13 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			user.getId()
 		);
 
-		ChapelResult chapelResult = generateChapelResult(takenLectureInventory);
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(
 			user,
 			takenLectureInventory,
 			graduationRequirement
 		);
+
+		ChapelResult chapelResult = generateChapelResult(user, takenLectureInventory);
 
 		GraduationResult graduationResult = generateGraduationResult(
 			chapelResult,
@@ -97,14 +98,20 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 
 	}
 
-	GraduationRequirement determineGraduationRequirement(User user) {
+	public GraduationRequirement determineGraduationRequirement(User user) {
 		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
 		DefaultGraduationRequirementType defaultGraduationRequirement =
 			DefaultGraduationRequirementType.determineGraduationRequirement(userCollage, user);
 		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
 	}
 
-	ChapelResult generateChapelResult(TakenLectureInventory takenLectureInventory) {
+	public ChapelResult generateChapelResult(
+		User user,
+		TakenLectureInventory takenLectureInventory
+	) {
+		if (user.isChapleReplaced()) {
+			return ChapelResult.replaced();
+		}
 		ChapelResult chapelResult = ChapelResult.create(takenLectureInventory);
 		chapelResult.checkCompleted();
 		return chapelResult;

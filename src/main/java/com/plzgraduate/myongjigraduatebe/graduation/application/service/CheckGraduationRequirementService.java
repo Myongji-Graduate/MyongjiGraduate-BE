@@ -44,17 +44,22 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 		GraduationRequirement graduationRequirement =
 			calculateGraduationService.determineGraduationRequirement(anonymous);
 
-		ChapelResult chapelResult =
-			calculateGraduationService.generateChapelResult(takenLectureInventoryWithDuplicateCode);
-		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
-			chapelResult.checkAnonymousTransferUserChapelCount();
-		}
-
 		List<DetailGraduationResult> detailGraduationResults = calculateGraduationService.generateDetailGraduationResults(
 			anonymous,
 			takenLectureInventoryWithDuplicateCode,
 			graduationRequirement
 		);
+
+		ChapelResult chapelResult =
+			calculateGraduationService.generateChapelResult(
+				anonymous,
+				takenLectureInventoryWithDuplicateCode
+			);
+
+		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
+			chapelResult.checkAnonymousTransferUserChapelCount();
+		}
+
 		GraduationResult graduationResult = calculateGraduationService.generateGraduationResult(
 			chapelResult,
 			detailGraduationResults,
@@ -63,6 +68,7 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			anonymous
 		);
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);
+		
 		return graduationResult;
 	}
 }
