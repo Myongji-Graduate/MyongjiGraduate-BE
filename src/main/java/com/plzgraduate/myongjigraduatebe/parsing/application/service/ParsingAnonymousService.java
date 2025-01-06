@@ -48,8 +48,8 @@ public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 		);
 
 		TakenLectureInventory takenLectureInventory = getTakenLectureInventory(
-			anonymous,
-			parsingInformation.getTakenLectureInformation()
+				anonymous,
+				parsingInformation.getTakenLectureInformation()
 		);
 
 		return new ParsingAnonymousDto(anonymous, takenLectureInventory);
@@ -68,18 +68,18 @@ public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 	}
 
 	private TakenLectureInventory getTakenLectureInventory(
-		User anonymous,
-		List<ParsingTakenLectureDto> parsingTakenLectureDtoList
+			User anonymous,
+			List<ParsingTakenLectureDto> parsingTakenLectureDtoList
 	) {
 		Set<TakenLecture> takenLectures = parsingTakenLectureDtoList.stream()
-			.map(parsingTakenLectureDto -> TakenLecture.of(
-					anonymous,
-					Lecture.from(parsingTakenLectureDto.getLectureCode()),
-					parsingTakenLectureDto.getYear(),
-					parsingTakenLectureDto.getSemester()
+				.map(parsingTakenLectureDto -> TakenLecture.of(
+								anonymous,
+								Lecture.from(parsingTakenLectureDto.getLectureCode()),
+								parsingTakenLectureDto.getYear(),
+								parsingTakenLectureDto.getSemester()
+						)
 				)
-			)
-			.collect(Collectors.toSet());
+				.collect(Collectors.toSet());
 
 		return TakenLectureInventory.from(takenLectures);
 	}

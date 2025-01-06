@@ -53,9 +53,12 @@ public class DefaultBasicAcademicalGraduationManager implements BasicAcademicalG
 			});
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
+		int exchangeCredit = user.getExchangeCredit().getBasicAcademicalCulture();
+
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			"학문기초교양", true, basicAcademicalCredit);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
+		detailCategoryResult.addTakenCredits(exchangeCredit);
 
 		return DetailGraduationResult.createNonCategorizedGraduationResult(basicAcademicalCredit,
 			List.of(detailCategoryResult));

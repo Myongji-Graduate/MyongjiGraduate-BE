@@ -53,10 +53,16 @@ public class FreeElectiveGraduationResult {
 			.sum();
 
 		int transferFreeElectiveCredit = calculateTransferFreeElectiveCredit(user);
+		int exchangeFreeElectiveCredit = calculateExchangeFreeElectiveCredit(user);
 
 		return remainCreditByDetailGraduationResult + remainCreditByTakenLectures
-			+ leftNormalCultureCredit+transferFreeElectiveCredit;
+			+ leftNormalCultureCredit+transferFreeElectiveCredit+exchangeFreeElectiveCredit;
 	}
+
+	private static int calculateExchangeFreeElectiveCredit(User user) {
+			return user.getExchangeCredit().getFreeElective();
+    }
+
 	private static int calculateTransferFreeElectiveCredit(User user) {
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
 			return user.getTransferCredit().getFreeElective();
