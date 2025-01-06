@@ -28,18 +28,13 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 		User anonymous,
 		TakenLectureInventory takenLectureInventory
 	) {
-		Set<TakenLecture> takenLectureWithDuplicateCode = takenLectureInventory.getTakenLectures()
-			.stream()
-			.map(takenLecture -> TakenLecture.of(
-					anonymous,
-					findLecturePort.findLectureById(takenLecture.getLecture().getId()),
-					takenLecture.getYear(),
-					takenLecture.getSemester()
-				)
-			).collect(Collectors.toSet());
+		Set<TakenLecture> takenLectureWithDuplicateCode = getTakenLectureWithDuplicateCode(
+			anonymous,
+			takenLectureInventory
+		);
 
-		TakenLectureInventory takenLectureInventoryWithDuplicateCode = TakenLectureInventory.from(
-			takenLectureWithDuplicateCode);
+		TakenLectureInventory takenLectureInventoryWithDuplicateCode =
+			TakenLectureInventory.from(takenLectureWithDuplicateCode);
 
 		GraduationRequirement graduationRequirement =
 			calculateGraduationService.determineGraduationRequirement(anonymous);
@@ -50,11 +45,10 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			graduationRequirement
 		);
 
-		ChapelResult chapelResult =
-			calculateGraduationService.generateChapelResult(
-				anonymous,
-				takenLectureInventoryWithDuplicateCode
-			);
+		ChapelResult chapelResult = calculateGraduationService.generateChapelResult(
+			anonymous,
+			takenLectureInventoryWithDuplicateCode
+		);
 
 		if (anonymous.getStudentCategory() == StudentCategory.TRANSFER) {
 			chapelResult.checkAnonymousTransferUserChapelCount();
@@ -68,7 +62,22 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			anonymous
 		);
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);
-		
+
 		return graduationResult;
+	}
+
+	private Set<TakenLecture> getTakenLectureWithDuplicateCode(
+		User anonymous,
+		TakenLectureInventory takenLectureInventory
+	) {
+		return takenLectureInventory.getTakenLectures()
+			.stream()
+			.map(takenLecture -> TakenLecture.of(
+					anonymous,
+					findLecturePort.findLectureById(takenLecture.getLecture().getId()),
+					takenLecture.getYear(),
+					takenLecture.getSemester()
+				)
+			).collect(Collectors.toSet());
 	}
 }

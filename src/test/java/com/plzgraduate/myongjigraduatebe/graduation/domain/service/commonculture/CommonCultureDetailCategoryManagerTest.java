@@ -325,10 +325,4 @@ class CommonCultureDetailCategoryManagerTest {
 			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits")
 			.contains(CHRISTIAN_A.getName(), false, false, CHRISTIAN_A.getTotalCredit());
 	}
-
-	@DisplayName("[외국인학생] 한국어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
-	@Test
-	void foreginerStudentTest() {
-		//
-	}
 }
