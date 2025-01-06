@@ -96,7 +96,7 @@ class GraduationResultTest {
 	@Test
 	void handleLeftTakenLectures() {
 		//given
-		User user = UserFixture.데이터테크놀로지학과_19학번();
+		User user = UserFixture.데이터테크놀로지전공_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA02110"), 2020, Semester.FIRST), //철학과인간
 			TakenLecture.of(user, mockLectureMap.get("KMA02111"), 2020, Semester.FIRST), //한국근현대사의이해
@@ -124,25 +124,31 @@ class GraduationResultTest {
 			.build();
 
 		//when
-		graduationResult.handleLeftTakenLectures(takenLectureInventory, graduationRequirement, user);
+		graduationResult.handleLeftTakenLectures(
+			takenLectureInventory,
+			graduationRequirement,
+			user
+		);
 
 		//then
 		assertThat(graduationResult.getNormalCultureGraduationResult())
 			.extracting("categoryName", "totalCredit", "takenCredit")
 			.contains(NORMAL_CULTURE.getName(), graduationRequirement.getNormalCultureCredit(),
 				takenNormalCultureCredit - (takenNormalCultureCredit
-					- graduationRequirement.getNormalCultureCredit()));
+					- graduationRequirement.getNormalCultureCredit())
+			);
 		assertThat(graduationResult.getFreeElectiveGraduationResult())
 			.extracting("categoryName", "totalCredit", "takenCredit")
 			.contains(FREE_ELECTIVE.getName(), graduationRequirement.getFreeElectiveCredit(),
 				takenNormalCultureCredit - graduationRequirement.getNormalCultureCredit()
-					+ takenFreeElectiveCredit);
+					+ takenFreeElectiveCredit
+			);
 	}
 
 	@DisplayName("채플 졸업 결과, 모든 세부 졸업 결과, 일반교양 졸업 결과, 자유선택 졸업 결과가 이수 완료일 시 전체 졸업 결과가 이수 완료이다.")
 	@Test
 	void checkCompletedGraduated() {
-		User user = UserFixture.데이터테크놀로지학과_19학번();
+		User user = UserFixture.데이터테크놀로지전공_19학번();
 		//given
 		int detailCategoryTotalCredit = 10;
 		int detailCategoryTakenCredit = 10;
@@ -195,12 +201,14 @@ class GraduationResultTest {
 	@DisplayName("채플 졸업 결과, 모든 세부 졸업 결과, 일반교양 졸업 결과, 자유선택 졸업 결과 중 하나라도 미이수일 시 전체 졸업 결과가 미이수이다.")
 	@ParameterizedTest
 	@MethodSource("graduationResultFields")
-	void checkUnCompletedGraduated(ChapelResult chapelResult,
+	void checkUnCompletedGraduated(
+		ChapelResult chapelResult,
 		List<DetailGraduationResult> detailGraduationResults,
 		NormalCultureGraduationResult normalCultureGraduationResult,
-		FreeElectiveGraduationResult freeElectiveGraduationResult) {
+		FreeElectiveGraduationResult freeElectiveGraduationResult
+	) {
 		//given
-		User user = UserFixture.데이터테크놀로지학과_19학번();
+		User user = UserFixture.데이터테크놀로지전공_19학번();
 		GraduationResult graduationResult = GraduationResult.builder()
 			.chapelResult(chapelResult)
 			.detailGraduationResults(detailGraduationResults)

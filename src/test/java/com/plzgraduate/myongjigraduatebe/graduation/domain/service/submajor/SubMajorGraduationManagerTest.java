@@ -24,7 +24,7 @@ class SubMajorGraduationManagerTest {
 	@Test
 	void createDetailGraduationResult() {
 		//given
-		User user = UserFixture.응용소프트웨어학과_19학번();
+		User user = UserFixture.응용소프트웨어전공_19학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, Lecture.builder()
 				.id("HEC01313")
@@ -65,20 +65,24 @@ class SubMajorGraduationManagerTest {
 		//when
 		DetailGraduationResult detailGraduationResult = subMajorManager.createDetailGraduationResult(
 			user,
-			takenLectureInventory, graduationLectures, subMajorGraduationCredit);
+			takenLectureInventory, graduationLectures, subMajorGraduationCredit
+		);
 
 		//then
 		int majorCredit = 3;
 		assertThat(detailGraduationResult.getDetailCategory()).hasSize(1)
 			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits",
-				"takenCredits")
+				"takenCredits"
+			)
 			.contains(
 				tuple("전공선택", true, true, subMajorGraduationCredit,
-					majorCredit * takenLecturesCount));
+					majorCredit * takenLecturesCount
+				));
 		assertThat(detailGraduationResult)
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 			.contains(SUB_MAJOR, true, subMajorGraduationCredit,
-				(double) majorCredit * takenLecturesCount);
+				(double) majorCredit * takenLecturesCount
+			);
 
 	}
 

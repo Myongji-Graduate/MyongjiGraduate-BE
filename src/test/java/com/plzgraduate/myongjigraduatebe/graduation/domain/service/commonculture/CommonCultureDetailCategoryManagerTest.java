@@ -35,9 +35,10 @@ class CommonCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
 	void generateEngBasicCompletedCommonCultureDetailCategory(
 		CommonCultureCategory commonCultureCategory,
-		Set<CommonCulture> graduationLectures) {
+		Set<CommonCulture> graduationLectures
+	) {
 		//given
-		User user = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
+		User user = UserFixture.데이테크놀로지전공_18학번_Basic_Eng();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMP02126"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
@@ -61,7 +62,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -74,7 +76,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
 	void generateEng12CompletedCommonCultureDetailCategory(
 		CommonCultureCategory commonCultureCategory,
-		Set<CommonCulture> graduationLectures) {
+		Set<CommonCulture> graduationLectures
+	) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG12();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -99,7 +102,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -112,7 +116,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
 	void generateEng34CompletedCommonCultureDetailCategory(
 		CommonCultureCategory commonCultureCategory,
-		Set<CommonCulture> graduationLectures) {
+		Set<CommonCulture> graduationLectures
+	) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -136,7 +141,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -149,7 +155,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
 	void generateEngFreeCompletedCommonCultureDetailCategory(
 		CommonCultureCategory commonCultureCategory,
-		Set<CommonCulture> graduationLectures) {
+		Set<CommonCulture> graduationLectures
+	) {
 		//given
 		User user = UserFixture.경영학과_19학번_영어_면제();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -165,7 +172,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -173,11 +181,13 @@ class CommonCultureDetailCategoryManagerTest {
 			.contains(commonCultureCategoryName, true);
 	}
 
-	@DisplayName("영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우(기초영어 미수강) 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
+	@DisplayName(
+		"영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우(기초영어 미수강) 이수 미 완료의 카테고리 졸업 결과를 생성한다."
+	)
 	@Test
 	void generateEngBasicUnCompletedCommonCultureDetailCategory() {
 		//given
-		User user = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
+		User user = UserFixture.데이테크놀로지전공_18학번_Basic_Eng();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
 			TakenLecture.of(user, mockLectureMap.get("KMA02106"), 2023, Semester.FIRST),
@@ -192,14 +202,16 @@ class CommonCultureDetailCategoryManagerTest {
 			CommonCulture.of(mockLectureMap.get("KMA02106"), commonCultureCategory),
 			CommonCulture.of(mockLectureMap.get("KMA02107"), commonCultureCategory),
 			CommonCulture.of(mockLectureMap.get("KMA02108"), commonCultureCategory),
-			CommonCulture.of(mockLectureMap.get("KMA02109"), commonCultureCategory)));
+			CommonCulture.of(mockLectureMap.get("KMA02109"), commonCultureCategory)
+		));
 		String commonCultureCategoryName = commonCultureCategory.getName();
 		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -212,7 +224,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
 	void generateEng12UnCompletedCommonCultureDetailCategory(
 		CommonCultureCategory commonCultureCategory,
-		Set<CommonCulture> graduationLectures) {
+		Set<CommonCulture> graduationLectures
+	) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG12();
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
@@ -222,7 +235,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -235,7 +249,8 @@ class CommonCultureDetailCategoryManagerTest {
 	@ArgumentsSource(CommonCultureCategoryFixture.class)
 	void generateEng34UnCompletedCommonCultureDetailCategory(
 		CommonCultureCategory commonCultureCategory,
-		Set<CommonCulture> graduationLectures) {
+		Set<CommonCulture> graduationLectures
+	) {
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
@@ -245,7 +260,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			commonCultureCategory);
+			commonCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -276,7 +292,8 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			CHRISTIAN_A);
+			CHRISTIAN_A
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -300,11 +317,18 @@ class CommonCultureDetailCategoryManagerTest {
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
 			graduationLectures,
-			CHRISTIAN_A);
+			CHRISTIAN_A
+		);
 
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits")
 			.contains(CHRISTIAN_A.getName(), false, false, CHRISTIAN_A.getTotalCredit());
+	}
+
+	@DisplayName("[외국인학생] 한국어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
+	@Test
+	void foreginerStudentTest() {
+		//
 	}
 }
