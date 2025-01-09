@@ -22,23 +22,26 @@ public class CoreCultureDetailCategoryManager {
 	private static final List<String> ICT_DEPARTMENTS = List.of(
 		"응용소프트웨어",
 		"데이터테크놀로지",
-		"디지털콘텐츠디자인");
+		"디지털콘텐츠디자인"
+	);
 	private static final Lecture 과학과기술_예외_과목 = Lecture.from("KMA02136");
 	private static final Set<Lecture> 문화와예술_예외_과목 = Set.of(
 		Lecture.from("KMA02155"),
-		Lecture.from("KMA02156"));
+		Lecture.from("KMA02156")
+	);
 
-	public DetailCategoryResult generate(User user, TakenLectureInventory takenLectureInventory,
-		Set<CoreCulture> graduationLectures, CoreCultureCategory category) {
-
+	public DetailCategoryResult generate(
+		User user, TakenLectureInventory takenLectureInventory,
+		Set<CoreCulture> graduationLectures, CoreCultureCategory category
+	) {
 		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			return DetailCategoryResult.create(
-					category.getName(), true, 0
-			);
+			return DetailCategoryResult.create(category.getName(), true, 0);
 		}
 
-		Set<Lecture> graduationCoreCultureLectures = categorizeCoreCultures(graduationLectures,
-			category);
+		Set<Lecture> graduationCoreCultureLectures = categorizeCoreCultures(
+			graduationLectures,
+			category
+		);
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		Set<Lecture> taken = new HashSet<>();
 		takenLectureInventory.getTakenLectures()
@@ -60,16 +63,20 @@ public class CoreCultureDetailCategoryManager {
 		return commonCultureDetailCategoryResult;
 	}
 
-	private Set<Lecture> categorizeCoreCultures(Set<CoreCulture> graduationLectures,
-		CoreCultureCategory category) {
+	private Set<Lecture> categorizeCoreCultures(
+		Set<CoreCulture> graduationLectures,
+		CoreCultureCategory category
+	) {
 		return graduationLectures.stream()
 			.filter(coreCulture -> coreCulture.getCoreCultureCategory() == category)
 			.map(CoreCulture::getLecture)
 			.collect(Collectors.toSet());
 	}
 
-	private void calculateFreeElectiveLeftCredit(User user, Set<Lecture> taken,
-		DetailCategoryResult commonCultureDetailCategoryResult) {
+	private void calculateFreeElectiveLeftCredit(
+		User user, Set<Lecture> taken,
+		DetailCategoryResult commonCultureDetailCategoryResult
+	) {
 		if (ICT_DEPARTMENTS.contains(user.getPrimaryMajor()) && (taken.contains(과학과기술_예외_과목))) {
 			taken.remove(과학과기술_예외_과목);
 			int exceptionLectureCredit = 3;
@@ -77,9 +84,11 @@ public class CoreCultureDetailCategoryManager {
 		}
 	}
 
-	private void calculateNormalLeftCredit(Set<Lecture> taken,
+	private void calculateNormalLeftCredit(
+		Set<Lecture> taken,
 		Set<TakenLecture> finishedTakenLecture,
-		DetailCategoryResult commonCultureDetailCategoryResult) {
+		DetailCategoryResult commonCultureDetailCategoryResult
+	) {
 		List<TakenLecture> cultureAndArtExceptionLectures = finishedTakenLecture.stream()
 			.filter(takenLecture -> 문화와예술_예외_과목.contains(takenLecture.getLecture())
 				&& takenLecture.getYear() == 2022

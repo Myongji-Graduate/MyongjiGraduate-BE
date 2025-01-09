@@ -31,7 +31,7 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 	@Test
 	void findBasicAcademicalCulture() {
 		//given
-		User user = UserFixture.응용소프트웨어학과_19학번();
+		User user = UserFixture.응용소프트웨어전공_19학번();
 		LectureJpaEntity lectureJpaEntityA = LectureJpaEntity.builder()
 			.id("testA")
 			.build();
@@ -50,8 +50,10 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 			.college(BUSINESS.getName())
 			.build();
 		basicAcademicalCultureRepository.saveAll(
-			List.of(basicAcademicalCultureLectureJpaEntityA,
-				basicAcademicalCultureLectureJpaEntityB));
+			List.of(
+				basicAcademicalCultureLectureJpaEntityA,
+				basicAcademicalCultureLectureJpaEntityB
+			));
 
 		//when
 		Set<BasicAcademicalCultureLecture> basicAcademicalCulture = basicAcademicalCulturePersistenceAdapter.findBasicAcademicalCulture(

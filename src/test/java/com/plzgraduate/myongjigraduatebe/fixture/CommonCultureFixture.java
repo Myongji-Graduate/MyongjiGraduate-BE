@@ -10,6 +10,7 @@ import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultu
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.DIGITAL_LITERACY;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.EXPRESSION;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.KOREAN;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -118,6 +119,24 @@ public class CommonCultureFixture implements ArgumentsProvider {
 		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02124"), ENGLISH));
 		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02125"), ENGLISH));
 		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02126"), ENGLISH));
+		return lectureSet;
+	}
+
+	public static Set<CommonCulture> 한국어레벨_12() {
+		Set<CommonCulture> lectureSet = new HashSet<>();
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02143"), KOREAN));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02144"), KOREAN));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02147"), KOREAN));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02148"), KOREAN));
+		return lectureSet;
+	}
+
+	public static Set<CommonCulture> 한국어레벨_34() {
+		Set<CommonCulture> lectureSet = new HashSet<>();
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02145"), KOREAN));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02146"), KOREAN));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02149"), KOREAN));
+		lectureSet.add(CommonCulture.of(mockLectureMap.get("KMA02150"), KOREAN));
 		return lectureSet;
 	}
 

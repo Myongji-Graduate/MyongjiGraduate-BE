@@ -29,7 +29,7 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void findMajor() {
 		//given
-		User user = UserFixture.응용소프트웨어학과_19학번();
+		User user = UserFixture.응용소프트웨어전공_19학번();
 		LectureJpaEntity lectureJpaEntityA = LectureJpaEntity.builder()
 			.id("testA")
 			.build();

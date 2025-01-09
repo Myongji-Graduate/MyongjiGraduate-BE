@@ -28,16 +28,16 @@ public class CommonGraduationManager implements GraduationManager<CommonCulture>
 		int commonCultureGraduationTotalCredit
 	) {
 		CommonCultureDetailCategoryManager commonCultureDetailCategoryManager = new CommonCultureDetailCategoryManager();
-		List<DetailCategoryResult> commonCultureDetailCategoryResults = Arrays.stream(
-				CommonCultureCategory.values())
-			.filter(commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
-			.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(
-				user,
-				takenLectureInventory,
-				graduationLectures,
-				commonCultureCategory
-			))
-			.collect(Collectors.toList());
+		List<DetailCategoryResult> commonCultureDetailCategoryResults =
+			Arrays.stream(CommonCultureCategory.values())
+				.filter(commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
+				.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(
+					user,
+					takenLectureInventory,
+					graduationLectures,
+					commonCultureCategory
+				))
+				.collect(Collectors.toList());
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.create(
 			COMMON_CULTURE,

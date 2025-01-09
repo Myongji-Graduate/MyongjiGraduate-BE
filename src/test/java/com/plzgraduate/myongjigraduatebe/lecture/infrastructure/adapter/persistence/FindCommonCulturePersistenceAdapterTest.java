@@ -34,7 +34,7 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void findBasicEngCommonCulture() {
 		//given
-		User basicEngUser = UserFixture.데이테크놀로지학과_18학번_Basic_Eng();
+		User basicEngUser = UserFixture.데이테크놀로지전공_18학번_Basic_Eng();
 		createCommonCultures();
 
 		//when
@@ -51,7 +51,7 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void findEng12CommonCulture() {
 		//given
-		User eng12User = UserFixture.데이테크놀로지학과_18학번();
+		User eng12User = UserFixture.데이테크놀로지전공_18학번();
 		createCommonCultures();
 
 		//when
@@ -68,7 +68,7 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void findEng34CommonCulture() {
 		//given
-		User eng34User = UserFixture.데이테크놀로지학과_16학번_Eng34();
+		User eng34User = UserFixture.데이테크놀로지전공_16학번_Eng34();
 		createCommonCultures();
 
 		//when
@@ -85,7 +85,7 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 	@Test
 	void findEngFreeCommonCulture() {
 		//given
-		User engFreeUser = UserFixture.응용소프트웨어학과_19학번_영어_면제();
+		User engFreeUser = UserFixture.응용소프트웨어전공_19학번_영어_면제();
 		createCommonCultures();
 
 		//when

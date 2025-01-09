@@ -39,7 +39,13 @@ class UserTest {
 	@Test
 	void create() {
 		//when
-		User newUser = User.create("tester00", "tester00!", EnglishLevel.ENG12, "60201000");
+		User newUser = User.create(
+			"tester00",
+			"tester00!",
+			EnglishLevel.ENG12,
+			KoreanLevel.FREE,
+			"60201000"
+		);
 
 		//then
 		assertThat(newUser)
@@ -56,7 +62,8 @@ class UserTest {
 		//then
 		assertThat(user)
 			.extracting("name", "primaryMajor", "subMajor", "dualMajor", "studentCategory",
-				"totalCredit", "takenCredit", "graduated")
+				"totalCredit", "takenCredit", "graduated"
+			)
 			.contains("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134, 120.5, true);
 	}
 

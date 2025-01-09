@@ -13,6 +13,7 @@ import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.Set;
@@ -24,28 +25,32 @@ import lombok.RequiredArgsConstructor;
 public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 
 	@Override
-	public ParsingAnonymousDto parseAnonymous(EnglishLevel englishLevel, String parsingText) {
+	public ParsingAnonymousDto parseAnonymous(
+		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
+		String parsingText
+	) {
 		validateParsingText(parsingText);
 		ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
 		checkUnSupportedUser(parsingInformation);
 
-
 		User anonymous = User.createAnonymous(
-				englishLevel,
-				parsingInformation.getStudentName(),
-				parsingInformation.getStudentNumber(),
-				parsingInformation.getMajor(),
-				parsingInformation.getSubMajor(),
-				parsingInformation.getDualMajor(),
-				parsingInformation.getAssociatedMajor(),
-				parsingInformation.getStudentCategory(),
-				parsingInformation.getTransferCredit(),
-				parsingInformation.getExchangeCredit()
+			englishLevel,
+			koreanLevel,
+			parsingInformation.getStudentName(),
+			parsingInformation.getStudentNumber(),
+			parsingInformation.getMajor(),
+			parsingInformation.getSubMajor(),
+			parsingInformation.getDualMajor(),
+			parsingInformation.getAssociatedMajor(),
+			parsingInformation.getStudentCategory(),
+			parsingInformation.getTransferCredit(),
+			parsingInformation.getExchangeCredit()
 		);
 
 		TakenLectureInventory takenLectureInventory = getTakenLectureInventory(
-				anonymous,
-				parsingInformation.getTakenLectureInformation()
+			anonymous,
+			parsingInformation.getTakenLectureInformation()
 		);
 
 		return new ParsingAnonymousDto(anonymous, takenLectureInventory);
@@ -64,18 +69,18 @@ public class ParsingAnonymousService implements ParsingAnonymousUseCase {
 	}
 
 	private TakenLectureInventory getTakenLectureInventory(
-			User anonymous,
-			List<ParsingTakenLectureDto> parsingTakenLectureDtoList
+		User anonymous,
+		List<ParsingTakenLectureDto> parsingTakenLectureDtoList
 	) {
 		Set<TakenLecture> takenLectures = parsingTakenLectureDtoList.stream()
-				.map(parsingTakenLectureDto -> TakenLecture.of(
-								anonymous,
-								Lecture.from(parsingTakenLectureDto.getLectureCode()),
-								parsingTakenLectureDto.getYear(),
-								parsingTakenLectureDto.getSemester()
-						)
+			.map(parsingTakenLectureDto -> TakenLecture.of(
+					anonymous,
+					Lecture.from(parsingTakenLectureDto.getLectureCode()),
+					parsingTakenLectureDto.getYear(),
+					parsingTakenLectureDto.getSemester()
 				)
-				.collect(Collectors.toSet());
+			)
+			.collect(Collectors.toSet());
 
 		return TakenLectureInventory.from(takenLectures);
 	}

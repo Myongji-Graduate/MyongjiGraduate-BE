@@ -7,7 +7,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,9 +14,9 @@ import lombok.Getter;
 public class DetailCategoryResult {
 
 	private final boolean isSatisfiedMandatory;
-	private final int totalCredits;
 	private final List<Lecture> takenLectures = new ArrayList<>();
 	private final List<Lecture> haveToLectures = new ArrayList<>();
+	private int totalCredits;
 	private String detailCategoryName;
 	private boolean isCompleted;
 	private int takenCredits;
@@ -116,16 +115,19 @@ public class DetailCategoryResult {
 		graduationLectures.stream()
 			.filter(graduationLecture -> graduationLecture.getIsRevoked() == 0)
 			.forEach(haveToLectures::add);
-
 	}
 
 	private boolean checkCompleted() {
 		isCompleted = totalCredits <= takenCredits && isSatisfiedMandatory;
 		return isCompleted;
 	}
+
 	public void addTakenCredits(int credits) {
 		this.takenCredits += credits;
 		checkCompleted();
 	}
 
+	public void addChapleCreditToChritain() {
+		this.totalCredits += (int) (ChapelResult.CHAPEL_CREDIT * ChapelResult.GRADUATION_COUNT);
+	}
 }
