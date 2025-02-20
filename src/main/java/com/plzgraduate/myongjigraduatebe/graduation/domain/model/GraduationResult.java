@@ -93,7 +93,7 @@ public class GraduationResult {
 		double freeElectiveCredits = freeElectiveGraduationResult.getTakenCredit();
 		double normalCultureCredits = normalCultureGraduationResult.getTakenCredit();
 
-		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+		if (isTransferStudent(user)) {
 			this.takenCredit += chapelResult.getTakenChapelCredit();
 		}
 		this.takenCredit += freeElectiveCredits + normalCultureCredits;
@@ -103,9 +103,10 @@ public class GraduationResult {
 		TakenLectureInventory takenLectureInventory, GraduationRequirement graduationRequirement, User user
 	) {
 		int acknowledgedCredit = 0;
-		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			acknowledgedCredit = user.getTransferCredit().getNormalCulture();
+		if (isTransferStudent(user)) {
+			acknowledgedCredit += user.getTransferCredit().getNormalCulture();
 		}
+			acknowledgedCredit += user.getExchangeCredit().getNormalCulture();
 		this.normalCultureGraduationResult = NormalCultureGraduationResult.create(
 			graduationRequirement.getNormalCultureCredit(),
 			acknowledgedCredit,
@@ -114,6 +115,9 @@ public class GraduationResult {
 		);
 
 		normalCultureGraduationResult.checkCompleted();
+	}
+	private boolean isTransferStudent(User user) {
+		return user.getStudentCategory() == StudentCategory.TRANSFER;
 	}
 
 	private void handleLeftTakenFreeElective(

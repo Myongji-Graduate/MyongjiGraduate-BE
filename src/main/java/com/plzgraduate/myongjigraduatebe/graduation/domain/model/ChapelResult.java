@@ -28,6 +28,12 @@ public class ChapelResult {
 			.build();
 	}
 
+	public static ChapelResult replaced() {
+		return ChapelResult.builder()
+			.isCompleted(true)
+			.build();
+	}
+
 	private static int countTakenChapel(TakenLectureInventory takenLectureInventory) {
 		return (int) takenLectureInventory.getTakenLectures()
 			.stream()

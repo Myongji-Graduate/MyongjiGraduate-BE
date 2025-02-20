@@ -54,25 +54,30 @@ import org.springframework.web.context.WebApplicationContext;
 @ActiveProfiles("test")
 @ComponentScan(
 	basePackageClasses = {SecurityConfig.class, TokenProvider.class},
-	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+	excludeFilters = @ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE, classes = {
 		QuerydslConfig.class,
-		JpaAuditingConfig.class})
+		JpaAuditingConfig.class
+	}
+	)
 )
-@WebMvcTest(controllers = {
-	SignInController.class,
-	TokenController.class,
-	SearchLectureController.class,
-	FindUserInformationController.class,
-	UpdateTakenLectureController.class,
-	ParsingTextController.class,
-	WithDrawController.class,
-	FindTakenLectureController.class,
-	ResetPasswordController.class,
-	SignUpController.class,
-	FindAuthIdController.class,
-	FindCompletedCreditsController.class,
-	FindDetailGraduationController.class
-})
+@WebMvcTest(
+	controllers = {
+		SignInController.class,
+		TokenController.class,
+		SearchLectureController.class,
+		FindUserInformationController.class,
+		UpdateTakenLectureController.class,
+		ParsingTextController.class,
+		WithDrawController.class,
+		FindTakenLectureController.class,
+		ResetPasswordController.class,
+		SignUpController.class,
+		FindAuthIdController.class,
+		FindCompletedCreditsController.class,
+		FindDetailGraduationController.class
+	}
+)
 public abstract class WebAdaptorTestSupport {
 
 	@Autowired
@@ -128,5 +133,4 @@ public abstract class WebAdaptorTestSupport {
 			.apply(springSecurity())
 			.build();
 	}
-
 }

@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +27,7 @@ public class ElectiveMajorManager {
 
 	public DetailCategoryResult createDetailCategoryResult(
 		TakenLectureInventory takenLectureInventory,
-		Set<Lecture> electiveLectures, int electiveMajorTotalCredit
+		Set<Lecture> electiveLectures, int electiveMajorTotalCredit, User user
 	) {
 		Set<Lecture> takenElective = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
@@ -39,12 +41,26 @@ public class ElectiveMajorManager {
 		DetailCategoryResult electiveMajorResult = DetailCategoryResult.create(ELECTIVE_MAJOR_NAME,
 			true, electiveMajorTotalCredit
 		);
+		processTransferStudent(user, electiveMajorResult);
+		processExchangeStudent(user, electiveMajorResult);
+
 		excludePracticeLectureForHaveToLecture(electiveLectures);
 		electiveMajorResult.calculate(takenElective, electiveLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		return electiveMajorResult;
 	}
 
+	private void processExchangeStudent(User user, DetailCategoryResult electiveMajorResult) {
+			int exchangeCredit = user.getExchangeCredit().getMajor();
+			electiveMajorResult.addTakenCredits(exchangeCredit);
+	}
+
+	private void processTransferStudent(User user, DetailCategoryResult electiveMajorResult) {
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			int transferCredit = user.getTransferCredit().getMajorLecture();
+			electiveMajorResult.addTakenCredits(transferCredit);
+		}
+	}
 	private void excludePracticeLectureForHaveToLecture(Set<Lecture> electiveLectures) {
 		electiveLectures.removeIf(lecture -> PRACTICE_LECTURE_CODES.contains(lecture.getId()));
 	}

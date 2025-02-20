@@ -116,6 +116,9 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 				DUAL_MANDATORY_MAJOR, dualMajorDetailGraduationResult);
 			DetailGraduationResult dualElectiveMajorDetailGraduationResult = isolateElectiveMajorDetailGraduation(
 				DUAL_ELECTIVE_MAJOR, dualMajorDetailGraduationResult);
+
+			addExchangeCreditsToDualElectiveMajor(user, dualElectiveMajorDetailGraduationResult);
+			
 			majorGraduationResults.addAll(
 				List.of(
 					dualMandatoryMajorDetailGraduationResult,
@@ -123,12 +126,25 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 				));
 		}
 		if (user.getStudentCategory() == StudentCategory.SUB_MAJOR) {
-			majorGraduationResults.add(
-				generateSubMajorDetailGraduationResult(user, takenLectureInventory,
-					graduationRequirement
-				));
+			DetailGraduationResult subMajorDetailGraduationResult = generateSubMajorDetailGraduationResult(
+					user, takenLectureInventory, graduationRequirement
+			);
+
+			processExchangeCreditsForSubMajor(user, subMajorDetailGraduationResult);
+			majorGraduationResults.add(subMajorDetailGraduationResult);
 		}
 		return majorGraduationResults;
+	}
+
+	private void processExchangeCreditsForSubMajor(User user, DetailGraduationResult subMajorDetailGraduationResult) {
+		int exchangeCredit = user.getExchangeCredit().getSubMajor();
+		subMajorDetailGraduationResult.addCredit(exchangeCredit);
+
+	}
+
+	private void addExchangeCreditsToDualElectiveMajor(User user, DetailGraduationResult dualElectiveMajorDetailGraduationResult) {
+		int additionalCredits = user.getExchangeCredit().getDualMajor();
+		dualElectiveMajorDetailGraduationResult.addCredit(additionalCredits);
 	}
 
 	private DetailGraduationResult generateMajorDetailGraduationResult(

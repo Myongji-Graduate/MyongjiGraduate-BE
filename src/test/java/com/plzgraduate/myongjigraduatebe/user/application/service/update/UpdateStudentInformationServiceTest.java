@@ -1,10 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.update;
 
 import static org.mockito.BDDMockito.then;
+import static org.testng.AssertJUnit.assertEquals;
 
 import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.ExchangeCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,5 +44,60 @@ class UpdateStudentInformationServiceTest {
 		//then
 		then(updateUserPort).should()
 			.updateUser(user);
+	}
+	@DisplayName("User의 TransferCredit 정보를 수정한다.")
+	@Test
+	void updateUserTransferCredit() {
+		// given
+		User user = User.builder()
+				.transferCredit(TransferCredit.empty())
+				.build();
+
+		TransferCredit newTransferCredit = new TransferCredit(3, 6, 9, 2);
+
+		UpdateStudentInformationCommand command = UpdateStudentInformationCommand.builder()
+				.user(user)
+				.name("정지환")
+				.major("응용소프트웨어학과")
+				.studentCategory(StudentCategory.TRANSFER)
+				.transferCredit(newTransferCredit)
+				.build();
+
+		// when
+		updateStudentInformationService.updateUser(command);
+
+		// then
+		then(updateUserPort).should()
+				.updateUser(user);
+
+		// Assert TransferCredit is updated
+		assertEquals(newTransferCredit, user.getTransferCredit());
+	}
+
+	@DisplayName("User의 ExchangeCredit 정보를 수정한다.")
+	@Test
+	void updateUserExchangeCredit() {
+		// given
+		User user = User.builder()
+				.exchangeCredit(ExchangeCredit.empty())
+				.build();
+
+		ExchangeCredit exchangeCredit = new ExchangeCredit(3,3,3,3,3,3,3,3);
+
+		UpdateStudentInformationCommand command = UpdateStudentInformationCommand.builder()
+				.user(user)
+				.name("정지환")
+				.major("응용소프트웨어학과")
+				.exchangeCredit(exchangeCredit)
+				.build();
+
+		// when
+		updateStudentInformationService.updateUser(command);
+
+		// then
+		then(updateUserPort).should()
+				.updateUser(user);
+
+		assertEquals(exchangeCredit, user.getExchangeCredit());
 	}
 }

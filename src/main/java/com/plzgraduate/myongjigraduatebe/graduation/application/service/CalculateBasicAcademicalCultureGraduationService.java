@@ -77,6 +77,9 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 				copiedTakenLectureForDualBasicAcademicalCulture,
 				graduationRequirement
 			);
+
+			addExchangeCreditsToDualBasicAcademicalCulture(user, dualBasicAcademicalCultureDetailGraduationResult);
+
 			syncOriginalTakenLectureInventory(
 				takenLectureInventory,
 				primaryBasicAcademicalCultureDetailGraduationResult,
@@ -90,6 +93,11 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 		DetailGraduationResult primaryBasicAcademicalCultureGraduationResult = calculateSingleDetailGraduation(
 			user, PRIMARY_BASIC_ACADEMICAL_CULTURE, takenLectureInventory, graduationRequirement);
 		return List.of(primaryBasicAcademicalCultureGraduationResult);
+	}
+
+	private void addExchangeCreditsToDualBasicAcademicalCulture(User user, DetailGraduationResult dualBasicAcademicalCultureDetailGraduationResult) {
+		int additionalCredits = user.getExchangeCredit().getDualBasicAcademicalCulture();
+		dualBasicAcademicalCultureDetailGraduationResult.addCredit(additionalCredits);
 	}
 
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(

@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistenc
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.ExchangeCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -118,6 +119,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 				.password("1q2w3e4r!")
 				.studentNumber("60181666")
 				.transferCredit(new TransferCredit(0, 0, 0, 0))
+				.exchangeCredit(new ExchangeCredit(0, 0, 0, 0, 0, 0, 0, 0))
 				.studentCategory(StudentCategory.NORMAL)
 				.build();
 	}
@@ -130,6 +132,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 				.password("1q2w3e4r!")
 				.studentNumber(studentNumber)
 				.transferCredit("0/0/0/0")
+				.exchangeCredit("0/0/0/0/0/0/0/0")
 				.studentCategory(StudentCategory.NORMAL)
 				.build();
 	}

@@ -17,11 +17,14 @@ public class User {
 	private final Long id;
 	private final String authId;
 	private final EnglishLevel englishLevel;
+	private final KoreanLevel koreanLevel;
 	private final String studentNumber;
 	private final int entryYear;
 	private final Instant createdAt;
 	private final Instant updatedAt;
+	private boolean isChapleReplaced;
 	private TransferCredit transferCredit;
+	private ExchangeCredit exchangeCredit;
 	private String password;
 	private String name;
 	private String primaryMajor;
@@ -35,27 +38,31 @@ public class User {
 
 	@Builder
 	private User(
-            Long id,
-            String authId,
-            String password,
-            EnglishLevel englishLevel,
-            String name,
-            String studentNumber,
-            int entryYear,
-            String primaryMajor,
-            String subMajor,
-            String dualMajor,
-            String associatedMajor,
-			TransferCredit transferCredit,
-			StudentCategory studentCategory,
-            int totalCredit,
-            double takenCredit,
-            boolean graduated,
-            Instant createdAt,
-            Instant updatedAt
-    ) {
+		Long id,
+		String authId,
+		String password,
+		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
+		String name,
+		String studentNumber,
+		int entryYear,
+		String primaryMajor,
+		String subMajor,
+		String dualMajor,
+		String associatedMajor,
+		TransferCredit transferCredit,
+		ExchangeCredit exchangeCredit,
+		StudentCategory studentCategory,
+		boolean isChapleReplaced,
+		int totalCredit,
+		double takenCredit,
+		boolean graduated,
+		Instant createdAt,
+		Instant updatedAt
+	) {
 		this.id = id;
 		this.authId = authId;
+		this.koreanLevel = koreanLevel;
 		this.password = password;
 		this.englishLevel = englishLevel;
 		this.name = name;
@@ -67,27 +74,39 @@ public class User {
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
+		this.exchangeCredit = exchangeCredit != null ? exchangeCredit : ExchangeCredit.empty();
+		this.isChapleReplaced = isChapleReplaced;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-    }
+	}
 
 	public static User create(
 		String authId,
 		String password,
 		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
 		String studentNumber
 	) {
 		return User.builder()
-			.authId(authId).password(password).englishLevel(englishLevel)
-			.studentNumber(studentNumber).entryYear(parseEntryYearInStudentNumber(studentNumber))
-			.totalCredit(0).takenCredit(0).graduated(false).build();
+			.authId(authId)
+			.password(password)
+			.englishLevel(englishLevel)
+			.koreanLevel(koreanLevel)
+			.studentNumber(studentNumber)
+			.entryYear(parseEntryYearInStudentNumber(studentNumber))
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduated(false)
+			.isChapleReplaced(false)
+			.build();
 	}
 
 	public static User createAnonymous(
 		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
 		String name,
 		String studentNumber,
 		String primaryMajor,
@@ -95,11 +114,14 @@ public class User {
 		String dualMajor,
 		String associatedMajor,
 		StudentCategory studentCategory,
-        TransferCredit transferCredit) {
+		TransferCredit transferCredit,
+		ExchangeCredit exchangeCredit
+	) {
 		return User.builder()
 			.authId("anonymous")
 			.name(name)
 			.englishLevel(englishLevel)
+			.koreanLevel(koreanLevel)
 			.studentNumber(studentNumber)
 			.entryYear(parseEntryYearInStudentNumber(studentNumber))
 			.primaryMajor(primaryMajor)
@@ -111,6 +133,7 @@ public class User {
 			.takenCredit(0)
 			.graduated(false)
 			.transferCredit(transferCredit)
+			.exchangeCredit(exchangeCredit)
 			.build();
 	}
 
@@ -124,6 +147,7 @@ public class User {
 			"id=" + id +
 			", authId='" + authId + '\'' +
 			", englishLevel=" + englishLevel +
+			", koreanLevel=" + koreanLevel +
 			", studentNumber='" + studentNumber + '\'' +
 			", entryYear=" + entryYear +
 			", createdAt=" + createdAt +
@@ -135,6 +159,7 @@ public class User {
 			", dualMajor='" + dualMajor + '\'' +
 			", associatedMajor='" + associatedMajor + '\'' +
 			", transferCredit=" + transferCredit +
+			", exchangeCredit=" + exchangeCredit +
 			", studentCategory=" + studentCategory +
 			", totalCredit=" + totalCredit +
 			", takenCredit=" + takenCredit +
@@ -143,9 +168,17 @@ public class User {
 	}
 
 	public void updateStudentInformation(
-		String name, String major, String dualMajor,
-		String subMajor, String associatedMajor,
-		StudentCategory studentCategory, int totalCredit, double takenCredit, boolean graduate
+		String name,
+		String major,
+		String dualMajor,
+		String subMajor,
+		String associatedMajor,
+		StudentCategory studentCategory,
+		TransferCredit transferCredit,
+		ExchangeCredit exchangeCredit,
+		int totalCredit,
+		double takenCredit,
+		boolean graduate
 	) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -153,18 +186,31 @@ public class User {
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
 		this.studentCategory = studentCategory;
+		updateTransferCredit(transferCredit);
+		updateExchangeCredit(exchangeCredit);
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduate;
 	}
 
-	public void updateTransferCredit(TransferCredit transferCredit) {
+	private void updateTransferCredit(TransferCredit transferCredit) {
 		if (transferCredit != null) {
 			this.transferCredit = transferCredit;
 		}
 	}
+
+	private void updateExchangeCredit(ExchangeCredit exchangeCredit) {
+		if (exchangeCredit != null) {
+			this.exchangeCredit = exchangeCredit;
+		}
+	}
+
 	public boolean checkBeforeEntryYear(int entryYear) {
 		return this.entryYear < entryYear;
+	}
+
+	public boolean checkAfterEntryYear(int entryYear) {
+		return entryYear <= this.entryYear;
 	}
 
 	public boolean checkMajor(String major) {
@@ -191,6 +237,18 @@ public class User {
 		return this.authId.equals(authId);
 	}
 
+	public boolean isAnonymous() {
+		return this.authId.equals("anonymous");
+	}
+
+	public boolean isForeignerStudent() {
+		return this.koreanLevel != KoreanLevel.FREE;
+	}
+
+	public void replaceChaple() {
+		this.isChapleReplaced = true;
+	}
+
 	public String getMajorByMajorType(MajorType majorType) {
 		if (majorType == PRIMARY) {
 			return primaryMajor;
@@ -198,6 +256,12 @@ public class User {
 			return dualMajor;
 		}
 		return subMajor;
+	}
+
+	public boolean isAnyMajorMatched(String major) {
+		return (this.primaryMajor.equals(major))
+			|| (this.dualMajor != null && this.dualMajor.equals(major))
+			|| (this.subMajor != null && this.subMajor.equals(major));
 	}
 
 	@Override
@@ -229,5 +293,4 @@ public class User {
 	public void setTransferCredit(TransferCredit transferCredit) {
 		this.transferCredit = transferCredit;
 	}
-
 }

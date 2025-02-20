@@ -36,8 +36,8 @@ class CoreCultureDetailCategoryManagerTest {
 
 	static Stream<Arguments> ictUsers() {
 		return Stream.of(
-			Arguments.arguments(UserFixture.응용소프트웨어학과_19학번()),
-			Arguments.arguments(UserFixture.데이터테크놀로지학과_19학번()),
+			Arguments.arguments(UserFixture.응용소프트웨어전공_19학번()),
+			Arguments.arguments(UserFixture.데이터테크놀로지전공_19학번()),
 			Arguments.arguments(UserFixture.디지털콘텐츠디자인학과_19학번())
 		);
 	}
@@ -45,8 +45,10 @@ class CoreCultureDetailCategoryManagerTest {
 	@DisplayName("각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CoreCultureCategoryFixture.class)
-	void generateCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
-		Set<CoreCulture> graduationLectures) {
+	void generateCompletedCoreCultureDetailCategoryResult(
+		CoreCultureCategory coreCultureCategory,
+		Set<CoreCulture> graduationLectures
+	) {
 
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
@@ -81,7 +83,8 @@ class CoreCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user,
-			takenLectureInventory, graduationLectures, coreCultureCategory);
+			takenLectureInventory, graduationLectures, coreCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -92,8 +95,10 @@ class CoreCultureDetailCategoryManagerTest {
 	@DisplayName("각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
 	@ParameterizedTest
 	@ArgumentsSource(CoreCultureCategoryFixture.class)
-	void generateUnCompletedCoreCultureDetailCategoryResult(CoreCultureCategory coreCultureCategory,
-		Set<CoreCulture> graduationLectures) {
+	void generateUnCompletedCoreCultureDetailCategoryResult(
+		CoreCultureCategory coreCultureCategory,
+		Set<CoreCulture> graduationLectures
+	) {
 
 		//given
 		User user = UserFixture.경영학과_19학번_ENG34();
@@ -103,7 +108,8 @@ class CoreCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user,
-			takenLectureInventory, graduationLectures, coreCultureCategory);
+			takenLectureInventory, graduationLectures, coreCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
@@ -111,7 +117,9 @@ class CoreCultureDetailCategoryManagerTest {
 			.contains(coreCultureCategoryName, false, categoryTotalCredit);
 	}
 
-	@DisplayName("ICT학부 전공 학생은 핵심교양 세부 카테고리 '과학과기술' 중 SW프로그래밍입문을 수강했을 경우 카테고리 수강 학점이 아닌 자유학점으로 인정된다.")
+	@DisplayName(
+		"ICT학부 전공 학생은 핵심교양 세부 카테고리 '과학과기술' 중 SW프로그래밍입문을 수강했을 경우 카테고리 수강 학점이 아닌 자유학점으로 인정된다."
+	)
 	@ParameterizedTest
 	@MethodSource("ictUsers")
 	void generateUnCompletedScienceTechnologyDetailCategoryResultWithICT(User user) {
@@ -129,12 +137,14 @@ class CoreCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user,
-			takenLectureInventory, graduationLectures, coreCultureCategory);
+			takenLectureInventory, graduationLectures, coreCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
-				"freeElectiveLeftCredit")
+				"freeElectiveLeftCredit"
+			)
 			.contains(coreCultureCategory.getName(), true, categoryTotalCredit, 3, 3);
 	}
 
@@ -154,12 +164,14 @@ class CoreCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user,
-			takenLectureInventory, graduationLectures, coreCultureCategory);
+			takenLectureInventory, graduationLectures, coreCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
-				"freeElectiveLeftCredit")
+				"freeElectiveLeftCredit"
+			)
 			.contains(coreCultureCategory.getName(), true, categoryTotalCredit, 0, 0);
 		assertThat(detailCategoryResult.getTakenLectures()).contains(
 			mockLectureMap.get("KMA02155"));
@@ -181,12 +193,14 @@ class CoreCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user,
-			takenLectureInventory, graduationLectures, coreCultureCategory);
+			takenLectureInventory, graduationLectures, coreCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
-				"freeElectiveLeftCredit")
+				"freeElectiveLeftCredit"
+			)
 			.contains(coreCultureCategory.getName(), true, categoryTotalCredit, 0, 0);
 		assertThat(detailCategoryResult.getTakenLectures()).contains(
 			mockLectureMap.get("KMA02156"));
@@ -209,12 +223,14 @@ class CoreCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user,
-			takenLectureInventory, graduationLectures, coreCultureCategory);
+			takenLectureInventory, graduationLectures, coreCultureCategory
+		);
 
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits", "normalLeftCredit",
-				"freeElectiveLeftCredit")
+				"freeElectiveLeftCredit"
+			)
 			.contains(coreCultureCategory.getName(), false, categoryTotalCredit, 6, 0);
 	}
 }

@@ -31,7 +31,7 @@ class DataTechnologyMajorTest {
 	void 전공필수_기준학점_충족() {
 
 		//given
-		User user = UserFixture.데이테크놀로지학과_16학번();
+		User user = UserFixture.데이테크놀로지전공_16학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HEB01102"), 2016, Semester.FIRST), //기초프로그래밍
 			TakenLecture.of(user, mockLectureMap.get("HEB01103"), 2016, Semester.SECOND),
@@ -72,13 +72,16 @@ class DataTechnologyMajorTest {
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
 			List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
-		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager,
-			electiveMajorManager);
+		MajorGraduationManager manager = new MajorGraduationManager(
+			mandatoryMajorManager,
+			electiveMajorManager
+		);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 데이터테크놀로지_전공, 70);
+			takenLectureInventory, 데이터테크놀로지_전공, 70
+		);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -104,7 +107,7 @@ class DataTechnologyMajorTest {
 	void 전공필수_기준학점_미충족() {
 
 		//given
-		User user = UserFixture.데이테크놀로지학과_18학번();
+		User user = UserFixture.데이테크놀로지전공_18학번();
 		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 			TakenLecture.of(user, mockLectureMap.get("HEB01102"), 2018, Semester.FIRST), //기초프로그래밍
 			TakenLecture.of(user, mockLectureMap.get("HEB01104"), 2018, Semester.SECOND),
@@ -138,13 +141,16 @@ class DataTechnologyMajorTest {
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
 			List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
-		MajorGraduationManager manager = new MajorGraduationManager(mandatoryMajorManager,
-			electiveMajorManager);
+		MajorGraduationManager manager = new MajorGraduationManager(
+			mandatoryMajorManager,
+			electiveMajorManager
+		);
 
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 데이터테크놀로지_전공, 70);
+			takenLectureInventory, 데이터테크놀로지_전공, 70
+		);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);

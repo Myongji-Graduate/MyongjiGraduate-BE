@@ -52,14 +52,22 @@ public class FreeElectiveGraduationResult {
 				.getCredit())
 			.sum();
 
-		int transferFreeElectiveCredit = 0;
+		int transferFreeElectiveCredit = calculateTransferFreeElectiveCredit(user);
+		int exchangeFreeElectiveCredit = calculateExchangeFreeElectiveCredit(user);
 
-		// 편입생일 경우 추가 학점을 계산
-		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			transferFreeElectiveCredit = user.getTransferCredit().getFreeElective();
-		}
 		return remainCreditByDetailGraduationResult + remainCreditByTakenLectures
-			+ leftNormalCultureCredit+transferFreeElectiveCredit;
+			+ leftNormalCultureCredit+transferFreeElectiveCredit+exchangeFreeElectiveCredit;
+	}
+
+	private static int calculateExchangeFreeElectiveCredit(User user) {
+			return user.getExchangeCredit().getFreeElective();
+    }
+
+	private static int calculateTransferFreeElectiveCredit(User user) {
+		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
+			return user.getTransferCredit().getFreeElective();
+		}
+		return 0;
 	}
 
 	public void checkCompleted() {

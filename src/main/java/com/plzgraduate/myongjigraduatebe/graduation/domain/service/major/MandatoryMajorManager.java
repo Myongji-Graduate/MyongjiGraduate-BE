@@ -20,9 +20,11 @@ public class MandatoryMajorManager {
 
 	private final List<MandatoryMajorSpecialCaseHandler> mandatoryMajorSpecialCaseHandlers;
 
-	public DetailCategoryResult createDetailCategoryResult(User user,
+	public DetailCategoryResult createDetailCategoryResult(
+		User user,
 		TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType) {
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType
+	) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
 		boolean isSatisfiedMandatory = true;
@@ -46,14 +48,17 @@ public class MandatoryMajorManager {
 			});
 		DetailCategoryResult majorMandatoryResult = DetailCategoryResult.create(
 			MANDATORY_MAJOR_NAME, isSatisfiedMandatory,
-			calculateTotalCredit(takenMandatory, mandatoryLectures, removeMandatoryTotalCredit));
+			calculateTotalCredit(takenMandatory, mandatoryLectures, removeMandatoryTotalCredit)
+		);
 		majorMandatoryResult.calculate(takenMandatory, mandatoryLectures);
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 		return majorMandatoryResult;
 	}
 
-	private int calculateTotalCredit(Set<Lecture> taken, Set<Lecture> mandatoryLectures,
-		int removedCredit) {
+	private int calculateTotalCredit(
+		Set<Lecture> taken, Set<Lecture> mandatoryLectures,
+		int removedCredit
+	) {
 		int totalCredit = 0;
 		for (Lecture lecture : mandatoryLectures) {
 			if (!taken.contains(lecture) && lecture.getIsRevoked() == 1) {
@@ -63,5 +68,4 @@ public class MandatoryMajorManager {
 		}
 		return totalCredit - removedCredit;
 	}
-
 }

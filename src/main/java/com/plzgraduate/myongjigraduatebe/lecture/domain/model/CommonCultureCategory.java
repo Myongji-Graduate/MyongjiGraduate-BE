@@ -8,11 +8,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum CommonCultureCategory {
 	CHRISTIAN_A("기독교", 4, List.of(16, 17, 18, 19)),
-	CHRISTIAN_B("기독교", 4, List.of(20, 21, 22, 23)),
-	EXPRESSION("사고와 표현", 3, List.of(16, 17, 18, 19, 20, 21, 22, 23)),
-	ENGLISH("영어", 6, List.of(16, 17, 18, 19, 20, 21, 22, 23)),
+	CHRISTIAN_B("기독교", 4, List.of(20, 21, 22, 23, 24)),
+	EXPRESSION("사고와 표현", 3, List.of(16, 17, 18, 19, 20, 21, 22, 23, 24)),
+	ENGLISH("영어", 6, List.of(16, 17, 18, 19, 20, 21, 22, 23, 24)),
 	CAREER("진로", 2, List.of(18, 19, 20, 21, 22)),
-	DIGITAL_LITERACY("진로와디지털리터러시", 2, List.of(23));
+	DIGITAL_LITERACY("진로와디지털리터러시", 2, List.of(23, 24)),
+	KOREAN("한국어", 6, List.of(16, 17, 18, 19, 20, 21, 22, 23, 24));
 
 	private final String name;
 	private final int totalCredit;
