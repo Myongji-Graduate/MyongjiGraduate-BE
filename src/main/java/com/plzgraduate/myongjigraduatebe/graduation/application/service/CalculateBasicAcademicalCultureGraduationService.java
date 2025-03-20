@@ -47,10 +47,11 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 	) {
 		MajorType majorType = MajorType.from(graduationCategory);
 		String userMajor = user.getMajorByMajorType(majorType);
+		int entryYear = user.getEntryYear();
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures =
-			findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor);
+			findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor,entryYear);
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager =
-			determineBasicAcademicalCultureGraduationManager(userMajor);
+			determineBasicAcademicalCultureGraduationManager(userMajor,entryYear);
 		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
 			graduationRequirement.getBasicCreditByMajorType(majorType)
@@ -101,10 +102,10 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 	}
 
 	private GraduationManager<BasicAcademicalCultureLecture> determineBasicAcademicalCultureGraduationManager(
-		String userMajor
+		String userMajor, int entryYear
 	) {
 		return basicAcademicalGraduationManagers.stream()
-			.filter(basicAcademicalManager -> basicAcademicalManager.isSatisfied(userMajor))
+			.filter(basicAcademicalManager -> basicAcademicalManager.isSatisfied(userMajor, entryYear))
 			.findFirst()
 			.orElse(new DefaultBasicAcademicalGraduationManager());
 	}

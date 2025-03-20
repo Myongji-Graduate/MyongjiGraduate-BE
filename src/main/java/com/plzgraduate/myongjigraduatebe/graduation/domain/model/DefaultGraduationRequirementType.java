@@ -20,9 +20,9 @@ public enum DefaultGraduationRequirementType {
 	ICT_16_17("ICT융합대", 70, 15, 12, 18, 10, 9, 134, 16, 17),
 	HUMANITIES_18_99("인문대", 63, 17, 12, 12, 10, 14, 128, 18, 99),
 	SOCIAL_SCIENCE_18_99("사회과학대", 63, 17, 12, 12, 19, 14, 128, 18, 99),
-	BUSINESS_18_99("경영대", 63, 17, 12, 6, 10, 20, 128, 18, 99),
-	LAW_18_99("법과대", 63, 17, 12, 9, 10, 17, 128, 18, 99),
-	ICT_18_99("ICT융합대", 70, 17, 12, 18, 10, 7, 134, 18, 99);
+	BUSINESS_18_24("경영대", 63, 17, 12, 6, 10, 20, 128, 18, 24),
+	LAW_18_24("법과대", 63, 17, 12, 9, 10, 17, 128, 18, 24),
+	ICT_18_24("ICT융합대", 70, 17, 12, 18, 10, 7, 134, 18, 24);
 
 	private final String collageName;
 	private final int majorLectureCredit;
@@ -75,7 +75,7 @@ public enum DefaultGraduationRequirementType {
 	}
 
 	private GraduationRequirement createTransferGraduationRequirement(User user) {
-		College userCollege = College.findBelongingCollege(user.getPrimaryMajor());
+		College userCollege = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
 		TransferGraduationRequirementType transferRequirement =
 				TransferGraduationRequirementType.findByCollegeName(userCollege.getName());
 

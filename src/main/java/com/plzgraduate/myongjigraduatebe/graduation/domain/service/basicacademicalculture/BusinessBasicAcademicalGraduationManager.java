@@ -33,8 +33,8 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 	);
 
 	@Override
-	public boolean isSatisfied(String major) {
-		return findBelongingCollege(major) == BUSINESS;
+	public boolean isSatisfied(String major, int entryYear) {
+		return findBelongingCollege(major, entryYear) == BUSINESS;
 	}
 
 	@Override

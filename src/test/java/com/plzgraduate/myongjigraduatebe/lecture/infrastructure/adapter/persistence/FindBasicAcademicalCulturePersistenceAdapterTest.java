@@ -57,7 +57,7 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 
 		//when
 		Set<BasicAcademicalCultureLecture> basicAcademicalCulture = basicAcademicalCulturePersistenceAdapter.findBasicAcademicalCulture(
-			user.getPrimaryMajor());
+			user.getPrimaryMajor(), user.getEntryYear());
 		//then
 		assertThat(basicAcademicalCulture).hasSize(1)
 			.extracting("college")

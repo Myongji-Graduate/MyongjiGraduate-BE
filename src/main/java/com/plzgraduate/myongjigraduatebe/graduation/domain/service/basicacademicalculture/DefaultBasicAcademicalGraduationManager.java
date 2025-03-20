@@ -24,9 +24,9 @@ import org.springframework.stereotype.Component;
 public class DefaultBasicAcademicalGraduationManager implements BasicAcademicalGraduationManager {
 
 	@Override
-	public boolean isSatisfied(String major) {
+	public boolean isSatisfied(String major, int entryYear) {
 		return List.of(HUMANITIES, LAW, ICT)
-			.contains(findBelongingCollege(major));
+			.contains(findBelongingCollege(major, entryYear));
 	}
 
 	@Override
