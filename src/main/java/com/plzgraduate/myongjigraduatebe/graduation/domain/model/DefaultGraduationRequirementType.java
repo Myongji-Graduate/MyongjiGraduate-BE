@@ -19,10 +19,16 @@ public enum DefaultGraduationRequirementType {
 	LAW_16_17("법과대", 63, 15, 12, 9, 10, 19, 128, 16, 17),
 	ICT_16_17("ICT융합대", 70, 15, 12, 18, 10, 9, 134, 16, 17),
 	HUMANITIES_18_99("인문대", 63, 17, 12, 12, 10, 14, 128, 18, 99),
-	SOCIAL_SCIENCE_18_99("사회과학대", 63, 17, 12, 12, 19, 14, 128, 18, 99),
-	BUSINESS_18_99("경영대", 63, 17, 12, 6, 10, 20, 128, 18, 99),
-	LAW_18_99("법과대", 63, 17, 12, 9, 10, 17, 128, 18, 99),
-	ICT_18_99("ICT융합대", 70, 17, 12, 18, 10, 7, 134, 18, 99);
+	SOCIAL_SCIENCE_18_99("사회과학대", 63, 17, 12, 12, 10, 14, 128, 18, 99),
+	BUSINESS_18_24("경영대", 63, 17, 12, 6, 10, 20, 128, 18, 24),
+	LAW_18_24("법과대", 63, 17, 12, 9, 10, 17, 128, 18, 24),
+	ICT_18_24("ICT융합대", 70, 17, 12, 18, 10, 7, 134, 18, 24),
+	//25년 이후 단과대
+	MEDIA_HUMAN_LIFE("미디어·휴먼라이프대", 63, 17, 12, 12, 10, 14, 128, 18, 99),
+	BUSINESS_25_99("경영대", 63, 17, 12, 9, 10, 17, 128, 25, 99),
+	BUSINESS_GLOBAL_25_99("경영대", 63, 17, 12, 6, 10, 20, 128, 25, 99),
+	ARTIFICIAL_INTELLIGENCE_SOFTWARE_25_99("인공지능·소프트웨어융합대학", 70, 17, 12, 15, 10, 10, 134, 25, 99);
+
 
 	private final String collageName;
 	private final int majorLectureCredit;
@@ -41,6 +47,12 @@ public enum DefaultGraduationRequirementType {
 	) {
 		return Arrays.stream(DefaultGraduationRequirementType.values())
 				.filter(gr -> gr.getCollageName().equals(college.getName()))
+				.filter(gr -> {
+					if (user.getPrimaryMajor().equals("글로벌비즈니스학전공")) {
+						return gr.name().contains("BUSINESS_GLOBAL");
+					}
+					return !gr.name().contains("BUSINESS_GLOBAL");
+				})
 				.filter(gr -> gr.getStartEntryYear() <= user.getEntryYear()
 						&& gr.getEndEntryYear() >= user.getEntryYear())
 				.findFirst()
@@ -75,7 +87,7 @@ public enum DefaultGraduationRequirementType {
 	}
 
 	private GraduationRequirement createTransferGraduationRequirement(User user) {
-		College userCollege = College.findBelongingCollege(user.getPrimaryMajor());
+		College userCollege = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
 		TransferGraduationRequirementType transferRequirement =
 				TransferGraduationRequirementType.findByCollegeName(userCollege.getName());
 

@@ -38,7 +38,8 @@ class GraduationRequirementTest {
 		//given
 		User user = User.builder()
 			.primaryMajor("응용소프트웨어전공")
-			.dualMajor("경영학과")
+			.dualMajor("경영학전공")
+			.entryYear(18)
 			.build();
 
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()

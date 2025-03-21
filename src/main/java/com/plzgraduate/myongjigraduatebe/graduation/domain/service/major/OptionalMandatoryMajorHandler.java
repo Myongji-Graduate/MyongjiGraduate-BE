@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
 
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
-	private static final String BUSINESS = "경영학과";
-	private static final String ADMINISTRATIONS = "행정학과";
-	private static final String INTERNATIONAL_TRADE = "국제통상학과";
+	private static final String BUSINESS = "경영학전공";
+	private static final String ADMINISTRATIONS = "행정학전공";
+	private static final String INTERNATIONAL_TRADE = "국제통상학전공";
 	private static final int CLASS_OF_17 = 17;
 	private static final int CLASS_OF_19 = 19;
 

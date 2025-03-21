@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 public class BusinessBasicAcademicalGraduationManager implements BasicAcademicalGraduationManager {
 
 	private static final int TWENTY = 20;
-	private static final String BUSINESS_ADMINISTRATION = "경영학과";
+	private static final String BUSINESS_ADMINISTRATION = "경영학전공";
 	private static final String MANAGEMENT_INFORMATION = "경영정보학과";
-	private static final String INTERNATIONAL_TRADE = "국제통상학과";
+	private static final String INTERNATIONAL_TRADE = "국제통상학전공";
 	private static final Set<Lecture> businessBefore20 = Set.of(
 			Lecture.of("KMD02114", "미시경제학원론", 3, 0, null),
 			Lecture.of("KMD02107", "경상통계학", 3, 0, null)
@@ -33,8 +33,8 @@ public class BusinessBasicAcademicalGraduationManager implements BasicAcademical
 	);
 
 	@Override
-	public boolean isSatisfied(String major) {
-		return findBelongingCollege(major) == BUSINESS;
+	public boolean isSatisfied(String major, int entryYear) {
+		return findBelongingCollege(major, entryYear) == BUSINESS;
 	}
 
 	@Override

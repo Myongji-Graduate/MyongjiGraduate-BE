@@ -20,8 +20,8 @@ public class FindBasicAcademicalCulturePersistenceAdapter implements
 	private final LectureMapper lectureMapper;
 
 	@Override
-	public Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(String major) {
-		College userCollege = College.findBelongingCollege(major);
+	public Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(String major, int entryYear) {
+		College userCollege = College.findBelongingCollege(major, entryYear);
 		return basicAcademicalCultureRepository.findAllByCollege(userCollege.getName())
 			.stream()
 			.map(lectureMapper::mapToBasicAcademicalCultureLectureModel)
@@ -30,8 +30,8 @@ public class FindBasicAcademicalCulturePersistenceAdapter implements
 
 	@Override
 	public Set<BasicAcademicalCultureLecture> findDuplicatedLecturesBetweenMajors(User user) {
-		College primaryMajorCollage = College.findBelongingCollege(user.getPrimaryMajor());
-		College dualMajorCollage = College.findBelongingCollege(user.getDualMajor());
+		College primaryMajorCollage = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
+		College dualMajorCollage = College.findBelongingCollege(user.getDualMajor(), user.getEntryYear());
 		return basicAcademicalCultureRepository.findAllDuplicatedTakenByCollages(user.getId(),
 				primaryMajorCollage.getName(), dualMajorCollage.getName())
 			.stream()

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public interface BasicAcademicalGraduationManager extends
 	GraduationManager<BasicAcademicalCultureLecture> {
 
-	boolean isSatisfied(String major);
+	boolean isSatisfied(String major, int entryYear);
 
 	default Set<Lecture> convertToLectureSet(
 		Set<BasicAcademicalCultureLecture> basicAcademicalCultureLectures) {
