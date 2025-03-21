@@ -25,7 +25,7 @@ class UpdateStudentInformationCommandTest {
         ParsingInformation parsingInformation = ParsingInformation.builder()
                 .studentName("홍길동")
                 .major("응용소프트웨어전공")
-                .dualMajor("경영학과")
+                .dualMajor("경영학전공")
                 .subMajor("통계학과")
                 .transferCredit(TransferCredit.from("0/0/0/0"))
                 .exchangeCredit(ExchangeCredit.from("0/0/0/0/0/0/0/0"))
@@ -39,7 +39,7 @@ class UpdateStudentInformationCommandTest {
         assertThat(command).isNotNull();
         assertThat(command.getName()).isEqualTo("홍길동");
         assertThat(command.getMajor()).isEqualTo("응용소프트웨어전공");
-        assertThat(command.getDualMajor()).isEqualTo("경영학과");
+        assertThat(command.getDualMajor()).isEqualTo("경영학전공");
         assertThat(command.getSubMajor()).isEqualTo("통계학과");
         assertThat(command.getTransferCredit()).isEqualTo(TransferCredit.from("0/0/0/0"));
         assertThat(command.getExchangeCredit()).isEqualTo(ExchangeCredit.from("0/0/0/0/0/0/0/0"));
@@ -54,7 +54,7 @@ class UpdateStudentInformationCommandTest {
                 .id(1L)
                 .name("홍길동")
                 .primaryMajor("응용소프트웨어전공")
-                .dualMajor("경영학과")
+                .dualMajor("경영학전공")
                 .subMajor("통계학과")
                 .studentCategory(StudentCategory.DUAL_MAJOR)
                 .build();
@@ -72,7 +72,7 @@ class UpdateStudentInformationCommandTest {
         assertThat(command).isNotNull();
         assertThat(command.getName()).isEqualTo("홍길동");
         assertThat(command.getMajor()).isEqualTo("응용소프트웨어전공");
-        assertThat(command.getDualMajor()).isEqualTo("경영학과");
+        assertThat(command.getDualMajor()).isEqualTo("경영학전공");
         assertThat(command.getSubMajor()).isEqualTo("통계학과");
         assertThat(command.getStudentCategory()).isEqualTo(StudentCategory.DUAL_MAJOR);
         assertThat(command.getTotalCredit()).isEqualTo(130);

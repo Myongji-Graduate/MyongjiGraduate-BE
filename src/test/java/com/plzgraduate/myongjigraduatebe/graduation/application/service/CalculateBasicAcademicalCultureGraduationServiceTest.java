@@ -10,6 +10,7 @@ import static com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategor
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -60,7 +61,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		user = User.builder()
 			.id(1L)
 			.primaryMajor("응용소프트웨어전공")
-			.dualMajor("경영학과")
+			.dualMajor("경영학전공")
 			.studentCategory(DUAL_MAJOR)
 			.entryYear(19)
 			.build();
@@ -68,7 +69,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		 user2 = User.builder()
 				.id(1L)
 				.primaryMajor("응용소프트웨어전공")
-				.dualMajor("경영학과")
+				.dualMajor("경영학전공")
 				.studentCategory(DUAL_MAJOR)
 				 .exchangeCredit(ExchangeCredit.from("0/0/0/6/0/0/0/0"))
 				.entryYear(19)
@@ -92,7 +93,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		//given
 		HashSet<BasicAcademicalCultureLecture> graduationCoreCultures = new HashSet<>(
 			Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02128"), ICT.getName())));
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(anyString())).willReturn(
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(anyString(), anyInt())).willReturn(
 			graduationCoreCultures);
 
 		HashSet<TakenLecture> takenLectures = new HashSet<>(
@@ -140,7 +141,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 			.dualBasicAcademicalCultureCredit(18)
 			.build();
 
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(anyString())).willReturn(
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(anyString(), anyInt())).willReturn(
 			graduationBasicAcademicalCultures);
 
 		//when
@@ -174,7 +175,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 				.dualBasicAcademicalCultureCredit(18)
 				.build();
 
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(anyString())).willReturn(
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(anyString(), anyInt())).willReturn(
 				graduationBasicAcademicalCultures);
 
 		//when
@@ -196,8 +197,8 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		Set<BasicAcademicalCultureLecture> primaryLectures = Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02128"), "ICT"));
 		Set<BasicAcademicalCultureLecture> dualLectures = Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02129"), "BUSINESS"));
 
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공")).willReturn(primaryLectures);
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("경영학과")).willReturn(dualLectures);
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공",19)).willReturn(primaryLectures);
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("경영학전공",19)).willReturn(dualLectures);
 
 		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
 				TakenLecture.builder().lecture(Lecture.builder().id("KMA02128").credit(3).build()).build(),

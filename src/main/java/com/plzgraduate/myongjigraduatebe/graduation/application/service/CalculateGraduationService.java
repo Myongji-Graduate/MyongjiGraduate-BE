@@ -99,7 +99,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	}
 
 	public GraduationRequirement determineGraduationRequirement(User user) {
-		College userCollage = College.findBelongingCollege(user.getPrimaryMajor());
+		College userCollage = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
 		DefaultGraduationRequirementType defaultGraduationRequirement =
 			DefaultGraduationRequirementType.determineGraduationRequirement(userCollage, user);
 		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);

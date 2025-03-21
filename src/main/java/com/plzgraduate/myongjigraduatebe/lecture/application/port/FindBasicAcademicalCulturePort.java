@@ -6,7 +6,7 @@ import java.util.Set;
 
 public interface FindBasicAcademicalCulturePort {
 
-	Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(String major);
+	Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(String major, int entryYear);
 
 	Set<BasicAcademicalCultureLecture> findDuplicatedLecturesBetweenMajors(User user);
 }

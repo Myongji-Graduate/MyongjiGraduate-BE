@@ -100,7 +100,7 @@ class CalculateSingleDetailGraduationServiceTest {
 			.entryYear(19)
 			.studentCategory(DUAL_MAJOR)
 			.primaryMajor("응용소프트웨어전공")
-			.dualMajor("데이터테크놀로지전공")
+			.dualMajor("데이터사이언스전공")
 			.build();
 		GraduationCategory graduationCategory = GraduationCategory.valueOf(graduationCategoryName);
 		CalculateDetailGraduationUseCase calculateDetailGraduationUseCase = mock(

@@ -34,8 +34,8 @@ public class SocialScienceBasicAcademicGraduationManager implements
 	);
 
 	@Override
-	public boolean isSatisfied(String major) {
-		return findBelongingCollege(major) == SOCIAL_SCIENCE;
+	public boolean isSatisfied(String major, int entryYear) {
+		return findBelongingCollege(major, entryYear) == SOCIAL_SCIENCE;
 	}
 
 	@Override
