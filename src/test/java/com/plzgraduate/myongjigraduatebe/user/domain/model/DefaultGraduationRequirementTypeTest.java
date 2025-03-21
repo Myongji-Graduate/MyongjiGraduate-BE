@@ -118,37 +118,37 @@ class DefaultGraduationRequirementTypeTest {
 		assertThat(graduationRequirement.getFreeElectiveCredit()).isEqualTo(defaultGraduationRequirementType.getFreeElectiveLectureCredit());
 	}
 
-//	@DisplayName("글로벌비즈니스학전공 학생의 졸업요건을 결정한다.")
-//	@Test()
-//	void determineGraduationRequirementWithGlobalBusinessMajor() {
-//		//given
-//		User globalBizUser = UserFixture.글로벌비즈니스학전공_25학번();
-//		College businessCollege = College.BUSINESS_NEW;
-//		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
-//			businessCollege, globalBizUser);
-//
-//		//when
-//		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(globalBizUser);
-//
-//		//then
-//		assertThat(defaultGraduationRequirementType.name()).contains("BUSINESS_GLOBAL");
-//		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
-//	}
-//
-//	@DisplayName("일반 경영학전공 학생의 졸업요건을 결정한다.")
-//	@Test()
-//	void determineGraduationRequirementWithRegularBusinessMajor() {
-//		//given
-//		User regularBizUser = UserFixture.경영학과_25학번();
-//		College businessCollege = College.BUSINESS_NEW;
-//		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
-//			businessCollege, regularBizUser);
-//
-//		//when
-//		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(regularBizUser);
-//
-//		//then
-//		assertThat(defaultGraduationRequirementType.name()).doesNotContain("BUSINESS_GLOBAL");
-//		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
-//	}
+	@DisplayName("글로벌비즈니스학전공 학생의 졸업요건을 결정한다.")
+	@Test()
+	void determineGraduationRequirementWithGlobalBusinessMajor() {
+		//given
+		User globalBizUser = UserFixture.글로벌비즈니스학전공_25학번();
+		College businessCollege = College.BUSINESS_NEW;
+		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
+			businessCollege, globalBizUser);
+
+		//when
+		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(globalBizUser);
+
+		//then
+		assertThat(defaultGraduationRequirementType.name()).contains("BUSINESS_GLOBAL");
+		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
+	}
+
+	@DisplayName("일반 경영학전공 학생의 졸업요건을 결정한다.")
+	@Test()
+	void determineGraduationRequirementWithRegularBusinessMajor() {
+		//given
+		User regularBizUser = UserFixture.경영학과_25학번();
+		College businessCollege = College.BUSINESS_NEW;
+		DefaultGraduationRequirementType defaultGraduationRequirementType = DefaultGraduationRequirementType.determineGraduationRequirement(
+			businessCollege, regularBizUser);
+
+		//when
+		GraduationRequirement graduationRequirement = defaultGraduationRequirementType.convertToProfitGraduationRequirement(regularBizUser);
+
+		//then
+		assertThat(defaultGraduationRequirementType.name()).doesNotContain("BUSINESS_GLOBAL");
+		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
+	}
 }

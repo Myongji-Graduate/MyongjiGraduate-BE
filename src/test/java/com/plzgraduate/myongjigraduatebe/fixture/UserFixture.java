@@ -496,6 +496,42 @@ public class UserFixture {
 		);
 	}
 
+	public static User 글로벌비즈니스학전공_25학번() {
+		return createUser(
+				"mj22",
+				"1234",
+				EnglishLevel.ENG34,
+				KoreanLevel.FREE,
+				"김글로",
+				"60251022",
+				25,
+				"글로벌비즈니스학전공",
+				null,
+				null,
+				StudentCategory.NORMAL,
+				"0/0/0/0",
+				"0/0/0/0/0/0/0/0"
+		);
+	}
+
+	public static User 경영학과_25학번() {
+		return createUser(
+				"mj22",
+				"1234",
+				EnglishLevel.ENG34,
+				KoreanLevel.FREE,
+				"김경영",
+				"60251022",
+				25,
+				"경영학전공",
+				null,
+				null,
+				StudentCategory.NORMAL,
+				"0/0/0/0",
+				"0/0/0/0/0/0/0/0"
+		);
+	}
+
 	public static User createUser(
 		String authId,
 		String password,
