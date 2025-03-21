@@ -61,7 +61,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		user = User.builder()
 			.id(1L)
 			.primaryMajor("응용소프트웨어전공")
-			.dualMajor("경영학과")
+			.dualMajor("경영학전공")
 			.studentCategory(DUAL_MAJOR)
 			.entryYear(19)
 			.build();
@@ -69,7 +69,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		 user2 = User.builder()
 				.id(1L)
 				.primaryMajor("응용소프트웨어전공")
-				.dualMajor("경영학과")
+				.dualMajor("경영학전공")
 				.studentCategory(DUAL_MAJOR)
 				 .exchangeCredit(ExchangeCredit.from("0/0/0/6/0/0/0/0"))
 				.entryYear(19)
@@ -198,7 +198,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		Set<BasicAcademicalCultureLecture> dualLectures = Set.of(BasicAcademicalCultureLecture.of(Lecture.from("KMA02129"), "BUSINESS"));
 
 		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공",19)).willReturn(primaryLectures);
-		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("경영학과",19)).willReturn(dualLectures);
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("경영학전공",19)).willReturn(dualLectures);
 
 		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
 				TakenLecture.builder().lecture(Lecture.builder().id("KMA02128").credit(3).build()).build(),

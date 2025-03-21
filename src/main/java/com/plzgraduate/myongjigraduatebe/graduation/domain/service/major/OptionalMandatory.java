@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OptionalMandatory {
-	ADMINISTRATIONS("행정학과", 2, Set.of(
+	ADMINISTRATIONS("행정학전공", 2, Set.of(
 		Lecture.of("HBA01109", "행정학의이해", 3, 0, null),
 		Lecture.of("HBA01110", "리더십과조직행동", 3, 0, null),
 		Lecture.of("HBA01111", "감성과현대행정", 3, 0, null),
@@ -19,13 +19,13 @@ public enum OptionalMandatory {
 		Lecture.of("HBA01222", "커뮤니티개발연구", 3, 0, null)
 	)),
 
-	BUSINESS("경영학과", 1, Set.of(
+	BUSINESS("경영학전공", 1, Set.of(
 		Lecture.of("HBX01128", "국제통상원론", 3, 0, null),
 		Lecture.of("HBX01127", "국제경영학", 3, 0, null),
 		Lecture.of("HBX01125", "경영정보", 3, 0, null),
 		Lecture.of("HBY01103", "경영정보", 3, 1, null)
 	)),
-	INTERNATIONAL_TRADE("국제통상학과", 4, Set.of(
+	INTERNATIONAL_TRADE("국제통상학전공", 4, Set.of(
 		Lecture.of("HBX01104", "회계원리", 3, 0, null),
 		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
 		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),

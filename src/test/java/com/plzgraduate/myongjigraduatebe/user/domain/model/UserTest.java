@@ -30,7 +30,7 @@ class UserTest {
 			.studentNumber("60201000")
 			.entryYear(20)
 			.englishLevel(EnglishLevel.ENG12)
-			.primaryMajor("경영학과")
+			.primaryMajor("경영학전공")
 			.studentCategory(StudentCategory.NORMAL)
 			.build();
 	}
@@ -57,14 +57,14 @@ class UserTest {
 	@Test
 	void updateStudentInformation() {
 		//given //when
-		user.updateStudentInformation("테스터2", "경영학과", null, null,  null, StudentCategory.CHANGE_MAJOR, null, null, 134,
+		user.updateStudentInformation("테스터2", "경영학전공", null, null,  null, StudentCategory.CHANGE_MAJOR, null, null, 134,
 			120.5, true);
 		//then
 		assertThat(user)
 			.extracting("name", "primaryMajor", "subMajor", "dualMajor", "studentCategory",
 				"totalCredit", "takenCredit", "graduated"
 			)
-			.contains("테스터2", "경영학과", null, null, StudentCategory.CHANGE_MAJOR, 134, 120.5, true);
+			.contains("테스터2", "경영학전공", null, null, StudentCategory.CHANGE_MAJOR, 134, 120.5, true);
 	}
 
 	@DisplayName("checkBeforeEntryYear 메서드 테스트")
@@ -77,8 +77,8 @@ class UserTest {
 	@DisplayName("checkMajor 메서드 테스트")
 	@Test
 	void checkMajor() {
-		assertThat(user.checkMajor("경영학과")).isTrue();
-		assertThat(user.checkMajor("경제학과")).isFalse();
+		assertThat(user.checkMajor("경영학전공")).isTrue();
+		assertThat(user.checkMajor("경제학전공")).isFalse();
 	}
 
 	@DisplayName("compareStudentNumber 메서드 테스트")
