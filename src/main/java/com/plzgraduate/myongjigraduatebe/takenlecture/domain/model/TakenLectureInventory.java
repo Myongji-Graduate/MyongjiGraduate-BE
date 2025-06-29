@@ -1,13 +1,16 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
 
-public class TakenLectureInventory {
+public class TakenLectureInventory implements  Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final Set<TakenLecture> takenLecture;
 
