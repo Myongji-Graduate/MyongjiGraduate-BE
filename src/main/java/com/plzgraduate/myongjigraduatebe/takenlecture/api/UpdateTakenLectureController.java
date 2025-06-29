@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ public class UpdateTakenLectureController implements UpdateTakenLectureApiPresen
 	private final DeleteTakenLectureUseCase deleteTakenLectureUseCase;
 
 	@PostMapping()
+	@CacheEvict(value = "takenLectures", key = "#userId")
 	public void generateCustomizedTakenLecture(@LoginUser Long userId,
 		@Valid @RequestBody GenerateCustomizedTakenLectureRequest generateCustomizedTakenLectureRequest) {
 		generateCustomizedTakenLectureUseCase.generateCustomizedTakenLecture(userId,
@@ -29,6 +31,7 @@ public class UpdateTakenLectureController implements UpdateTakenLectureApiPresen
 	}
 
 	@DeleteMapping("{takenLectureId}")
+	@CacheEvict(value = "takenLectures", key = "#userId")
 	public void deleteCustomizedTakenLecture(@LoginUser Long userId,
 		@Valid @PathVariable Long takenLectureId) {
 		deleteTakenLectureUseCase.deleteTakenLecture(userId, takenLectureId);

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 
 @UseCase
 @Transactional(readOnly = true)
@@ -22,6 +23,7 @@ class FindTakenLectureService implements FindTakenLectureUseCase {
 	private final FindTakenLecturePort findTakenLecturePort;
 
 	@Override
+	@Cacheable(value = "takenLectures", key = "#userId")
 	public TakenLectureInventory findTakenLectures(Long userId) {
 		User user = findUserUseCase.findUserById(userId);
 		List<TakenLecture> takenLectures = findTakenLecturePort.findTakenLecturesByUser(user);

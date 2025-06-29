@@ -5,6 +5,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
+import org.springframework.cache.annotation.CacheEvict;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 
 	@PostMapping
+	@CacheEvict(value = "takenLectures", key = "#userId")
 	public void enrollParsingText(
 		@LoginUser Long userId,
 		@Valid @RequestBody ParsingTextRequest parsingTextRequest
