@@ -9,12 +9,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.request.SignInRequest;
 import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 class SignInControllerTest extends WebAdaptorTestSupport {
+
+	@MockBean
+	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@DisplayName("로그인을 진행한다.")
 	@Test
