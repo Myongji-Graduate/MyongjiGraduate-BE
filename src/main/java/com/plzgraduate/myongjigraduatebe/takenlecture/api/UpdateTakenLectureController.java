@@ -2,12 +2,13 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.api;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
+
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateCustomizedTakenLectureRequest;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,19 +22,20 @@ public class UpdateTakenLectureController implements UpdateTakenLectureApiPresen
 
 	private final GenerateCustomizedTakenLectureUseCase generateCustomizedTakenLectureUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureUseCase;
+	private final TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@PostMapping()
-	@CacheEvict(value = "takenLectures", key = "#userId")
 	public void generateCustomizedTakenLecture(@LoginUser Long userId,
 		@Valid @RequestBody GenerateCustomizedTakenLectureRequest generateCustomizedTakenLectureRequest) {
 		generateCustomizedTakenLectureUseCase.generateCustomizedTakenLecture(userId,
 			generateCustomizedTakenLectureRequest.getLectureId());
+		takenLectureCacheEvict.evictTakenLecturesCache(userId);
 	}
 
 	@DeleteMapping("{takenLectureId}")
-	@CacheEvict(value = "takenLectures", key = "#userId")
 	public void deleteCustomizedTakenLecture(@LoginUser Long userId,
 		@Valid @PathVariable Long takenLectureId) {
 		deleteTakenLectureUseCase.deleteTakenLecture(userId, takenLectureId);
+		takenLectureCacheEvict.evictTakenLecturesCache(userId);
 	}
 }
