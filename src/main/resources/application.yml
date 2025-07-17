@@ -17,6 +17,10 @@ spring:
         format_sql: true
     open-in-view: false
 
+  redis:
+    host: localhost
+    port: 6380
+
 logging:
   level:
     p6spy: info
@@ -70,6 +74,10 @@ spring:
     hibernate:
       ddl-auto: none
 
+  redis:
+    host: localhost
+    port: 6379
+
 jwt:
   issuer: "plzgraduate"
   secret-key: ${JWT_SECRET}
@@ -91,6 +99,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+  redis:
+    host: localhost
+    port: 6379
 
 jwt:
   issuer: "plzgraduate"

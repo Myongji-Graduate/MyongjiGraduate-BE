@@ -1,11 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Lecture {
+public class Lecture implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private static final String CULTURE_CODE_START_PREFIX = "KM";
 

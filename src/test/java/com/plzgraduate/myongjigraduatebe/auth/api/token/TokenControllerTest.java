@@ -11,12 +11,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request.TokenRequest;
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 class TokenControllerTest extends WebAdaptorTestSupport {
+
+	@MockBean
+	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@DisplayName("AccessToken 재발급한다.")
 	@Test

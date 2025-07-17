@@ -5,6 +5,8 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorTyp
 
 import com.google.common.annotations.VisibleForTesting;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 import lombok.Builder;
@@ -12,7 +14,8 @@ import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
-public class User {
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final Long id;
 	private final String authId;
