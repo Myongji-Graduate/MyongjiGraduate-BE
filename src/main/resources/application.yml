@@ -72,7 +72,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
   redis:
     host: localhost
