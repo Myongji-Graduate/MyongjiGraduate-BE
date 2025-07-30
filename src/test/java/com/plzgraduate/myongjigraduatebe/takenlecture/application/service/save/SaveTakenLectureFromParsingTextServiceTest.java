@@ -31,6 +31,8 @@ class SaveTakenLectureFromParsingTextServiceTest {
 	private SaveTakenLecturePort saveTakenLecturePort;
 	@Mock
 	private FindLecturesUseCase findLecturesUseCase;
+	@Mock
+	private com.plzgraduate.myongjigraduatebe.log.application.usecase.LogInvalidLectureUseCase logInvalidLectureUseCase;
 	@InjectMocks
 	private SaveTakenLectureFromParsingTextService saveTakenLectureFromParsingTextService;
 
@@ -42,8 +44,8 @@ class SaveTakenLectureFromParsingTextServiceTest {
 			.id(1L)
 			.build();
 		List<TakenLectureInformation> takenLectureInformationList = new ArrayList<>(List.of(
-			createTakenLectureInformation("KMA02122", 2022),
-			createTakenLectureInformation("KMA02135", 2023)
+			createTakenLectureInformation("KMA02122", 2022, "기독교와문화"),
+			createTakenLectureInformation("KMA02135", 2023, "알 수 없는 과목")
 		));
 		Lecture lecture1 = createLecture("KMA02122");
 		Lecture lecture2 = createLecture("KMA02135");
@@ -76,8 +78,8 @@ class SaveTakenLectureFromParsingTextServiceTest {
 			.id(1L)
 			.build();
 		List<TakenLectureInformation> takenLectureInformationList = new ArrayList<>(List.of(
-			createTakenLectureInformation("KMA02122", 2022),
-			createTakenLectureInformation("KMA02135", 2023)
+			createTakenLectureInformation("KMA02122", 2022, "기독교와문화"),
+			createTakenLectureInformation("KMA02135", 2023, "알 수 없는 과목")
 		));
 		Lecture lecture1 = createLecture("KMA02122");
 		given(findLecturesUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
@@ -92,11 +94,43 @@ class SaveTakenLectureFromParsingTextServiceTest {
 
 	}
 
-	private TakenLectureInformation createTakenLectureInformation(String lectureCode, int year) {
+	@DisplayName("과목 데이터베이스에 존재하지 않는 경우 로그를 저장한다.")
+	@Test
+	void shouldLogWhenLectureDoesNotExist() {
+		// given
+		User user = User.builder()
+			.id(1L)
+			.studentNumber("60231215")
+			.build();
+		List<TakenLectureInformation> takenLectureInformationList = new ArrayList<>(List.of(
+			TakenLectureInformation.createTakenLectureInformation("KMA02122", 2022, Semester.FIRST, "기독교와문화"),
+			TakenLectureInformation.createTakenLectureInformation("KMA02135", 2023, Semester.FIRST, "알 수 없는 과목")
+		));
+		Lecture lecture1 = createLecture("KMA02122");
+		given(findLecturesUseCase.findLecturesByLectureCodes(List.of("KMA02122", "KMA02135")))
+			.willReturn(List.of(lecture1));
+
+		// when
+		try {
+			saveTakenLectureFromParsingTextService.saveTakenLectures(user, takenLectureInformationList);
+		} catch (IllegalArgumentException ignored) {}
+
+		// then
+		then(logInvalidLectureUseCase).should().log(org.mockito.ArgumentMatchers.argThat(log ->
+			log.getStudentNumber().equals("60231215")
+			&& log.getLectureCode().equals("KMA02135")
+			&& log.getLectureName().equals("알 수 없는 과목")
+			&& log.getYear() == 2023
+			&& log.getSemester() == Semester.FIRST.getValue()
+		));
+	}
+
+	private TakenLectureInformation createTakenLectureInformation(String lectureCode, int year, String lectureName) {
 		return TakenLectureInformation.builder()
 			.lectureCode(lectureCode)
 			.year(year)
 			.semester(Semester.FIRST)
+			.lectureName(lectureName)
 			.build();
 	}
 
