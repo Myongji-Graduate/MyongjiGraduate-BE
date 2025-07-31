@@ -113,7 +113,9 @@ class SaveTakenLectureFromParsingTextServiceTest {
 		// when
 		try {
 			saveTakenLectureFromParsingTextService.saveTakenLectures(user, takenLectureInformationList);
-		} catch (IllegalArgumentException ignored) {}
+		} catch (IllegalArgumentException ignored) {
+			// 디비에 존재하지 않는 과목이 있어 예외 발생. 로그 저장 여부만 검증하므로 무시함.
+		}
 
 		// then
 		then(logInvalidLectureUseCase).should().log(org.mockito.ArgumentMatchers.argThat(log ->
