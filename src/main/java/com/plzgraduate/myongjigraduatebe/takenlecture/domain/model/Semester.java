@@ -9,11 +9,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Semester {
-	FIRST("1학기"),
-	SUMMER("하계계절"),
-	SECOND("2학기"),
-	WINTER("동계계절");
+	FIRST(1, "1학기"),
+	SUMMER(2, "하계계절"),
+	SECOND(3, "2학기"),
+	WINTER(4, "동계계절");
 
+	private final int value;
 	private final String name;
 
 	public static Semester of(String name) {
