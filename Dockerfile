@@ -17,4 +17,4 @@ ENV JWT_SECRET=${JWT_SECRET}
 
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java -jar -Dspring.profiles.active=$PROFILE /app.jar"]
+ENTRYPOINT sh -c 'java -jar -Dspring.profiles.active="$PROFILE" /app.jar'
