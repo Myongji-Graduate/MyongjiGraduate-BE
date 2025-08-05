@@ -66,9 +66,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${STAGING_DATASOURCE_URL}
-    username: ${STAGING_DATASOURCE_USERNAME}
-    password: ${STAGING_DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
@@ -93,7 +93,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATASOURCE_URL}
-    username: ${DB_USERNAME}
+    username: ${DATASOURCE_URL}
     password: ${DATASOURCE_PASSWORD}
 
   jpa:
