@@ -12,11 +12,13 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI springOpenApi() {
-        return new OpenAPI().info(new Info()
+        return new OpenAPI()
+                .info(new Info()
                         .title("Myongji-Graduate API Documentation")
                         .description("졸업을 부탁해 서비스의 API 명세서입니다.")
                         .version("v2.0.0"))
-                .components(securityComponents());
+                .components(securityComponents())
+                .addSecurityItem(new io.swagger.v3.oas.models.security.SecurityRequirement().addList("AccessToken")); // 🔒 added
     }
 
     private Components securityComponents() {
