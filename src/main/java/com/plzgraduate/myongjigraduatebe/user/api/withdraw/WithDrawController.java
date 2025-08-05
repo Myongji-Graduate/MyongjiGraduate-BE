@@ -5,7 +5,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.user.api.withdraw.dto.request.WithDrawRequest;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,7 +16,7 @@ public class WithDrawController implements WithDrawApiPresentation {
 
 	private final WithDrawUserUseCase withDrawUserUseCase;
 
-	@DeleteMapping()
+	@PostMapping("/withdraw")
 	public void withDraw(@LoginUser Long userId, @RequestBody WithDrawRequest withDrawRequest) {
 		withDrawUserUseCase.withDraw(userId, withDrawRequest.getPassword());
 	}
