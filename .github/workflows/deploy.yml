@@ -3,7 +3,7 @@ name: Dev
 on:
   push:
     branches:
-      - main
+      - DEV-57
 
 jobs:
   build:
