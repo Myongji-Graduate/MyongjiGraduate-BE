@@ -33,7 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with gradle
-        run : ./gradlew build -x test -x asciidoctor
+        run : ./gradlew build -x test
 
       - name: Build Docker image
         run: |
@@ -54,9 +54,11 @@ jobs:
           script: |
             cd ~/mju-graduate-server
 
-            echo " Redis 컨테이너 실행 (기존에 없을 경우만)"
-            docker ps -a --format '{{.Names}}' | grep -q '^mg-redis$' || \
-            docker run -d --name mg-redis -p 6379:6379 redis:latest
+            echo " Redis 컨테이너 실행"
+            docker stop mg-redis || true
+            docker rm mg-redis || true
+            docker network create mju-net || true
+            docker run -d --name mg-redis --network mju-net -p 6379:6379 redis:latest
             echo "기존 앱 컨테이너 중지 및 삭제"
             docker stop mju-graduate-server || true
             docker rm mju-graduate-server || true
@@ -66,15 +68,15 @@ jobs:
 
             echo "앱 컨테이너 실행"
             docker run -d --name mju-graduate-server \
+              --network mju-net \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e DATASOURCE_URL=${{ secrets.DATASOURCE_URL }} \
               -e DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }} \
               -e DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }} \
-              -e REDIS_HOST=localhost \
+              -e REDIS_HOST=mg-redis \
               -e REDIS_PORT=6379 \
               ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
 
             docker image prune -f
-

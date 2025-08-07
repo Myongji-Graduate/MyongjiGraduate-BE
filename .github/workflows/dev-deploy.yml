@@ -3,7 +3,7 @@ name: Dev
 on:
   push:
     branches:
-      - feature/DEV-57
+      - develop
 
 jobs:
   build:
@@ -57,7 +57,9 @@ jobs:
 
             echo " Redis 컨테이너 실행 (기존에 없을 경우만)"
             docker network create mju-net || true
-            docker ps -a --format '{{.Names}}' | grep -q '^mg-redis$' || \
+            echo "Redis 컨테이너 강제 재시작"
+            docker stop mg-redis || true
+            docker rm mg-redis || true
             docker run -d --name mg-redis --network mju-net -p 6379:6379 redis:latest
             echo "기존 앱 컨테이너 중지 및 삭제"
             docker stop staging-mju-graduate-server || true
