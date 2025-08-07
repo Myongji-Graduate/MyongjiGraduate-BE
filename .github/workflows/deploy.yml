@@ -33,7 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with gradle
-        run : ./gradlew build -x test
+        run : ./gradlew build -x test -x asciidoctor
 
       - name: Build Docker image
         run: |
@@ -77,3 +77,4 @@ jobs:
               ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
 
             docker image prune -f
+
