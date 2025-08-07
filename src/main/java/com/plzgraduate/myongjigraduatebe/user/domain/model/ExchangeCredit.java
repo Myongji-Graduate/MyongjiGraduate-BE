@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.domain.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExchangeCredit {
+public class ExchangeCredit implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int basicAcademicalCulture;  // 학문기초교양
     private int normalCulture;          // 일반교양

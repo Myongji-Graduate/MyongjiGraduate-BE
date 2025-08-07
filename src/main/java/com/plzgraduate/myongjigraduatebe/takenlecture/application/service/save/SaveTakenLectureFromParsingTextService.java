@@ -4,14 +4,19 @@ import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.FindLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.log.application.usecase.LogInvalidLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.log.domain.InvalidTakenLectureLog;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
+
+import java.time.LocalDateTime;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromParsingTextUseCase {
-
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	private final FindLecturesUseCase findLecturesUseCase;
+	private final LogInvalidLectureUseCase logInvalidLectureUseCase;
 
 	@Override
 	public void saveTakenLectures(User user,
@@ -39,25 +44,39 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 	private List<TakenLecture> makeTakenLectures(User user,
 		List<TakenLectureInformation> takenLectureInformationList,
 		Map<String, Lecture> lectureMap) {
-		return takenLectureInformationList.stream()
-			.map(takenLectureInformation -> {
-					Lecture lecture = getLectureFromLectureMap(lectureMap, takenLectureInformation);
-					return TakenLecture.of(user, lecture, takenLectureInformation.getYear(),
-						takenLectureInformation.getSemester());
-				}
-			)
-			.collect(Collectors.toList());
+
+		List<TakenLecture> result = new ArrayList<>();
+		List<String> invalidLectureCodes = new ArrayList<>();
+
+		for (TakenLectureInformation info : takenLectureInformationList) {
+			Lecture lecture = lectureMap.get(info.getLectureCode());
+
+			if (lecture == null) {
+				log.warn("Not Found Lecture in Database: {}", info.getLectureCode());
+				logInvalidLectureUseCase.log(
+					InvalidTakenLectureLog.builder()
+						.studentNumber(user.getStudentNumber())
+						.lectureCode(info.getLectureCode())
+						.lectureName(info.getLectureName())
+						.year(info.getYear())
+						.semester(info.getSemester().getValue())
+						.timestamp(LocalDateTime.now())
+						.build()
+				);
+				invalidLectureCodes.add(info.getLectureCode());
+				continue;
+			}
+
+			result.add(TakenLecture.of(user, lecture, info.getYear(), info.getSemester()));
+		}
+
+		if (!invalidLectureCodes.isEmpty()) {
+			throw new IllegalArgumentException(ErrorCode.NON_EXISTED_LECTURE.toString());
+		}
+
+		return result;
 	}
 
-	private Lecture getLectureFromLectureMap(Map<String, Lecture> lectureMap,
-		TakenLectureInformation takenLectureInformation) {
-		return Optional.ofNullable(lectureMap.get(takenLectureInformation.getLectureCode()))
-			.orElseThrow(() -> {
-				log.warn("Not Found Lecture in Database: {}",
-					takenLectureInformation.getLectureCode());
-				return new IllegalArgumentException(ErrorCode.NON_EXISTED_LECTURE.toString());
-			});
-	}
 
 	private Map<String, Lecture> makeLectureMapByLectureCodes(
 		List<TakenLectureInformation> takenLectureInformationList) {

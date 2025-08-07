@@ -9,11 +9,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindAuthIdControllerTest extends WebAdaptorTestSupport {
+
+	@MockBean
+	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@DisplayName("학번으로 해당 학생의 아이디를 조회한다.")
 	@Test

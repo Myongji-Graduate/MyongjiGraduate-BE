@@ -14,13 +14,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
+
+	@MockBean
+	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@WithMockAuthenticationUser
 	@DisplayName("공통교양 졸업 상세 결과를 조회한다.")

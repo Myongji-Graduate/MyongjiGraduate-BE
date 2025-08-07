@@ -51,10 +51,29 @@ jobs:
           host: ${{ secrets.WAS_HOST }}
           username: ${{ secrets.WAS_USERNAME }}
           key: ${{ secrets.WAS_KEY }}
-          script : |
+          script: |
             cd ~/mju-graduate-server
-            docker stop $(docker ps -a -q) 
+
+            echo " Redis 컨테이너 실행 (기존에 없을 경우만)"
+            docker ps -a --format '{{.Names}}' | grep -q '^mg-redis$' || \
+            docker run -d --name mg-redis -p 6379:6379 redis:latest
+            echo "기존 앱 컨테이너 중지 및 삭제"
+            docker stop mju-graduate-server || true
+            docker rm mju-graduate-server || true
+
+            echo "최신 앱 이미지 pull"
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
-            docker rm -f $(docker ps -a -q) 
-            docker run -d --name mju-graduate-server -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
+
+            echo "앱 컨테이너 실행"
+            docker run -d --name mju-graduate-server \
+              -p 8080:8080 \
+              -e SPRING_PROFILES_ACTIVE=prod \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e DATASOURCE_URL=${{ secrets.DATASOURCE_URL }} \
+              -e DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }} \
+              -e DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }} \
+              -e REDIS_HOST=localhost \
+              -e REDIS_PORT=6379 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
+
             docker image prune -f

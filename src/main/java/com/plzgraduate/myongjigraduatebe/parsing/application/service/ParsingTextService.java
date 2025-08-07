@@ -20,6 +20,7 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateS
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,6 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
-
 	@Override
 	public void enrollParsingText(Long userId, String parsingText) {
 		User user = findUserUseCase.findUserById(userId);
@@ -92,7 +92,8 @@ class ParsingTextService implements ParsingTextUseCase {
 				TakenLectureInformation.createTakenLectureInformation(
 					parsingTakenLectureDto.getLectureCode(),
 					parsingTakenLectureDto.getYear(),
-					parsingTakenLectureDto.getSemester()
+					parsingTakenLectureDto.getSemester(),
+					parsingTakenLectureDto.getLectureName()
 				)
 			)
 			.collect(Collectors.toList());

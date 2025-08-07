@@ -159,12 +159,14 @@ public class ParsingInformation {
 			int year = Integer.parseInt(splitText[i + 1].split(" ")[0].substring(0, 4));
 			String semester = splitText[i + 1].split(" ")[1];
 			String code = splitText[i + 3];
+			String lectureName = splitText[i + 4];
 			char grade = splitText[i + 6].charAt(0);
 			if (grade != 'F' && grade != 'N' && grade != 'R') {
 				takenLectureInformation.add(ParsingTakenLectureDto.of(
 						code,
 						year,
-						Semester.of(semester)
+						Semester.of(semester),
+						lectureName
 				));
 			}
 			if (i + 7 < splitText.length && Character.isDigit(splitText[i + 7].charAt(0))) {

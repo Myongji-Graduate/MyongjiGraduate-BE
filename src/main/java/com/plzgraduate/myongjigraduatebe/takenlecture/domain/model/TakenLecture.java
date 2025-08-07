@@ -2,13 +2,16 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class TakenLecture {
+public class TakenLecture implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final Long id;
 	private final User user;
