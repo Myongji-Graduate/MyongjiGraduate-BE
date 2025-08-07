@@ -2,7 +2,7 @@ package com.plzgraduate.myongjigraduatebe.user.api.withdraw;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +32,7 @@ class WithDrawControllerTest extends WebAdaptorTestSupport {
 
 		//when
 		ResultActions actions = mockMvc.perform(
-			delete("/api/v1/users/me")
+			post("/api/v1/users/me/withdraw")
 				.content(objectMapper.writeValueAsString(request))
 				.contentType(MediaType.APPLICATION_JSON));
 
