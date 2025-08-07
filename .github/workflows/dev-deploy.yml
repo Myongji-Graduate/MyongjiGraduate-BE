@@ -56,8 +56,11 @@ jobs:
             cd ~/staging-mju-graduate-server
 
             echo " Redis 컨테이너 실행 (기존에 없을 경우만)"
-            docker ps -a --format '{{.Names}}' | grep -q '^mg-redis$' || \
-            docker run -d --name mg-redis -p 6379:6379 redis:latest
+            docker network create mju-net || true
+            echo "Redis 컨테이너 강제 재시작"
+            docker stop mg-redis || true
+            docker rm mg-redis || true
+            docker run -d --name mg-redis --network mju-net -p 6379:6379 redis:latest
             echo "기존 앱 컨테이너 중지 및 삭제"
             docker stop staging-mju-graduate-server || true
             docker rm staging-mju-graduate-server || true
@@ -67,13 +70,14 @@ jobs:
 
             echo "앱 컨테이너 실행"
             docker run -d --name staging-mju-graduate-server \
+              --network mju-net \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=dev \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e DATASOURCE_URL=${{ secrets.STAGING_DB_URL }} \
               -e DATASOURCE_USERNAME=${{ secrets.STAGING_DB_USERNAME }} \
               -e DATASOURCE_PASSWORD=${{ secrets.STAGING_DB_PASSWORD }} \
-              -e REDIS_HOST=localhost \
+              -e REDIS_HOST=mg-redis \
               -e REDIS_PORT=6379 \
               ${{ secrets.DOCKERHUB_USERNAME }}/staging-mju-graduate-server:latest
 
