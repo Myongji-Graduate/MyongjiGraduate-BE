@@ -532,6 +532,42 @@ public class UserFixture {
 		);
 	}
 
+	public static User 한국어_레벨_NULL() {
+		return createUser(
+				"mjTest",
+				"1234",
+				EnglishLevel.ENG12,
+				null,
+				"김테스트",
+				"60180001",
+				18,
+				"테스트학과",
+				null,
+				null,
+				StudentCategory.NORMAL,
+				"0/0/0/0",
+				"0/0/0/0/0/0/0/0"
+		);
+	}
+
+	public static User 한국어_레벨_FREE() {
+		return createUser(
+				"mjTest2",
+				"1234",
+				EnglishLevel.ENG12,
+				KoreanLevel.FREE,
+				"김테스트",
+				"60180002",
+				18,
+				"테스트학과",
+				null,
+				null,
+				StudentCategory.NORMAL,
+				"0/0/0/0",
+				"0/0/0/0/0/0/0/0"
+		);
+	}
+
 	public static User createUser(
 		String authId,
 		String password,

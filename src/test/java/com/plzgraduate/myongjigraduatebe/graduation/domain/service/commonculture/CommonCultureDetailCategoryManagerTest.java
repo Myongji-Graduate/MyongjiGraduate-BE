@@ -325,4 +325,32 @@ class CommonCultureDetailCategoryManagerTest {
 			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits")
 			.contains(CHRISTIAN_A.getName(), false, false, CHRISTIAN_A.getTotalCredit());
 	}
+
+    @Test
+    @DisplayName("KoreanLevel 이 null 인 경우 한국어 과목은 0학점으로 처리된다.")
+    void koreanLevelNullShouldBeZeroCredit() {
+        User user = UserFixture.한국어_레벨_NULL();
+
+        TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
+        Set<CommonCulture> graduationLectures = new HashSet<>();
+        DetailCategoryResult result = manager.generate(user, takenLectureInventory,
+            graduationLectures, CommonCultureCategory.KOREAN);
+
+        assertThat(result.getTotalCredits()).isEqualTo(0);
+        assertThat(result.isCompleted()).isTrue();
+    }
+
+    @Test
+    @DisplayName("KoreanLevel 이 FREE 인 경우 한국어 과목은 0학점으로 처리된다.")
+    void koreanLevelFreeShouldBeZeroCredit() {
+        User user = UserFixture.한국어_레벨_FREE();
+
+        TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
+        Set<CommonCulture> graduationLectures = new HashSet<>();
+        DetailCategoryResult result = manager.generate(user, takenLectureInventory,
+            graduationLectures, CommonCultureCategory.KOREAN);
+
+        assertThat(result.getTotalCredits()).isEqualTo(0);
+        assertThat(result.isCompleted()).isTrue();
+    }
 }
