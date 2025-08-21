@@ -406,7 +406,7 @@ public class UserFixture {
 		);
 	}
 
-	public static User 데이터테크놀로지전공_21학번_외국인학생() {
+	public static User 데이터테크놀로지전공_21학번_외국인학생_KOR12() {
 		return createUser(
 			"fs20",
 			"1234",
@@ -421,6 +421,24 @@ public class UserFixture {
 			StudentCategory.NORMAL,
 			"0/0/0/0",
 			"0/0/0/0/0/0/0/0"
+		);
+	}
+
+	public static User 데이터테크놀로지전공_21학번_외국인학생_KOR34() {
+		return createUser(
+				"fs20",
+				"1234",
+				EnglishLevel.FREE,
+				KoreanLevel.KOR12,
+				"김외국",
+				"60211022",
+				23,
+				"데이터사이언스전공",
+				null,
+				null,
+				StudentCategory.NORMAL,
+				"0/0/0/0",
+				"0/0/0/0/0/0/0/0"
 		);
 	}
 
@@ -441,6 +459,7 @@ public class UserFixture {
 			"3/0/0/0/0/0/0/0"
 		);
 	}
+
 
 	public static User 경제학과_18학번_교환_자율학점3학점() {
 		return createUser(
