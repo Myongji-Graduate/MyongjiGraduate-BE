@@ -57,7 +57,7 @@ class CommonCultureDetailCategoryManagerTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String commonCultureCategoryName = commonCultureCategory.getName();
-		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
+		int expectedTotalCredit = (commonCultureCategory == CommonCultureCategory.KOREAN) ? 0 : commonCultureCategory.getTotalCredit();
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
@@ -68,7 +68,7 @@ class CommonCultureDetailCategoryManagerTest {
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits")
-			.contains(commonCultureCategoryName, true, categoryTotalCredit);
+			.contains(commonCultureCategoryName, true, expectedTotalCredit);
 	}
 
 	@DisplayName("영어 레벨 12: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
@@ -97,7 +97,7 @@ class CommonCultureDetailCategoryManagerTest {
 		)));
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		String commonCultureCategoryName = commonCultureCategory.getName();
-		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
+		int expectedTotalCredit = (commonCultureCategory == CommonCultureCategory.KOREAN) ? 0 : commonCultureCategory.getTotalCredit();
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
@@ -108,7 +108,7 @@ class CommonCultureDetailCategoryManagerTest {
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits")
-			.contains(commonCultureCategoryName, true, categoryTotalCredit);
+			.contains(commonCultureCategoryName, true, expectedTotalCredit);
 	}
 
 	@DisplayName("영어 레벨 34: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
@@ -230,7 +230,7 @@ class CommonCultureDetailCategoryManagerTest {
 		User user = UserFixture.경영학과_19학번_ENG12();
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 		String commonCultureCategoryName = commonCultureCategory.getName();
-		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
+		int expectedTotalCredit = (commonCultureCategory == CommonCultureCategory.KOREAN) ? 0 : commonCultureCategory.getTotalCredit();
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
@@ -241,7 +241,7 @@ class CommonCultureDetailCategoryManagerTest {
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits")
-			.contains(commonCultureCategoryName, false, categoryTotalCredit);
+			.contains(commonCultureCategoryName, false, expectedTotalCredit);
 	}
 
 	@DisplayName("영어 레벨 34: 각 카테고리의 해당하는 과목의 이수 학점을 만족하지 못한 경우 이수 미 완료의 카테고리 졸업 결과를 생성한다.")
@@ -255,7 +255,7 @@ class CommonCultureDetailCategoryManagerTest {
 		User user = UserFixture.경영학과_19학번_ENG34();
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 		String commonCultureCategoryName = commonCultureCategory.getName();
-		int categoryTotalCredit = commonCultureCategory.getTotalCredit();
+		int expectedTotalCredit = (commonCultureCategory == CommonCultureCategory.KOREAN) ? 0 : commonCultureCategory.getTotalCredit();
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
@@ -266,7 +266,7 @@ class CommonCultureDetailCategoryManagerTest {
 		//then
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "totalCredits")
-			.contains(commonCultureCategoryName, false, categoryTotalCredit);
+			.contains(commonCultureCategoryName, false, expectedTotalCredit);
 	}
 
 	@DisplayName("16~19 학번의 기독교 카테고리는 필수 과목을 수강해야 이수 완료의 카테고리 졸업 결과를 생성할 수 있다.")
