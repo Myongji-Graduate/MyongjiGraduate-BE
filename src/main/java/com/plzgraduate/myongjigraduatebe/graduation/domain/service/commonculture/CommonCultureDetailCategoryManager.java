@@ -108,8 +108,10 @@ class CommonCultureDetailCategoryManager {
 	}
 
 	private int checkCategoryTotalCredit(User user, CommonCultureCategory commonCultureCategory) {
-		if (user.getEnglishLevel() == EnglishLevel.FREE && commonCultureCategory == ENGLISH ||
-			user.getKoreanLevel() == KoreanLevel.FREE && commonCultureCategory == KOREAN) {
+		if (commonCultureCategory == ENGLISH && user.getEnglishLevel() == EnglishLevel.FREE) {
+			return 0;
+		}
+		if (commonCultureCategory == KOREAN && (user.getKoreanLevel() == null || user.getKoreanLevel() == KoreanLevel.FREE)) {
 			return 0;
 		}
 		return commonCultureCategory.getTotalCredit();
