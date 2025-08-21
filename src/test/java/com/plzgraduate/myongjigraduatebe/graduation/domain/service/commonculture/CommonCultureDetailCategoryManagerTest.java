@@ -314,11 +314,11 @@ class CommonCultureDetailCategoryManagerTest {
         TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
         Set<CommonCulture> graduationLectures = 공통교양_16_17(); // == 공통교양_18_19
 
-        //when
-        DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
-                graduationLectures,
-                CHRISTIAN_A
-        );
+		//when
+		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
+			graduationLectures,
+			CHRISTIAN_A
+		);
 
         //then
         assertThat(detailCategoryResult)
