@@ -111,32 +111,32 @@ class CommonCultureDetailCategoryManagerTest {
                 .contains(commonCultureCategoryName, true, expectedTotalCredit);
     }
 
-    @DisplayName("영어 레벨 34: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
-    @ParameterizedTest
-    @ArgumentsSource(CommonCultureCategoryFixture.class)
-    void generateEng34CompletedCommonCultureDetailCategory(
-            CommonCultureCategory commonCultureCategory,
-            Set<CommonCulture> graduationLectures
-    ) {
-        //given
-        User user = UserFixture.경영학과_19학번_ENG34();
-        Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
-                TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02106"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02107"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02123"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02124"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02108"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02109"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
-                TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
-        )));
-        TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
-        String commonCultureCategoryName = commonCultureCategory.getName();
+	@DisplayName("영어 레벨 34: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
+	@ParameterizedTest
+	@ArgumentsSource(CommonCultureCategoryFixture.class)
+	void generateEng34CompletedCommonCultureDetailCategory(
+		CommonCultureCategory commonCultureCategory,
+		Set<CommonCulture> graduationLectures
+	) {
+		//given
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
+			TakenLecture.of(user, mockLectureMap.get("KMA00101"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02102"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02122"), 2019, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02104"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02141"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02106"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02107"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02123"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02124"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02108"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02109"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02125"), 2023, Semester.FIRST),
+			TakenLecture.of(user, mockLectureMap.get("KMA02126"), 2023, Semester.FIRST)
+		)));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+		String commonCultureCategoryName = commonCultureCategory.getName();
 
         //when
         DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
@@ -316,34 +316,34 @@ class CommonCultureDetailCategoryManagerTest {
 
 		//when
 		DetailCategoryResult detailCategoryResult = manager.generate(user, takenLectureInventory,
-			graduationLectures,
-			CHRISTIAN_A
+				graduationLectures,
+				CHRISTIAN_A
 		);
 
-        //then
-        assertThat(detailCategoryResult)
-                .extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits")
-                .contains(CHRISTIAN_A.getName(), false, false, CHRISTIAN_A.getTotalCredit());
-    }
+		//then
+		assertThat(detailCategoryResult)
+			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits")
+			.contains(CHRISTIAN_A.getName(), false, false, CHRISTIAN_A.getTotalCredit());
+	}
 
-    @Test
-    @DisplayName("KoreanLevel 이 null 인 경우 한국어 과목은 0학점으로 처리된다.")
-    void koreanLevelNullShouldBeZeroCredit() {
-        User user = UserFixture.한국어_레벨_NULL();
+	@Test
+	@DisplayName("KoreanLevel 이 null 인 경우 한국어 과목은 0학점으로 처리된다.")
+	void koreanLevelNullShouldBeZeroCredit() {
+		User user = UserFixture.한국어_레벨_NULL();
 
         TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
         Set<CommonCulture> graduationLectures = new HashSet<>();
         DetailCategoryResult result = manager.generate(user, takenLectureInventory,
                 graduationLectures, CommonCultureCategory.KOREAN);
 
-        assertThat(result.getTotalCredits()).isEqualTo(0);
-        assertThat(result.isCompleted()).isTrue();
-    }
+		assertThat(result.getTotalCredits()).isEqualTo(0);
+		assertThat(result.isCompleted()).isTrue();
+	}
 
-    @Test
-    @DisplayName("KoreanLevel 이 FREE 인 경우 한국어 과목은 0학점으로 처리된다.")
-    void koreanLevelFreeShouldBeZeroCredit() {
-        User user = UserFixture.한국어_레벨_FREE();
+	@Test
+	@DisplayName("KoreanLevel 이 FREE 인 경우 한국어 과목은 0학점으로 처리된다.")
+	void koreanLevelFreeShouldBeZeroCredit() {
+		User user = UserFixture.한국어_레벨_FREE();
 
         TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
         Set<CommonCulture> graduationLectures = new HashSet<>();
