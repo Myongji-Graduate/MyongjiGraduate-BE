@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.api;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateCustomizedTakenLectureRequest;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
@@ -22,20 +21,17 @@ public class UpdateTakenLectureController implements UpdateTakenLectureApiPresen
 
 	private final GenerateCustomizedTakenLectureUseCase generateCustomizedTakenLectureUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureUseCase;
-	private final TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@PostMapping()
 	public void generateCustomizedTakenLecture(@LoginUser Long userId,
 		@Valid @RequestBody GenerateCustomizedTakenLectureRequest generateCustomizedTakenLectureRequest) {
 		generateCustomizedTakenLectureUseCase.generateCustomizedTakenLecture(userId,
 			generateCustomizedTakenLectureRequest.getLectureId());
-		takenLectureCacheEvict.evictTakenLecturesCache(userId);
 	}
 
 	@DeleteMapping("{takenLectureId}")
 	public void deleteCustomizedTakenLecture(@LoginUser Long userId,
 		@Valid @PathVariable Long takenLectureId) {
 		deleteTakenLectureUseCase.deleteTakenLecture(userId, takenLectureId);
-		takenLectureCacheEvict.evictTakenLecturesCache(userId);
 	}
 }

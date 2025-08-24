@@ -19,7 +19,6 @@ import org.springframework.cache.annotation.Cacheable;
 class FindTakenLectureService implements FindTakenLectureUseCase {
 
 	private final FindUserUseCase findUserUseCase;
-
 	private final FindTakenLecturePort findTakenLecturePort;
 
 	@Override
