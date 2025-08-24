@@ -42,15 +42,12 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
 			user.getId()
 		);
-
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(
 			user,
 			takenLectureInventory,
 			graduationRequirement
 		);
-
 		ChapelResult chapelResult = generateChapelResult(user, takenLectureInventory);
-
 		GraduationResult graduationResult = generateGraduationResult(
 			chapelResult,
 			detailGraduationResults,

@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.then;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
@@ -29,6 +30,8 @@ class GenerateTakenLectureServiceTest {
 	private SaveTakenLecturePort saveTakenLecturePort;
 	@Mock
 	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+	@Mock
+	private TakenLectureCacheEvict takenLectureCacheEvict;
 	@InjectMocks
 	private GenerateCustomizedTakenLectureService generateTakenLectureService;
 
