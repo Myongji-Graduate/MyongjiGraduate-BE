@@ -4,6 +4,8 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.Gen
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.GenerateCustomizedTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -22,15 +24,21 @@ public class GenerateCustomizedTakenLectureService implements
 	private final FindLecturePort findLecturePort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+	private final TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@Override
 	public void generateCustomizedTakenLecture(final Long userId, final String addedTakenLectureId) {
 		User user = findUserUseCase.findUserById(userId);
 		Lecture lecture = findLecturePort.findLectureById(addedTakenLectureId);
+
 		addCustomTakenLecture(user, lecture);
+
+		// 캐시 무효화 (학점 재계산 전에 수행)
+		takenLectureCacheEvict.evictTakenLecturesCache(userId);
+
+		// 학점 재계산
 		generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
 	}
-
 	private void addCustomTakenLecture(User user, Lecture addedLecture) {
 		TakenLecture addedTakenLecture = TakenLecture.custom(user, addedLecture);
 		saveTakenLecturePort.saveTakenLecture(addedTakenLecture);
