@@ -82,7 +82,7 @@ class UpdateStudentInformationServiceTest {
 				.exchangeCredit(ExchangeCredit.empty())
 				.build();
 
-		ExchangeCredit exchangeCredit = new ExchangeCredit(3,3,3,3,3,3,3,3);
+		ExchangeCredit exchangeCredit = new ExchangeCredit(3,3,3,3,3,3,3,3,3);
 
 		UpdateStudentInformationCommand command = UpdateStudentInformationCommand.builder()
 				.user(user)
