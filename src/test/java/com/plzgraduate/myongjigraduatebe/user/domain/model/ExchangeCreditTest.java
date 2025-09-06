@@ -4,6 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExchangeCreditTest {
@@ -11,26 +15,12 @@ class ExchangeCreditTest {
     @Nested
     @DisplayName("from(String) 하위호환 파싱")
     class FromParsing {
-        @Test
-        @DisplayName("null 입력이면 empty() 반환")
-        void from_null_returnsEmpty() {
-            ExchangeCredit ec = ExchangeCredit.from(null);
-            assertNotNull(ec);
-            assertEquals(ExchangeCredit.empty(), ec);
-        }
-
-        @Test
-        @DisplayName("빈 문자열이면 empty() 반환")
-        void from_blank_returnsEmpty() {
-            ExchangeCredit ec = ExchangeCredit.from("   ");
-            assertNotNull(ec);
-            assertEquals(ExchangeCredit.empty(), ec);
-        }
-
-        @Test
-        @DisplayName("\"0\" 입력이면 empty() 반환")
-        void from_zero_returnsEmpty() {
-            ExchangeCredit ec = ExchangeCredit.from("0");
+        @ParameterizedTest(name = "input=[{0}] → empty()")
+        @NullSource
+        @ValueSource(strings = {"", "   ", "0"})
+        @DisplayName("null/빈문자열/공백/\"0\" 입력이면 empty() 반환")
+        void from_emptyish_returnsEmpty(String input) {
+            ExchangeCredit ec = ExchangeCredit.from(input);
             assertNotNull(ec);
             assertEquals(ExchangeCredit.empty(), ec);
         }
