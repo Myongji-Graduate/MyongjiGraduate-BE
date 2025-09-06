@@ -75,12 +75,6 @@ public class ExchangeCredit implements Serializable {
         }
     }
 
-    private static boolean isValid(String input) {
-        if (input == null) return false;
-        // 숫자 8개 (슬래시 7개) 또는 9개 (슬래시 8개) 허용
-        return input.matches("^\\d+(/\\d+){7,8}$");
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
