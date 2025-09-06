@@ -59,7 +59,7 @@ class UserMapperTest extends PersistenceTestSupport {
 		assertThat(userJpaEntity.getTransferCredit())
 				.isEqualTo("0/0/0/0");
 		assertThat(userJpaEntity.getExchangeCredit())
-				.isEqualTo("0/0/0/0/0/0/0/0");
+				.isEqualTo("0/0/0/0/0/0/0/0/0");
 	}
 
 	private User createUser() {
@@ -75,7 +75,7 @@ class UserMapperTest extends PersistenceTestSupport {
 			.dualMajor(null)
 			.subMajor(null)
 			.transferCredit(TransferCredit.from("0/0/0/0"))
-			.exchangeCredit(ExchangeCredit.from("0/0/0/0/0/0/0/0"))
+			.exchangeCredit(ExchangeCredit.from("0/0/0/0/0/0/0/0/0"))
 			.totalCredit(100)
 			.takenCredit(40)
 			.graduated(false)
@@ -97,7 +97,7 @@ class UserMapperTest extends PersistenceTestSupport {
 				.subMajor(null)
 				.associatedMajor(null)
 				.transferCredit("0/0/0/0") // 기본값 설정
-				.exchangeCredit("0/0/0/0/0/0/0/0") //기본값 설정
+				.exchangeCredit("0/0/0/0/0/0/0/0/0") //기본값 설정
 				.studentCategory(StudentCategory.NORMAL)
 				.totalCredit(100)
 				.takenCredit(40.0)

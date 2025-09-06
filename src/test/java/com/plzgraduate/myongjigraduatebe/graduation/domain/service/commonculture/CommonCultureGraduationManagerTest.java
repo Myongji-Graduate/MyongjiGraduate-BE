@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
+import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
@@ -14,6 +15,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -80,6 +82,40 @@ class CommonCultureGraduationManagerTest {
 		assertThat(detailGraduationResult)
 			.extracting("graduationCategory", "isCompleted")
 			.contains(COMMON_CULTURE, false);
+	}
+
+	@DisplayName("교환학생 공통교양 학점이 없으면 0점 가산된다.")
+	@org.junit.jupiter.api.Test
+	void addZeroWhenNoExchangeCredit() {
+	    // given
+	    User user = UserFixture.경영학과_19학번_ENG34(); // 레거시 8필드 교환학점 0 → commonCulture=0
+	    TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>()); // 빈 이력
+	    Set<CommonCulture> graduationLectures = Collections.emptySet();
+
+	    // when
+	    DetailGraduationResult result = graduationManager.createDetailGraduationResult(
+	        user, takenLectureInventory, graduationLectures, 10
+	    );
+
+	    // then
+	    assertThat(result.getTakenCredit()).isEqualTo(0.0);
+	}
+
+	@DisplayName("교환학생 공통교양 학점이 있으면 해당 학점이 가산된다.")
+	@org.junit.jupiter.api.Test
+	void addExchangeCommonCultureCredit() {
+	    // given
+	    User user = UserFixture.교환공통교양3학점_20학번();
+	    TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>()); // 빈 이력
+	    Set<CommonCulture> graduationLectures = Collections.emptySet();
+
+	    // when
+	    DetailGraduationResult result = graduationManager.createDetailGraduationResult(
+	        user, takenLectureInventory, graduationLectures, 10
+	    );
+
+	    // then
+	    assertThat(result.getTakenCredit()).isEqualTo(3.0);
 	}
 
 }

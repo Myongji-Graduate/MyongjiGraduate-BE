@@ -11,6 +11,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.ExchangeCredit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -22,39 +23,45 @@ public class CommonGraduationManager implements GraduationManager<CommonCulture>
 
 	@Override
 	public DetailGraduationResult createDetailGraduationResult(
-		User user,
-		TakenLectureInventory takenLectureInventory,
-		Set<CommonCulture> graduationLectures,
-		int commonCultureGraduationTotalCredit
+			User user,
+			TakenLectureInventory takenLectureInventory,
+			Set<CommonCulture> graduationLectures,
+			int commonCultureGraduationTotalCredit
 	) {
 		CommonCultureDetailCategoryManager commonCultureDetailCategoryManager = new CommonCultureDetailCategoryManager();
 		List<DetailCategoryResult> commonCultureDetailCategoryResults =
-			Arrays.stream(CommonCultureCategory.values())
-				.filter(commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
-				.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(
-					user,
-					takenLectureInventory,
-					graduationLectures,
-					commonCultureCategory
-				))
-				.collect(Collectors.toList());
+				Arrays.stream(CommonCultureCategory.values())
+						.filter(commonCultureCategory -> commonCultureCategory.isContainsEntryYear(user.getEntryYear()))
+						.map(commonCultureCategory -> commonCultureDetailCategoryManager.generate(
+								user,
+								takenLectureInventory,
+								graduationLectures,
+								commonCultureCategory
+						))
+						.collect(Collectors.toList());
 
 		DetailGraduationResult detailGraduationResult = DetailGraduationResult.create(
-			COMMON_CULTURE,
-			commonCultureGraduationTotalCredit,
-			commonCultureDetailCategoryResults
+				COMMON_CULTURE,
+				commonCultureGraduationTotalCredit,
+				commonCultureDetailCategoryResults
 		);
 		detailGraduationResult.addCredit(getTakenChapelCredits(takenLectureInventory));
+		detailGraduationResult.addCredit(getExchangeCommonCultureCredit(user));
 		return detailGraduationResult;
 	}
 
 	private double getTakenChapelCredits(TakenLectureInventory takenLectureInventory) {
 		int chapelCount = (int) takenLectureInventory.getTakenLectures()
-			.stream()
-			.filter(takenLecture -> takenLecture.getLecture()
-				.getId()
-				.equals(CHAPEL_LECTURE_CODE))
-			.count();
+				.stream()
+				.filter(takenLecture -> takenLecture.getLecture()
+						.getId()
+						.equals(CHAPEL_LECTURE_CODE))
+				.count();
 		return chapelCount * CHAPEL_CREDIT;
+	}
+
+	private double getExchangeCommonCultureCredit(User user) {
+		ExchangeCredit ec = user.getExchangeCredit();
+		return (ec == null) ? 0 : ec.getCommonCulture();
 	}
 }

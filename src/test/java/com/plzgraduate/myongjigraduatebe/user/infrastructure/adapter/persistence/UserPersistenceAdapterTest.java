@@ -119,7 +119,7 @@ class UserPersistenceAdapterTest extends PersistenceTestSupport {
 				.password("1q2w3e4r!")
 				.studentNumber("60181666")
 				.transferCredit(new TransferCredit(0, 0, 0, 0))
-				.exchangeCredit(new ExchangeCredit(0, 0, 0, 0, 0, 0, 0, 0))
+				.exchangeCredit(new ExchangeCredit(0, 0, 0, 0, 0, 0, 0, 0,0))
 				.studentCategory(StudentCategory.NORMAL)
 				.build();
 	}
