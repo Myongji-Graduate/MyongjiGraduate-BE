@@ -587,6 +587,24 @@ public class UserFixture {
 		);
 	}
 
+	public static User 교환공통교양3학점_20학번() {
+		return createUser(
+				"auth",
+				"pw",
+				EnglishLevel.ENG12,
+				KoreanLevel.FREE,
+				"테스트",
+				"20201234",
+				20,
+				"테스트전공",
+				null,
+				null,
+				StudentCategory.NORMAL,
+				"0/0/0/0",                  // transferCredit
+				"3/0/0/0/0/0/0/0/0"         // exchangeCredit: 9필드, commonCulture=3
+		);
+	}
+
 	public static User createUser(
 		String authId,
 		String password,
