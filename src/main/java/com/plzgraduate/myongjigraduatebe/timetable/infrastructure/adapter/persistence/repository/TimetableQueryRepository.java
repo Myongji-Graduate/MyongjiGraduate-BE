@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface TimetableQueryRepository {
     List<TimetableJpaEntity> searchByCondition(int year, int semester,TimetableSearchConditionRequest condition);
+    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeIn(int year, int semester, List<String> codes);
+
+    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(int year, int semester, List<String> codes);
 }

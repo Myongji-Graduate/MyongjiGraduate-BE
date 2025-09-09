@@ -1,14 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.repository;
 
-import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.QLectureJpaEntity;
-import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.QTakenLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
-import com.plzgraduate.myongjigraduatebe.timetable.domain.model.TakenFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.QTimetableJpaEntity;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.TimetableJpaEntity;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,80 +12,78 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class TimetableQueryDslRepository {
+public class TimetableQueryDslRepository implements TimetableQueryRepository {
 
-    private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory query;
 
-    public List<TimetableJpaEntity> searchCombined(
-            int year,
-            int semester,
-            TimetableSearchConditionRequest condition,
-            TakenFilter filter,
-            Long userId,
-            boolean restrictToMajorAndCommons,
-            String userMajor
-    ) {
-        QTimetableJpaEntity tt = QTimetableJpaEntity.timetableJpaEntity;
-        QTakenLectureJpaEntity tk = QTakenLectureJpaEntity.takenLectureJpaEntity;
-        QLectureJpaEntity lec = QLectureJpaEntity.lectureJpaEntity;
+    private static final QTimetableJpaEntity timetable = QTimetableJpaEntity.timetableJpaEntity;
 
-        // --- 기본 조건 ---
+    @Override
+    public List<TimetableJpaEntity> searchByCondition(int year, int semester, TimetableSearchConditionRequest c) {
         BooleanBuilder where = new BooleanBuilder()
-                .and(tt.year.eq(year))
-                .and(tt.semester.eq(semester));
+                .and(timetable.year.eq(year))
+                .and(timetable.semester.eq(semester));
 
-        if (condition != null) {
-            if (condition.getKeyword() != null && !condition.getKeyword().isBlank()) {
-                where.and(
-                        tt.name.containsIgnoreCase(condition.getKeyword())
-                                .or(tt.lectureCode.containsIgnoreCase(condition.getKeyword()))
-                );
+        if (c != null) {
+            if (hasText(c.getDepartment())) {
+                where.and(timetable.department.eq(c.getDepartment().trim()));
             }
-            if (condition.getDepartment() != null) {
-                where.and(tt.department.eq(condition.getDepartment()));
+            if (hasText(c.getProfessor())) {
+                // 대소문자 무시 검색
+                where.and(timetable.professor.lower()
+                        .contains(c.getProfessor().trim().toLowerCase()));
             }
-            if (condition.getProfessor() != null) {
-                where.and(tt.professor.eq(condition.getProfessor()));
+            if (hasText(c.getCampus())) {
+                where.and(timetable.campus.eq(c.getCampus().trim()));
             }
-            if (condition.getCampus() != null) {
-                where.and(tt.campus.eq(condition.getCampus()));
+
+            if (hasText(c.getKeyword())) {
+                String kw = c.getKeyword().trim().toLowerCase();
+                where.and(timetable.name.lower().contains(kw));
             }
         }
 
-        // --- 이수 상태 필터 (exists / not exists) ---
-        if (filter == TakenFilter.TAKEN) {
-            // 이수 강의만
-            where.and(JPAExpressions
-                    .selectOne()
-                    .from(tk)
-                    .join(tk.lecture, lec)
-                    .where(
-                            tk.user.id.eq(userId),
-                            lec.id.eq(tt.lectureCode) // 문자열 매칭
-                    )
-                    .exists());
-        } else if (filter == TakenFilter.NOT_TAKEN) {
-            // 미이수 강의만
-            where.and(JPAExpressions
-                    .selectOne()
-                    .from(tk)
-                    .join(tk.lecture, lec)
-                    .where(
-                            tk.user.id.eq(userId),
-                            lec.id.eq(tt.lectureCode)
-                    )
-                    .notExists());
+        // 정렬: 요일 -> 시작분 -> 분반(필요시)
+        return query.selectFrom(timetable)
+                .where(where)
+                .orderBy(
+                        // 사용 가능한 칼럼에 맞게 유지/수정하세요
+                        timetable.day1.asc().nullsLast(),
+                        timetable.startMinute1.asc().nullsLast(),
+                        timetable.classDivision.asc()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeIn(int year, int semester, List<String> codes) {
+        if (codes == null || codes.isEmpty()) return List.of();
+
+        return query.selectFrom(timetable)
+                .where(timetable.year.eq(year)
+                        .and(timetable.semester.eq(semester))
+                        .and(timetable.lectureCode.in(codes)))
+                .fetch();
+    }
+
+    @Override
+    public List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(int year, int semester, List<String> codes) {
+        if (codes == null || codes.isEmpty()) {
+            // not in (empty) 은 모든 행이 통과하므로, 빈 경우엔 그냥 해당 학기 전체 반환
+            return query.selectFrom(timetable)
+                    .where(timetable.year.eq(year)
+                            .and(timetable.semester.eq(semester)))
+                    .fetch();
         }
 
-        // --- 미이수에서 “자연교양/인문교양/사용자전공만” 제한 ---
-        if (restrictToMajorAndCommons) {
-            where.and(
-                    tt.department.eq("자연교양")
-                            .or(tt.department.eq("인문교양"))
-                            .or(userMajor != null ? tt.department.eq(userMajor) : Expressions.FALSE)
-            );
-        }
+        return query.selectFrom(timetable)
+                .where(timetable.year.eq(year)
+                        .and(timetable.semester.eq(semester))
+                        .and(timetable.lectureCode.notIn(codes)))
+                .fetch();
+    }
 
-        return queryFactory.selectFrom(tt).where(where).fetch();
+    private boolean hasText(String s) {
+        return s != null && !s.trim().isEmpty();
     }
 }

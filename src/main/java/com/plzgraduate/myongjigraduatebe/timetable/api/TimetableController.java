@@ -5,10 +5,13 @@ package com.plzgraduate.myongjigraduatebe.timetable.api;
 //import com.plzgraduate.myongjigraduatebe.timetable.application.service.FindTimeTableService.FilterType;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.application.usecase.FindTimetableUseCase;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.TakenFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -75,19 +78,45 @@ public class TimetableController {
 //        return result.stream().map(TimetableResponse::from).collect(Collectors.toList());
 //    }
 
-    @GetMapping("/search/combined")
-    public List<TimetableResponse> searchCombined(
+//    @GetMapping("/search/combined")
+//    public List<TimetableResponse> searchCombined(
+//            @RequestParam int year,
+//            @RequestParam int semester,
+//            @RequestParam TakenFilter filter,  // ALL/TAKEN/NOT_TAKEN
+//            @LoginUser Long userId,        // TAKEN/NOT_TAKEN일 때 필요
+//            @ModelAttribute TimetableSearchConditionRequest condition
+//    ) {
+//        // “미이수 시 자연교양/인문교양/사용자전공만” 조건을 적용하고 싶으면 플래그 전달
+//        boolean restrictToMajorAndCommons = true;
+//        List<Timetable> result = useCase.searchCombined(
+//                userId, year, semester, filter, condition, restrictToMajorAndCommons);
+//        return result.stream().map(TimetableResponse::from).collect(Collectors.toList());
+//    }
+    /**
+     * 통합 조회
+     * - filter: ALL / TAKEN / NOT_TAKEN
+     *   * NOT_TAKEN은 haveToLectures 기반 추천 미이수로 동작
+     *   * 이때 recommendedCategory 필수 (예: PRIMARY_ELECTIVE_MAJOR 등)
+     */
+    @GetMapping("/filter")
+    public List<TimetableResponse> combined(
+            @LoginUser Long userId,
             @RequestParam int year,
             @RequestParam int semester,
-            @RequestParam TakenFilter filter,  // ALL/TAKEN/NOT_TAKEN
-            @LoginUser Long userId,        // TAKEN/NOT_TAKEN일 때 필요
-            @ModelAttribute TimetableSearchConditionRequest condition
+            @RequestParam TakenFilter filter,
+            @ModelAttribute TimetableSearchConditionRequest condition,
+            @RequestParam(required = false)
+            @Parameter(description = "NOT_TAKEN일 때 필수. ENUM 상수명만 허용",
+                    schema = @Schema(type = "string", allowableValues = {
+                            "COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MANDATORY_MAJOR", "PRIMARY_ELECTIVE_MAJOR",
+                            "DUAL_MANDATORY_MAJOR", "DUAL_ELECTIVE_MAJOR", "SUB_MAJOR", "PRIMARY_BASIC_ACADEMICAL_CULTURE",
+                            "DUAL_BASIC_ACADEMICAL_CULTURE", "TRANSFER_CHRISTIAN", "NORMAL_CULTURE", "FREE_ELECTIVE", "CHAPEL"
+                    }))
+            GraduationCategory recommendedCategory
     ) {
-        // “미이수 시 자연교양/인문교양/사용자전공만” 조건을 적용하고 싶으면 플래그 전달
-        boolean restrictToMajorAndCommons = true;
         List<Timetable> result = useCase.searchCombined(
-                userId, year, semester, filter, condition, restrictToMajorAndCommons);
+                userId, year, semester, filter, condition, recommendedCategory
+        );
         return result.stream().map(TimetableResponse::from).collect(Collectors.toList());
     }
-
 }

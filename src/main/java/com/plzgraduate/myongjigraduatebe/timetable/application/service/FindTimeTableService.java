@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.timetable.application.service;
 
+import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.application.port.TimetablePort;
@@ -12,16 +14,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Service
+@UseCase
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FindTimeTableService implements FindTimetableUseCase {
 
     private final TimetablePort timetablePort;
     private final FindTakenLecturePort findTakenLecturePort;
-    private final FindUserUseCase findUserUseCase;
+    private final RecommendedLectureExtractor recommendedExtractor;
 
     @Override
     public List<Timetable> findByYearAndSemester(int year, int semester) {
@@ -75,6 +81,26 @@ public class FindTimeTableService implements FindTimetableUseCase {
 //            return timetablePort.findByYearSemesterAndLectureCodeNotIn(year, semester, takenCodes);
 //        }
 //    }
+//
+//    @Override
+//    public List<Timetable> searchCombined(
+//            Long userId,
+//            int year,
+//            int semester,
+//            TakenFilter filter,
+//            TimetableSearchConditionRequest condition,
+//            boolean restrictToMajorAndCommons
+//    ) {
+//        String userMajor = null;
+//        if (filter != TakenFilter.ALL || restrictToMajorAndCommons) {
+//            // 이수/미이수 또는 제한 플래그가 있으면 사용자 조회
+//            User user = findUserUseCase.findUserById(userId);
+//            userMajor = user.getPrimaryMajor();
+//        }
+//
+//        return timetablePort.searchCombined(
+//                userId, year, semester, filter, condition, restrictToMajorAndCommons, userMajor);
+//    }
 
     @Override
     public List<Timetable> searchCombined(
@@ -83,16 +109,59 @@ public class FindTimeTableService implements FindTimetableUseCase {
             int semester,
             TakenFilter filter,
             TimetableSearchConditionRequest condition,
-            boolean restrictToMajorAndCommons
+            GraduationCategory recommendedCategory
     ) {
-        String userMajor = null;
-        if (filter != TakenFilter.ALL || restrictToMajorAndCommons) {
-            // 이수/미이수 또는 제한 플래그가 있으면 사용자 조회
-            User user = findUserUseCase.findUserById(userId);
-            userMajor = user.getPrimaryMajor();
+        // 1) 기본 후보군 (조건 있으면 QDSL, 없으면 전체)
+        List<Timetable> base = (condition == null)
+                ? timetablePort.findByYearAndSemester(year, semester)
+                : timetablePort.searchByCondition(year, semester, condition);
+
+        if (base.isEmpty()) return List.of();
+
+        if (filter == TakenFilter.ALL) {
+            return base;
         }
 
-        return timetablePort.searchCombined(
-                userId, year, semester, filter, condition, restrictToMajorAndCommons, userMajor);
+        // 코드 집합
+        List<String> baseCodes = base.stream()
+                .map(Timetable::getLectureCode)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (filter == TakenFilter.TAKEN) {
+            List<String> taken = findTakenLecturePort.findTakenLectureIdsByUserAndCodes(userId, baseCodes);
+            if (taken.isEmpty()) return List.of();
+            return timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, taken);
+        }
+
+        // NOT_TAKEN = haveToLectures 기반 추천 미이수
+        if (filter == TakenFilter.NOT_TAKEN) {
+            if (recommendedCategory == null) {
+                throw new IllegalArgumentException("recommendedCategory is required when filter=NOT_TAKEN");
+            }
+
+            // (a) haveToLectures에서 추천 ID
+            List<String> recommendedIds = recommendedExtractor.extractRecommendedLectureIds(userId, recommendedCategory);
+            if (recommendedIds.isEmpty()) return List.of();
+
+            // (b) 현재 학기 개설 과목과 교집합
+            Set<String> openNow = new HashSet<>(baseCodes);
+            List<String> recommendedOpen = recommendedIds.stream().filter(openNow::contains).collect(Collectors.toList());
+            if (recommendedOpen.isEmpty()) return List.of();
+
+            // (c) 이미 이수한 과목 제거
+            List<String> alreadyTaken = findTakenLecturePort.findTakenLectureIdsByUserAndCodes(userId, recommendedOpen);
+            Set<String> takenSet = new HashSet<>(alreadyTaken);
+            List<String> finalCodes = recommendedOpen.stream()
+                    .filter(c -> !takenSet.contains(c))
+                    .collect(Collectors.toList());
+
+            if (finalCodes.isEmpty()) return List.of();
+            return timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, finalCodes);
+        }
+
+        // safety
+        return base;
     }
 }

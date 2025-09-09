@@ -11,11 +11,14 @@ public interface TimetableRepository extends JpaRepository<TimetableJpaEntity, L
     List<TimetableJpaEntity> findAllByYearAndSemester(int year, int semester);
     List<TimetableJpaEntity> findByYearAndSemesterAndNameContaining(int year, int semester, String keyword);
 
-    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeIn(int year, int semester, List<String> codes);
+//    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeIn(int year, int semester, List<String> codes);
 
-    @Query("select t from TimetableJpaEntity t where t.year = :year and t.semester = :semester and t.lectureCode not in :codes")
-    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(@Param("year") int year,
-                                                                      @Param("semester") int semester,
-                                                                      @Param("codes") List<String> codes);
+//    @Query("select t from TimetableJpaEntity t where t.year = :year and t.semester = :semester and t.lectureCode not in :codes")
+//    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(@Param("year") int year,
+//                                                                      @Param("semester") int semester,
+//                                                                      @Param("codes") List<String> codes);
+
+    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeIn(int year, int semester, List<String> codes);
+    List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(int year, int semester, List<String> codes);
 
 }

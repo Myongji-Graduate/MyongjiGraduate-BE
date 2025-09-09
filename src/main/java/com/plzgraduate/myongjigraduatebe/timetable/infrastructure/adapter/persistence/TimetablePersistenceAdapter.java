@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 public class TimetablePersistenceAdapter implements TimetablePort {
 
     private final TimetableRepository repository;
-    //private final TimetableQueryRepository timetableQueryRepository;
-    private final TimetableQueryDslRepository queryDslRepository;
+    private final TimetableQueryRepository timetableQueryRepository;
     private final TimetableMapper mapper;
 
     @Override
@@ -35,12 +34,12 @@ public class TimetablePersistenceAdapter implements TimetablePort {
                 .stream().map(mapper::mapToDomainEntity).collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<Timetable> searchByCondition(int year, int semester,TimetableSearchConditionRequest condition) {
-//        return timetableQueryRepository.searchByCondition(year, semester,condition).stream()
-//                .map(mapper::mapToDomainEntity)
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public List<Timetable> searchByCondition(int year, int semester, TimetableSearchConditionRequest condition) {
+        return timetableQueryRepository.searchByCondition(year, semester, condition).stream()
+                .map(mapper::mapToDomainEntity)
+                .collect(Collectors.toList());
+    }
 
 //    @Override
 //    public List<String> findLectureCodesByYearAndSemester(int year, int semester) {
@@ -66,18 +65,43 @@ public class TimetablePersistenceAdapter implements TimetablePort {
 //                .collect(Collectors.toList());
 //    }
 
+//    @Override
+//    public List<Timetable> searchCombined(
+//            Long userId,
+//            int year,
+//            int semester,
+//            TakenFilter filter,
+//            TimetableSearchConditionRequest condition,
+//            boolean restrictToMajorAndCommons,
+//            String userMajor
+//    ) {
+//        return queryDslRepository.searchCombined(
+//                        year, semester, condition, filter, userId, restrictToMajorAndCommons, userMajor)
+//                .stream()
+//                .map(mapper::mapToDomainEntity)
+//                .collect(Collectors.toList());
+//    }
+
+
     @Override
-    public List<Timetable> searchCombined(
-            Long userId,
-            int year,
-            int semester,
-            TakenFilter filter,
-            TimetableSearchConditionRequest condition,
-            boolean restrictToMajorAndCommons,
-            String userMajor
-    ) {
-        return queryDslRepository.searchCombined(
-                        year, semester, condition, filter, userId, restrictToMajorAndCommons, userMajor)
+    public List<String> findLectureCodesByYearAndSemester(int year, int semester) {
+        return repository.findAllByYearAndSemester(year, semester)
+                .stream()
+                .map(e -> e.getLectureCode())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Timetable> findByYearSemesterAndLectureCodeIn(int year, int semester, List<String> codes) {
+        return repository.findByYearAndSemesterAndLectureCodeIn(year, semester, codes)
+                .stream()
+                .map(mapper::mapToDomainEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Timetable> findByYearSemesterAndLectureCodeNotIn(int year, int semester, List<String> codes) {
+        return repository.findByYearAndSemesterAndLectureCodeNotIn(year, semester, codes)
                 .stream()
                 .map(mapper::mapToDomainEntity)
                 .collect(Collectors.toList());
