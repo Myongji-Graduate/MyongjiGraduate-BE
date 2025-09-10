@@ -7,7 +7,5 @@ import lombok.Setter;
 @Setter
 public class TimetableSearchConditionRequest {
     private String keyword;
-    private String department;
     private String professor;
-    private String campus;
 }

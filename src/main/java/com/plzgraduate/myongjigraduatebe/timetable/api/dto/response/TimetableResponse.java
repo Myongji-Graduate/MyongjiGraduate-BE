@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Getter
 public class TimetableResponse {
 
-    @Schema(name = "classDivision", example = "5976", description = "분반")
-    private final String classDivision;
+    @Schema(name = "id", example = "5976", description = "식별 아이디")
+    private final Long id;
 
     @Schema(name = "lectureCode", example = "HEF01102", description = "교과목 코드")
     private final String lectureCode;
@@ -72,13 +72,13 @@ public class TimetableResponse {
     private final String note;
 
     @Builder
-    public TimetableResponse(String classDivision, String lectureCode, String name, int credit,
+    public TimetableResponse(Long id, String lectureCode, String name, int credit,
                              String campus, int year, int semester, String maxStudent,
                              String koreanCode, String department, String professor,
                              String day1, String time1, Integer startMinute1, Integer endMinute1,
                              String day2, String time2, Integer startMinute2, Integer endMinute2,
                              String lectureRoom, String note) {
-        this.classDivision = classDivision;
+        this.id = id;
         this.lectureCode = lectureCode;
         this.name = name;
         this.credit = credit;
@@ -102,7 +102,7 @@ public class TimetableResponse {
     }
     public static TimetableResponse from(Timetable timetable) {
         return TimetableResponse.builder()
-                .classDivision(timetable.getClassDivision())
+                .id(timetable.getId())
                 .lectureCode(timetable.getLectureCode())
                 .name(timetable.getName())
                 .credit(timetable.getCredit())

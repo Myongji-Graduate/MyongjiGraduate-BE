@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.repository;
 
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
+import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.QTimetableJpaEntity;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.TimetableJpaEntity;
 import com.querydsl.core.BooleanBuilder;
@@ -19,22 +20,21 @@ public class TimetableQueryDslRepository implements TimetableQueryRepository {
     private static final QTimetableJpaEntity timetable = QTimetableJpaEntity.timetableJpaEntity;
 
     @Override
-    public List<TimetableJpaEntity> searchByCondition(int year, int semester, TimetableSearchConditionRequest c) {
+    public List<TimetableJpaEntity> searchByCondition(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest c) {
         BooleanBuilder where = new BooleanBuilder()
                 .and(timetable.year.eq(year))
                 .and(timetable.semester.eq(semester));
 
+
+        if (campus != null) {
+            where.and(timetable.campus.eq(campus.name()));
+        }
+
+
         if (c != null) {
-            if (hasText(c.getDepartment())) {
-                where.and(timetable.department.eq(c.getDepartment().trim()));
-            }
             if (hasText(c.getProfessor())) {
-                // 대소문자 무시 검색
                 where.and(timetable.professor.lower()
                         .contains(c.getProfessor().trim().toLowerCase()));
-            }
-            if (hasText(c.getCampus())) {
-                where.and(timetable.campus.eq(c.getCampus().trim()));
             }
 
             if (hasText(c.getKeyword())) {
@@ -47,7 +47,6 @@ public class TimetableQueryDslRepository implements TimetableQueryRepository {
         return query.selectFrom(timetable)
                 .where(where)
                 .orderBy(
-                        // 사용 가능한 칼럼에 맞게 유지/수정하세요
                         timetable.day1.asc().nullsLast(),
                         timetable.startMinute1.asc().nullsLast(),
                         timetable.classDivision.asc()
