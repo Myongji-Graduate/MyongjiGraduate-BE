@@ -4,10 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class TimetableSearchConditionRequest {
-    private String keyword;
-    private String professor;
+public class ReplaceLecturesRequest {
+    private int year;
+    private int semester;
+    private List<Long> timetableIds;
 }

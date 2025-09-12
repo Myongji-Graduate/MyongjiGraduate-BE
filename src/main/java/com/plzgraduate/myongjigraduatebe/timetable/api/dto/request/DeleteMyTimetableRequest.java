@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TimetableSearchConditionRequest {
-    private String keyword;
-    private String professor;
+public class DeleteMyTimetableRequest {
+    private int year;
+    private int semester;
 }
