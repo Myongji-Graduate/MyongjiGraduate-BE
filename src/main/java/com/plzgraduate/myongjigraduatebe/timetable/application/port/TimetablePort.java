@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.timetable.application.port;
 
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
-import com.plzgraduate.myongjigraduatebe.timetable.domain.model.TakenFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
 
 import java.util.List;

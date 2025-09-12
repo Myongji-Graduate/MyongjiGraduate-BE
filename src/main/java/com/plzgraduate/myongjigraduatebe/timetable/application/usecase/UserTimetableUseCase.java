@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.timetable.application.usecase;
 
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.TimetableResponse;
-import com.plzgraduate.myongjigraduatebe.timetable.domain.model.UserTimetable;
 
 import java.util.List;
 

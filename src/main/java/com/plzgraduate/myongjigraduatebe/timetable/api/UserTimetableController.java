@@ -5,7 +5,6 @@ import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.DeleteMyTimetableRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.ReplaceLecturesRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.TimetableResponse;
-import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.UserTimetableResponse;
 import com.plzgraduate.myongjigraduatebe.timetable.application.usecase.UserTimetableUseCase;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebAdapter
 @RequestMapping("/api/v1/timetables/my")

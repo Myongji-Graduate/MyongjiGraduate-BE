@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.timetable.application.port;
 
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.UserTimetable;
-import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.UserTimetableJpaEntity;
 
 import java.util.List;
 
