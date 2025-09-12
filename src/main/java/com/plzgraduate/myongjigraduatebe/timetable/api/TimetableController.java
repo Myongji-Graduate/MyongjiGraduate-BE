@@ -54,7 +54,7 @@ public class TimetableController {
      */
     @GetMapping("/filter")
     public List<TimetableResponse> combined(
-            @LoginUser Long userId,
+            @Parameter(hidden = true) @LoginUser Long userId,
             @RequestParam int year,
             @RequestParam int semester,
             @RequestParam(required = false) CampusFilter campus,
