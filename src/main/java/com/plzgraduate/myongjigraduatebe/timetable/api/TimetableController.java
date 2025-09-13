@@ -61,11 +61,11 @@ public class TimetableController {
             @RequestParam TakenFilter filter,
             @ModelAttribute TimetableSearchConditionRequest condition,
             @RequestParam(required = false)
-            @Parameter(description = "NOT_TAKEN일 때 필수. ENUM 상수명만 허용",
+            @Parameter(description = "ENUM 상수명만 허용",
                     schema = @Schema(type = "string", allowableValues = {
                             "COMMON_CULTURE", "CORE_CULTURE", "PRIMARY_MANDATORY_MAJOR", "PRIMARY_ELECTIVE_MAJOR",
                             "DUAL_MANDATORY_MAJOR", "DUAL_ELECTIVE_MAJOR", "SUB_MAJOR", "PRIMARY_BASIC_ACADEMICAL_CULTURE",
-                            "DUAL_BASIC_ACADEMICAL_CULTURE", "TRANSFER_CHRISTIAN", "NORMAL_CULTURE"
+                            "DUAL_BASIC_ACADEMICAL_CULTURE"
                     }))
             GraduationCategory recommendedCategory
     ) {
