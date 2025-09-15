@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @UseCase
 @Transactional(readOnly = true)
@@ -52,95 +51,88 @@ public class FindTimeTableService implements FindTimetableUseCase {
             GraduationCategory recommendedCategory
     ) {
         User user = findUserUseCase.findUserById(userId);
-        // 1) 기본 후보군 (조건 있으면 QDSL, 없으면 전체)
+
         List<Timetable> base = (condition == null)
                 ? timetablePort.findByYearAndSemester(year, semester)
                 : timetablePort.searchByCondition(year, semester, campus, condition);
 
         if (base.isEmpty()) return List.of();
 
-        if (filter == TakenFilter.ALL) {
+        if (filter == TakenFilter.ALL && recommendedCategory == null) {
             return base;
         }
 
-        // 코드 집합
+        // 현재 학기 개설 코드 목록
         List<String> baseCodes = base.stream()
                 .map(Timetable::getLectureCode)
                 .filter(Objects::nonNull)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
+        // TAKEN / NOT_TAKEN / (ALL+category) 공통
+        List<GraduationCategory> sourceCategories;
+        if (recommendedCategory != null) {
+            sourceCategories = List.of(recommendedCategory);
+        } else {
+            List<GraduationCategory> dynamic = new ArrayList<>(List.of(
+                    GraduationCategory.PRIMARY_MANDATORY_MAJOR,
+                    GraduationCategory.PRIMARY_ELECTIVE_MAJOR,
+                    GraduationCategory.COMMON_CULTURE,
+                    GraduationCategory.CORE_CULTURE,
+                    GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
+            ));
+            switch (user.getStudentCategory()) {
+                case SUB_MAJOR:
+                    dynamic.add(GraduationCategory.SUB_MAJOR);
+                    break;
+                case DUAL_MAJOR:
+                    dynamic.add(GraduationCategory.DUAL_ELECTIVE_MAJOR);
+                    dynamic.add(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
+                    break;
+                default:
+                    // NORMAL
+                    break;
+            }
+            sourceCategories = dynamic;
+        }
+
+        RecommendedLectureExtractor.ExtractMode mode;
         if (filter == TakenFilter.TAKEN) {
-            List<String> taken = findTakenLecturePort.findTakenLectureIdsByUserAndCodes(userId, baseCodes);
-            if (taken.isEmpty()) return List.of();
-            return timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, campus, taken);
+            mode = RecommendedLectureExtractor.ExtractMode.TAKEN;
+        } else if (filter == TakenFilter.NOT_TAKEN) {
+            mode = RecommendedLectureExtractor.ExtractMode.HAVE_TO;
+        } else {
+            mode = RecommendedLectureExtractor.ExtractMode.BOTH;
         }
 
-        // NOT_TAKEN = haveToLectures 기반 추천 미이수
-        if (filter == TakenFilter.NOT_TAKEN) {
-
-            // 1) 추천 소스 카테고리 결정
-            List<GraduationCategory> sourceCategories;
-            if (recommendedCategory != null) {
-                sourceCategories = List.of(recommendedCategory);
-            } else {
-                // 기본 카테고리 5개
-                List<GraduationCategory> baseCategories = List.of(
-                        GraduationCategory.PRIMARY_MANDATORY_MAJOR,
-                        GraduationCategory.PRIMARY_ELECTIVE_MAJOR,
-                        GraduationCategory.COMMON_CULTURE,
-                        GraduationCategory.CORE_CULTURE,
-                        GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
-                );
-
-                // 가변 목록으로 시작
-                List<GraduationCategory> dynamic = new ArrayList<>(baseCategories);
-
-                // 사용자 학적에 따라 추가 카테고리 부여
-                switch (user.getStudentCategory()) {
-                    case SUB_MAJOR:
-                        dynamic.add(GraduationCategory.SUB_MAJOR);
-                        break;
-                    case DUAL_MAJOR:
-                        dynamic.add(GraduationCategory.DUAL_ELECTIVE_MAJOR);
-                        dynamic.add(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
-                        break;
-                    default:
-                        // NORMAL 등 기본 케이스
-                        break;
-                }
-
-                sourceCategories = dynamic;
+        // 카테고리별 ID 수집 + 중복제거
+        Set<String> recommendedIds = new HashSet<>();
+        for (GraduationCategory cat : sourceCategories) {
+            List<String> ids = recommendedExtractor.extractLectureIds(userId, cat, mode);
+            if (ids != null && !ids.isEmpty()) {
+                recommendedIds.addAll(ids);
             }
+        }
+        if (recommendedIds.isEmpty()) return List.of();
 
-            // 2) haveToLectures 기반 추천 id 수집(카테고리 합산) + 중복 제거
-            Set<String> recommendedIds = new HashSet<>();
-            for (GraduationCategory cat : sourceCategories) {
-                List<String> ids = recommendedExtractor.extractRecommendedLectureIds(userId, cat);
-                if (ids != null && !ids.isEmpty()) {
-                    recommendedIds.addAll(ids);
-                }
-            }
-            if (recommendedIds.isEmpty()) return List.of();
+        // 현재 학기 개설 과목과 교집합
+        Set<String> openNow = new HashSet<>(baseCodes);
+        List<String> candidate = recommendedIds.stream()
+                .filter(openNow::contains)
+                .toList();
+        if (candidate.isEmpty()) return List.of();
 
-            // 3) 현재 학기 개설 과목과 교집합
-            Set<String> openNow = new HashSet<>(baseCodes);
-            List<String> recommendedOpen = recommendedIds.stream()
-                    .filter(openNow::contains)
-                    .collect(Collectors.toList());
-            if (recommendedOpen.isEmpty()) return List.of();
-
-            // 4) 이미 이수한 과목 제거
-            List<String> alreadyTaken = findTakenLecturePort.findTakenLectureIdsByUserAndCodes(userId, recommendedOpen);
+        List<String> finalCodes;
+        if (mode == RecommendedLectureExtractor.ExtractMode.HAVE_TO) {
+            List<String> alreadyTaken = findTakenLecturePort.findTakenLectureIdsByUserAndCodes(userId, candidate);
             Set<String> takenSet = new HashSet<>(alreadyTaken);
-            List<String> finalCodes = recommendedOpen.stream()
+            finalCodes = candidate.stream()
                     .filter(c -> !takenSet.contains(c))
-                    .collect(Collectors.toList());
-
-            if (finalCodes.isEmpty()) return List.of();
-            return timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, campus, finalCodes);
+                    .toList();
+        } else {
+            finalCodes = candidate;
         }
-        return base;
+        if (finalCodes.isEmpty()) return List.of();
+        return timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, campus, finalCodes);
     }
 }
-
