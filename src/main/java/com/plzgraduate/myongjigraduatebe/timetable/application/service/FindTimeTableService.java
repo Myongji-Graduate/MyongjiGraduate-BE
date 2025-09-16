@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @UseCase
 @Transactional(readOnly = true)
@@ -67,7 +68,7 @@ public class FindTimeTableService implements FindTimetableUseCase {
                 .map(Timetable::getLectureCode)
                 .filter(Objects::nonNull)
                 .distinct()
-                .toList();
+                .collect(Collectors.toList());
 
         // TAKEN / NOT_TAKEN / (ALL+category) 공통
         List<GraduationCategory> sourceCategories;
@@ -119,7 +120,7 @@ public class FindTimeTableService implements FindTimetableUseCase {
         Set<String> openNow = new HashSet<>(baseCodes);
         List<String> candidate = recommendedIds.stream()
                 .filter(openNow::contains)
-                .toList();
+                .collect(Collectors.toList());
         if (candidate.isEmpty()) return List.of();
 
         List<String> finalCodes;
@@ -128,7 +129,7 @@ public class FindTimeTableService implements FindTimetableUseCase {
             Set<String> takenSet = new HashSet<>(alreadyTaken);
             finalCodes = candidate.stream()
                     .filter(c -> !takenSet.contains(c))
-                    .toList();
+                    .collect(Collectors.toList());
         } else {
             finalCodes = candidate;
         }
