@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.repository;
 
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.TimetableJpaEntity;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE) // 내장 DB 대체 금지
 @Import({TimetableQueryDslRepository.class, TimetableQueryRepositoryTest.TestConfig.class})
-class TimetableQueryRepositoryTest {
+class TimetableQueryRepositoryTest extends PersistenceTestSupport {
 
     @TestConfiguration
     static class TestConfig {

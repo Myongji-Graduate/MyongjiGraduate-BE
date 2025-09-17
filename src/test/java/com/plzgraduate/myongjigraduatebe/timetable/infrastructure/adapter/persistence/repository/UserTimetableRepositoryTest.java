@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserTimetableRepositoryTest extends PersistenceTestSupport { // ★ 여기!
+class UserTimetableRepositoryTest extends PersistenceTestSupport { //
 
     @Autowired private UserTimetableRepository userTimetableRepository;
     @Autowired private EntityManager em;

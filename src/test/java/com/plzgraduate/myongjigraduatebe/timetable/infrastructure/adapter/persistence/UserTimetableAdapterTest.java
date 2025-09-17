@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence;
 
+import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.UserTimetable;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.TimetableJpaEntity;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserTimetableAdapterTest {
+class UserTimetableAdapterTest extends PersistenceTestSupport {
 
     @Mock private UserTimetableRepository userTimetableRepository;
     @Mock private UserTimetableMapper userTimetableMapper;
