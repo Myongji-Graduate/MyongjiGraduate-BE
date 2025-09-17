@@ -24,7 +24,7 @@ ext {
 }
 
 jacoco {
-    toolVersion = '0.8.8'
+    toolVersion = "0.8.11"
 }
 
 dependencies {
@@ -59,14 +59,24 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:mysql'
-    // Mockito inline for mocking finals
-    testImplementation 'org.mockito:mockito-inline:4.8.1'
+    // Mockito inline for mocking
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 tasks.named('test') {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs += [
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED",
+        "--add-opens=java.base/java.io=ALL-UNNAMED"
+    ]
 }
 
 jacocoTestReport {
