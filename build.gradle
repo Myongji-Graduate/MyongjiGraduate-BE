@@ -24,7 +24,7 @@ ext {
 }
 
 jacoco {
-    toolVersion = '0.8.8'
+    toolVersion = "0.8.11"
 }
 
 dependencies {
@@ -50,26 +50,33 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     testImplementation 'org.testng:testng:7.9.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.mockito', module: 'mockito-core'
+    }
     testImplementation 'org.springframework.security:spring-security-test'
+    // Testcontainers BOM to align versions
+    testImplementation platform('org.testcontainers:testcontainers-bom:1.19.0')
     testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:testcontainers:1.19.0'
-    testImplementation 'org.testcontainers:mysql:1.19.0'
-    testImplementation 'org.testcontainers:junit-jupiter:1.13.0'
-    testCompileOnly 'org.projectlombok:lombok:1.18.30'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.testcontainers:testcontainers:1.19.0'
-    testImplementation 'org.testcontainers:mysql:1.19.0'
-    testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
+    testImplementation 'org.testcontainers:testcontainers'
+    testImplementation 'org.testcontainers:mysql'
+    // Mockito inline for mocking
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 tasks.named('test') {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs += [
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED",
+        "--add-opens=java.base/java.io=ALL-UNNAMED"
+    ]
 }
 
 jacocoTestReport {
@@ -104,7 +111,7 @@ jar {
     enabled = false
 }
 
-def querydslDir = "$buildDir/generated/'querydsl'"
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
     jpa = true
