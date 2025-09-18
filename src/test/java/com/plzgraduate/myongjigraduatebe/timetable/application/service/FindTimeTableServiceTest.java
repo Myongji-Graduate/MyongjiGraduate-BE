@@ -81,7 +81,7 @@ class FindTimeTableServiceTest {
 
         // category 지정 → extractor(BOTH)에서 B,X 추천 → 교집합은 B
         GraduationCategory cat = GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
-        when(recommendedExtractor.extractLectureIds(eq(1L), eq(cat), eq(RecommendedLectureExtractor.ExtractMode.BOTH)))
+        when(recommendedExtractor.extractLectureIds(1L, cat, RecommendedLectureExtractor.ExtractMode.BOTH))
                 .thenReturn(List.of("B", "X"));
 
         // 최종 조회는 교집합 코드로
@@ -107,7 +107,7 @@ class FindTimeTableServiceTest {
         when(timetablePort.findByYearAndSemester(year, semester)).thenReturn(base);
 
         GraduationCategory cat = GraduationCategory.PRIMARY_ELECTIVE_MAJOR; // 카테고리 지정해서 user 분기 회피
-        when(recommendedExtractor.extractLectureIds(eq(1L), eq(cat), eq(RecommendedLectureExtractor.ExtractMode.TAKEN)))
+        when(recommendedExtractor.extractLectureIds(1L, cat, RecommendedLectureExtractor.ExtractMode.TAKEN))
                 .thenReturn(List.of("A", "Z")); // 개설 교집합 → A
 
         when(timetablePort.findByYearSemesterAndLectureCodeIn(eq(year), eq(semester), eq(campus), eq(List.of("A"))))
@@ -128,7 +128,7 @@ class FindTimeTableServiceTest {
         when(timetablePort.findByYearAndSemester(year, semester)).thenReturn(base);
 
         GraduationCategory cat = GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
-        when(recommendedExtractor.extractLectureIds(eq(1L), eq(cat), eq(RecommendedLectureExtractor.ExtractMode.HAVE_TO)))
+        when(recommendedExtractor.extractLectureIds(1L, cat, RecommendedLectureExtractor.ExtractMode.HAVE_TO))
                 .thenReturn(List.of("A", "B"));
 
         // A는 이미 이수 → 제외, B만 남음
