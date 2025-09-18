@@ -86,7 +86,7 @@ class FindTimeTableServiceTest {
 
         // 최종 조회는 교집합 코드로
         Timetable onlyB = t("B");
-        when(timetablePort.findByYearSemesterAndLectureCodeIn(eq(year), eq(semester), eq(campus), eq(List.of("B"))))
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, campus, List.of("B")))
                 .thenReturn(List.of(onlyB));
 
         TimetableSearchConditionRequest cond = mock(TimetableSearchConditionRequest.class);
@@ -110,7 +110,7 @@ class FindTimeTableServiceTest {
         when(recommendedExtractor.extractLectureIds(1L, cat, RecommendedLectureExtractor.ExtractMode.TAKEN))
                 .thenReturn(List.of("A", "Z")); // 개설 교집합 → A
 
-        when(timetablePort.findByYearSemesterAndLectureCodeIn(eq(year), eq(semester), eq(campus), eq(List.of("A"))))
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, campus, List.of("A")))
                 .thenReturn(List.of(t("A")));
 
         List<Timetable> result = sut.searchCombined(1L, year, semester, campus, TakenFilter.TAKEN, null, cat);
@@ -135,7 +135,7 @@ class FindTimeTableServiceTest {
         when(findTakenLecturePort.findTakenLectureIdsByUserAndCodes(1L, List.of("A", "B")))
                 .thenReturn(List.of("A"));
 
-        when(timetablePort.findByYearSemesterAndLectureCodeIn(eq(year), eq(semester), eq(campus), eq(List.of("B"))))
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(year, semester, campus, List.of("B")))
                 .thenReturn(List.of(t("B")));
 
         List<Timetable> result = sut.searchCombined(1L, year, semester, campus, TakenFilter.NOT_TAKEN, null, cat);
