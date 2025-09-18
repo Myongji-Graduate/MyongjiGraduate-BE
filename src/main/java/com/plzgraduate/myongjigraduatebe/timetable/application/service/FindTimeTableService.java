@@ -51,8 +51,6 @@ public class FindTimeTableService implements FindTimetableUseCase {
             TimetableSearchConditionRequest condition,
             GraduationCategory recommendedCategory
     ) {
-        User user = findUserUseCase.findUserById(userId);
-
         List<Timetable> base = (condition == null)
                 ? timetablePort.findByYearAndSemester(year, semester)
                 : timetablePort.searchByCondition(year, semester, campus, condition);
@@ -82,6 +80,8 @@ public class FindTimeTableService implements FindTimetableUseCase {
                     GraduationCategory.CORE_CULTURE,
                     GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
             ));
+            // fetch user only when recommendedCategory is null (dynamic selection needed)
+            User user = findUserUseCase.findUserById(userId);
             switch (user.getStudentCategory()) {
                 case SUB_MAJOR:
                     dynamic.add(GraduationCategory.SUB_MAJOR);
