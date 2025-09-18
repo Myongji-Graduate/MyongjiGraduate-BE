@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.repository;
 
-import com.plzgraduate.myongjigraduatebe.support.PersistenceTestSupport;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.TimetableJpaEntity;
@@ -23,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({TimetableQueryDslRepositoryTest.TestConfig.class, TimetableQueryDslRepository.class})
-class TimetableQueryDslRepositoryTest extends PersistenceTestSupport {
+class TimetableQueryDslRepositoryTest{
 
     @TestConfiguration
     static class TestConfig {
