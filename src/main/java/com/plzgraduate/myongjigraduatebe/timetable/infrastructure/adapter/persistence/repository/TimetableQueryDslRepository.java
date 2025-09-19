@@ -54,34 +54,6 @@ public class TimetableQueryDslRepository implements TimetableQueryRepository {
                 .fetch();
     }
 
-    @Override
-    public List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeIn(int year, int semester, List<String> codes) {
-        if (codes == null || codes.isEmpty()) return List.of();
-
-        return query.selectFrom(timetable)
-                .where(timetable.year.eq(year)
-                        .and(timetable.semester.eq(semester))
-                        .and(timetable.lectureCode.in(codes)))
-                .fetch();
-    }
-
-    @Override
-    public List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(int year, int semester, List<String> codes) {
-        if (codes == null || codes.isEmpty()) {
-            // not in (empty) 은 모든 행이 통과하므로, 빈 경우엔 그냥 해당 학기 전체 반환
-            return query.selectFrom(timetable)
-                    .where(timetable.year.eq(year)
-                            .and(timetable.semester.eq(semester)))
-                    .fetch();
-        }
-
-        return query.selectFrom(timetable)
-                .where(timetable.year.eq(year)
-                        .and(timetable.semester.eq(semester))
-                        .and(timetable.lectureCode.notIn(codes)))
-                .fetch();
-    }
-
     private boolean hasText(String s) {
         return s != null && !s.trim().isEmpty();
     }

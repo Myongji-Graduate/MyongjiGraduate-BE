@@ -46,12 +46,7 @@ public class TimetableController {
         List<Timetable> result = useCase.findByKeyword(year, semester, keyword);
         return result.stream().map(TimetableResponse::from).collect(Collectors.toList());
     }
-    /**
-     * 통합 조회
-     * - filter: ALL / TAKEN / NOT_TAKEN
-     *   * NOT_TAKEN은 haveToLectures 기반 추천 미이수로 동작
-     *   * 이때 recommendedCategory 필수 (예: PRIMARY_ELECTIVE_MAJOR 등)
-     */
+
     @GetMapping("/filter")
     public List<TimetableResponse> combined(
             @Parameter(hidden = true) @LoginUser Long userId,
