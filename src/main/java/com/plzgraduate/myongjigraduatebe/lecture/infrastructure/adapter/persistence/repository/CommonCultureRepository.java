@@ -23,4 +23,8 @@ public interface CommonCultureRepository extends JpaRepository<CommonCultureJpaE
 	@Query("select cc from CommonCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear and cc.commonCultureCategory != 'ENGLISH'")
 	List<CommonCultureJpaEntity> findEngFreeGraduationCommonCulturesByEntryYear(
 		@Param("entryYear") int entryYear);
+
+    @Query("select cc.lectureJpaEntity.id from CommonCultureJpaEntity cc where cc.lectureJpaEntity.id in :ids")
+    List<String> findIdsByLectureIdIn(@Param("ids") List<String> ids);
+
 }

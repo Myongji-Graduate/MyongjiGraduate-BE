@@ -23,4 +23,9 @@ public interface BasicAcademicalCultureRepository extends
 	List<BasicAcademicalCultureLectureJpaEntity> findAllDuplicatedTakenByCollages(
 		@Param("userId") Long id,
 		@Param("primary") String primaryMajorCollage, @Param("dual") String dualMajorCollage);
+
+    @Query("select b.lectureJpaEntity.id " +
+            "from BasicAcademicalCultureLectureJpaEntity b " +
+            "where b.lectureJpaEntity.id in :ids")
+    List<String> findIdsByLectureIdIn(@Param("ids") List<String> ids);
 }
