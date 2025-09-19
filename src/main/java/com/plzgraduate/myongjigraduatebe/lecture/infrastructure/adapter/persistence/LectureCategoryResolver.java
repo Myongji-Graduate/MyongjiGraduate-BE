@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory.*;
 
