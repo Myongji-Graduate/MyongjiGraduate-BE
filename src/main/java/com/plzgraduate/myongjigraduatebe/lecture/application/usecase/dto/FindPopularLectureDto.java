@@ -1,12 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto;
 
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class FindPopularLectureDto {

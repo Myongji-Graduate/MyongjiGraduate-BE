@@ -4,7 +4,6 @@ import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.GetPopularLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.GetPopularLecturesUseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;

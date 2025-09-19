@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.application.service;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.GetPopularLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.GetPopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

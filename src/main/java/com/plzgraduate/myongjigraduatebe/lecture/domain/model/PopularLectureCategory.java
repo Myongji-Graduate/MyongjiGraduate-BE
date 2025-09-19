@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
