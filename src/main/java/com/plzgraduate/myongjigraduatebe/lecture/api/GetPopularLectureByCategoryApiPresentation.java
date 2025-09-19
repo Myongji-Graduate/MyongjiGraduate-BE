@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.lecture.api;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface GetPopularLectureByCategoryApiPresentation {
 
     @GetMapping("/api/v1/lectures/popular/by-category")
-    PopularLecturesByCategoryResponse getPopularLecturesByCategory(
-            @RequestParam("majors") String[] majors,
+    ResponseEntity<?> getPopularLecturesByCategory(
+            @RequestParam("major") String majors,
             @RequestParam("entryYear") int entryYear,
             @RequestParam(value = "category", required = false) PopularLectureCategory category,
             @RequestParam(value = "limit", defaultValue = "10") int limit,

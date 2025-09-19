@@ -18,4 +18,19 @@ public interface MajorLectureRepository extends JpaRepository<MajorLectureJpaEnt
             @Param("ids") List<String> ids,
             @Param("mandatory") int mandatory
     );
+
+    @Query("select m.lectureJpaEntity.id " +
+            "from MajorLectureJpaEntity m " +
+            "where m.lectureJpaEntity.id in :ids " +
+            "and m.mandatory = :mandatory " +
+            "and m.major in :majors " +
+            "and m.startEntryYear <= :entryYear " +
+            "and m.endEntryYear >= :entryYear")
+    List<String> findIdsByLectureIdInAndMajorsInAndIsMandatoryAndEntryYearBetween(
+            @Param("ids") List<String> lectureIds,
+            @Param("majors") List<String> majors,
+            @Param("isMandatory") int mandatory,
+            @Param("entryYear") int entryYear
+    );
+
 }

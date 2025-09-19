@@ -2,6 +2,8 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.BasicAcademicalCultureLectureJpaEntity;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +30,13 @@ public interface BasicAcademicalCultureRepository extends
             "from BasicAcademicalCultureLectureJpaEntity b " +
             "where b.lectureJpaEntity.id in :ids")
     List<String> findIdsByLectureIdIn(@Param("ids") List<String> ids);
+
+    @Query("select b.lectureJpaEntity.id " +
+            "from BasicAcademicalCultureLectureJpaEntity b " +
+            "where b.lectureJpaEntity.id in :ids " +
+            "and b.college in :colleges")
+    List<String> findIdsByLectureIdInAndCollegeIn(
+            @Param("ids") List<String> lectureIds,
+            @Param("colleges") Set<String> colleges
+    );
 }
