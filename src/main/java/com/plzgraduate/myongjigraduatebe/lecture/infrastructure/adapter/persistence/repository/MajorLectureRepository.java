@@ -29,7 +29,7 @@ public interface MajorLectureRepository extends JpaRepository<MajorLectureJpaEnt
     List<String> findIdsByLectureIdInAndMajorsInAndIsMandatoryAndEntryYearBetween(
             @Param("ids") List<String> lectureIds,
             @Param("majors") List<String> majors,
-            @Param("isMandatory") int mandatory,
+            @Param("mandatory") int mandatory,
             @Param("entryYear") int entryYear
     );
 
