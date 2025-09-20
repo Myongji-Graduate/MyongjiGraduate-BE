@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,7 +45,7 @@ public class GetPopularLecturesService implements GetPopularLecturesUseCase {
         List<GetPopularLectureResponse> lectures =
                 getPopularLecturePort.getLecturesByCategory(major, entryYear, firstCategory, limit, cursor).stream()
                         .map(dto -> GetPopularLectureResponse.from(dto, 0.0)) // 별점은 아직 없으므로 0.0
-                        .toList();
+                        .collect(Collectors.toUnmodifiableList());
 
         return PopularLecturesInitResponse.of(
                 sections,
@@ -66,7 +67,7 @@ public class GetPopularLecturesService implements GetPopularLecturesUseCase {
         List<GetPopularLectureResponse> lectures =
                 getPopularLecturePort.getLecturesByCategory(major, entryYear, category, limit, cursor).stream()
                         .map(dto -> GetPopularLectureResponse.from(dto, 0.0))
-                        .toList();
+                        .collect(Collectors.toUnmodifiableList());
 
         return PopularLecturesByCategoryResponse.of(
                 category,

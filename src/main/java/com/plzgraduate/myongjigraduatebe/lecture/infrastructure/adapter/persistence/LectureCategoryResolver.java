@@ -3,10 +3,12 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.*;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory.*;
 
@@ -23,7 +25,7 @@ public class LectureCategoryResolver {
      * 컨텍스트 없이 단순 카테고리 분류
      */
     public List<FindPopularLectureDto> attachWithoutContext(List<FindPopularLectureDto> rawLectures) {
-        List<String> lectureIds = rawLectures.stream().map(FindPopularLectureDto::getLectureId).toList();
+        List<String> lectureIds = rawLectures.stream().map(FindPopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
 
         Set<String> majorMandatoryIds =
                 new HashSet<>(majorLectureRepository.findIdsByLectureIdInAndIsMandatory(lectureIds, 1));
@@ -49,19 +51,19 @@ public class LectureCategoryResolver {
                                 basicCultureIds,
                                 commonCultureIds)
                 ))
-                .toList();
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
      * 특정 major + entryYear 맥락으로 카테고리 분류
      */
-    public List<FindPopularLectureDto> attachWithContext(List<FindPopularLectureDto> rawLectures,
+    public List<FindPopularLectureDto> attachWithContext(List<FindPopularLectureDto> findPopularLectureDto,
                                                          String major,
                                                          int entryYear) {
-        List<String> lectureIds = rawLectures.stream().map(FindPopularLectureDto::getLectureId).toList();
+        List<String> lectureIds = findPopularLectureDto.stream().map(FindPopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
 
         // 1) major → 소속 college
-        String college = com.plzgraduate.myongjigraduatebe.user.domain.model.College
+        String college = College
                 .findBelongingCollege(major, entryYear)
                 .getName();
 
@@ -87,7 +89,7 @@ public class LectureCategoryResolver {
                                 lectureIds, List.of(major), 0, entryYear));
 
         // 5) 매핑 결과 조합
-        return rawLectures.stream()
+        return findPopularLectureDto.stream()
                 .map(dto -> FindPopularLectureDto.of(
                         dto.getLectureId(),
                         dto.getLectureName(),
@@ -100,7 +102,7 @@ public class LectureCategoryResolver {
                                 basicCultureIdsByCollege,
                                 commonCultureIdsByYear)
                 ))
-                .toList();
+                .collect(Collectors.toUnmodifiableList());
     }
 
     private PopularLectureCategory resolveCategory(String lectureId,

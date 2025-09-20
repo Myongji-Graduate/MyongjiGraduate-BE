@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebAdapter
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class GetPopularLectureController implements GetPopularLectureApiPresenta
         List<GetPopularLectureResponse> responses =
                 getPopularLecturesUseCase.getPopularLecturesByTotalCount().stream()
                 .map(dto -> GetPopularLectureResponse.from(dto, 0.0))
-                .toList();
+                        .collect(Collectors.toUnmodifiableList());
 
         return PopularLecturesPageResponse.of(responses, limit);
     }
