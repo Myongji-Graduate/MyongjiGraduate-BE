@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "GetPopularLectureByCategory", description = "카테고리별 인기 과목 조회 API")
 public interface GetPopularLectureByCategoryApiPresentation {
 
-    @GetMapping("/api/v1/lectures/popular/by-category")
     ResponseEntity<?> getPopularLecturesByCategory(
             @RequestParam("major") String majors,
             @RequestParam("entryYear") int entryYear,
