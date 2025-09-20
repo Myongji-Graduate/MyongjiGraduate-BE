@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class TakenLectureQueryRepositoryImpl
-        implements TakenLectureQueryRepositoryCustom, GetPopularLecturePort {
+public class TakenLectureRepositoryImpl
+        implements TakenLectureRepositoryCustom, GetPopularLecturePort {
 
     private static final QTakenLectureJpaEntity takenLecture = QTakenLectureJpaEntity.takenLectureJpaEntity;
 
@@ -68,7 +68,7 @@ public class TakenLectureQueryRepositoryImpl
 
         return categoryResolver.attachWithContext(rawResult, major, entryYear).stream()
                 .filter(dto -> dto.getCategoryName() == category)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -84,6 +84,6 @@ public class TakenLectureQueryRepositoryImpl
                         .categoryName(entry.getKey())
                         .total(entry.getValue())
                         .build())
-                .toList();
+                .collect(Collectors.toList());
     }
 }

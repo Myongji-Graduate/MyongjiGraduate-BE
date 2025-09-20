@@ -4,6 +4,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPop
 
 import java.util.List;
 
-public interface TakenLectureQueryRepositoryCustom {
+public interface TakenLectureRepositoryCustom {
     List<FindPopularLectureDto> getPopularLecturesByTotalCount();
 }

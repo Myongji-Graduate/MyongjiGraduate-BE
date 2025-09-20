@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface TakenLectureRepository extends JpaRepository<TakenLectureJpaEntity, Long> , TakenLectureQueryRepositoryCustom{
+public interface TakenLectureRepository extends JpaRepository<TakenLectureJpaEntity, Long> , TakenLectureRepositoryCustom{
 
 	@Query("delete from TakenLectureJpaEntity t where t.user = :user")
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
