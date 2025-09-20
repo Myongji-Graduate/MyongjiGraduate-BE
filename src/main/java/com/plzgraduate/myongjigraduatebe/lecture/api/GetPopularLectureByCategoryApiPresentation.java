@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.api;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "GetPopularLectureByCategory", description = "카테고리별 인기 과목 조회 API")
