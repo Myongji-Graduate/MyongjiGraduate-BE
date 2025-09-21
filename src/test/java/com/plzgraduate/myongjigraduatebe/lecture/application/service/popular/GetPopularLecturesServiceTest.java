@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.service.popular;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.GetPopularLectureResponse;
