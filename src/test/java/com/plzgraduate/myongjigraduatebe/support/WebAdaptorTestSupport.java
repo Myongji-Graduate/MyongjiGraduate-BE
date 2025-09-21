@@ -17,7 +17,9 @@ import com.plzgraduate.myongjigraduatebe.graduation.api.FindDetailGraduationCont
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.api.SearchLectureController;
+import com.plzgraduate.myongjigraduatebe.lecture.api.GetPopularLectureController;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.GetPopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.api.ParsingTextController;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
@@ -46,6 +48,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -64,8 +68,9 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(
 	controllers = {
 		SignInController.class,
-		TokenController.class,
+        TokenController.class,
 		SearchLectureController.class,
+		GetPopularLectureController.class,
 		FindUserInformationController.class,
 		UpdateTakenLectureController.class,
 		ParsingTextController.class,
@@ -89,11 +94,13 @@ public abstract class WebAdaptorTestSupport {
 	@MockBean
 	protected SignInUseCase signInUseCase;
 	@MockBean
-	protected TokenUseCase tokenUseCase;
+    protected TokenUseCase tokenUseCase;
 	@MockBean
 	protected CalculateGraduationUseCase calculateGraduationUseCase;
 	@MockBean
 	protected SearchLectureUseCase searchLectureUseCase;
+	@MockBean
+	protected GetPopularLecturesUseCase getPopularLecturesUseCase;
 	@MockBean
 	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
 	@MockBean
@@ -111,9 +118,9 @@ public abstract class WebAdaptorTestSupport {
 	@MockBean
 	protected WithDrawUserUseCase withDrawUserUseCase;
 	@MockBean
-	protected ParsingTextUseCase parsingTextUseCase;
-	@MockBean
-	protected ParsingTextHistoryUseCase parsingTextHistoryUseCase;
+    protected ParsingTextUseCase parsingTextUseCase;
+    @MockBean
+    protected ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 	@MockBean
 	protected SignUpUseCase signUpUseCase;
 	@MockBean
