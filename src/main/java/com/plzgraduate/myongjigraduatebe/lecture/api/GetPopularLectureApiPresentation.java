@@ -4,7 +4,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecture
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "GetPopularLecture", description = "여러 필터(학점, 단과대, 교양종류, 입학년도, 전공/교양)를 조합을 통해 인기 과목정보를 조회하는 API")
+@Tag(name = "GetPopularLecture", description = "필터링 없이 인기 과목 조회하는 API")
 public interface GetPopularLectureApiPresentation {
 
     PopularLecturesPageResponse getPopularLectures(
