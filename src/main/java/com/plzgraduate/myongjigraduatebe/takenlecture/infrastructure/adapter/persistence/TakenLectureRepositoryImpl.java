@@ -68,7 +68,7 @@ public class TakenLectureRepositoryImpl
 
         return categoryResolver.attachWithContext(rawResult, major, entryYear).stream()
                 .filter(dto -> dto.getCategoryName() == category)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -84,6 +84,6 @@ public class TakenLectureRepositoryImpl
                         .categoryName(entry.getKey())
                         .total(entry.getValue())
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 }
