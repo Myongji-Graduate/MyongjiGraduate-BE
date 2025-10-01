@@ -3,7 +3,7 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.pe
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.QFindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.QPopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
 import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.QTakenLectureJpaEntity;
@@ -30,7 +30,7 @@ public class TakenLectureRepositoryImpl
     @Override
     public List<PopularLectureDto> getPopularLecturesByTotalCount() {
         List<PopularLectureDto> rawResult = jpaQueryFactory
-                .select(new QFindPopularLectureDto(
+                .select(new QPopularLectureDto(
                         takenLecture.lecture.id,
                         takenLecture.lecture.name,
                         takenLecture.lecture.credit,
@@ -49,7 +49,7 @@ public class TakenLectureRepositoryImpl
             String major, int entryYear, PopularLectureCategory category, int limit, String cursor) {
 
         JPAQuery<PopularLectureDto> baseQuery = jpaQueryFactory
-                .select(new QFindPopularLectureDto(
+                .select(new QPopularLectureDto(
                         takenLecture.lecture.id,
                         takenLecture.lecture.name,
                         takenLecture.lecture.credit,
