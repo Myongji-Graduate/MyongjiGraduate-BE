@@ -1,11 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.repository;
 
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
+import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureRepositoryImpl;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persistence.entity.TimetableJpaEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -21,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({TimetableQueryDslRepositoryTest.TestConfig.class, TimetableQueryDslRepository.class})
+@Import({TimetableQueryDslRepositoryTest.TestConfig.class, TimetableQueryDslRepository.class, LectureCategoryResolver.class, TakenLectureRepositoryImpl.class})
 class TimetableQueryDslRepositoryTest{
 
     @TestConfiguration
@@ -32,10 +35,10 @@ class TimetableQueryDslRepositoryTest{
         }
     }
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     private EntityManager em;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     private TimetableQueryRepository repository;
 
     // ============ helper ============
