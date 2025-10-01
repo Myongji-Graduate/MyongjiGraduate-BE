@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.BasicAcademicalCultureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CommonCultureRepository;
@@ -33,11 +33,11 @@ class LectureCategoryResolverTest {
   @Test
   void attachWithoutContext() {
     // given
-    List<FindPopularLectureDto> raw = List.of(
-        new FindPopularLectureDto("A", "A", 3, 10),
-        new FindPopularLectureDto("B", "B", 3, 9),
-        new FindPopularLectureDto("C", "C", 3, 8),
-        new FindPopularLectureDto("X", "X", 3, 1)
+    List<PopularLectureDto> raw = List.of(
+        new PopularLectureDto("A", "A", 3, 10),
+        new PopularLectureDto("B", "B", 3, 9),
+        new PopularLectureDto("C", "C", 3, 8),
+        new PopularLectureDto("X", "X", 3, 1)
     );
     given(majorLectureRepository.findIdsByLectureIdInAndIsMandatory(anyList(), eq(1)))
         .willReturn(List.of("A"));
@@ -48,7 +48,7 @@ class LectureCategoryResolverTest {
     given(commonCultureRepository.findIdsByLectureIdIn(anyList())).willReturn(List.of());
 
     // when
-    List<FindPopularLectureDto> result = resolver.attachWithoutContext(raw);
+    List<PopularLectureDto> result = resolver.attachWithoutContext(raw);
 
     // then
     assertThat(result).hasSize(4);
@@ -64,12 +64,12 @@ class LectureCategoryResolverTest {
     // given
     String major = "응용소프트웨어전공"; // ICT 계열(16~24년) - College enum과 정확히 일치
     int entryYear = 20; // College enum은 2자리 연도로 비교
-    List<FindPopularLectureDto> raw = List.of(
-        new FindPopularLectureDto("A", "A", 3, 10), // 전필
-        new FindPopularLectureDto("B", "B", 3, 9),  // 전선
-        new FindPopularLectureDto("C", "C", 3, 8),  // 핵교
-        new FindPopularLectureDto("D", "D", 3, 7),  // 공교
-        new FindPopularLectureDto("E", "E", 3, 6)   // 학기
+    List<PopularLectureDto> raw = List.of(
+        new PopularLectureDto("A", "A", 3, 10), // 전필
+        new PopularLectureDto("B", "B", 3, 9),  // 전선
+        new PopularLectureDto("C", "C", 3, 8),  // 핵교
+        new PopularLectureDto("D", "D", 3, 7),  // 공교
+        new PopularLectureDto("E", "E", 3, 6)   // 학기
     );
 
     given(basicAcademicalCultureRepository.findIdsByLectureIdInAndCollegeIn(anyList(), any(Set.class)))
@@ -84,7 +84,7 @@ class LectureCategoryResolverTest {
         .willReturn(List.of("B"));
 
     // when
-    List<FindPopularLectureDto> result = resolver.attachWithContext(raw, major, entryYear);
+    List<PopularLectureDto> result = resolver.attachWithContext(raw, major, entryYear);
 
     // then
     assertThat(result).hasSize(5);
@@ -95,7 +95,7 @@ class LectureCategoryResolverTest {
     assertThat(findCategory(result, "E")).isEqualTo(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE);
   }
 
-  private PopularLectureCategory findCategory(List<FindPopularLectureDto> list, String id) {
+  private PopularLectureCategory findCategory(List<PopularLectureDto> list, String id) {
     return list.stream().filter(d -> d.getLectureId().equals(id)).findFirst().orElseThrow().getCategoryName();
   }
 }

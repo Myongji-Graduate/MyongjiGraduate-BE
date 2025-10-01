@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "GetPopularLectureByCategory", description = "여러 필터(학점, 학과, 교양종류, 입학년도, 전공/교양)를 조합을 통해 인기 과목정보를 조회하는 API")
-public interface GetPopularLectureByCategoryApiPresentation {
+public interface PopularLectureByCategoryApiPresentation {
 
     @Operation(summary = "인기 과목 카테고리별 조회",
         description = "category 파라미터가 없으면 초기 섹션 응답을, 지정하면 해당 카테고리 페이지를 반환합니다.")

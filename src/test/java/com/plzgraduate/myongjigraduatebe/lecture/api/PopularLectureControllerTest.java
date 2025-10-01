@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.GetPopularLectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-class GetPopularLectureControllerTest extends WebAdaptorTestSupport {
+class PopularLectureControllerTest extends WebAdaptorTestSupport {
 
     // 일부 테스트 컨텍스트에서 ParsingTextController 의존성으로 필요할 수 있어 안전망으로 Mock 추가
     @MockBean
@@ -33,9 +33,9 @@ class GetPopularLectureControllerTest extends WebAdaptorTestSupport {
     @DisplayName("인기 과목 목록을 기본 limit으로 페이지 응답한다.")
     @Test
     void getPopularLectures_defaultLimit() throws Exception {
-        List<FindPopularLectureDto> dtos = List.of(
-            FindPopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
-            FindPopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
+        List<PopularLectureDto> dtos = List.of(
+            PopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
+            PopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
         );
         given(getPopularLecturesUseCase.getPopularLecturesByTotalCount()).willReturn(dtos);
 
@@ -56,9 +56,9 @@ class GetPopularLectureControllerTest extends WebAdaptorTestSupport {
     @DisplayName("limit이 작은 경우 페이징 정보를 포함해 잘린 목록을 반환한다.")
     @Test
     void getPopularLectures_withLimitPagination() throws Exception {
-        List<FindPopularLectureDto> dtos = List.of(
-            FindPopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
-            FindPopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
+        List<PopularLectureDto> dtos = List.of(
+            PopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
+            PopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
         );
         given(getPopularLecturesUseCase.getPopularLecturesByTotalCount()).willReturn(dtos);
 
@@ -84,11 +84,11 @@ class GetPopularLectureControllerTest extends WebAdaptorTestSupport {
                 .total(2)
                 .build()
         );
-        List<GetPopularLectureResponse> items = List.of(
-            GetPopularLectureResponse.from(
-                FindPopularLectureDto.of("LEC-10", "철학입문", 2, 50L, PopularLectureCategory.NORMAL_CULTURE), 0.0),
-            GetPopularLectureResponse.from(
-                FindPopularLectureDto.of("LEC-11", "심리학개론", 3, 45L, PopularLectureCategory.NORMAL_CULTURE), 0.0)
+        List<PopularLectureResponse> items = List.of(
+            PopularLectureResponse.from(
+                PopularLectureDto.of("LEC-10", "철학입문", 2, 50L, PopularLectureCategory.NORMAL_CULTURE), 0.0),
+            PopularLectureResponse.from(
+                PopularLectureDto.of("LEC-11", "심리학개론", 3, 45L, PopularLectureCategory.NORMAL_CULTURE), 0.0)
         );
         PopularLecturesInitResponse response = PopularLecturesInitResponse.of(
             sections,
@@ -118,11 +118,11 @@ class GetPopularLectureControllerTest extends WebAdaptorTestSupport {
     @DisplayName("카테고리 지정 시 해당 카테고리 페이지 응답한다.")
     @Test
     void getPopularLecturesByCategory_categorySelected() throws Exception {
-        List<GetPopularLectureResponse> items = List.of(
-            GetPopularLectureResponse.from(
-                FindPopularLectureDto.of("LEC-20", "운영체제", 3, 80L, PopularLectureCategory.MANDATORY_MAJOR), 0.0),
-            GetPopularLectureResponse.from(
-                FindPopularLectureDto.of("LEC-21", "컴퓨터구조", 3, 70L, PopularLectureCategory.MANDATORY_MAJOR), 0.0)
+        List<PopularLectureResponse> items = List.of(
+            PopularLectureResponse.from(
+                PopularLectureDto.of("LEC-20", "운영체제", 3, 80L, PopularLectureCategory.MANDATORY_MAJOR), 0.0),
+            PopularLectureResponse.from(
+                PopularLectureDto.of("LEC-21", "컴퓨터구조", 3, 70L, PopularLectureCategory.MANDATORY_MAJOR), 0.0)
         );
         PopularLecturesByCategoryResponse response = PopularLecturesByCategoryResponse.of(
             PopularLectureCategory.MANDATORY_MAJOR,

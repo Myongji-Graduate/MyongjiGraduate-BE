@@ -22,13 +22,13 @@ public class PopularLecturesPageResponse {
     }
 
     @Schema(description = "인기 과목 목록")
-    private final List<GetPopularLectureResponse> lectures;
+    private final List<PopularLectureResponse> lectures;
     @Schema(description = "페이지 정보")
     private final PageInfo pageInfo;
 
-    public static PopularLecturesPageResponse of(List<GetPopularLectureResponse> items, int limit) {
+    public static PopularLecturesPageResponse of(List<PopularLectureResponse> items, int limit) {
         boolean hasMore = items.size() > limit;
-        List<GetPopularLectureResponse> page = hasMore ? items.subList(0, limit) : items;
+        List<PopularLectureResponse> page = hasMore ? items.subList(0, limit) : items;
         String nextCursor = hasMore ? page.get(page.size() - 1).getId() : null;
 
         return PopularLecturesPageResponse.builder()

@@ -1,8 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.GetPopularLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.QFindPopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class TakenLectureRepositoryImpl
-        implements TakenLectureRepositoryCustom, GetPopularLecturePort {
+        implements TakenLectureRepositoryCustom, PopularLecturePort {
 
     private static final QTakenLectureJpaEntity takenLecture = QTakenLectureJpaEntity.takenLectureJpaEntity;
 
@@ -28,8 +28,8 @@ public class TakenLectureRepositoryImpl
     private final LectureCategoryResolver categoryResolver;
 
     @Override
-    public List<FindPopularLectureDto> getPopularLecturesByTotalCount() {
-        List<FindPopularLectureDto> rawResult = jpaQueryFactory
+    public List<PopularLectureDto> getPopularLecturesByTotalCount() {
+        List<PopularLectureDto> rawResult = jpaQueryFactory
                 .select(new QFindPopularLectureDto(
                         takenLecture.lecture.id,
                         takenLecture.lecture.name,
@@ -45,10 +45,10 @@ public class TakenLectureRepositoryImpl
     }
 
     @Override
-    public List<FindPopularLectureDto> getLecturesByCategory(
+    public List<PopularLectureDto> getLecturesByCategory(
             String major, int entryYear, PopularLectureCategory category, int limit, String cursor) {
 
-        JPAQuery<FindPopularLectureDto> baseQuery = jpaQueryFactory
+        JPAQuery<PopularLectureDto> baseQuery = jpaQueryFactory
                 .select(new QFindPopularLectureDto(
                         takenLecture.lecture.id,
                         takenLecture.lecture.name,
@@ -64,7 +64,7 @@ public class TakenLectureRepositoryImpl
             baseQuery.where(takenLecture.lecture.id.gt(cursor));
         }
 
-        List<FindPopularLectureDto> rawResult = baseQuery.fetch();
+        List<PopularLectureDto> rawResult = baseQuery.fetch();
 
         return categoryResolver.attachWithContext(rawResult, major, entryYear).stream()
                 .filter(dto -> dto.getCategoryName() == category)
@@ -73,11 +73,11 @@ public class TakenLectureRepositoryImpl
 
     @Override
     public List<PopularLecturesInitResponse.SectionMeta> getSections(String major, int entryYear) {
-        List<FindPopularLectureDto> allLectures = getPopularLecturesByTotalCount();
-        List<FindPopularLectureDto> withCategory = categoryResolver.attachWithContext(allLectures, major, entryYear);
+        List<PopularLectureDto> allLectures = getPopularLecturesByTotalCount();
+        List<PopularLectureDto> withCategory = categoryResolver.attachWithContext(allLectures, major, entryYear);
 
         Map<PopularLectureCategory, Long> groupedByCategory = withCategory.stream()
-                .collect(Collectors.groupingBy(FindPopularLectureDto::getCategoryName, Collectors.counting()));
+                .collect(Collectors.groupingBy(PopularLectureDto::getCategoryName, Collectors.counting()));
 
         return groupedByCategory.entrySet().stream()
                 .map(entry -> PopularLecturesInitResponse.SectionMeta.builder()

@@ -14,7 +14,7 @@ public class PopularLecturesByCategoryResponse {
     @Schema(name = "categoryName", example = "전공필수", description = "조회한 카테고리 한글명")
     private final PopularLectureCategory categoryName;
     @Schema(description = "해당 카테고리 강의 목록")
-    private final List<GetPopularLectureResponse> lectures;
+    private final List<PopularLectureResponse> lectures;
     @Schema(description = "페이지 정보")
     private final PageInfo pageInfo;
 
@@ -31,11 +31,11 @@ public class PopularLecturesByCategoryResponse {
 
     public static PopularLecturesByCategoryResponse of(
             PopularLectureCategory categoryName,
-            List<GetPopularLectureResponse> items,
+            List<PopularLectureResponse> items,
             int limit
     ) {
         boolean hasMore = items.size() > limit;
-        List<GetPopularLectureResponse> page = hasMore ? items.subList(0, limit) : items;
+        List<PopularLectureResponse> page = hasMore ? items.subList(0, limit) : items;
         String nextCursor = hasMore ? page.get(page.size() - 1).getId() : null;
 
         return PopularLecturesByCategoryResponse.builder()

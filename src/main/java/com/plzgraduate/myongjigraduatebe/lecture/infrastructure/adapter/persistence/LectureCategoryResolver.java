@@ -1,6 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.*;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
@@ -24,8 +24,8 @@ public class LectureCategoryResolver {
     /**
      * 컨텍스트 없이 단순 카테고리 분류
      */
-    public List<FindPopularLectureDto> attachWithoutContext(List<FindPopularLectureDto> rawLectures) {
-        List<String> lectureIds = rawLectures.stream().map(FindPopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
+    public List<PopularLectureDto> attachWithoutContext(List<PopularLectureDto> rawLectures) {
+        List<String> lectureIds = rawLectures.stream().map(PopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
 
         Set<String> majorMandatoryIds =
                 new HashSet<>(majorLectureRepository.findIdsByLectureIdInAndIsMandatory(lectureIds, 1));
@@ -39,7 +39,7 @@ public class LectureCategoryResolver {
                 new HashSet<>(commonCultureRepository.findIdsByLectureIdIn(lectureIds));
 
         return rawLectures.stream()
-                .map(dto -> FindPopularLectureDto.of(
+                .map(dto -> PopularLectureDto.of(
                         dto.getLectureId(),
                         dto.getLectureName(),
                         dto.getCredit(),
@@ -57,10 +57,10 @@ public class LectureCategoryResolver {
     /**
      * 특정 major + entryYear 맥락으로 카테고리 분류
      */
-    public List<FindPopularLectureDto> attachWithContext(List<FindPopularLectureDto> findPopularLectureDto,
-                                                         String major,
-                                                         int entryYear) {
-        List<String> lectureIds = findPopularLectureDto.stream().map(FindPopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
+    public List<PopularLectureDto> attachWithContext(List<PopularLectureDto> findPopularLectureDto,
+                                                     String major,
+                                                     int entryYear) {
+        List<String> lectureIds = findPopularLectureDto.stream().map(PopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
 
         // 1) major → 소속 college
         String college = College
@@ -90,7 +90,7 @@ public class LectureCategoryResolver {
 
         // 5) 매핑 결과 조합
         return findPopularLectureDto.stream()
-                .map(dto -> FindPopularLectureDto.of(
+                .map(dto -> PopularLectureDto.of(
                         dto.getLectureId(),
                         dto.getLectureName(),
                         dto.getCredit(),

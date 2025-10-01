@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
 import com.querydsl.core.types.EntityPath;
@@ -34,14 +34,14 @@ class TakenLectureRepositoryImplTest {
 
     @Mock private JPAQueryFactory jpaQueryFactory;
     @Mock private LectureCategoryResolver categoryResolver;
-    @Mock private JPAQuery<FindPopularLectureDto> mockQuery;
+    @Mock private JPAQuery<PopularLectureDto> mockQuery;
 
     @InjectMocks private TakenLectureRepositoryImpl repository;
 
     @BeforeEach
     void setUp() {
         // 공통 QueryDSL 체이닝 스텁 (항상 호출되는 부분만 공통화)
-        lenient().when(jpaQueryFactory.select(ArgumentMatchers.<Expression<FindPopularLectureDto>>any()))
+        lenient().when(jpaQueryFactory.select(ArgumentMatchers.<Expression<PopularLectureDto>>any()))
                 .thenReturn(mockQuery);
         lenient().when(mockQuery.from((EntityPath<?>) any())).thenReturn(mockQuery);
         // varargs 메서드는 배열 매처로 스텁해야 함
@@ -54,20 +54,20 @@ class TakenLectureRepositoryImplTest {
     @DisplayName("getPopularLecturesByTotalCount: 쿼리 결과에 카테고리 부착 결과를 반환")
     void getPopularLecturesByTotalCount_returnsAttached() {
         // given
-        List<FindPopularLectureDto> raw = List.of(
-                new FindPopularLectureDto("LEC-1", "알고리즘", 3, 10L),
-                new FindPopularLectureDto("LEC-2", "자료구조", 3, 9L)
+        List<PopularLectureDto> raw = List.of(
+                new PopularLectureDto("LEC-1", "알고리즘", 3, 10L),
+                new PopularLectureDto("LEC-2", "자료구조", 3, 9L)
         );
         given(mockQuery.fetch()).willReturn(raw);
 
-        List<FindPopularLectureDto> attached = List.of(
-                FindPopularLectureDto.of("LEC-1", "알고리즘", 3, 10L, PopularLectureCategory.MANDATORY_MAJOR),
-                FindPopularLectureDto.of("LEC-2", "자료구조", 3, 9L, PopularLectureCategory.ELECTIVE_MAJOR)
+        List<PopularLectureDto> attached = List.of(
+                PopularLectureDto.of("LEC-1", "알고리즘", 3, 10L, PopularLectureCategory.MANDATORY_MAJOR),
+                PopularLectureDto.of("LEC-2", "자료구조", 3, 9L, PopularLectureCategory.ELECTIVE_MAJOR)
         );
         given(categoryResolver.attachWithoutContext(raw)).willReturn(attached);
 
         // when
-        List<FindPopularLectureDto> result = repository.getPopularLecturesByTotalCount();
+        List<PopularLectureDto> result = repository.getPopularLecturesByTotalCount();
 
         // then
         assertThat(result).isEqualTo(attached);
@@ -79,29 +79,29 @@ class TakenLectureRepositoryImplTest {
     @DisplayName("getLecturesByCategory: cursor가 있으면 where 적용 + 해당 카테고리만 필터")
     void getLecturesByCategory_appliesCursorAndFilters() {
         // given
-        List<FindPopularLectureDto> raw = List.of(
-                new FindPopularLectureDto("LEC-10", "선형대수", 3, 30L),
-                new FindPopularLectureDto("LEC-11", "철학입문", 2, 25L),
-                new FindPopularLectureDto("LEC-12", "운영체제", 3, 20L)
+        List<PopularLectureDto> raw = List.of(
+                new PopularLectureDto("LEC-10", "선형대수", 3, 30L),
+                new PopularLectureDto("LEC-11", "철학입문", 2, 25L),
+                new PopularLectureDto("LEC-12", "운영체제", 3, 20L)
         );
         // 쿼리 체이닝 중 limit, where 사용됨
         given(mockQuery.limit(anyLong())).willReturn(mockQuery);
         given(mockQuery.where(any(Predicate.class))).willReturn(mockQuery);
         given(mockQuery.fetch()).willReturn(raw);
 
-        List<FindPopularLectureDto> withCategory = List.of(
-                FindPopularLectureDto.of("LEC-10", "선형대수", 3, 30L, PopularLectureCategory.MANDATORY_MAJOR),
-                FindPopularLectureDto.of("LEC-11", "철학입문", 2, 25L, PopularLectureCategory.NORMAL_CULTURE),
-                FindPopularLectureDto.of("LEC-12", "운영체제", 3, 20L, PopularLectureCategory.MANDATORY_MAJOR)
+        List<PopularLectureDto> withCategory = List.of(
+                PopularLectureDto.of("LEC-10", "선형대수", 3, 30L, PopularLectureCategory.MANDATORY_MAJOR),
+                PopularLectureDto.of("LEC-11", "철학입문", 2, 25L, PopularLectureCategory.NORMAL_CULTURE),
+                PopularLectureDto.of("LEC-12", "운영체제", 3, 20L, PopularLectureCategory.MANDATORY_MAJOR)
         );
         given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCategory);
 
         // when
-        List<FindPopularLectureDto> result = repository.getLecturesByCategory(
+        List<PopularLectureDto> result = repository.getLecturesByCategory(
                 "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 2, "LEC-00");
 
         // then
-        assertThat(result).extracting(FindPopularLectureDto::getLectureId)
+        assertThat(result).extracting(PopularLectureDto::getLectureId)
                 .containsExactly("LEC-10", "LEC-12");
         verify(mockQuery).where(any(Predicate.class));
         verify(categoryResolver).attachWithContext(raw, "컴퓨터공학", 2021);
@@ -111,20 +111,20 @@ class TakenLectureRepositoryImplTest {
     @DisplayName("getSections: 카테고리별 개수를 집계하여 SectionMeta로 반환")
     void getSections_groupsByCategory() {
         // given
-        List<FindPopularLectureDto> raw = List.of(
-                new FindPopularLectureDto("A", "A1", 3, 100L),
-                new FindPopularLectureDto("B", "B1", 3, 90L),
-                new FindPopularLectureDto("C", "C1", 3, 80L),
-                new FindPopularLectureDto("D", "D1", 3, 70L)
+        List<PopularLectureDto> raw = List.of(
+                new PopularLectureDto("A", "A1", 3, 100L),
+                new PopularLectureDto("B", "B1", 3, 90L),
+                new PopularLectureDto("C", "C1", 3, 80L),
+                new PopularLectureDto("D", "D1", 3, 70L)
         );
         given(mockQuery.fetch()).willReturn(raw);
         given(categoryResolver.attachWithoutContext(raw)).willReturn(raw);
 
-        List<FindPopularLectureDto> withCtx = List.of(
-                FindPopularLectureDto.of("A", "A1", 3, 100L, PopularLectureCategory.MANDATORY_MAJOR),
-                FindPopularLectureDto.of("B", "B1", 3,  90L, PopularLectureCategory.MANDATORY_MAJOR),
-                FindPopularLectureDto.of("C", "C1", 3,  80L, PopularLectureCategory.CORE_CULTURE),
-                FindPopularLectureDto.of("D", "D1", 3,  70L, PopularLectureCategory.NORMAL_CULTURE)
+        List<PopularLectureDto> withCtx = List.of(
+                PopularLectureDto.of("A", "A1", 3, 100L, PopularLectureCategory.MANDATORY_MAJOR),
+                PopularLectureDto.of("B", "B1", 3,  90L, PopularLectureCategory.MANDATORY_MAJOR),
+                PopularLectureDto.of("C", "C1", 3,  80L, PopularLectureCategory.CORE_CULTURE),
+                PopularLectureDto.of("D", "D1", 3,  70L, PopularLectureCategory.NORMAL_CULTURE)
         );
         given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCtx);
 

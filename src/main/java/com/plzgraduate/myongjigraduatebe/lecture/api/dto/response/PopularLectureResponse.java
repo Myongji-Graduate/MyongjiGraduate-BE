@@ -1,13 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api.dto.response;
 
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class GetPopularLectureResponse {
+public class PopularLectureResponse {
     @Schema(name = "id", example = "KMA02137", description = "교과목 코드")
     private final String id;
     @Schema(name = "name", example = "4차산업혁명시대의진로선택", description = "교과목명")
@@ -22,7 +22,7 @@ public class GetPopularLectureResponse {
     private final PopularLectureCategory categoryName;
 
     @Builder
-    public GetPopularLectureResponse(String id, String name, int credit, double averageRating, long totalCount, PopularLectureCategory categoryName) {
+    public PopularLectureResponse(String id, String name, int credit, double averageRating, long totalCount, PopularLectureCategory categoryName) {
         this.id = id;
         this.name = name;
         this.credit = credit;
@@ -31,11 +31,11 @@ public class GetPopularLectureResponse {
         this.categoryName = categoryName;
     }
 
-    public static GetPopularLectureResponse from(
-            FindPopularLectureDto findPopularLectureDto,
+    public static PopularLectureResponse from(
+            PopularLectureDto findPopularLectureDto,
             double averageRating
     ) {
-        return GetPopularLectureResponse.builder()
+        return PopularLectureResponse.builder()
                 .id(findPopularLectureDto.getLectureId())
                 .name(findPopularLectureDto.getLectureName())
                 .credit(findPopularLectureDto.getCredit())

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class FindPopularLectureDto {
+public class PopularLectureDto {
     private final String lectureId;
     private final String lectureName;
     private final int credit;
@@ -15,7 +15,7 @@ public class FindPopularLectureDto {
 
     @QueryProjection
     @Builder
-    public FindPopularLectureDto(String lectureId, String lectureName, int credit, long totalCount, PopularLectureCategory categoryName) {
+    public PopularLectureDto(String lectureId, String lectureName, int credit, long totalCount, PopularLectureCategory categoryName) {
         this.lectureId = lectureId;
         this.lectureName = lectureName;
         this.credit = credit;
@@ -24,12 +24,12 @@ public class FindPopularLectureDto {
     }
 
     @QueryProjection
-    public FindPopularLectureDto(String lectureId, String lectureName, int credit, long totalCount) {
+    public PopularLectureDto(String lectureId, String lectureName, int credit, long totalCount) {
         this(lectureId, lectureName, credit, totalCount, null);
     }
 
-    public static FindPopularLectureDto of(String lectureId, String lectureName, int credit, long totalCount, PopularLectureCategory categoryName) {
-        return FindPopularLectureDto.builder()
+    public static PopularLectureDto of(String lectureId, String lectureName, int credit, long totalCount, PopularLectureCategory categoryName) {
+        return PopularLectureDto.builder()
                 .lectureId(lectureId)
                 .lectureName(lectureName)
                 .credit(credit)

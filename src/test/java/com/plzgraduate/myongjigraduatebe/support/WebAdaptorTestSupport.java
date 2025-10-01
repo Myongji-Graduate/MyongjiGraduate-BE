@@ -17,9 +17,9 @@ import com.plzgraduate.myongjigraduatebe.graduation.api.FindDetailGraduationCont
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.api.SearchLectureController;
-import com.plzgraduate.myongjigraduatebe.lecture.api.GetPopularLectureController;
+import com.plzgraduate.myongjigraduatebe.lecture.api.PopularLectureController;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.GetPopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.api.ParsingTextController;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
@@ -68,7 +68,7 @@ import org.springframework.web.context.WebApplicationContext;
 		SignInController.class,
         TokenController.class,
 		SearchLectureController.class,
-		GetPopularLectureController.class,
+		PopularLectureController.class,
 		FindUserInformationController.class,
 		UpdateTakenLectureController.class,
 		ParsingTextController.class,
@@ -98,7 +98,7 @@ public abstract class WebAdaptorTestSupport {
 	@MockBean
 	protected SearchLectureUseCase searchLectureUseCase;
 	@MockBean
-	protected GetPopularLecturesUseCase getPopularLecturesUseCase;
+	protected PopularLecturesUseCase getPopularLecturesUseCase;
 	@MockBean
 	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
 	@MockBean

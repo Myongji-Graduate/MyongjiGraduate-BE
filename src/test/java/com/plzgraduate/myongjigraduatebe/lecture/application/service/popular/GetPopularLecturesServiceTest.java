@@ -3,12 +3,12 @@ package com.plzgraduate.myongjigraduatebe.lecture.application.service.popular;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.GetPopularLectureResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.GetPopularLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.application.service.GetPopularLecturesService;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.FindPopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.service.PopularLecturesService;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -22,23 +22,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class GetPopularLecturesServiceTest {
 
   @Mock
-  private GetPopularLecturePort getPopularLecturePort;
+  private PopularLecturePort PopularLecturePort;
 
   @InjectMocks
-  private GetPopularLecturesService service;
+  private PopularLecturesService service;
 
   @DisplayName("총 수강 횟수 기준 인기 과목 목록을 그대로 반환한다.")
   @Test
   void getPopularLecturesByTotalCount() {
     // given
-    List<FindPopularLectureDto> dtos = List.of(
-        FindPopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
-        FindPopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
+    List<PopularLectureDto> dtos = List.of(
+        PopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
+        PopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
     );
-    given(getPopularLecturePort.getPopularLecturesByTotalCount()).willReturn(dtos);
+    given(PopularLecturePort.getPopularLecturesByTotalCount()).willReturn(dtos);
 
     // when
-    List<FindPopularLectureDto> result = service.getPopularLecturesByTotalCount();
+    List<PopularLectureDto> result = service.getPopularLecturesByTotalCount();
 
     // then
     assertThat(result).containsExactlyElementsOf(dtos);
@@ -64,13 +64,13 @@ class GetPopularLecturesServiceTest {
             .total(5)
             .build()
     );
-    given(getPopularLecturePort.getSections(major, entryYear)).willReturn(sections);
+    given(PopularLecturePort.getSections(major, entryYear)).willReturn(sections);
 
-    List<FindPopularLectureDto> dtos = List.of(
-        FindPopularLectureDto.of("LEC-10", "철학입문", 2, 50L, first),
-        FindPopularLectureDto.of("LEC-11", "심리학개론", 3, 45L, first)
+    List<PopularLectureDto> dtos = List.of(
+        PopularLectureDto.of("LEC-10", "철학입문", 2, 50L, first),
+        PopularLectureDto.of("LEC-11", "심리학개론", 3, 45L, first)
     );
-    given(getPopularLecturePort.getLecturesByCategory(major, entryYear, first, limit, cursor))
+    given(PopularLecturePort.getLecturesByCategory(major, entryYear, first, limit, cursor))
         .willReturn(dtos);
 
     // when
@@ -80,7 +80,7 @@ class GetPopularLecturesServiceTest {
     assertThat(response.getSections()).hasSize(2);
     assertThat(response.getPrimeSection().getCategoryName()).isEqualTo(first);
     assertThat(response.getPrimeSection().getLectures()).hasSize(1);
-    GetPopularLectureResponse only = response.getPrimeSection().getLectures().get(0);
+    PopularLectureResponse only = response.getPrimeSection().getLectures().get(0);
     assertThat(only.getId()).isEqualTo("LEC-10");
     assertThat(only.getAverageRating()).isEqualTo(0.0);
     assertThat(response.getPrimeSection().getPageInfo().isHasMore()).isTrue();
@@ -98,11 +98,11 @@ class GetPopularLecturesServiceTest {
     int limit = 1;
     String cursor = null;
 
-    List<FindPopularLectureDto> dtos = List.of(
-        FindPopularLectureDto.of("LEC-20", "운영체제", 3, 80L, category),
-        FindPopularLectureDto.of("LEC-21", "컴퓨터구조", 3, 70L, category)
+    List<PopularLectureDto> dtos = List.of(
+        PopularLectureDto.of("LEC-20", "운영체제", 3, 80L, category),
+        PopularLectureDto.of("LEC-21", "컴퓨터구조", 3, 70L, category)
     );
-    given(getPopularLecturePort.getLecturesByCategory(major, entryYear, category, limit, cursor))
+    given(PopularLecturePort.getLecturesByCategory(major, entryYear, category, limit, cursor))
         .willReturn(dtos);
 
     // when
