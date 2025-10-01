@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class GetPopularLecturesServiceTest {
 
   @Mock
-  private PopularLecturePort PopularLecturePort;
+  private PopularLecturePort popularLecturePort;
 
   @InjectMocks
   private PopularLecturesService service;
@@ -35,7 +35,7 @@ class GetPopularLecturesServiceTest {
         PopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
         PopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
     );
-    given(PopularLecturePort.getPopularLecturesByTotalCount()).willReturn(dtos);
+    given(popularLecturePort.getPopularLecturesByTotalCount()).willReturn(dtos);
 
     // when
     List<PopularLectureDto> result = service.getPopularLecturesByTotalCount();
@@ -64,13 +64,13 @@ class GetPopularLecturesServiceTest {
             .total(5)
             .build()
     );
-    given(PopularLecturePort.getSections(major, entryYear)).willReturn(sections);
+    given(popularLecturePort.getSections(major, entryYear)).willReturn(sections);
 
     List<PopularLectureDto> dtos = List.of(
         PopularLectureDto.of("LEC-10", "철학입문", 2, 50L, first),
         PopularLectureDto.of("LEC-11", "심리학개론", 3, 45L, first)
     );
-    given(PopularLecturePort.getLecturesByCategory(major, entryYear, first, limit, cursor))
+    given(popularLecturePort.getLecturesByCategory(major, entryYear, first, limit, cursor))
         .willReturn(dtos);
 
     // when
@@ -102,7 +102,7 @@ class GetPopularLecturesServiceTest {
         PopularLectureDto.of("LEC-20", "운영체제", 3, 80L, category),
         PopularLectureDto.of("LEC-21", "컴퓨터구조", 3, 70L, category)
     );
-    given(PopularLecturePort.getLecturesByCategory(major, entryYear, category, limit, cursor))
+    given(popularLecturePort.getLecturesByCategory(major, entryYear, category, limit, cursor))
         .willReturn(dtos);
 
     // when
