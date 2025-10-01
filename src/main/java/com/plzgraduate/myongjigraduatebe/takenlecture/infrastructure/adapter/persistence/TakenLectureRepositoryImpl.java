@@ -58,7 +58,7 @@ public class TakenLectureRepositoryImpl
                 .from(takenLecture)
                 .groupBy(takenLecture.lecture.id, takenLecture.lecture.name, takenLecture.lecture.credit)
                 .orderBy(takenLecture.id.count().desc(), takenLecture.lecture.id.desc())
-                .limit(limit + 1);
+                .limit(limit + 1L);
 
         if (cursor != null) {
             baseQuery.where(takenLecture.lecture.id.gt(cursor));
