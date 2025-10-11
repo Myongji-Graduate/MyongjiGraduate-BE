@@ -17,8 +17,6 @@ import com.plzgraduate.myongjigraduatebe.graduation.api.FindDetailGraduationCont
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateSingleDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.api.SearchLectureController;
-import com.plzgraduate.myongjigraduatebe.lecture.api.PopularLectureController;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.api.ParsingTextController;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
@@ -66,9 +64,8 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(
 	controllers = {
 		SignInController.class,
-        TokenController.class,
+		TokenController.class,
 		SearchLectureController.class,
-		PopularLectureController.class,
 		FindUserInformationController.class,
 		UpdateTakenLectureController.class,
 		ParsingTextController.class,
@@ -92,13 +89,11 @@ public abstract class WebAdaptorTestSupport {
 	@MockBean
 	protected SignInUseCase signInUseCase;
 	@MockBean
-    protected TokenUseCase tokenUseCase;
+	protected TokenUseCase tokenUseCase;
 	@MockBean
 	protected CalculateGraduationUseCase calculateGraduationUseCase;
 	@MockBean
 	protected SearchLectureUseCase searchLectureUseCase;
-	@MockBean
-	protected PopularLecturesUseCase getPopularLecturesUseCase;
 	@MockBean
 	protected DeleteTakenLectureUseCase deleteTakenLectureUseCase;
 	@MockBean
@@ -116,9 +111,9 @@ public abstract class WebAdaptorTestSupport {
 	@MockBean
 	protected WithDrawUserUseCase withDrawUserUseCase;
 	@MockBean
-    protected ParsingTextUseCase parsingTextUseCase;
-    @MockBean
-    protected ParsingTextHistoryUseCase parsingTextHistoryUseCase;
+	protected ParsingTextUseCase parsingTextUseCase;
+	@MockBean
+	protected ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 	@MockBean
 	protected SignUpUseCase signUpUseCase;
 	@MockBean
