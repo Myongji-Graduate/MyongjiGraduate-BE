@@ -50,7 +50,6 @@ public class SecurityConfig {
 				API_V1_PREFIX + "/health", // 헬스체크
 				API_V1_PREFIX + "/graduations/check", // 비로그인 졸업 요건 검사
 				API_V1_PREFIX + "/timetable/**", // 시간표 강의 조회
-                API_V1_PREFIX + "/lectures/popular/**", //인기 강의 조회
 				"/api-docs",
 				"/swagger-custom-ui.html",
 				"/v3/api-docs/**",
