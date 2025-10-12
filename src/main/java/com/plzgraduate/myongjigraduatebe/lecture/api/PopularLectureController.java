@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/lectures/popular")
 @Validated
-public class PopularLectureController implements PopularLectureApiPresentation,PopularLectureByCategoryApiPresentation {
+public class PopularLectureController implements PopularLectureApiPresentation {
     private final PopularLecturesUseCase popularLecturesUseCase;
 
     @Override
