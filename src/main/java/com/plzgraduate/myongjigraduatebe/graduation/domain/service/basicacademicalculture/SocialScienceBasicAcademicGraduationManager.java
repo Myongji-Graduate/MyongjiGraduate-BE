@@ -57,13 +57,8 @@ public class SocialScienceBasicAcademicGraduationManager implements
 		takenLectureInventory.getTakenLectures()
 			.stream()
 			.filter(takenLecture -> basicAcademicalLectures.contains(takenLecture.getLecture()))
-			.filter(takenLecture -> {
-				Lecture lecture = takenLecture.getLecture();
-				if (lecturesAcceptTakenAfter2023.contains(lecture)) {
-					return takenLecture.takenAfter(TWENTY_THREE_YEAR);
-				}
-				return true;
-			})
+			.filter(takenLecture -> lecturesAcceptTakenAfter2023.contains(takenLecture.getLecture())
+				&& !takenLecture.takenAfter(TWENTY_THREE_YEAR))
 			.forEach(takenLecture -> {
 				finishedTakenLecture.add(takenLecture);
 				taken.add(takenLecture.getLecture());
