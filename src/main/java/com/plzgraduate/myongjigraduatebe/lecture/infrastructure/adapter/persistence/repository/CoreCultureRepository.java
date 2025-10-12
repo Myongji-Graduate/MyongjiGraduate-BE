@@ -10,19 +10,4 @@ public interface CoreCultureRepository extends JpaRepository<CoreCultureJpaEntit
 
 	@Query("select cc from CoreCultureJpaEntity cc join fetch cc.lectureJpaEntity where cc.startEntryYear <= :entryYear and cc.endEntryYear >= :entryYear")
 	List<CoreCultureJpaEntity> findAllByEntryYear(@Param("entryYear") int entryYear);
-
-    @Query("select c.lectureJpaEntity.id " +
-            "from CoreCultureJpaEntity c " +
-            "where c.lectureJpaEntity.id in :ids")
-    List<String> findIdsByLectureIdIn(@Param("ids") List<String> ids);
-
-    @Query("select c.lectureJpaEntity.id " +
-            "from CoreCultureJpaEntity c " +
-            "where c.lectureJpaEntity.id in :ids " +
-            "and c.startEntryYear <= :entryYear " +
-            "and c.endEntryYear >= :entryYear")
-    List<String> findIdsByLectureIdInAndEntryYearBetween(
-            @Param("ids") List<String> lectureIds,
-            @Param("entryYear") int entryYear
-    );
 }
