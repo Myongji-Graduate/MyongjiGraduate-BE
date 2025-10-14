@@ -1,6 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.mapper;
 
+import com.plzgraduate.myongjigraduatebe.lecturedetail.domain.model.LectureInfo;
 import com.plzgraduate.myongjigraduatebe.lecturedetail.domain.model.LectureReview;
+import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.LectureInfoJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.LectureReviewJpaEntity;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,19 @@ public class LectureDetailMapper {
                 .semester(lectureReview.getSemester())
                 .rating(lectureReview.getRating())
                 .content(lectureReview.getContent())
+                .build();
+    }
+
+    public LectureInfo mapToLectureInfoModel(LectureInfoJpaEntity lectureInfo) {
+        return LectureInfo.builder()
+                .subject(lectureInfo.getSubject())
+                .professor(lectureInfo.getProfessor())
+                .assignment(lectureInfo.getAssignment())
+                .attendance(lectureInfo.getAttendance())
+                .exam(lectureInfo.getExam())
+                .grading(lectureInfo.getGrading())
+                .teamwork(lectureInfo.getTeamwork())
+                .rating(lectureInfo.getRating())
                 .build();
     }
 }
