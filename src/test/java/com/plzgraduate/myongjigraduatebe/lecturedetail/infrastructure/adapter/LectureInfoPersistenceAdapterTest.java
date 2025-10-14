@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -64,7 +63,7 @@ class LectureInfoPersistenceAdapterTest {
                 .rating(new BigDecimal("4.07"))
                 .build();
 
-        given(repository.findBySubjectAndProfessor(eq(subject), professor))
+        given(repository.findBySubjectAndProfessor(subject, professor))
                 .willReturn(entity);
         given(mapper.mapToLectureInfoModel(entity)).willReturn(info);
 
