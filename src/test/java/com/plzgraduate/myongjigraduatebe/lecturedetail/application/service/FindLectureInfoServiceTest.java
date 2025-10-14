@@ -43,7 +43,7 @@ class FindLectureInfoServiceTest {
                 .rating(new BigDecimal("4.07"))
                 .build();
 
-        given(findLectureInfoPort.findBySubjectAndProfessor(eq(subject), eq(professor)))
+        given(findLectureInfoPort.findBySubjectAndProfessor(eq(subject), professor))
                 .willReturn(info);
 
         // when

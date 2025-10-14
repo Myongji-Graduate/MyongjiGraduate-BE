@@ -64,7 +64,7 @@ class LectureInfoPersistenceAdapterTest {
                 .rating(new BigDecimal("4.07"))
                 .build();
 
-        given(repository.findBySubjectAndProfessor(eq(subject), eq(professor)))
+        given(repository.findBySubjectAndProfessor(eq(subject), professor))
                 .willReturn(entity);
         given(mapper.mapToLectureInfoModel(entity)).willReturn(info);
 
