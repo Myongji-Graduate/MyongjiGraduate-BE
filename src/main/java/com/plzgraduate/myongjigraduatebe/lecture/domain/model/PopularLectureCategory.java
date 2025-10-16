@@ -29,11 +29,4 @@ public enum PopularLectureCategory {
         return this == MANDATORY_MAJOR;
     }
 
-    @Override
-    public String toString() {
-        return "PopularLectureCategory{" +
-                "name='" + name + '\'' +
-                '}';
-    }
-
 }
