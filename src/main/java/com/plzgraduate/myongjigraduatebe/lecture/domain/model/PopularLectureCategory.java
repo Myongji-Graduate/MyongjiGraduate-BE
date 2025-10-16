@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public enum PopularLectureCategory {
 
     private final String name;
 
+    @JsonCreator
     public static PopularLectureCategory of(String name) {
         return Arrays.stream(PopularLectureCategory.values())
                 .filter(category -> Objects.equals(category.getName(), name))
