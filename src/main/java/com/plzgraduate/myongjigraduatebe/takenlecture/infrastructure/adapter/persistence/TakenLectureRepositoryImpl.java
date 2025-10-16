@@ -60,8 +60,8 @@ public class TakenLectureRepositoryImpl
         int startIndex = 0;
         if (cursor != null) {
             for (int i = 0; i < filtered.size(); i++) {
-                if (filtered.get(i).getLectureId().compareTo(cursor) > 0) {
-                    startIndex = i;
+                if (filtered.get(i).getLectureId().equals(cursor)) {
+                    startIndex = i + 1;  // cursor 다음부터 시작
                     break;
                 }
             }
