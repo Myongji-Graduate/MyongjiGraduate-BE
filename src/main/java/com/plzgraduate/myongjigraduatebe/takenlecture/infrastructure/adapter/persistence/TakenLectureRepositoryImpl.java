@@ -7,7 +7,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.QPopula
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
 import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.QTakenLectureJpaEntity;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -48,27 +47,29 @@ public class TakenLectureRepositoryImpl
     public List<PopularLectureDto> getLecturesByCategory(
             String major, int entryYear, PopularLectureCategory category, int limit, String cursor) {
 
-        JPAQuery<PopularLectureDto> baseQuery = jpaQueryFactory
-                .select(new QPopularLectureDto(
-                        takenLecture.lecture.id,
-                        takenLecture.lecture.name,
-                        takenLecture.lecture.credit,
-                        takenLecture.id.count()
-                ))
-                .from(takenLecture)
-                .groupBy(takenLecture.lecture.id, takenLecture.lecture.name, takenLecture.lecture.credit)
-                .orderBy(takenLecture.id.count().desc(), takenLecture.lecture.id.desc())
-                .limit(limit + 1L);
+        // 1. 전체 인기 강의 조회 (getSections()와 동일한 방식)
+        List<PopularLectureDto> allLectures = getPopularLecturesByTotalCount();
+        List<PopularLectureDto> withCategory = categoryResolver.attachWithContext(allLectures, major, entryYear);
 
+        // 2. 해당 카테고리만 필터링
+        List<PopularLectureDto> filtered = withCategory.stream()
+                .filter(dto -> dto.getCategoryName() == category)
+                .collect(Collectors.toList());
+
+        // 3. cursor 기준으로 시작 인덱스 찾기
+        int startIndex = 0;
         if (cursor != null) {
-            baseQuery.where(takenLecture.lecture.id.gt(cursor));
+            for (int i = 0; i < filtered.size(); i++) {
+                if (filtered.get(i).getLectureId().compareTo(cursor) > 0) {
+                    startIndex = i;
+                    break;
+                }
+            }
         }
 
-        List<PopularLectureDto> rawResult = baseQuery.fetch();
-
-        return categoryResolver.attachWithContext(rawResult, major, entryYear).stream()
-                .filter(dto -> dto.getCategoryName() == category)
-                .collect(Collectors.toUnmodifiableList());
+        // 4. limit+1개 반환 (hasMore 판단용)
+        int endIndex = Math.min(startIndex + limit + 1, filtered.size());
+        return filtered.subList(startIndex, endIndex);
     }
 
     @Override
