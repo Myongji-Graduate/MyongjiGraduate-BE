@@ -42,16 +42,16 @@ public class PopularLectureController implements PopularLectureApiPresentation {
     public ResponseEntity<?> getPopularLecturesByCategory(
             @RequestParam("major") String major,
             @RequestParam("entryYear") int entryYear,
-            @RequestParam(value = "category", required = false) PopularLectureCategory category,
+            @RequestParam("category") PopularLectureCategory category,
             @RequestParam(value = "limit", defaultValue = "10") int limit,
             @RequestParam(value = "cursor", required = false) String cursor) {
-        if (category == null) {
+        if (category == PopularLectureCategory.ALL) {
             // 최초 호출: sections + primeSection
             PopularLecturesInitResponse initResponse =
                     popularLecturesUseCase.getInitPopularLectures(major, entryYear, limit, cursor);
             return ResponseEntity.ok(initResponse);
         } else {
-            // 카테고리 지정 호출: categoryName + lectures + pageInfo
+            // 특정 카테고리 지정 호출: categoryName + lectures + pageInfo
             PopularLecturesByCategoryResponse categoryResponse =
                     popularLecturesUseCase.getPopularLecturesByCategory(major, entryYear, category, limit, cursor);
             return ResponseEntity.ok(categoryResponse);
