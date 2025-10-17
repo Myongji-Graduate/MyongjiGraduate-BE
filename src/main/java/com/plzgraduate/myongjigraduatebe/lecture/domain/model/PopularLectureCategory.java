@@ -9,6 +9,7 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 public enum PopularLectureCategory {
+    ALL("전체"),
     BASIC_ACADEMICAL_CULTURE("학문기초교양"),
     CORE_CULTURE("핵심교양"),
     COMMON_CULTURE("공통교양"),

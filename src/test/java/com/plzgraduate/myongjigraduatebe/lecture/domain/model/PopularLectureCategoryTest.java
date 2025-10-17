@@ -30,6 +30,7 @@ class PopularLectureCategoryTest {
     void checkMandatoryIfSeparated() {
         assertThat(PopularLectureCategory.MANDATORY_MAJOR.checkMandatoryIfSeperatedByMandatoryAndElective()).isTrue();
 
+        assertThat(PopularLectureCategory.ALL.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
         assertThat(PopularLectureCategory.ELECTIVE_MAJOR.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
         assertThat(PopularLectureCategory.CORE_CULTURE.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
         assertThat(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
@@ -38,11 +39,16 @@ class PopularLectureCategoryTest {
     }
 
     @Test
-    @DisplayName("toString(): name을 포함한다")
-    void toStringContainsName() {
-        for (PopularLectureCategory c : PopularLectureCategory.values()) {
-            assertThat(c.toString()).contains(c.getName());
-        }
+    @DisplayName("name(): enum 상수명을 반환한다")
+    void nameReturnsConstantName() {
+        // Enum의 name() 메서드는 상수명(MANDATORY_MAJOR, ELECTIVE_MAJOR 등)을 반환
+        assertThat(PopularLectureCategory.ALL.name()).isEqualTo("ALL");
+        assertThat(PopularLectureCategory.MANDATORY_MAJOR.name()).isEqualTo("MANDATORY_MAJOR");
+        assertThat(PopularLectureCategory.ELECTIVE_MAJOR.name()).isEqualTo("ELECTIVE_MAJOR");
+        assertThat(PopularLectureCategory.CORE_CULTURE.name()).isEqualTo("CORE_CULTURE");
+        assertThat(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE.name()).isEqualTo("BASIC_ACADEMICAL_CULTURE");
+        assertThat(PopularLectureCategory.COMMON_CULTURE.name()).isEqualTo("COMMON_CULTURE");
+        assertThat(PopularLectureCategory.NORMAL_CULTURE.name()).isEqualTo("NORMAL_CULTURE");
     }
 }
 

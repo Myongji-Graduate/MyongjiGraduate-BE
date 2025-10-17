@@ -7,7 +7,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,34 +75,39 @@ class TakenLectureRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("getLecturesByCategory: cursor가 있으면 where 적용 + 해당 카테고리만 필터")
+    @DisplayName("getLecturesByCategory: cursor가 있으면 해당 위치 이후부터 + 해당 카테고리만 필터")
     void getLecturesByCategory_appliesCursorAndFilters() {
         // given
+        // 1. getPopularLecturesByTotalCount() 호출을 위한 Mock 설정
         List<PopularLectureDto> raw = List.of(
+                new PopularLectureDto("LEC-08", "데이터베이스", 3, 50L),
                 new PopularLectureDto("LEC-10", "선형대수", 3, 30L),
                 new PopularLectureDto("LEC-11", "철학입문", 2, 25L),
-                new PopularLectureDto("LEC-12", "운영체제", 3, 20L)
+                new PopularLectureDto("LEC-12", "운영체제", 3, 20L),
+                new PopularLectureDto("LEC-13", "네트워크", 3, 15L)
         );
-        // 쿼리 체이닝 중 limit, where 사용됨
-        given(mockQuery.limit(anyLong())).willReturn(mockQuery);
-        given(mockQuery.where(any(Predicate.class))).willReturn(mockQuery);
         given(mockQuery.fetch()).willReturn(raw);
+        given(categoryResolver.attachWithoutContext(raw)).willReturn(raw);
 
+        // 2. attachWithContext로 카테고리가 붙은 결과
         List<PopularLectureDto> withCategory = List.of(
+                PopularLectureDto.of("LEC-08", "데이터베이스", 3, 50L, PopularLectureCategory.MANDATORY_MAJOR),
                 PopularLectureDto.of("LEC-10", "선형대수", 3, 30L, PopularLectureCategory.MANDATORY_MAJOR),
                 PopularLectureDto.of("LEC-11", "철학입문", 2, 25L, PopularLectureCategory.NORMAL_CULTURE),
-                PopularLectureDto.of("LEC-12", "운영체제", 3, 20L, PopularLectureCategory.MANDATORY_MAJOR)
+                PopularLectureDto.of("LEC-12", "운영체제", 3, 20L, PopularLectureCategory.MANDATORY_MAJOR),
+                PopularLectureDto.of("LEC-13", "네트워크", 3, 15L, PopularLectureCategory.MANDATORY_MAJOR)
         );
         given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCategory);
 
-        // when
+        // when: cursor "LEC-08" 다음부터 MANDATORY_MAJOR 카테고리만, limit 2
         List<PopularLectureDto> result = repository.getLecturesByCategory(
-                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 2, "LEC-00");
+                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 2, "LEC-08");
 
-        // then
+        // then: MANDATORY_MAJOR만 필터 → [LEC-08, LEC-10, LEC-12, LEC-13]
+        //       cursor "LEC-08" 다음부터 → [LEC-10, LEC-12, LEC-13]
+        //       limit 2 + 1(hasMore 판단용) → [LEC-10, LEC-12, LEC-13] (최대 3개)
         assertThat(result).extracting(PopularLectureDto::getLectureId)
-                .containsExactly("LEC-10", "LEC-12");
-        verify(mockQuery).where(any(Predicate.class));
+                .containsExactly("LEC-10", "LEC-12", "LEC-13");
         verify(categoryResolver).attachWithContext(raw, "컴퓨터공학", 2021);
     }
 
