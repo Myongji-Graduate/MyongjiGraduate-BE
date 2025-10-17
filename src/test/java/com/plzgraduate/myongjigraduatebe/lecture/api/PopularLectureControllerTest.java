@@ -45,7 +45,7 @@ class PopularLectureControllerTest extends WebAdaptorTestSupport {
             .andExpect(jsonPath("$.lectures", hasSize(2)))
             .andExpect(jsonPath("$.lectures[0].id").value("LEC-1"))
             .andExpect(jsonPath("$.lectures[0].name").value("알고리즘"))
-            .andExpect(jsonPath("$.lectures[0].categoryName").value("전공필수"))
+            .andExpect(jsonPath("$.lectures[0].categoryName").value("MANDATORY_MAJOR"))
             .andExpect(jsonPath("$.pageInfo.pageSize").value(10))
             .andExpect(jsonPath("$.pageInfo.hasMore").value(false));
 
@@ -75,9 +75,9 @@ class PopularLectureControllerTest extends WebAdaptorTestSupport {
     }
 
     @WithMockAuthenticationUser
-    @DisplayName("카테고리 미지정 시 섹션 메타와 프라임 섹션을 반환한다.")
+    @DisplayName("카테고리 ALL 선택 시 섹션 메타와 프라임 섹션을 반환한다.")
     @Test
-    void getPopularLecturesByCategory_init() throws Exception {
+    void getPopularLecturesByCategory_all() throws Exception {
         List<PopularLecturesInitResponse.SectionMeta> sections = List.of(
             PopularLecturesInitResponse.SectionMeta.builder()
                 .categoryName(PopularLectureCategory.NORMAL_CULTURE)
@@ -101,12 +101,13 @@ class PopularLectureControllerTest extends WebAdaptorTestSupport {
 
         mockMvc.perform(get("/api/v1/lectures/popular/by-category")
                 .param("major", "컴퓨터공학")
-                .param("entryYear", "2020"))
+                .param("entryYear", "2020")
+                .param("category", "ALL"))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.sections", hasSize(1)))
-            .andExpect(jsonPath("$.sections[0].categoryName").value("일반교양"))
-            .andExpect(jsonPath("$.primeSection.categoryName").value("일반교양"))
+            .andExpect(jsonPath("$.sections[0].categoryName").value("NORMAL_CULTURE"))
+            .andExpect(jsonPath("$.primeSection.categoryName").value("NORMAL_CULTURE"))
             .andExpect(jsonPath("$.primeSection.lectures", hasSize(2)))
             .andExpect(jsonPath("$.primeSection.pageInfo.pageSize").value(10));
 
@@ -139,7 +140,7 @@ class PopularLectureControllerTest extends WebAdaptorTestSupport {
                 .param("limit", "5"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.categoryName").value("전공필수"))
+            .andExpect(jsonPath("$.categoryName").value("MANDATORY_MAJOR"))
             .andExpect(jsonPath("$.lectures", hasSize(2)))
             .andExpect(jsonPath("$.pageInfo.pageSize").value(5));
 
