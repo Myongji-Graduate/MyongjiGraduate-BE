@@ -27,6 +27,8 @@ UpdateStudentInformationCommand {
 
 	private String associatedMajor;
 
+	private Integer completedSemesterCount;
+
 	private TransferCredit transferCredit;
 
 	private ExchangeCredit exchangeCredit;
@@ -41,7 +43,7 @@ UpdateStudentInformationCommand {
 
 	@Builder
 	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
-											String subMajor, String associatedMajor, TransferCredit transferCredit, ExchangeCredit exchangeCredit, StudentCategory studentCategory, int totalCredit, double takenCredit,
+											String subMajor, String associatedMajor, Integer completedSemesterCount, TransferCredit transferCredit, ExchangeCredit exchangeCredit, StudentCategory studentCategory, int totalCredit, double takenCredit,
 											boolean graduate) {
 		this.user = user;
 		this.name = name;
@@ -49,6 +51,7 @@ UpdateStudentInformationCommand {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
+		this.completedSemesterCount = completedSemesterCount;
 		this.transferCredit = transferCredit;
 		this.exchangeCredit = exchangeCredit;
 		this.studentCategory = studentCategory;
@@ -66,6 +69,7 @@ UpdateStudentInformationCommand {
 				.dualMajor(parsingInformation.getDualMajor())
 				.subMajor(parsingInformation.getSubMajor())
 				.associatedMajor(parsingInformation.getAssociatedMajor())
+				.completedSemesterCount(parsingInformation.getCompletedSemesterCount())
 				.transferCredit(parsingInformation.getTransferCredit())
 				.exchangeCredit(parsingInformation.getExchangeCredit())
 				.studentCategory(parsingInformation.getStudentCategory())
@@ -82,6 +86,7 @@ UpdateStudentInformationCommand {
 				.dualMajor(user.getDualMajor())
 				.subMajor(user.getSubMajor())
 				.associatedMajor(user.getAssociatedMajor())
+				.completedSemesterCount(user.getCompletedSemesterCount())
 				.totalCredit(graduationResult.getTotalCredit())
 				.takenCredit(graduationResult.getTakenCredit())
 				.graduate(graduationResult.isGraduated())

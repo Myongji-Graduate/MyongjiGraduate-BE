@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
@@ -23,6 +24,7 @@ public class ParsingInformation {
 	private final String subMajor;
 	private final String dualMajor;
 	private final String associatedMajor;
+	private final Integer completedSemesterCount;
 	private final TransferCredit transferCredit;
 	private final ExchangeCredit exchangeCredit;
 	private final StudentCategory studentCategory;
@@ -37,6 +39,7 @@ public class ParsingInformation {
 			String subMajor,
 			String dualMajor,
 			String associatedMajor,
+			Integer completedSemesterCount,
 			StudentCategory studentCategory,
 			TransferCredit transferCredit,
 			ExchangeCredit exchangeCredit,
@@ -49,6 +52,7 @@ public class ParsingInformation {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
+		this.completedSemesterCount = completedSemesterCount;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit;
 		this.exchangeCredit = exchangeCredit;
@@ -59,12 +63,15 @@ public class ParsingInformation {
 		String[] splitText = splitParsingText(parsingText);
 		ParsingStudentCategoryDto parsingStudentCategoryDto = parseStudentCategory(splitText);
 
+		Integer completedSemesterCount = parseCompletedSemesterCount(splitText);
+
 		return ParsingInformation.builder().studentName(parseStudentName(splitText))
 				.studentNumber(parseStudentNumber(splitText)).major(parseMajor(splitText))
 				.dualMajor(parsingStudentCategoryDto.getDualMajor())
 				.changeMajor(parsingStudentCategoryDto.getChangeMajor())
 				.subMajor(parsingStudentCategoryDto.getSubMajor())
 				.associatedMajor(parsingStudentCategoryDto.getAssociatedMajor())
+				.completedSemesterCount(completedSemesterCount)
 				.studentCategory(parsingStudentCategoryDto.getStudentCategory())
 				.transferCredit(parsingStudentCategoryDto.getTransferCredit())
 				.exchangeCredit(parsingStudentCategoryDto.getExchangeCredit())
@@ -186,5 +193,19 @@ public class ParsingInformation {
 			index++;
 		}
 		return 1;
+	}
+
+	private static Integer parseCompletedSemesterCount(String[] splitText) {
+		// The second line contains: ... , 현학적 - 재학, 이수 - 3, 입학 - ...
+		String secondLineText = splitText[2];
+		Matcher m = Pattern.compile("이수\\s*-\\s*(\\d+)").matcher(secondLineText);
+		if (m.find()) {
+			try {
+				return Integer.valueOf(m.group(1));
+			} catch (NumberFormatException e) {
+				// fall through
+			}
+		}
+		return null; // not present or unparsable
 	}
 }
