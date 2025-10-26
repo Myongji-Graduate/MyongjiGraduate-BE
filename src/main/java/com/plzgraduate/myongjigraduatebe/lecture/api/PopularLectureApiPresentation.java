@@ -18,11 +18,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "GetPopularLecture", description = "필터링 없이 인기 과목 조회하는 API")
 public interface PopularLectureApiPresentation {
 
+    @Operation(summary = "인기 과목 전체 조회",
+            description = "전체 인기 과목을 조회합니다. cursor가 없으면 첫 페이지를, cursor가 있으면 해당 항목 이후부터 limit만큼 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    description = "성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PopularLecturesPageResponse.class)))
+    })
     PopularLecturesPageResponse getPopularLectures(
-            @RequestParam(defaultValue = "10") int limit);
+            @Parameter(description = "페이지 크기", example = "10")
+            @RequestParam(defaultValue = "10") int limit,
+            @Parameter(description = "커서(마지막 항목 id)", example = "KMA02108")
+            @RequestParam(value = "cursor", required = false) String cursor);
 
     @Operation(summary = "인기 과목 카테고리별 조회",
-            description = "category 파라미터가 없으면 초기 섹션 응답을, 지정하면 해당 카테고리 페이지를 반환합니다.")
+            description = "category=ALL이면 초기 섹션(sections + primeSection), 특정 카테고리를 지정하면 해당 카테고리 페이지를 반환합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200",
                     description = "성공",
@@ -48,11 +59,11 @@ public interface PopularLectureApiPresentation {
     })
     ResponseEntity<?> getPopularLecturesByCategory(
             @Parameter(description = "전공(정확한 전공명)", example = "응용소프트웨어전공")
-            @RequestParam("major") String majors,
+            @RequestParam("major") String major,
             @Parameter(description = "입학년도(2자리)", example = "20")
             @RequestParam("entryYear") int entryYear,
             @Parameter(description = "카테고리(한글 또는 enum)", example = "MANDATORY_MAJOR")
-            @RequestParam(value = "category", required = false) PopularLectureCategory category,
+            @RequestParam("category") PopularLectureCategory category,
             @Parameter(description = "페이지 크기", example = "10")
             @RequestParam(value = "limit", defaultValue = "10") int limit,
             @Parameter(description = "커서(마지막 항목 id)", example = "KMA05155")
