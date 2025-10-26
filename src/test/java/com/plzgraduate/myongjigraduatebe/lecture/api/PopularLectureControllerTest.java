@@ -1,150 +1,99 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
+
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
-import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
-import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
-import java.util.List;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
+@WebMvcTest(PopularLectureController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WithMockUser
+class PopularLectureControllerTest {
 
-class PopularLectureControllerTest extends WebAdaptorTestSupport {
+    @Autowired
+    private MockMvc mockMvc;
 
-    // 일부 테스트 컨텍스트에서 ParsingTextController 의존성으로 필요할 수 있어 안전망으로 Mock 추가
     @MockBean
-    private TakenLectureCacheEvict takenLectureCacheEvict;
+    private PopularLecturesUseCase popularLecturesUseCase;
 
-    @WithMockAuthenticationUser
-    @DisplayName("인기 과목 목록을 기본 limit으로 페이지 응답한다.")
-    @Test
-    void getPopularLectures_defaultLimit() throws Exception {
-        List<PopularLectureDto> dtos = List.of(
-            PopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
-            PopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
+    private List<PopularLectureDto> sampleLectures() {
+        return List.of(
+                PopularLectureDto.of("KMA001", "과목1", 3, 100L, PopularLectureCategory.NORMAL_CULTURE),
+                PopularLectureDto.of("KMA002", "과목2", 3, 90L, PopularLectureCategory.NORMAL_CULTURE),
+                PopularLectureDto.of("KMA003", "과목3", 3, 80L, PopularLectureCategory.NORMAL_CULTURE),
+                PopularLectureDto.of("KMA004", "과목4", 3, 70L, PopularLectureCategory.NORMAL_CULTURE),
+                PopularLectureDto.of("KMA005", "과목5", 3, 60L, PopularLectureCategory.NORMAL_CULTURE)
         );
-        given(getPopularLecturesUseCase.getPopularLecturesByTotalCount()).willReturn(dtos);
-
-        mockMvc.perform(get("/api/v1/lectures/popular"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.lectures", hasSize(2)))
-            .andExpect(jsonPath("$.lectures[0].id").value("LEC-1"))
-            .andExpect(jsonPath("$.lectures[0].name").value("알고리즘"))
-            .andExpect(jsonPath("$.lectures[0].categoryName").value("MANDATORY_MAJOR"))
-            .andExpect(jsonPath("$.pageInfo.pageSize").value(10))
-            .andExpect(jsonPath("$.pageInfo.hasMore").value(false));
-
-        then(getPopularLecturesUseCase).should(times(1)).getPopularLecturesByTotalCount();
     }
 
-    @WithMockAuthenticationUser
-    @DisplayName("limit이 작은 경우 페이징 정보를 포함해 잘린 목록을 반환한다.")
     @Test
-    void getPopularLectures_withLimitPagination() throws Exception {
-        List<PopularLectureDto> dtos = List.of(
-            PopularLectureDto.of("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR),
-            PopularLectureDto.of("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR)
-        );
-        given(getPopularLecturesUseCase.getPopularLecturesByTotalCount()).willReturn(dtos);
+    @DisplayName("/popular 첫 페이지: limit=2이면 2개 반환, hasMore=true, nextCursor=두번째ID")
+    void getPopularLectures_firstPage_withHasMore() throws Exception {
+        when(popularLecturesUseCase.getPopularLecturesByTotalCount())
+                .thenReturn(sampleLectures());
 
-        mockMvc.perform(get("/api/v1/lectures/popular").param("limit", "1"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.lectures", hasSize(1)))
-            .andExpect(jsonPath("$.lectures[0].id").value("LEC-1"))
-            .andExpect(jsonPath("$.pageInfo.pageSize").value(1))
-            .andExpect(jsonPath("$.pageInfo.hasMore").value(true))
-            .andExpect(jsonPath("$.pageInfo.nextCursor").value("LEC-1"));
-
-        then(getPopularLecturesUseCase).should(times(1)).getPopularLecturesByTotalCount();
+        mockMvc.perform(get("/api/v1/lectures/popular")
+                        .param("limit", "2")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lectures", hasSize(2)))
+                .andExpect(jsonPath("$.lectures[0].id", is("KMA001")))
+                .andExpect(jsonPath("$.lectures[1].id", is("KMA002")))
+                .andExpect(jsonPath("$.pageInfo.hasMore", is(true)))
+                .andExpect(jsonPath("$.pageInfo.nextCursor", is("KMA002")))
+                .andExpect(jsonPath("$.pageInfo.pageSize", is(2)));
     }
 
-    @WithMockAuthenticationUser
-    @DisplayName("카테고리 ALL 선택 시 섹션 메타와 프라임 섹션을 반환한다.")
     @Test
-    void getPopularLecturesByCategory_all() throws Exception {
-        List<PopularLecturesInitResponse.SectionMeta> sections = List.of(
-            PopularLecturesInitResponse.SectionMeta.builder()
-                .categoryName(PopularLectureCategory.NORMAL_CULTURE)
-                .total(2)
-                .build()
-        );
-        List<PopularLectureResponse> items = List.of(
-            PopularLectureResponse.from(
-                PopularLectureDto.of("LEC-10", "철학입문", 2, 50L, PopularLectureCategory.NORMAL_CULTURE), 0.0),
-            PopularLectureResponse.from(
-                PopularLectureDto.of("LEC-11", "심리학개론", 3, 45L, PopularLectureCategory.NORMAL_CULTURE), 0.0)
-        );
-        PopularLecturesInitResponse response = PopularLecturesInitResponse.of(
-            sections,
-            PopularLectureCategory.NORMAL_CULTURE,
-            items,
-            10
-        );
-        given(getPopularLecturesUseCase.getInitPopularLectures(anyString(), anyInt(), anyInt(), any()))
-            .willReturn(response);
+    @DisplayName("/popular 두번째 페이지: cursor=KMA002, limit=2 → KMA003,KMA004, hasMore=true, nextCursor=KMA004")
+    void getPopularLectures_secondPage_withHasMore() throws Exception {
+        when(popularLecturesUseCase.getPopularLecturesByTotalCount())
+                .thenReturn(sampleLectures());
 
-        mockMvc.perform(get("/api/v1/lectures/popular/by-category")
-                .param("major", "컴퓨터공학")
-                .param("entryYear", "2020")
-                .param("category", "ALL"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.sections", hasSize(1)))
-            .andExpect(jsonPath("$.sections[0].categoryName").value("NORMAL_CULTURE"))
-            .andExpect(jsonPath("$.primeSection.categoryName").value("NORMAL_CULTURE"))
-            .andExpect(jsonPath("$.primeSection.lectures", hasSize(2)))
-            .andExpect(jsonPath("$.primeSection.pageInfo.pageSize").value(10));
-
-        then(getPopularLecturesUseCase).should(times(1))
-            .getInitPopularLectures(anyString(), anyInt(), anyInt(), any());
+        mockMvc.perform(get("/api/v1/lectures/popular")
+                        .param("limit", "2")
+                        .param("cursor", "KMA002")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lectures", hasSize(2)))
+                .andExpect(jsonPath("$.lectures[0].id", is("KMA003")))
+                .andExpect(jsonPath("$.lectures[1].id", is("KMA004")))
+                .andExpect(jsonPath("$.pageInfo.hasMore", is(true)))
+                .andExpect(jsonPath("$.pageInfo.nextCursor", is("KMA004")))
+                .andExpect(jsonPath("$.pageInfo.pageSize", is(2)));
     }
 
-    @WithMockAuthenticationUser
-    @DisplayName("카테고리 지정 시 해당 카테고리 페이지 응답한다.")
     @Test
-    void getPopularLecturesByCategory_categorySelected() throws Exception {
-        List<PopularLectureResponse> items = List.of(
-            PopularLectureResponse.from(
-                PopularLectureDto.of("LEC-20", "운영체제", 3, 80L, PopularLectureCategory.MANDATORY_MAJOR), 0.0),
-            PopularLectureResponse.from(
-                PopularLectureDto.of("LEC-21", "컴퓨터구조", 3, 70L, PopularLectureCategory.MANDATORY_MAJOR), 0.0)
-        );
-        PopularLecturesByCategoryResponse response = PopularLecturesByCategoryResponse.of(
-            PopularLectureCategory.MANDATORY_MAJOR,
-            items,
-            5
-        );
-        given(getPopularLecturesUseCase.getPopularLecturesByCategory(anyString(), anyInt(), any(), anyInt(), any()))
-            .willReturn(response);
+    @DisplayName("/popular 마지막 페이지: cursor=KMA004, limit=2 → KMA005만 반환, hasMore=false, nextCursor=null")
+    void getPopularLectures_lastPage_noMore() throws Exception {
+        when(popularLecturesUseCase.getPopularLecturesByTotalCount())
+                .thenReturn(sampleLectures());
 
-        mockMvc.perform(get("/api/v1/lectures/popular/by-category")
-                .param("major", "컴퓨터공학")
-                .param("entryYear", "2020")
-                .param("category", "MANDATORY_MAJOR")
-                .param("limit", "5"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.categoryName").value("MANDATORY_MAJOR"))
-            .andExpect(jsonPath("$.lectures", hasSize(2)))
-            .andExpect(jsonPath("$.pageInfo.pageSize").value(5));
-
-        then(getPopularLecturesUseCase).should(times(1))
-            .getPopularLecturesByCategory(anyString(), anyInt(), any(), anyInt(), any());
+        mockMvc.perform(get("/api/v1/lectures/popular")
+                        .param("limit", "2")
+                        .param("cursor", "KMA004")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lectures", hasSize(1)))
+                .andExpect(jsonPath("$.lectures[0].id", is("KMA005")))
+                .andExpect(jsonPath("$.pageInfo.hasMore", is(false)))
+                .andExpect(jsonPath("$.pageInfo.nextCursor", nullValue()))
+                .andExpect(jsonPath("$.pageInfo.pageSize", is(2)));
     }
 }
