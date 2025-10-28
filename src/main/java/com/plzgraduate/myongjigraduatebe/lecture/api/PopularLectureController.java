@@ -27,14 +27,27 @@ public class PopularLectureController implements PopularLectureApiPresentation {
     @Override
     @GetMapping
     public PopularLecturesPageResponse getPopularLectures(
-            @RequestParam(defaultValue = "10") int limit
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(value = "cursor", required = false) String cursor
     ) {
         List<PopularLectureResponse> responses =
                 popularLecturesUseCase.getPopularLecturesByTotalCount().stream()
                 .map(dto -> PopularLectureResponse.from(dto, 0.0))
                         .collect(Collectors.toUnmodifiableList());
 
-        return PopularLecturesPageResponse.of(responses, limit);
+        int startIndex = 0;
+        if (cursor != null) {
+            for (int i = 0; i < responses.size(); i++) {
+                if (responses.get(i).getId().equals(cursor)) {
+                    startIndex = i + 1;
+                    break;
+                }
+            }
+        }
+        int endIndex = Math.min(startIndex + limit + 1, responses.size());
+        List<PopularLectureResponse> pageSlice = responses.subList(startIndex, endIndex);
+
+        return PopularLecturesPageResponse.of(pageSlice, limit);
     }
 
     @Override

@@ -37,6 +37,16 @@ public class PopularLecturesService implements PopularLecturesUseCase {
         List<PopularLecturesInitResponse.SectionMeta> sections =
                 popularLecturePort.getSections(major, entryYear);
 
+        // 데이터가 전혀 없는 경우: 빈 리스트로 안전 반환
+        if (sections.isEmpty()) {
+            return PopularLecturesInitResponse.of(
+                    sections,
+                    PopularLectureCategory.ALL,
+                    List.of(),
+                    limit
+            );
+        }
+
         // 첫 번째 카테고리
         PopularLectureCategory firstCategory = sections.get(0).getCategoryName();
 
