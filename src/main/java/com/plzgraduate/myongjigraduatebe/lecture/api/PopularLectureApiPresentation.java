@@ -20,12 +20,12 @@ public interface PopularLectureApiPresentation {
 
     @Operation(summary = "인기 과목 전체 조회",
             description = "전체 인기 과목을 조회합니다. cursor가 없으면 첫 페이지를, cursor가 있으면 해당 항목 이후부터 limit만큼 반환합니다.")
-    @ApiResponses({
+    @ApiResponses(
             @ApiResponse(responseCode = "200",
                     description = "성공",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PopularLecturesPageResponse.class)))
-    })
+    )
     PopularLecturesPageResponse getPopularLectures(
             @Parameter(description = "페이지 크기", example = "10")
             @RequestParam(defaultValue = "10") int limit,
