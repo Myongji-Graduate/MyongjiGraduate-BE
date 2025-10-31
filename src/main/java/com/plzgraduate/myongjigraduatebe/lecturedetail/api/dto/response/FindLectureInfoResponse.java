@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecturedetail.api.dto.response;
 
 import com.plzgraduate.myongjigraduatebe.lecturedetail.domain.model.LectureInfo;
+import com.plzgraduate.myongjigraduatebe.lecturedetail.domain.model.LectureReview;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,6 +22,7 @@ public class FindLectureInfoResponse {
     private final String grading;
     private final String teamwork;
     private final BigDecimal rating;
+    private final List<LectureReview> lectureReviews;
 
     @Builder
     private FindLectureInfoResponse(
@@ -31,7 +33,8 @@ public class FindLectureInfoResponse {
             List<String> exam,
             String grading,
             String teamwork,
-            BigDecimal rating
+            BigDecimal rating,
+            List<LectureReview> lectureReviews
     ) {
         this.subject = subject;
         this.professor = professor;
@@ -41,6 +44,7 @@ public class FindLectureInfoResponse {
         this.grading = grading;
         this.teamwork = teamwork;
         this.rating = rating;
+        this.lectureReviews = lectureReviews;
     }
 
     public static FindLectureInfoResponse from(LectureInfo lectureInfo) {
@@ -53,6 +57,7 @@ public class FindLectureInfoResponse {
                 .grading(lectureInfo.getGrading())
                 .teamwork(lectureInfo.getTeamwork())
                 .rating(lectureInfo.getRating())
+                .lectureReviews(lectureInfo.getLectureReviews())
                 .build();
     }
 

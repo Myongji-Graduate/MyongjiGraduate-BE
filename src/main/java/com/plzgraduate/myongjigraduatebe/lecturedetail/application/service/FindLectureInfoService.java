@@ -7,7 +7,7 @@ import com.plzgraduate.myongjigraduatebe.lecturedetail.domain.model.LectureInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.List;
 
 @UseCase
 @Transactional(readOnly = true)
@@ -17,7 +17,7 @@ public class FindLectureInfoService implements FindLectureInfoUseCase {
     private final FindLectureInfoPort findLectureInfoPort;
 
     @Override
-    public LectureInfo findLectureInfoBySubjectAndProfessor(String subject, String professor) {
-        return findLectureInfoPort.findBySubjectAndProfessor(subject, professor);
+    public List<LectureInfo> findLectureInfoBySubject(String subject) {
+        return findLectureInfoPort.findBySubject(subject);
     }
 }
