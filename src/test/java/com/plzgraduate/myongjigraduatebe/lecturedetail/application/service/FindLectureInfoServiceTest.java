@@ -32,7 +32,7 @@ class FindLectureInfoServiceTest {
         // given
         String subject = "성서와인간이해";
 
-        LectureInfo 강안일 = LectureInfo.builder()
+        LectureInfo professor1 = LectureInfo.builder()
                 .subject(subject)
                 .professor("강안일")
                 .assignment("없음")
@@ -43,13 +43,16 @@ class FindLectureInfoServiceTest {
                 .rating(new BigDecimal("5.0"))
                 .lectureReviews(List.of(
                         LectureReview.builder()
-                                .subject(subject).professor("강안일")
+                                .subject(subject)
+                                .professor("강안일")
                                 .semester("25년 1학기 수강자")
-                                .rating(BigDecimal.valueOf(5)).content("수업 깔끔").build()
+                                .rating(BigDecimal.valueOf(5))
+                                .content("수업 깔끔")
+                                .build()
                 ))
                 .build();
 
-        LectureInfo 조내연 = LectureInfo.builder()
+        LectureInfo professor2 = LectureInfo.builder()
                 .subject(subject)
                 .professor("조내연")
                 .assignment("없음")
@@ -62,7 +65,7 @@ class FindLectureInfoServiceTest {
                 .build();
 
         given(findLectureInfoPort.findBySubject(subject))
-                .willReturn(List.of(강안일, 조내연));
+                .willReturn(List.of(professor1, professor2));
 
         // when
         List<LectureInfo> result = service.findLectureInfoBySubject(subject);
