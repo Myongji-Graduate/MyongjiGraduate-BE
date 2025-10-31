@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,51 +31,52 @@ class FindLectureInfoControllerTest {
     private FindLectureInfoService findLectureInfoService;
 
     @Test
-    @DisplayName("강의 정보 조회 API 성공")
-    void shouldReturnLectureInfoWhenValidParams() throws Exception {
+    @DisplayName("강좌명으로 교수별 강좌 정보 리스트 조회 성공")
+    void shouldReturnLectureInfoListWhenValidSubject() throws Exception {
         // given
         String subject = "성서와인간이해";
-        String professor = "조내연";
 
-        String assignmentText = "없음";
-        String attendance = "두 번";
-        String exam = "보통";
-        BigDecimal rating = BigDecimal.valueOf(4.07);
-        String grading = "없음";
-        String teamwork = "없음";
-
-        LectureInfo domain = LectureInfo.builder()
+        LectureInfo profA = LectureInfo.builder()
                 .subject(subject)
-                .professor(professor)
-                .assignment(assignmentText)
-                .attendance(attendance)
-                .exam(exam)
-                .grading(grading)
-                .teamwork(teamwork)
-                .rating(rating)
+                .professor("강안일")
+                .assignment("없음")
+                .attendance("출석 체크")
+                .exam("한 번")
+                .grading("담당교수 재량")
+                .teamwork("없음")
+                .rating(new BigDecimal("5.0"))
+                .lectureReviews(Collections.emptyList())
                 .build();
 
-        given(findLectureInfoService.findLectureInfoBySubjectAndProfessor(subject, professor)).willReturn(domain);
+        LectureInfo profB = LectureInfo.builder()
+                .subject(subject)
+                .professor("조내연")
+                .assignment("없음")
+                .attendance("두 번")
+                .exam("보통")
+                .grading("보통")
+                .teamwork("없음")
+                .rating(new BigDecimal("4.07"))
+                .lectureReviews(Collections.emptyList())
+                .build();
+
+        given(findLectureInfoService.findLectureInfoBySubject(subject))
+                .willReturn(List.of(profA, profB));
 
         // when & then
         mockMvc.perform(get("/api/v1/lectures-info")
                         .param("subject", subject)
-                        .param("professor", professor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.subject").value(subject))
-                .andExpect(jsonPath("$.professor").value(professor))
-                .andExpect(jsonPath("$.assignment").value(assignmentText))
-                .andExpect(jsonPath("$.attendance").value("두 번"))
-                .andExpect(jsonPath("$.rating").value(4.07))
-                .andExpect(jsonPath("$.exam").value("보통"))
-                .andExpect(jsonPath("$.grading").value(grading))
-                .andExpect(jsonPath("$.teamwork").value(teamwork));
+                // 리스트이므로 [0], [1] 인덱싱
+                .andExpect(jsonPath("$[0].professor").value("강안일"))
+                .andExpect(jsonPath("$[1].professor").value("조내연"))
+                .andExpect(jsonPath("$[0].subject").value(subject));
     }
 
     @Test
-    @DisplayName("필수 파라미터 누락 시 400")
-    void shouldReturnBadRequestWhenMissingParams() throws Exception {
+    @DisplayName("subject 파라미터 없으면 400 반환")
+    void shouldReturnBadRequestWhenMissingSubject() throws Exception {
         mockMvc.perform(get("/api/v1/lectures-info")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

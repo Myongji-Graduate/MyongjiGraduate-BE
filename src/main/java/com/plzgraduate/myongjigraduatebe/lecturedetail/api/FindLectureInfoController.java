@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @WebAdapter
 @RequiredArgsConstructor
@@ -19,11 +22,12 @@ public class FindLectureInfoController implements FindLectureInfoApiPresentation
     private final FindLectureInfoUseCase findLectureInfoUseCase;
 
     @GetMapping
-    public FindLectureInfoResponse searchLectureReview(
-            @RequestParam String subject,
-            @RequestParam String professor
+    public List<FindLectureInfoResponse> searchLectureReview(
+            @RequestParam String subject
     ){
-        return FindLectureInfoResponse
-                .from(findLectureInfoUseCase.findLectureInfoBySubjectAndProfessor(subject, professor));
+        return findLectureInfoUseCase.findLectureInfoBySubject(subject)
+                .stream()
+                .map(FindLectureInfoResponse::from)
+                .collect(Collectors.toList());
     }
 }

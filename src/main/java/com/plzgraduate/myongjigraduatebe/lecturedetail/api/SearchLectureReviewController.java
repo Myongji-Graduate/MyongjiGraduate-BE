@@ -26,7 +26,7 @@ public class SearchLectureReviewController implements SearchLectureReviewApiPres
     public SliceResponse<SearchLectureReviewResponse> searchLectureReview(
             @RequestParam String subject,
             @RequestParam String professor,
-            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(page = 1, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ){
         return SliceResponse.from(searchLectureReviewUseCase.findLectureReviewBySubjectAndProfessor(subject, professor, pageable)
                 .map(SearchLectureReviewResponse::from));

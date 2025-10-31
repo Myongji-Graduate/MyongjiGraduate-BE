@@ -3,11 +3,10 @@ package com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.p
 import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.LectureInfoJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 
 
 public interface LectureInfoRepository extends JpaRepository<LectureInfoJpaEntity, Long> {
 
-    LectureInfoJpaEntity findBySubjectAndProfessor(
-            String subject, String professor
-    );
+    List<LectureInfoJpaEntity> findAllBySubject(String subject);
 }

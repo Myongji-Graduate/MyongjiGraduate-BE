@@ -6,6 +6,10 @@ import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.pe
 import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.LectureReviewJpaEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Component
 public class LectureDetailMapper {
 
@@ -19,7 +23,15 @@ public class LectureDetailMapper {
                 .build();
     }
 
-    public LectureInfo mapToLectureInfoModel(LectureInfoJpaEntity lectureInfo) {
+    public LectureInfo mapToLectureInfoModel(
+            LectureInfoJpaEntity lectureInfo,
+            List<LectureReviewJpaEntity> lectureReviews
+    ) {
+        List<LectureReview> previews = lectureReviews == null ? List.of() :
+                lectureReviews.stream()
+                        .map(this::mapToLectureReviewModel)
+                        .collect(Collectors.toList());
+
         return LectureInfo.builder()
                 .subject(lectureInfo.getSubject())
                 .professor(lectureInfo.getProfessor())
@@ -29,6 +41,20 @@ public class LectureDetailMapper {
                 .grading(lectureInfo.getGrading())
                 .teamwork(lectureInfo.getTeamwork())
                 .rating(lectureInfo.getRating())
+                .lectureReviews(previews)
                 .build();
+    }
+
+    public List<LectureInfo> mapToLectureInfoModels(
+            List<LectureInfoJpaEntity> lectureInfos,
+            Map<String, List<LectureReviewJpaEntity>> previewsByProfessor
+    ) {
+        return lectureInfos.stream()
+                .map(info -> {
+                    List<LectureReviewJpaEntity> previews =
+                            previewsByProfessor.getOrDefault(info.getProfessor(), List.of());
+                    return mapToLectureInfoModel(info, previews);
+                })
+                .collect(Collectors.toList());
     }
 }

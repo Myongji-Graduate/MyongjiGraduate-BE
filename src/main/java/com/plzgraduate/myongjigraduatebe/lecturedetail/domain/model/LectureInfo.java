@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 public class LectureInfo {
@@ -16,6 +17,7 @@ public class LectureInfo {
     private final String grading;
     private final String teamwork;
     private final BigDecimal rating;
+    private final List<LectureReview> lectureReviews;
 
     @Builder
     private LectureInfo(
@@ -26,7 +28,8 @@ public class LectureInfo {
             String exam,
             String grading,
             String teamwork,
-            BigDecimal rating
+            BigDecimal rating,
+            List<LectureReview> lectureReviews
     ) {
         this.subject = subject;
         this.professor = professor;
@@ -36,5 +39,6 @@ public class LectureInfo {
         this.grading = grading;
         this.teamwork = teamwork;
         this.rating = rating;
+        this.lectureReviews = lectureReviews;
     }
 }
