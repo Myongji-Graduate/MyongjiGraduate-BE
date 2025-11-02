@@ -470,12 +470,23 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         Optional<MajorLectureOffering> offeringOpt =
                 cache.computeIfAbsent(l.getId(), majorLectureOfferingPort::findByLectureId);
 
+        // 전공 매핑이 없거나(=전공 과목인데 레코드가 없을 때) 유효하지 않으면 추천 제외
         if (offeringOpt.isEmpty()) {
-            // 전공 매핑이 없으면(교양 등) 학기/학년 제약 없이 허용
-            return true;
+            return false;
         }
+
         MajorLectureOffering offering = offeringOpt.get();
-        // 학년(0은 전학년) & 학기(BOTH/해당 학기) 체크
-        return offering.matchesGrade(grade) && offering.isOfferedInSemester(semester);
+
+        // grade / offered_semester 등 내부 필드가 null 이면 안전하게 제외
+        return safeMatches(offering, grade, semester);
+    }
+
+    /** MajorLectureOffering 내부 필드가 null 이어도 NPE 없이 false 로 처리 */
+    private boolean safeMatches(MajorLectureOffering offering, int grade, int semester) {
+        try {
+            return offering.matchesGrade(grade) && offering.isOfferedInSemester(semester);
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 }
