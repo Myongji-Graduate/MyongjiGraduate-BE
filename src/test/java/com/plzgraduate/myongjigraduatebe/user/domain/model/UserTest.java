@@ -57,7 +57,7 @@ class UserTest {
 	@Test
 	void updateStudentInformation() {
 		//given //when
-		user.updateStudentInformation("테스터2", "경영학전공", null, null,  null, StudentCategory.CHANGE_MAJOR, null, null, 134,
+		user.updateStudentInformation("테스터2", "경영학전공", null, null, null, null, StudentCategory.CHANGE_MAJOR, null, null, 134,
 			120.5, true);
 		//then
 		assertThat(user)
