@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
+import java.text.Normalizer;
 
 import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import lombok.Builder;
@@ -197,8 +198,9 @@ public class ParsingInformation {
 
 	private static Integer parseCompletedSemesterCount(String[] splitText) {
 		// The second line contains: ... , 현학적 - 재학, 이수 - 3, 입학 - ...
-		String secondLineText = splitText[2];
-		Matcher m = Pattern.compile("이수\\s*-\\s*(\\d+)").matcher(secondLineText);
+		String secondLineTextRaw = splitText[2];
+		String secondLineText = Normalizer.normalize(secondLineTextRaw, Normalizer.Form.NFC);
+		Matcher m = Pattern.compile("이수\\h*-\\h*(\\d+)", Pattern.UNICODE_CHARACTER_CLASS).matcher(secondLineText);
 		if (m.find()) {
 			try {
 				return Integer.valueOf(m.group(1));

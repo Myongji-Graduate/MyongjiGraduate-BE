@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class RecommendAfterTimetableService implements RecommendAfterTimetableUseCase {
 
     private static final int MAX_PER_SEMESTER = 18;
+    private static final String CHAPEL_CODE = "KMA02101";
 
     private final FindUserPort findUserPort;
     private final RemainingSemesterCalculator remainingSemesterCalculator;
@@ -145,106 +146,131 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
     @Override
     public RecommendAfterTimetableResponse build(Long userId) {
-        User user = findUserPort.findUserById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        User user = getUserOrThrow(userId);
 
-        // 남은 학기/시작 학기
         int remainingSemesters = remainingSemesterCalculator.from(user);
         RemainingSemesterCalculator.NextSemester start = remainingSemesterCalculator.nextSemester(user);
 
-        // 학기별 목표학점(없으면 정책 기본)
         OptionalInt remainingCreditsOpt = remainingCreditsProvider.get(user);
         List<Integer> creditPlan = remainingCreditsOpt.isPresent()
                 ? creditTargetPolicy.plan(remainingCreditsOpt.getAsInt(), remainingSemesters)
                 : null;
 
-        // 졸업요건 스냅샷으로 채플 잔여 추론
-        var snapshot = requirementSnapshotQueryPort.getSnapshot(user, remainingSemesters);
-        var chapelItem = snapshot.getItems().get(GraduationCategory.CHAPEL);
-        int chapelLeft = 0;
-        if (chapelItem != null) {
-            int totalI = chapelItem.getTotalCredit();
-            int takenI = chapelItem.getTakenCredit();
-            chapelLeft = Math.max(0, totalI - takenI);
-        }
+        RequirementSnapshot snapshot = requirementSnapshotQueryPort.getSnapshot(user, remainingSemesters);
+        int chapelLeft = calcChapelLeft(snapshot);
 
-        // 이미 수강한 과목 코드(= Lecture.id)
         Set<String> takenCodes = takenLectureQuery.findAlreadyTakenLectureCodes(user);
+        List<Lecture> availableLectures = buildAvailableLectures(takenCodes, chapelLeft);
 
-        // 전체 과목 → 미이수만 풀로 (채플은 잔여가 있으면 과거 이수 여부 무시)
-        int finalChapelLeft = chapelLeft;
-        List<Lecture> availableLectures = findLecturePort.findAllLectures().stream()
-                .filter(l -> l.getIsRevoked() == 0) // 폐지 과목 제외
+        Map<GraduationCategory, List<String>> haveToByCategory = buildHaveToByCategory(userId, snapshot);
+        Map<String, GraduationCategory> categoryByLectureId = reverseIndex(haveToByCategory);
+        Map<GraduationCategory, Integer> deficits = computeDeficits(snapshot);
+
+        List<RecommendAfterTimetableResponse.SemesterBlock> semesters = planSemesters(
+                remainingSemesters,
+                start,
+                creditPlan,
+                chapelLeft,
+                availableLectures,
+                haveToByCategory,
+                categoryByLectureId,
+                deficits
+        );
+
+        return RecommendAfterTimetableResponse.builder()
+                .semestersLeft(remainingSemesters)
+                .semesters(semesters)
+                .build();
+    }
+
+    private User getUserOrThrow(Long userId) {
+        return findUserPort.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+    }
+
+    private int calcChapelLeft(RequirementSnapshot snapshot) {
+        if (snapshot == null || snapshot.getItems() == null) return 0;
+        RequirementSnapshot.Item chapelItem = snapshot.getItems().get(GraduationCategory.CHAPEL);
+        if (chapelItem == null) return 0;
+        int totalI = chapelItem.getTotalCredit();
+        int takenI = chapelItem.getTakenCredit();
+        return Math.max(0, totalI - takenI);
+    }
+
+    private List<Lecture> buildAvailableLectures(Set<String> takenCodes, int chapelLeft) {
+        final int finalChapelLeft = chapelLeft;
+        return findLecturePort.findAllLectures().stream()
+                .filter(l -> l.getIsRevoked() == 0)
                 .filter(l -> {
-                    // 채플은 잔여가 있으면 과거 이수 여부에 상관없이 추천 풀에 포함
                     if (isChapel(l) && finalChapelLeft > 0) return true;
                     return !takenCodes.contains(l.getId());
                 })
-                .sorted(Comparator.comparing(Lecture::getId)) // 결정적 순서 보장
-                .collect(Collectors.toCollection(ArrayList::new)); // 제거 가능한 리스트
+                .sorted(Comparator.comparing(Lecture::getId))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
-        // per-request cache for major lecture offering
-        Map<String, Optional<MajorLectureOffering>> offeringCache = new HashMap<>();
+    private Map<GraduationCategory, List<String>> buildHaveToByCategory(Long userId, RequirementSnapshot snapshot) {
+        Set<GraduationCategory> applicable = (snapshot == null || snapshot.getItems() == null)
+                ? Collections.emptySet()
+                : snapshot.getItems().keySet();
 
-        // === 미이수(HAVE_TO) 우선 추천을 위한 사전 수집 ===
-        // 스냅샷에 포함된 카테고리만 대상으로 하여, 불필요한 계산/예외를 회피
-        Set<GraduationCategory> applicableCategories = snapshot.getItems().keySet();
-        Map<GraduationCategory, List<String>> haveToByCategory = applicableCategories.stream()
-                .collect(Collectors.toMap(
-                        cat -> cat,
-                        cat -> {
-                            try {
-                                List<String> ids = recommendedLectureExtractor.extractRecommendedLectureIds(userId, cat);
-                                return (ids == null) ? List.of() : ids;
-                            } catch (IllegalArgumentException e) {
-                                // UNFITTED_GRADUATION_CATEGORY 등은 해당 카테고리 스킵
-                                if (e.getMessage() != null && e.getMessage().contains("UNFITTED_GRADUATION_CATEGORY")) {
-                                    return List.of();
-                                }
-                                throw e;
-                            } catch (RuntimeException e) {
-                                // 계산기를 찾지 못한 케이스("No calculate detail graduation case found")는 스킵
-                                String msg = e.getMessage();
-                                if (msg != null && msg.contains("No calculate detail graduation case found")) {
-                                    return List.of();
-                                }
-                                throw e;
-                            }
-                        }
-                ));
-
-        // 강의ID → 카테고리 역방향 맵 (미이수 기준)
-        Map<String, GraduationCategory> categoryByLectureId = new HashMap<>();
-        haveToByCategory.forEach((cat, ids) -> {
-            if (ids != null) {
-                for (String id : ids) {
-                    if (id != null) categoryByLectureId.put(id, cat);
+        return applicable.stream().collect(Collectors.toMap(
+                cat -> cat,
+                cat -> {
+                    try {
+                        List<String> ids = recommendedLectureExtractor.extractRecommendedLectureIds(userId, cat);
+                        return (ids == null) ? List.of() : ids;
+                    } catch (IllegalArgumentException e) {
+                        String msg = e.getMessage();
+                        if (msg != null && msg.contains("UNFITTED_GRADUATION_CATEGORY")) return List.of();
+                        throw e;
+                    } catch (RuntimeException e) {
+                        String msg = e.getMessage();
+                        if (msg != null && msg.contains("No calculate detail graduation case found")) return List.of();
+                        throw e;
+                    }
                 }
-            }
-        });
-        // 카테고리별 남은 크레딧(채플 제외) - 비율 배분용
-        Map<GraduationCategory, Integer> deficits = computeDeficits(snapshot);
+        ));
+    }
 
-        // 카테고리 통합 미이수 집합 (채플은 별도로 처리하므로 제외)
+    private Map<String, GraduationCategory> reverseIndex(Map<GraduationCategory, List<String>> haveToByCategory) {
+        Map<String, GraduationCategory> map = new HashMap<>();
+        haveToByCategory.forEach((cat, ids) -> {
+            if (ids != null) for (String id : ids) if (id != null) map.put(id, cat);
+        });
+        return map;
+    }
+
+    private List<RecommendAfterTimetableResponse.SemesterBlock> planSemesters(
+            int remainingSemesters,
+            RemainingSemesterCalculator.NextSemester start,
+            List<Integer> creditPlan,
+            int chapelLeftInit,
+            List<Lecture> availableLectures,
+            Map<GraduationCategory, List<String>> haveToByCategory,
+            Map<String, GraduationCategory> categoryByLectureId,
+            Map<GraduationCategory, Integer> deficits
+    ) {
+        // 미이수 과목 풀(채플 제외)
         Set<String> haveToSet = haveToByCategory.values().stream()
                 .filter(Objects::nonNull)
                 .flatMap(List::stream)
                 .filter(Objects::nonNull)
-                .filter(id -> !"KMA02101".equalsIgnoreCase(id))
+                .filter(id -> !CHAPEL_CODE.equalsIgnoreCase(id))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
-        // 현재 개설 풀에서 미이수 과목만 따로 리스트업 (제거 가능한 리스트)
         List<Lecture> mustLectures = availableLectures.stream()
                 .filter(l -> haveToSet.contains(l.getId()))
                 .sorted(Comparator.comparing(Lecture::getId))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        // 이전 학기에 추천한 과목을 다음 학기에서 제외하기 위한 누적 세트
+        Map<String, Optional<MajorLectureOffering>> offeringCache = new HashMap<>();
         Set<String> recommendedAcross = new HashSet<>();
-
         List<RecommendAfterTimetableResponse.SemesterBlock> semesters = new ArrayList<>(remainingSemesters);
+
         int grade = start.getGrade();
         int semester = start.getSemester();
+        int chapelLeft = chapelLeftInit;
 
         for (int i = 0; i < remainingSemesters; i++) {
             String label = grade + "-" + semester;
@@ -254,10 +280,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             List<RecommendAfterTimetableResponse.LectureItem> picks = new ArrayList<>();
             int cur = 0;
 
-            // 1) 채플 우선(잔여 있는 동안 매 학기 1개씩)
+            // 1) 채플 우선 배치
             if (chapelLeft > 0) {
-                // chapel은 동일 코드(KMA02101)를 학기마다 반복 수강 가능하므로
-                // 풀에서 제거하거나 recommendedAcross에 넣지 않는다.
                 Lecture chapel = findFirst(availableLectures, this::isChapel);
                 if (chapel != null) {
                     String cat = resolveCategory(chapel.getId(), categoryByLectureId);
@@ -267,8 +291,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 }
             }
 
-            // 2) 미이수 과목 우선 채우되, 카테고리 비율(부족분 비례)로 배분
-            int cap = target; // 이미 위에서 target = Math.min(target, MAX_PER_SEMESTER)로 캡핑됨
+            // 2) 카테고리 비율 배분에 맞춰 채우기
+            int cap = target;
             Map<GraduationCategory, Integer> semesterQuota = makeSemesterQuota(cap - cur, deficits);
             Map<GraduationCategory, Integer> pickedByCat = new EnumMap<>(GraduationCategory.class);
 
@@ -277,22 +301,16 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 final int curSemester = semester;
                 int remain = cap - cur;
 
-                // 다음에 노려야 할 카테고리(부족분이 큰 카테고리) 선택
                 Optional<GraduationCategory> targetCatOpt = chooseNextCategory(semesterQuota, pickedByCat);
-
                 Lecture next = null;
                 if (targetCatOpt.isPresent()) {
                     GraduationCategory targetCat = targetCatOpt.get();
-
-                    // 2-1) 해당 카테고리에서 미이수 과목 우선
                     next = pickAndRemoveFirst(mustLectures,
                             l -> !recommendedAcross.contains(l.getId())
                                     && safeCredit(l) > 0
                                     && safeCredit(l) <= remain
                                     && isOfferedNow(l, curGrade, curSemester, offeringCache)
                                     && lectureInCategory(l, targetCat, categoryByLectureId));
-
-                    // 2-2) 없으면 동일 카테고리에서 일반 과목(채플 제외)
                     if (next == null) {
                         next = pickAndRemoveFirst(availableLectures,
                                 l -> !recommendedAcross.contains(l.getId())
@@ -303,8 +321,6 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                                         && lectureInCategory(l, targetCat, categoryByLectureId));
                     }
                 }
-
-                // 2-3) 그래도 없으면 카테고리 무시하고 전체에서 픽(기존 폴백)
                 if (next == null) {
                     next = pickAndRemoveFirst(mustLectures,
                             l -> !recommendedAcross.contains(l.getId())
@@ -320,7 +336,6 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                                     && safeCredit(l) <= remain
                                     && isOfferedNow(l, curGrade, curSemester, offeringCache));
                 }
-
                 if (next == null) break;
 
                 String catName = resolveCategory(next.getId(), categoryByLectureId);
@@ -329,18 +344,14 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 int c = safeCredit(next);
                 cur += c;
 
-                // 카테고리 집계 및 남은 쿼터/부족분 갱신
                 GraduationCategory mappedCat = categoryByLectureId.get(next.getId());
                 if (mappedCat != null && mappedCat != GraduationCategory.CHAPEL) {
                     pickedByCat.merge(mappedCat, c, Integer::sum);
-                    // 전역 deficits(남은 총 부족분)에서도 차감하여 다음 학기에 반영
                     deficits.merge(mappedCat, -c, Integer::sum);
                     if (deficits.get(mappedCat) != null && deficits.get(mappedCat) <= 0) {
                         deficits.remove(mappedCat);
                     }
                 }
-
-                // 남은 자리(cap-cur)가 바뀌었으므로 이번 학기 쿼터도 재계산(가벼운 비용)
                 if (cur < cap) {
                     semesterQuota = makeSemesterQuota(cap - cur, deficits);
                 }
@@ -352,15 +363,10 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                     .lectures(picks)
                     .build());
 
-            // 다음 라벨 진전
-            if (semester == 1) semester = 2;
-            else { semester = 1; grade++; }
+            // 다음 학기
+            if (semester == 1) semester = 2; else { semester = 1; grade++; }
         }
-
-        return RecommendAfterTimetableResponse.builder()
-                .semestersLeft(remainingSemesters)
-                .semesters(semesters)
-                .build();
+        return semesters;
     }
 
     /** 조건에 맞는 첫 과목을 찾아 리스트에서 제거 후 반환 */
@@ -386,7 +392,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     /** 채플 판정: 오직 코드 "KMA02101"만 채플로 간주 */
     private boolean isChapel(Lecture l) {
         String code = l.getId();
-        return "KMA02101".equalsIgnoreCase(code);
+        return CHAPEL_CODE.equalsIgnoreCase(code);
     }
 
     /** NPE 방지용 크레딧 */
@@ -399,7 +405,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         if (lectureId == null) return "일반교양";
         GraduationCategory cat = categoryByLectureId.get(lectureId);
         if (cat != null) return cat.getName();
-        if ("KMA02101".equalsIgnoreCase(lectureId)) return GraduationCategory.CHAPEL.getName();
+        if (CHAPEL_CODE.equalsIgnoreCase(lectureId)) return GraduationCategory.CHAPEL.getName();
         return "일반교양";
     }
 

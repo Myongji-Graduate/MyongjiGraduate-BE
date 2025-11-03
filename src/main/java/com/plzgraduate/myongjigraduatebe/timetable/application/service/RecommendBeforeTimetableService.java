@@ -53,8 +53,7 @@ public class RecommendBeforeTimetableService implements RecommendBeforeTimetable
                     // 채플 과목 예외 처리: 남은 회차가 있으면 제외하지 않는다
                     if (isChapel(tt)) {
                         var chapelItem = req.getItems().get(GraduationCategory.CHAPEL);
-                        boolean chapelRemaining = chapelItem != null && chapelItem.getTakenCredit() < chapelItem.getTotalCredit();
-                        return chapelRemaining;
+                        return chapelItem != null && chapelItem.getTakenCredit() < chapelItem.getTotalCredit();
                     }
                     // 그 외 과목은 일반 규칙: 이미 들은 과목이면 제외
                     return !takenCodes.contains(tt.getLectureCode());
