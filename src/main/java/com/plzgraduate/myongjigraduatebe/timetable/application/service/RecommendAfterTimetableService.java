@@ -216,21 +216,23 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
         return applicable.stream().collect(Collectors.toMap(
                 cat -> cat,
-                cat -> {
-                    try {
-                        List<String> ids = recommendedLectureExtractor.extractRecommendedLectureIds(userId, cat);
-                        return (ids == null) ? List.of() : ids;
-                    } catch (IllegalArgumentException e) {
-                        String msg = e.getMessage();
-                        if (msg != null && msg.contains("UNFITTED_GRADUATION_CATEGORY")) return List.of();
-                        throw e;
-                    } catch (RuntimeException e) {
-                        String msg = e.getMessage();
-                        if (msg != null && msg.contains("No calculate detail graduation case found")) return List.of();
-                        throw e;
-                    }
-                }
+                cat -> safeExtractRecommended(userId, cat)
         ));
+    }
+
+    private List<String> safeExtractRecommended(Long userId, GraduationCategory cat) {
+        try {
+            List<String> ids = recommendedLectureExtractor.extractRecommendedLectureIds(userId, cat);
+            return (ids == null) ? List.of() : ids;
+        } catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("UNFITTED_GRADUATION_CATEGORY")) return List.of();
+            throw e;
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("No calculate detail graduation case found")) return List.of();
+            throw e;
+        }
     }
 
     private Map<String, GraduationCategory> reverseIndex(Map<GraduationCategory, List<String>> haveToByCategory) {
@@ -251,18 +253,9 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             Map<String, GraduationCategory> categoryByLectureId,
             Map<GraduationCategory, Integer> deficits
     ) {
-        // 미이수 과목 풀(채플 제외)
-        Set<String> haveToSet = haveToByCategory.values().stream()
-                .filter(Objects::nonNull)
-                .flatMap(List::stream)
-                .filter(Objects::nonNull)
-                .filter(id -> !CHAPEL_CODE.equalsIgnoreCase(id))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-
-        List<Lecture> mustLectures = availableLectures.stream()
-                .filter(l -> haveToSet.contains(l.getId()))
-                .sorted(Comparator.comparing(Lecture::getId))
-                .collect(Collectors.toCollection(ArrayList::new));
+        // 준비: 미이수 과목(채플 제외)과 필수 과목 리스트
+        LinkedHashSet<String> haveToSet = toHaveToSet(haveToByCategory);
+        List<Lecture> mustLectures = filterMustLectures(availableLectures, haveToSet);
 
         Map<String, Optional<MajorLectureOffering>> offeringCache = new HashMap<>();
         Set<String> recommendedAcross = new HashSet<>();
@@ -282,78 +275,41 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
             // 1) 채플 우선 배치
             if (chapelLeft > 0) {
-                Lecture chapel = findFirst(availableLectures, this::isChapel);
-                if (chapel != null) {
-                    String cat = resolveCategory(chapel.getId(), categoryByLectureId);
-                    picks.add(toDto(chapel, cat));
-                    chapelLeft--;
-                    cur += safeCredit(chapel);
-                }
+                cur += placeChapelIfAny(availableLectures, categoryByLectureId, picks);
+                if (cur > 0) chapelLeft--; // 채플 1회 감산
             }
 
             // 2) 카테고리 비율 배분에 맞춰 채우기
-            int cap = target;
-            Map<GraduationCategory, Integer> semesterQuota = makeSemesterQuota(cap - cur, deficits);
+            Map<GraduationCategory, Integer> semesterQuota = makeSemesterQuota(target - cur, deficits);
             Map<GraduationCategory, Integer> pickedByCat = new EnumMap<>(GraduationCategory.class);
 
-            while (cur < cap) {
-                final int curGrade = grade;
-                final int curSemester = semester;
-                int remain = cap - cur;
-
+            while (cur < target) {
+                int remain = target - cur;
                 Optional<GraduationCategory> targetCatOpt = chooseNextCategory(semesterQuota, pickedByCat);
-                Lecture next = null;
-                if (targetCatOpt.isPresent()) {
-                    GraduationCategory targetCat = targetCatOpt.get();
-                    next = pickAndRemoveFirst(mustLectures,
-                            l -> !recommendedAcross.contains(l.getId())
-                                    && safeCredit(l) > 0
-                                    && safeCredit(l) <= remain
-                                    && isOfferedNow(l, curGrade, curSemester, offeringCache)
-                                    && lectureInCategory(l, targetCat, categoryByLectureId));
-                    if (next == null) {
-                        next = pickAndRemoveFirst(availableLectures,
-                                l -> !recommendedAcross.contains(l.getId())
-                                        && !isChapel(l)
-                                        && safeCredit(l) > 0
-                                        && safeCredit(l) <= remain
-                                        && isOfferedNow(l, curGrade, curSemester, offeringCache)
-                                        && lectureInCategory(l, targetCat, categoryByLectureId));
-                    }
-                }
-                if (next == null) {
-                    next = pickAndRemoveFirst(mustLectures,
-                            l -> !recommendedAcross.contains(l.getId())
-                                    && safeCredit(l) > 0
-                                    && safeCredit(l) <= remain
-                                    && isOfferedNow(l, curGrade, curSemester, offeringCache));
-                }
-                if (next == null) {
-                    next = pickAndRemoveFirst(availableLectures,
-                            l -> !recommendedAcross.contains(l.getId())
-                                    && !isChapel(l)
-                                    && safeCredit(l) > 0
-                                    && safeCredit(l) <= remain
-                                    && isOfferedNow(l, curGrade, curSemester, offeringCache));
-                }
-                if (next == null) break;
 
+                Lecture next = chooseNextLecture(
+                        mustLectures,
+                        availableLectures,
+                        recommendedAcross,
+                        remain,
+                        grade,
+                        semester,
+                        offeringCache,
+                        targetCatOpt,
+                        categoryByLectureId
+                );
+                if (next == null) break; // 더 고를 수 있는 과목 없음
+
+                // 선택 반영
                 String catName = resolveCategory(next.getId(), categoryByLectureId);
                 picks.add(toDto(next, catName));
                 recommendedAcross.add(next.getId());
                 int c = safeCredit(next);
                 cur += c;
+                applyPick(next, c, categoryByLectureId, pickedByCat, deficits);
 
-                GraduationCategory mappedCat = categoryByLectureId.get(next.getId());
-                if (mappedCat != null && mappedCat != GraduationCategory.CHAPEL) {
-                    pickedByCat.merge(mappedCat, c, Integer::sum);
-                    deficits.merge(mappedCat, -c, Integer::sum);
-                    if (deficits.get(mappedCat) != null && deficits.get(mappedCat) <= 0) {
-                        deficits.remove(mappedCat);
-                    }
-                }
-                if (cur < cap) {
-                    semesterQuota = makeSemesterQuota(cap - cur, deficits);
+                if (cur < target) {
+                    semesterQuota = makeSemesterQuota(target - cur, deficits);
                 }
             }
 
@@ -367,6 +323,93 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             if (semester == 1) semester = 2; else { semester = 1; grade++; }
         }
         return semesters;
+    }
+
+    // ====== 새 헬퍼들 ======
+    /** haveToByCategory에서 채플을 제외한 미이수 과목 ID를 LinkedHashSet으로 수집 */
+    private LinkedHashSet<String> toHaveToSet(Map<GraduationCategory, List<String>> haveToByCategory) {
+        return haveToByCategory.values().stream()
+                .filter(Objects::nonNull)
+                .flatMap(List::stream)
+                .filter(Objects::nonNull)
+                .filter(id -> !CHAPEL_CODE.equalsIgnoreCase(id))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /** availableLectures에서 haveToSet에 해당하는 과목만 추려 정렬 */
+    private List<Lecture> filterMustLectures(List<Lecture> availableLectures, Set<String> haveToSet) {
+        return availableLectures.stream()
+                .filter(l -> haveToSet.contains(l.getId()))
+                .sorted(Comparator.comparing(Lecture::getId))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /** 가능하면 채플 1과목을 picks에 추가하고, 추가된 학점을 반환 */
+    private int placeChapelIfAny(
+            List<Lecture> availableLectures,
+            Map<String, GraduationCategory> categoryByLectureId,
+            List<RecommendAfterTimetableResponse.LectureItem> picks
+    ) {
+        Lecture chapel = findFirst(availableLectures, this::isChapel);
+        if (chapel == null) return 0;
+        String cat = resolveCategory(chapel.getId(), categoryByLectureId);
+        picks.add(toDto(chapel, cat));
+        return safeCredit(chapel);
+    }
+
+    /** 다음에 고를 과목 하나 선택(없으면 null) */
+    private Lecture chooseNextLecture(
+            List<Lecture> mustLectures,
+            List<Lecture> availableLectures,
+            Set<String> recommendedAcross,
+            int remain,
+            int curGrade,
+            int curSemester,
+            Map<String, Optional<MajorLectureOffering>> offeringCache,
+            Optional<GraduationCategory> targetCatOpt,
+            Map<String, GraduationCategory> categoryByLectureId
+    ) {
+        Predicate<Lecture> base = l -> !recommendedAcross.contains(l.getId())
+                && safeCredit(l) > 0
+                && safeCredit(l) <= remain
+                && isOfferedNow(l, curGrade, curSemester, offeringCache);
+
+        // 1) 타겟 카테고리 우선(필수 → 일반)
+        if (targetCatOpt.isPresent()) {
+            GraduationCategory targetCat = targetCatOpt.get();
+            Predicate<Lecture> inCat = l -> lectureInCategory(l, targetCat, categoryByLectureId);
+
+            Lecture next = pickAndRemoveFirst(mustLectures, base.and(inCat));
+            if (next != null) return next;
+
+            next = pickAndRemoveFirst(availableLectures, base.and(inCat).and(l -> !isChapel(l)));
+            if (next != null) return next;
+        }
+
+        // 2) 카테고리 무관 필수 → 일반
+        Lecture next = pickAndRemoveFirst(mustLectures, base);
+        if (next != null) return next;
+
+        return pickAndRemoveFirst(availableLectures, base.and(l -> !isChapel(l)));
+    }
+
+    /** 선정된 과목의 학점/카테고리를 반영하여 집계치 갱신 */
+    private void applyPick(
+            Lecture picked,
+            int credit,
+            Map<String, GraduationCategory> categoryByLectureId,
+            Map<GraduationCategory, Integer> pickedByCat,
+            Map<GraduationCategory, Integer> deficits
+    ) {
+        GraduationCategory mappedCat = categoryByLectureId.get(picked.getId());
+        if (mappedCat == null || mappedCat == GraduationCategory.CHAPEL) return;
+
+        pickedByCat.merge(mappedCat, credit, Integer::sum);
+        deficits.merge(mappedCat, -credit, Integer::sum);
+        Integer left = deficits.get(mappedCat);
+        if (left != null && left <= 0) {
+            deficits.remove(mappedCat);
+        }
     }
 
     /** 조건에 맞는 첫 과목을 찾아 리스트에서 제거 후 반환 */

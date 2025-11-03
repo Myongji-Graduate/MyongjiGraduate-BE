@@ -200,7 +200,12 @@ public class ParsingInformation {
 		// The second line contains: ... , 현학적 - 재학, 이수 - 3, 입학 - ...
 		String secondLineTextRaw = splitText[2];
 		String secondLineText = Normalizer.normalize(secondLineTextRaw, Normalizer.Form.NFC);
-		Matcher m = Pattern.compile("이수\\h*-\\h*(\\d+)", Pattern.UNICODE_CHARACTER_CLASS).matcher(secondLineText);
+
+		// CANON_EQ 추가 (유니코드 정규화 비교 허용)
+		Matcher m = Pattern
+				.compile("이수\\h*-\\h*(\\d+)", Pattern.UNICODE_CHARACTER_CLASS | Pattern.CANON_EQ)
+				.matcher(secondLineText);
+
 		if (m.find()) {
 			try {
 				return Integer.valueOf(m.group(1));
