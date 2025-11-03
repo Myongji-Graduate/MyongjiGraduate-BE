@@ -34,6 +34,7 @@ public class User implements Serializable {
 	private String subMajor;
 	private String dualMajor;
 	private String associatedMajor;
+	private Integer completedSemesterCount;
 	private StudentCategory studentCategory;
 	private int totalCredit;
 	private double takenCredit;
@@ -53,6 +54,7 @@ public class User implements Serializable {
 		String subMajor,
 		String dualMajor,
 		String associatedMajor,
+		Integer completedSemesterCount,
 		TransferCredit transferCredit,
 		ExchangeCredit exchangeCredit,
 		StudentCategory studentCategory,
@@ -75,6 +77,7 @@ public class User implements Serializable {
 		this.subMajor = subMajor;
 		this.dualMajor = dualMajor;
 		this.associatedMajor = associatedMajor;
+		this.completedSemesterCount = completedSemesterCount;
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit != null ? transferCredit : TransferCredit.empty();
 		this.exchangeCredit = exchangeCredit != null ? exchangeCredit : ExchangeCredit.empty();
@@ -161,6 +164,7 @@ public class User implements Serializable {
 			", subMajor='" + subMajor + '\'' +
 			", dualMajor='" + dualMajor + '\'' +
 			", associatedMajor='" + associatedMajor + '\'' +
+			", completedSemesterCount=" + completedSemesterCount +
 			", transferCredit=" + transferCredit +
 			", exchangeCredit=" + exchangeCredit +
 			", studentCategory=" + studentCategory +
@@ -176,6 +180,7 @@ public class User implements Serializable {
 		String dualMajor,
 		String subMajor,
 		String associatedMajor,
+		Integer completedSemesterCount,
 		StudentCategory studentCategory,
 		TransferCredit transferCredit,
 		ExchangeCredit exchangeCredit,
@@ -188,6 +193,7 @@ public class User implements Serializable {
 		this.dualMajor = dualMajor;
 		this.subMajor = subMajor;
 		this.associatedMajor = associatedMajor;
+		this.completedSemesterCount = completedSemesterCount;
 		this.studentCategory = studentCategory;
 		updateTransferCredit(transferCredit);
 		updateExchangeCredit(exchangeCredit);

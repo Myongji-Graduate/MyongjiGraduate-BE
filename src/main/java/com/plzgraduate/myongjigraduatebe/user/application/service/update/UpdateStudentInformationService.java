@@ -24,6 +24,7 @@ class UpdateStudentInformationService implements UpdateStudentInformationUseCase
 			updateStudentInformationCommand.getDualMajor(),
 			updateStudentInformationCommand.getSubMajor(),
 			updateStudentInformationCommand.getAssociatedMajor(),
+			updateStudentInformationCommand.getCompletedSemesterCount(),
 			updateStudentInformationCommand.getStudentCategory(),
 			updateStudentInformationCommand.getTransferCredit(),
 			updateStudentInformationCommand.getExchangeCredit(),

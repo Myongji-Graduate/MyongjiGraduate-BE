@@ -10,4 +10,6 @@ public interface FindLecturePort {
 	List<Lecture> findLecturesByIds(List<String> lectureIds);
 
 	Lecture findLectureById(String lectureId);
+
+	List<Lecture> findAllLectures();
 }
