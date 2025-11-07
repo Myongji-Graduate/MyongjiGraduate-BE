@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.api;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
