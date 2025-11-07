@@ -58,8 +58,12 @@ public class TakenLectureRepositoryImpl
             Integer credit = tuple.get(takenLecture.lecture.credit);
             Long total = tuple.get(countExp);
             Double avg = tuple.get(avgExpr);
-            double avgVal = (avg == null) ? 0.0 : avg.doubleValue();
-            return PopularLectureDto.ofWithAverage(id, name, credit, total, null, avgVal);
+
+            int creditVal = (credit == null) ? 0 : credit;
+            long totalVal = (total == null) ? 0L : total;
+            double avgVal = (avg == null) ? 0.0 : avg;
+
+            return PopularLectureDto.ofWithAverage(id, name, creditVal, totalVal, null, avgVal);
         }).collect(Collectors.toUnmodifiableList());
 
         return categoryResolver.attachWithoutContext(rawResult);
