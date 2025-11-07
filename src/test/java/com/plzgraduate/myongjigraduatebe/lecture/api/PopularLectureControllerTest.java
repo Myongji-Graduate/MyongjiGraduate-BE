@@ -33,21 +33,26 @@ class PopularLectureControllerTest {
     @MockBean
     private PopularLecturesUseCase popularLecturesUseCase;
 
-    private List<PopularLectureDto> sampleLectures() {
+
+    private List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> sampleLectureResponses() {
         return List.of(
-                PopularLectureDto.of("KMA001", "과목1", 3, 100L, PopularLectureCategory.NORMAL_CULTURE),
-                PopularLectureDto.of("KMA002", "과목2", 3, 90L, PopularLectureCategory.NORMAL_CULTURE),
-                PopularLectureDto.of("KMA003", "과목3", 3, 80L, PopularLectureCategory.NORMAL_CULTURE),
-                PopularLectureDto.of("KMA004", "과목4", 3, 70L, PopularLectureCategory.NORMAL_CULTURE),
-                PopularLectureDto.of("KMA005", "과목5", 3, 60L, PopularLectureCategory.NORMAL_CULTURE)
+                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA001").name("과목1").credit(3).averageRating(4.0).totalCount(100L).categoryName(PopularLectureCategory.NORMAL_CULTURE).build(),
+                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA002").name("과목2").credit(3).averageRating(4.0).totalCount(90L).categoryName(PopularLectureCategory.NORMAL_CULTURE).build(),
+                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA003").name("과목3").credit(3).averageRating(4.0).totalCount(80L).categoryName(PopularLectureCategory.NORMAL_CULTURE).build(),
+                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA004").name("과목4").credit(3).averageRating(4.0).totalCount(70L).categoryName(PopularLectureCategory.NORMAL_CULTURE).build(),
+                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA005").name("과목5").credit(3).averageRating(4.0).totalCount(60L).categoryName(PopularLectureCategory.NORMAL_CULTURE).build()
         );
     }
 
     @Test
     @DisplayName("/popular 첫 페이지: limit=2이면 2개 반환, hasMore=true, nextCursor=두번째ID")
     void getPopularLectures_firstPage_withHasMore() throws Exception {
-        when(popularLecturesUseCase.getPopularLecturesByTotalCount())
-                .thenReturn(sampleLectures());
+        List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> all = sampleLectureResponses();
+        // service will have done slicing; controller returns what service provides
+        var firstPageSource = List.of(all.get(0), all.get(1), all.get(2));
+        var pageResp = com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse.of(firstPageSource, 2);
+        when(popularLecturesUseCase.getPopularLectures(2, null))
+                .thenReturn(pageResp);
 
         mockMvc.perform(get("/api/v1/lectures/popular")
                         .param("limit", "2")
@@ -64,8 +69,11 @@ class PopularLectureControllerTest {
     @Test
     @DisplayName("/popular 두번째 페이지: cursor=KMA002, limit=2 → KMA003,KMA004, hasMore=true, nextCursor=KMA004")
     void getPopularLectures_secondPage_withHasMore() throws Exception {
-        when(popularLecturesUseCase.getPopularLecturesByTotalCount())
-                .thenReturn(sampleLectures());
+        List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> all = sampleLectureResponses();
+        var secondPageSource = List.of(all.get(2), all.get(3), all.get(4));
+        var pageResp = com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse.of(secondPageSource, 2);
+        when(popularLecturesUseCase.getPopularLectures(2, "KMA002"))
+                .thenReturn(pageResp);
 
         mockMvc.perform(get("/api/v1/lectures/popular")
                         .param("limit", "2")
@@ -83,8 +91,11 @@ class PopularLectureControllerTest {
     @Test
     @DisplayName("/popular 마지막 페이지: cursor=KMA004, limit=2 → KMA005만 반환, hasMore=false, nextCursor=null")
     void getPopularLectures_lastPage_noMore() throws Exception {
-        when(popularLecturesUseCase.getPopularLecturesByTotalCount())
-                .thenReturn(sampleLectures());
+        List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> all = sampleLectureResponses();
+        var lastPageSource = List.of(all.get(4));
+        var pageResp = com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse.of(lastPageSource, 2);
+        when(popularLecturesUseCase.getPopularLectures(2, "KMA004"))
+                .thenReturn(pageResp);
 
         mockMvc.perform(get("/api/v1/lectures/popular")
                         .param("limit", "2")
