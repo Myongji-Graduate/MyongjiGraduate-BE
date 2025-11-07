@@ -39,11 +39,8 @@ public class LectureCategoryResolver {
                 new HashSet<>(commonCultureRepository.findIdsByLectureIdIn(lectureIds));
 
         return rawLectures.stream()
-                .map(dto -> PopularLectureDto.of(
-                        dto.getLectureId(),
-                        dto.getLectureName(),
-                        dto.getCredit(),
-                        dto.getTotalCount(),
+                .map(dto -> PopularLectureDto.withCategory(
+                        dto,
                         resolveCategory(dto.getLectureId(),
                                 majorMandatoryIds,
                                 majorElectiveIds,
@@ -90,11 +87,8 @@ public class LectureCategoryResolver {
 
         // 5) 매핑 결과 조합
         return findPopularLectureDto.stream()
-                .map(dto -> PopularLectureDto.of(
-                        dto.getLectureId(),
-                        dto.getLectureName(),
-                        dto.getCredit(),
-                        dto.getTotalCount(),
+                .map(dto -> PopularLectureDto.withCategory(
+                        dto,
                         resolveCategory(dto.getLectureId(),
                                 majorMandatoryIdsByYear,
                                 majorElectiveIdsByYear,
