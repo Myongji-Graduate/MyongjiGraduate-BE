@@ -187,8 +187,8 @@ class TakenLectureRepositoryImplTest {
         PopularLectureDto dto = result.get(0);
         assertThat(dto.getLectureId()).isEqualTo("LEC-X");
         assertThat(dto.getLectureName()).isEqualTo("이름X");
-        assertThat(dto.getCredit()).isEqualTo(0);
-        assertThat(dto.getTotalCount()).isEqualTo(0L);
+        assertThat(dto.getCredit()).isZero();
+        assertThat(dto.getTotalCount()).isZero();
         assertThat(dto.getAverageRating()).isEqualTo(0.0);
     }
 }
