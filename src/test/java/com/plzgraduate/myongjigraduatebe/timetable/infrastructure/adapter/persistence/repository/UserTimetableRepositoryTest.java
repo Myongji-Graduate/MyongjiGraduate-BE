@@ -129,7 +129,7 @@ class UserTimetableRepositoryTest extends PersistenceTestSupport { //
 
         assertThat(remain2024).isEmpty();
         assertThat(remain2025).hasSize(1);
-        assertThat(remain2025.get(0).getTimetable().getId()).isEqualTo(t3.getId());
+        assertThat(remain2025.getFirst().getTimetable().getId()).isEqualTo(t3.getId());
     }
 
     @Test
