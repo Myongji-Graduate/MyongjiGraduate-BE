@@ -57,20 +57,52 @@ jobs:
           username: ${{ secrets.STAGING_USERNAME }}
           key: ${{ secrets.STAGING_KEY }}
           script: |
-            set -e
-            docker network create mju-net || true
+            set -euo pipefail
+
+            echo "[Disk before]"
+            docker system df || true
+            df -h || true
+
+            # Ensure network exists (avoid noisy error)
+            if ! docker network inspect mju-net >/dev/null 2>&1; then
+              docker network create mju-net
+            fi
+
+            echo "[Light cleanup] stop/rm exited, dangling images, builder cache, dangling volumes"
+            docker ps -aq --filter status=exited | xargs -r docker rm || true
+            docker images -f "dangling=true" -q | xargs -r docker rmi || true
+            docker builder prune -af || true
+            docker volume ls -qf dangling=true | xargs -r docker volume rm || true
+
+            # If still low space under /var/lib/docker (<1GB free), do deep prune including volumes
+            DOCKER_DIR=/var/lib/docker
+            if [ -d "$DOCKER_DIR" ]; then
+              AVAIL_KB=$(df --output=avail -k "$DOCKER_DIR" | tail -1 | tr -d ' ')
+              if [ -n "$AVAIL_KB" ] && [ "$AVAIL_KB" -lt 1048576 ]; then  # <1GB
+                echo "[Deep cleanup] docker system prune --volumes"
+                docker system prune -af --volumes || true
+              fi
+            fi
 
             echo "Redis restart"
             docker rm -f mg-redis || true
-            docker run -d --name mg-redis --network mju-net -p 6379:6379 redis:latest
+            docker volume create mg-redis-data >/dev/null 2>&1 || true
+            docker run -d --name mg-redis \
+              --network mju-net \
+              --restart unless-stopped \
+              --log-opt max-size=10m --log-opt max-file=3 \
+              -p 6379:6379 \
+              -v mg-redis-data:/data \
+              redis:7-alpine
 
             echo "App restart"
             docker rm -f staging-mju-graduate-server || true
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/staging-mju-graduate-server:latest
 
-            # 값에 & 등이 있을 수 있으니 반드시 따옴표로 감싸서 전달
             docker run -d --name staging-mju-graduate-server \
               --network mju-net \
+              --restart unless-stopped \
+              --log-opt max-size=10m --log-opt max-file=3 \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=dev \
               -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
@@ -81,4 +113,6 @@ jobs:
               -e REDIS_PORT=6379 \
               ${{ secrets.DOCKERHUB_USERNAME }}/staging-mju-graduate-server:latest
 
-            docker image prune -f
+            echo "[Disk after]"
+            docker system df || true
+            df -h || true
