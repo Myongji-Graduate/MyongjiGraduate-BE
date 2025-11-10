@@ -95,6 +95,16 @@ jobs:
               -v mg-redis-data:/data \
               redis:7-alpine
 
+            echo "Waiting for Redis to be ready..."
+            for i in $(seq 1 30); do
+              if docker run --rm --network mju-net redis:7-alpine redis-cli -h mg-redis ping 2>/dev/null | grep -q "PONG"; then
+                echo "Redis is ready."
+                break
+              fi
+              echo "  still waiting ($i/30)..."
+              sleep 1
+            done
+
             echo "App restart"
             docker rm -f staging-mju-graduate-server || true
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/staging-mju-graduate-server:latest
@@ -109,8 +119,8 @@ jobs:
               -e SPRING_DATASOURCE_URL='${{ secrets.STAGING_DB_URL }}' \
               -e SPRING_DATASOURCE_USERNAME='${{ secrets.STAGING_DB_USERNAME }}' \
               -e SPRING_DATASOURCE_PASSWORD='${{ secrets.STAGING_DB_PASSWORD }}' \
-              -e REDIS_HOST=mg-redis \
-              -e REDIS_PORT=6379 \
+              -e SPRING_DATA_REDIS_HOST=mg-redis \
+              -e SPRING_DATA_REDIS_PORT=6379 \
               ${{ secrets.DOCKERHUB_USERNAME }}/staging-mju-graduate-server:latest
 
             echo "[Disk after]"
