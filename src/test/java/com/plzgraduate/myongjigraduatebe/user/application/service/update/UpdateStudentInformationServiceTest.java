@@ -1,7 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.user.application.service.update;
 
 import static org.mockito.BDDMockito.then;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.plzgraduate.myongjigraduatebe.user.application.port.UpdateUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;

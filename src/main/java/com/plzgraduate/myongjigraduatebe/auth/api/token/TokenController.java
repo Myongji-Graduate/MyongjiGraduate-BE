@@ -4,7 +4,7 @@ import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.request.TokenRequest
 import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessTokenResponse;
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.token.TokenUseCase;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

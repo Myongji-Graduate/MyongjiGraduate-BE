@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,37 +37,44 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().headers().disable().formLogin().disable().httpBasic().disable()
-			.rememberMe().disable().logout().disable().exceptionHandling()
-			.accessDeniedHandler(jwtAccessDeniedHandler)
-			.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-			.antMatchers(
-				API_V1_PREFIX + "/users/sign-up/**", // 회원가입
-				API_V1_PREFIX + "/auth/sign-in", // 로그인
-				API_V1_PREFIX + "/auth/token", // 새 토큰 발급
-				API_V1_PREFIX + "/users/{student-number}/auth-id", // 아이디 찾기
-				API_V1_PREFIX + "/users/{student-number}/validate", // 유저 검증
-				API_V1_PREFIX + "/users/password", // 비밀번호 재설정
-				API_V1_PREFIX + "/health", // 헬스체크
-				API_V1_PREFIX + "/graduations/check", // 비로그인 졸업 요건 검사
-				API_V1_PREFIX + "/timetable/**", // 시간표 강의 조회
-                API_V1_PREFIX + "/lectures/popular/**", //인기 강의 조회
-				API_V1_PREFIX + "/lectures-info", // 강좌 정보 조회
-				API_V1_PREFIX + "/lecture-reviews", //강좌평 조회
-				"/api-docs",
-				"/swagger-custom-ui.html",
-				"/v3/api-docs/**",
-				"/swagger-ui/**",
-				"/api-docs/**",
-				"/swagger-ui.html"
-			).permitAll().anyRequest().authenticated().and().cors()
-			.configurationSource(corsConfigurationSource()).and().addFilterBefore(
-				tokenAuthenticationFilter(tokenProvider),
-				UsernamePasswordAuthenticationFilter.class
-			);
+	    http
+	        .csrf(AbstractHttpConfigurer::disable)
+	        .formLogin(AbstractHttpConfigurer::disable)
+	        .httpBasic(AbstractHttpConfigurer::disable)
+	        .rememberMe(AbstractHttpConfigurer::disable)
+	        .logout(AbstractHttpConfigurer::disable)
+	        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	        .exceptionHandling(ex -> ex
+	            .accessDeniedHandler(jwtAccessDeniedHandler)
+	            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+	        )
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers(
+	                API_V1_PREFIX + "/users/sign-up/**",      // 회원가입
+	                API_V1_PREFIX + "/auth/sign-in",          // 로그인
+	                API_V1_PREFIX + "/auth/token",            // 새 토큰 발급
+	                API_V1_PREFIX + "/users/{student-number}/auth-id", // 아이디 찾기
+	                API_V1_PREFIX + "/users/{student-number}/validate", // 유저 검증
+	                API_V1_PREFIX + "/users/password",        // 비밀번호 재설정
+	                API_V1_PREFIX + "/health",                // 헬스체크
+	                API_V1_PREFIX + "/graduations/check",     // 비로그인 졸업 요건 검사
+	                API_V1_PREFIX + "/timetable/**",          // 시간표 강의 조회
+	                API_V1_PREFIX + "/lectures/popular/**",   // 인기 강의 조회
+	                API_V1_PREFIX + "/lectures-info",         // 강좌 정보 조회
+	                API_V1_PREFIX + "/lecture-reviews",       // 강좌평 조회
+	                "/v3/api-docs/**",
+	                "/swagger-ui/**",
+	                "/swagger-ui.html",
+	                "/api-docs",
+	                "/api-docs/**",
+	                "/swagger-custom-ui.html"
+	            ).permitAll()
+	            .anyRequest().authenticated()
+	        )
+	        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+	        .addFilterBefore(tokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
-		return http.build();
+	    return http.build();
 	}
 
 	@Bean

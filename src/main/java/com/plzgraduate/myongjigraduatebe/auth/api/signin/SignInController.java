@@ -5,7 +5,7 @@ import com.plzgraduate.myongjigraduatebe.auth.api.signin.dto.response.TokenRespo
 import com.plzgraduate.myongjigraduatebe.auth.application.usecase.signin.SignInUseCase;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
