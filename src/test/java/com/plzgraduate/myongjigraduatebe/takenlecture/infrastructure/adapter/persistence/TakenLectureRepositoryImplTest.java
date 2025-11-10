@@ -7,7 +7,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -38,15 +38,88 @@ class TakenLectureRepositoryImplTest {
     @InjectMocks private TakenLectureRepositoryImpl repository;
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     void setUp() {
-        // 공통 QueryDSL 체이닝 스텁 (항상 호출되는 부분만 공통화)
-        lenient().when(jpaQueryFactory.select((Expression<?>[]) any()))
+        // --- QueryDSL factory.select(...) overloading 대응 ---
+        // select(Expression<?>... exprs) → bytecode 상으로 select(Expression<?>[])
+        lenient().when(jpaQueryFactory.select(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
                 .thenReturn(mockQuery);
+        // --- Varargs arity-based stubs (Mockito sometimes fails to match varargs-as-array) ---
+        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        // select(Expression<T> expr) 오버로드 대비
+        lenient().when(jpaQueryFactory.select(any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        // selectDistinct(...) 사용 가능성 대비
+        lenient().when(jpaQueryFactory.selectDistinct(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        // selectFrom(entity) 사용 가능성 대비
+        lenient().when(jpaQueryFactory.selectFrom((com.querydsl.core.types.EntityPath) any()))
+                .thenReturn((JPAQuery) mockQuery);
+
+        // --- 공통 체이닝 스텁 ---
         lenient().when(mockQuery.from((EntityPath<?>) any())).thenReturn(mockQuery);
-        // varargs 메서드는 배열 매처로 스텁해야 함
-        lenient().when(mockQuery.groupBy((Expression<?>[]) any())).thenReturn(mockQuery);
-        lenient().when(mockQuery.orderBy((OrderSpecifier<?>[]) any())).thenReturn(mockQuery);
-        // fetch는 각 테스트에서 스텁
+
+        // where/having (varargs)
+        lenient().when(mockQuery.where(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.having(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
+                .thenReturn(mockQuery);
+
+        // groupBy/orderBy (varargs → 배열 매처 필요)
+        lenient().when(mockQuery.groupBy(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(org.mockito.ArgumentMatchers.<com.querydsl.core.types.OrderSpecifier<?>[]>any()))
+                .thenReturn(mockQuery);
+        // --- Varargs arity-based stubs for groupBy ---
+        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
+                .thenReturn(mockQuery);
+        // --- Varargs arity-based stubs for orderBy ---
+        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
+                .thenReturn(mockQuery);
+
+        // limit/offset
+        lenient().when(mockQuery.limit(anyLong())).thenReturn(mockQuery);
+        lenient().when(mockQuery.offset(anyLong())).thenReturn(mockQuery);
+        // fetch()는 각 테스트마다 given(...)으로 주입
     }
 
     @Test
