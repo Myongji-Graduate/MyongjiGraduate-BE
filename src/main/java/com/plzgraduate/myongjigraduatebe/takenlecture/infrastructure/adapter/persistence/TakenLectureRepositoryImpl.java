@@ -3,10 +3,14 @@ package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.pe
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
-import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.QPopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
 import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.QTakenLectureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.QLectureReviewJpaEntity;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -28,19 +32,58 @@ public class TakenLectureRepositoryImpl
 
     @Override
     public List<PopularLectureDto> getPopularLecturesByTotalCount() {
-        List<PopularLectureDto> rawResult = jpaQueryFactory
-                .select(new QPopularLectureDto(
+        QLectureReviewJpaEntity lectureReviewJpaEntity = QLectureReviewJpaEntity.lectureReviewJpaEntity;
+        NumberExpression<Long> countExp = takenLecture.id.count();
+        JPQLQuery<Double> avgExpr = JPAExpressions
+                .select(lectureReviewJpaEntity.rating.avg())
+                .from(lectureReviewJpaEntity)
+                .where(lectureReviewJpaEntity.subject.eq(takenLecture.lecture.name));
+
+        List<Tuple> rows = jpaQueryFactory
+                .select(
                         takenLecture.lecture.id,
                         takenLecture.lecture.name,
                         takenLecture.lecture.credit,
-                        takenLecture.id.count()
-                ))
+                        countExp,
+                        avgExpr
+                )
                 .from(takenLecture)
                 .groupBy(takenLecture.lecture.id, takenLecture.lecture.name, takenLecture.lecture.credit)
-                .orderBy(takenLecture.id.count().desc(), takenLecture.lecture.id.desc())
+                .orderBy(countExp.desc(), takenLecture.lecture.id.desc())
                 .fetch();
 
+        List<PopularLectureDto> rawResult = rows.stream().map(tuple -> {
+            String id = tuple.get(takenLecture.lecture.id);
+            String name = tuple.get(takenLecture.lecture.name);
+            Integer credit = tuple.get(takenLecture.lecture.credit);
+            Long total = tuple.get(countExp);
+            Double avg = tuple.get(avgExpr);
+
+            int creditVal = (credit == null) ? 0 : credit;
+            long totalVal = (total == null) ? 0L : total;
+            double avgVal = (avg == null) ? 0.0 : avg;
+
+            return PopularLectureDto.ofWithAverage(id, name, creditVal, totalVal, null, avgVal);
+        }).collect(Collectors.toUnmodifiableList());
+
         return categoryResolver.attachWithoutContext(rawResult);
+    }
+
+    @Override
+    public List<PopularLectureDto> getPopularLecturesSlice(int limit, String cursor) {
+        List<PopularLectureDto> all = getPopularLecturesByTotalCount();
+
+        int startIndex = 0;
+        if (cursor != null) {
+            for (int i = 0; i < all.size(); i++) {
+                if (all.get(i).getLectureId().equals(cursor)) {
+                    startIndex = i + 1;
+                    break;
+                }
+            }
+        }
+        int endIndex = Math.min(startIndex + limit + 1, all.size());
+        return all.subList(startIndex, endIndex);
     }
 
     @Override

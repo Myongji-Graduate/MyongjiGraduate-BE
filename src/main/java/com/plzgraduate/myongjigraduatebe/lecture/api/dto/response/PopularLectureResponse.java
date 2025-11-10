@@ -14,8 +14,8 @@ public class PopularLectureResponse {
     private final String name;
     @Schema(name = "credit", example = "2", description = "학점")
     private final int credit;
-    @Schema(name = "averageRating", example = "0.0", description = "평균 평점(현재 0.0 고정)")
-    private final double averageRating; // 현재 0.0로 채움(별점 소스 붙이면 갱신)
+    @Schema(name = "averageRating", example = "4.2", description = "평균 평점")
+    private final double averageRating;
     @Schema(name = "totalCount", example = "1292", description = "누적 수강 인원 수")
     private final long totalCount;
     @Schema(name = "categoryName", example = "전공필수", description = "카테고리 한글명")
@@ -32,14 +32,13 @@ public class PopularLectureResponse {
     }
 
     public static PopularLectureResponse from(
-            PopularLectureDto findPopularLectureDto,
-            double averageRating
+            PopularLectureDto findPopularLectureDto
     ) {
         return PopularLectureResponse.builder()
                 .id(findPopularLectureDto.getLectureId())
                 .name(findPopularLectureDto.getLectureName())
                 .credit(findPopularLectureDto.getCredit())
-                .averageRating(averageRating)
+                .averageRating(Math.round(findPopularLectureDto.getAverageRating() * 10.0) / 10.0)
                 .totalCount(findPopularLectureDto.getTotalCount())
                 .categoryName(findPopularLectureDto.getCategoryName())
                 .build();

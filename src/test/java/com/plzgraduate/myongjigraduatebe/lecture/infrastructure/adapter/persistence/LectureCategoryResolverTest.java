@@ -34,10 +34,10 @@ class LectureCategoryResolverTest {
   void attachWithoutContext() {
     // given
     List<PopularLectureDto> raw = List.of(
-        new PopularLectureDto("A", "A", 3, 10),
-        new PopularLectureDto("B", "B", 3, 9),
-        new PopularLectureDto("C", "C", 3, 8),
-        new PopularLectureDto("X", "X", 3, 1)
+        PopularLectureDto.ofWithAverage("A", "A", 3, 10, null, 0.0),
+        PopularLectureDto.ofWithAverage("B", "B", 3, 9, null, 0.0),
+        PopularLectureDto.ofWithAverage("C", "C", 3, 8, null, 0.0),
+        PopularLectureDto.ofWithAverage("X", "X", 3, 1, null, 0.0)
     );
     given(majorLectureRepository.findIdsByLectureIdInAndIsMandatory(anyList(), eq(1)))
         .willReturn(List.of("A"));
@@ -65,11 +65,11 @@ class LectureCategoryResolverTest {
     String major = "응용소프트웨어전공"; // ICT 계열(16~24년) - College enum과 정확히 일치
     int entryYear = 20; // College enum은 2자리 연도로 비교
     List<PopularLectureDto> raw = List.of(
-        new PopularLectureDto("A", "A", 3, 10), // 전필
-        new PopularLectureDto("B", "B", 3, 9),  // 전선
-        new PopularLectureDto("C", "C", 3, 8),  // 핵교
-        new PopularLectureDto("D", "D", 3, 7),  // 공교
-        new PopularLectureDto("E", "E", 3, 6)   // 학기
+        PopularLectureDto.ofWithAverage("A", "A", 3, 10, null, 0.0), // 전필
+        PopularLectureDto.ofWithAverage("B", "B", 3, 9, null, 0.0),  // 전선
+        PopularLectureDto.ofWithAverage("C", "C", 3, 8, null, 0.0),  // 핵교
+        PopularLectureDto.ofWithAverage("D", "D", 3, 7, null, 0.0),  // 공교
+        PopularLectureDto.ofWithAverage("E", "E", 3, 6, null, 0.0)   // 학기
     );
 
     given(basicAcademicalCultureRepository.findIdsByLectureIdInAndCollegeIn(anyList(), any(Set.class)))

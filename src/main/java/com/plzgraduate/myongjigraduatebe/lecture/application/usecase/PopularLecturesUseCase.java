@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.lecture.application.usecase;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 
@@ -9,6 +10,8 @@ import java.util.List;
 
 public interface PopularLecturesUseCase {
     List<PopularLectureDto> getPopularLecturesByTotalCount();
+
+    PopularLecturesPageResponse getPopularLectures(int limit, String cursor);
 
     /**
      * 최초 호출 (category=null)
