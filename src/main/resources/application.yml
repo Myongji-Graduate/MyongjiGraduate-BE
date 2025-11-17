@@ -17,9 +17,10 @@ spring:
         format_sql: true
     open-in-view: false
 
-  redis:
-    host: localhost
-    port: 6380
+  data:
+    redis:
+      host: localhost
+      port: 6380
 
 logging:
   level:
@@ -74,9 +75,10 @@ spring:
     hibernate:
       ddl-auto: update
 
-  redis:
-    host: mg-redis
-    port: 6379
+  data:
+    redis:
+      host: mg-redis
+      port: 6379
 
 jwt:
   issuer: "plzgraduate"
@@ -100,9 +102,10 @@ spring:
     hibernate:
       ddl-auto: none
 
-  redis:
-    host: mg-redis
-    port: 6379
+  data:
+    redis:
+      host: mg-redis
+      port: 6379
 
 jwt:
   issuer: "plzgraduate"
