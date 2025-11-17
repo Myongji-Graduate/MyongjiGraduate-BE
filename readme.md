@@ -50,14 +50,35 @@
             <img src="https://avatars.githubusercontent.com/u/96857599?v=4" width="100px" />
         </a>
     </td>
+    <td>
+        <a href="https://github.com/tiemo0708">
+            <img src="https://avatars.githubusercontent.com/u/42500530?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/win9-tech">
+            <img src="https://avatars.githubusercontent.com/u/71001678?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/baaamk">
+            <img src="https://avatars.githubusercontent.com/u/136908616?v=4" width="100px" />
+        </a>
+    </td>
   </tr>
   <tr>
     <td><b>유도진</b></td>
     <td><b>정지환</b></td>
     <td><b>박수환</b></td>
     <td><b>나경호</b></td>
+    <td><b>박진현</b></td>
+    <td><b>한승규</b></td>
+    <td><b>방현우</b></td>
   </tr>
   <tr>
+    <td><b>BE Developer</b></td>
+    <td><b>BE Developer</b></td>
+    <td><b>BE Developer</b></td>
     <td><b>BE Developer</b></td>
     <td><b>BE Developer</b></td>
     <td><b>BE Developer</b></td>
