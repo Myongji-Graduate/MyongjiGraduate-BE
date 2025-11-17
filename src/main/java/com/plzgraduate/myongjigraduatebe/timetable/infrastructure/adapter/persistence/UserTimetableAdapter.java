@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class UserTimetableAdapter implements UserTimetablePort {
                     TimetableJpaEntity ttRef = em.getReference(TimetableJpaEntity.class, ut.getTimetableId());
                     return mapper.mapToJpaEntity(ut, userRef, ttRef);
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         userTimetableRepository.saveAll(entities);
     }
@@ -52,7 +51,7 @@ public class UserTimetableAdapter implements UserTimetablePort {
         return userTimetableRepository.findTimetablesOfUser(userId, year, semester)
                 .stream()
                 .map(timetableMapper::mapToDomainEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }
