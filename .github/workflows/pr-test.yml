@@ -11,34 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
+      # JDK 21로 통일 (+ Gradle 캐시 자동)
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
 
-      - name: Gradle Caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle test를 실행 후 report 추출
-      - name: Test with Gradle
-        run: ./gradlew build jacocoTestReport
+      # 테스트 + 커버리지 리포트 생성
+      # (Gradle 8.10 래퍼가 레포에 커밋되어 있어야 함)
+      - name: Test with Gradle (JaCoCo)
+        run: ./gradlew clean test jacocoTestReport --no-daemon
 
-      # report 업로드하기
+      # (선택) JUnit & JaCoCo 리포트 아티팩트로 보관
+      - name: Upload test & coverage reports (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            **/build/test-results/test/**/*
+            **/build/reports/tests/test/**/*
+            **/build/reports/jacoco/test/**/*
+          if-no-files-found: warn
+
+      # Codecov 업로드
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true

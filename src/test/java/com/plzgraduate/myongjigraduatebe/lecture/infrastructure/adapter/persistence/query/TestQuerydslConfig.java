@@ -2,8 +2,8 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.LectureQueryRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

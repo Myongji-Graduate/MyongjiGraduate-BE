@@ -1,8 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.support;
 
 import com.plzgraduate.myongjigraduatebe.core.config.JpaAuditingConfig;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
