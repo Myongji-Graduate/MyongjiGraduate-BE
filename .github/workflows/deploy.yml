@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +31,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle 8.10 기준 빌드
+      # Gradle 8.10 기준 빌드 (테스트 제외)
       - name: Build without tests
         run: ./gradlew clean build -x test --no-daemon
 
@@ -60,31 +59,72 @@ jobs:
           username: ${{ secrets.WAS_USERNAME }}
           key: ${{ secrets.WAS_KEY }}
           script: |
-            set -e
-            cd ~/mju-graduate-server
+            set -euo pipefail
 
-            echo "Redis 컨테이너 실행"
+            echo "[Disk before]"
+            docker system df || true
+            df -h || true
+
+            # Ensure network exists (avoid noisy error)
+            if ! docker network inspect mju-net >/dev/null 2>&1; then
+              docker network create mju-net
+            fi
+
+            echo "[Light cleanup] stop/rm exited, dangling images, builder cache, dangling volumes"
+            docker ps -aq --filter status=exited | xargs -r docker rm || true
+            docker images -f "dangling=true" -q | xargs -r docker rmi || true
+            docker builder prune -af || true
+            docker volume ls -qf dangling=true | xargs -r docker volume rm || true
+
+            # If still low space under /var/lib/docker (<1GB free), do deep prune including volumes
+            DOCKER_DIR=/var/lib/docker
+            if [ -d "$DOCKER_DIR" ]; then
+              AVAIL_KB=$(df --output=avail -k "$DOCKER_DIR" | tail -1 | tr -d ' ')
+              if [ -n "$AVAIL_KB" ] && [ "$AVAIL_KB" -lt 1048576 ]; then  # <1GB
+                echo "[Deep cleanup] docker system prune --volumes"
+                docker system prune -af --volumes || true
+              fi
+            fi
+
+            echo "Redis restart"
             docker rm -f mg-redis || true
-            docker network create mju-net || true
-            docker run -d --name mg-redis --network mju-net -p 6379:6379 redis:latest
+            docker volume create mg-redis-data >/dev/null 2>&1 || true
+            docker run -d --name mg-redis \
+              --network mju-net \
+              --restart unless-stopped \
+              --log-opt max-size=10m --log-opt max-file=3 \
+              -p 6379:6379 \
+              -v mg-redis-data:/data \
+              redis:7-alpine
 
-            echo "기존 앱 컨테이너 중지 및 삭제"
+            echo "Waiting for Redis to be ready..."
+            for i in $(seq 1 30); do
+              if docker run --rm --network mju-net redis:7-alpine redis-cli -h mg-redis ping 2>/dev/null | grep -q "PONG"; then
+                echo "Redis is ready."
+                break
+              fi
+              echo "  still waiting ($i/30)..."
+              sleep 1
+            done
+
+            echo "App restart"
             docker rm -f mju-graduate-server || true
-
-            echo "최신 앱 이미지 pull"
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
 
-            echo "앱 컨테이너 실행"
             docker run -d --name mju-graduate-server \
               --network mju-net \
+              --restart unless-stopped \
+              --log-opt max-size=10m --log-opt max-file=3 \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
               -e SPRING_DATASOURCE_URL='${{ secrets.DATASOURCE_URL }}' \
               -e SPRING_DATASOURCE_USERNAME='${{ secrets.DATASOURCE_USERNAME }}' \
               -e SPRING_DATASOURCE_PASSWORD='${{ secrets.DATASOURCE_PASSWORD }}' \
               -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
-              -e REDIS_HOST=mg-redis \
-              -e REDIS_PORT=6379 \
+              -e SPRING_DATA_REDIS_HOST=mg-redis \
+              -e SPRING_DATA_REDIS_PORT=6379 \
               ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
 
-            docker image prune -f
+            echo "[Disk after]"
+            docker system df || true
+            df -h || true
