@@ -2,7 +2,7 @@ name: Dev
 
 on:
   push:
-    branches: [ chore/DEV-77 ]
+    branches: [ develop ]
 
 jobs:
   build:
