@@ -118,11 +118,9 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "Myongji-Graduate_Myongjigraduate-BE"
+        property "sonar.projectKey", "Myongji-Graduate_MyongjiGraduate-BE"
         property "sonar.organization", "mg-sc-gh-con-key"
         property "sonar.host.url", "https://sonarcloud.io"
-        // 필요 시:
-        // property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
