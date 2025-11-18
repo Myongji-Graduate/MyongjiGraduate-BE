@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
+import com.plzgraduate.myongjigraduatebe.core.exception.GlobalExceptionHandler;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
@@ -9,13 +10,16 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCate
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -24,8 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PopularLectureController.class)
-@org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc(addFilters = false)
-@org.springframework.context.annotation.Import(com.plzgraduate.myongjigraduatebe.core.exception.GlobalExceptionHandler.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(GlobalExceptionHandler.class)
 class PopularLectureControllerTest {
 
     @Autowired
@@ -38,7 +42,7 @@ class PopularLectureControllerTest {
     @DisplayName("/lectures/popular - 초기 빈 결과는 404와 NO_POPULAR_LECTURES 반환")
     void popular_initial_empty_returns_404() throws Exception {
         given(useCase.getPopularLectures(anyInt(), isNull()))
-                .willThrow(new java.util.NoSuchElementException(ErrorCode.NO_POPULAR_LECTURES.toString()));
+                .willThrow(new NoSuchElementException(ErrorCode.NO_POPULAR_LECTURES.toString()));
 
         mockMvc.perform(get("/api/v1/lectures/popular")
                         .param("limit", "10"))
@@ -67,7 +71,7 @@ class PopularLectureControllerTest {
     @DisplayName("/lectures/popular/by-category - category=ALL 섹션 총합 0이면 404")
     void by_category_all_sections_empty_returns_404() throws Exception {
         given(useCase.getInitPopularLectures(anyString(), anyInt(), anyInt(), isNull()))
-                .willThrow(new java.util.NoSuchElementException(ErrorCode.NO_POPULAR_LECTURES.toString()));
+                .willThrow(new NoSuchElementException(ErrorCode.NO_POPULAR_LECTURES.toString()));
 
         mockMvc.perform(get("/api/v1/lectures/popular/by-category")
                         .param("major", "컴퓨터공학")
@@ -82,7 +86,7 @@ class PopularLectureControllerTest {
     @DisplayName("/lectures/popular/by-category - 특정 카테고리 초기 결과 0이면 404")
     void by_category_specific_initial_empty_returns_404() throws Exception {
         given(useCase.getPopularLecturesByCategory(anyString(), anyInt(), org.mockito.ArgumentMatchers.any(PopularLectureCategory.class), anyInt(), isNull()))
-                .willThrow(new java.util.NoSuchElementException(ErrorCode.NO_POPULAR_LECTURES.toString()));
+                .willThrow(new NoSuchElementException(ErrorCode.NO_POPULAR_LECTURES.toString()));
 
         mockMvc.perform(get("/api/v1/lectures/popular/by-category")
                         .param("major", "컴퓨터공학")
