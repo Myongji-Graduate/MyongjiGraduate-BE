@@ -154,4 +154,28 @@ class PopularLecturesServiceTest {
         assertThat(resp.getPageInfo().getNextCursor()).isNull();
         assertThat(resp.getPageInfo().getPageSize()).isEqualTo(5);
     }
+
+    @Test
+    @DisplayName("getInitPopularLectures - 커서 이후 빈 결과면 hasMore=false, nextCursor=null로 정상 반환")
+    void getInitPopularLectures_after_cursor_empty_returns_page() {
+        // 섹션 총합은 0이 아니게 설정하여 404 조건 회피
+        PopularLecturesInitResponse.SectionMeta meta = PopularLecturesInitResponse.SectionMeta.builder()
+                .categoryName(PopularLectureCategory.NORMAL_CULTURE)
+                .total(3)
+                .build();
+        given(port.getSections(anyString(), anyInt())).willReturn(Collections.singletonList(meta));
+
+        // 커서가 있는 상태에서 강의 목록이 비어 있어도 예외가 아닌 빈 페이지 반환
+        given(port.getLecturesByCategory(anyString(), anyInt(), any(PopularLectureCategory.class), anyInt(), anyString()))
+                .willReturn(Collections.emptyList());
+
+        PopularLecturesInitResponse resp = service.getInitPopularLectures("컴공", 2020, 10, "CURSOR");
+
+        assertThat(resp.getSections()).hasSize(1);
+        assertThat(resp.getPrimeSection().getCategoryName()).isEqualTo(PopularLectureCategory.NORMAL_CULTURE);
+        assertThat(resp.getPrimeSection().getLectures()).isEmpty();
+        assertThat(resp.getPrimeSection().getPageInfo().isHasMore()).isFalse();
+        assertThat(resp.getPrimeSection().getPageInfo().getNextCursor()).isNull();
+        assertThat(resp.getPrimeSection().getPageInfo().getPageSize()).isEqualTo(10);
+    }
 }
