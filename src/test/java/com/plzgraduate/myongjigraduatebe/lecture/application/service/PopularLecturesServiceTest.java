@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.application.service;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
+import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
@@ -102,5 +103,55 @@ class PopularLecturesServiceTest {
         assertThatThrownBy(() -> service.getPopularLecturesByCategory("컴공", 2020, PopularLectureCategory.MANDATORY_MAJOR, 10, null))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("NO_POPULAR_LECTURES");
+    }
+
+    @Test
+    @DisplayName("getInitPopularLectures - 섹션은 있으나 초기 primeSection 강의가 비어있으면 NoSuchElementException")
+    void getInitPopularLectures_initial_prime_section_empty_throws() {
+        // 섹션 총합은 0이 아니게 설정
+        PopularLecturesInitResponse.SectionMeta meta = PopularLecturesInitResponse.SectionMeta.builder()
+                .categoryName(PopularLectureCategory.NORMAL_CULTURE)
+                .total(3)
+                .build();
+        given(port.getSections(anyString(), anyInt())).willReturn(Collections.singletonList(meta));
+
+        // 초기 primeSection(첫 카테고리) 강의 결과가 비어있는 경우
+        given(port.getLecturesByCategory(anyString(), anyInt(), any(PopularLectureCategory.class), anyInt(), isNull()))
+                .willReturn(Collections.emptyList());
+
+        assertThatThrownBy(() -> service.getInitPopularLectures("컴공", 2020, 10, null))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("NO_POPULAR_LECTURES");
+    }
+
+    @Test
+    @DisplayName("getPopularLectures - 커서 이후 limit+1 슬라이스면 hasMore=true, nextCursor 설정")
+    void getPopularLectures_after_cursor_hasMore_true() {
+        PopularLectureDto d1 = PopularLectureDto.ofWithAverage("A1", "과목A", 3, 100, PopularLectureCategory.NORMAL_CULTURE, 4.5);
+        PopularLectureDto d2 = PopularLectureDto.ofWithAverage("A2", "과목B", 3, 90, PopularLectureCategory.NORMAL_CULTURE, 4.4);
+        PopularLectureDto d3 = PopularLectureDto.ofWithAverage("A3", "과목C", 3, 80, PopularLectureCategory.NORMAL_CULTURE, 4.3);
+        given(port.getPopularLecturesSlice(2, "CURSOR")).willReturn(Arrays.asList(d1, d2, d3));
+
+        PopularLecturesPageResponse resp = service.getPopularLectures(2, "CURSOR");
+        assertThat(resp.getLectures()).hasSize(2);
+        assertThat(resp.getPageInfo().isHasMore()).isTrue();
+        assertThat(resp.getPageInfo().getNextCursor()).isEqualTo("A2");
+        assertThat(resp.getPageInfo().getPageSize()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("getPopularLecturesByCategory - 커서 이후 빈 결과면 hasMore=false, nextCursor=null")
+    void getPopularLecturesByCategory_after_cursor_empty_returns_page() {
+        given(port.getLecturesByCategory(anyString(), anyInt(), any(PopularLectureCategory.class), anyInt(), anyString()))
+                .willReturn(Collections.emptyList());
+
+        PopularLecturesByCategoryResponse resp = service.getPopularLecturesByCategory(
+                "컴공", 2020, PopularLectureCategory.ELECTIVE_MAJOR, 5, "CURSOR");
+
+        assertThat(resp.getCategoryName()).isEqualTo(PopularLectureCategory.ELECTIVE_MAJOR);
+        assertThat(resp.getLectures()).isEmpty();
+        assertThat(resp.getPageInfo().isHasMore()).isFalse();
+        assertThat(resp.getPageInfo().getNextCursor()).isNull();
+        assertThat(resp.getPageInfo().getPageSize()).isEqualTo(5);
     }
 }
