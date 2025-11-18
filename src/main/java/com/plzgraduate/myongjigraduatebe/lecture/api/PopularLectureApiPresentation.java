@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Tag(name = "GetPopularLecture", description = "필터링 없이 인기 과목 조회하는 API")
 public interface PopularLectureApiPresentation {
@@ -28,7 +30,7 @@ public interface PopularLectureApiPresentation {
     )
     PopularLecturesPageResponse getPopularLectures(
             @Parameter(description = "페이지 크기", example = "10")
-            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit,
             @Parameter(description = "커서(마지막 항목 id)", example = "KMA02108")
             @RequestParam(value = "cursor", required = false) String cursor);
 
@@ -65,7 +67,7 @@ public interface PopularLectureApiPresentation {
             @Parameter(description = "카테고리(한글 또는 enum)", example = "MANDATORY_MAJOR")
             @RequestParam("category") PopularLectureCategory category,
             @Parameter(description = "페이지 크기", example = "10")
-            @RequestParam(value = "limit", defaultValue = "10") int limit,
+            @RequestParam(value = "limit", defaultValue = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit,
             @Parameter(description = "커서(마지막 항목 id)", example = "KMA05155")
             @RequestParam(value = "cursor", required = false) String cursor
     );
