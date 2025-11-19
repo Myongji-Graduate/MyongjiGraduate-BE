@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
- 
+import jakarta.validation.constraints.Min;
+
 
 @WebAdapter
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class PopularLectureController implements PopularLectureApiPresentation {
     @Override
     @GetMapping
     public PopularLecturesPageResponse getPopularLectures(
-            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit,
             @RequestParam(value = "cursor", required = false) String cursor
     ) {
         return popularLecturesUseCase.getPopularLectures(limit, cursor);
@@ -37,7 +38,7 @@ public class PopularLectureController implements PopularLectureApiPresentation {
             @RequestParam("major") String major,
             @RequestParam("entryYear") int entryYear,
             @RequestParam("category") PopularLectureCategory category,
-            @RequestParam(value = "limit", defaultValue = "10") int limit,
+            @RequestParam(value = "limit", defaultValue = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit,
             @RequestParam(value = "cursor", required = false) String cursor) {
         if (category == PopularLectureCategory.ALL) {
             // 최초 호출: sections + primeSection
