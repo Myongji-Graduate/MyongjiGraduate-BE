@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.timetable.application.service;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -114,9 +115,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         int smallDefTotal = smallDeficits.values().stream().mapToInt(Integer::intValue).sum();
         int remainingCap = Math.max(0, cap - smallDefTotal);
 
-        for (var e : smallDeficits.entrySet()) {
-            quota.put(e.getKey(), e.getValue());
-        }
+        quota.putAll(smallDeficits);
 
         // 큰 deficit 카테고리만 비율 배분
         if (remainingCap > 0 && !largeDeficits.isEmpty()) {
@@ -264,9 +263,10 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         if (snapshot == null || snapshot.getItems() == null) return 0;
         RequirementSnapshot.Item chapelItem = snapshot.getItems().get(GraduationCategory.CHAPEL);
         if (chapelItem == null) return 0;
-        int totalI = chapelItem.getTotalCredit();
-        int takenI = chapelItem.getTakenCredit();
-        return Math.max(0, totalI - takenI);
+        double total = chapelItem.getTotalCredit();
+        double taken = chapelItem.getTakenCredit();
+        double remainingCredit = Math.max(0.0, total - taken);
+        return (int) Math.round(remainingCredit / ChapelResult.CHAPEL_CREDIT);
     }
 
     private List<Lecture> buildAvailableLectures(Set<String> takenCodes, int chapelLeft) {
@@ -381,8 +381,11 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
         // 1) 채플 우선 1과목
         if (chapelLeft > 0) {
-            cur += placeChapelIfAny(availableLectures, detailKeyByLectureId, picks);
-            if (cur > 0) chapelLeft--;
+            int chapelCredit = placeChapelIfAny(availableLectures, detailKeyByLectureId, picks);
+            if (chapelCredit >= 0) {
+                cur += chapelCredit;
+                chapelLeft--;
+            }
         }
 
         // 2) 쿼터 계산 및 채우기
@@ -575,8 +578,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof DetailKey)) return false;
-            DetailKey detailKey = (DetailKey) o;
+            if (!(o instanceof DetailKey detailKey)) return false;
             return graduationCategory == detailKey.graduationCategory &&
                     Objects.equals(detailName, detailKey.detailName);
         }
@@ -620,7 +622,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             List<RecommendAfterTimetableResponse.LectureItem> picks
     ) {
         Lecture chapel = findFirst(availableLectures, this::isChapel);
-        if (chapel == null) return 0;
+        if (chapel == null) return -1;
         String cat = resolveCategory(chapel.getId(), detailKeyByLectureId);
         picks.add(toDto(chapel, cat));
         return safeCredit(chapel);
