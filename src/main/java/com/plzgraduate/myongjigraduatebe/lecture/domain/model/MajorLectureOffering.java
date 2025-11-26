@@ -39,7 +39,10 @@ public class MajorLectureOffering {
     }
 
     public boolean matchesGrade(int g) {
-        return this.grade == 0 || this.grade == g; // 0은 전학년 공통
+        if (this.grade == 0) {
+            return true; // 전 학년 공통
+        }
+        return this.grade <= g; // 현재 학년보다 낮거나 같으면 수강 가능
     }
 
     public int getOfferedSemesterCode() {
