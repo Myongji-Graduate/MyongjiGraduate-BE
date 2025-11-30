@@ -210,6 +210,117 @@ class TakenLectureRepositoryImplTest {
                 .findFirst().orElseThrow().getTotal()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("getSections: 총합 기준 조회 매핑 로직(튜플→DTO) 커버")
+    @SuppressWarnings("unchecked")
+    void getSections_coversTupleMappingInTotalCountQuery() {
+        // given: 총합 기준 쿼리에서 1개 튜플 반환 -> 매핑 로직 실행
+        Tuple t = mock(Tuple.class, Answers.RETURNS_DEEP_STUBS);
+        given(mockQuery.fetch()).willReturn(java.util.List.of(t));
+        when(t.get(any(Expression.class)))
+                .thenReturn("ID1")
+                .thenReturn("이름1")
+                .thenReturn(3)
+                .thenReturn(10L)
+                .thenReturn(4.0);
+
+        // 매핑 이후 attachWithoutContext/attachWithContext가 정상 동작하도록 스텁
+        List<PopularLectureDto> raw = List.of(
+                PopularLectureDto.ofWithAverage("ID1", "이름1", 3, 10L, null, 4.0)
+        );
+        given(categoryResolver.attachWithoutContext(anyList())).willReturn(raw);
+
+        List<PopularLectureDto> withCtx = List.of(
+                PopularLectureDto.ofWithAverage("ID1", "이름1", 3, 10L, PopularLectureCategory.MANDATORY_MAJOR, 4.0)
+        );
+        given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCtx);
+
+        // when
+        List<PopularLecturesInitResponse.SectionMeta> sections = repository.getSections("컴퓨터공학", 2021);
+
+        // then: 1개 카테고리만 1건으로 집계
+        assertThat(sections).hasSize(1);
+        assertThat(sections.getFirst().getCategoryName()).isEqualTo(PopularLectureCategory.MANDATORY_MAJOR);
+        assertThat(sections.getFirst().getTotal()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("getLecturesByCategory: 잘못된 복합 커서(문자 prefix) → id-only로 폴백")
+    @SuppressWarnings("unchecked")
+    void getLecturesByCategory_invalidCompositeCursor_fallsBackToIdOnly() {
+        // given: 튜플 1개 매핑
+        Tuple tuple = mock(Tuple.class, Answers.RETURNS_DEEP_STUBS);
+        given(mockQuery.fetch()).willReturn(java.util.List.of(tuple));
+        when(tuple.get((Expression<Object>) any(Expression.class)))
+                .thenReturn("LEC-30")
+                .thenReturn("알고리즘")
+                .thenReturn(3)
+                .thenReturn(60L);
+        when(tuple.get(eq(4), eq(Double.class))).thenReturn(4.3);
+
+        // when
+        List<PopularLectureDto> result = repository.getLecturesByCategory(
+                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 1, "abc:LEC-20");
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().getLectureId()).isEqualTo("LEC-30");
+    }
+
+    @Test
+    @DisplayName("applyCategoryJoin: CORE_CULTURE 케이스 경로 커버")
+    void applyCategoryJoin_coreCulture_path() {
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        List<PopularLectureDto> res = repository.getLecturesByCategory(
+                "컴", 2021, PopularLectureCategory.CORE_CULTURE, 1, null);
+        assertThat(res).isEmpty();
+    }
+
+    @Test
+    @DisplayName("applyCategoryJoin: COMMON_CULTURE 케이스 경로 커버")
+    void applyCategoryJoin_commonCulture_path() {
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        List<PopularLectureDto> res = repository.getLecturesByCategory(
+                "컴", 2021, PopularLectureCategory.COMMON_CULTURE, 1, null);
+        assertThat(res).isEmpty();
+    }
+
+    @Test
+    @DisplayName("applyCategoryJoin: BASIC_ACADEMICAL_CULTURE 케이스 경로 커버")
+    void applyCategoryJoin_basicAcademical_path() {
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        // College 매핑에 존재하는 전공/입학년도 사용(예: 응용소프트웨어전공, 24)
+        List<PopularLectureDto> res = repository.getLecturesByCategory(
+                "응용소프트웨어전공", 24, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, 1, null);
+        assertThat(res).isEmpty();
+    }
+
+    @Test
+    @DisplayName("applyCategoryJoin: MANDATORY_MAJOR 케이스 경로 커버")
+    void applyCategoryJoin_mandatory_path() {
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        List<PopularLectureDto> res = repository.getLecturesByCategory(
+                "컴", 2021, PopularLectureCategory.MANDATORY_MAJOR, 1, null);
+        assertThat(res).isEmpty();
+    }
+
+    @Test
+    @DisplayName("applyCategoryJoin: ELECTIVE_MAJOR 케이스 경로 커버")
+    void applyCategoryJoin_elective_path() {
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        List<PopularLectureDto> res = repository.getLecturesByCategory(
+                "컴", 2021, PopularLectureCategory.ELECTIVE_MAJOR, 1, null);
+        assertThat(res).isEmpty();
+    }
+
+    @Test
+    @DisplayName("applyCategoryJoin: 지원하지 않는 카테고리(ALL) → IllegalArgumentException")
+    void applyCategoryJoin_unsupported_all_throws() {
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                repository.getLecturesByCategory("컴", 2021, PopularLectureCategory.ALL, 1, null)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
     
 
     

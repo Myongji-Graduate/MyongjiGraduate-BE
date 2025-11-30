@@ -74,6 +74,27 @@ class PopularLecturesServiceTest {
     assertThat(response.getPrimeSection().getPageInfo().getPageSize()).isEqualTo(limit);
   }
 
+  @DisplayName("초기 섹션이 비어있으면: 빈 프라임 섹션(ALL, lectures=[], hasMore=false)")
+  @Test
+  void getInitPopularLectures_emptySections_returnsEmptyPrime() {
+    // given
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
+    int limit = 10;
+    given(popularLecturePort.getSections(major, entryYear)).willReturn(List.of());
+
+    // when
+    PopularLecturesInitResponse response = service.getInitPopularLectures(major, entryYear, limit, null);
+
+    // then
+    assertThat(response.getSections()).isEmpty();
+    assertThat(response.getPrimeSection().getCategoryName()).isEqualTo(PopularLectureCategory.ALL);
+    assertThat(response.getPrimeSection().getLectures()).isEmpty();
+    assertThat(response.getPrimeSection().getPageInfo().isHasMore()).isFalse();
+    assertThat(response.getPrimeSection().getPageInfo().getNextCursor()).isNull();
+    assertThat(response.getPrimeSection().getPageInfo().getPageSize()).isEqualTo(limit);
+  }
+
   @DisplayName("카테고리 지정: 해당 카테고리 페이지 응답을 반환한다.")
   @Test
   void getPopularLecturesByCategory() {
@@ -178,6 +199,32 @@ class PopularLecturesServiceTest {
     assertThat(resp.getLectures().getFirst().getId()).isEqualTo("LEC-X");
     assertThat(resp.getPageInfo().isHasMore()).isTrue();
     assertThat(resp.getPageInfo().getNextCursor()).isEqualTo("LEC-X");
+  }
+
+  @DisplayName("통합 진입점: category≠ALL이면 byCategory 로직으로 라우팅")
+  @Test
+  void getPopularLectures_nonAll_routesToByCategory() {
+    // given
+    String major = "컴퓨터공학";
+    int entryYear = 2020;
+    int limit = 2;
+    PopularLectureCategory cat = PopularLectureCategory.MANDATORY_MAJOR;
+    List<PopularLectureDto> list = List.of(
+        PopularLectureDto.ofWithAverage("LEC-AA", "운영체제", 3, 80L, cat, 4.1),
+        PopularLectureDto.ofWithAverage("LEC-AB", "컴퓨터구조", 3, 70L, cat, 4.0)
+    );
+    given(popularLecturePort.getLecturesByCategory(major, entryYear, cat, limit, null))
+        .willReturn(list);
+
+    // when
+    PopularLecturesByCategoryResponse resp = service.getPopularLectures(major, entryYear, cat, limit, null);
+
+    // then
+    assertThat(resp.getCategoryName()).isEqualTo(cat);
+    assertThat(resp.getLectures()).hasSize(2);
+    assertThat(resp.getLectures().getFirst().getId()).isEqualTo("LEC-AA");
+    assertThat(resp.getPageInfo().isHasMore()).isFalse();
+    assertThat(resp.getPageInfo().getNextCursor()).isNull();
   }
 
   @DisplayName("기본 인기 강의: 전 카테고리 비어있으면 NoSuchElementException")
