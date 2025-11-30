@@ -70,7 +70,7 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
             double avgVal = (avg == null) ? 0.0 : avg;
 
             return PopularLectureDto.ofWithAverage(id, name, creditVal, totalVal, null, avgVal);
-        }).collect(Collectors.toUnmodifiableList());
+        }).toList();
 
         return categoryResolver.attachWithoutContext(rawResult);
     }
@@ -82,25 +82,27 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
             String major, int entryYear, PopularLectureCategory category, int limit, String cursor) {
         List<Tuple> rows = fetchPopularByCategoryWithKeyset(category, major, entryYear, limit, cursor);
         NumberExpression<Long> countExp = takenLecture.id.count();
-        return rows.stream().map(t -> toDto(t, countExp, category)).collect(Collectors.toUnmodifiableList());
+        return rows.stream().map(t -> toDto(t, countExp, category)).toList();
     }
 
-    // ===== Helpers: keyset paging & mapping =====
 
-    private static class Cursor {
-        final long total; final String lectureId;
-        Cursor(long total, String lectureId) { this.total = total; this.lectureId = lectureId; }
+    private record Cursor(long total, String lectureId) {
     }
 
     private Cursor parseCursor(String raw) {
         if (raw == null || raw.isBlank()) return null;
-        String[] parts = raw.split(":");
-        if (parts.length != 2) return null;
+        int idx = raw.indexOf(':');
+        if (idx < 0) {
+            // id-only cursor (new format)
+            return new Cursor(-1L, raw);
+        }
         try {
-            long total = Long.parseLong(parts[0]);
-            return new Cursor(total, parts[1]);
+            long total = Long.parseLong(raw.substring(0, idx));
+            String id = raw.substring(idx + 1);
+            return new Cursor(total, id);
         } catch (NumberFormatException e) {
-            return null;
+            // Fallback to id-only if prefix isn't a number
+            return new Cursor(-1L, raw.substring(idx + 1));
         }
     }
 
@@ -114,8 +116,14 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
         Cursor c = parseCursor(rawCursor);
         BooleanExpression keysetCond = null;
         if (c != null) {
-            keysetCond = countExp.lt(c.total)
-                    .or(countExp.eq(c.total).and(takenLecture.lecture.id.lt(c.lectureId)));
+            if (c.total >= 0) {
+                // legacy composite cursor: total:id
+                keysetCond = countExp.lt(c.total)
+                        .or(countExp.eq(c.total).and(takenLecture.lecture.id.lt(c.lectureId)));
+            } else {
+                // id-only cursor: use secondary order key
+                keysetCond = takenLecture.lecture.id.lt(c.lectureId);
+            }
         }
 
         JPAQuery<Tuple> query = jpaQueryFactory
@@ -194,26 +202,6 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
         return PopularLectureDto.ofWithAverage(id, name, creditVal, totalVal, category, avgVal);
     }
 
-    private List<PopularLectureDto> legacyInMemorySlice(String major, int entryYear, PopularLectureCategory category, int limit, String cursor) {
-        List<PopularLectureDto> allLectures = getPopularLecturesByTotalCount();
-        List<PopularLectureDto> withCategory = categoryResolver.attachWithContext(allLectures, major, entryYear);
-        List<PopularLectureDto> filtered = withCategory.stream()
-                .filter(dto -> dto.getCategoryName() != null)
-                .filter(dto -> dto.getCategoryName() == category)
-                .collect(Collectors.toList());
-        int startIndex = 0;
-        if (cursor != null) {
-            for (int i = 0; i < filtered.size(); i++) {
-                if (filtered.get(i).getLectureId().equals(cursor)) {
-                    startIndex = i + 1;
-                    break;
-                }
-            }
-        }
-        int endIndex = Math.min(startIndex + limit + 1, filtered.size());
-        return filtered.subList(startIndex, endIndex);
-    }
-
     @Override
     public List<PopularLecturesInitResponse.SectionMeta> getSections(String major, int entryYear) {
         List<PopularLectureDto> allLectures = getPopularLecturesByTotalCount();
@@ -231,6 +219,6 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
                         .total(groupedByCategory.getOrDefault(c, 0L))
                         .build())
                 .filter(meta -> meta.getTotal() > 0)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 }

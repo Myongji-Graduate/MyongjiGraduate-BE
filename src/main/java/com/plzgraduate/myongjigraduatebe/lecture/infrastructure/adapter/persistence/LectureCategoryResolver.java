@@ -25,7 +25,7 @@ public class LectureCategoryResolver {
      * 컨텍스트 없이 단순 카테고리 분류
      */
     public List<PopularLectureDto> attachWithoutContext(List<PopularLectureDto> rawLectures) {
-        List<String> lectureIds = rawLectures.stream().map(PopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
+        List<String> lectureIds = rawLectures.stream().map(PopularLectureDto::getLectureId).toList();
 
         Set<String> majorMandatoryIds =
                 new HashSet<>(majorLectureRepository.findIdsByLectureIdInAndIsMandatory(lectureIds, 1));
@@ -48,7 +48,7 @@ public class LectureCategoryResolver {
                                 basicCultureIds,
                                 commonCultureIds)
                 ))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     /**
@@ -57,7 +57,7 @@ public class LectureCategoryResolver {
     public List<PopularLectureDto> attachWithContext(List<PopularLectureDto> findPopularLectureDto,
                                                      String major,
                                                      int entryYear) {
-        List<String> lectureIds = findPopularLectureDto.stream().map(PopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
+        List<String> lectureIds = findPopularLectureDto.stream().map(PopularLectureDto::getLectureId).toList();
 
         // 1) major → 소속 college
         String college = College
@@ -96,7 +96,7 @@ public class LectureCategoryResolver {
                                 basicCultureIdsByCollege,
                                 commonCultureIdsByYear)
                 ))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     private PopularLectureCategory resolveCategory(String lectureId,

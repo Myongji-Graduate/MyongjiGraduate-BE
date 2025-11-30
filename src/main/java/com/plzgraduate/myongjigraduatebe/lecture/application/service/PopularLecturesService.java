@@ -54,7 +54,7 @@ public class PopularLecturesService implements PopularLecturesUseCase {
 
         List<PopularLectureResponse> lectures = lectureDtos.stream()
                 .map(PopularLectureResponse::from)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
         return PopularLecturesInitResponse.of(
                 sections,
@@ -82,7 +82,7 @@ public class PopularLecturesService implements PopularLecturesUseCase {
 
         List<PopularLectureResponse> lectures = lectureDtos.stream()
                 .map(PopularLectureResponse::from)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
         return PopularLecturesByCategoryResponse.of(
                 category,
@@ -113,7 +113,7 @@ public class PopularLecturesService implements PopularLecturesUseCase {
             if (!lectureDtos.isEmpty()) {
                 List<PopularLectureResponse> lectures = lectureDtos.stream()
                         .map(PopularLectureResponse::from)
-                        .collect(Collectors.toUnmodifiableList());
+                        .toList();
                 return PopularLecturesByCategoryResponse.of(cat, lectures, limit);
             }
         }
