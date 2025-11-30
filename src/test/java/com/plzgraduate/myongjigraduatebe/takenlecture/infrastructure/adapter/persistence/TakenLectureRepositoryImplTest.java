@@ -9,6 +9,7 @@ import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.mockito.Answers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -109,6 +110,67 @@ class TakenLectureRepositoryImplTest {
 
         // then
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("getLecturesByCategory: id-only 커서여도 결과 매핑 정상")
+    @SuppressWarnings("unchecked")
+    void getLecturesByCategory_idOnlyCursor_mapsRows() {
+        // given: 1개 튜플을 반환하도록 구성
+        Tuple tuple = mock(Tuple.class, Answers.RETURNS_DEEP_STUBS);
+        given(mockQuery.fetch()).willReturn(java.util.List.of(tuple));
+
+        // 순차 반환: id, name, credit, total (Expression 기반 get 호출 순서)
+        when(tuple.get((Expression<Object>) any(Expression.class)))
+                .thenReturn("LEC-20")
+                .thenReturn("운영체제")
+                .thenReturn(3)
+                .thenReturn(80L);
+        // index 기반 평균 평점
+        when(tuple.get(eq(4), eq(Double.class))).thenReturn(4.5);
+
+        // when
+        List<PopularLectureDto> result = repository.getLecturesByCategory(
+                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 1, "LEC-10");
+
+        // then
+        assertThat(result).hasSize(1);
+        PopularLectureDto dto = result.getFirst();
+        assertThat(dto.getLectureId()).isEqualTo("LEC-20");
+        assertThat(dto.getLectureName()).isEqualTo("운영체제");
+        assertThat(dto.getCredit()).isEqualTo(3);
+        assertThat(dto.getTotalCount()).isEqualTo(80L);
+        assertThat(dto.getAverageRating()).isEqualTo(4.5);
+        assertThat(dto.getCategoryName()).isEqualTo(PopularLectureCategory.MANDATORY_MAJOR);
+    }
+
+    @Test
+    @DisplayName("getLecturesByCategory: 복합 커서(total:id)도 정상 매핑")
+    @SuppressWarnings("unchecked")
+    void getLecturesByCategory_compositeCursor_mapsRows() {
+        // given
+        Tuple tuple = mock(Tuple.class, Answers.RETURNS_DEEP_STUBS);
+        given(mockQuery.fetch()).willReturn(java.util.List.of(tuple));
+
+        when(tuple.get((Expression<Object>) any(Expression.class)))
+                .thenReturn("LEC-21")
+                .thenReturn("컴퓨터구조")
+                .thenReturn(3)
+                .thenReturn(70L);
+        when(tuple.get(eq(4), eq(Double.class))).thenReturn(4.2);
+
+        // when
+        List<PopularLectureDto> result = repository.getLecturesByCategory(
+                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 1, "80:LEC-20");
+
+        // then
+        assertThat(result).hasSize(1);
+        PopularLectureDto dto = result.getFirst();
+        assertThat(dto.getLectureId()).isEqualTo("LEC-21");
+        assertThat(dto.getLectureName()).isEqualTo("컴퓨터구조");
+        assertThat(dto.getCredit()).isEqualTo(3);
+        assertThat(dto.getTotalCount()).isEqualTo(70L);
+        assertThat(dto.getAverageRating()).isEqualTo(4.2);
     }
 
     @Test

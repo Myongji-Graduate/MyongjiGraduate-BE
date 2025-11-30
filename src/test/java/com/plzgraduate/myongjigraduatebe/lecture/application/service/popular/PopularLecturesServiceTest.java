@@ -2,8 +2,10 @@ package com.plzgraduate.myongjigraduatebe.lecture.application.service.popular;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
@@ -100,6 +102,109 @@ class PopularLecturesServiceTest {
     assertThat(response.getPageInfo().isHasMore()).isTrue();
     assertThat(response.getPageInfo().getNextCursor()).isEqualTo("LEC-20");
     assertThat(response.getPageInfo().getPageSize()).isEqualTo(limit);
+  }
+
+  @DisplayName("카테고리 지정: 데이터 없으면 NoSuchElementException")
+  @Test
+  void getPopularLecturesByCategory_whenEmpty_throwsNoSuchElement() {
+    // given
+    String major = "컴퓨터공학";
+    int entryYear = 2020;
+    PopularLectureCategory category = PopularLectureCategory.MANDATORY_MAJOR;
+
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, category, 10, null))
+        .thenReturn(List.of());
+
+    // when + then
+    org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+            service.getPopularLecturesByCategory(major, entryYear, category, 10, null)
+        ).isInstanceOf(java.util.NoSuchElementException.class);
+  }
+
+  @DisplayName("기본 인기 강의: 첫 비어있지 않은 카테고리를 선택")
+  @Test
+  void getDefaultPopularLectures_picksFirstNonEmptyCategory() {
+    // given
+    String major = "컴퓨터공학";
+    int entryYear = 2020;
+    int limit = 2;
+
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, limit, null))
+        .thenReturn(List.of());
+    List<PopularLectureDto> core = List.of(
+        PopularLectureDto.ofWithAverage("LEC-01", "철학", 2, 10L, PopularLectureCategory.CORE_CULTURE, 4.2),
+        PopularLectureDto.ofWithAverage("LEC-02", "심리학", 2, 8L, PopularLectureCategory.CORE_CULTURE, 4.1),
+        PopularLectureDto.ofWithAverage("LEC-03", "윤리학", 2, 7L, PopularLectureCategory.CORE_CULTURE, 4.0)
+    );
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.CORE_CULTURE, limit, null))
+        .thenReturn(core);
+
+    // when
+    PopularLecturesByCategoryResponse resp = service.getDefaultPopularLectures(major, entryYear, limit, null);
+
+    // then
+    assertThat(resp.getCategoryName()).isEqualTo(PopularLectureCategory.CORE_CULTURE);
+    assertThat(resp.getLectures()).hasSize(2);
+    assertThat(resp.getLectures().getFirst().getId()).isEqualTo("LEC-01");
+    assertThat(resp.getPageInfo().getNextCursor()).isEqualTo("LEC-02");
+    assertThat(resp.getPageInfo().getPageSize()).isEqualTo(limit);
+  }
+
+  @DisplayName("통합 진입점: category=ALL이면 기본 로직으로 라우팅")
+  @Test
+  void getPopularLectures_routesAllToDefault() {
+    // given
+    String major = "컴퓨터공학";
+    int entryYear = 2020;
+    int limit = 1;
+
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, limit, null))
+        .thenReturn(List.of());
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.CORE_CULTURE, limit, null))
+        .thenReturn(List.of());
+    List<PopularLectureDto> list = List.of(
+        PopularLectureDto.ofWithAverage("LEC-X", "데베", 3, 99L, PopularLectureCategory.COMMON_CULTURE, 0.0),
+        PopularLectureDto.ofWithAverage("LEC-Y", "운영체제", 3, 88L, PopularLectureCategory.COMMON_CULTURE, 0.0)
+    );
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.COMMON_CULTURE, limit, null))
+        .thenReturn(list);
+
+    // when
+    PopularLecturesByCategoryResponse resp = service.getPopularLectures(major, entryYear, PopularLectureCategory.ALL, limit, null);
+
+    // then
+    assertThat(resp.getCategoryName()).isEqualTo(PopularLectureCategory.COMMON_CULTURE);
+    assertThat(resp.getLectures()).hasSize(1);
+    assertThat(resp.getLectures().getFirst().getId()).isEqualTo("LEC-X");
+    assertThat(resp.getPageInfo().isHasMore()).isTrue();
+    assertThat(resp.getPageInfo().getNextCursor()).isEqualTo("LEC-X");
+  }
+
+  @DisplayName("기본 인기 강의: 전 카테고리 비어있으면 NoSuchElementException")
+  @Test
+  void getDefaultPopularLectures_allEmpty_throwsNoSuchElement() {
+    // given
+    String major = "컴퓨터공학";
+    int entryYear = 2020;
+    int limit = 2;
+
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, limit, null))
+        .thenReturn(List.of());
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.CORE_CULTURE, limit, null))
+        .thenReturn(List.of());
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.COMMON_CULTURE, limit, null))
+        .thenReturn(List.of());
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.MANDATORY_MAJOR, limit, null))
+        .thenReturn(List.of());
+    when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.ELECTIVE_MAJOR, limit, null))
+        .thenReturn(List.of());
+
+    // when + then
+    org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+        service.getDefaultPopularLectures(major, entryYear, limit, null)
+    )
+    .isInstanceOf(java.util.NoSuchElementException.class)
+    .hasMessage(ErrorCode.NON_EXISTED_LECTURE.toString());
   }
 
 }
