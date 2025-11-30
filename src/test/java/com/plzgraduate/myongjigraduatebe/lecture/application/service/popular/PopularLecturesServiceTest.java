@@ -37,7 +37,7 @@ class PopularLecturesServiceTest {
     int limit = 1;
     String cursor = null;
 
-    PopularLectureCategory first = PopularLectureCategory.NORMAL_CULTURE;
+    PopularLectureCategory first = PopularLectureCategory.CORE_CULTURE;
     List<PopularLecturesInitResponse.SectionMeta> sections = List.of(
         PopularLecturesInitResponse.SectionMeta.builder()
             .categoryName(first)
@@ -64,7 +64,7 @@ class PopularLecturesServiceTest {
     assertThat(response.getSections()).hasSize(2);
     assertThat(response.getPrimeSection().getCategoryName()).isEqualTo(first);
     assertThat(response.getPrimeSection().getLectures()).hasSize(1);
-    PopularLectureResponse only = response.getPrimeSection().getLectures().get(0);
+    PopularLectureResponse only = response.getPrimeSection().getLectures().getFirst();
     assertThat(only.getId()).isEqualTo("LEC-10");
     assertThat(only.getAverageRating()).isEqualTo(0.0);
     assertThat(response.getPrimeSection().getPageInfo().isHasMore()).isTrue();
@@ -96,7 +96,7 @@ class PopularLecturesServiceTest {
     // then
     assertThat(response.getCategoryName()).isEqualTo(category);
     assertThat(response.getLectures()).hasSize(1);
-    assertThat(response.getLectures().get(0).getId()).isEqualTo("LEC-20");
+    assertThat(response.getLectures().getFirst().getId()).isEqualTo("LEC-20");
     assertThat(response.getPageInfo().isHasMore()).isTrue();
     assertThat(response.getPageInfo().getNextCursor()).isEqualTo("LEC-20");
     assertThat(response.getPageInfo().getPageSize()).isEqualTo(limit);

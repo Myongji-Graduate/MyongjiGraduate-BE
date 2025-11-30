@@ -40,86 +40,32 @@ class TakenLectureRepositoryImplTest {
     @BeforeEach
     @SuppressWarnings("unchecked")
     void setUp() {
-        // --- QueryDSL factory.select(...) overloading 대응 ---
-        // select(Expression<?>... exprs) → bytecode 상으로 select(Expression<?>[])
+        // 최소 스텁: select(varargs), from, groupBy(varargs), orderBy(varargs), where/having
         lenient().when(jpaQueryFactory.select(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
                 .thenReturn(mockQuery);
-        // --- Varargs arity-based stubs (Mockito sometimes fails to match varargs-as-array) ---
-        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.select(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        // select(Expression<T> expr) 오버로드 대비
-        lenient().when(jpaQueryFactory.select(any(com.querydsl.core.types.Expression.class)))
-                .thenReturn(mockQuery);
-        // selectDistinct(...) 사용 가능성 대비
-        lenient().when(jpaQueryFactory.selectDistinct(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(jpaQueryFactory.selectDistinct(any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)))
-                .thenReturn(mockQuery);
-        // selectFrom(entity) 사용 가능성 대비
-        lenient().when(jpaQueryFactory.selectFrom((com.querydsl.core.types.EntityPath) any()))
-                .thenReturn((JPAQuery) mockQuery);
+        // repo에서 사용하는 5-arity select(id, name, credit, count, avg)
+        lenient().when(jpaQueryFactory.select(
+                any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)
+        )).thenReturn(mockQuery);
 
-        // --- 공통 체이닝 스텁 ---
+        // varargs 체이닝에서 Mockito 매칭 이슈 방지용 아리티 스텁
+        lenient().when(mockQuery.groupBy(any(Expression.class), any(Expression.class), any(Expression.class)))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.orderBy(
+                any(com.querydsl.core.types.OrderSpecifier.class),
+                any(com.querydsl.core.types.OrderSpecifier.class)
+        )).thenReturn(mockQuery);
+
         lenient().when(mockQuery.from((EntityPath<?>) any())).thenReturn(mockQuery);
-
-        // where/having (varargs)
-        lenient().when(mockQuery.where(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.having(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
-                .thenReturn(mockQuery);
-
-        // groupBy/orderBy (varargs → 배열 매처 필요)
         lenient().when(mockQuery.groupBy(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
                 .thenReturn(mockQuery);
         lenient().when(mockQuery.orderBy(org.mockito.ArgumentMatchers.<com.querydsl.core.types.OrderSpecifier<?>[]>any()))
                 .thenReturn(mockQuery);
-        // --- Varargs arity-based stubs for groupBy ---
-        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class)))
+        lenient().when(mockQuery.where(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
                 .thenReturn(mockQuery);
-        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
+        lenient().when(mockQuery.having(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
                 .thenReturn(mockQuery);
-        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.groupBy(any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class), any(com.querydsl.core.types.Expression.class)))
-                .thenReturn(mockQuery);
-        // --- Varargs arity-based stubs for orderBy ---
-        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
-                .thenReturn(mockQuery);
-        lenient().when(mockQuery.orderBy(any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class), any(com.querydsl.core.types.OrderSpecifier.class)))
-                .thenReturn(mockQuery);
-
-        // limit/offset
-        lenient().when(mockQuery.limit(anyLong())).thenReturn(mockQuery);
-        lenient().when(mockQuery.offset(anyLong())).thenReturn(mockQuery);
-        // fetch()는 각 테스트마다 given(...)으로 주입
+        // fetch()는 각 테스트에서 given(...)으로 설정
     }
 
     
@@ -141,7 +87,7 @@ class TakenLectureRepositoryImplTest {
         List<PopularLectureDto> withCategory = List.of(
                 PopularLectureDto.ofWithAverage("LEC-08", "데이터베이스", 3, 50L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
                 PopularLectureDto.ofWithAverage("LEC-10", "선형대수", 3, 30L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
-                PopularLectureDto.ofWithAverage("LEC-11", "철학입문", 2, 25L, PopularLectureCategory.NORMAL_CULTURE, 0.0),
+                PopularLectureDto.ofWithAverage("LEC-11", "철학입문", 2, 25L, PopularLectureCategory.CORE_CULTURE, 0.0),
                 PopularLectureDto.ofWithAverage("LEC-12", "운영체제", 3, 20L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
                 PopularLectureDto.ofWithAverage("LEC-13", "네트워크", 3, 15L, PopularLectureCategory.MANDATORY_MAJOR, 0.0)
         );
@@ -174,7 +120,7 @@ class TakenLectureRepositoryImplTest {
                 PopularLectureDto.ofWithAverage("A", "A1", 3, 100L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
                 PopularLectureDto.ofWithAverage("B", "B1", 3,  90L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
                 PopularLectureDto.ofWithAverage("C", "C1", 3,  80L, PopularLectureCategory.CORE_CULTURE, 0.0),
-                PopularLectureDto.ofWithAverage("D", "D1", 3,  70L, PopularLectureCategory.NORMAL_CULTURE, 0.0)
+                PopularLectureDto.ofWithAverage("D", "D1", 3,  70L, PopularLectureCategory.COMMON_CULTURE, 0.0)
         );
         given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCtx);
 
@@ -190,7 +136,7 @@ class TakenLectureRepositoryImplTest {
                 .filter(s -> s.getCategoryName() == PopularLectureCategory.CORE_CULTURE)
                 .findFirst().orElseThrow().getTotal()).isEqualTo(1);
         assertThat(sections.stream()
-                .filter(s -> s.getCategoryName() == PopularLectureCategory.NORMAL_CULTURE)
+                .filter(s -> s.getCategoryName() == PopularLectureCategory.COMMON_CULTURE)
                 .findFirst().orElseThrow().getTotal()).isEqualTo(1);
     }
 

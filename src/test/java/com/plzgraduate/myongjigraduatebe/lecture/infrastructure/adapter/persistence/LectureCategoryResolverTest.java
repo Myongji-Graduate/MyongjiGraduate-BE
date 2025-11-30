@@ -55,7 +55,8 @@ class LectureCategoryResolverTest {
     assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.MANDATORY_MAJOR).count()).isEqualTo(1);
     assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.ELECTIVE_MAJOR).count()).isEqualTo(1);
     assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.CORE_CULTURE).count()).isEqualTo(1);
-    assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.NORMAL_CULTURE).count()).isEqualTo(1);
+    // 일반교양 제거 정책: 매칭되지 않는 강의는 카테고리 미부여(null)
+    assertThat(result.stream().filter(d -> d.getCategoryName() == null).count()).isEqualTo(1);
   }
 
   @DisplayName("major/entryYear 컨텍스트로 카테고리를 부여한다.")
