@@ -351,8 +351,8 @@ class TakenLectureRepositoryImplTest {
 
         // then: 캡처된 DTO의 기본값 확인
         PopularLectureDto dto = captor.getValue().getFirst();
-        assertThat(dto.getCredit()).isEqualTo(0);
-        assertThat(dto.getTotalCount()).isEqualTo(0L);
+        assertThat(dto.getCredit()).isZero();
+        assertThat(dto.getTotalCount()).isZero();
         assertThat(dto.getAverageRating()).isEqualTo(0.0);
     }
 
@@ -403,8 +403,8 @@ class TakenLectureRepositoryImplTest {
 
         // then
         PopularLectureDto dto = result.getFirst();
-        assertThat(dto.getCredit()).isEqualTo(0);
-        assertThat(dto.getTotalCount()).isEqualTo(0L);
+        assertThat(dto.getCredit()).isZero();
+        assertThat(dto.getTotalCount()).isZero();
         assertThat(dto.getAverageRating()).isEqualTo(0.0);
     }
 
