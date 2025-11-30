@@ -2,7 +2,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.api;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,22 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "GetPopularLecture", description = "필터링 없이 인기 과목 조회하는 API")
+@Tag(name = "GetPopularLecture", description = "인기 과목 카테고리별 조회 API")
 public interface PopularLectureApiPresentation {
-
-    @Operation(summary = "인기 과목 전체 조회",
-            description = "전체 인기 과목을 조회합니다. cursor가 없으면 첫 페이지를, cursor가 있으면 해당 항목 이후부터 limit만큼 반환합니다.")
-    @ApiResponses(
-            @ApiResponse(responseCode = "200",
-                    description = "성공",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PopularLecturesPageResponse.class)))
-    )
-    PopularLecturesPageResponse getPopularLectures(
-            @Parameter(description = "페이지 크기", example = "10")
-            @RequestParam(defaultValue = "10") int limit,
-            @Parameter(description = "커서(마지막 항목 id)", example = "KMA02108")
-            @RequestParam(value = "cursor", required = false) String cursor);
 
     @Operation(summary = "인기 과목 카테고리별 조회",
             description = "category=ALL이면 초기 섹션(sections + primeSection), 특정 카테고리를 지정하면 해당 카테고리 페이지를 반환합니다.")

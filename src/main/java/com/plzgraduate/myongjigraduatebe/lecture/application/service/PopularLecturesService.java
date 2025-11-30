@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.application.service;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
@@ -22,22 +21,6 @@ public class PopularLecturesService implements PopularLecturesUseCase {
 
     private final PopularLecturePort popularLecturePort;
     
-
-    @Override
-    public List<PopularLectureDto> getPopularLecturesByTotalCount() {
-        return popularLecturePort.getPopularLecturesByTotalCount();
-    }
-
-    @Override
-    public PopularLecturesPageResponse getPopularLectures(int limit, String cursor) {
-        List<PopularLectureDto> slice = popularLecturePort.getPopularLecturesSlice(limit, cursor);
-
-        List<PopularLectureResponse> pageItems = slice.stream()
-                .map(PopularLectureResponse::from)
-                .collect(Collectors.toUnmodifiableList());
-
-        return PopularLecturesPageResponse.of(pageItems, limit);
-    }
 
     @Override
     public PopularLecturesInitResponse getInitPopularLectures(

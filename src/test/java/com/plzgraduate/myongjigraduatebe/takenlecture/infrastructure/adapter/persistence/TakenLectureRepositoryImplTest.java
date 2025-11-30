@@ -122,26 +122,7 @@ class TakenLectureRepositoryImplTest {
         // fetch()는 각 테스트마다 given(...)으로 주입
     }
 
-    @Test
-    @DisplayName("getPopularLecturesByTotalCount: resolver 반환을 그대로 돌려준다")
-    void getPopularLecturesByTotalCount_returnsAttached() {
-        // given: 내부 쿼리 결과는 비워두고, resolver가 반환하는 값만 검증
-        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
-
-        List<PopularLectureDto> attached = List.of(
-                PopularLectureDto.ofWithAverage("LEC-1", "알고리즘", 3, 10L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
-                PopularLectureDto.ofWithAverage("LEC-2", "자료구조", 3, 9L, PopularLectureCategory.ELECTIVE_MAJOR, 0.0)
-        );
-        given(categoryResolver.attachWithoutContext(anyList())).willReturn(attached);
-
-        // when
-        List<PopularLectureDto> result = repository.getPopularLecturesByTotalCount();
-
-        // then
-        assertThat(result).isEqualTo(attached);
-        verify(categoryResolver).attachWithoutContext(anyList());
-        verify(mockQuery).fetch();
-    }
+    
 
     @Test
     @DisplayName("getLecturesByCategory: cursor/limit 적용 후 카테고리 필터링")
@@ -213,55 +194,7 @@ class TakenLectureRepositoryImplTest {
                 .findFirst().orElseThrow().getTotal()).isEqualTo(1);
     }
 
-    @Test
-    @DisplayName("getPopularLecturesSlice: cursor/limit로 서브리스트를 반환한다")
-    void getPopularLecturesSlice_returnsSubListByCursor() {
-        // given: 전체 목록을 스파이로 스텁
-        TakenLectureRepositoryImpl spyRepo = spy(repository);
-        List<PopularLectureDto> all = List.of(
-                PopularLectureDto.ofWithAverage("A", "A", 3, 100L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
-                PopularLectureDto.ofWithAverage("B", "B", 3,  90L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
-                PopularLectureDto.ofWithAverage("C", "C", 3,  80L, PopularLectureCategory.CORE_CULTURE, 0.0),
-                PopularLectureDto.ofWithAverage("D", "D", 3,  70L, PopularLectureCategory.NORMAL_CULTURE, 0.0)
-        );
-        doReturn(all).when(spyRepo).getPopularLecturesByTotalCount();
+    
 
-        // when: limit=2, cursor=B → C, D, (limit+1이라 3개 반환)
-        List<PopularLectureDto> slice = spyRepo.getPopularLecturesSlice(2, "B");
-
-        // then
-        assertThat(slice).extracting(PopularLectureDto::getLectureId)
-                .containsExactly("C", "D");
-    }
-
-    @Test
-    @DisplayName("getPopularLecturesByTotalCount: Tuple 매핑 null-safe 처리")
-    void getPopularLecturesByTotalCount_nullSafetyOnTupleMapping() {
-        // given: 단일 튜플을 반환하며, credit/total/avg는 null로 내려온다고 가정
-        Tuple tuple = mock(Tuple.class);
-        given(mockQuery.fetch()).willReturn(List.of(tuple));
-
-        // id, name, credit는 Q타입으로 스텁 (repo내에서 동일 인스턴스 사용)
-        var taken = com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.QTakenLectureJpaEntity.takenLectureJpaEntity;
-        when(tuple.get(taken.lecture.id)).thenReturn("LEC-X");
-        when(tuple.get(taken.lecture.name)).thenReturn("이름X");
-        when(tuple.get(taken.lecture.credit)).thenReturn(null);
-        // count/avg 등은 스텁하지 않아 기본값(null) 반환되도록 둔다
-
-        // resolver는 입력을 그대로 돌려주게 설정
-        given(categoryResolver.attachWithoutContext(anyList()))
-                .willAnswer(inv -> inv.getArgument(0));
-
-        // when
-        List<PopularLectureDto> result = repository.getPopularLecturesByTotalCount();
-
-        // then: null이던 값들이 0/0L/0.0으로 안전 매핑되었는지 확인
-        assertThat(result).hasSize(1);
-        PopularLectureDto dto = result.get(0);
-        assertThat(dto.getLectureId()).isEqualTo("LEC-X");
-        assertThat(dto.getLectureName()).isEqualTo("이름X");
-        assertThat(dto.getCredit()).isZero();
-        assertThat(dto.getTotalCount()).isZero();
-        assertThat(dto.getAverageRating()).isEqualTo(0.0);
-    }
+    
 }

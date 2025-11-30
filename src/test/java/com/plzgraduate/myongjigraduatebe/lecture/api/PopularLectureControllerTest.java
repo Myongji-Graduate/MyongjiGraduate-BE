@@ -43,70 +43,7 @@ class PopularLectureControllerTest {
         );
     }
 
-    @Test
-    @DisplayName("/popular 첫 페이지: limit=2이면 2개 반환, hasMore=true, nextCursor=두번째ID")
-    void getPopularLectures_firstPage_withHasMore() throws Exception {
-        List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> all = sampleLectureResponses();
-        // service will have done slicing; controller returns what service provides
-        var firstPageSource = List.of(all.get(0), all.get(1), all.get(2));
-        var pageResp = com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse.of(firstPageSource, 2);
-        when(popularLecturesUseCase.getPopularLectures(2, null))
-                .thenReturn(pageResp);
-
-        mockMvc.perform(get("/api/v1/lectures/popular")
-                        .param("limit", "2")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.lectures", hasSize(2)))
-                .andExpect(jsonPath("$.lectures[0].id", is("KMA001")))
-                .andExpect(jsonPath("$.lectures[1].id", is("KMA002")))
-                .andExpect(jsonPath("$.pageInfo.hasMore", is(true)))
-                .andExpect(jsonPath("$.pageInfo.nextCursor", is("KMA002")))
-                .andExpect(jsonPath("$.pageInfo.pageSize", is(2)));
-    }
-
-    @Test
-    @DisplayName("/popular 두번째 페이지: cursor=KMA002, limit=2 → KMA003,KMA004, hasMore=true, nextCursor=KMA004")
-    void getPopularLectures_secondPage_withHasMore() throws Exception {
-        List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> all = sampleLectureResponses();
-        var secondPageSource = List.of(all.get(2), all.get(3), all.get(4));
-        var pageResp = com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse.of(secondPageSource, 2);
-        when(popularLecturesUseCase.getPopularLectures(2, "KMA002"))
-                .thenReturn(pageResp);
-
-        mockMvc.perform(get("/api/v1/lectures/popular")
-                        .param("limit", "2")
-                        .param("cursor", "KMA002")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.lectures", hasSize(2)))
-                .andExpect(jsonPath("$.lectures[0].id", is("KMA003")))
-                .andExpect(jsonPath("$.lectures[1].id", is("KMA004")))
-                .andExpect(jsonPath("$.pageInfo.hasMore", is(true)))
-                .andExpect(jsonPath("$.pageInfo.nextCursor", is("KMA004")))
-                .andExpect(jsonPath("$.pageInfo.pageSize", is(2)));
-    }
-
-    @Test
-    @DisplayName("/popular 마지막 페이지: cursor=KMA004, limit=2 → KMA005만 반환, hasMore=false, nextCursor=null")
-    void getPopularLectures_lastPage_noMore() throws Exception {
-        List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> all = sampleLectureResponses();
-        var lastPageSource = List.of(all.get(4));
-        var pageResp = com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse.of(lastPageSource, 2);
-        when(popularLecturesUseCase.getPopularLectures(2, "KMA004"))
-                .thenReturn(pageResp);
-
-        mockMvc.perform(get("/api/v1/lectures/popular")
-                        .param("limit", "2")
-                        .param("cursor", "KMA004")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.lectures", hasSize(1)))
-                .andExpect(jsonPath("$.lectures[0].id", is("KMA005")))
-                .andExpect(jsonPath("$.pageInfo.hasMore", is(false)))
-                .andExpect(jsonPath("$.pageInfo.nextCursor", nullValue()))
-                .andExpect(jsonPath("$.pageInfo.pageSize", is(2)));
-    }
+    
 
     @Test
     @DisplayName("/popular/by-category 초기: category=ALL → sections + primeSection 반환")

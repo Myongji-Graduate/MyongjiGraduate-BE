@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
@@ -28,22 +27,6 @@ class PopularLecturesServiceTest {
   @InjectMocks
   private PopularLecturesService service;
 
-  @DisplayName("총 수강 횟수 기준 인기 과목 목록을 그대로 반환한다.")
-  @Test
-  void getPopularLecturesByTotalCount() {
-    // given
-    List<PopularLectureDto> dtos = List.of(
-        PopularLectureDto.ofWithAverage("LEC-1", "알고리즘", 3, 120L, PopularLectureCategory.MANDATORY_MAJOR, 0.0),
-        PopularLectureDto.ofWithAverage("LEC-2", "자료구조", 3, 110L, PopularLectureCategory.ELECTIVE_MAJOR, 0.0)
-    );
-    given(popularLecturePort.getPopularLecturesByTotalCount()).willReturn(dtos);
-
-    // when
-    List<PopularLectureDto> result = service.getPopularLecturesByTotalCount();
-
-    // then
-    assertThat(result).containsExactlyElementsOf(dtos);
-  }
 
   @DisplayName("카테고리 미지정 초기 진입: 섹션과 첫 카테고리 페이지를 반환한다.")
   @Test
@@ -119,27 +102,5 @@ class PopularLecturesServiceTest {
     assertThat(response.getPageInfo().getPageSize()).isEqualTo(limit);
   }
 
-  @DisplayName("무한 스크롤: limit+1 슬라이스 → hasMore/nextCursor 계산")
-  @Test
-  void getPopularLectures_paging_hasMore_and_nextCursor() {
-    // given
-    List<PopularLectureDto> slice = List.of(
-        PopularLectureDto.ofWithAverage("KMA001", "과목1", 3, 100L, PopularLectureCategory.NORMAL_CULTURE, 4.2),
-        PopularLectureDto.ofWithAverage("KMA002", "과목2", 3, 90L, PopularLectureCategory.NORMAL_CULTURE, 4.1),
-        PopularLectureDto.ofWithAverage("KMA003", "과목3", 3, 80L, PopularLectureCategory.NORMAL_CULTURE, 3.9)
-    );
-    given(popularLecturePort.getPopularLecturesSlice(2, null)).willReturn(slice);
-
-    // when
-    PopularLecturesPageResponse resp = service.getPopularLectures(2, null);
-
-    // then
-    assertThat(resp.getLectures()).hasSize(2);
-    assertThat(resp.getLectures().get(0).getId()).isEqualTo("KMA001");
-    assertThat(resp.getPageInfo().isHasMore()).isTrue();
-    assertThat(resp.getPageInfo().getNextCursor()).isEqualTo("KMA002");
-    assertThat(resp.getPageInfo().getPageSize()).isEqualTo(2);
-    assertThat(resp.getLectures().get(0).getAverageRating()).isEqualTo(4.2);
-  }
 }
 

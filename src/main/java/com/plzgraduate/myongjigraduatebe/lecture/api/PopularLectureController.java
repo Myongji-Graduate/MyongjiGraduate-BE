@@ -3,7 +3,6 @@ package com.plzgraduate.myongjigraduatebe.lecture.api;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesPageResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Validated
 public class PopularLectureController implements PopularLectureApiPresentation {
     private final PopularLecturesUseCase popularLecturesUseCase;
-
-    @Override
-    @GetMapping
-    public PopularLecturesPageResponse getPopularLectures(
-            @RequestParam(defaultValue = "10") int limit,
-            @RequestParam(value = "cursor", required = false) String cursor
-    ) {
-        return popularLecturesUseCase.getPopularLectures(limit, cursor);
-    }
 
     @Override
     @GetMapping("/by-category")

@@ -22,16 +22,14 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class TakenLectureRepositoryImpl
-        implements TakenLectureRepositoryCustom, PopularLecturePort {
+public class TakenLectureRepositoryImpl implements PopularLecturePort {
 
     private static final QTakenLectureJpaEntity takenLecture = QTakenLectureJpaEntity.takenLectureJpaEntity;
 
     private final JPAQueryFactory jpaQueryFactory;
     private final LectureCategoryResolver categoryResolver;
 
-    @Override
-    public List<PopularLectureDto> getPopularLecturesByTotalCount() {
+    private List<PopularLectureDto> getPopularLecturesByTotalCount() {
         QLectureReviewJpaEntity lectureReviewJpaEntity = QLectureReviewJpaEntity.lectureReviewJpaEntity;
         NumberExpression<Long> countExp = takenLecture.id.count();
         JPQLQuery<Double> avgExpr = JPAExpressions
@@ -69,22 +67,7 @@ public class TakenLectureRepositoryImpl
         return categoryResolver.attachWithoutContext(rawResult);
     }
 
-    @Override
-    public List<PopularLectureDto> getPopularLecturesSlice(int limit, String cursor) {
-        List<PopularLectureDto> all = getPopularLecturesByTotalCount();
-
-        int startIndex = 0;
-        if (cursor != null) {
-            for (int i = 0; i < all.size(); i++) {
-                if (all.get(i).getLectureId().equals(cursor)) {
-                    startIndex = i + 1;
-                    break;
-                }
-            }
-        }
-        int endIndex = Math.min(startIndex + limit + 1, all.size());
-        return all.subList(startIndex, endIndex);
-    }
+    
 
     @Override
     public List<PopularLectureDto> getLecturesByCategory(
