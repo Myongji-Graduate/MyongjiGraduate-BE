@@ -5,8 +5,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecture
  
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 
-import java.util.List;
-
 public interface PopularLecturesUseCase {
 
     /**
@@ -26,6 +24,28 @@ public interface PopularLecturesUseCase {
      */
     PopularLecturesByCategoryResponse getPopularLecturesByCategory(
             String majors,
+            int entryYear,
+            PopularLectureCategory category,
+            int limit,
+            String cursor
+    );
+
+    /**
+     * category=ALL 요청 시, 섹션을 내려주지 않고 서버가 기본 카테고리를 선택하여
+     * PopularLecturesByCategoryResponse 형태로 반환
+     */
+    PopularLecturesByCategoryResponse getDefaultPopularLectures(
+            String major,
+            int entryYear,
+            int limit,
+            String cursor
+    );
+
+    /**
+     * 통합 진입점: category가 ALL이면 getDefaultPopularLectures, 아니면 getPopularLecturesByCategory로 라우팅
+     */
+    PopularLecturesByCategoryResponse getPopularLectures(
+            String major,
             int entryYear,
             PopularLectureCategory category,
             int limit,

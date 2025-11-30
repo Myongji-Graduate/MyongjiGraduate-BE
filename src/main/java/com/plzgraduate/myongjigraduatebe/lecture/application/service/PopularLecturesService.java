@@ -7,6 +7,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecture
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
+import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +46,7 @@ public class PopularLecturesService implements PopularLecturesUseCase {
         }
 
         // 첫 번째 카테고리
-        PopularLectureCategory firstCategory = sections.get(0).getCategoryName();
+        PopularLectureCategory firstCategory = sections.getFirst().getCategoryName();
 
         // 해당 카테고리 강의 목록
         List<PopularLectureDto> lectureDtos =
@@ -74,6 +76,10 @@ public class PopularLecturesService implements PopularLecturesUseCase {
         List<PopularLectureDto> lectureDtos =
                 popularLecturePort.getLecturesByCategory(major, entryYear, category, limit, cursor);
 
+        if (lectureDtos.isEmpty()) {
+            throw new NoSuchElementException(ErrorCode.NON_EXISTED_LECTURE.toString());
+        }
+
         List<PopularLectureResponse> lectures = lectureDtos.stream()
                 .map(PopularLectureResponse::from)
                 .collect(Collectors.toUnmodifiableList());
@@ -83,5 +89,41 @@ public class PopularLecturesService implements PopularLecturesUseCase {
                 lectures,
                 limit
         );
+    }
+
+    @Override
+    public PopularLecturesByCategoryResponse getDefaultPopularLectures(
+            String major,
+            int entryYear,
+            int limit,
+            String cursor
+    ) {
+        List<PopularLecturesInitResponse.SectionMeta> sections = popularLecturePort.getSections(major, entryYear);
+        if (sections.isEmpty()) {
+            throw new NoSuchElementException(ErrorCode.NON_EXISTED_LECTURE.toString());
+        }
+        PopularLectureCategory firstCategory = sections.get(0).getCategoryName();
+        List<PopularLectureDto> lectureDtos = popularLecturePort.getLecturesByCategory(major, entryYear, firstCategory, limit, cursor);
+        if (lectureDtos.isEmpty()) {
+            throw new NoSuchElementException(ErrorCode.NON_EXISTED_LECTURE.toString());
+        }
+        List<PopularLectureResponse> lectures = lectureDtos.stream()
+                .map(PopularLectureResponse::from)
+                .collect(Collectors.toUnmodifiableList());
+        return PopularLecturesByCategoryResponse.of(firstCategory, lectures, limit);
+    }
+
+    @Override
+    public PopularLecturesByCategoryResponse getPopularLectures(
+            String major,
+            int entryYear,
+            PopularLectureCategory category,
+            int limit,
+            String cursor
+    ) {
+        if (category == PopularLectureCategory.ALL) {
+            return getDefaultPopularLectures(major, entryYear, limit, cursor);
+        }
+        return getPopularLecturesByCategory(major, entryYear, category, limit, cursor);
     }
 }

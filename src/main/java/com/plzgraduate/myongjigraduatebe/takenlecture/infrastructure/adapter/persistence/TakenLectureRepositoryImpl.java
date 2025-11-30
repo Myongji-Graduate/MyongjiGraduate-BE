@@ -79,6 +79,7 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
 
         // 2. 해당 카테고리만 필터링
         List<PopularLectureDto> filtered = withCategory.stream()
+                .filter(dto -> dto.getCategoryName() != null)
                 .filter(dto -> dto.getCategoryName() == category)
                 .collect(Collectors.toList());
 
@@ -104,13 +105,17 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
         List<PopularLectureDto> withCategory = categoryResolver.attachWithContext(allLectures, major, entryYear);
 
         Map<PopularLectureCategory, Long> groupedByCategory = withCategory.stream()
+                .filter(dto -> dto.getCategoryName() != null)
                 .collect(Collectors.groupingBy(PopularLectureDto::getCategoryName, Collectors.counting()));
 
-        return groupedByCategory.entrySet().stream()
-                .map(entry -> PopularLecturesInitResponse.SectionMeta.builder()
-                        .categoryName(entry.getKey())
-                        .total(entry.getValue())
+        // Deterministic order: BASIC -> CORE -> COMMON -> MANDATORY -> ELECTIVE
+        return Arrays.stream(PopularLectureCategory.values())
+                .filter(c -> c != PopularLectureCategory.ALL)
+                .map(c -> PopularLecturesInitResponse.SectionMeta.builder()
+                        .categoryName(c)
+                        .total(groupedByCategory.getOrDefault(c, 0L))
                         .build())
+                .filter(meta -> meta.getTotal() > 0)
                 .collect(Collectors.toUnmodifiableList());
     }
 }

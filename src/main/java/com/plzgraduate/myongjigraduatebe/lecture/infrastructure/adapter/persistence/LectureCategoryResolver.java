@@ -110,6 +110,6 @@ public class LectureCategoryResolver {
         if (coreCultureIds.contains(lectureId)) return CORE_CULTURE;
         if (basicCultureIds.contains(lectureId)) return BASIC_ACADEMICAL_CULTURE;
         if (commonCultureIds.contains(lectureId)) return COMMON_CULTURE;
-        return NORMAL_CULTURE;
+        return null; // 일반교양 제거: 매칭되지 않는 강의는 카테고리 미부여
     }
 }
