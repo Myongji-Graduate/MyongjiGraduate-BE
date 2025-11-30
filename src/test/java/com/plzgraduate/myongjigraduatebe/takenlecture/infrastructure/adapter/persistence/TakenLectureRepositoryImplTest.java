@@ -127,7 +127,7 @@ class TakenLectureRepositoryImplTest {
                 .thenReturn(3)
                 .thenReturn(80L);
         // index 기반 평균 평점
-        when(tuple.get(eq(4), eq(Double.class))).thenReturn(4.5);
+        when(tuple.get(4, Double.class)).thenReturn(4.5);
 
         // when
         List<PopularLectureDto> result = repository.getLecturesByCategory(
@@ -157,7 +157,7 @@ class TakenLectureRepositoryImplTest {
                 .thenReturn("컴퓨터구조")
                 .thenReturn(3)
                 .thenReturn(70L);
-        when(tuple.get(eq(4), eq(Double.class))).thenReturn(4.2);
+        when(tuple.get(4, Double.class)).thenReturn(4.2);
 
         // when
         List<PopularLectureDto> result = repository.getLecturesByCategory(
@@ -256,7 +256,7 @@ class TakenLectureRepositoryImplTest {
                 .thenReturn("알고리즘")
                 .thenReturn(3)
                 .thenReturn(60L);
-        when(tuple.get(eq(4), eq(Double.class))).thenReturn(4.3);
+        when(tuple.get(4, Double.class)).thenReturn(4.3);
 
         // when
         List<PopularLectureDto> result = repository.getLecturesByCategory(
