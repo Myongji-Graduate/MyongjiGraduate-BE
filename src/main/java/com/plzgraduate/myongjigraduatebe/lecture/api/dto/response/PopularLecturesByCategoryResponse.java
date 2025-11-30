@@ -39,8 +39,7 @@ public class PopularLecturesByCategoryResponse {
         String nextCursor = null;
         if (hasMore) {
             PopularLectureResponse last = page.getLast();
-            // composite cursor: totalCount:id (server supports id-only for backward compatibility)
-            nextCursor = last.getTotalCount() + ":" + last.getId();
+            nextCursor = last.getId();
         }
 
         return PopularLecturesByCategoryResponse.builder()
