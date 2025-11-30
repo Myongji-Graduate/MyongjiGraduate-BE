@@ -322,6 +322,105 @@ class TakenLectureRepositoryImplTest {
         ).isInstanceOf(IllegalArgumentException.class);
     }
     
+    @Test
+    @DisplayName("getSections: 튜플 매핑에서 null 값들은 기본값(0,0L,0.0)으로 변환")
+    @SuppressWarnings("unchecked")
+    void getSections_tupleMapping_nulls_defaultValues() {
+        // given: 튜플의 credit/total/avg가 null로 들어오는 경우
+        Tuple t = mock(Tuple.class, Answers.RETURNS_DEEP_STUBS);
+        given(mockQuery.fetch()).willReturn(java.util.List.of(t));
+        when(t.get(any(Expression.class)))
+                .thenReturn("ID2")
+                .thenReturn("이름2")
+                .thenReturn(null)    // credit
+                .thenReturn(null)    // total
+                .thenReturn(null);   // avg
+
+        // attachWithoutContext에 전달된 값을 캡처해서 기본값이 세팅되었는지 확인
+        org.mockito.ArgumentCaptor<java.util.List<PopularLectureDto>> captor =
+                org.mockito.ArgumentCaptor.forClass(java.util.List.class);
+        given(categoryResolver.attachWithoutContext(captor.capture()))
+                .willAnswer(invocation -> invocation.getArgument(0));
+
+        // attachWithContext는 입력값 그대로 반환(카테고리 붙이지 않음)
+        given(categoryResolver.attachWithContext(anyList(), anyString(), anyInt()))
+                .willAnswer(invocation -> invocation.getArgument(0));
+
+        // when
+        repository.getSections("컴퓨터공학", 2021);
+
+        // then: 캡처된 DTO의 기본값 확인
+        PopularLectureDto dto = captor.getValue().getFirst();
+        assertThat(dto.getCredit()).isEqualTo(0);
+        assertThat(dto.getTotalCount()).isEqualTo(0L);
+        assertThat(dto.getAverageRating()).isEqualTo(0.0);
+    }
+
+    @Test
+    @DisplayName("getSections: category=null 항목은 집계에서 제외")
+    void getSections_filtersNullCategory() {
+        // given
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+        List<PopularLectureDto> raw = List.of(
+                PopularLectureDto.ofWithAverage("A", "A1", 3, 100L, null, 0.0)
+        );
+        given(categoryResolver.attachWithoutContext(anyList())).willReturn(raw);
+
+        // withContext에 null 카테고리와 유효 카테고리를 섞어서 반환
+        List<PopularLectureDto> withCtx = List.of(
+                PopularLectureDto.ofWithAverage("A", "A1", 3, 100L, null, 0.0),
+                PopularLectureDto.ofWithAverage("B", "B1", 3,  90L, PopularLectureCategory.MANDATORY_MAJOR, 0.0)
+        );
+        given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCtx);
+
+        // when
+        List<PopularLecturesInitResponse.SectionMeta> sections = repository.getSections("컴퓨터공학", 2021);
+
+        // then: null 카테고리는 제외되어 1개만 집계
+        assertThat(sections).hasSize(1);
+        assertThat(sections.getFirst().getCategoryName()).isEqualTo(PopularLectureCategory.MANDATORY_MAJOR);
+        assertThat(sections.getFirst().getTotal()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("getLecturesByCategory: toDto가 null 값들을 기본값으로 변환")
+    @SuppressWarnings("unchecked")
+    void getLecturesByCategory_nulls_defaults() {
+        // given
+        Tuple tuple = mock(Tuple.class, Answers.RETURNS_DEEP_STUBS);
+        given(mockQuery.fetch()).willReturn(java.util.List.of(tuple));
+
+        when(tuple.get((Expression<Object>) any(Expression.class)))
+                .thenReturn("LEC-99")
+                .thenReturn("임베디드")
+                .thenReturn(null)   // credit
+                .thenReturn(null);  // total
+        when(tuple.get(4, Double.class)).thenReturn(null); // avg
+
+        // when
+        List<PopularLectureDto> result = repository.getLecturesByCategory(
+                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 1, null);
+
+        // then
+        PopularLectureDto dto = result.getFirst();
+        assertThat(dto.getCredit()).isEqualTo(0);
+        assertThat(dto.getTotalCount()).isEqualTo(0L);
+        assertThat(dto.getAverageRating()).isEqualTo(0.0);
+    }
+
+    @Test
+    @DisplayName("getLecturesByCategory: cursor가 공백이면 파싱 null 처리(키셋 미적용)")
+    void getLecturesByCategory_blankCursor_treatedAsNull() {
+        // given
+        given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
+
+        // when: 공백 커서
+        List<PopularLectureDto> result = repository.getLecturesByCategory(
+                "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 1, "   ");
+
+        // then: 예외 없이 정상 빈 리스트
+        assertThat(result).isEmpty();
+    }
 
     
 }
