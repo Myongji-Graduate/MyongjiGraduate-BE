@@ -10,8 +10,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CommonCultureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CoreCultureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.MajorLectureRepository;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +73,7 @@ class LectureCategoryResolverTest {
         PopularLectureDto.ofWithAverage("E", "E", 3, 6, null, 0.0)   // 학기
     );
 
-    given(basicAcademicalCultureRepository.findIdsByLectureIdInAndCollegeIn(anyList(), Collections.unmodifiableSet(any(Set.class))))
+    given(basicAcademicalCultureRepository.findIdsByLectureIdInAndCollegeIn(anyList(), anySet()))
         .willReturn(List.of("E"));
     given(coreCultureRepository.findIdsByLectureIdInAndEntryYearBetween(anyList(), eq(entryYear)))
         .willReturn(List.of("C"));
