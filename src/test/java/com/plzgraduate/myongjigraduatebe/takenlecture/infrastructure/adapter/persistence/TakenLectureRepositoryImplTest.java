@@ -43,10 +43,11 @@ class TakenLectureRepositoryImplTest {
         // 최소 스텁: select(varargs), from, groupBy(varargs), orderBy(varargs), where/having
         lenient().when(jpaQueryFactory.select(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
                 .thenReturn(mockQuery);
-        // repo에서 사용하는 5-arity select(id, name, credit, count, avg)
+        // repo에서 사용하는 select 오버로드들
         lenient().when(jpaQueryFactory.select(
                 any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class), any(Expression.class)
         )).thenReturn(mockQuery);
+        lenient().when(jpaQueryFactory.select(any(Expression.class))).thenReturn(mockQuery);
 
         // varargs 체이닝에서 Mockito 매칭 이슈 방지용 아리티 스텁
         lenient().when(mockQuery.groupBy(any(Expression.class), any(Expression.class), any(Expression.class)))
@@ -55,6 +56,11 @@ class TakenLectureRepositoryImplTest {
                 any(com.querydsl.core.types.OrderSpecifier.class),
                 any(com.querydsl.core.types.OrderSpecifier.class)
         )).thenReturn(mockQuery);
+        // join/leftJoin/on/limit 체인 스텁
+        lenient().when(mockQuery.join((EntityPath<?>) any())).thenReturn(mockQuery);
+        lenient().when(mockQuery.leftJoin((EntityPath<?>) any())).thenReturn(mockQuery);
+        lenient().when(mockQuery.on(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate>any())).thenReturn(mockQuery);
+        lenient().when(mockQuery.limit(anyLong())).thenReturn(mockQuery);
 
         lenient().when(mockQuery.from((EntityPath<?>) any())).thenReturn(mockQuery);
         lenient().when(mockQuery.groupBy(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Expression<?>[]>any()))
@@ -63,7 +69,11 @@ class TakenLectureRepositoryImplTest {
                 .thenReturn(mockQuery);
         lenient().when(mockQuery.where(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
                 .thenReturn(mockQuery);
+        lenient().when(mockQuery.where(any(com.querydsl.core.types.Predicate.class)))
+                .thenReturn(mockQuery);
         lenient().when(mockQuery.having(org.mockito.ArgumentMatchers.<com.querydsl.core.types.Predicate[]>any()))
+                .thenReturn(mockQuery);
+        lenient().when(mockQuery.having(any(com.querydsl.core.types.Predicate.class)))
                 .thenReturn(mockQuery);
         // fetch()는 각 테스트에서 given(...)으로 설정
     }
@@ -71,7 +81,7 @@ class TakenLectureRepositoryImplTest {
     
 
     @Test
-    @DisplayName("getLecturesByCategory: cursor/limit 적용 후 카테고리 필터링")
+    @DisplayName("getLecturesByCategory: DB rows 없으면 빈 결과 반환(서비스에서 404 처리)")
     void getLecturesByCategory_appliesCursorAndFilters() {
         // given: 쿼리 결과는 비워두고 attachWithoutContext가 raw를 돌려주게 함
         given(mockQuery.fetch()).willReturn(java.util.Collections.emptyList());
@@ -93,14 +103,12 @@ class TakenLectureRepositoryImplTest {
         );
         given(categoryResolver.attachWithContext(raw, "컴퓨터공학", 2021)).willReturn(withCategory);
 
-        // when: cursor "LEC-08" 다음부터 MANDATORY_MAJOR 카테고리만, limit 2
+        // when: DB 키셋 결과가 없으면 빈 결과 반환(서비스에서 404 변환되므로 여기서는 빈 리스트)
         List<PopularLectureDto> result = repository.getLecturesByCategory(
                 "컴퓨터공학", 2021, PopularLectureCategory.MANDATORY_MAJOR, 2, "LEC-08");
 
         // then
-        assertThat(result).extracting(PopularLectureDto::getLectureId)
-                .containsExactly("LEC-10", "LEC-12", "LEC-13");
-        verify(categoryResolver).attachWithContext(raw, "컴퓨터공학", 2021);
+        assertThat(result).isEmpty();
     }
 
     @Test

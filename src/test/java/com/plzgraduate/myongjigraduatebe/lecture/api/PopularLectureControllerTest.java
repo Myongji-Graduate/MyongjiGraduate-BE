@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api;
 
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import org.junit.jupiter.api.DisplayName;
@@ -31,17 +30,6 @@ class PopularLectureControllerTest {
 
     @MockBean
     private PopularLecturesUseCase popularLecturesUseCase;
-
-
-    private List<com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse> sampleLectureResponses() {
-        return List.of(
-                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA001").name("과목1").credit(3).averageRating(4.0).totalCount(100L).categoryName(PopularLectureCategory.CORE_CULTURE).build(),
-                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA002").name("과목2").credit(3).averageRating(4.0).totalCount(90L).categoryName(PopularLectureCategory.CORE_CULTURE).build(),
-                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA003").name("과목3").credit(3).averageRating(4.0).totalCount(80L).categoryName(PopularLectureCategory.CORE_CULTURE).build(),
-                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA004").name("과목4").credit(3).averageRating(4.0).totalCount(70L).categoryName(PopularLectureCategory.CORE_CULTURE).build(),
-                com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder().id("KMA005").name("과목5").credit(3).averageRating(4.0).totalCount(60L).categoryName(PopularLectureCategory.CORE_CULTURE).build()
-        );
-    }
 
     
 
@@ -148,15 +136,15 @@ class PopularLectureControllerTest {
         // 3) 다음 카테고리로 전환: MANDATORY_MAJOR, 첫 페이지 2개 노출, hasMore=true
         var thirdItems = List.of(
                 com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder()
-                        .id("HMD001").name("전필1").credit(3).averageRating(4.7).totalCount(150L)
+                        .id("HMD001").name("MANDATORY_MAJOR_1").credit(3).averageRating(4.7).totalCount(150L)
                         .categoryName(PopularLectureCategory.MANDATORY_MAJOR)
                         .build(),
                 com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder()
-                        .id("HMD002").name("전필2").credit(3).averageRating(4.6).totalCount(149L)
+                        .id("HMD002").name("MANDATORY_MAJOR_2").credit(3).averageRating(4.6).totalCount(149L)
                         .categoryName(PopularLectureCategory.MANDATORY_MAJOR)
                         .build(),
                 com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLectureResponse.builder()
-                        .id("HMD003").name("전필3").credit(3).averageRating(4.5).totalCount(148L)
+                        .id("HMD003").name("MANDATORY_MAJOR_3").credit(3).averageRating(4.5).totalCount(148L)
                         .categoryName(PopularLectureCategory.MANDATORY_MAJOR)
                         .build()
         );
