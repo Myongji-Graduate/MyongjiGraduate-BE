@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface PopularLectureApiPresentation {
 
     @Operation(summary = "인기 과목 카테고리별 조회",
-            description = "category=ALL이어도 섹션 없이 서버가 기본 카테고리를 선택해 동일한 형태로 반환합니다.\n"
-                    + "카테고리 고정 순서: 학문기초교양(BASIC_ACADEMICAL_CULTURE) → 핵심교양(CORE_CULTURE) → 공통교양(COMMON_CULTURE) → 전공필수(MANDATORY_MAJOR) → 전공선택(ELECTIVE_MAJOR).\n"
-                    + "ALL 초기 호출 응답의 categoryName을 사용해 무한 스크롤을 이어가며, hasMore=false인 경우 위 고정 순서의 다음 카테고리로 요청을 전환합니다.")
+            description = """
+                    category=ALL이어도 섹션 없이 서버가 기본 카테고리를 선택해 동일한 형태로 반환합니다.
+                    카테고리 고정 순서: 학문기초교양(BASIC_ACADEMICAL_CULTURE) → 핵심교양(CORE_CULTURE) → 공통교양(COMMON_CULTURE) → 전공필수(MANDATORY_MAJOR) → 전공선택(ELECTIVE_MAJOR).
+                    ALL 초기 호출 응답의 categoryName을 사용해 무한 스크롤을 이어가며, hasMore=false인 경우 위 고정 순서의 다음 카테고리로 요청을 전환합니다.""")
     @ApiResponses({
             @ApiResponse(responseCode = "200",
                     description = "성공",
