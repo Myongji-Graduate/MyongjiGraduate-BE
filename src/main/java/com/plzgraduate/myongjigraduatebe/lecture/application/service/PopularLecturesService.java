@@ -98,19 +98,26 @@ public class PopularLecturesService implements PopularLecturesUseCase {
             int limit,
             String cursor
     ) {
-        List<PopularLecturesInitResponse.SectionMeta> sections = popularLecturePort.getSections(major, entryYear);
-        if (sections.isEmpty()) {
-            throw new NoSuchElementException(ErrorCode.NON_EXISTED_LECTURE.toString());
+        // Avoid double work: probe fixed category order and return first non-empty page
+        PopularLectureCategory[] order = new PopularLectureCategory[] {
+                PopularLectureCategory.BASIC_ACADEMICAL_CULTURE,
+                PopularLectureCategory.CORE_CULTURE,
+                PopularLectureCategory.COMMON_CULTURE,
+                PopularLectureCategory.MANDATORY_MAJOR,
+                PopularLectureCategory.ELECTIVE_MAJOR
+        };
+
+        for (PopularLectureCategory cat : order) {
+            List<PopularLectureDto> lectureDtos =
+                    popularLecturePort.getLecturesByCategory(major, entryYear, cat, limit, cursor);
+            if (!lectureDtos.isEmpty()) {
+                List<PopularLectureResponse> lectures = lectureDtos.stream()
+                        .map(PopularLectureResponse::from)
+                        .collect(Collectors.toUnmodifiableList());
+                return PopularLecturesByCategoryResponse.of(cat, lectures, limit);
+            }
         }
-        PopularLectureCategory firstCategory = sections.get(0).getCategoryName();
-        List<PopularLectureDto> lectureDtos = popularLecturePort.getLecturesByCategory(major, entryYear, firstCategory, limit, cursor);
-        if (lectureDtos.isEmpty()) {
-            throw new NoSuchElementException(ErrorCode.NON_EXISTED_LECTURE.toString());
-        }
-        List<PopularLectureResponse> lectures = lectureDtos.stream()
-                .map(PopularLectureResponse::from)
-                .collect(Collectors.toUnmodifiableList());
-        return PopularLecturesByCategoryResponse.of(firstCategory, lectures, limit);
+        throw new NoSuchElementException(ErrorCode.NON_EXISTED_LECTURE.toString());
     }
 
     @Override

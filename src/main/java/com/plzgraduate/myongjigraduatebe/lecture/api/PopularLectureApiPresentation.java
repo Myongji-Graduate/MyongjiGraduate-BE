@@ -1,7 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.lecture.api;
 
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesByCategoryResponse;
-import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.PopularLecturesInitResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,7 +35,7 @@ public interface PopularLectureApiPresentation {
                     )
             )
     })
-    ResponseEntity<?> getPopularLecturesByCategory(
+    ResponseEntity<PopularLecturesByCategoryResponse> getPopularLecturesByCategory(
             @Parameter(description = "전공(정확한 전공명)", example = "응용소프트웨어전공")
             @RequestParam("major") String major,
             @Parameter(description = "입학년도(2자리)", example = "20")
