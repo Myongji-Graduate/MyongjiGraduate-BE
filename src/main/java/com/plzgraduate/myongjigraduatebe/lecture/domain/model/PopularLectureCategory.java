@@ -13,7 +13,6 @@ public enum PopularLectureCategory {
     BASIC_ACADEMICAL_CULTURE("학문기초교양"),
     CORE_CULTURE("핵심교양"),
     COMMON_CULTURE("공통교양"),
-    NORMAL_CULTURE("일반교양"),
     MANDATORY_MAJOR("전공필수"),
     ELECTIVE_MAJOR("전공선택");
 

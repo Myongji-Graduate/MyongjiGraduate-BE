@@ -35,7 +35,7 @@ class PopularLectureCategoryTest {
         assertThat(PopularLectureCategory.CORE_CULTURE.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
         assertThat(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
         assertThat(PopularLectureCategory.COMMON_CULTURE.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
-        assertThat(PopularLectureCategory.NORMAL_CULTURE.checkMandatoryIfSeperatedByMandatoryAndElective()).isFalse();
+        // NORMAL_CULTURE 제거됨
     }
 
     @Test
@@ -48,7 +48,7 @@ class PopularLectureCategoryTest {
         assertThat(PopularLectureCategory.CORE_CULTURE.name()).isEqualTo("CORE_CULTURE");
         assertThat(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE.name()).isEqualTo("BASIC_ACADEMICAL_CULTURE");
         assertThat(PopularLectureCategory.COMMON_CULTURE.name()).isEqualTo("COMMON_CULTURE");
-        assertThat(PopularLectureCategory.NORMAL_CULTURE.name()).isEqualTo("NORMAL_CULTURE");
+        // NORMAL_CULTURE 제거됨
     }
 }
 

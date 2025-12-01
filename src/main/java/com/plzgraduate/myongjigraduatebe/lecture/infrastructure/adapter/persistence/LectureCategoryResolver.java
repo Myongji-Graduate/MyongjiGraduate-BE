@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory.*;
 
@@ -25,7 +24,7 @@ public class LectureCategoryResolver {
      * 컨텍스트 없이 단순 카테고리 분류
      */
     public List<PopularLectureDto> attachWithoutContext(List<PopularLectureDto> rawLectures) {
-        List<String> lectureIds = rawLectures.stream().map(PopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
+        List<String> lectureIds = rawLectures.stream().map(PopularLectureDto::getLectureId).toList();
 
         Set<String> majorMandatoryIds =
                 new HashSet<>(majorLectureRepository.findIdsByLectureIdInAndIsMandatory(lectureIds, 1));
@@ -48,7 +47,7 @@ public class LectureCategoryResolver {
                                 basicCultureIds,
                                 commonCultureIds)
                 ))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     /**
@@ -57,7 +56,7 @@ public class LectureCategoryResolver {
     public List<PopularLectureDto> attachWithContext(List<PopularLectureDto> findPopularLectureDto,
                                                      String major,
                                                      int entryYear) {
-        List<String> lectureIds = findPopularLectureDto.stream().map(PopularLectureDto::getLectureId).collect(Collectors.toUnmodifiableList());
+        List<String> lectureIds = findPopularLectureDto.stream().map(PopularLectureDto::getLectureId).toList();
 
         // 1) major → 소속 college
         String college = College
@@ -96,7 +95,7 @@ public class LectureCategoryResolver {
                                 basicCultureIdsByCollege,
                                 commonCultureIdsByYear)
                 ))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     private PopularLectureCategory resolveCategory(String lectureId,
@@ -110,6 +109,6 @@ public class LectureCategoryResolver {
         if (coreCultureIds.contains(lectureId)) return CORE_CULTURE;
         if (basicCultureIds.contains(lectureId)) return BASIC_ACADEMICAL_CULTURE;
         if (commonCultureIds.contains(lectureId)) return COMMON_CULTURE;
-        return NORMAL_CULTURE;
+        return null; // 일반교양 제거: 매칭되지 않는 강의는 카테고리 미부여
     }
 }
