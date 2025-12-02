@@ -34,8 +34,8 @@ class PopularLecturesServiceTest {
   @Test
   void getInitPopularLectures() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     int limit = 1;
     String cursor = null;
 
@@ -99,8 +99,8 @@ class PopularLecturesServiceTest {
   @Test
   void getPopularLecturesByCategory() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     PopularLectureCategory category = PopularLectureCategory.MANDATORY_MAJOR;
     int limit = 1;
     String cursor = null;
@@ -129,8 +129,8 @@ class PopularLecturesServiceTest {
   @Test
   void getPopularLecturesByCategory_whenEmpty_throwsNoSuchElement() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     PopularLectureCategory category = PopularLectureCategory.MANDATORY_MAJOR;
 
     when(popularLecturePort.getLecturesByCategory(major, entryYear, category, 10, null))
@@ -146,8 +146,8 @@ class PopularLecturesServiceTest {
   @Test
   void getDefaultPopularLectures_picksFirstNonEmptyCategory() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     int limit = 2;
 
     when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, limit, null))
@@ -175,8 +175,8 @@ class PopularLecturesServiceTest {
   @Test
   void getPopularLectures_routesAllToDefault() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     int limit = 1;
 
     when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, limit, null))
@@ -205,8 +205,8 @@ class PopularLecturesServiceTest {
   @Test
   void getPopularLectures_nonAll_routesToByCategory() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     int limit = 2;
     PopularLectureCategory cat = PopularLectureCategory.MANDATORY_MAJOR;
     List<PopularLectureDto> list = List.of(
@@ -231,8 +231,8 @@ class PopularLecturesServiceTest {
   @Test
   void getDefaultPopularLectures_allEmpty_throwsNoSuchElement() {
     // given
-    String major = "컴퓨터공학";
-    int entryYear = 2020;
+    String major = "응용소프트웨어전공";
+    int entryYear = 24;
     int limit = 2;
 
     when(popularLecturePort.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, limit, null))
