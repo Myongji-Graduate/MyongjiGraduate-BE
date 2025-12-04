@@ -39,4 +39,6 @@ public interface BasicAcademicalCultureRepository extends
             @Param("ids") List<String> lectureIds,
             @Param("colleges") Set<String> colleges
     );
+
+    boolean existsByLectureJpaEntity_Id(String lectureId);
 }

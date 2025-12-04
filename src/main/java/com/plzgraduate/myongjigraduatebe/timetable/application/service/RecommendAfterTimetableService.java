@@ -4,9 +4,16 @@ import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
-import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.MajorLectureOfferingPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.MajorMembershipPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.BasicCultureMembershipPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.CoreCultureMembershipPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.CommonCultureMembershipPort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLectureOffering;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.RecommendAfterTimetableResponse;
 import com.plzgraduate.myongjigraduatebe.timetable.application.port.RequirementSnapshotQueryPort;
 import com.plzgraduate.myongjigraduatebe.timetable.application.usecase.RecommendAfterTimetableUseCase;
@@ -14,6 +21,7 @@ import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -22,9 +30,13 @@ import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
+@Slf4j
 public class RecommendAfterTimetableService implements RecommendAfterTimetableUseCase {
 
     private static final int MAX_PER_SEMESTER = 18;
+    // 한 학기 target 학점 대비, 한 과목 정도 초과 허용(예: 2 남았는데 3학점 과목)
+    private static final int MAX_SEMESTER_SLACK = 3;
+    private static final int MAX_POPULARITY_CONSIDERED = 300;
     private static final String CHAPEL_CODE = "KMA02101";
 
     private final FindUserPort findUserPort;
@@ -38,6 +50,11 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     private final FindLecturePort findLecturePort;
     private final RecommendedLectureExtractor recommendedLectureExtractor;
     private final MajorLectureOfferingPort majorLectureOfferingPort;
+    private final PopularLecturePort popularLecturePort;
+    private final MajorMembershipPort majorMembershipPort;
+    private final BasicCultureMembershipPort basicCultureMembershipPort;
+    private final CoreCultureMembershipPort coreCultureMembershipPort;
+    private final CommonCultureMembershipPort commonCultureMembershipPort;
 
     private DetailRequirementContext buildDetailRequirementContext(Long userId, RequirementSnapshot snapshot, User user) {
         Map<DetailKey, DetailRequirement> requirements = new LinkedHashMap<>();
@@ -234,6 +251,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         DetailRequirementContext detailRequirementContext = buildDetailRequirementContext(userId, snapshot, user);
         Map<String, DetailKey> detailKeyByLectureId = detailRequirementContext.lectureToDetailKey();
         Map<DetailKey, Integer> deficits = detailRequirementContext.remainingCredits();
+        applyPopularityOrdering(user, availableLectures, detailKeyByLectureId);
 
         List<RecommendAfterTimetableResponse.SemesterBlock> semesters = planSemesters(
                 new PlanningArgs(
@@ -279,6 +297,126 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 })
                 .sorted(Comparator.comparing(Lecture::getId))
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void applyPopularityOrdering(User user,
+                                         List<Lecture> availableLectures,
+                                         Map<String, DetailKey> detailKeyByLectureId) {
+        if (availableLectures == null || availableLectures.isEmpty()) return;
+        Map<String, Integer> ranking = buildPopularityRanking(user, detailKeyByLectureId);
+        if (ranking.isEmpty()) return;
+        availableLectures.sort(Comparator
+                .comparingInt((Lecture l) -> ranking.getOrDefault(l.getId(), Integer.MAX_VALUE))
+                .thenComparing(Lecture::getId));
+    }
+
+    private Map<String, Integer> buildPopularityRanking(User user,
+                                                        Map<String, DetailKey> detailKeyByLectureId) {
+        if (popularLecturePort == null
+                || detailKeyByLectureId == null
+                || detailKeyByLectureId.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Set<GraduationCategory> interestedCategories = detailKeyByLectureId.values().stream()
+                .filter(Objects::nonNull)
+                .map(DetailKey::getGraduationCategory)
+                .collect(Collectors.toSet());
+        if (interestedCategories.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        List<PopularLectureDto> popularLectures;
+        try {
+            popularLectures = popularLecturePort.getPopularLecturesByTotalCount();
+        } catch (RuntimeException e) {
+            log.warn("[RecommendAfter] Failed to load popular lectures: {}", e.getMessage());
+            return Collections.emptyMap();
+        }
+        Map<String, Integer> ranking = new HashMap<>();
+        int rank = 0;
+
+        // 1) 전공별 BASIC_ACADEMICAL_CULTURE: 전공/입학연도 컨텍스트 기반
+        boolean needsBasic =
+                interestedCategories.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE)
+                        || interestedCategories.contains(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
+        if (needsBasic && user != null && user.getPrimaryMajor() != null) {
+            try {
+                List<PopularLectureDto> basicByMajor =
+                        popularLecturePort.getLecturesByCategory(
+                                user.getPrimaryMajor(),
+                                user.getEntryYear(),
+                                PopularLectureCategory.BASIC_ACADEMICAL_CULTURE,
+                                MAX_POPULARITY_CONSIDERED,
+                                null
+                        );
+                if (basicByMajor != null) {
+                    for (PopularLectureDto dto : basicByMajor) {
+                        if (dto == null || dto.getLectureId() == null) continue;
+                        if (ranking.containsKey(dto.getLectureId())) continue;
+                        ranking.put(dto.getLectureId(), rank++);
+                        if (rank >= MAX_POPULARITY_CONSIDERED) break;
+                    }
+                }
+            } catch (RuntimeException e) {
+                log.warn("[RecommendAfter] Failed to load basic-culture popular lectures by major: {}", e.getMessage());
+            }
+        }
+
+        // 2) 나머지 카테고리: 전역 인기순(단, 전공은 deficits 매칭 필요)
+        if (popularLectures != null && !popularLectures.isEmpty()) {
+            for (PopularLectureDto dto : popularLectures) {
+                if (dto == null || dto.getLectureId() == null) continue;
+                if (ranking.containsKey(dto.getLectureId())) continue;
+                PopularLectureCategory popularCategory = dto.getCategoryName();
+                if (popularCategory == null) continue;
+
+                // BASIC은 위에서 전공별로 처리했으니 전역 랭킹에서는 건너뜀
+                if (popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) continue;
+
+                boolean isCultureCategory =
+                        popularCategory == PopularLectureCategory.CORE_CULTURE
+                                || popularCategory == PopularLectureCategory.COMMON_CULTURE
+                                || popularCategory == PopularLectureCategory.NORMAL_CULTURE;
+
+                // 전공(MANDATORY/ELECTIVE) 쪽은 현재 부족한 GraduationCategory와 매칭될 때만 사용
+                if (!isCultureCategory && !matchesInterestedCategory(popularCategory, interestedCategories)) {
+                    continue;
+                }
+
+                ranking.put(dto.getLectureId(), rank++);
+                if (rank >= MAX_POPULARITY_CONSIDERED) break;
+            }
+        }
+        return ranking;
+    }
+
+    private boolean matchesInterestedCategory(PopularLectureCategory popularCategory,
+                                              Set<GraduationCategory> interestedCategories) {
+        for (GraduationCategory graduationCategory : interestedCategories) {
+            if (popularCategoryMatches(popularCategory, graduationCategory)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean popularCategoryMatches(PopularLectureCategory popularCategory,
+                                           GraduationCategory graduationCategory) {
+        return switch (popularCategory) {
+            case MANDATORY_MAJOR -> graduationCategory == GraduationCategory.PRIMARY_MANDATORY_MAJOR
+                    || graduationCategory == GraduationCategory.DUAL_MANDATORY_MAJOR;
+            case ELECTIVE_MAJOR -> graduationCategory == GraduationCategory.PRIMARY_ELECTIVE_MAJOR
+                    || graduationCategory == GraduationCategory.DUAL_ELECTIVE_MAJOR
+                    || graduationCategory == GraduationCategory.SUB_MAJOR;
+            case BASIC_ACADEMICAL_CULTURE -> graduationCategory == GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
+                    || graduationCategory == GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE;
+            case CORE_CULTURE -> graduationCategory == GraduationCategory.CORE_CULTURE;
+            case COMMON_CULTURE -> graduationCategory == GraduationCategory.COMMON_CULTURE;
+            case NORMAL_CULTURE -> graduationCategory == GraduationCategory.NORMAL_CULTURE
+                    || graduationCategory == GraduationCategory.FREE_ELECTIVE;
+            case ALL -> true;
+        };
     }
 
     /**
@@ -634,11 +772,11 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             List<Lecture> availableLectures,
             PickContext ctx
     ) {
-        // 기본 필터: 이미 추천한 과목 제외, 학점 제한, 개설학기 체크
+        // 기본 필터: 이미 추천한 과목 제외, 학점 제한(전공은 최대 +1 허용), 개설학기 체크
         Predicate<Lecture> base = l ->
                 !ctx.recommendedAcross.contains(l.getId()) &&
                         safeCredit(l) > 0 &&
-                        safeCredit(l) <= ctx.remain &&
+                        canTakeCreditWithSlack(l, ctx.remain, ctx.detailKeyByLectureId) &&
                         isOfferedNow(l, ctx.curGrade, ctx.curSemester, ctx.offeringCache, ctx.detailKeyByLectureId);
 
         // ---------------------------------------------------------------------
@@ -672,8 +810,21 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
         // ---------------------------------------------------------------------
         // 3) deficits가 남아 있으면 → deficits 줄일 수 있는 과목만 일반 pool에서 선택
+        //    - NORMAL_CULTURE / FREE_ELECTIVE를 채울 때는 "진짜 일반교양(NORMAL_CULTURE)"을 우선 사용
         // ---------------------------------------------------------------------
         if (!ctx.deficits.isEmpty()) {
+            // (a) NORMAL_CULTURE / FREE_ELECTIVE 부족이면 먼저 NORMAL_CULTURE 과목만 시도
+            if (needsPureNormalCultureFirst(ctx.deficits)) {
+                next = pickAndRemoveFirst(
+                        availableLectures,
+                        base.and(l -> !isChapel(l))
+                                .and(l -> hasRemainingDeficit(l, ctx.detailKeyByLectureId, ctx.deficits))
+                                .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId))
+                );
+                if (next != null) return next;
+            }
+
+            // (b) 그 외 또는 위에서 못 찾았으면 기존 로직대로 deficits 줄일 수 있는 아무 과목
             next = pickAndRemoveFirst(
                     availableLectures,
                     base.and(l -> !isChapel(l))
@@ -683,11 +834,12 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         }
 
         // ---------------------------------------------------------------------
-        // 4) deficits를 모두 채운 이후 → 자유롭게 아무 교양/자선부터 채움
+        // 4) deficits를 모두 채운 이후 → 전공/기초/핵심/공통을 제외한 "순수 일반교양"만으로 채움
         // ---------------------------------------------------------------------
         return pickAndRemoveFirst(
                 availableLectures,
                 base.and(l -> !isChapel(l))
+                        .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId))
         );
     }
 
@@ -736,9 +888,74 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         return CHAPEL_CODE.equalsIgnoreCase(code);
     }
 
+    /** NORMAL_CULTURE / FREE_ELECTIVE deficit이 있는지 여부 */
+    private boolean needsPureNormalCultureFirst(Map<DetailKey, Integer> deficits) {
+        if (deficits == null || deficits.isEmpty()) return false;
+        for (DetailKey key : deficits.keySet()) {
+            GraduationCategory cat = key.getGraduationCategory();
+            if (cat == GraduationCategory.NORMAL_CULTURE || cat == GraduationCategory.FREE_ELECTIVE) {
+                Integer left = deficits.get(key);
+                if (left != null && left > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** 이 강의가 "진짜 일반교양(NORMAL_CULTURE)" 카테고리인지 여부
+     *  - 조건:
+     *    1) GraduationCategory.NORMAL_CULTURE 이고
+     *    2) major / basic / core / common 어떤 테이블에도 속하지 않는 강의
+     *  - 단, detailKey 매핑이 없는 경우에도 2)를 만족하면 순수 일반교양으로 인정
+     */
+    private boolean isNormalCultureLecture(Lecture lecture, Map<String, DetailKey> detailKeyByLectureId) {
+        if (lecture == null) return false;
+        String id = lecture.getId();
+        if (id == null) return false;
+
+        // 1) 어떤 전공/기초/핵심/공통 테이블에도 속하지 않는지 확인
+        boolean ownedByStructuredCategory =
+                (majorMembershipPort != null && majorMembershipPort.isMajorLecture(id))
+                        || (basicCultureMembershipPort != null && basicCultureMembershipPort.isBasicLecture(id))
+                        || (coreCultureMembershipPort != null && coreCultureMembershipPort.isCoreLecture(id))
+                        || (commonCultureMembershipPort != null && commonCultureMembershipPort.isCommonLecture(id));
+        if (ownedByStructuredCategory) {
+            return false;
+        }
+
+        if (detailKeyByLectureId == null) {
+            // 매핑 정보가 없으면, 위 조건 하나만으로 순수 일반교양으로 인정
+            return true;
+        }
+
+        DetailKey key = detailKeyByLectureId.get(id);
+        if (key == null) {
+            // GraduationCategory 매핑이 없어도, 전공/기초/핵심/공통에 속하지 않으면 순수 일반교양
+            return true;
+        }
+        return key.getGraduationCategory() == GraduationCategory.NORMAL_CULTURE;
+    }
+
     /** NPE 방지용 크레딧 */
     private int safeCredit(Lecture l) {
         return l.getCredit();
+    }
+
+    /**
+     * 남은 학점(remain) 대비 이 과목을 이번 학기에 배치할 수 있는지 여부.
+     * - 기본: safeCredit(l) <= remain
+     * - 단, 한 과목 정도는 초과를 허용하기 위해 remain + MAX_SEMESTER_SLACK 까지 허용
+     *   (예: remain=2, 3학점 과목 허용 → 학기 target 보다 1학점 초과)
+     */
+    private boolean canTakeCreditWithSlack(
+            Lecture lecture,
+            int remain,
+            Map<String, DetailKey> detailKeyByLectureId
+    ) {
+        int credit = safeCredit(lecture);
+        if (credit <= 0) return false;
+        return credit <= remain + MAX_SEMESTER_SLACK;
     }
 
     /** 카테고리 문자열 해석: 있으면 Enum 이름, 채플이면 CHAPEL, 없으면 '일반교양' */
@@ -759,23 +976,18 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 .build();
     }
 
-    // ===== 기존 보조 컴포넌트(그대로 사용) =====
+    //
     public interface RemainingCreditsProvider {
         OptionalInt get(User user);
     }
 
-    // NOTE: takenCredit can include 0.5 (chapel). Use double math and ceil to avoid truncation.
     @Component
     public static class DefaultRemainingCreditsProvider implements RemainingCreditsProvider {
         @Override
         public OptionalInt get(User user) {
-            // total is defined by school policy (integer credits)
             int total = user.getTotalCredit();
-
-            // taken can be fractional (e.g., 0.5 for chapel); DO NOT cast to int
             double taken = user.getTakenCredit();
 
-            // Remaining can be fractional; for planning, round up to next int credit
             double remainingDouble = Math.max(0.0, total - taken);
             int remainingInt = (int) Math.ceil(remainingDouble);
 
