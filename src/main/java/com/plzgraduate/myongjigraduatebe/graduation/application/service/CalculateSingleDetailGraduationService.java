@@ -7,6 +7,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduati
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGraduationStrategyFactory;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
@@ -25,6 +26,7 @@ public class CalculateSingleDetailGraduationService implements
 	private final FindUserUseCase findUserUseCase;
 	private final FindTakenLectureUseCase findTakenLectureUseCase;
 	private final List<CalculateDetailGraduationUseCase> calculateDetailGraduationUseCases;
+	private final StudentGraduationStrategyFactory strategyFactory;
 
 	@Override
 	public DetailGraduationResult calculateSingleDetailGraduation(Long userId,
@@ -55,6 +57,7 @@ public class CalculateSingleDetailGraduationService implements
 		College userCollage = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
 		DefaultGraduationRequirementType defaultGraduationRequirement = DefaultGraduationRequirementType.determineGraduationRequirement(
 			userCollage, user);
-		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
+		return strategyFactory.getStrategy(user.getStudentCategory())
+			.createGraduationRequirement(user, defaultGraduationRequirement);
 	}
 }

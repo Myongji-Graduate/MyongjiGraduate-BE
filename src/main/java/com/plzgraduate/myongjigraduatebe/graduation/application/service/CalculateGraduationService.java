@@ -9,6 +9,8 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduatio
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGraduationStrategy;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGraduationStrategyFactory;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -17,7 +19,6 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateS
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private final CalculateBasicAcademicalCultureGraduationService calculateBasicAcademicalCultureGraduationService;
 	private final CalculateMajorGraduationService calculateMajorGraduationService;
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
+	private final StudentGraduationStrategyFactory strategyFactory;
 
 
 	@Override
@@ -99,7 +101,8 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		College userCollage = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
 		DefaultGraduationRequirementType defaultGraduationRequirement =
 			DefaultGraduationRequirementType.determineGraduationRequirement(userCollage, user);
-		return defaultGraduationRequirement.convertToProfitGraduationRequirement(user);
+		StudentGraduationStrategy strategy = strategyFactory.getStrategy(user.getStudentCategory());
+		return strategy.createGraduationRequirement(user, defaultGraduationRequirement);
 	}
 
 	public ChapelResult generateChapelResult(
@@ -119,37 +122,43 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		TakenLectureInventory takenLectureInventory,
 		GraduationRequirement graduationRequirement
 	) {
-		List<DetailGraduationResult> detailGraduationResults = new ArrayList<>();
-		if (user.getStudentCategory() == StudentCategory.TRANSFER) {
-			detailGraduationResults.add(
-				generateTransferChristianDetailGraduationResult(
-					user,
-					graduationRequirement,
-					takenLectureInventory
-				)
-			);
-		} else {
-			detailGraduationResults.addAll(List.of(
-				generateCommonCultureDetailGraduationResult(
-					user, takenLectureInventory, graduationRequirement
-				),
-				generateCoreCultureDetailGraduationResult(
-					user, takenLectureInventory, graduationRequirement
-				)
-			));
-			detailGraduationResults.addAll(
-				generateBasicAcademicalDetailGraduationResult(
-					user, takenLectureInventory, graduationRequirement
-				)
-			);
-		}
-		detailGraduationResults.addAll(
-			generateMajorDetailGraduationResult(
-				user, takenLectureInventory, graduationRequirement
-			)
-		);
+		StudentGraduationStrategy strategy = strategyFactory.getStrategy(user.getStudentCategory());
+		StudentGraduationStrategy.DetailGraduationResultGenerator generator =
+			new StudentGraduationStrategy.DetailGraduationResultGenerator() {
+				@Override
+				public DetailGraduationResult generateCommonCulture(User user,
+					TakenLectureInventory inventory, GraduationRequirement requirement) {
+					return generateCommonCultureDetailGraduationResult(user, inventory, requirement);
+				}
 
-		return detailGraduationResults;
+				@Override
+				public DetailGraduationResult generateCoreCulture(User user,
+					TakenLectureInventory inventory, GraduationRequirement requirement) {
+					return generateCoreCultureDetailGraduationResult(user, inventory, requirement);
+				}
+
+				@Override
+				public List<DetailGraduationResult> generateBasicAcademicalCulture(User user,
+					TakenLectureInventory inventory, GraduationRequirement requirement) {
+					return generateBasicAcademicalDetailGraduationResult(user, inventory, requirement);
+				}
+
+				@Override
+				public List<DetailGraduationResult> generateMajor(User user,
+					TakenLectureInventory inventory, GraduationRequirement requirement) {
+					return generateMajorDetailGraduationResult(user, inventory, requirement);
+				}
+
+				@Override
+				public DetailGraduationResult generateTransferChristian(User user,
+					TakenLectureInventory inventory, GraduationRequirement requirement) {
+					return generateTransferChristianDetailGraduationResult(user, requirement, inventory);
+				}
+			};
+
+		return strategy.generateDetailGraduationResults(
+			user, takenLectureInventory, graduationRequirement, generator
+		);
 	}
 
 	private DetailGraduationResult generateCommonCultureDetailGraduationResult(
