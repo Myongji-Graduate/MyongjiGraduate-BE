@@ -37,7 +37,8 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
     private final JPAQueryFactory jpaQueryFactory;
     private final LectureCategoryResolver categoryResolver;
 
-    private List<PopularLectureDto> getPopularLecturesByTotalCount() {
+    @Override
+    public List<PopularLectureDto> getPopularLecturesByTotalCount() {
         QLectureReviewJpaEntity lectureReviewJpaEntity = QLectureReviewJpaEntity.lectureReviewJpaEntity;
         NumberExpression<Long> countExp = takenLecture.id.count();
         JPQLQuery<Double> avgExpr = JPAExpressions
