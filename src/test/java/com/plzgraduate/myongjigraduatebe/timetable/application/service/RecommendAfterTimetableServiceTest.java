@@ -10,6 +10,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.CommonCultureM
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
+import java.util.HashMap;
 import com.plzgraduate.myongjigraduatebe.timetable.application.port.RequirementSnapshotQueryPort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
@@ -285,6 +286,123 @@ class RecommendAfterTimetableServiceTest {
                 .containsKey("LEC001")
                 .containsKey("LEC002");
         assertThat(result.get("LEC001")).isLessThan(result.get("LEC002")); // 더 인기있는 강의가 낮은 랭크
+    }
+
+    @Test
+    @DisplayName("shouldProcessPopularLecture: null dto는 false 반환")
+    void shouldProcessPopularLecture_nullDto() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "shouldProcessPopularLecture", PopularLectureDto.class, Map.class, Set.class);
+        method.setAccessible(true);
+
+        boolean result = (boolean) method.invoke(sut, null, new HashMap<>(), new HashSet<>());
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("shouldProcessPopularLecture: 이미 ranking에 있으면 false 반환")
+    void shouldProcessPopularLecture_alreadyInRanking() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "shouldProcessPopularLecture", PopularLectureDto.class, Map.class, Set.class);
+        method.setAccessible(true);
+
+        PopularLectureDto dto = PopularLectureDto.builder()
+                .lectureId("LEC001")
+                .categoryName(PopularLectureCategory.CORE_CULTURE)
+                .build();
+        Map<String, Integer> ranking = new HashMap<>();
+        ranking.put("LEC001", 1);
+
+        boolean result = (boolean) method.invoke(sut, dto, ranking, new HashSet<>());
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("shouldProcessPopularLecture: BASIC_ACADEMICAL_CULTURE는 false 반환")
+    void shouldProcessPopularLecture_basicAcademicalCulture() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "shouldProcessPopularLecture", PopularLectureDto.class, Map.class, Set.class);
+        method.setAccessible(true);
+
+        PopularLectureDto dto = PopularLectureDto.builder()
+                .lectureId("LEC001")
+                .categoryName(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE)
+                .build();
+
+        boolean result = (boolean) method.invoke(sut, dto, new HashMap<>(), new HashSet<>());
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("shouldProcessPopularLecture: CORE_CULTURE는 true 반환")
+    void shouldProcessPopularLecture_coreCulture() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "shouldProcessPopularLecture", PopularLectureDto.class, Map.class, Set.class);
+        method.setAccessible(true);
+
+        PopularLectureDto dto = PopularLectureDto.builder()
+                .lectureId("LEC001")
+                .categoryName(PopularLectureCategory.CORE_CULTURE)
+                .build();
+
+        boolean result = (boolean) method.invoke(sut, dto, new HashMap<>(), new HashSet<>());
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("addGlobalPopularLectures: MAX_POPULARITY_CONSIDERED 도달 시 중단")
+    void addGlobalPopularLectures_stopsAtMax() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "addGlobalPopularLectures", List.class, Set.class, Map.class, int.class);
+        method.setAccessible(true);
+
+        PopularLectureDto dto1 = PopularLectureDto.builder()
+                .lectureId("LEC001")
+                .categoryName(PopularLectureCategory.CORE_CULTURE)
+                .build();
+        PopularLectureDto dto2 = PopularLectureDto.builder()
+                .lectureId("LEC002")
+                .categoryName(PopularLectureCategory.COMMON_CULTURE)
+                .build();
+
+        Map<String, Integer> ranking = new HashMap<>();
+        int startRank = 299; // MAX_POPULARITY_CONSIDERED = 300
+
+        method.invoke(sut, List.of(dto1, dto2), new HashSet<>(), ranking, startRank);
+
+        // 첫 번째만 추가되고 두 번째는 MAX 도달로 스킵되어야 함
+        assertThat(ranking).containsKey("LEC001");
+        assertThat(ranking).doesNotContainKey("LEC002");
+    }
+
+    @Test
+    @DisplayName("shouldIncludePopularLecture: CORE_CULTURE는 항상 true")
+    void shouldIncludePopularLecture_coreCulture() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "shouldIncludePopularLecture", PopularLectureCategory.class, Set.class);
+        method.setAccessible(true);
+
+        boolean result = (boolean) method.invoke(sut, PopularLectureCategory.CORE_CULTURE, new HashSet<>());
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("shouldIncludePopularLecture: interestedCategories에 매칭되는 전공 카테고리는 true")
+    void shouldIncludePopularLecture_matchesInterestedCategory() throws Exception {
+        Method method = RecommendAfterTimetableService.class.getDeclaredMethod(
+                "shouldIncludePopularLecture", PopularLectureCategory.class, Set.class);
+        method.setAccessible(true);
+
+        Set<GraduationCategory> interested = Set.of(GraduationCategory.PRIMARY_MANDATORY_MAJOR);
+
+        boolean result = (boolean) method.invoke(sut, PopularLectureCategory.MANDATORY_MAJOR, interested);
+
+        assertThat(result).isTrue();
     }
 
 }
