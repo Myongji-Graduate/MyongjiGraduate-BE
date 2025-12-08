@@ -398,30 +398,44 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
     private int addBasicCultureByMajor(User user, Set<GraduationCategory> interestedCategories,
                                       Map<String, Integer> ranking, int rank) {
-        boolean needsBasic = interestedCategories.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE)
-                || interestedCategories.contains(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
-        if (!needsBasic || user == null || user.getPrimaryMajor() == null) {
+        if (!shouldAddBasicCultureByMajor(user, interestedCategories)) {
             return rank;
         }
 
         try {
-            List<PopularLectureDto> basicByMajor = popularLecturePort.getLecturesByCategory(
-                    user.getPrimaryMajor(),
-                    user.getEntryYear(),
-                    PopularLectureCategory.BASIC_ACADEMICAL_CULTURE,
-                    MAX_POPULARITY_CONSIDERED,
-                    null
-            );
+            List<PopularLectureDto> basicByMajor = loadBasicCultureByMajor(user);
             if (basicByMajor != null) {
-                for (PopularLectureDto dto : basicByMajor) {
-                    if (dto == null || dto.getLectureId() == null) continue;
-                    if (ranking.containsKey(dto.getLectureId())) continue;
-                    ranking.put(dto.getLectureId(), rank++);
-                    if (rank >= MAX_POPULARITY_CONSIDERED) break;
-                }
+                rank = processBasicCultureLectures(basicByMajor, ranking, rank);
             }
         } catch (RuntimeException e) {
             log.warn("[RecommendAfter] Failed to load basic-culture popular lectures by major: {}", e.getMessage());
+        }
+        return rank;
+    }
+
+    private boolean shouldAddBasicCultureByMajor(User user, Set<GraduationCategory> interestedCategories) {
+        boolean needsBasic = interestedCategories.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE)
+                || interestedCategories.contains(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
+        return needsBasic && user != null && user.getPrimaryMajor() != null;
+    }
+
+    private List<PopularLectureDto> loadBasicCultureByMajor(User user) {
+        return popularLecturePort.getLecturesByCategory(
+                user.getPrimaryMajor(),
+                user.getEntryYear(),
+                PopularLectureCategory.BASIC_ACADEMICAL_CULTURE,
+                MAX_POPULARITY_CONSIDERED,
+                null
+        );
+    }
+
+    private int processBasicCultureLectures(List<PopularLectureDto> basicByMajor,
+                                            Map<String, Integer> ranking, int rank) {
+        for (PopularLectureDto dto : basicByMajor) {
+            if (dto == null || dto.getLectureId() == null) continue;
+            if (ranking.containsKey(dto.getLectureId())) continue;
+            ranking.put(dto.getLectureId(), rank++);
+            if (rank >= MAX_POPULARITY_CONSIDERED) break;
         }
         return rank;
     }
