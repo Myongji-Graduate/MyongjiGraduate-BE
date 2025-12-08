@@ -200,24 +200,24 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                                       Map<DetailKey, Integer> quota) {
         int gap = sum - remainingCap;
         List<DetailKey> order = new ArrayList<>(quota.keySet());
-        order.sort((a, b) -> {
-            double da = Math.abs(ideal.getOrDefault(a, 0.0) - quota.getOrDefault(a, 0));
-            double db = Math.abs(ideal.getOrDefault(b, 0.0) - quota.getOrDefault(b, 0));
+            order.sort((a, b) -> {
+                double da = Math.abs(ideal.getOrDefault(a, 0.0) - quota.getOrDefault(a, 0));
+                double db = Math.abs(ideal.getOrDefault(b, 0.0) - quota.getOrDefault(b, 0));
             return Double.compare(db, da);
-        });
-        int step = gap > 0 ? -1 : 1;
-        int remain = Math.abs(gap);
-        int idx = 0;
-        while (remain > 0 && !order.isEmpty()) {
+            });
+            int step = gap > 0 ? -1 : 1;
+            int remain = Math.abs(gap);
+            int idx = 0;
+            while (remain > 0 && !order.isEmpty()) {
             DetailKey c = order.get(idx % order.size());
-            int cur = quota.getOrDefault(c, 0) + step;
-            if (cur >= 0) {
-                quota.put(c, cur);
-                remain--;
+                int cur = quota.getOrDefault(c, 0) + step;
+                if (cur >= 0) {
+                    quota.put(c, cur);
+                    remain--;
+                }
+                idx++;
             }
-            idx++;
         }
-    }
 
     private void enforceQuotaLimits(Map<DetailKey, Integer> quota, Map<DetailKey, Integer> deficits) {
         quota.replaceAll((k, v) -> {
