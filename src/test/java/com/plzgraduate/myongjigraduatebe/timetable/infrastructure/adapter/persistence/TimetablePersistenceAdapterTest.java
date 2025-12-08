@@ -50,23 +50,6 @@ class TimetablePersistenceAdapterTest {
     }
 
     @Test
-    @DisplayName("findByKeyword: 이름 like 검색 → Mapper 매핑")
-    void findByKeyword_maps() {
-        int year = 2024; int semester = 1; String keyword = "자료구조";
-        TimetableJpaEntity e = mock(TimetableJpaEntity.class);
-        when(repository.findByYearAndSemesterAndNameContaining(year, semester, keyword))
-                .thenReturn(List.of(e));
-        Timetable d = mock(Timetable.class);
-        when(mapper.mapToDomainEntity(e)).thenReturn(d);
-
-        List<Timetable> result = sut.findByKeyword(year, semester, keyword);
-
-        assertThat(result).containsExactly(d);
-        verify(repository).findByYearAndSemesterAndNameContaining(year, semester, keyword);
-        verify(mapper).mapToDomainEntity(e);
-    }
-
-    @Test
     @DisplayName("searchByCondition: QueryRepository 호출 → Mapper 매핑")
     void searchByCondition_maps() {
         int year = 2023; int semester = 2; CampusFilter campus = CampusFilter.인문;

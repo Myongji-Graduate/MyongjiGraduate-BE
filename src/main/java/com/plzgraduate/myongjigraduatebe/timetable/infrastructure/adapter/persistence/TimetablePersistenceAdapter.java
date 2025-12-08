@@ -29,12 +29,6 @@ public class TimetablePersistenceAdapter implements TimetablePort {
     }
 
     @Override
-    public List<Timetable> findByKeyword(int year, int semester, String keyword) {
-        return repository.findByYearAndSemesterAndNameContaining(year, semester, keyword)
-                .stream().map(mapper::mapToDomainEntity).collect(Collectors.toList());
-    }
-
-    @Override
     public List<Timetable> searchByCondition(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest condition) {
         return timetableQueryRepository.searchByCondition(year, semester, campus, condition).stream()
                 .map(mapper::mapToDomainEntity)

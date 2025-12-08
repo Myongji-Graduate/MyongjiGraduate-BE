@@ -37,11 +37,6 @@ public class FindTimeTableService implements FindTimetableUseCase {
     }
 
     @Override
-    public List<Timetable> findByKeyword(int year, int semester, String keyword) {
-        return timetablePort.findByKeyword(year, semester, keyword);
-    }
-
-    @Override
     public List<Timetable> searchCombined(
             Long userId,
             int year,
