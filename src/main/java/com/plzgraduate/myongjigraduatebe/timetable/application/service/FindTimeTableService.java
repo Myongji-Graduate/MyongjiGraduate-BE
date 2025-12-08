@@ -136,23 +136,25 @@ public class FindTimeTableService implements FindTimetableUseCase {
     @Override
     public FindTimetableUseCase.SearchCombinedResult searchCombinedWithPagination(
             Long userId,
-            int year,
-            int semester,
-            CampusFilter campus,
-            TakenFilter filter,
-            TimetableSearchConditionRequest condition,
-            GraduationCategory recommendedCategory,
-            int page,
-            int limit
+            FindTimetableUseCase.SearchParams searchParams,
+            FindTimetableUseCase.PaginationParams pagination
     ) {
         // 기존 searchCombined 로직을 재사용하여 전체 결과 조회
-        List<Timetable> allResults = searchCombined(userId, year, semester, campus, filter, condition, recommendedCategory);
+        List<Timetable> allResults = searchCombined(
+                userId,
+                searchParams.year(),
+                searchParams.semester(),
+                searchParams.campus(),
+                searchParams.filter(),
+                searchParams.condition(),
+                searchParams.recommendedCategory()
+        );
         
         long totalCount = allResults.size();
         
         // 페이지네이션 적용 (1-based page)
-        int offset = (page - 1) * limit;
-        int endIndex = Math.min(offset + limit, allResults.size());
+        int offset = (pagination.page() - 1) * pagination.limit();
+        int endIndex = Math.min(offset + pagination.limit(), allResults.size());
         
         List<Timetable> paginatedResults = (offset >= allResults.size())
                 ? List.of()

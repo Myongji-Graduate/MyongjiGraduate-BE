@@ -80,7 +80,9 @@ public class TimetableController {
             int limit
     ) {
         FindTimetableUseCase.SearchCombinedResult result = useCase.searchCombinedWithPagination(
-                userId, year, semester, campus, filter, condition, recommendedCategory, page, limit
+                userId,
+                new FindTimetableUseCase.SearchParams(year, semester, campus, filter, condition, recommendedCategory),
+                new FindTimetableUseCase.PaginationParams(page, limit)
         );
         
         List<TimetableResponse> data = result.getData().stream()

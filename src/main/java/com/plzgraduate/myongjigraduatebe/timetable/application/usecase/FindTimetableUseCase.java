@@ -24,15 +24,20 @@ public interface FindTimetableUseCase {
 
     SearchCombinedResult searchCombinedWithPagination(
             Long userId,
+            SearchParams searchParams,
+            PaginationParams pagination
+    );
+
+    record SearchParams(
             int year,
             int semester,
             CampusFilter campus,
             TakenFilter filter,
             TimetableSearchConditionRequest condition,
-            GraduationCategory recommendedCategory,
-            int page,
-            int limit
-    );
+            GraduationCategory recommendedCategory
+    ) {}
+
+    record PaginationParams(int page, int limit) {}
 
     @Getter
     class SearchCombinedResult {

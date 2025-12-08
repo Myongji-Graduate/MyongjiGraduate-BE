@@ -70,7 +70,9 @@ class TimetableControllerTest {
         Timetable t2 = mock(Timetable.class);
         FindTimetableUseCase.SearchCombinedResult searchResult = 
                 new FindTimetableUseCase.SearchCombinedResult(List.of(t1, t2), 2L);
-        when(useCase.searchCombinedWithPagination(userId, year, semester, campus, filter, condition, category, page, limit))
+        when(useCase.searchCombinedWithPagination(userId,
+                new FindTimetableUseCase.SearchParams(year, semester, campus, filter, condition, category),
+                new FindTimetableUseCase.PaginationParams(page, limit)))
                 .thenReturn(searchResult);
 
         TimetableResponse r1 = mock(TimetableResponse.class);
@@ -86,7 +88,9 @@ class TimetableControllerTest {
             assertThat(result.getData()).containsExactly(r1, r2);
             assertThat(result.getTotalCount()).isEqualTo(2L);
             assertThat(result.getNextPage()).isNull(); // 1페이지에 20개 limit, 총 2개이므로 다음 페이지 없음
-            verify(useCase).searchCombinedWithPagination(userId, year, semester, campus, filter, condition, category, page, limit);
+            verify(useCase).searchCombinedWithPagination(userId,
+                    new FindTimetableUseCase.SearchParams(year, semester, campus, filter, condition, category),
+                    new FindTimetableUseCase.PaginationParams(page, limit));
             mocked.verify(() -> TimetableResponse.from(t1));
             mocked.verify(() -> TimetableResponse.from(t2));
         }
