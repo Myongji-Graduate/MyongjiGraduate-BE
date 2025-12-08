@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
@@ -54,7 +53,7 @@ class RecommendedLectureExtractor {
                 .map(Lecture::getId)
                 .filter(Objects::nonNull)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /** 하위호환: 기존 호출부는 미이수(HAVE_TO)로 동작 */
@@ -101,7 +100,7 @@ class RecommendedLectureExtractor {
                 .filter(Objects::nonNull)
                 .map(detail -> createDetailRecommendation(category, detail))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private DetailRecommendation createDetailRecommendation(GraduationCategory category, DetailCategoryResult detail) {
@@ -136,7 +135,7 @@ class RecommendedLectureExtractor {
                 .map(Lecture::getId)
                 .filter(Objects::nonNull)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Getter

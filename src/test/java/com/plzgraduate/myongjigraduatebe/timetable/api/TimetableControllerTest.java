@@ -55,33 +55,6 @@ class TimetableControllerTest {
         }
     }
 
-    // search() 메서드가 주석 처리되어 있어 테스트 제거
-    // @Test
-    // @DisplayName("GET /api/v1/timetable/search: 키워드 검색 결과를 Response로 매핑한다")
-    // void search_mapsResponses() {
-    //     int year = 2025, semester = 2;
-    //     String keyword = "프로그래밍";
-    //
-    //     Timetable t1 = mock(Timetable.class);
-    //     Timetable t2 = mock(Timetable.class);
-    //     when(useCase.findByKeyword(year, semester, keyword)).thenReturn(List.of(t1, t2));
-    //
-    //     TimetableResponse r1 = mock(TimetableResponse.class);
-    //     TimetableResponse r2 = mock(TimetableResponse.class);
-    //
-    //     try (MockedStatic<TimetableResponse> mocked = mockStatic(TimetableResponse.class)) {
-    //         mocked.when(() -> TimetableResponse.from(t1)).thenReturn(r1);
-    //         mocked.when(() -> TimetableResponse.from(t2)).thenReturn(r2);
-    //
-    //         List<TimetableResponse> result = controller.search(year, semester, keyword);
-    //
-    //         assertThat(result).containsExactly(r1, r2);
-    //         verify(useCase).findByKeyword(year, semester, keyword);
-    //         mocked.verify(() -> TimetableResponse.from(t1));
-    //         mocked.verify(() -> TimetableResponse.from(t2));
-    //     }
-    // }
-
     @Test
     @DisplayName("GET /api/v1/timetable/filter: 통합 검색 결과를 Response로 매핑한다")
     void combined_mapsResponses() {
