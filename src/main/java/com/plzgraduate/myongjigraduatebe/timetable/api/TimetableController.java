@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,6 @@ import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.TimetableRes
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.TimetablePageResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "Timetable", description = "시간표 과목 조회 API")
 @WebAdapter
@@ -41,18 +39,8 @@ public class TimetableController {
             @RequestParam int semester
     ) {
         List<Timetable> result = useCase.findByYearAndSemester(year, semester);
-        return result.stream().map(TimetableResponse::from).collect(Collectors.toList());
+        return result.stream().map(TimetableResponse::from).toList();
     }
-
-//    @GetMapping("/search")
-//    public List<TimetableResponse> search(
-//            @RequestParam int year,
-//            @RequestParam int semester,
-//            @RequestParam String keyword
-//    ) {
-//        List<Timetable> result = useCase.findByKeyword(year, semester, keyword);
-//        return result.stream().map(TimetableResponse::from).collect(Collectors.toList());
-//    }
 
     @Operation(
             summary = "시간표 과목 필터링 조회 (무한스크롤)",
@@ -60,16 +48,14 @@ public class TimetableController {
                     "page와 limit 파라미터로 무한스크롤을 구현할 수 있습니다. " +
                     "응답의 nextPage가 null이면 마지막 페이지입니다."
     )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "성공",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = TimetablePageResponse.class)
-                    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = TimetablePageResponse.class)
             )
-    })
+    )
     @GetMapping("/search")
     public TimetablePageResponse combined(
             @Parameter(hidden = true) @LoginUser Long userId,
@@ -99,7 +85,7 @@ public class TimetableController {
         
         List<TimetableResponse> data = result.getData().stream()
                 .map(TimetableResponse::from)
-                .collect(Collectors.toList());
+                .toList();
         
         return TimetablePageResponse.of(data, page, limit, result.getTotalCount());
     }
