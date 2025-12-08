@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.timetable.api;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
+import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.TimetablePageResponse;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.response.TimetableResponse;
 import com.plzgraduate.myongjigraduatebe.timetable.application.usecase.FindTimetableUseCase;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
@@ -54,31 +55,32 @@ class TimetableControllerTest {
         }
     }
 
-    @Test
-    @DisplayName("GET /api/v1/timetable/search: 키워드 검색 결과를 Response로 매핑한다")
-    void search_mapsResponses() {
-        int year = 2025, semester = 2;
-        String keyword = "프로그래밍";
-
-        Timetable t1 = mock(Timetable.class);
-        Timetable t2 = mock(Timetable.class);
-        when(useCase.findByKeyword(year, semester, keyword)).thenReturn(List.of(t1, t2));
-
-        TimetableResponse r1 = mock(TimetableResponse.class);
-        TimetableResponse r2 = mock(TimetableResponse.class);
-
-        try (MockedStatic<TimetableResponse> mocked = mockStatic(TimetableResponse.class)) {
-            mocked.when(() -> TimetableResponse.from(t1)).thenReturn(r1);
-            mocked.when(() -> TimetableResponse.from(t2)).thenReturn(r2);
-
-            List<TimetableResponse> result = controller.search(year, semester, keyword);
-
-            assertThat(result).containsExactly(r1, r2);
-            verify(useCase).findByKeyword(year, semester, keyword);
-            mocked.verify(() -> TimetableResponse.from(t1));
-            mocked.verify(() -> TimetableResponse.from(t2));
-        }
-    }
+    // search() 메서드가 주석 처리되어 있어 테스트 제거
+    // @Test
+    // @DisplayName("GET /api/v1/timetable/search: 키워드 검색 결과를 Response로 매핑한다")
+    // void search_mapsResponses() {
+    //     int year = 2025, semester = 2;
+    //     String keyword = "프로그래밍";
+    //
+    //     Timetable t1 = mock(Timetable.class);
+    //     Timetable t2 = mock(Timetable.class);
+    //     when(useCase.findByKeyword(year, semester, keyword)).thenReturn(List.of(t1, t2));
+    //
+    //     TimetableResponse r1 = mock(TimetableResponse.class);
+    //     TimetableResponse r2 = mock(TimetableResponse.class);
+    //
+    //     try (MockedStatic<TimetableResponse> mocked = mockStatic(TimetableResponse.class)) {
+    //         mocked.when(() -> TimetableResponse.from(t1)).thenReturn(r1);
+    //         mocked.when(() -> TimetableResponse.from(t2)).thenReturn(r2);
+    //
+    //         List<TimetableResponse> result = controller.search(year, semester, keyword);
+    //
+    //         assertThat(result).containsExactly(r1, r2);
+    //         verify(useCase).findByKeyword(year, semester, keyword);
+    //         mocked.verify(() -> TimetableResponse.from(t1));
+    //         mocked.verify(() -> TimetableResponse.from(t2));
+    //     }
+    // }
 
     @Test
     @DisplayName("GET /api/v1/timetable/filter: 통합 검색 결과를 Response로 매핑한다")
@@ -89,11 +91,14 @@ class TimetableControllerTest {
         TakenFilter filter = TakenFilter.TAKEN;
         TimetableSearchConditionRequest condition = new TimetableSearchConditionRequest();
         GraduationCategory category = GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
+        int page = 1, limit = 20;
 
         Timetable t1 = mock(Timetable.class);
         Timetable t2 = mock(Timetable.class);
-        when(useCase.searchCombined(userId, year, semester, campus, filter, condition, category))
-                .thenReturn(List.of(t1, t2));
+        FindTimetableUseCase.SearchCombinedResult searchResult = 
+                new FindTimetableUseCase.SearchCombinedResult(List.of(t1, t2), 2L);
+        when(useCase.searchCombinedWithPagination(userId, year, semester, campus, filter, condition, category, page, limit))
+                .thenReturn(searchResult);
 
         TimetableResponse r1 = mock(TimetableResponse.class);
         TimetableResponse r2 = mock(TimetableResponse.class);
@@ -102,11 +107,13 @@ class TimetableControllerTest {
             mocked.when(() -> TimetableResponse.from(t1)).thenReturn(r1);
             mocked.when(() -> TimetableResponse.from(t2)).thenReturn(r2);
 
-            List<TimetableResponse> result =
-                    controller.combined(userId, year, semester, campus, filter, condition, category);
+            TimetablePageResponse result =
+                    controller.combined(userId, year, semester, campus, filter, condition, category, page, limit);
 
-            assertThat(result).containsExactly(r1, r2);
-            verify(useCase).searchCombined(userId, year, semester, campus, filter, condition, category);
+            assertThat(result.getData()).containsExactly(r1, r2);
+            assertThat(result.getTotalCount()).isEqualTo(2L);
+            assertThat(result.getNextPage()).isNull(); // 1페이지에 20개 limit, 총 2개이므로 다음 페이지 없음
+            verify(useCase).searchCombinedWithPagination(userId, year, semester, campus, filter, condition, category, page, limit);
             mocked.verify(() -> TimetableResponse.from(t1));
             mocked.verify(() -> TimetableResponse.from(t2));
         }
