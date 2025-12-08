@@ -69,39 +69,59 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             RequirementSnapshot.Item item = snapshotItems.get(category);
             if (item == null) continue;
 
-            List<RecommendedLectureExtractor.DetailRecommendation> detailRecommendations =
-                    recommendedLectureExtractor.extractDetailRecommendations(userId, category);
-
-            if (detailRecommendations.isEmpty()) {
-                List<String> haveTo = safeExtractRecommended(userId, category);
-                int remaining = item.getRemainingCredit();
-                if (remaining <= 0 || haveTo.isEmpty()) {
-                    continue;
-                }
-                DetailRequirement requirement = DetailRequirement.of(category, category.getName(), remaining, haveTo);
-                requirements.put(requirement.getKey(), requirement);
-                requirement.getHaveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.getKey()));
-                continue;
-            }
-
-            detailRecommendations.forEach(detail -> {
-                int remaining = detail.getRemainingCredit();
-                List<String> haveTo = detail.getHaveToLectureIds();
-                if (remaining <= 0 || haveTo.isEmpty()) {
-                    return;
-                }
-                DetailRequirement requirement = DetailRequirement.of(
-                        detail.getGraduationCategory(),
-                        detail.getDetailCategoryName(),
-                        remaining,
-                        haveTo
-                );
-                requirements.put(requirement.getKey(), requirement);
-                requirement.getHaveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.getKey()));
-            });
+            processCategoryRequirements(userId, category, item, requirements, lectureIndex);
         }
 
         return DetailRequirementContext.of(requirements, lectureIndex);
+    }
+
+    private void processCategoryRequirements(Long userId, GraduationCategory category,
+                                             RequirementSnapshot.Item item,
+                                             Map<DetailKey, DetailRequirement> requirements,
+                                             Map<String, DetailKey> lectureIndex) {
+        List<RecommendedLectureExtractor.DetailRecommendation> detailRecommendations =
+                recommendedLectureExtractor.extractDetailRecommendations(userId, category);
+
+        if (detailRecommendations.isEmpty()) {
+            processCategoryWithoutDetails(category, item, userId, requirements, lectureIndex);
+            return;
+        }
+
+        processDetailRecommendations(detailRecommendations, requirements, lectureIndex);
+    }
+
+    private void processCategoryWithoutDetails(GraduationCategory category, RequirementSnapshot.Item item,
+                                               Long userId,
+                                               Map<DetailKey, DetailRequirement> requirements,
+                                               Map<String, DetailKey> lectureIndex) {
+        List<String> haveTo = safeExtractRecommended(userId, category);
+        int remaining = item.getRemainingCredit();
+        if (remaining <= 0 || haveTo.isEmpty()) {
+            return;
+        }
+        DetailRequirement requirement = DetailRequirement.of(category, category.getName(), remaining, haveTo);
+        requirements.put(requirement.getKey(), requirement);
+        requirement.getHaveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.getKey()));
+    }
+
+    private void processDetailRecommendations(List<RecommendedLectureExtractor.DetailRecommendation> detailRecommendations,
+                                             Map<DetailKey, DetailRequirement> requirements,
+                                             Map<String, DetailKey> lectureIndex) {
+        detailRecommendations.forEach(detail -> {
+            int remaining = detail.getRemainingCredit();
+            List<String> haveTo = detail.getHaveToLectureIds();
+            if (remaining <= 0 || haveTo.isEmpty()) {
+                return;
+            }
+            DetailRequirement requirement = DetailRequirement.of(
+                    detail.getGraduationCategory(),
+                    detail.getDetailCategoryName(),
+                    remaining,
+                    haveTo
+            );
+            requirements.put(requirement.getKey(), requirement);
+            requirement.getHaveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.getKey()));
+        });
     }
 
     /**
@@ -117,9 +137,26 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         int totalDef = deficits.values().stream().mapToInt(Integer::intValue).sum();
         if (totalDef == 0) return quota;
 
-        // 남은 학점이 적은 카테고리(3학점 이하)는 별도 처리
         Map<DetailKey, Integer> smallDeficits = new LinkedHashMap<>();
         Map<DetailKey, Integer> largeDeficits = new LinkedHashMap<>();
+        separateDeficitsBySize(deficits, smallDeficits, largeDeficits);
+
+        int smallDefTotal = smallDeficits.values().stream().mapToInt(Integer::intValue).sum();
+        int remainingCap = Math.max(0, cap - smallDefTotal);
+
+        quota.putAll(smallDeficits);
+
+        if (remainingCap > 0 && !largeDeficits.isEmpty()) {
+            allocateLargeDeficits(largeDeficits, remainingCap, quota);
+        }
+
+        enforceQuotaLimits(quota, deficits);
+        return quota;
+    }
+
+    private void separateDeficitsBySize(Map<DetailKey, Integer> deficits,
+                                       Map<DetailKey, Integer> smallDeficits,
+                                       Map<DetailKey, Integer> largeDeficits) {
         for (var e : deficits.entrySet()) {
             if (e.getValue() <= 3) {
                 smallDeficits.put(e.getKey(), e.getValue());
@@ -127,58 +164,64 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 largeDeficits.put(e.getKey(), e.getValue());
             }
         }
+    }
 
-        // 작은 deficit 카테고리는 남은 학점만큼만 할당
-        int smallDefTotal = smallDeficits.values().stream().mapToInt(Integer::intValue).sum();
-        int remainingCap = Math.max(0, cap - smallDefTotal);
+    private void allocateLargeDeficits(Map<DetailKey, Integer> largeDeficits, int remainingCap,
+                                      Map<DetailKey, Integer> quota) {
+        int largeDefTotal = largeDeficits.values().stream().mapToInt(Integer::intValue).sum();
+        if (largeDefTotal <= 0) return;
 
-        quota.putAll(smallDeficits);
+        Map<DetailKey, Double> ideal = new LinkedHashMap<>();
+        int sum = allocateProportionally(largeDeficits, largeDefTotal, remainingCap, ideal, quota);
 
-        // 큰 deficit 카테고리만 비율 배분
-        if (remainingCap > 0 && !largeDeficits.isEmpty()) {
-            int largeDefTotal = largeDeficits.values().stream().mapToInt(Integer::intValue).sum();
-            if (largeDefTotal > 0) {
-                // 1차 배분(반올림)
-                int sum = 0;
-                Map<DetailKey, Double> ideal = new LinkedHashMap<>();
-                for (var e : largeDeficits.entrySet()) {
-                    double portion = (double) e.getValue() / largeDefTotal;
-                    double idealVal = portion * remainingCap;
-                    ideal.put(e.getKey(), idealVal);
-                    int alloc = (int) Math.round(idealVal);
-                    quota.put(e.getKey(), alloc);
-                    sum += alloc;
-                }
-                // 2차 보정: 합계 != remainingCap이면 보정
-                if (sum != remainingCap) {
-                    int gap = sum - remainingCap;
-                    List<DetailKey> order = new ArrayList<>(quota.keySet());
-                    order.sort((a, b) -> {
-                        double da = Math.abs(ideal.getOrDefault(a, 0.0) - quota.getOrDefault(a, 0));
-                        double db = Math.abs(ideal.getOrDefault(b, 0.0) - quota.getOrDefault(b, 0));
-                        return Double.compare(db, da); // desc
-                    });
-                    int step = gap > 0 ? -1 : 1;
-                    int remain = Math.abs(gap);
-                    int idx = 0;
-                    while (remain > 0 && !order.isEmpty()) {
-                        DetailKey c = order.get(idx % order.size());
-                        int cur = quota.getOrDefault(c, 0) + step;
-                        if (cur >= 0) {
-                            quota.put(c, cur);
-                            remain--;
-                        }
-                        idx++;
-                    }
-                }
-            }
+        if (sum != remainingCap) {
+            adjustQuotaDifference(sum, remainingCap, ideal, quota);
         }
-        // 음수 방지 및 할당량이 남은 학점을 초과하지 않도록 제한
+    }
+
+    private int allocateProportionally(Map<DetailKey, Integer> largeDeficits, int largeDefTotal,
+                                      int remainingCap, Map<DetailKey, Double> ideal,
+                                      Map<DetailKey, Integer> quota) {
+        int sum = 0;
+        for (var e : largeDeficits.entrySet()) {
+            double portion = (double) e.getValue() / largeDefTotal;
+            double idealVal = portion * remainingCap;
+            ideal.put(e.getKey(), idealVal);
+            int alloc = (int) Math.round(idealVal);
+            quota.put(e.getKey(), alloc);
+            sum += alloc;
+        }
+        return sum;
+    }
+
+    private void adjustQuotaDifference(int sum, int remainingCap, Map<DetailKey, Double> ideal,
+                                      Map<DetailKey, Integer> quota) {
+        int gap = sum - remainingCap;
+        List<DetailKey> order = new ArrayList<>(quota.keySet());
+        order.sort((a, b) -> {
+            double da = Math.abs(ideal.getOrDefault(a, 0.0) - quota.getOrDefault(a, 0));
+            double db = Math.abs(ideal.getOrDefault(b, 0.0) - quota.getOrDefault(b, 0));
+            return Double.compare(db, da);
+        });
+        int step = gap > 0 ? -1 : 1;
+        int remain = Math.abs(gap);
+        int idx = 0;
+        while (remain > 0 && !order.isEmpty()) {
+            DetailKey c = order.get(idx % order.size());
+            int cur = quota.getOrDefault(c, 0) + step;
+            if (cur >= 0) {
+                quota.put(c, cur);
+                remain--;
+            }
+            idx++;
+        }
+    }
+
+    private void enforceQuotaLimits(Map<DetailKey, Integer> quota, Map<DetailKey, Integer> deficits) {
         quota.replaceAll((k, v) -> {
             int deficit = deficits.getOrDefault(k, 0);
             return Math.max(0, Math.min(v, deficit));
         });
-        return quota;
     }
 
     /**
@@ -318,77 +361,99 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             return Collections.emptyMap();
         }
 
-        Set<GraduationCategory> interestedCategories = detailKeyByLectureId.values().stream()
-                .filter(Objects::nonNull)
-                .map(DetailKey::getGraduationCategory)
-                .collect(Collectors.toSet());
+        Set<GraduationCategory> interestedCategories = extractInterestedCategories(detailKeyByLectureId);
         if (interestedCategories.isEmpty()) {
             return Collections.emptyMap();
         }
 
-        List<PopularLectureDto> popularLectures;
-        try {
-            popularLectures = popularLecturePort.getPopularLecturesByTotalCount();
-        } catch (RuntimeException e) {
-            log.warn("[RecommendAfter] Failed to load popular lectures: {}", e.getMessage());
+        List<PopularLectureDto> popularLectures = loadPopularLectures();
+        if (popularLectures == null || popularLectures.isEmpty()) {
             return Collections.emptyMap();
         }
+
         Map<String, Integer> ranking = new HashMap<>();
         int rank = 0;
 
-        // 1) 전공별 BASIC_ACADEMICAL_CULTURE: 전공/입학연도 컨텍스트 기반
-        boolean needsBasic =
-                interestedCategories.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE)
-                        || interestedCategories.contains(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
-        if (needsBasic && user != null && user.getPrimaryMajor() != null) {
-            try {
-                List<PopularLectureDto> basicByMajor =
-                        popularLecturePort.getLecturesByCategory(
-                                user.getPrimaryMajor(),
-                                user.getEntryYear(),
-                                PopularLectureCategory.BASIC_ACADEMICAL_CULTURE,
-                                MAX_POPULARITY_CONSIDERED,
-                                null
-                        );
-                if (basicByMajor != null) {
-                    for (PopularLectureDto dto : basicByMajor) {
-                        if (dto == null || dto.getLectureId() == null) continue;
-                        if (ranking.containsKey(dto.getLectureId())) continue;
-                        ranking.put(dto.getLectureId(), rank++);
-                        if (rank >= MAX_POPULARITY_CONSIDERED) break;
-                    }
-                }
-            } catch (RuntimeException e) {
-                log.warn("[RecommendAfter] Failed to load basic-culture popular lectures by major: {}", e.getMessage());
-            }
-        }
+        rank = addBasicCultureByMajor(user, interestedCategories, ranking, rank);
+        rank = addGlobalPopularLectures(popularLectures, interestedCategories, ranking, rank);
 
-        // 2) 나머지 카테고리: 전역 인기순(단, 전공은 deficits 매칭 필요)
-        if (popularLectures != null && !popularLectures.isEmpty()) {
-            for (PopularLectureDto dto : popularLectures) {
-                if (dto == null || dto.getLectureId() == null) continue;
-                if (ranking.containsKey(dto.getLectureId())) continue;
-                PopularLectureCategory popularCategory = dto.getCategoryName();
-                if (popularCategory == null) continue;
-
-                // BASIC은 위에서 전공별로 처리했으니 전역 랭킹에서는 건너뜀
-                if (popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) continue;
-
-                boolean isCultureCategory =
-                        popularCategory == PopularLectureCategory.CORE_CULTURE
-                                || popularCategory == PopularLectureCategory.COMMON_CULTURE
-                                || popularCategory == PopularLectureCategory.NORMAL_CULTURE;
-
-                // 전공(MANDATORY/ELECTIVE) 쪽은 현재 부족한 GraduationCategory와 매칭될 때만 사용
-                if (!isCultureCategory && !matchesInterestedCategory(popularCategory, interestedCategories)) {
-                    continue;
-                }
-
-                ranking.put(dto.getLectureId(), rank++);
-                if (rank >= MAX_POPULARITY_CONSIDERED) break;
-            }
-        }
         return ranking;
+    }
+
+    private Set<GraduationCategory> extractInterestedCategories(Map<String, DetailKey> detailKeyByLectureId) {
+        return detailKeyByLectureId.values().stream()
+                .filter(Objects::nonNull)
+                .map(DetailKey::getGraduationCategory)
+                .collect(Collectors.toSet());
+    }
+
+    private List<PopularLectureDto> loadPopularLectures() {
+        try {
+            return popularLecturePort.getPopularLecturesByTotalCount();
+        } catch (RuntimeException e) {
+            log.warn("[RecommendAfter] Failed to load popular lectures: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    private int addBasicCultureByMajor(User user, Set<GraduationCategory> interestedCategories,
+                                      Map<String, Integer> ranking, int rank) {
+        boolean needsBasic = interestedCategories.contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE)
+                || interestedCategories.contains(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
+        if (!needsBasic || user == null || user.getPrimaryMajor() == null) {
+            return rank;
+        }
+
+        try {
+            List<PopularLectureDto> basicByMajor = popularLecturePort.getLecturesByCategory(
+                    user.getPrimaryMajor(),
+                    user.getEntryYear(),
+                    PopularLectureCategory.BASIC_ACADEMICAL_CULTURE,
+                    MAX_POPULARITY_CONSIDERED,
+                    null
+            );
+            if (basicByMajor != null) {
+                for (PopularLectureDto dto : basicByMajor) {
+                    if (dto == null || dto.getLectureId() == null) continue;
+                    if (ranking.containsKey(dto.getLectureId())) continue;
+                    ranking.put(dto.getLectureId(), rank++);
+                    if (rank >= MAX_POPULARITY_CONSIDERED) break;
+                }
+            }
+        } catch (RuntimeException e) {
+            log.warn("[RecommendAfter] Failed to load basic-culture popular lectures by major: {}", e.getMessage());
+        }
+        return rank;
+    }
+
+    private int addGlobalPopularLectures(List<PopularLectureDto> popularLectures,
+                                        Set<GraduationCategory> interestedCategories,
+                                        Map<String, Integer> ranking, int rank) {
+        for (PopularLectureDto dto : popularLectures) {
+            if (dto == null || dto.getLectureId() == null) continue;
+            if (ranking.containsKey(dto.getLectureId())) continue;
+
+            PopularLectureCategory popularCategory = dto.getCategoryName();
+            if (popularCategory == null) continue;
+            if (popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) continue;
+
+            if (!shouldIncludePopularLecture(popularCategory, interestedCategories)) {
+                continue;
+            }
+
+            ranking.put(dto.getLectureId(), rank++);
+            if (rank >= MAX_POPULARITY_CONSIDERED) break;
+        }
+        return rank;
+    }
+
+    private boolean shouldIncludePopularLecture(PopularLectureCategory popularCategory,
+                                               Set<GraduationCategory> interestedCategories) {
+        boolean isCultureCategory = popularCategory == PopularLectureCategory.CORE_CULTURE
+                || popularCategory == PopularLectureCategory.COMMON_CULTURE
+                || popularCategory == PopularLectureCategory.NORMAL_CULTURE;
+
+        return isCultureCategory || matchesInterestedCategory(popularCategory, interestedCategories);
     }
 
     private boolean matchesInterestedCategory(PopularLectureCategory popularCategory,

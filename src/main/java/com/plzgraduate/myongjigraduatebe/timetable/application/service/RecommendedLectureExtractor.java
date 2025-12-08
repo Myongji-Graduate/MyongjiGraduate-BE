@@ -74,45 +74,57 @@ class RecommendedLectureExtractor {
 
             List<DetailCategoryResult> detailCategories = result.getDetailCategory();
             if (detailCategories == null || detailCategories.isEmpty()) {
-                int remaining = Math.max(0, result.getTotalCredit() - (int) result.getTakenCredit());
-                List<String> haveTo = extractRecommendedLectureIds(userId, category);
-                if (remaining <= 0 && haveTo.isEmpty()) {
-                    return List.of();
-                }
-                return List.of(DetailRecommendation.of(category, category.getName(), remaining, haveTo));
+                return extractCategoryLevelRecommendation(userId, category, result);
             }
 
-            return detailCategories.stream()
-                    .filter(Objects::nonNull)
-                    .map(detail -> {
-                        String detailName = detail.getDetailCategoryName();
-                        int remaining = Math.max(0, detail.getTotalCredits() - detail.getTakenCredits());
-                        List<String> haveTo = toLectureIds(detail.getHaveToLectures());
-                        if (remaining <= 0 && haveTo.isEmpty()) {
-                            return null;
-                        }
-                        return DetailRecommendation.of(
-                                category,
-                                detailName != null ? detailName : category.getName(),
-                                remaining,
-                                haveTo
-                        );
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+            return extractDetailLevelRecommendations(category, detailCategories);
         } catch (IllegalArgumentException e) {
-            String msg = e.getMessage();
-            if (msg != null && msg.contains("UNFITTED_GRADUATION_CATEGORY")) {
-                return List.of();
-            }
-            throw e;
+            return handleExtractionException(e, "UNFITTED_GRADUATION_CATEGORY");
         } catch (RuntimeException e) {
-            String msg = e.getMessage();
-            if (msg != null && msg.contains("No calculate detail graduation case found")) {
-                return List.of();
-            }
-            throw e;
+            return handleExtractionException(e, "No calculate detail graduation case found");
         }
+    }
+
+    private List<DetailRecommendation> extractCategoryLevelRecommendation(Long userId, GraduationCategory category,
+                                                                          DetailGraduationResult result) {
+        int remaining = Math.max(0, result.getTotalCredit() - (int) result.getTakenCredit());
+        List<String> haveTo = extractRecommendedLectureIds(userId, category);
+        if (remaining <= 0 && haveTo.isEmpty()) {
+            return List.of();
+        }
+        return List.of(DetailRecommendation.of(category, category.getName(), remaining, haveTo));
+    }
+
+    private List<DetailRecommendation> extractDetailLevelRecommendations(GraduationCategory category,
+                                                                         List<DetailCategoryResult> detailCategories) {
+        return detailCategories.stream()
+                .filter(Objects::nonNull)
+                .map(detail -> createDetailRecommendation(category, detail))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private DetailRecommendation createDetailRecommendation(GraduationCategory category, DetailCategoryResult detail) {
+        String detailName = detail.getDetailCategoryName();
+        int remaining = Math.max(0, detail.getTotalCredits() - detail.getTakenCredits());
+        List<String> haveTo = toLectureIds(detail.getHaveToLectures());
+        if (remaining <= 0 && haveTo.isEmpty()) {
+            return null;
+        }
+        return DetailRecommendation.of(
+                category,
+                detailName != null ? detailName : category.getName(),
+                remaining,
+                haveTo
+        );
+    }
+
+    private List<DetailRecommendation> handleExtractionException(RuntimeException e, String expectedMessage) {
+        String msg = e.getMessage();
+        if (msg != null && msg.contains(expectedMessage)) {
+            return List.of();
+        }
+        throw e;
     }
 
     private List<String> toLectureIds(List<Lecture> lectures) {
