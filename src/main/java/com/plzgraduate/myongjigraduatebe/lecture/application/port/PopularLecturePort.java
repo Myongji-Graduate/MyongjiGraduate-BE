@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface PopularLecturePort {
     List<PopularLectureDto> getPopularLecturesByTotalCount();
-    List<PopularLectureDto> getPopularLecturesSlice(int limit, String cursor);
     List<PopularLectureDto> getLecturesByCategory(String major, int entryYear, PopularLectureCategory category, int limit, String cursor);
 
     List<PopularLecturesInitResponse.SectionMeta> getSections(String major, int entryYear);

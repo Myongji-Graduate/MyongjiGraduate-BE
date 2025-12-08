@@ -66,7 +66,7 @@ public enum DefaultGraduationRequirementType {
 		return createDefaultGraduationRequirement(user);
 	}
 
-	private GraduationRequirement createDefaultGraduationRequirement(User user) {
+	public GraduationRequirement createDefaultGraduationRequirement(User user) {
 		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
 				.totalCredit(this.totalCredit)
 				.primaryMajorCredit(this.majorLectureCredit)
@@ -86,7 +86,7 @@ public enum DefaultGraduationRequirementType {
 		return graduationRequirement;
 	}
 
-	private GraduationRequirement createTransferGraduationRequirement(User user) {
+	public GraduationRequirement createTransferGraduationRequirement(User user) {
 		College userCollege = College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear());
 		TransferGraduationRequirementType transferRequirement =
 				TransferGraduationRequirementType.findByCollegeName(userCollege.getName());

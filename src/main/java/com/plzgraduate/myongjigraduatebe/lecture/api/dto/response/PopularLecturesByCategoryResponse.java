@@ -36,7 +36,11 @@ public class PopularLecturesByCategoryResponse {
     ) {
         boolean hasMore = items.size() > limit;
         List<PopularLectureResponse> page = hasMore ? items.subList(0, limit) : items;
-        String nextCursor = hasMore ? page.get(page.size() - 1).getId() : null;
+        String nextCursor = null;
+        if (hasMore) {
+            PopularLectureResponse last = page.getLast();
+            nextCursor = last.getId();
+        }
 
         return PopularLecturesByCategoryResponse.builder()
                 .categoryName(categoryName)

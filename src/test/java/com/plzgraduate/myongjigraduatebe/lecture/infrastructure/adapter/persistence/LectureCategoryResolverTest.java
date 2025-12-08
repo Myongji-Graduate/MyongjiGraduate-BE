@@ -11,7 +11,6 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CoreCultureRepository;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.MajorLectureRepository;
 import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +54,8 @@ class LectureCategoryResolverTest {
     assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.MANDATORY_MAJOR).count()).isEqualTo(1);
     assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.ELECTIVE_MAJOR).count()).isEqualTo(1);
     assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.CORE_CULTURE).count()).isEqualTo(1);
-    assertThat(result.stream().filter(d -> d.getCategoryName() == PopularLectureCategory.NORMAL_CULTURE).count()).isEqualTo(1);
+    // 일반교양 제거 정책: 매칭되지 않는 강의는 카테고리 미부여(null)
+    assertThat(result.stream().filter(d -> d.getCategoryName() == null).count()).isEqualTo(1);
   }
 
   @DisplayName("major/entryYear 컨텍스트로 카테고리를 부여한다.")
@@ -65,14 +65,14 @@ class LectureCategoryResolverTest {
     String major = "응용소프트웨어전공"; // ICT 계열(16~24년) - College enum과 정확히 일치
     int entryYear = 20; // College enum은 2자리 연도로 비교
     List<PopularLectureDto> raw = List.of(
-        PopularLectureDto.ofWithAverage("A", "A", 3, 10, null, 0.0), // 전필
-        PopularLectureDto.ofWithAverage("B", "B", 3, 9, null, 0.0),  // 전선
+        PopularLectureDto.ofWithAverage("A", "A", 3, 10, null, 0.0), // MANDATORY_MAJOR
+        PopularLectureDto.ofWithAverage("B", "B", 3, 9, null, 0.0),  // ELECTIVE_MAJOR
         PopularLectureDto.ofWithAverage("C", "C", 3, 8, null, 0.0),  // 핵교
         PopularLectureDto.ofWithAverage("D", "D", 3, 7, null, 0.0),  // 공교
         PopularLectureDto.ofWithAverage("E", "E", 3, 6, null, 0.0)   // 학기
     );
 
-    given(basicAcademicalCultureRepository.findIdsByLectureIdInAndCollegeIn(anyList(), any(Set.class)))
+    given(basicAcademicalCultureRepository.findIdsByLectureIdInAndCollegeIn(anyList(), anySet()))
         .willReturn(List.of("E"));
     given(coreCultureRepository.findIdsByLectureIdInAndEntryYearBetween(anyList(), eq(entryYear)))
         .willReturn(List.of("C"));
