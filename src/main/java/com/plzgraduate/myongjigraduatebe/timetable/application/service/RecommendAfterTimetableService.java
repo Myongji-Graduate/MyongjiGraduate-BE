@@ -65,11 +65,13 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 (snapshot == null || snapshot.getItems() == null) ? Collections.emptyMap() : snapshot.getItems();
 
         for (GraduationCategory category : applicableCategories) {
-            if (category == GraduationCategory.CHAPEL) continue;
+            if (category == GraduationCategory.CHAPEL) {
+                continue;
+            }
             RequirementSnapshot.Item item = snapshotItems.get(category);
-            if (item == null) continue;
-
-            processCategoryRequirements(userId, category, item, requirements, lectureIndex);
+            if (item != null) {
+                processCategoryRequirements(userId, category, item, requirements, lectureIndex);
+            }
         }
 
         return DetailRequirementContext.of(requirements, lectureIndex);
@@ -432,33 +434,42 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     private int processBasicCultureLectures(List<PopularLectureDto> basicByMajor,
                                             Map<String, Integer> ranking, int rank) {
         for (PopularLectureDto dto : basicByMajor) {
-            if (dto == null || dto.getLectureId() == null) continue;
-            if (ranking.containsKey(dto.getLectureId())) continue;
-            ranking.put(dto.getLectureId(), rank++);
-            if (rank >= MAX_POPULARITY_CONSIDERED) break;
+            if (rank >= MAX_POPULARITY_CONSIDERED) {
+                break;
+            }
+            if (dto != null && dto.getLectureId() != null && !ranking.containsKey(dto.getLectureId())) {
+                ranking.put(dto.getLectureId(), rank++);
+            }
         }
         return rank;
     }
 
-    private int addGlobalPopularLectures(List<PopularLectureDto> popularLectures,
-                                        Set<GraduationCategory> interestedCategories,
-                                        Map<String, Integer> ranking, int rank) {
+    private void addGlobalPopularLectures(List<PopularLectureDto> popularLectures,
+                                          Set<GraduationCategory> interestedCategories,
+                                          Map<String, Integer> ranking, int rank) {
         for (PopularLectureDto dto : popularLectures) {
-            if (dto == null || dto.getLectureId() == null) continue;
-            if (ranking.containsKey(dto.getLectureId())) continue;
-
-            PopularLectureCategory popularCategory = dto.getCategoryName();
-            if (popularCategory == null) continue;
-            if (popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) continue;
-
-            if (!shouldIncludePopularLecture(popularCategory, interestedCategories)) {
-                continue;
+            if (rank >= MAX_POPULARITY_CONSIDERED) {
+                break;
             }
-
-            ranking.put(dto.getLectureId(), rank++);
-            if (rank >= MAX_POPULARITY_CONSIDERED) break;
+            if (shouldProcessPopularLecture(dto, ranking, interestedCategories)) {
+                ranking.put(dto.getLectureId(), rank++);
+            }
         }
-        return rank;
+    }
+
+    private boolean shouldProcessPopularLecture(PopularLectureDto dto, Map<String, Integer> ranking,
+                                                 Set<GraduationCategory> interestedCategories) {
+        if (dto == null || dto.getLectureId() == null) {
+            return false;
+        }
+        if (ranking.containsKey(dto.getLectureId())) {
+            return false;
+        }
+        PopularLectureCategory popularCategory = dto.getCategoryName();
+        if (popularCategory == null || popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) {
+            return false;
+        }
+        return shouldIncludePopularLecture(popularCategory, interestedCategories);
     }
 
     private boolean shouldIncludePopularLecture(PopularLectureCategory popularCategory,

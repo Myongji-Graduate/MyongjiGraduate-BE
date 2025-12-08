@@ -125,8 +125,7 @@ class RecommendAfterTimetableServiceTest {
         @SuppressWarnings("unchecked")
         Map<Object, Integer> result = (Map<Object, Integer>) method.invoke(sut, 10, deficits);
 
-        assertThat(result.get(key1)).isEqualTo(2);
-        assertThat(result.get(key2)).isEqualTo(3);
+        assertThat(result).containsEntry(key1, 2).containsEntry(key2, 3);
     }
 
     @Test
@@ -169,10 +168,9 @@ class RecommendAfterTimetableServiceTest {
         Map<Object, Integer> result = (Map<Object, Integer>) method.invoke(sut, 15, deficits);
 
         // 작은 deficit은 정확히 2 할당
-        assertThat(result.get(smallKey)).isEqualTo(2);
+        assertThat(result).containsEntry(smallKey, 2);
         // 큰 deficit은 남은 13을 비율 배분
-        assertThat(result.get(largeKey)).isGreaterThan(0);
-        assertThat(result.get(largeKey)).isLessThanOrEqualTo(13);
+        assertThat(result.get(largeKey)).isGreaterThan(0).isLessThanOrEqualTo(13);
     }
 
     @Test
@@ -189,9 +187,10 @@ class RecommendAfterTimetableServiceTest {
         @SuppressWarnings("unchecked")
         Set<GraduationCategory> result = (Set<GraduationCategory>) method.invoke(sut, normalUser);
 
-        assertThat(result).contains(GraduationCategory.COMMON_CULTURE);
-        assertThat(result).contains(GraduationCategory.CORE_CULTURE);
-        assertThat(result).contains(GraduationCategory.PRIMARY_MANDATORY_MAJOR);
+        assertThat(result)
+                .contains(GraduationCategory.COMMON_CULTURE)
+                .contains(GraduationCategory.CORE_CULTURE)
+                .contains(GraduationCategory.PRIMARY_MANDATORY_MAJOR);
     }
 
     @Test
@@ -281,9 +280,10 @@ class RecommendAfterTimetableServiceTest {
         Map<String, Integer> result = (Map<String, Integer>) method.invoke(
                 sut, testUser, detailKeyByLectureId);
 
-        assertThat(result).isNotEmpty();
-        assertThat(result).containsKey("LEC001");
-        assertThat(result).containsKey("LEC002");
+        assertThat(result)
+                .isNotEmpty()
+                .containsKey("LEC001")
+                .containsKey("LEC002");
         assertThat(result.get("LEC001")).isLessThan(result.get("LEC002")); // 더 인기있는 강의가 낮은 랭크
     }
 
