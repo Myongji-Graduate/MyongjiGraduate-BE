@@ -5,6 +5,7 @@ import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSear
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.TakenFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public interface FindTimetableUseCase {
             int limit
     );
 
+    @Getter
     class SearchCombinedResult {
         private final List<Timetable> data;
         private final long totalCount;
@@ -41,14 +43,6 @@ public interface FindTimetableUseCase {
         public SearchCombinedResult(List<Timetable> data, long totalCount) {
             this.data = data;
             this.totalCount = totalCount;
-        }
-
-        public List<Timetable> getData() {
-            return data;
-        }
-
-        public long getTotalCount() {
-            return totalCount;
         }
     }
 }
