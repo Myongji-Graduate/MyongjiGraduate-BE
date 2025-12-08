@@ -21,4 +21,34 @@ public interface FindTimetableUseCase {
             TimetableSearchConditionRequest condition,
             GraduationCategory recommendedCategory // NOT_TAKEN일 때 필수
     );
+
+    SearchCombinedResult searchCombinedWithPagination(
+            Long userId,
+            int year,
+            int semester,
+            CampusFilter campus,
+            TakenFilter filter,
+            TimetableSearchConditionRequest condition,
+            GraduationCategory recommendedCategory,
+            int page,
+            int limit
+    );
+
+    class SearchCombinedResult {
+        private final List<Timetable> data;
+        private final long totalCount;
+
+        public SearchCombinedResult(List<Timetable> data, long totalCount) {
+            this.data = data;
+            this.totalCount = totalCount;
+        }
+
+        public List<Timetable> getData() {
+            return data;
+        }
+
+        public long getTotalCount() {
+            return totalCount;
+        }
+    }
 }

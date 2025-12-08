@@ -21,15 +21,54 @@ public class TimetableQueryDslRepository implements TimetableQueryRepository {
 
     @Override
     public List<TimetableJpaEntity> searchByCondition(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest c) {
+        BooleanBuilder where = buildWhereClause(year, semester, campus, c);
+
+        // 정렬: 요일 -> 시작분 -> 분반(필요시)
+        return query.selectFrom(timetable)
+                .where(where)
+                .orderBy(
+                        timetable.day1.asc().nullsLast(),
+                        timetable.startMinute1.asc().nullsLast(),
+                        timetable.classDivision.asc()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<TimetableJpaEntity> searchByConditionWithPagination(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest c, int offset, int limit) {
+        BooleanBuilder where = buildWhereClause(year, semester, campus, c);
+
+        // 정렬: 요일 -> 시작분 -> 분반(필요시)
+        return query.selectFrom(timetable)
+                .where(where)
+                .orderBy(
+                        timetable.day1.asc().nullsLast(),
+                        timetable.startMinute1.asc().nullsLast(),
+                        timetable.classDivision.asc()
+                )
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+    }
+
+    @Override
+    public long countByCondition(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest c) {
+        BooleanBuilder where = buildWhereClause(year, semester, campus, c);
+        Long count = query.select(timetable.count())
+                .from(timetable)
+                .where(where)
+                .fetchOne();
+        return count != null ? count : 0L;
+    }
+
+    private BooleanBuilder buildWhereClause(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest c) {
         BooleanBuilder where = new BooleanBuilder()
                 .and(timetable.year.eq(year))
                 .and(timetable.semester.eq(semester));
 
-
         if (campus != null) {
             where.and(timetable.campus.eq(campus.name()));
         }
-
 
         if (c != null) {
             if (hasText(c.getProfessor())) {
@@ -43,15 +82,7 @@ public class TimetableQueryDslRepository implements TimetableQueryRepository {
             }
         }
 
-        // 정렬: 요일 -> 시작분 -> 분반(필요시)
-        return query.selectFrom(timetable)
-                .where(where)
-                .orderBy(
-                        timetable.day1.asc().nullsLast(),
-                        timetable.startMinute1.asc().nullsLast(),
-                        timetable.classDivision.asc()
-                )
-                .fetch();
+        return where;
     }
 
     private boolean hasText(String s) {

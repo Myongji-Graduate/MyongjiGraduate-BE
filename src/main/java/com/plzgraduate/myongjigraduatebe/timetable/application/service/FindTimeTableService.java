@@ -73,14 +73,11 @@ public class FindTimeTableService implements FindTimetableUseCase {
     }
 
     private RecommendedLectureExtractor.ExtractMode resolveExtractMode(TakenFilter filter) {
-        switch (filter) {
-            case TAKEN:
-                return RecommendedLectureExtractor.ExtractMode.TAKEN;
-            case NOT_TAKEN:
-                return RecommendedLectureExtractor.ExtractMode.HAVE_TO;
-            default:
-                return RecommendedLectureExtractor.ExtractMode.BOTH;
-        }
+        return switch (filter) {
+            case TAKEN -> RecommendedLectureExtractor.ExtractMode.TAKEN;
+            case NOT_TAKEN -> RecommendedLectureExtractor.ExtractMode.HAVE_TO;
+            default -> RecommendedLectureExtractor.ExtractMode.BOTH;
+        };
     }
 
     private Set<String> extractRecommendedLectureCodes(Long userId, List<GraduationCategory> categories, RecommendedLectureExtractor.ExtractMode mode) {
@@ -139,5 +136,33 @@ public class FindTimeTableService implements FindTimetableUseCase {
                 break; // NORMAL
         }
         return dynamic;
+    }
+
+    @Override
+    public FindTimetableUseCase.SearchCombinedResult searchCombinedWithPagination(
+            Long userId,
+            int year,
+            int semester,
+            CampusFilter campus,
+            TakenFilter filter,
+            TimetableSearchConditionRequest condition,
+            GraduationCategory recommendedCategory,
+            int page,
+            int limit
+    ) {
+        // 기존 searchCombined 로직을 재사용하여 전체 결과 조회
+        List<Timetable> allResults = searchCombined(userId, year, semester, campus, filter, condition, recommendedCategory);
+        
+        long totalCount = allResults.size();
+        
+        // 페이지네이션 적용 (1-based page)
+        int offset = (page - 1) * limit;
+        int endIndex = Math.min(offset + limit, allResults.size());
+        
+        List<Timetable> paginatedResults = (offset >= allResults.size())
+                ? List.of()
+                : allResults.subList(offset, endIndex);
+        
+        return new FindTimetableUseCase.SearchCombinedResult(paginatedResults, totalCount);
     }
 }
