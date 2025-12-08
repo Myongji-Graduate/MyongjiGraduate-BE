@@ -43,6 +43,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     private final RemainingSemesterCalculator remainingSemesterCalculator;
     private final CreditTargetPolicy creditTargetPolicy;
     private final RemainingCreditsProvider remainingCreditsProvider;
+
+    // 추가 주입
     private final RequirementSnapshotQueryPort requirementSnapshotQueryPort;
     private final TakenLectureQuery takenLectureQuery;
     private final FindLecturePort findLecturePort;
@@ -294,7 +296,10 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         DetailRequirementContext detailRequirementContext = buildDetailRequirementContext(userId, snapshot, user);
         Map<String, DetailKey> detailKeyByLectureId = detailRequirementContext.lectureToDetailKey();
         Map<DetailKey, Integer> deficits = detailRequirementContext.remainingCredits();
-        applyPopularityOrdering(user, availableLectures, detailKeyByLectureId);
+        
+        // 멤버십 정보 일괄 조회 캐시 구축 (N+1 문제 해결)
+        Set<String> membershipCache = buildMembershipCache(availableLectures);
+        applyPopularityOrdering(user, availableLectures, detailKeyByLectureId, membershipCache);
 
         List<RecommendAfterTimetableResponse.SemesterBlock> semesters = planSemesters(
                 new PlanningArgs(
@@ -305,7 +310,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                         availableLectures,
                         detailRequirementContext,
                         detailKeyByLectureId,
-                        deficits
+                        deficits,
+                        membershipCache
                 )
         );
 
@@ -344,7 +350,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
     private void applyPopularityOrdering(User user,
                                          List<Lecture> availableLectures,
-                                         Map<String, DetailKey> detailKeyByLectureId) {
+                                         Map<String, DetailKey> detailKeyByLectureId,
+                                         Set<String> membershipCache) {
         if (availableLectures == null || availableLectures.isEmpty()) return;
         Map<String, Integer> ranking = buildPopularityRanking(user, detailKeyByLectureId);
         if (ranking.isEmpty()) return;
@@ -353,13 +360,13 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         // 단, 인기 랭킹에 일반교양이 하나라도 있으면 필터링 적용
         Set<String> rankedLectureIds = new HashSet<>(ranking.keySet());
         boolean hasRankedNormalCulture = availableLectures.stream()
-                .anyMatch(l -> isNormalCultureLecture(l, detailKeyByLectureId) 
+                .anyMatch(l -> isNormalCultureLecture(l, detailKeyByLectureId, membershipCache) 
                         && rankedLectureIds.contains(l.getId()));
         
         if (hasRankedNormalCulture) {
             // 인기 랭킹에 일반교양이 있으면, 랭킹에 없는 일반교양만 제거
             availableLectures.removeIf(l -> {
-                if (isNormalCultureLecture(l, detailKeyByLectureId)) {
+                if (isNormalCultureLecture(l, detailKeyByLectureId, membershipCache)) {
                     return !rankedLectureIds.contains(l.getId());
                 }
                 return false;
@@ -592,7 +599,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                     recommendedAcross,
                     offeringCache,
                     a.detailKeyByLectureId,
-                    a.deficits
+                    a.deficits,
+                    a.membershipCache
             );
 
             semesters.add(RecommendAfterTimetableResponse.SemesterBlock.builder()
@@ -630,7 +638,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             Set<String> recommendedAcross,
             Map<String, Optional<MajorLectureOffering>> offeringCache,
             Map<String, DetailKey> detailKeyByLectureId,
-            Map<DetailKey, Integer> deficits
+            Map<DetailKey, Integer> deficits,
+            Set<String> membershipCache
     ) {
         List<RecommendAfterTimetableResponse.LectureItem> picks = new ArrayList<>();
         int cur = 0;
@@ -654,7 +663,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
             PickContext ctx = new PickContext(
                     recommendedAcross, remain, new SemesterInfo(grade, semester),
-                    offeringCache, targetDetailOpt, detailKeyByLectureId, deficits
+                    offeringCache, targetDetailOpt, detailKeyByLectureId, deficits, membershipCache
             );
 
             Lecture next = chooseNextLecture(mustLectures, availableLectures, ctx);
@@ -694,6 +703,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         final Optional<DetailKey> targetDetailOpt;
         final Map<String, DetailKey> detailKeyByLectureId;
         final Map<DetailKey, Integer> deficits;
+        final Set<String> membershipCache;
 
         PickContext(
                 Set<String> recommendedAcross,
@@ -702,7 +712,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 Map<String, Optional<MajorLectureOffering>> offeringCache,
                 Optional<DetailKey> targetDetailOpt,
                 Map<String, DetailKey> detailKeyByLectureId,
-                Map<DetailKey, Integer> deficits
+                Map<DetailKey, Integer> deficits,
+                Set<String> membershipCache
         ) {
             this.recommendedAcross = recommendedAcross;
             this.remain = remain;
@@ -711,6 +722,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             this.targetDetailOpt = targetDetailOpt;
             this.detailKeyByLectureId = detailKeyByLectureId;
             this.deficits = deficits;
+            this.membershipCache = membershipCache;
         }
     }
 
@@ -723,6 +735,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         final DetailRequirementContext detailRequirementContext;
         final Map<String, DetailKey> detailKeyByLectureId;
         final Map<DetailKey, Integer> deficits;
+        final Set<String> membershipCache;
 
         PlanningArgs(int remainingSemesters,
                      RemainingSemesterCalculator.NextSemester start,
@@ -731,7 +744,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                      List<Lecture> availableLectures,
                      DetailRequirementContext detailRequirementContext,
                      Map<String, DetailKey> detailKeyByLectureId,
-                     Map<DetailKey, Integer> deficits) {
+                     Map<DetailKey, Integer> deficits,
+                     Set<String> membershipCache) {
             this.remainingSemesters = remainingSemesters;
             this.start = start;
             this.creditPlan = creditPlan;
@@ -740,6 +754,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             this.detailRequirementContext = detailRequirementContext;
             this.detailKeyByLectureId = detailKeyByLectureId;
             this.deficits = deficits;
+            this.membershipCache = membershipCache;
         }
     }
 
@@ -919,7 +934,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                         availableLectures,
                         base.and(l -> !isChapel(l))
                                 .and(l -> hasRemainingDeficit(l, ctx.detailKeyByLectureId, ctx.deficits))
-                                .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId))
+                                .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId, ctx.membershipCache))
                 );
                 if (next != null) return next;
             }
@@ -939,7 +954,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         return pickAndRemoveFirst(
                 availableLectures,
                 base.and(l -> !isChapel(l))
-                        .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId))
+                        .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId, ctx.membershipCache))
         );
     }
 
@@ -982,6 +997,37 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         return null;
     }
 
+    /** 멤버십 정보 일괄 조회 캐시 구축 (N+1 문제 해결) */
+    private Set<String> buildMembershipCache(List<Lecture> availableLectures) {
+        if (availableLectures == null || availableLectures.isEmpty()) {
+            return Set.of();
+        }
+        
+        List<String> lectureIds = availableLectures.stream()
+                .map(Lecture::getId)
+                .filter(Objects::nonNull)
+                .toList();
+        
+        if (lectureIds.isEmpty()) {
+            return Set.of();
+        }
+        
+        Set<String> cache = new HashSet<>();
+        if (majorMembershipPort != null) {
+            cache.addAll(majorMembershipPort.findMajorLectureIds(lectureIds));
+        }
+        if (basicCultureMembershipPort != null) {
+            cache.addAll(basicCultureMembershipPort.findBasicLectureIds(lectureIds));
+        }
+        if (coreCultureMembershipPort != null) {
+            cache.addAll(coreCultureMembershipPort.findCoreLectureIds(lectureIds));
+        }
+        if (commonCultureMembershipPort != null) {
+            cache.addAll(commonCultureMembershipPort.findCommonLectureIds(lectureIds));
+        }
+        return cache;
+    }
+
     /** 채플 판정: 오직 코드 "KMA02101"만 채플로 간주 */
     private boolean isChapel(Lecture l) {
         String code = l.getId();
@@ -1010,16 +1056,27 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
      *  - 단, detailKey 매핑이 없는 경우에도 2)를 만족하면 순수 일반교양으로 인정
      */
     private boolean isNormalCultureLecture(Lecture lecture, Map<String, DetailKey> detailKeyByLectureId) {
+        return isNormalCultureLecture(lecture, detailKeyByLectureId, null);
+    }
+
+    private boolean isNormalCultureLecture(Lecture lecture, Map<String, DetailKey> detailKeyByLectureId, Set<String> membershipCache) {
         if (lecture == null) return false;
         String id = lecture.getId();
         if (id == null) return false;
 
         // 1) 어떤 전공/기초/핵심/공통 테이블에도 속하지 않는지 확인
-        boolean ownedByStructuredCategory =
-                (majorMembershipPort != null && majorMembershipPort.isMajorLecture(id))
-                        || (basicCultureMembershipPort != null && basicCultureMembershipPort.isBasicLecture(id))
-                        || (coreCultureMembershipPort != null && coreCultureMembershipPort.isCoreLecture(id))
-                        || (commonCultureMembershipPort != null && commonCultureMembershipPort.isCommonLecture(id));
+        boolean ownedByStructuredCategory;
+        if (membershipCache != null) {
+            // 캐시 사용 (일괄 조회된 결과) - N+1 문제 해결
+            ownedByStructuredCategory = membershipCache.contains(id);
+        } else {
+            // 기존 방식 (개별 조회 - 느림)
+            ownedByStructuredCategory =
+                    (majorMembershipPort != null && majorMembershipPort.isMajorLecture(id))
+                            || (basicCultureMembershipPort != null && basicCultureMembershipPort.isBasicLecture(id))
+                            || (coreCultureMembershipPort != null && coreCultureMembershipPort.isCoreLecture(id))
+                            || (commonCultureMembershipPort != null && commonCultureMembershipPort.isCommonLecture(id));
+        }
         if (ownedByStructuredCategory) {
             return false;
         }

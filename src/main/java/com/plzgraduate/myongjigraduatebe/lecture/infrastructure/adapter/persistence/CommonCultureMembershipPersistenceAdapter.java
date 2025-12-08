@@ -5,6 +5,10 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.CommonCultureM
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CommonCultureRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class CommonCultureMembershipPersistenceAdapter implements CommonCultureMembershipPort {
@@ -17,6 +21,14 @@ public class CommonCultureMembershipPersistenceAdapter implements CommonCultureM
             return false;
         }
         return commonCultureRepository.existsByLectureJpaEntity_Id(lectureId);
+    }
+
+    @Override
+    public Set<String> findCommonLectureIds(List<String> lectureIds) {
+        if (lectureIds == null || lectureIds.isEmpty()) {
+            return Set.of();
+        }
+        return new HashSet<>(commonCultureRepository.findIdsByLectureIdIn(lectureIds));
     }
 }
 

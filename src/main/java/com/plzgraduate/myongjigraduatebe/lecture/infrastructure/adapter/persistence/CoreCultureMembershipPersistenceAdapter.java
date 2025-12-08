@@ -5,6 +5,10 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.CoreCultureMem
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CoreCultureRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class CoreCultureMembershipPersistenceAdapter implements CoreCultureMembershipPort {
@@ -17,6 +21,14 @@ public class CoreCultureMembershipPersistenceAdapter implements CoreCultureMembe
             return false;
         }
         return coreCultureRepository.existsByLectureJpaEntity_Id(lectureId);
+    }
+
+    @Override
+    public Set<String> findCoreLectureIds(List<String> lectureIds) {
+        if (lectureIds == null || lectureIds.isEmpty()) {
+            return Set.of();
+        }
+        return new HashSet<>(coreCultureRepository.findIdsByLectureIdIn(lectureIds));
     }
 }
 
