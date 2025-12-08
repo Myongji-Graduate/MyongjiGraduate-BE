@@ -375,8 +375,9 @@ class RecommendAfterTimetableServiceTest {
         method.invoke(sut, List.of(dto1, dto2), new HashSet<>(), ranking, startRank);
 
         // 첫 번째만 추가되고 두 번째는 MAX 도달로 스킵되어야 함
-        assertThat(ranking).containsKey("LEC001");
-        assertThat(ranking).doesNotContainKey("LEC002");
+        assertThat(ranking)
+                .containsKey("LEC001")
+                .doesNotContainKey("LEC002");
     }
 
     @Test
