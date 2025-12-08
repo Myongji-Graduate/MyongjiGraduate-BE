@@ -100,8 +100,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             return;
         }
         DetailRequirement requirement = DetailRequirement.of(category, category.getName(), remaining, haveTo);
-        requirements.put(requirement.getKey(), requirement);
-        requirement.getHaveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.getKey()));
+        requirements.put(requirement.key(), requirement);
+        requirement.haveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.key()));
     }
 
     private void processDetailRecommendations(List<RecommendedLectureExtractor.DetailRecommendation> detailRecommendations,
@@ -119,8 +119,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                     remaining,
                     haveTo
             );
-            requirements.put(requirement.getKey(), requirement);
-            requirement.getHaveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.getKey()));
+            requirements.put(requirement.key(), requirement);
+            requirement.haveToLectureIds().forEach(id -> lectureIndex.put(id, requirement.key()));
         });
     }
 
@@ -220,7 +220,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     private void enforceQuotaLimits(Map<DetailKey, Integer> quota, Map<DetailKey, Integer> deficits) {
         quota.replaceAll((k, v) -> {
             int deficit = deficits.getOrDefault(k, 0);
-            return Math.max(0, Math.min(v, deficit));
+            return Math.clamp(v, 0, deficit);
         });
     }
 
@@ -375,7 +375,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         int rank = 0;
 
         rank = addBasicCultureByMajor(user, interestedCategories, ranking, rank);
-        rank = addGlobalPopularLectures(popularLectures, interestedCategories, ranking, rank);
+        addGlobalPopularLectures(popularLectures, interestedCategories, ranking, rank);
 
         return ranking;
     }
@@ -614,7 +614,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             Optional<DetailKey> targetDetailOpt = chooseNextDetail(semesterQuota, pickedByDetail);
 
             PickContext ctx = new PickContext(
-                    recommendedAcross, remain, grade, semester,
+                    recommendedAcross, remain, new SemesterInfo(grade, semester),
                     offeringCache, targetDetailOpt, detailKeyByLectureId, deficits
             );
 
@@ -645,11 +645,12 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     /**
      * Pick-time context to reduce parameter count for chooser methods.
      */
+    private record SemesterInfo(int grade, int semester) {}
+
     private static final class PickContext {
         final Set<String> recommendedAcross;
         final int remain;
-        final int curGrade;
-        final int curSemester;
+        final SemesterInfo semesterInfo;
         final Map<String, Optional<MajorLectureOffering>> offeringCache;
         final Optional<DetailKey> targetDetailOpt;
         final Map<String, DetailKey> detailKeyByLectureId;
@@ -658,8 +659,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         PickContext(
                 Set<String> recommendedAcross,
                 int remain,
-                int curGrade,
-                int curSemester,
+                SemesterInfo semesterInfo,
                 Map<String, Optional<MajorLectureOffering>> offeringCache,
                 Optional<DetailKey> targetDetailOpt,
                 Map<String, DetailKey> detailKeyByLectureId,
@@ -667,8 +667,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         ) {
             this.recommendedAcross = recommendedAcross;
             this.remain = remain;
-            this.curGrade = curGrade;
-            this.curSemester = curSemester;
+            this.semesterInfo = semesterInfo;
             this.offeringCache = offeringCache;
             this.targetDetailOpt = targetDetailOpt;
             this.detailKeyByLectureId = detailKeyByLectureId;
@@ -724,8 +723,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             Map<DetailKey, Integer> copy = new LinkedHashMap<>();
             requirements.values()
                     .forEach(req -> {
-                        if (req.getRemainingCredit() > 0) {
-                            copy.put(req.getKey(), req.getRemainingCredit());
+                        if (req.remainingCredit() > 0) {
+                            copy.put(req.key(), req.remainingCredit());
                         }
                     });
             return copy;
@@ -737,38 +736,21 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
         Collection<List<String>> haveToLectureLists() {
             return requirements.values().stream()
-                    .map(DetailRequirement::getHaveToLectureIds)
-                    .collect(Collectors.toList());
+                    .map(DetailRequirement::haveToLectureIds)
+                    .toList();
         }
     }
 
-    private static final class DetailRequirement {
-        private final DetailKey key;
-        private final int remainingCredit;
-        private final List<String> haveToLectureIds;
-
-        private DetailRequirement(DetailKey key, int remainingCredit, List<String> haveToLectureIds) {
-            this.key = key;
-            this.remainingCredit = remainingCredit;
-            this.haveToLectureIds = haveToLectureIds == null ? List.of() : List.copyOf(haveToLectureIds);
-        }
-
+    private record DetailRequirement(
+            DetailKey key,
+            int remainingCredit,
+            List<String> haveToLectureIds
+    ) {
         static DetailRequirement of(GraduationCategory category, String detailName,
                                     int remainingCredit, List<String> haveToLectureIds) {
             DetailKey key = DetailKey.of(category, detailName);
-            return new DetailRequirement(key, remainingCredit, haveToLectureIds);
-        }
-
-        DetailKey getKey() {
-            return key;
-        }
-
-        int getRemainingCredit() {
-            return remainingCredit;
-        }
-
-        List<String> getHaveToLectureIds() {
-            return haveToLectureIds;
+            List<String> safeList = haveToLectureIds == null ? List.of() : List.copyOf(haveToLectureIds);
+            return new DetailRequirement(key, remainingCredit, safeList);
         }
     }
 
@@ -855,8 +837,8 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         Predicate<Lecture> base = l ->
                 !ctx.recommendedAcross.contains(l.getId()) &&
                         safeCredit(l) > 0 &&
-                        canTakeCreditWithSlack(l, ctx.remain, ctx.detailKeyByLectureId) &&
-                        isOfferedNow(l, ctx.curGrade, ctx.curSemester, ctx.offeringCache, ctx.detailKeyByLectureId);
+                        canTakeCreditWithSlack(l, ctx.remain) &&
+                        isOfferedNow(l, ctx.semesterInfo.grade(), ctx.semesterInfo.semester(), ctx.offeringCache, ctx.detailKeyByLectureId);
 
         // ---------------------------------------------------------------------
         // 1) 타겟 detail 카테고리 우선 (필수 → 일반)
@@ -970,10 +952,10 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     /** NORMAL_CULTURE / FREE_ELECTIVE deficit이 있는지 여부 */
     private boolean needsPureNormalCultureFirst(Map<DetailKey, Integer> deficits) {
         if (deficits == null || deficits.isEmpty()) return false;
-        for (DetailKey key : deficits.keySet()) {
-            GraduationCategory cat = key.getGraduationCategory();
+        for (Map.Entry<DetailKey, Integer> entry : deficits.entrySet()) {
+            GraduationCategory cat = entry.getKey().getGraduationCategory();
             if (cat == GraduationCategory.NORMAL_CULTURE || cat == GraduationCategory.FREE_ELECTIVE) {
-                Integer left = deficits.get(key);
+                Integer left = entry.getValue();
                 if (left != null && left > 0) {
                     return true;
                 }
@@ -1029,8 +1011,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
      */
     private boolean canTakeCreditWithSlack(
             Lecture lecture,
-            int remain,
-            Map<String, DetailKey> detailKeyByLectureId
+            int remain
     ) {
         int credit = safeCredit(lecture);
         if (credit <= 0) return false;
