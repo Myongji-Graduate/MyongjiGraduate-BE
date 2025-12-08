@@ -43,8 +43,6 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     private final RemainingSemesterCalculator remainingSemesterCalculator;
     private final CreditTargetPolicy creditTargetPolicy;
     private final RemainingCreditsProvider remainingCreditsProvider;
-
-    // 추가 주입
     private final RequirementSnapshotQueryPort requirementSnapshotQueryPort;
     private final TakenLectureQuery takenLectureQuery;
     private final FindLecturePort findLecturePort;
@@ -350,6 +348,24 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         if (availableLectures == null || availableLectures.isEmpty()) return;
         Map<String, Integer> ranking = buildPopularityRanking(user, detailKeyByLectureId);
         if (ranking.isEmpty()) return;
+        
+        // 일반교양은 인기 랭킹에 있는 것만 유지 (takenlecture에 있는 일반교양만 추천)
+        // 단, 인기 랭킹에 일반교양이 하나라도 있으면 필터링 적용
+        Set<String> rankedLectureIds = new HashSet<>(ranking.keySet());
+        boolean hasRankedNormalCulture = availableLectures.stream()
+                .anyMatch(l -> isNormalCultureLecture(l, detailKeyByLectureId) 
+                        && rankedLectureIds.contains(l.getId()));
+        
+        if (hasRankedNormalCulture) {
+            // 인기 랭킹에 일반교양이 있으면, 랭킹에 없는 일반교양만 제거
+            availableLectures.removeIf(l -> {
+                if (isNormalCultureLecture(l, detailKeyByLectureId)) {
+                    return !rankedLectureIds.contains(l.getId());
+                }
+                return false;
+            });
+        }
+        
         availableLectures.sort(Comparator
                 .comparingInt((Lecture l) -> ranking.getOrDefault(l.getId(), Integer.MAX_VALUE))
                 .thenComparing(Lecture::getId));
@@ -357,13 +373,20 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
 
     private Map<String, Integer> buildPopularityRanking(User user,
                                                         Map<String, DetailKey> detailKeyByLectureId) {
-        if (popularLecturePort == null
-                || detailKeyByLectureId == null
-                || detailKeyByLectureId.isEmpty()) {
+        if (popularLecturePort == null) {
             return Collections.emptyMap();
         }
 
         Set<GraduationCategory> interestedCategories = extractInterestedCategories(detailKeyByLectureId);
+        // 일반교양은 항상 포함 (takenlecture에 있으면 추천 대상)
+        Set<GraduationCategory> applicableCategories = getApplicableCategories(user);
+        if (applicableCategories.contains(GraduationCategory.NORMAL_CULTURE)) {
+            interestedCategories.add(GraduationCategory.NORMAL_CULTURE);
+        }
+        if (applicableCategories.contains(GraduationCategory.FREE_ELECTIVE)) {
+            interestedCategories.add(GraduationCategory.FREE_ELECTIVE);
+        }
+        
         if (interestedCategories.isEmpty()) {
             return Collections.emptyMap();
         }
@@ -466,7 +489,12 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             return false;
         }
         PopularLectureCategory popularCategory = dto.getCategoryName();
-        if (popularCategory == null || popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) {
+        // category가 null이면 일반교양으로 간주 (다른 카테고리에 매칭되지 않은 경우)
+        if (popularCategory == null) {
+            return interestedCategories.contains(GraduationCategory.NORMAL_CULTURE)
+                    || interestedCategories.contains(GraduationCategory.FREE_ELECTIVE);
+        }
+        if (popularCategory == PopularLectureCategory.BASIC_ACADEMICAL_CULTURE) {
             return false;
         }
         return shouldIncludePopularLecture(popularCategory, interestedCategories);
