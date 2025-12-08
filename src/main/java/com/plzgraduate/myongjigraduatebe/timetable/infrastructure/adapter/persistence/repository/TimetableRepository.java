@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface TimetableRepository extends JpaRepository<TimetableJpaEntity, Long> {
     List<TimetableJpaEntity> findAllByYearAndSemester(int year, int semester);
-    List<TimetableJpaEntity> findByYearAndSemesterAndNameContaining(int year, int semester, String keyword);
-
     List<TimetableJpaEntity> findByYearAndSemesterAndCampusAndLectureCodeIn(int year, int semester, String campus, List<String> codes);
     List<TimetableJpaEntity> findByYearAndSemesterAndLectureCodeNotIn(int year, int semester, List<String> codes);
 

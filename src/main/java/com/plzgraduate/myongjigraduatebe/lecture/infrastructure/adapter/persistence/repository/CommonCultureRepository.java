@@ -36,4 +36,6 @@ public interface CommonCultureRepository extends JpaRepository<CommonCultureJpaE
             @Param("ids") List<String> lectureIds,
             @Param("entryYear") int entryYear
     );
+
+    boolean existsByLectureJpaEntity_Id(String lectureId);
 }

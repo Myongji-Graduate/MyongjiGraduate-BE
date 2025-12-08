@@ -25,4 +25,6 @@ public interface CoreCultureRepository extends JpaRepository<CoreCultureJpaEntit
             @Param("ids") List<String> lectureIds,
             @Param("entryYear") int entryYear
     );
+
+    boolean existsByLectureJpaEntity_Id(String lectureId);
 }

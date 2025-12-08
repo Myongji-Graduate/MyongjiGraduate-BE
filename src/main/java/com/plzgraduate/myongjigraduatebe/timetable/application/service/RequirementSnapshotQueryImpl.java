@@ -28,8 +28,8 @@ class RequirementSnapshotQueryImpl implements RequirementSnapshotQueryPort {
                     credit.getGraduationCategory(),
                     RequirementSnapshot.Item.builder()
                             .category(credit.getGraduationCategory())
-                            .totalCredit((int) credit.getTotalCredit())
-                            .takenCredit((int) credit.getTakenCredit())
+                            .totalCredit(credit.getTotalCredit())
+                            .takenCredit(credit.getTakenCredit())
                             .build()
             );
         }

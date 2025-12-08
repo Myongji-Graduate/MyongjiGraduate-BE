@@ -31,14 +31,16 @@ public class RequirementSnapshot {
     @Builder
     public static class Item {
         private final GraduationCategory category;
-        private final int totalCredit;
-        private final int takenCredit;
+        private final double totalCredit;
+        private final double takenCredit;
 
         public boolean isCompleted() {
             return takenCredit >= totalCredit;
         }
+
         public int getRemainingCredit() {
-            return Math.max(0, totalCredit - takenCredit);
+            double remaining = Math.max(0.0, totalCredit - takenCredit);
+            return (int) Math.ceil(remaining);
         }
     }
 }

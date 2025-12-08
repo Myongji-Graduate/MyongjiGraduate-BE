@@ -24,6 +24,7 @@ spring:
 
 logging:
   level:
+    com.plzgraduate.myongjigraduatebe.timetable.application.service: DEBUG
     p6spy: info
 
 server:

@@ -33,4 +33,6 @@ public interface MajorLectureRepository extends JpaRepository<MajorLectureJpaEnt
             @Param("entryYear") int entryYear
     );
 
+    boolean existsByLectureJpaEntity_Id(String lectureId);
+
 }
