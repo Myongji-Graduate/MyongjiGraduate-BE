@@ -63,10 +63,10 @@ public class LectureTestDataHelper {
         entityManager.clear();
 
         // 멤버십 정보 추가
-        addMajorMemberships(lectures, major, entryYear);
+        addMajorMemberships(lectures, major);
         addBasicCultureMemberships(lectures);
-        addCoreCultureMemberships(lectures, entryYear);
-        addCommonCultureMemberships(lectures, entryYear);
+        addCoreCultureMemberships(lectures);
+        addCommonCultureMemberships(lectures);
 
         entityManager.flush();
         entityManager.clear();
@@ -94,7 +94,7 @@ public class LectureTestDataHelper {
         return lectures;
     }
 
-    private void addMajorMemberships(List<LectureJpaEntity> lectures, String major, int entryYear) {
+    private void addMajorMemberships(List<LectureJpaEntity> lectures, String major) {
         List<MajorLectureJpaEntity> majorLectures = new ArrayList<>();
         int count = Math.min(10, lectures.size());
         
@@ -135,7 +135,7 @@ public class LectureTestDataHelper {
         basicAcademicalCultureRepository.saveAll(basicCultures);
     }
 
-    private void addCoreCultureMemberships(List<LectureJpaEntity> lectures, int entryYear) {
+    private void addCoreCultureMemberships(List<LectureJpaEntity> lectures) {
         List<CoreCultureJpaEntity> coreCultures = new ArrayList<>();
         CoreCultureCategory[] categories = CoreCultureCategory.values();
         int startIndex = 20;
@@ -153,7 +153,7 @@ public class LectureTestDataHelper {
         coreCultureRepository.saveAll(coreCultures);
     }
 
-    private void addCommonCultureMemberships(List<LectureJpaEntity> lectures, int entryYear) {
+    private void addCommonCultureMemberships(List<LectureJpaEntity> lectures) {
         List<CommonCultureJpaEntity> commonCultures = new ArrayList<>();
         int startIndex = 30;
         int endIndex = Math.min(40, lectures.size());
