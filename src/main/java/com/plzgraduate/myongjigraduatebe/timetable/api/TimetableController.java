@@ -48,14 +48,14 @@ public class TimetableController {
                     "page와 limit 파라미터로 무한스크롤을 구현할 수 있습니다. " +
                     "응답의 nextPage가 null이면 마지막 페이지입니다."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = TimetablePageResponse.class)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TimetablePageResponse.class)
+                    )
             )
-    )
     @GetMapping("/search")
     public TimetablePageResponse combined(
             @Parameter(hidden = true) @LoginUser Long userId,
