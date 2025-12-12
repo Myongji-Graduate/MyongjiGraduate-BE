@@ -51,9 +51,8 @@ public class LectureTestDataHelper {
      * 쿼리 수 측정을 위해 충분한 양의 강의 데이터를 생성합니다.
      *
      * @param major 사용자의 전공
-     * @param entryYear 사용자의 입학년도
      */
-    public void prepareTestData(String major, int entryYear) {
+    public void prepareTestData(String major) {
         // 테스트용 강의 데이터 생성 (쿼리 수 측정을 위해 충분한 양 생성)
         List<LectureJpaEntity> lectures = createTestLectures(100);
 
