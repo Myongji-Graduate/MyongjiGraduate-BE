@@ -99,7 +99,7 @@ class RecommendAfterTimetableServiceQueryCountTest extends PersistenceTestSuppor
         );
         
         // 테스트 데이터 준비: lecture.csv에서 강의 데이터 읽어서 저장
-        testDataHelper.prepareTestData(userEntity.getMajor(), userEntity.getEntryYear());
+        testDataHelper.prepareTestData(userEntity.getMajor());
         
         // 사용자 생성 후 통계 리셋 (실제 테스트 시작 전)
         statistics.clear();
