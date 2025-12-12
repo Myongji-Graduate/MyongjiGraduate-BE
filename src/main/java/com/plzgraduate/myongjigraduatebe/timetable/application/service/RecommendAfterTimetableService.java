@@ -661,9 +661,11 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             int remain = target - cur;
             Optional<DetailKey> targetDetailOpt = chooseNextDetail(semesterQuota, pickedByDetail);
 
+            PickContext.CacheContext cacheCtx = new PickContext.CacheContext(offeringCache, membershipCache);
+            PickContext.SelectionContext selectionCtx = new PickContext.SelectionContext(
+                    targetDetailOpt, detailKeyByLectureId, deficits);
             PickContext ctx = new PickContext(
-                    recommendedAcross, remain, new SemesterInfo(grade, semester),
-                    offeringCache, targetDetailOpt, detailKeyByLectureId, deficits, membershipCache
+                    recommendedAcross, remain, new SemesterInfo(grade, semester), cacheCtx, selectionCtx
             );
 
             Lecture next = chooseNextLecture(mustLectures, availableLectures, ctx);
@@ -699,30 +701,46 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         final Set<String> recommendedAcross;
         final int remain;
         final SemesterInfo semesterInfo;
-        final Map<String, Optional<MajorLectureOffering>> offeringCache;
-        final Optional<DetailKey> targetDetailOpt;
-        final Map<String, DetailKey> detailKeyByLectureId;
-        final Map<DetailKey, Integer> deficits;
-        final Set<String> membershipCache;
+        final CacheContext cache;
+        final SelectionContext selection;
 
         PickContext(
                 Set<String> recommendedAcross,
                 int remain,
                 SemesterInfo semesterInfo,
-                Map<String, Optional<MajorLectureOffering>> offeringCache,
-                Optional<DetailKey> targetDetailOpt,
-                Map<String, DetailKey> detailKeyByLectureId,
-                Map<DetailKey, Integer> deficits,
-                Set<String> membershipCache
+                CacheContext cache,
+                SelectionContext selection
         ) {
             this.recommendedAcross = recommendedAcross;
             this.remain = remain;
             this.semesterInfo = semesterInfo;
-            this.offeringCache = offeringCache;
-            this.targetDetailOpt = targetDetailOpt;
-            this.detailKeyByLectureId = detailKeyByLectureId;
-            this.deficits = deficits;
-            this.membershipCache = membershipCache;
+            this.cache = cache;
+            this.selection = selection;
+        }
+
+        static class CacheContext {
+            final Map<String, Optional<MajorLectureOffering>> offeringCache;
+            final Set<String> membershipCache;
+
+            CacheContext(Map<String, Optional<MajorLectureOffering>> offeringCache,
+                        Set<String> membershipCache) {
+                this.offeringCache = offeringCache;
+                this.membershipCache = membershipCache;
+            }
+        }
+
+        static class SelectionContext {
+            final Optional<DetailKey> targetDetailOpt;
+            final Map<String, DetailKey> detailKeyByLectureId;
+            final Map<DetailKey, Integer> deficits;
+
+            SelectionContext(Optional<DetailKey> targetDetailOpt,
+                            Map<String, DetailKey> detailKeyByLectureId,
+                            Map<DetailKey, Integer> deficits) {
+                this.targetDetailOpt = targetDetailOpt;
+                this.detailKeyByLectureId = detailKeyByLectureId;
+                this.deficits = deficits;
+            }
         }
     }
 
@@ -892,15 +910,15 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
                 !ctx.recommendedAcross.contains(l.getId()) &&
                         safeCredit(l) > 0 &&
                         canTakeCreditWithSlack(l, ctx.remain) &&
-                        isOfferedNow(l, ctx.semesterInfo.grade(), ctx.semesterInfo.semester(), ctx.offeringCache, ctx.detailKeyByLectureId);
+                        isOfferedNow(l, ctx.semesterInfo.grade(), ctx.semesterInfo.semester(), ctx.cache.offeringCache, ctx.selection.detailKeyByLectureId);
 
         // ---------------------------------------------------------------------
         // 1) 타겟 detail 카테고리 우선 (필수 → 일반)
         // ---------------------------------------------------------------------
-        if (ctx.targetDetailOpt.isPresent()) {
-            DetailKey targetDetail = ctx.targetDetailOpt.get();
+        if (ctx.selection.targetDetailOpt.isPresent()) {
+            DetailKey targetDetail = ctx.selection.targetDetailOpt.get();
             Predicate<Lecture> inDetail =
-                    l -> lectureInDetailCategory(l, targetDetail, ctx.detailKeyByLectureId);
+                    l -> lectureInDetailCategory(l, targetDetail, ctx.selection.detailKeyByLectureId);
 
             // (a) 타겟 detail + 필수(must)
             Lecture next = pickAndRemoveFirst(mustLectures, base.and(inDetail));
@@ -919,7 +937,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         // ---------------------------------------------------------------------
         Lecture next = pickAndRemoveFirst(
                 mustLectures,
-                base.and(l -> hasRemainingDeficit(l, ctx.detailKeyByLectureId, ctx.deficits))
+                base.and(l -> hasRemainingDeficit(l, ctx.selection.detailKeyByLectureId, ctx.selection.deficits))
         );
         if (next != null) return next;
 
@@ -927,14 +945,14 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         // 3) deficits가 남아 있으면 → deficits 줄일 수 있는 과목만 일반 pool에서 선택
         //    - NORMAL_CULTURE / FREE_ELECTIVE를 채울 때는 "진짜 일반교양(NORMAL_CULTURE)"을 우선 사용
         // ---------------------------------------------------------------------
-        if (!ctx.deficits.isEmpty()) {
+        if (!ctx.selection.deficits.isEmpty()) {
             // (a) NORMAL_CULTURE / FREE_ELECTIVE 부족이면 먼저 NORMAL_CULTURE 과목만 시도
-            if (needsPureNormalCultureFirst(ctx.deficits)) {
+            if (needsPureNormalCultureFirst(ctx.selection.deficits)) {
                 next = pickAndRemoveFirst(
                         availableLectures,
                         base.and(l -> !isChapel(l))
-                                .and(l -> hasRemainingDeficit(l, ctx.detailKeyByLectureId, ctx.deficits))
-                                .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId, ctx.membershipCache))
+                                .and(l -> hasRemainingDeficit(l, ctx.selection.detailKeyByLectureId, ctx.selection.deficits))
+                                .and(l -> isNormalCultureLecture(l, ctx.selection.detailKeyByLectureId, ctx.cache.membershipCache))
                 );
                 if (next != null) return next;
             }
@@ -943,7 +961,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
             next = pickAndRemoveFirst(
                     availableLectures,
                     base.and(l -> !isChapel(l))
-                            .and(l -> hasRemainingDeficit(l, ctx.detailKeyByLectureId, ctx.deficits))
+                            .and(l -> hasRemainingDeficit(l, ctx.selection.detailKeyByLectureId, ctx.selection.deficits))
             );
             if (next != null) return next;
         }
@@ -954,7 +972,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         return pickAndRemoveFirst(
                 availableLectures,
                 base.and(l -> !isChapel(l))
-                        .and(l -> isNormalCultureLecture(l, ctx.detailKeyByLectureId, ctx.membershipCache))
+                        .and(l -> isNormalCultureLecture(l, ctx.selection.detailKeyByLectureId, ctx.cache.membershipCache))
         );
     }
 
@@ -1055,10 +1073,6 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
      *    2) major / basic / core / common 어떤 테이블에도 속하지 않는 강의
      *  - 단, detailKey 매핑이 없는 경우에도 2)를 만족하면 순수 일반교양으로 인정
      */
-    private boolean isNormalCultureLecture(Lecture lecture, Map<String, DetailKey> detailKeyByLectureId) {
-        return isNormalCultureLecture(lecture, detailKeyByLectureId, null);
-    }
-
     private boolean isNormalCultureLecture(Lecture lecture, Map<String, DetailKey> detailKeyByLectureId, Set<String> membershipCache) {
         if (lecture == null) return false;
         String id = lecture.getId();
