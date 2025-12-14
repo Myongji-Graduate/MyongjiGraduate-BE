@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface TimetablePort {
     List<Timetable> findByYearAndSemester(int year, int semester);
-    List<Timetable> findByKeyword(int year, int semester, String keyword);
     List<Timetable> searchByCondition(int year, int semester, CampusFilter campus, TimetableSearchConditionRequest condition);
 
 

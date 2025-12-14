@@ -9,7 +9,7 @@ import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingAnon
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.dto.ParsingAnonymousDto;
 import com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response.UserInformationResponse;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

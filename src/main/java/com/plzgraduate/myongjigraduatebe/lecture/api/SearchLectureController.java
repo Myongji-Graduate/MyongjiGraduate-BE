@@ -5,8 +5,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureResponse;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +29,6 @@ public class SearchLectureController implements SearchLectureApiPresentation {
 		return searchLectureUseCase.searchLectures(userId, type, keyword)
 			.stream()
 			.map(SearchLectureResponse::from)
-			.collect(Collectors.toList());
+			.toList();
 	}
 }

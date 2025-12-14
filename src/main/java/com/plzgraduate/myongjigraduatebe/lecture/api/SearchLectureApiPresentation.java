@@ -5,7 +5,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.api.dto.response.SearchLectureR
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "SearchLecture", description = "type과 keyword를 통해 과목정보를 검색하는 API")

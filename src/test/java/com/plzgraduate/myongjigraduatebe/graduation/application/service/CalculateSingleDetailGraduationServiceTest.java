@@ -11,8 +11,11 @@ import static org.mockito.Mockito.mock;
 
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DefaultGraduationRequirementType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGraduationStrategy;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGraduationStrategyFactory;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
@@ -37,6 +40,10 @@ class CalculateSingleDetailGraduationServiceTest {
 	private FindTakenLectureUseCase findTakenLectureUseCase;
 	@Mock
 	private List<CalculateDetailGraduationUseCase> calculateDetailGraduationUseCases;
+	@Mock
+	private StudentGraduationStrategyFactory strategyFactory;
+	@Mock
+	private StudentGraduationStrategy studentGraduationStrategy;
 
 	@InjectMocks
 	private CalculateSingleDetailGraduationService calculateSingleDetailGraduationService;
@@ -60,12 +67,26 @@ class CalculateSingleDetailGraduationServiceTest {
 			CalculateDetailGraduationUseCase.class);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
+			.totalCredit(128)
+			.primaryMajorCredit(63)
+			.commonCultureCredit(17)
+			.coreCultureCredit(12)
+			.primaryBasicAcademicalCultureCredit(12)
+			.normalCultureCredit(10)
+			.freeElectiveCredit(14)
+			.build();
+
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(findTakenLectureUseCase.findTakenLectures(user.getId())).willReturn(
 			takenLectureInventory);
 		given(calculateDetailGraduationUseCases.stream()).willReturn(
 			Stream.of(calculateDetailGraduationUseCase));
 		given(calculateDetailGraduationUseCase.supports(graduationCategory)).willReturn(true);
+		given(strategyFactory.getStrategy(NORMAL)).willReturn(studentGraduationStrategy);
+		given(studentGraduationStrategy.createGraduationRequirement(
+			any(User.class), any(DefaultGraduationRequirementType.class)))
+			.willReturn(graduationRequirement);
 		given(calculateDetailGraduationUseCase.calculateSingleDetailGraduation(
 			any(User.class), any(GraduationCategory.class),
 			any(TakenLectureInventory.class), any(GraduationRequirement.class)))
@@ -107,12 +128,28 @@ class CalculateSingleDetailGraduationServiceTest {
 			CalculateDetailGraduationUseCase.class);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
+			.totalCredit(128)
+			.primaryMajorCredit(63)
+			.dualMajorCredit(63)
+			.commonCultureCredit(17)
+			.coreCultureCredit(12)
+			.primaryBasicAcademicalCultureCredit(12)
+			.dualBasicAcademicalCultureCredit(12)
+			.normalCultureCredit(0)
+			.freeElectiveCredit(0)
+			.build();
+
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(findTakenLectureUseCase.findTakenLectures(user.getId())).willReturn(
 			takenLectureInventory);
 		given(calculateDetailGraduationUseCases.stream()).willReturn(
 			Stream.of(calculateDetailGraduationUseCase));
 		given(calculateDetailGraduationUseCase.supports(graduationCategory)).willReturn(true);
+		given(strategyFactory.getStrategy(DUAL_MAJOR)).willReturn(studentGraduationStrategy);
+		given(studentGraduationStrategy.createGraduationRequirement(
+			any(User.class), any(DefaultGraduationRequirementType.class)))
+			.willReturn(graduationRequirement);
 		given(calculateDetailGraduationUseCase.calculateSingleDetailGraduation(
 			any(User.class), any(GraduationCategory.class),
 			any(TakenLectureInventory.class), any(GraduationRequirement.class)))
@@ -151,12 +188,27 @@ class CalculateSingleDetailGraduationServiceTest {
 			CalculateDetailGraduationUseCase.class);
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
 
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
+			.totalCredit(128)
+			.primaryMajorCredit(63)
+			.subMajorCredit(21)
+			.commonCultureCredit(17)
+			.coreCultureCredit(12)
+			.primaryBasicAcademicalCultureCredit(12)
+			.normalCultureCredit(10)
+			.freeElectiveCredit(0)
+			.build();
+
 		given(findUserUseCase.findUserById(user.getId())).willReturn(user);
 		given(findTakenLectureUseCase.findTakenLectures(user.getId())).willReturn(
 			takenLectureInventory);
 		given(calculateDetailGraduationUseCases.stream()).willReturn(
 			Stream.of(calculateDetailGraduationUseCase));
 		given(calculateDetailGraduationUseCase.supports(graduationCategory)).willReturn(true);
+		given(strategyFactory.getStrategy(SUB_MAJOR)).willReturn(studentGraduationStrategy);
+		given(studentGraduationStrategy.createGraduationRequirement(
+			any(User.class), any(DefaultGraduationRequirementType.class)))
+			.willReturn(graduationRequirement);
 		given(calculateDetailGraduationUseCase.calculateSingleDetailGraduation(
 			any(User.class), any(GraduationCategory.class),
 			any(TakenLectureInventory.class), any(GraduationRequirement.class)))

@@ -4,6 +4,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCateg
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.application.port.TimetablePort;
+import com.plzgraduate.myongjigraduatebe.timetable.application.usecase.FindTimetableUseCase;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.TakenFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -156,5 +158,102 @@ class FindTimeTableServiceTest {
         List<Timetable> result = sut.searchCombined(1L, year, semester, campus, TakenFilter.TAKEN, null, GraduationCategory.PRIMARY_ELECTIVE_MAJOR);
         assertThat(result).isEmpty();
         verifyNoInteractions(recommendedExtractor, findTakenLecturePort);
+    }
+
+    @Test
+    @DisplayName("determineCategories: NORMAL 학생은 기본 카테고리 반환")
+    void determineCategories_normalStudent() throws Exception {
+        Method method = FindTimeTableService.class.getDeclaredMethod("determineCategories", Long.class);
+        method.setAccessible(true);
+
+        User normalUser = mock(User.class);
+        when(normalUser.getStudentCategory()).thenReturn(com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.NORMAL);
+        when(findUserUseCase.findUserById(1L)).thenReturn(normalUser);
+
+        @SuppressWarnings("unchecked")
+        List<GraduationCategory> result = (List<GraduationCategory>) method.invoke(sut, 1L);
+
+        assertThat(result)
+                .contains(GraduationCategory.PRIMARY_MANDATORY_MAJOR)
+                .contains(GraduationCategory.PRIMARY_ELECTIVE_MAJOR)
+                .contains(GraduationCategory.COMMON_CULTURE)
+                .contains(GraduationCategory.CORE_CULTURE)
+                .contains(GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE)
+                .doesNotContain(GraduationCategory.SUB_MAJOR)
+                .doesNotContain(GraduationCategory.DUAL_ELECTIVE_MAJOR);
+    }
+
+    @Test
+    @DisplayName("determineCategories: SUB_MAJOR 학생은 SUB_MAJOR 카테고리 추가")
+    void determineCategories_subMajorStudent() throws Exception {
+        Method method = FindTimeTableService.class.getDeclaredMethod("determineCategories", Long.class);
+        method.setAccessible(true);
+
+        User subMajorUser = mock(User.class);
+        when(subMajorUser.getStudentCategory()).thenReturn(com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.SUB_MAJOR);
+        when(findUserUseCase.findUserById(1L)).thenReturn(subMajorUser);
+
+        @SuppressWarnings("unchecked")
+        List<GraduationCategory> result = (List<GraduationCategory>) method.invoke(sut, 1L);
+
+        assertThat(result).contains(GraduationCategory.SUB_MAJOR);
+    }
+
+    @Test
+    @DisplayName("determineCategories: DUAL_MAJOR 학생은 DUAL 카테고리 추가")
+    void determineCategories_dualMajorStudent() throws Exception {
+        Method method = FindTimeTableService.class.getDeclaredMethod("determineCategories", Long.class);
+        method.setAccessible(true);
+
+        User dualMajorUser = mock(User.class);
+        when(dualMajorUser.getStudentCategory()).thenReturn(com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.DUAL_MAJOR);
+        when(findUserUseCase.findUserById(1L)).thenReturn(dualMajorUser);
+
+        @SuppressWarnings("unchecked")
+        List<GraduationCategory> result = (List<GraduationCategory>) method.invoke(sut, 1L);
+
+        assertThat(result)
+                .contains(GraduationCategory.DUAL_ELECTIVE_MAJOR)
+                .contains(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE);
+    }
+
+    @Test
+    @DisplayName("searchCombinedWithPagination: 페이지네이션 적용")
+    void searchCombinedWithPagination_appliesPagination() {
+        List<Timetable> allResults = List.of(t("A"), t("B"), t("C"), t("D"), t("E"));
+        when(timetablePort.findByYearAndSemester(year, semester)).thenReturn(allResults);
+        when(recommendedExtractor.extractLectureIds(anyLong(), any(), any()))
+                .thenReturn(List.of("A", "B", "C", "D", "E"));
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(anyInt(), anyInt(), any(), anyList()))
+                .thenReturn(allResults);
+
+        FindTimetableUseCase.SearchCombinedResult result = sut.searchCombinedWithPagination(
+                1L,
+                new FindTimetableUseCase.SearchParams(year, semester, campus, TakenFilter.ALL, null, null),
+                new FindTimetableUseCase.PaginationParams(2, 2) // 2페이지, 페이지당 2개
+        );
+
+        assertThat(result.getTotalCount()).isEqualTo(5);
+        assertThat(result.getData()).hasSize(2); // 2페이지는 3,4번째 항목
+    }
+
+    @Test
+    @DisplayName("searchCombinedWithPagination: 마지막 페이지 초과 시 빈 리스트 반환")
+    void searchCombinedWithPagination_outOfRange() {
+        List<Timetable> allResults = List.of(t("A"), t("B"));
+        when(timetablePort.findByYearAndSemester(year, semester)).thenReturn(allResults);
+        when(recommendedExtractor.extractLectureIds(anyLong(), any(), any()))
+                .thenReturn(List.of("A", "B"));
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(anyInt(), anyInt(), any(), anyList()))
+                .thenReturn(allResults);
+
+        FindTimetableUseCase.SearchCombinedResult result = sut.searchCombinedWithPagination(
+                1L,
+                new FindTimetableUseCase.SearchParams(year, semester, campus, TakenFilter.ALL, null, null),
+                new FindTimetableUseCase.PaginationParams(3, 2) // 3페이지 (존재하지 않음)
+        );
+
+        assertThat(result.getTotalCount()).isEqualTo(2);
+        assertThat(result.getData()).isEmpty();
     }
 }

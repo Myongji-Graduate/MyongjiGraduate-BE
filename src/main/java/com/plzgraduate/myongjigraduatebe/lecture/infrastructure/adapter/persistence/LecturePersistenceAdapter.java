@@ -47,6 +47,14 @@ public class LecturePersistenceAdapter implements FindLecturePort, SearchLecture
 	}
 
 	@Override
+	public List<Lecture> findAllLectures() {
+		return lectureRepository.findAll()
+				.stream()
+				.map(lectureMapper::mapToLectureModel)
+				.collect(Collectors.toList());
+	}
+
+	@Override
 	public List<Lecture> searchLectureByNameOrCode(String type, String keyword) {
 		List<LectureJpaEntity> lectureJpaEntities = lectureQueryRepository.searchByNameOrCode(type, keyword);
 		return lectureJpaEntities.stream()

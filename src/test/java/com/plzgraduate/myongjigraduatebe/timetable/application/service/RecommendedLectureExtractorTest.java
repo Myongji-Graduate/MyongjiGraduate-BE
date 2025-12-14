@@ -120,4 +120,123 @@ class RecommendedLectureExtractorTest {
 
         assertThat(ids).containsExactlyInAnyOrder("A", "B");
     }
+
+    @Test
+    @DisplayName("extractDetailRecommendations: detailCategories가 있을 때 각 detail별로 추천 반환")
+    void extractDetailRecommendations_withDetailCategories() {
+        DetailCategoryResult detail1 = DetailCategoryResult.builder()
+                .detailCategoryName("사회와공동체")
+                .totalCredits(3)
+                .takenCredits(0)
+                .build();
+        detail1.getHaveToLectures().addAll(List.of(l("LEC001"), l("LEC002")));
+
+        DetailCategoryResult detail2 = DetailCategoryResult.builder()
+                .detailCategoryName("역사와철학")
+                .totalCredits(3)
+                .takenCredits(3)
+                .build();
+
+        DetailGraduationResult result = DetailGraduationResult.builder()
+                .graduationCategory(GraduationCategory.CORE_CULTURE)
+                .detailCategory(List.of(detail1, detail2))
+                .totalCredit(6)
+                .takenCredit(3)
+                .build();
+
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.CORE_CULTURE)))
+                .thenReturn(result);
+
+        List<RecommendedLectureExtractor.DetailRecommendation> recommendations =
+                sut.extractDetailRecommendations(1L, GraduationCategory.CORE_CULTURE);
+
+        assertThat(recommendations).hasSize(1);
+        assertThat(recommendations.getFirst().getDetailCategoryName()).isEqualTo("사회와공동체");
+        assertThat(recommendations.getFirst().getRemainingCredit()).isEqualTo(3);
+        assertThat(recommendations.getFirst().getHaveToLectureIds()).containsExactlyInAnyOrder("LEC001", "LEC002");
+    }
+
+    @Test
+    @DisplayName("extractDetailRecommendations: detailCategories가 없을 때 카테고리 레벨 추천 반환")
+    void extractDetailRecommendations_withoutDetailCategories() {
+        DetailGraduationResult result = DetailGraduationResult.builder()
+                .graduationCategory(GraduationCategory.COMMON_CULTURE)
+                .detailCategory(List.of())
+                .totalCredit(17)
+                .takenCredit(15)
+                .build();
+
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.COMMON_CULTURE)))
+                .thenReturn(result);
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.COMMON_CULTURE)))
+                .thenReturn(result);
+
+        List<RecommendedLectureExtractor.DetailRecommendation> recommendations =
+                sut.extractDetailRecommendations(1L, GraduationCategory.COMMON_CULTURE);
+
+        assertThat(recommendations).hasSize(1);
+        assertThat(recommendations.getFirst().getGraduationCategory()).isEqualTo(GraduationCategory.COMMON_CULTURE);
+        assertThat(recommendations.getFirst().getRemainingCredit()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("extractDetailRecommendations: remaining이 0이고 haveTo가 비어있으면 빈 리스트 반환")
+    void extractDetailRecommendations_noRemainingAndNoHaveTo() {
+        DetailCategoryResult detail = DetailCategoryResult.builder()
+                .detailCategoryName("완료된카테고리")
+                .totalCredits(3)
+                .takenCredits(3)
+                .build();
+
+        DetailGraduationResult result = DetailGraduationResult.builder()
+                .graduationCategory(GraduationCategory.CORE_CULTURE)
+                .detailCategory(List.of(detail))
+                .totalCredit(3)
+                .takenCredit(3)
+                .build();
+
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.CORE_CULTURE)))
+                .thenReturn(result);
+
+        List<RecommendedLectureExtractor.DetailRecommendation> recommendations =
+                sut.extractDetailRecommendations(1L, GraduationCategory.CORE_CULTURE);
+
+        assertThat(recommendations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("extractDetailRecommendations: UNFITTED_GRADUATION_CATEGORY 예외 시 빈 리스트 반환")
+    void extractDetailRecommendations_handlesUnfittedCategoryException() {
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.FREE_ELECTIVE)))
+                .thenThrow(new IllegalArgumentException("UNFITTED_GRADUATION_CATEGORY"));
+
+        List<RecommendedLectureExtractor.DetailRecommendation> recommendations =
+                sut.extractDetailRecommendations(1L, GraduationCategory.FREE_ELECTIVE);
+
+        assertThat(recommendations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("extractDetailRecommendations: No calculate detail graduation case found 예외 시 빈 리스트 반환")
+    void extractDetailRecommendations_handlesNoCalculateCaseException() {
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.CHAPEL)))
+                .thenThrow(new RuntimeException("No calculate detail graduation case found"));
+
+        List<RecommendedLectureExtractor.DetailRecommendation> recommendations =
+                sut.extractDetailRecommendations(1L, GraduationCategory.CHAPEL);
+
+        assertThat(recommendations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("extractDetailRecommendations: 다른 예외는 그대로 전파")
+    void extractDetailRecommendations_propagatesOtherExceptions() {
+        RuntimeException exception = new RuntimeException("Unexpected error");
+        when(calc.calculateSingleDetailGraduation(anyLong(), eq(GraduationCategory.CORE_CULTURE)))
+                .thenThrow(exception);
+
+        assertThat(org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () ->
+                sut.extractDetailRecommendations(1L, GraduationCategory.CORE_CULTURE)
+        )).isEqualTo(exception);
+    }
 }

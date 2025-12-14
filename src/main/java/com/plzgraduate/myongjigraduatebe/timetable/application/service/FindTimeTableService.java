@@ -37,11 +37,6 @@ public class FindTimeTableService implements FindTimetableUseCase {
     }
 
     @Override
-    public List<Timetable> findByKeyword(int year, int semester, String keyword) {
-        return timetablePort.findByKeyword(year, semester, keyword);
-    }
-
-    @Override
     public List<Timetable> searchCombined(
             Long userId,
             int year,
@@ -73,14 +68,11 @@ public class FindTimeTableService implements FindTimetableUseCase {
     }
 
     private RecommendedLectureExtractor.ExtractMode resolveExtractMode(TakenFilter filter) {
-        switch (filter) {
-            case TAKEN:
-                return RecommendedLectureExtractor.ExtractMode.TAKEN;
-            case NOT_TAKEN:
-                return RecommendedLectureExtractor.ExtractMode.HAVE_TO;
-            default:
-                return RecommendedLectureExtractor.ExtractMode.BOTH;
-        }
+        return switch (filter) {
+            case TAKEN -> RecommendedLectureExtractor.ExtractMode.TAKEN;
+            case NOT_TAKEN -> RecommendedLectureExtractor.ExtractMode.HAVE_TO;
+            default -> RecommendedLectureExtractor.ExtractMode.BOTH;
+        };
     }
 
     private Set<String> extractRecommendedLectureCodes(Long userId, List<GraduationCategory> categories, RecommendedLectureExtractor.ExtractMode mode) {
@@ -139,5 +131,35 @@ public class FindTimeTableService implements FindTimetableUseCase {
                 break; // NORMAL
         }
         return dynamic;
+    }
+
+    @Override
+    public FindTimetableUseCase.SearchCombinedResult searchCombinedWithPagination(
+            Long userId,
+            FindTimetableUseCase.SearchParams searchParams,
+            FindTimetableUseCase.PaginationParams pagination
+    ) {
+        // 기존 searchCombined 로직을 재사용하여 전체 결과 조회
+        List<Timetable> allResults = searchCombined(
+                userId,
+                searchParams.year(),
+                searchParams.semester(),
+                searchParams.campus(),
+                searchParams.filter(),
+                searchParams.condition(),
+                searchParams.recommendedCategory()
+        );
+        
+        long totalCount = allResults.size();
+        
+        // 페이지네이션 적용 (1-based page)
+        int offset = (pagination.page() - 1) * pagination.limit();
+        int endIndex = Math.min(offset + pagination.limit(), allResults.size());
+        
+        List<Timetable> paginatedResults = (offset >= allResults.size())
+                ? List.of()
+                : allResults.subList(offset, endIndex);
+        
+        return new FindTimetableUseCase.SearchCombinedResult(paginatedResults, totalCount);
     }
 }

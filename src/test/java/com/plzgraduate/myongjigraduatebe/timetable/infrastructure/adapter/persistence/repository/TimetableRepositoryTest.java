@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,27 +60,6 @@ class TimetableRepositoryTest extends PersistenceTestSupport {
         assertThat(result)
                 .extracting(TimetableJpaEntity::getLectureCode)
                 .containsExactlyInAnyOrder("KMA00001", "KMA00002");
-    }
-
-    @Test
-    @DisplayName("findByYearAndSemesterAndNameContaining: 과목명 키워드로 필터")
-    void findByYearAndSemesterAndNameContaining_filtersByNameKeyword() {
-        // given (같은 학기 내에서만 검색)
-        persistTimetable(1, "KMA10001", "자료구조", "인문", 2025, 2);
-        persistTimetable(2, "KMA10002", "고급자료구조", "인문", 2025, 2);
-        persistTimetable(3, "KMA10003", "네트워크", "자연", 2025, 2);
-        // 다른 학기 동일 키워드 존재하더라도 제외
-        persistTimetable(4, "KMA10004", "자료구조", "인문", 2024, 2);
-
-        // when
-        List<TimetableJpaEntity> result = timetableRepository
-                .findByYearAndSemesterAndNameContaining(2025, 2, "자료구조");
-
-        // then
-        assertThat(result).hasSize(2);
-        assertThat(result)
-                .extracting(TimetableJpaEntity::getLectureCode)
-                .containsExactlyInAnyOrder("KMA10001", "KMA10002");
     }
 
     @Test

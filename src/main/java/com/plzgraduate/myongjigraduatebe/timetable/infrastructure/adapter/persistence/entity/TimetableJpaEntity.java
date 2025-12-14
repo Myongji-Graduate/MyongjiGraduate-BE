@@ -4,7 +4,7 @@ package com.plzgraduate.myongjigraduatebe.timetable.infrastructure.adapter.persi
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(

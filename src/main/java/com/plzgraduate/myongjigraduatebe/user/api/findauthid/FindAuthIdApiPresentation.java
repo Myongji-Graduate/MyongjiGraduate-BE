@@ -4,7 +4,7 @@ import com.plzgraduate.myongjigraduatebe.user.api.findauthid.dto.response.UserAu
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "FindAuthId", description = "학번으로 해당 학생의 아이디를 조회하는 API")

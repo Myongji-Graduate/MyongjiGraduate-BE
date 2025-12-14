@@ -5,7 +5,7 @@ import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequ
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "ParsingText", description = "파싱 텍스트를 등록하는 API")

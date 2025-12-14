@@ -5,12 +5,12 @@ import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSear
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.CampusFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.TakenFilter;
 import com.plzgraduate.myongjigraduatebe.timetable.domain.model.Timetable;
+import lombok.Getter;
 
 import java.util.List;
 
 public interface FindTimetableUseCase {
     List<Timetable> findByYearAndSemester(int year, int semester);
-    List<Timetable> findByKeyword(int year, int semester, String keyword);
 
     List<Timetable> searchCombined(
             Long userId,
@@ -21,4 +21,32 @@ public interface FindTimetableUseCase {
             TimetableSearchConditionRequest condition,
             GraduationCategory recommendedCategory // NOT_TAKEN일 때 필수
     );
+
+    SearchCombinedResult searchCombinedWithPagination(
+            Long userId,
+            SearchParams searchParams,
+            PaginationParams pagination
+    );
+
+    record SearchParams(
+            int year,
+            int semester,
+            CampusFilter campus,
+            TakenFilter filter,
+            TimetableSearchConditionRequest condition,
+            GraduationCategory recommendedCategory
+    ) {}
+
+    record PaginationParams(int page, int limit) {}
+
+    @Getter
+    class SearchCombinedResult {
+        private final List<Timetable> data;
+        private final long totalCount;
+
+        public SearchCombinedResult(List<Timetable> data, long totalCount) {
+            this.data = data;
+            this.totalCount = totalCount;
+        }
+    }
 }

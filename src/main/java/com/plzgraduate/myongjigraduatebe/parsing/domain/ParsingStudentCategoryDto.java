@@ -16,6 +16,7 @@ class ParsingStudentCategoryDto {
 	private final StudentCategory studentCategory;
 	private final TransferCredit transferCredit;
 	private final ExchangeCredit exchangeCredit;
+	private final Integer completedSemesterCount;
 
 
 	@Builder
@@ -26,7 +27,8 @@ class ParsingStudentCategoryDto {
 			String associatedMajor,
 			StudentCategory studentCategory,
 			TransferCredit transferCredit,
-			ExchangeCredit exchangeCredit
+			ExchangeCredit exchangeCredit,
+			Integer completedSemesterCount
 	) {
 		this.changeMajor = changeMajor;
 		this.dualMajor = dualMajor;
@@ -35,6 +37,7 @@ class ParsingStudentCategoryDto {
 		this.studentCategory = studentCategory;
 		this.transferCredit = transferCredit;
 		this.exchangeCredit = exchangeCredit;
+		this.completedSemesterCount = completedSemesterCount;
 	}
 
 	public static ParsingStudentCategoryDto of(

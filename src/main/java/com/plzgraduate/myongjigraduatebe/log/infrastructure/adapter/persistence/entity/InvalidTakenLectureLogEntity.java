@@ -3,7 +3,7 @@ package com.plzgraduate.myongjigraduatebe.log.infrastructure.adapter.persistence
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
