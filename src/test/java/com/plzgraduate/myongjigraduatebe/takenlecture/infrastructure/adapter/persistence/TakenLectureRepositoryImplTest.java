@@ -4,7 +4,9 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecture
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.LectureCategoryResolver;
+import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CommonCultureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.CoreCultureJpaEntity;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.LectureReviewJpaEntity;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -55,6 +57,40 @@ class TakenLectureRepositoryImplTest {
                 .studentCategory(StudentCategory.NORMAL)
                 .build();
         em.persist(user);
+    }
+
+    @Test
+    @DisplayName("총 인기 강의 조회: subquery 평균 평점 + 전체 수강 카운트가 계산된다")
+    void getPopularLecturesByTotalCount_coversAvgSubquery() {
+        // lectures
+        LectureJpaEntity l1 = LectureJpaEntity.builder().id("TL1").name("TLec1").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity l2 = LectureJpaEntity.builder().id("TL2").name("TLec2").credit(2).duplicateCode(null).isRevoked(0).build();
+        em.persist(l1); em.persist(l2);
+
+        // taken counts: l1 x3, l2 x2
+        persistTaken(l1); persistTaken(l1); persistTaken(l1);
+        persistTaken(l2); persistTaken(l2);
+
+        // reviews for subquery avg (subject = lecture.name)
+        em.persist(reviewOf("TLec1", BigDecimal.valueOf(4.0)));
+        em.persist(reviewOf("TLec1", BigDecimal.valueOf(5.0))); // avg 4.5
+        em.persist(reviewOf("TLec2", BigDecimal.valueOf(3.0))); // avg 3.0
+
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> list = repository.getPopularLecturesByTotalCount();
+
+        PopularLectureDto d1 = list.stream().filter(d -> d.getLectureId().equals("TL1")).findFirst().orElseThrow();
+        PopularLectureDto d2 = list.stream().filter(d -> d.getLectureId().equals("TL2")).findFirst().orElseThrow();
+
+        assertThat(d1.getTotalCount()).isEqualTo(3L);
+        assertThat(d1.getAverageRating()).isEqualTo(4.5);
+        assertThat(d1.getCredit()).isEqualTo(3);
+
+        assertThat(d2.getTotalCount()).isEqualTo(2L);
+        assertThat(d2.getAverageRating()).isEqualTo(3.0);
+        assertThat(d2.getCredit()).isEqualTo(2);
     }
 
     @Test
@@ -194,5 +230,96 @@ class TakenLectureRepositoryImplTest {
         JPAQueryFactory jpaQueryFactory(EntityManager em) {
             return new JPAQueryFactory(em);
         }
+    }
+
+    @Test
+    @DisplayName("COMMON_CULTURE 카테고리 조회 + 빈 문자열 커서 처리")
+    void commonCultureQuery_withBlankCursor() {
+        LectureJpaEntity com = LectureJpaEntity.builder().id("COM1").name("Common1").credit(2).duplicateCode(null).isRevoked(0).build();
+        em.persist(com);
+        // CommonCulture 매핑 (entryYear 포함)
+        em.persist(CommonCultureJpaEntity
+                .builder()
+                .lectureJpaEntity(com)
+                .commonCultureCategory(CommonCultureCategory.KOREAN)
+                .startEntryYear(0)
+                .endEntryYear(99)
+                .build());
+        // 수강 기록 1건
+        persistTaken(com);
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> page = repository.getLecturesByCategory("x", 20, PopularLectureCategory.COMMON_CULTURE, 10, "");
+        assertThat(page).hasSize(1);
+        assertThat(page.getFirst().getLectureId()).isEqualTo("COM1");
+        assertThat(page.getFirst().getCredit()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("섹션 메타: 데이터가 없으면 빈 리스트 반환")
+    void getSections_emptyReturnsEmpty() {
+        var sections = repository.getSections("응용소프트웨어전공", 20);
+        assertThat(sections).isEmpty();
+    }
+
+    @Test
+    @DisplayName("섹션 메타: 카테고리별 개수를 그룹핑하고 고정 순서로 반환한다")
+    void getSections_groupsByCategoryAndOrder() {
+        // given: major/entryYear에 맞는 맥락
+        String major = "응용소프트웨어전공";
+        int entryYear = 20;
+
+        // lectures by category
+        LectureJpaEntity basic = LectureJpaEntity.builder().id("BAS1").name("Basic1").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity core1 = LectureJpaEntity.builder().id("COR1").name("Core1").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity core2 = LectureJpaEntity.builder().id("COR2").name("Core2").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity mand = LectureJpaEntity.builder().id("MAN1").name("Mand1").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity elect = LectureJpaEntity.builder().id("ELE1").name("Elect1").credit(3).duplicateCode(null).isRevoked(0).build();
+        em.persist(basic); em.persist(core1); em.persist(core2); em.persist(mand); em.persist(elect);
+
+        // mappings
+        // BASIC: college 이름은 College.findBelongingCollege(major, entryYear).getName()와 동일해야 함
+        String college = com.plzgraduate.myongjigraduatebe.user.domain.model.College
+                .findBelongingCollege(major, entryYear).getName();
+        em.persist(com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.BasicAcademicalCultureLectureJpaEntity
+                .builder()
+                .lectureJpaEntity(basic)
+                .college(college)
+                .build());
+
+        // CORE: entryYear 사이
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(core1).startEntryYear(0).endEntryYear(99).build());
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(core2).startEntryYear(0).endEntryYear(99).build());
+
+        // MANDATORY_MAJOR / ELECTIVE_MAJOR
+        em.persist(com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(mand).major(major).mandatory(1).startEntryYear(0).endEntryYear(99).build());
+        em.persist(com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(elect).major(major).mandatory(0).startEntryYear(0).endEntryYear(99).build());
+
+        // taken: 각 강의당 최소 1건(집계 대상에 포함되도록)
+        persistTaken(basic);
+        persistTaken(core1);
+        persistTaken(core2);
+        persistTaken(mand);
+        persistTaken(elect);
+
+        em.flush();
+        em.clear();
+
+        // when
+        var sections = repository.getSections(major, entryYear);
+
+        // then: COMMON은 없으므로 제외되고, 순서는 BASIC -> CORE -> MANDATORY -> ELECTIVE
+        assertThat(sections).hasSize(4);
+        assertThat(sections.get(0).getCategoryName()).isEqualTo(PopularLectureCategory.BASIC_ACADEMICAL_CULTURE);
+        assertThat(sections.get(0).getTotal()).isEqualTo(1);
+        assertThat(sections.get(1).getCategoryName()).isEqualTo(PopularLectureCategory.CORE_CULTURE);
+        assertThat(sections.get(1).getTotal()).isEqualTo(2);
+        assertThat(sections.get(2).getCategoryName()).isEqualTo(PopularLectureCategory.MANDATORY_MAJOR);
+        assertThat(sections.get(2).getTotal()).isEqualTo(1);
+        assertThat(sections.get(3).getCategoryName()).isEqualTo(PopularLectureCategory.ELECTIVE_MAJOR);
+        assertThat(sections.get(3).getTotal()).isEqualTo(1);
     }
 }
