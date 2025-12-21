@@ -10,16 +10,19 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCateg
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecturedetail.infrastructure.adapter.persistence.entity.LectureReviewJpaEntity;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.QTakenLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.entity.TakenLectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -358,7 +361,9 @@ class TakenLectureRepositoryImplTest {
         LectureJpaEntity core2 = LectureJpaEntity.builder().id("COR2").name("Core2").credit(3).duplicateCode(null).isRevoked(0).build();
         LectureJpaEntity mand = LectureJpaEntity.builder().id("MAN1").name("Mand1").credit(3).duplicateCode(null).isRevoked(0).build();
         LectureJpaEntity elect = LectureJpaEntity.builder().id("ELE1").name("Elect1").credit(3).duplicateCode(null).isRevoked(0).build();
-        em.persist(basic); em.persist(core1); em.persist(core2); em.persist(mand); em.persist(elect);
+        // unmapped lecture (categoryName=null)
+        LectureJpaEntity other = LectureJpaEntity.builder().id("OTH1").name("Other1").credit(1).duplicateCode(null).isRevoked(0).build();
+        em.persist(basic); em.persist(core1); em.persist(core2); em.persist(mand); em.persist(elect); em.persist(other);
 
         // mappings
         // BASIC: college 이름은 College.findBelongingCollege(major, entryYear).getName()와 동일해야 함
@@ -386,6 +391,8 @@ class TakenLectureRepositoryImplTest {
         persistTaken(core2);
         persistTaken(mand);
         persistTaken(elect);
+        // taken for unmapped lecture → category null, contributes to filter(false)
+        persistTaken(other);
 
         em.flush();
         em.clear();
@@ -403,5 +410,38 @@ class TakenLectureRepositoryImplTest {
         assertThat(sections.get(2).getTotal()).isEqualTo(1);
         assertThat(sections.get(3).getCategoryName()).isEqualTo(PopularLectureCategory.ELECTIVE_MAJOR);
         assertThat(sections.get(3).getTotal()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("toDto null-guard 분기(credit/total/avg null) 경로를 반사로 커버")
+    void toDto_nullGuardsCoveredViaReflection() throws Exception {
+        // downcast to impl to call private method
+        TakenLectureRepositoryImpl impl = (TakenLectureRepositoryImpl) repository;
+        var tuple = Mockito.mock(com.querydsl.core.Tuple.class);
+        @SuppressWarnings("unchecked")
+        NumberExpression<Long> countExp = (NumberExpression<Long>) Mockito.mock(NumberExpression.class);
+
+        // stub tuple getters used in toDto
+        Mockito.when(tuple.get(QTakenLectureJpaEntity.takenLectureJpaEntity.lecture.id)).thenReturn("X");
+        Mockito.when(tuple.get(QTakenLectureJpaEntity.takenLectureJpaEntity.lecture.name)).thenReturn("NameX");
+        Mockito.when(tuple.get(QTakenLectureJpaEntity.takenLectureJpaEntity.lecture.credit)).thenReturn(null); // trigger credit null branch
+        Mockito.when(tuple.get(countExp)).thenReturn(null); // trigger total null branch
+        Mockito.when(tuple.get(4, Double.class)).thenReturn(null); // trigger avg null branch
+
+        java.lang.reflect.Method m = TakenLectureRepositoryImpl.class.getDeclaredMethod(
+                "toDto",
+                com.querydsl.core.Tuple.class,
+                com.querydsl.core.types.dsl.NumberExpression.class,
+                PopularLectureCategory.class
+        );
+        m.setAccessible(true);
+        PopularLectureDto dto = (PopularLectureDto) m.invoke(impl, tuple, countExp, PopularLectureCategory.CORE_CULTURE);
+
+        assertThat(dto.getLectureId()).isEqualTo("X");
+        assertThat(dto.getLectureName()).isEqualTo("NameX");
+        assertThat(dto.getCredit()).isEqualTo(0); // credit null → 0
+        assertThat(dto.getTotalCount()).isEqualTo(0L); // total null → 0
+        assertThat(dto.getAverageRating()).isEqualTo(0.0); // avg null → 0.0
+        assertThat(dto.getCategoryName()).isEqualTo(PopularLectureCategory.CORE_CULTURE);
     }
 }
