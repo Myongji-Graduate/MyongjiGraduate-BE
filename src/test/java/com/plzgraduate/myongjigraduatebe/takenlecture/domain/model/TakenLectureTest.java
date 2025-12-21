@@ -1,62 +1,81 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
-import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class TakenLectureTest {
 
-	private static final Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
+    private static User user(String authId) {
+        return User.builder()
+                .id(1L)
+                .authId(authId)
+                .englishLevel(EnglishLevel.BASIC)
+                .koreanLevel(KoreanLevel.KOR12)
+                .studentNumber("20200001")
+                .entryYear(20)
+                .studentCategory(StudentCategory.NORMAL)
+                .build();
+    }
 
-	@DisplayName("수강과목은 과목, 수강 년도, 수강 학기 모두 같으면 같은 것으로 인정된다.")
-	@Test
-	void lectureEqualsTest() {
-		//given
-		User user = UserFixture.국제통상학과_19학번();
-		TakenLecture takenLectureA = TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2019,
-			Semester.FIRST);
-		TakenLecture takenLectureB = TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2019,
-			Semester.FIRST);
+    private static Lecture lecture(String code, String name, int credit) {
+        return Lecture.from(code, name, credit);
+    }
 
-		//when
-		boolean equalsResult = takenLectureA.equals(takenLectureB);
-		Set<TakenLecture> takenLectureSet = new HashSet<>();
-		takenLectureSet.add(takenLectureA);
-		takenLectureSet.add(takenLectureB);
+    @Test
+    @DisplayName("of(): 필드 세팅 및 toString() 호출")
+    void of_setsFields() {
+        User u = user("u1");
+        Lecture l = lecture("KMA00001", "알고리즘", 3);
 
-		//then
-		assertThat(equalsResult).isTrue();
-		assertThat(takenLectureSet).hasSize(1);
-	}
+        TakenLecture t = TakenLecture.of(u, l, 2020, Semester.FIRST);
 
-	@DisplayName("수강과목은 과목, 수강 년도, 수강 학기 모두 같으면 같은 것으로 인정된다.")
-	@Test
-	void lectureUnEqualsTest() {
-		//given
-		User user = UserFixture.국제통상학과_19학번();
-		TakenLecture takenLectureA = TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2019,
-			Semester.FIRST);
-		TakenLecture takenLectureB = TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2018,
-			Semester.SECOND);
-		TakenLecture takenLectureC = TakenLecture.of(user, mockLectureMap.get("HBX01128"), 2019,
-			Semester.SECOND);
+        assertThat(t.getUser()).isSameAs(u);
+        assertThat(t.getLecture()).isSameAs(l);
+        assertThat(t.getYear()).isEqualTo(2020);
+        assertThat(t.getSemester()).isEqualTo(Semester.FIRST);
+        assertThat(t.toString()).contains("TakenLecture{");
+    }
 
-		//when
-		Set<TakenLecture> takenLectureSet = new HashSet<>();
-		takenLectureSet.add(takenLectureA);
-		takenLectureSet.add(takenLectureB);
-		takenLectureSet.add(takenLectureC);
+    @Test
+    @DisplayName("custom(): year=2099로 설정되고 semester는 null")
+    void custom_setsYear2099() {
+        TakenLecture t = TakenLecture.custom(user("u2"), lecture("KMB00001", "컴퓨터개론", 2));
+        assertThat(t.getYear()).isEqualTo(2099);
+        assertThat(t.getSemester()).isNull();
+    }
 
-		//then
-		assertThat(takenLectureSet).hasSize(3);
-	}
+    @Test
+    @DisplayName("takenAfter(): 경계 포함 비교 (>, =, <)")
+    void takenAfter_boundaries() {
+        TakenLecture t = TakenLecture.of(user("u3"), lecture("KMC00001", "자료구조", 3), 2020, Semester.SECOND);
+        assertThat(t.takenAfter(2019)).isTrue();
+        assertThat(t.takenAfter(2020)).isTrue();
+        assertThat(t.takenAfter(2021)).isFalse();
+    }
 
+    @Test
+    @DisplayName("equals/hashCode: 동일 필드면 동등, 다르면 비동등")
+    void equals_hashCode() {
+        User u = user("u4");
+        Lecture l1 = lecture("KMD00001", "운영체제", 3);
+        Lecture l2 = lecture("KMD00002", "컴퓨터구조", 2);
+
+        TakenLecture a = TakenLecture.of(u, l1, 2020, Semester.FIRST);
+        TakenLecture b = TakenLecture.of(u, l1, 2020, Semester.FIRST);
+        TakenLecture c = TakenLecture.of(u, l2, 2020, Semester.FIRST);
+
+        assertThat(a)
+                .isEqualTo(b)
+                .hasSameHashCodeAs(b)
+                .isNotEqualTo(c)
+                .isNotEqualTo(null)
+                .isNotEqualTo("str");
+    }
 }

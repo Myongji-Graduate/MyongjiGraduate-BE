@@ -76,13 +76,14 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
         return categoryResolver.attachWithoutContext(rawResult);
     }
 
-    
+
 
     @Override
     public List<PopularLectureDto> getLecturesByCategory(
             String major, int entryYear, PopularLectureCategory category, int limit, String cursor) {
         List<Tuple> rows = fetchPopularByCategoryWithKeyset(category, major, entryYear, limit, cursor);
-        NumberExpression<Long> countExp = takenLecture.id.count();
+        // Use DISTINCT to avoid inflated counts due to joins (e.g., reviews or major mappings)
+        NumberExpression<Long> countExp = takenLecture.id.countDistinct();
         return rows.stream().map(t -> toDto(t, countExp, category)).toList();
     }
 
@@ -111,7 +112,8 @@ public class TakenLectureRepositoryImpl implements PopularLecturePort {
             PopularLectureCategory category, String major, int entryYear, int limit, String rawCursor
     ) {
         QLectureReviewJpaEntity review = QLectureReviewJpaEntity.lectureReviewJpaEntity;
-        NumberExpression<Long> countExp = takenLecture.id.count();
+        // Avoid row-multiplication inflating totals when joining review or major/category maps
+        NumberExpression<Long> countExp = takenLecture.id.countDistinct();
         Expression<Double> avgExpr = review.rating.avg();
 
         Cursor c = parseCursor(rawCursor);
