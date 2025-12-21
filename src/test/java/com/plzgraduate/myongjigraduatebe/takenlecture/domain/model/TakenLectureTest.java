@@ -71,10 +71,11 @@ class TakenLectureTest {
         TakenLecture b = TakenLecture.of(u, l1, 2020, Semester.FIRST);
         TakenLecture c = TakenLecture.of(u, l2, 2020, Semester.FIRST);
 
-        assertThat(a).isEqualTo(b);
-        assertThat(a.hashCode()).isEqualTo(b.hashCode());
-        assertThat(a).isNotEqualTo(c);
-        assertThat(a).isNotEqualTo(null);
-        assertThat(a).isNotEqualTo("str");
+        assertThat(a)
+                .isEqualTo(b)
+                .hasSameHashCodeAs(b)
+                .isNotEqualTo(c)
+                .isNotEqualTo(null)
+                .isNotEqualTo("str");
     }
 }
