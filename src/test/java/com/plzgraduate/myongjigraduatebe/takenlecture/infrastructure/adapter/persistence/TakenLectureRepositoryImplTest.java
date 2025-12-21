@@ -264,6 +264,88 @@ class TakenLectureRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("BASIC_ACADEMICAL_CULTURE 카테고리 조회가 단과대 매핑으로 동작한다")
+    void basicAcademicalCultureQuery() {
+        String major = "응용소프트웨어전공";
+        int entryYear = 20;
+        String college = com.plzgraduate.myongjigraduatebe.user.domain.model.College
+                .findBelongingCollege(major, entryYear).getName();
+
+        LectureJpaEntity basic = LectureJpaEntity.builder().id("BASIC1").name("BasicName").credit(2).duplicateCode(null).isRevoked(0).build();
+        em.persist(basic);
+        em.persist(com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.BasicAcademicalCultureLectureJpaEntity
+                .builder()
+                .lectureJpaEntity(basic)
+                .college(college)
+                .build());
+        persistTaken(basic);
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> res = repository.getLecturesByCategory(major, entryYear, PopularLectureCategory.BASIC_ACADEMICAL_CULTURE, 10, null);
+        assertThat(res).hasSize(1);
+        assertThat(res.getFirst().getLectureId()).isEqualTo("BASIC1");
+        assertThat(res.getFirst().getCredit()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("MANDATORY_MAJOR 카테고리 조회가 전공+년도+mandatory=1 매핑으로 동작한다")
+    void mandatoryMajorQuery() {
+        String major = "응용소프트웨어전공";
+        int entryYear = 20;
+        LectureJpaEntity mand = LectureJpaEntity.builder().id("MAND1").name("MandName").credit(3).duplicateCode(null).isRevoked(0).build();
+        em.persist(mand);
+        em.persist(com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(mand)
+                .major(major)
+                .mandatory(1)
+                .startEntryYear(0)
+                .endEntryYear(99)
+                .build());
+        persistTaken(mand);
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> res = repository.getLecturesByCategory(major, entryYear, PopularLectureCategory.MANDATORY_MAJOR, 10, null);
+        assertThat(res).hasSize(1);
+        assertThat(res.getFirst().getLectureId()).isEqualTo("MAND1");
+    }
+
+    @Test
+    @DisplayName("ELECTIVE_MAJOR 카테고리 조회가 전공+년도+mandatory=0 매핑으로 동작한다")
+    void electiveMajorQuery() {
+        String major = "응용소프트웨어전공";
+        int entryYear = 20;
+        LectureJpaEntity elect = LectureJpaEntity.builder().id("ELE2").name("ElectName").credit(3).duplicateCode(null).isRevoked(0).build();
+        em.persist(elect);
+        em.persist(com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity.builder()
+                .lectureJpaEntity(elect)
+                .major(major)
+                .mandatory(0)
+                .startEntryYear(0)
+                .endEntryYear(99)
+                .build());
+        persistTaken(elect);
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> res = repository.getLecturesByCategory(major, entryYear, PopularLectureCategory.ELECTIVE_MAJOR, 10, null);
+        assertThat(res).hasSize(1);
+        assertThat(res.getFirst().getLectureId()).isEqualTo("ELE2");
+    }
+
+    @Test
+    @DisplayName("ALL 카테고리로 조회 시 Unsupported category 예외")
+    void unsupportedCategoryThrows() {
+        String major = "응용소프트웨어전공";
+        int entryYear = 20;
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                repository.getLecturesByCategory(major, entryYear, PopularLectureCategory.ALL, 10, null)
+        ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unsupported category: ALL");
+    }
+
+    @Test
     @DisplayName("섹션 메타: 카테고리별 개수를 그룹핑하고 고정 순서로 반환한다")
     void getSections_groupsByCategoryAndOrder() {
         // given: major/entryYear에 맞는 맥락
