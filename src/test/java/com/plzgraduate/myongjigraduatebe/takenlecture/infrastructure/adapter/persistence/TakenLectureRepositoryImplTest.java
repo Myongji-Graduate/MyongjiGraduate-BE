@@ -439,8 +439,8 @@ class TakenLectureRepositoryImplTest {
 
         assertThat(dto.getLectureId()).isEqualTo("X");
         assertThat(dto.getLectureName()).isEqualTo("NameX");
-        assertThat(dto.getCredit()).isEqualTo(0); // credit null → 0
-        assertThat(dto.getTotalCount()).isEqualTo(0L); // total null → 0
+        assertThat(dto.getCredit()).isZero(); // credit null → 0
+        assertThat(dto.getTotalCount()).isZero(); // total null → 0
         assertThat(dto.getAverageRating()).isEqualTo(0.0); // avg null → 0.0
         assertThat(dto.getCategoryName()).isEqualTo(PopularLectureCategory.CORE_CULTURE);
     }
