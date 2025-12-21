@@ -128,6 +128,48 @@ class TakenLectureRepositoryImplTest {
         assertThat(page2.getFirst().getLectureId()).isEqualTo("A");
     }
 
+    @Test
+    @DisplayName("복합 커서(total:id) 사용 시 키셋 조건이 적용되어 다음 페이지가 조회된다")
+    void compositeCursorWorks() {
+        LectureJpaEntity a = LectureJpaEntity.builder().id("A").name("AName").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity b = LectureJpaEntity.builder().id("B").name("BName").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity c = LectureJpaEntity.builder().id("C").name("CName").credit(3).duplicateCode(null).isRevoked(0).build();
+        em.persist(a); em.persist(b); em.persist(c);
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(a).startEntryYear(0).endEntryYear(99).build());
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(b).startEntryYear(0).endEntryYear(99).build());
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(c).startEntryYear(0).endEntryYear(99).build());
+        persistTaken(a); persistTaken(b); persistTaken(c);
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> page1 = repository.getLecturesByCategory("x", 20, PopularLectureCategory.CORE_CULTURE, 2, null);
+        String cursor = page1.get(1).getTotalCount() + ":" + page1.get(1).getLectureId();
+        List<PopularLectureDto> page2 = repository.getLecturesByCategory("x", 20, PopularLectureCategory.CORE_CULTURE, 2, cursor);
+        assertThat(page2).hasSize(1);
+        assertThat(page2.getFirst().getLectureId()).isEqualTo("A");
+    }
+
+    @Test
+    @DisplayName("비정상 접두어 복합 커서(abc:id)는 id-only로 폴백되어 작동한다")
+    void malformedCompositeCursorFallsBackToIdOnly() {
+        LectureJpaEntity a = LectureJpaEntity.builder().id("A").name("AName").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity b = LectureJpaEntity.builder().id("B").name("BName").credit(3).duplicateCode(null).isRevoked(0).build();
+        LectureJpaEntity c = LectureJpaEntity.builder().id("C").name("CName").credit(3).duplicateCode(null).isRevoked(0).build();
+        em.persist(a); em.persist(b); em.persist(c);
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(a).startEntryYear(0).endEntryYear(99).build());
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(b).startEntryYear(0).endEntryYear(99).build());
+        em.persist(CoreCultureJpaEntity.builder().lectureJpaEntity(c).startEntryYear(0).endEntryYear(99).build());
+        persistTaken(a); persistTaken(b); persistTaken(c);
+        em.flush();
+        em.clear();
+
+        List<PopularLectureDto> page1 = repository.getLecturesByCategory("x", 20, PopularLectureCategory.CORE_CULTURE, 2, null);
+        String cursor = "abc:" + page1.get(1).getLectureId();
+        List<PopularLectureDto> page2 = repository.getLecturesByCategory("x", 20, PopularLectureCategory.CORE_CULTURE, 2, cursor);
+        assertThat(page2).hasSize(1);
+        assertThat(page2.getFirst().getLectureId()).isEqualTo("A");
+    }
+
     private void persistTaken(LectureJpaEntity lecture) {
         em.persist(TakenLectureJpaEntity.builder()
                 .user(user)
