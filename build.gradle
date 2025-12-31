@@ -53,6 +53,10 @@ dependencies {
     // MySQL 드라이버 (새 좌표)
     runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
 
+    // Flyway (DB 마이그레이션)
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
