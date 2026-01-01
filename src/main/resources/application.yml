@@ -17,6 +17,9 @@ spring:
         format_sql: true
     open-in-view: false
 
+  flyway:
+    enabled: false
+
   data:
     redis:
       host: localhost
@@ -76,6 +79,9 @@ spring:
     hibernate:
       ddl-auto: update
 
+  flyway:
+    enabled: false
+
   data:
     redis:
       host: mg-redis
@@ -102,6 +108,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
 
   data:
     redis:
