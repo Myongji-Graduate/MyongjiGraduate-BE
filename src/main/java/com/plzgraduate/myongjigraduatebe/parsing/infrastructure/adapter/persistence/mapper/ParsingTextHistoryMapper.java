@@ -16,6 +16,8 @@ public class ParsingTextHistoryMapper {
 			.user(mapToUserJpaEntity(parsingTextHistory.getUser()))
 			.parsingText(parsingTextHistory.getParsingText())
 			.parsingResult(parsingTextHistory.getParsingResult())
+			.failureReason(parsingTextHistory.getFailureReason())
+			.failureDetails(parsingTextHistory.getFailureDetails())
 			.build();
 	}
 

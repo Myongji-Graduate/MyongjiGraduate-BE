@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity;
 
 import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.FailureReason;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import jakarta.persistence.Column;
@@ -37,4 +38,11 @@ public class ParsingTextHistoryJpaEntity extends TimeBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private ParsingResult parsingResult;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length = 100)
+	private FailureReason failureReason;
+
+	@Column(columnDefinition = "TEXT")
+	private String failureDetails;
 }
