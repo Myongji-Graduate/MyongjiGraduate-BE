@@ -46,4 +46,14 @@ public class ParsingTextHistory {
 			.parsingResult(ParsingResult.FAIL)
 			.build();
 	}
+
+	public static ParsingTextHistory fail(User user, String parsingText, FailureReason failureReason, String failureDetails) {
+		return ParsingTextHistory.builder()
+			.user(user)
+			.parsingText(parsingText)
+			.parsingResult(ParsingResult.FAIL)
+			.failureReason(failureReason)
+			.failureDetails(failureDetails)
+			.build();
+	}
 }
