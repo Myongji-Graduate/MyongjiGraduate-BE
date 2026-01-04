@@ -19,6 +19,7 @@ import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -240,6 +241,7 @@ public class FailureAnalysisService {
 	/**
 	 * 실패 원인 분석 결과를 담는 클래스
 	 */
+	@Getter
 	public static class FailureAnalysisResult {
 		private final FailureReason failureReason;
 		private final String failureDetails;
@@ -247,14 +249,6 @@ public class FailureAnalysisService {
 		public FailureAnalysisResult(FailureReason failureReason, String failureDetails) {
 			this.failureReason = failureReason;
 			this.failureDetails = failureDetails;
-		}
-
-		public FailureReason getFailureReason() {
-			return failureReason;
-		}
-
-		public String getFailureDetails() {
-			return failureDetails;
 		}
 	}
 }
