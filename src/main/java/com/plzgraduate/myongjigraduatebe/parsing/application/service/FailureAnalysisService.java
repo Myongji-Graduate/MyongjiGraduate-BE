@@ -10,14 +10,18 @@ import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CheckGraduationRequirementUseCase;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.QueryParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingAnonymousUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.dto.ParsingAnonymousDto;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.FailureReason;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @UseCase
@@ -26,6 +30,8 @@ public class FailureAnalysisService {
 
 	private final ParsingAnonymousUseCase parsingAnonymousUseCase;
 	private final CheckGraduationRequirementUseCase checkGraduationRequirementUseCase;
+	private final QueryParsingTextHistoryPort queryParsingTextHistoryPort;
+	private final SaveParsingTextHistoryPort saveParsingTextHistoryPort;
 
 	/**
 	 * 실패한 성적표를 분석하여 실패 원인을 파악합니다.
@@ -180,6 +186,55 @@ public class FailureAnalysisService {
 		if (parsingInformation.getStudentCategory() == DOUBLE_SUB) {
 			throw new IllegalArgumentException(ErrorCode.UNSUPPORTED_STUDENT_CATEGORY.toString());
 		}
+	}
+
+	/**
+	 * 기존 실패 데이터를 일괄 재분석하여 실패 원인을 업데이트합니다.
+	 * failureReason이 null인 기존 실패 데이터를 조회하여 분석 후 업데이트합니다.
+	 *
+	 * @return 분석된 실패 데이터 개수
+	 */
+	@Transactional
+	public int analyzeExistingFailures() {
+		log.info("기존 실패 데이터 재분석 시작");
+		
+		var existingFailures = queryParsingTextHistoryPort.findByParsingResultAndFailureReasonIsNull();
+		
+		if (existingFailures.isEmpty()) {
+			log.info("분석할 기존 실패 데이터가 없습니다.");
+			return 0;
+		}
+
+		log.info("총 {}개의 실패 데이터를 재분석합니다.", existingFailures.size());
+		int analyzedCount = 0;
+
+		for (ParsingTextHistory history : existingFailures) {
+			try {
+				FailureAnalysisResult analysisResult = analyzeFailure(history.getParsingText());
+				
+				// 실패 원인을 업데이트한 새로운 도메인 객체 생성
+				ParsingTextHistory updatedHistory = ParsingTextHistory.builder()
+					.id(history.getId())
+					.user(history.getUser())
+					.parsingText(history.getParsingText())
+					.parsingResult(history.getParsingResult())
+					.failureReason(analysisResult.getFailureReason())
+					.failureDetails(analysisResult.getFailureDetails())
+					.build();
+				
+				saveParsingTextHistoryPort.saveParsingTextHistory(updatedHistory);
+				analyzedCount++;
+				
+				log.debug("실패 데이터 ID: {} 분석 완료. 원인: {}", 
+					history.getId(), analysisResult.getFailureReason());
+			} catch (Exception e) {
+				log.error("실패 데이터 ID: {} 분석 중 오류 발생: {}", 
+					history.getId(), e.getMessage(), e);
+			}
+		}
+
+		log.info("기존 실패 데이터 재분석 완료. 총 {}개 분석됨", analyzedCount);
+		return analyzedCount;
 	}
 
 	/**

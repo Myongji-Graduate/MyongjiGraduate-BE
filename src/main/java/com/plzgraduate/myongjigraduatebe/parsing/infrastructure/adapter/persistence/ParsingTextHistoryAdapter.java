@@ -2,17 +2,21 @@ package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persist
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.application.port.QueryParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.mapper.ParsingTextHistoryMapper;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort,
-	DeleteParsingTextHistoryPort {
+	DeleteParsingTextHistoryPort, QueryParsingTextHistoryPort {
 
 	private final ParsingTextRepository parsingTextRepository;
 	private final ParsingTextHistoryMapper parsingTextHistoryMapper;
@@ -25,5 +29,13 @@ public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort,
 	@Override
 	public void deleteUserParsingTextHistory(User user) {
 		parsingTextRepository.deleteAllByUser(parsingTextHistoryMapper.mapToUserJpaEntity(user));
+	}
+
+	@Override
+	public List<ParsingTextHistory> findByParsingResultAndFailureReasonIsNull() {
+		return parsingTextRepository.findByParsingResultAndFailureReasonIsNull(ParsingResult.FAIL)
+			.stream()
+			.map(parsingTextHistoryMapper::mapToDomainEntity)
+			.collect(Collectors.toList());
 	}
 }
