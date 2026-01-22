@@ -25,4 +25,6 @@ public interface UserTimetableRepository extends JpaRepository<UserTimetableJpaE
     List<TimetableJpaEntity> findTimetablesOfUser(@Param("userId") Long userId,
                                                   @Param("year") int year,
                                                   @Param("semester") int semester);
+
+    void deleteByUserId(Long userId);
 }
