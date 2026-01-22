@@ -22,7 +22,7 @@
 <img width="80%" height="80%" src="https://github.com/Myongji-Graduate/MyongjiGraduate-BE/assets/64758861/6f9218f2-a00e-41d7-bd53-8402275a09c9">
 
 ### ERD
-<img width="80%" height="80%" src="https://github.com/Myongji-Graduate/MyongjiGraduate-BE/assets/64758861/e6b2036c-d5bf-497a-81da-5e922ad3121a">
+<img width="80%" height="80%" src="https://github.com/user-attachments/assets/57e2cad2-b5dc-4165-ba7e-0d526326402f">
 
 ## 🤟 졸부팀 소개
 
