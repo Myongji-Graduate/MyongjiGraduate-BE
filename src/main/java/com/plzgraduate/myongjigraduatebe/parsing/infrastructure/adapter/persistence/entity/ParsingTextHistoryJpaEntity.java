@@ -24,7 +24,7 @@ public class ParsingTextHistoryJpaEntity extends TimeBaseEntity {
 	@JoinColumn(name = "user_id")
 	private UserJpaEntity user;
 
-	@Column(length = 3000)
+	@Column(length = 5000)
 	private String parsingText;
 
 	@Enumerated(EnumType.STRING)

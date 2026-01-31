@@ -26,6 +26,7 @@ public class LectureReviewJpaEntity {
 
     private BigDecimal rating;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Builder

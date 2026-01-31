@@ -50,6 +50,9 @@ dependencies {
     implementation 'io.sentry:sentry-spring-boot-starter-jakarta:7.16.0'
     implementation 'io.sentry:sentry-logback:7.16.0'
 
+    // JSON 로그 (Loki 연동용)
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
     // MySQL 드라이버 (새 좌표)
     runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
 

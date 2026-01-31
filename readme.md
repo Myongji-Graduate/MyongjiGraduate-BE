@@ -14,7 +14,7 @@
 <img width="80%" height="80%" src="https://github.com/Myongji-Graduate/MyongjiGraduate-BE/assets/64758861/86857528-df46-4055-b7f8-bf5cdf0865a4">
 
 ### 교내 SW 경진대회 대상 🥇
-[명지투데이 - '제1회 ICT융합대학 SW프로그램 개발 경진대회 시상식' 열려](https://www.mju.ac.kr/mjukr/302/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGbWp1a3IlMkYxNjYlMkYxOTQzMDclMkZhcnRjbFZpZXcuZG8lM0Y%3D)
+[명지투데이 - '제1회 ICT융합대학 SW프로그램 개발 경진대회 시상식' 열려](https://ince.mju.ac.kr/ince/5124/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW5jZSUyRjczMSUyRjE5NDMyOSUyRmFydGNsVmlldy5kbyUzRnBhZ2UlM0QxJTI2c3JjaENvbHVtbiUzRCUyNnNyY2hXcmQlM0QlMjZiYnNDbFNlcSUzRCUyNmJic09wZW5XcmRTZXElM0QlMjZyZ3NCZ25kZVN0ciUzRCUyNnJnc0VuZGRlU3RyJTNEJTI2aXNWaWV3TWluZSUzRGZhbHNlJTI2aXNWaWV3JTNEdHJ1ZSUyNnBhc3N3b3JkJTNEJTI2)
 
 ## 🛠️ 아키텍처
 
@@ -22,7 +22,7 @@
 <img width="80%" height="80%" src="https://github.com/Myongji-Graduate/MyongjiGraduate-BE/assets/64758861/6f9218f2-a00e-41d7-bd53-8402275a09c9">
 
 ### ERD
-<img width="80%" height="80%" src="https://github.com/Myongji-Graduate/MyongjiGraduate-BE/assets/64758861/e6b2036c-d5bf-497a-81da-5e922ad3121a">
+<img width="80%" height="80%" src="https://github.com/user-attachments/assets/57e2cad2-b5dc-4165-ba7e-0d526326402f">
 
 ## 🤟 졸부팀 소개
 
@@ -92,36 +92,59 @@
   <tr>
     <td>
         <a href="https://github.com/seonghunYang">
-            <img src="https://avatars.githubusercontent.com/u/52571252?v=4" width="100px" />
+        <img src="https://avatars.githubusercontent.com/u/52571252?v=4" width="100px" />
         </a>
     </td>
     <td>
-        <a href="https://github.com/youkyeong60">
-            <img src="https://avatars.githubusercontent.com/u/75975946?v=4" width="100px" />
+        <a href="https://github.com/yougyung">
+        <img src="https://avatars.githubusercontent.com/u/75975946?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/gahyuun">
+        <img src="https://avatars.githubusercontent.com/u/81469686?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/xxxjinn">
+        <img src="https://avatars.githubusercontent.com/u/102955516?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/ujinsim">
+        <img src="https://avatars.githubusercontent.com/u/98771235?v=4" width="100px" />
         </a>
     </td>
   </tr>
   <tr>
     <td><b>양성훈</b></td>
     <td><b>모유경</b></td>
+    <td><b>박가현</b></td>
+    <td><b>신현진</b></td>
+    <td><b>심유진</b></td>
+
   </tr>
-  <tr>
+<tr>
     <td><b>FE Developer</b></td>
     <td><b>FE Developer</b></td>
-  </tr>
+    <td><b>FE Developer</b></td>
+    <td><b>FE Developer</b></td>
+    <td><b>FE Developer</b></td>
+</tr>
 </table>
 
-[FE Github Repository](https://github.com/Myongji-Graduate/MyongjiGraduate-FE)
+[FE Github Repository](https://github.com/Myongji-Graduate/myongji-graduate-next)
 
 ## 📜 기술 스택
 <div align=left>
-<img src="https://img.shields.io/badge/java 11-007396?style=for-the-badge&logo=java&logoColor=white">
+<img src="https://img.shields.io/badge/java 21-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/springboot 2.7.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/spring security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
 <img src="https://img.shields.io/badge/spring data jpa-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 <img src="https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white">
 <img src="https://img.shields.io/badge/testcontainers-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+<img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
 
 <br>
 
