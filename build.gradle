@@ -53,6 +53,12 @@ dependencies {
     // JSON 로그 (Loki 연동용)
     implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 
+    // 애플리케이션 상태(Health) 및 메트릭(Metrics) 관리를 위한 Spring Boot Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // 프로메테우스 메트릭 수집 라이브러리
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
     // MySQL 드라이버 (새 좌표)
     runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
 
