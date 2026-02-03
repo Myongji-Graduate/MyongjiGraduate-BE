@@ -130,8 +130,16 @@ management:
     web:
       exposure:
         include: health, prometheus
+
   endpoint:
     health:
       show-details: never
     prometheus:
       enabled: true
+
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "http.server.requests": true
+      slo:
+        "http.server.requests": [50ms, 100ms, 200ms, 500ms, 1s]
