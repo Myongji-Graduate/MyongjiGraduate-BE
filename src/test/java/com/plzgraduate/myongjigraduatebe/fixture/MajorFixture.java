@@ -22,6 +22,7 @@ public class MajorFixture {
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01104"), 국제통상학전공, 1, 16, 99)); //회계원리
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01106"), 국제통상학전공, 1, 16, 99)); //마켓팅원론
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01105"), 국제통상학전공, 1, 16, 99)); //재무관리원론
+		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01147"), 국제통상학전공, 1, 16, 99)); //재무관리
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01113"), 국제통상학전공, 1, 16, 99)); //인적자원관리
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01114"), 국제통상학전공, 1, 16, 99)); //생산운영관리
 		lectureSet.add(MajorLecture.of(mockLectureMap.get("HBX01143"), 국제통상학전공, 1, 16, 99)); //운영관리

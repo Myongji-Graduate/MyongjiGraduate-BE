@@ -26,17 +26,19 @@ public enum OptionalMandatory {
 		Lecture.of("HBY01103", "경영정보", 3, 1, null)
 	)),
 	INTERNATIONAL_TRADE("국제통상학전공", 4, Set.of(
-		Lecture.of("HBX01104", "회계원리", 3, 0, null),
-		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
-		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
-		Lecture.of("HBX01105", "재무관리원론", 3, 0, null),
-		Lecture.of("HBX01114", "생산운영관리", 3, 1, null),
-		Lecture.of("HBX01143", "운영관리", 3, 0, null)
+			Lecture.of("HBX01104", "회계원리", 3, 0, null),
+			Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
+			Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
+			Lecture.of("HBX01105", "재무관리원론", 3, 1, null),
+			Lecture.of("HBX01147", "재무관리", 3, 0, null),
+			Lecture.of("HBX01114", "생산운영관리", 3, 1, null),
+			Lecture.of("HBX01143", "운영관리", 3, 0, null)
 	)),
 	MANAGEMENT_INFORMATION("경영정보학과", 2, Set.of(
-		Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
-		Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
-		Lecture.of("HBX01105", "재무관리원론", 3, 0, null)
+			Lecture.of("HBX01113", "인적자원관리", 3, 0, null),
+			Lecture.of("HBX01106", "마케팅원론", 3, 0, null),
+			Lecture.of("HBX01105", "재무관리원론", 3, 1, null),
+			Lecture.of("HBX01147", "재무관리", 3, 0, null)
 	));
 
 	private final String department;

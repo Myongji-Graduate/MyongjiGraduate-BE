@@ -14,7 +14,6 @@
   </springProfile>
 
   <springProfile name="dev,prod">
-    <!-- 콘솔 출력 (JSON) -->
     <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
       <encoder class="net.logstash.logback.encoder.LogstashEncoder">
         <includeMdcKeyName>userId</includeMdcKeyName>
@@ -22,33 +21,11 @@
       </encoder>
     </appender>
 
-    <!-- 파일 출력 (JSON, 압축, 용량제한) -->
-    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="FILE">
-      <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-        <includeMdcKeyName>userId</includeMdcKeyName>
-        <includeMdcKeyName>requestId</includeMdcKeyName>
-      </encoder>
-      <file>/var/log/myongji-graduate/app.log</file>
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>/var/log/myongji-graduate/app.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-        <maxHistory>30</maxHistory>
-        <totalSizeCap>3GB</totalSizeCap>
-      </rollingPolicy>
-    </appender>
-
-    <!-- 비동기 파일 출력 -->
-    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-      <appender-ref ref="FILE"/>
-      <queueSize>512</queueSize>
-      <discardingThreshold>0</discardingThreshold>
-    </appender>
-
     <logger level="INFO" name="com.plzgraduate.myongjigraduatebe"/>
     <logger level="DEBUG" name="org.hibernate.jpa"/>
 
     <root level="INFO">
       <appender-ref ref="STDOUT"/>
-      <appender-ref ref="ASYNC_FILE"/>
     </root>
   </springProfile>
 
