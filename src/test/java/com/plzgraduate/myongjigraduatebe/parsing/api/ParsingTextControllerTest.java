@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 class ParsingTextControllerTest extends WebAdaptorTestSupport {
+
+	@SuppressWarnings("unused")
 	@MockBean
 	private TakenLectureCacheEvict takenLectureCacheEvict;
 

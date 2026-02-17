@@ -25,7 +25,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Slf4j
 @UseCase
@@ -36,6 +37,7 @@ public class FailureAnalysisService {
 	private final CheckGraduationRequirementUseCase checkGraduationRequirementUseCase;
 	private final QueryParsingTextHistoryPort queryParsingTextHistoryPort;
 	private final SaveParsingTextHistoryPort saveParsingTextHistoryPort;
+	private final PlatformTransactionManager transactionManager;
 
 	/**
 	 * 실패한 성적표를 분석하여 실패 원인을 파악합니다.
@@ -254,29 +256,32 @@ public class FailureAnalysisService {
 		return analyzedCount;
 	}
 
-	@Transactional
-	public int analyzeAndSaveSingle(ParsingTextHistory history) {
+	private int analyzeAndSaveSingle(ParsingTextHistory history) {
 		try {
-			FailureAnalysisResult analysisResult = analyzeFailure(
-				history.getParsingText(),
-				history.getUser().getEnglishLevel(),
-				history.getUser().getKoreanLevel()
-			);
+			TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);
+			Integer result = txTemplate.execute(status -> {
+				FailureAnalysisResult analysisResult = analyzeFailure(
+					history.getParsingText(),
+					history.getUser().getEnglishLevel(),
+					history.getUser().getKoreanLevel()
+				);
 
-			ParsingTextHistory updatedHistory = ParsingTextHistory.builder()
-				.id(history.getId())
-				.user(history.getUser())
-				.parsingText(history.getParsingText())
-				.parsingResult(history.getParsingResult())
-				.failureReason(analysisResult.getFailureReason())
-				.failureDetails(analysisResult.getFailureDetails())
-				.build();
+				ParsingTextHistory updatedHistory = ParsingTextHistory.builder()
+					.id(history.getId())
+					.user(history.getUser())
+					.parsingText(history.getParsingText())
+					.parsingResult(history.getParsingResult())
+					.failureReason(analysisResult.getFailureReason())
+					.failureDetails(analysisResult.getFailureDetails())
+					.build();
 
-			saveParsingTextHistoryPort.saveParsingTextHistory(updatedHistory);
+				saveParsingTextHistoryPort.saveParsingTextHistory(updatedHistory);
 
-			log.debug("실패 데이터 ID: {} 분석 완료. 원인: {}",
-				history.getId(), analysisResult.getFailureReason());
-			return 1;
+				log.debug("실패 데이터 ID: {} 분석 완료. 원인: {}",
+					history.getId(), analysisResult.getFailureReason());
+				return 1;
+			});
+			return result != null ? result : 0;
 		} catch (Exception e) {
 			log.error("실패 데이터 ID: {} 분석 중 오류 발생: {}",
 				history.getId(), e.getMessage(), e);
