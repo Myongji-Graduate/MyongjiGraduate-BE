@@ -6,6 +6,8 @@ import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import java.time.Instant;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ParsingTextRepository extends JpaRepository<ParsingTextHistoryJpaEntity, Long> {
@@ -13,6 +15,9 @@ public interface ParsingTextRepository extends JpaRepository<ParsingTextHistoryJ
 	void deleteAllByUser(UserJpaEntity user);
 
 	List<ParsingTextHistoryJpaEntity> findByParsingResultAndFailureReasonIsNull(ParsingResult parsingResult);
+
+	@EntityGraph(attributePaths = {"user"})
+	List<ParsingTextHistoryJpaEntity> findByParsingResultAndFailureReasonIsNull(ParsingResult parsingResult, Pageable pageable);
 
 	List<ParsingTextHistoryJpaEntity> findByParsingResult(ParsingResult parsingResult);
 

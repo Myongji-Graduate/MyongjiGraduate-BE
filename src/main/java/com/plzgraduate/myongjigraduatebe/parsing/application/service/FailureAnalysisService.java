@@ -19,9 +19,12 @@ import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
+import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -156,6 +159,42 @@ public class FailureAnalysisService {
 				parsingAnonymousDto.getAnonymous(),
 				parsingAnonymousDto.getTakenLectureInventory()
 			);
+		} catch (IllegalArgumentException e) {
+			String message = e.getMessage();
+			log.debug("졸업 검사 실패 (IllegalArgumentException): {}", message);
+			
+			if (message != null && message.contains("소속 단과대가 존재하지 않습니다")) {
+				return new FailureAnalysisResult(
+					FailureReason.MAJOR_NAME_MISMATCH,
+					"전공명이 시스템에 등록되지 않았습니다: " + message
+				);
+			}
+			if (message != null && message.contains("해당 과목을 찾을 수 없습니다")) {
+				return new FailureAnalysisResult(
+					FailureReason.LECTURE_NOT_FOUND,
+					message
+				);
+			}
+			// 기타 IllegalArgumentException은 일반 졸업 검사 실패로 분류
+			return new FailureAnalysisResult(
+				FailureReason.GRADUATION_CHECK_FAILED,
+				"졸업 검사 중 오류 발생: " + message
+			);
+		} catch (NoSuchElementException e) {
+			String message = e.getMessage();
+			log.debug("졸업 검사 실패 (NoSuchElementException): {}", message);
+			
+			if (message != null && message.contains("일치하는 졸업 요건이 존재하지 않습니다")) {
+				return new FailureAnalysisResult(
+					FailureReason.GRADUATION_REQUIREMENT_NOT_FOUND,
+					"전공명/입학년도 조합에 맞는 졸업 요건을 찾을 수 없습니다: " + message
+				);
+			}
+			// 기타 NoSuchElementException은 일반 졸업 검사 실패로 분류
+			return new FailureAnalysisResult(
+				FailureReason.GRADUATION_CHECK_FAILED,
+				"졸업 검사 중 오류 발생: " + message
+			);
 		} catch (Exception e) {
 			log.debug("졸업 검사 실패: {}", e.getMessage(), e);
 			return new FailureAnalysisResult(
@@ -189,53 +228,60 @@ public class FailureAnalysisService {
 		}
 	}
 
+	private static final int BATCH_SIZE = 100;
+
 	/**
 	 * 기존 실패 데이터를 일괄 재분석하여 실패 원인을 업데이트합니다.
-	 * failureReason이 null인 기존 실패 데이터를 조회하여 분석 후 업데이트합니다.
+	 * failureReason이 null인 기존 실패 데이터를 페이징으로 조회하여 건별로 분석 후 업데이트합니다.
 	 *
 	 * @return 분석된 실패 데이터 개수
 	 */
-	@Transactional
 	public int analyzeExistingFailures() {
 		log.info("기존 실패 데이터 재분석 시작");
-		
-		var existingFailures = queryParsingTextHistoryPort.findByParsingResultAndFailureReasonIsNull();
-		
-		if (existingFailures.isEmpty()) {
-			log.info("분석할 기존 실패 데이터가 없습니다.");
-			return 0;
-		}
 
-		log.info("총 {}개의 실패 데이터를 재분석합니다.", existingFailures.size());
 		int analyzedCount = 0;
+		List<ParsingTextHistory> batch;
 
-		for (ParsingTextHistory history : existingFailures) {
-			try {
-				FailureAnalysisResult analysisResult = analyzeFailure(history.getParsingText());
-				
-				// 실패 원인을 업데이트한 새로운 도메인 객체 생성
-				ParsingTextHistory updatedHistory = ParsingTextHistory.builder()
-					.id(history.getId())
-					.user(history.getUser())
-					.parsingText(history.getParsingText())
-					.parsingResult(history.getParsingResult())
-					.failureReason(analysisResult.getFailureReason())
-					.failureDetails(analysisResult.getFailureDetails())
-					.build();
-				
-				saveParsingTextHistoryPort.saveParsingTextHistory(updatedHistory);
-				analyzedCount++;
-				
-				log.debug("실패 데이터 ID: {} 분석 완료. 원인: {}", 
-					history.getId(), analysisResult.getFailureReason());
-			} catch (Exception e) {
-				log.error("실패 데이터 ID: {} 분석 중 오류 발생: {}", 
-					history.getId(), e.getMessage(), e);
+		while (!(batch = queryParsingTextHistoryPort
+				.findByParsingResultAndFailureReasonIsNull(PageRequest.of(0, BATCH_SIZE))).isEmpty()) {
+			for (ParsingTextHistory history : batch) {
+				analyzedCount += analyzeAndSaveSingle(history);
 			}
+			log.info("현재까지 {}개 분석 완료", analyzedCount);
 		}
 
 		log.info("기존 실패 데이터 재분석 완료. 총 {}개 분석됨", analyzedCount);
 		return analyzedCount;
+	}
+
+	@Transactional
+	public int analyzeAndSaveSingle(ParsingTextHistory history) {
+		try {
+			FailureAnalysisResult analysisResult = analyzeFailure(
+				history.getParsingText(),
+				history.getUser().getEnglishLevel(),
+				history.getUser().getKoreanLevel()
+			);
+
+			ParsingTextHistory updatedHistory = ParsingTextHistory.builder()
+				.id(history.getId())
+				.user(history.getUser())
+				.parsingText(history.getParsingText())
+				.parsingResult(history.getParsingResult())
+				.failureReason(analysisResult.getFailureReason())
+				.failureDetails(analysisResult.getFailureDetails())
+				.build();
+
+			saveParsingTextHistoryPort.saveParsingTextHistory(updatedHistory);
+
+			log.debug("실패 데이터 ID: {} 분석 완료. 원인: {}",
+				history.getId(), analysisResult.getFailureReason());
+			return 1;
+		} catch (Exception e) {
+			log.error("실패 데이터 ID: {} 분석 중 오류 발생: {}",
+				history.getId(), e.getMessage(), e);
+			return 0;
+		}
 	}
 
 	/**

@@ -12,6 +12,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -34,6 +35,22 @@ public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort,
 	@Override
 	public List<ParsingTextHistory> findByParsingResultAndFailureReasonIsNull() {
 		return parsingTextRepository.findByParsingResultAndFailureReasonIsNull(ParsingResult.FAIL)
+			.stream()
+			.map(parsingTextHistoryMapper::mapToDomainEntity)
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ParsingTextHistory> findByParsingResultAndFailureReasonIsNull(Pageable pageable) {
+		return parsingTextRepository.findByParsingResultAndFailureReasonIsNull(ParsingResult.FAIL, pageable)
+			.stream()
+			.map(parsingTextHistoryMapper::mapToDomainEntity)
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ParsingTextHistory> findByParsingResult(ParsingResult parsingResult) {
+		return parsingTextRepository.findByParsingResult(parsingResult)
 			.stream()
 			.map(parsingTextHistoryMapper::mapToDomainEntity)
 			.collect(Collectors.toList());

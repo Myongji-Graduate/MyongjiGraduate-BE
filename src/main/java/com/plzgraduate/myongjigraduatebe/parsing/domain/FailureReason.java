@@ -10,6 +10,9 @@ public enum FailureReason {
 	INCORRECT_STUDENT_NUMBER("학번이 일치하지 않습니다.", "성적표의 학번과 사용자의 학번이 일치하지 않습니다."),
 	UNSUPPORTED_STUDENT_CATEGORY("지원하지 않는 학생 유형입니다.", "현재 시스템에서 지원하지 않는 학생 유형입니다."),
 	GRADUATION_CHECK_FAILED("졸업 검사에 실패했습니다.", "졸업 요건 검사 중 오류가 발생했습니다."),
+	MAJOR_NAME_MISMATCH("전공명이 시스템에 등록되지 않았습니다.", "성적표의 전공명이 시스템에 등록된 전공명과 일치하지 않습니다."),
+	GRADUATION_REQUIREMENT_NOT_FOUND("졸업 요건을 찾을 수 없습니다.", "전공명/입학년도 조합에 맞는 졸업 요건을 찾을 수 없습니다."),
+	COLLEGE_NOT_FOUND("단과대를 찾을 수 없습니다.", "소속 단과대 정보를 시스템에서 찾을 수 없습니다."),
 	LECTURE_NOT_FOUND("과목 정보를 찾을 수 없습니다.", "성적표에 포함된 과목 정보를 시스템에서 찾을 수 없습니다."),
 	UNKNOWN_ERROR("알 수 없는 오류가 발생했습니다.", "예상치 못한 오류가 발생했습니다.");
 
