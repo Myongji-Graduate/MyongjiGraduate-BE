@@ -126,10 +126,14 @@ public class ParsingInformation {
 		for (String part : parts) {
 			if (part.startsWith("부전공 - ")) {
 				categories.add("부전공");
-				subMajor = part.substring("부전공 - ".length());
+				subMajor = extractLastMajor(
+						part.substring("부전공 - ".length())
+				);
 			} else if (part.startsWith("복수전공 - ")) {
 				categories.add("복수전공");
-				dualMajor = part.substring("복수전공 - ".length());
+				dualMajor = extractLastMajor(
+						part.substring("복수전공 - ".length())
+				);
 			} else if (part.startsWith("연계전공 - ")) {
 				categories.add("연계전공");
 				associatedMajor = part.substring("연계전공 - ".length());
@@ -214,5 +218,10 @@ public class ParsingInformation {
 			}
 		}
 		return null; // not present or unparsable
+	}
+
+	private static String extractLastMajor(String raw) {
+		String trimmed = raw.trim();
+		return trimmed.substring(trimmed.lastIndexOf(" ") + 1);
 	}
 }

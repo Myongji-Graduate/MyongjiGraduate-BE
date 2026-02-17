@@ -12,7 +12,7 @@ public enum TransferGraduationRequirementType {
     HUMANITIES("인문대", 51, 2),
     SOCIAL_SCIENCE("사회과학대", 51, 2),
     BUSINESS("경영대", 45, 2),
-    LAW("법과대", 48, 2),
+    LAW("법대", 48, 2),
     ICT("ICT융합대", 57, 2);
 
     private final String collegeName;

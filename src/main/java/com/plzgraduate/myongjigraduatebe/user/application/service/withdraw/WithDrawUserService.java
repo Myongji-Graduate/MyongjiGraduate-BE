@@ -5,6 +5,7 @@ import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.DeleteParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.timetable.application.port.DeleteUserTimetablePort;
 import com.plzgraduate.myongjigraduatebe.user.application.port.DeleteUserPort;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.withdraw.WithDrawUserUseCase;
@@ -21,6 +22,7 @@ class WithDrawUserService implements WithDrawUserUseCase {
 	private final FindUserUseCase findUserUseCase;
 	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	private final DeleteParsingTextHistoryPort deleteParsingTextHistoryPort;
+	private final DeleteUserTimetablePort deleteUserTimetablePort;
 	private final DeleteUserPort deleteUserPort;
 	private final DeleteCompletedCreditPort deleteCompletedCreditPort;
 	private final PasswordEncoder passwordEncoder;
@@ -34,6 +36,7 @@ class WithDrawUserService implements WithDrawUserUseCase {
 		deleteTakenLectureByUserUseCase.deleteAllTakenLecturesByUser(user);
 		deleteParsingTextHistoryPort.deleteUserParsingTextHistory(user);
 		deleteCompletedCreditPort.deleteAllCompletedCredits(user);
+		deleteUserTimetablePort.deleteAllByUser(user);
 		deleteUserPort.deleteUser(user);
 	}
 }
