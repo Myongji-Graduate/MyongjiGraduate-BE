@@ -383,7 +383,7 @@ class FailureAnalysisServiceTest {
 		int analyzedCount = failureAnalysisService.analyzeExistingFailures();
 
 		//then
-		assertThat(analyzedCount).isEqualTo(0);
+		assertThat(analyzedCount).isZero();
 	}
 
 	@DisplayName("기존 실패 데이터 재분석 - failureReason이 null인 데이터 분석")
