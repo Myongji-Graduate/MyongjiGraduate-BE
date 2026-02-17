@@ -37,8 +37,6 @@ jobs:
 
       # 테스트 + 커버리지 리포트 생성(sonar가 jacoco xml을 소비)
       - name: Test & Jacoco
-        env:
-          DOCKER_API_VERSION: '1.44'
         run: ./gradlew clean test jacocoTestReport --no-daemon --info
 
       # Sonar 분석 (JDK 21에서 그대로 실행)
