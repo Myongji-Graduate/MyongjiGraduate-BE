@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
@@ -300,6 +301,47 @@ class FailureAnalysisServiceTest {
 		assertThat(result.getFailureDetails()).contains("졸업 검사 중 오류 발생");
 	}
 
+	@DisplayName("복수전공+부전공(DOUBLE_SUB) 학생 유형이면 UNSUPPORTED_STUDENT_CATEGORY를 반환한다")
+	@Test
+	void analyzeFailure_unsupportedStudentCategoryFromCheckStudentCategory() {
+		//given
+		String doubleSubParsingText = "출력일자 :  2023/09/01|1/1"
+			+ "|경영대학 경영학과, 이아현(60191000), 현학적 - 재학, 이수 - 6, 입학 - 신입학(2019/03/04), 복수전공 - 기계공학전공, 부전공 - 경제학전공"
+			+ "|토익 - 625, 영어교과목면제 - 면제없음, 최종학적변동 - 불일치복학(2021/07/20)"
+			+ "|편입생 인정학점 - 교양 0, 전공 0, 자유선택 0, 성경과인간이해 0"
+			+ "|교환학생 인정학점 - 학문기초교양 0, 일반교양 0, 전공 0, 복수전공학문기초교양 0, 복수전공 0, 연계전공 0, 부전공 0, 자유선택 0"
+			+ "|공통교양 15, 핵심교양 12, 학문기초교양 6, 일반교양 22, 전공 50, 복수전공 0, 연계전공 0, 부전공 0, 교직 0, 자유선택 0"
+			+ "|총 취득학점 - 105, 총점 - 368.5, 평균평점 - 4.14"
+			+ "|이수구분|수강년도/학기|한글코드|과목코드|과목명|학점|등급|중복|";
+
+		//when
+		FailureAnalysisService.FailureAnalysisResult result = failureAnalysisService.analyzeFailure(doubleSubParsingText);
+
+		//then
+		assertThat(result.getFailureReason()).isEqualTo(FailureReason.UNSUPPORTED_STUDENT_CATEGORY);
+	}
+
+	@DisplayName("졸업 검사 실패 - 기타 IllegalArgumentException은 GRADUATION_CHECK_FAILED를 반환한다")
+	@Test
+	void analyzeFailure_otherIllegalArgumentInGraduation() {
+		//given
+		User anonymous = createAnonymousUser();
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
+		ParsingAnonymousDto parsingAnonymousDto = new ParsingAnonymousDto(anonymous, takenLectureInventory);
+
+		given(parsingAnonymousUseCase.parseAnonymous(eq(EnglishLevel.ENG12), eq(KoreanLevel.KOR12), any()))
+			.willReturn(parsingAnonymousDto);
+		given(checkGraduationRequirementUseCase.checkGraduationRequirement(anonymous, takenLectureInventory))
+			.willThrow(new IllegalArgumentException("기타 오류"));
+
+		//when
+		FailureAnalysisService.FailureAnalysisResult result = failureAnalysisService.analyzeFailure(VALID_PARSING_TEXT);
+
+		//then
+		assertThat(result.getFailureReason()).isEqualTo(FailureReason.GRADUATION_CHECK_FAILED);
+		assertThat(result.getFailureDetails()).contains("졸업 검사 중 오류 발생");
+	}
+
 	@DisplayName("모든 검증 단계를 통과하면 UNKNOWN_ERROR를 반환한다")
 	@Test
 	void analyzeFailure_allStepsPassed() {
@@ -317,6 +359,31 @@ class FailureAnalysisServiceTest {
 		//then
 		assertThat(result.getFailureReason()).isEqualTo(FailureReason.UNKNOWN_ERROR);
 		assertThat(result.getFailureDetails()).contains("모든 검증 단계를 통과했지만 실패로 기록되었습니다");
+	}
+
+	@DisplayName("기존 실패 데이터 재분석 - 개별 분석 중 오류 발생 시 건너뛰고 계속한다")
+	@Test
+	void analyzeExistingFailures_withErrorInSingleAnalysis() {
+		//given
+		User user = createUser();
+		ParsingTextHistory history = ParsingTextHistory.builder()
+			.id(1L)
+			.user(user)
+			.parsingText("parsingText1")
+			.parsingResult(ParsingResult.FAIL)
+			.build();
+
+		given(queryParsingTextHistoryPort.findByParsingResultAndFailureReasonIsNull(PageRequest.of(0, 100)))
+			.willReturn(List.of(history))
+			.willReturn(Collections.emptyList());
+
+		doThrow(new RuntimeException("DB error")).when(saveParsingTextHistoryPort).saveParsingTextHistory(any());
+
+		//when
+		int analyzedCount = failureAnalysisService.analyzeExistingFailures();
+
+		//then
+		assertThat(analyzedCount).isEqualTo(0);
 	}
 
 	@DisplayName("기존 실패 데이터 재분석 - failureReason이 null인 데이터 분석")
