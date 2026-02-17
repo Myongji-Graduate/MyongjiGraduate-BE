@@ -10,7 +10,6 @@ import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persiste
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.repository.ParsingTextRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
@@ -37,6 +36,6 @@ public class ParsingTextHistoryAdapter implements SaveParsingTextHistoryPort,
 		return parsingTextRepository.findByParsingResultAndFailureReasonIsNull(ParsingResult.FAIL, pageable)
 			.stream()
 			.map(parsingTextHistoryMapper::mapToDomainEntity)
-			.collect(Collectors.toList());
+			.toList();
 	}
 }

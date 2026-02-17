@@ -1,10 +1,8 @@
 package com.plzgraduate.myongjigraduatebe.parsing.api.dto.response;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class AnalyzeExistingFailuresResponse {
 
 	private final int analyzedCount;
@@ -14,9 +12,6 @@ public class AnalyzeExistingFailuresResponse {
 	}
 
 	public static AnalyzeExistingFailuresResponse of(int analyzedCount) {
-		return AnalyzeExistingFailuresResponse.builder()
-			.analyzedCount(analyzedCount)
-			.build();
+		return new AnalyzeExistingFailuresResponse(analyzedCount);
 	}
 }
-
