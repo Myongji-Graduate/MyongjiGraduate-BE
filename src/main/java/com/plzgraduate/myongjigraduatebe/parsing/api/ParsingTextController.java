@@ -1,5 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.parsing.api;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
+import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
@@ -8,8 +12,10 @@ import com.plzgraduate.myongjigraduatebe.parsing.application.service.FailureAnal
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 
@@ -22,6 +28,9 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 	private final TakenLectureCacheEvict takenLectureCacheEvict;
 	private final FailureAnalysisService failureAnalysisService;
+
+	@Value("${admin.api-key}")
+	private String adminApiKey;
 
 	@PostMapping
 	public void enrollParsingText(
@@ -51,8 +60,19 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 	 * @return 분석된 실패 데이터 개수
 	 */
 	@PostMapping("/analyze-existing-failures")
-	public AnalyzeExistingFailuresResponse analyzeExistingFailures() {
+	public AnalyzeExistingFailuresResponse analyzeExistingFailures(
+		@RequestHeader(value = "X-Admin-Key", required = false) String apiKey
+	) {
+		validateAdminApiKey(apiKey);
 		int analyzedCount = failureAnalysisService.analyzeExistingFailures();
 		return AnalyzeExistingFailuresResponse.of(analyzedCount);
+	}
+
+	private void validateAdminApiKey(String apiKey) {
+		if (apiKey == null || !MessageDigest.isEqual(
+				apiKey.getBytes(StandardCharsets.UTF_8),
+				adminApiKey.getBytes(StandardCharsets.UTF_8))) {
+			throw new UnAuthorizedException("유효하지 않은 관리자 API 키입니다.");
+		}
 	}
 }

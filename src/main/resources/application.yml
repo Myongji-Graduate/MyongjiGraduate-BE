@@ -38,6 +38,9 @@ jwt:
   secret-key: "coffee"
   expiry-seconds: 10800000
 
+admin:
+  api-key: local-admin-key
+
 springdoc:
   api-docs:
     path: /api-docs
@@ -92,6 +95,9 @@ jwt:
   secret-key: ${JWT_SECRET}
   expiry-seconds: 3600000
 
+admin:
+  api-key: ${ADMIN_API_KEY}
+
 ---
 
 spring:
@@ -124,3 +130,6 @@ jwt:
   issuer: "plzgraduate"
   secret-key: ${JWT_SECRET}
   expiry-seconds: 3600000
+
+admin:
+  api-key: ${ADMIN_API_KEY}
