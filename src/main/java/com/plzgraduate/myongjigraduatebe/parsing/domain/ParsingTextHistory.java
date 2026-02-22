@@ -11,18 +11,24 @@ public class ParsingTextHistory {
 	private final User user;
 	private final String parsingText;
 	private final ParsingResult parsingResult;
+	private final FailureReason failureReason;
+	private final String failureDetails;
 
 	@Builder
 	private ParsingTextHistory(
 		Long id,
 		User user,
 		String parsingText,
-		ParsingResult parsingResult
+		ParsingResult parsingResult,
+		FailureReason failureReason,
+		String failureDetails
 	) {
 		this.id = id;
 		this.user = user;
 		this.parsingText = parsingText;
 		this.parsingResult = parsingResult;
+		this.failureReason = failureReason;
+		this.failureDetails = failureDetails;
 	}
 
 	public static ParsingTextHistory success(User user, String parsingText) {
@@ -38,6 +44,16 @@ public class ParsingTextHistory {
 			.user(user)
 			.parsingText(parsingText)
 			.parsingResult(ParsingResult.FAIL)
+			.build();
+	}
+
+	public static ParsingTextHistory fail(User user, String parsingText, FailureReason failureReason, String failureDetails) {
+		return ParsingTextHistory.builder()
+			.user(user)
+			.parsingText(parsingText)
+			.parsingResult(ParsingResult.FAIL)
+			.failureReason(failureReason)
+			.failureDetails(failureDetails)
 			.build();
 	}
 }

@@ -61,6 +61,7 @@ public class SecurityConfig {
 	                API_V1_PREFIX + "/lectures/popular/**",   // 인기 강의 조회
 	                API_V1_PREFIX + "/lectures-info",         // 강좌 정보 조회
 	                API_V1_PREFIX + "/lecture-reviews",       // 강좌평 조회
+	                API_V1_PREFIX + "/parsing-text/analyze-existing-failures", // 기존 실패 데이터 재분석
 	                "/v3/api-docs/**",
 	                "/swagger-ui/**",
 	                "/swagger-ui.html",
