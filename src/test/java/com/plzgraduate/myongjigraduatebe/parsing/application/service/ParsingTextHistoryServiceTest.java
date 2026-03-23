@@ -5,9 +5,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.FailureReason;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,8 @@ class ParsingTextHistoryServiceTest {
 	private SaveParsingTextHistoryPort saveParsingTextHistoryPort;
 	@Mock
 	private FindUserUseCase findUserUseCase;
+	@Mock
+	private FailureAnalysisService failureAnalysisService;
 	@InjectMocks
 	private ParsingTextHistoryService parsingTextHistoryService;
 
@@ -58,7 +62,16 @@ class ParsingTextHistoryServiceTest {
 		User user = createUser(userId, "mju1001!", "1q2w3e4r!", EnglishLevel.ENG12, "정지환",
 			"60181666", 18, "융합소프트웨어학부", null, StudentCategory.NORMAL);
 		String parsingText = "parsingText";
+		FailureReason failureReason = FailureReason.EMPTY_PARSING_TEXT;
+		String failureDetails = "PDF를 인식하지 못했습니다.";
+		
 		given(findUserUseCase.findUserById(userId)).willReturn(user);
+		given(failureAnalysisService.analyzeFailure(
+			parsingText, 
+			user.getEnglishLevel(), 
+			user.getKoreanLevel()
+		)).willReturn(new FailureAnalysisService.FailureAnalysisResult(failureReason, failureDetails));
+		
 		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(
 			ParsingTextHistory.class);
 		//when
@@ -70,6 +83,8 @@ class ParsingTextHistoryServiceTest {
 		ParsingTextHistory captureArgument = captor.getValue();
 		assertThat(captureArgument.getUser()).isEqualTo(user);
 		assertThat(captureArgument.getParsingText()).isEqualTo(parsingText);
+		assertThat(captureArgument.getFailureReason()).isEqualTo(failureReason);
+		assertThat(captureArgument.getFailureDetails()).isEqualTo(failureDetails);
 	}
 
 	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel,
@@ -84,6 +99,7 @@ class ParsingTextHistoryServiceTest {
 			.studentNumber(studentNumber)
 			.entryYear(entryYear)
 			.englishLevel(englishLevel)
+			.koreanLevel(KoreanLevel.KOR12)
 			.primaryMajor(major)
 			.subMajor(subMajor)
 			.studentCategory(studentCategory)

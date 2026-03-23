@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.parsing.api;
 
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.doThrow;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 class ParsingTextControllerTest extends WebAdaptorTestSupport {
+
+	@SuppressWarnings("unused")
 	@MockBean
 	private TakenLectureCacheEvict takenLectureCacheEvict;
 
@@ -82,6 +85,57 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 
 		then(parsingTextHistoryUseCase).should()
 			.generateFailedParsingTextHistory(any(Long.class), any(String.class));
+	}
+
+	@DisplayName("올바른 API Key로 기존 실패 데이터 재분석을 요청하면 성공한다.")
+	@Test
+	void analyzeExistingFailuresWithValidApiKey() throws Exception {
+		//given
+		given(failureAnalysisService.analyzeExistingFailures()).willReturn(5);
+
+		//when
+		ResultActions actions = mockMvc.perform(
+			post("/api/v1/parsing-text/analyze-existing-failures")
+				.header("X-Admin-Key", "test-admin-key")
+				.with(csrf())
+		);
+
+		//then
+		actions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.analyzedCount").value(5));
+	}
+
+	@DisplayName("API Key가 없는 경우 기존 실패 데이터 재분석 요청이 401로 실패한다.")
+	@Test
+	void analyzeExistingFailuresWithoutApiKey() throws Exception {
+		//when
+		ResultActions actions = mockMvc.perform(
+			post("/api/v1/parsing-text/analyze-existing-failures")
+				.with(csrf())
+		);
+
+		//then
+		actions
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@DisplayName("잘못된 API Key로 요청하면 401로 실패한다.")
+	@Test
+	void analyzeExistingFailuresWithWrongApiKey() throws Exception {
+		//when
+		ResultActions actions = mockMvc.perform(
+			post("/api/v1/parsing-text/analyze-existing-failures")
+				.header("X-Admin-Key", "wrong-key")
+				.with(csrf())
+		);
+
+		//then
+		actions
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
 	}
 
 }

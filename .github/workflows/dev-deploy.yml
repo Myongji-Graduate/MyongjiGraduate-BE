@@ -121,6 +121,7 @@ jobs:
               -e SPRING_DATASOURCE_PASSWORD='${{ secrets.STAGING_DB_PASSWORD }}' \
               -e SPRING_DATA_REDIS_HOST=mg-redis \
               -e SPRING_DATA_REDIS_PORT=6379 \
+              -e ADMIN_API_KEY='${{ secrets.ADMIN_API_KEY }}' \
               ${{ secrets.DOCKERHUB_USERNAME }}/staging-mju-graduate-server:latest
 
             echo "[Disk after]"

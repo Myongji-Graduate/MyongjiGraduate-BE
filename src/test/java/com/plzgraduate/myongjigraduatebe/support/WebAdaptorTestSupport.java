@@ -21,6 +21,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.api.PopularLectureController;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.PopularLecturesUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.SearchLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.api.ParsingTextController;
+import com.plzgraduate.myongjigraduatebe.parsing.application.service.FailureAnalysisService;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.FindTakenLectureController;
@@ -119,6 +120,8 @@ public abstract class WebAdaptorTestSupport {
     protected ParsingTextUseCase parsingTextUseCase;
     @MockBean
     protected ParsingTextHistoryUseCase parsingTextHistoryUseCase;
+	@MockBean
+	protected FailureAnalysisService failureAnalysisService;
 	@MockBean
 	protected SignUpUseCase signUpUseCase;
 	@MockBean

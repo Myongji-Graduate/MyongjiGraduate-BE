@@ -25,3 +25,6 @@ jwt:
   issuer: "plzgraduate"
   secret-key: "coffee"
   expiry-seconds: 86400
+
+admin:
+  api-key: test-admin-key

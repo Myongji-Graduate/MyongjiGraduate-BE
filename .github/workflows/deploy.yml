@@ -123,7 +123,17 @@ jobs:
               -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
               -e SPRING_DATA_REDIS_HOST=mg-redis \
               -e SPRING_DATA_REDIS_PORT=6379 \
+              -e ADMIN_API_KEY='${{ secrets.ADMIN_API_KEY }}' \
               ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
+
+            echo "Autoheal restart"
+            docker rm -f autoheal || true
+            docker run -d --name autoheal \
+              --restart unless-stopped \
+              -e AUTOHEAL_CONTAINER_LABEL=all \
+              -e AUTOHEAL_INTERVAL=30 \
+              -v /var/run/docker.sock:/var/run/docker.sock \
+              willfarrell/autoheal
 
             echo "[Disk after]"
             docker system df || true
