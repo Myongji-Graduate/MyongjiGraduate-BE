@@ -37,6 +37,15 @@ public class RedisCacheConfig {
                 .entryTtl(Duration.ofMinutes(10))
                 .serializeValuesWith(jdkSerializer));
 
+        // 졸업요건 공유 캐시 (학기 1~2회만 변경되는 마스터 데이터)
+        RedisCacheConfiguration graduationRequirementConfig = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofHours(24))
+                .serializeValuesWith(jdkSerializer);
+        cacheConfigurations.put("commonCultures", graduationRequirementConfig);
+        cacheConfigurations.put("coreCultures", graduationRequirementConfig);
+        cacheConfigurations.put("basicAcademicalCultures", graduationRequirementConfig);
+        cacheConfigurations.put("majorLectures", graduationRequirementConfig);
+
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(defaultConfig)
                 .withInitialCacheConfigurations(cacheConfigurations)

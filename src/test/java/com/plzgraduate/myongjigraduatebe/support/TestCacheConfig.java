@@ -16,6 +16,8 @@ public class TestCacheConfig {
     @Bean
     @Primary
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("takenLectures");
+        return new ConcurrentMapCacheManager(
+            "takenLectures", "commonCultures", "coreCultures",
+            "basicAcademicalCultures", "majorLectures");
     }
 } 

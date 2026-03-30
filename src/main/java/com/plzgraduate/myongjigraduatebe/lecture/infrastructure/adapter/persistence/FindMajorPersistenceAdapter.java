@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persiste
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class FindMajorPersistenceAdapter implements FindMajorPort {
 	private final LectureMapper mapper;
 
 	@Override
+	@Cacheable(value = "majorLectures", key = "#major")
 	public Set<MajorLecture> findMajor(String major) {
 		return majorLectureRepository.findAllByMajor(major)
 			.stream()

@@ -1,10 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class MajorLecture {
+public class MajorLecture implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final Lecture lecture;
 	private final String major;

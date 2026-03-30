@@ -13,6 +13,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 	private final LectureMapper lectureMapper;
 
 	@Override
+	@Cacheable(value = "commonCultures", key = "#user.entryYear + '_' + #user.englishLevel.name()")
 	public Set<CommonCulture> findCommonCulture(User user) {
 		if (user.getEnglishLevel() == BASIC) {
 			return findEngBasicCommonCultures(user);

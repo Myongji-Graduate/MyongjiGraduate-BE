@@ -10,6 +10,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class FindBasicAcademicalCulturePersistenceAdapter implements
 	private final LectureMapper lectureMapper;
 
 	@Override
+	@Cacheable(value = "basicAcademicalCultures", key = "#major + '_' + #entryYear")
 	public Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(String major, int entryYear) {
 		College userCollege = College.findBelongingCollege(major, entryYear);
 		return basicAcademicalCultureRepository.findAllByCollege(userCollege.getName())

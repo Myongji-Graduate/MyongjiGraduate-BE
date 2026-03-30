@@ -9,6 +9,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class FindCoreCulturePersistenceAdapter implements FindCoreCulturePort {
 	private final LectureMapper lectureMapper;
 
 	@Override
+	@Cacheable(value = "coreCultures", key = "#user.entryYear")
 	public Set<CoreCulture> findCoreCulture(User user) {
 		return coreCultureRepository.findAllByEntryYear(user.getEntryYear())
 			.stream()

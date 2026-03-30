@@ -1,10 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
+import java.io.Serializable;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class CommonCulture {
+public class CommonCulture implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private final Lecture lecture;
 	private final CommonCultureCategory commonCultureCategory;
