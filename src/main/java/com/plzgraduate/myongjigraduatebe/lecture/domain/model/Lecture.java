@@ -2,10 +2,13 @@ package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class Lecture implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -7,8 +7,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class TakenLectureInventory implements  Serializable {
 	private static final long serialVersionUID = 1L;
 

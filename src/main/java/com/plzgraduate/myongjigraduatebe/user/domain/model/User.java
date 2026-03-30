@@ -9,11 +9,14 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 

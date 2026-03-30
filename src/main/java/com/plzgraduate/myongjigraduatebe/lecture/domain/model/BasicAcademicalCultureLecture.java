@@ -1,12 +1,13 @@
 package com.plzgraduate.myongjigraduatebe.lecture.domain.model;
 
-import java.io.Serializable;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public class BasicAcademicalCultureLecture implements Serializable {
-	private static final long serialVersionUID = 1L;
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+public class BasicAcademicalCultureLecture {
 
 	private final Lecture lecture;
 	private final String college;

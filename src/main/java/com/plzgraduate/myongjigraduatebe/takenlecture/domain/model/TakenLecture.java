@@ -6,10 +6,13 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class TakenLecture implements Serializable {
 	private static final long serialVersionUID = 1L;
 
