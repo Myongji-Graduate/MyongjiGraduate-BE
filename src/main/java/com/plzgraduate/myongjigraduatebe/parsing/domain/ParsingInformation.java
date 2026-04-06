@@ -142,6 +142,16 @@ public class ParsingInformation {
 			}
 		}
 
+		if (!categories.contains("편입")) {
+			for (int idx = splitText.length - 1; idx >= 0; idx--) {
+				if (!splitText[idx].isEmpty()) {
+					if (splitText[idx].startsWith("입학 -") && splitText[idx].contains("편입")) {
+						categories.add("편입");
+					}
+					break;
+				}
+			}
+		}
 
 		String fourthLine = fourthLineText.substring("편입생 인정학점 - ".length());
 		transferCredit = TransferCredit.from(Arrays.stream(fourthLine.split(","))
@@ -162,7 +172,7 @@ public class ParsingInformation {
 	private static List<ParsingTakenLectureDto> parseTakenLectureInformation(String[] splitText) {
 		List<ParsingTakenLectureDto> takenLectureInformation = new ArrayList<>();
 		for (int i = 16; i < splitText.length; i += 7) {
-			if (i + 3 < splitText.length && !Pattern.matches(
+			if (i + 3 >= splitText.length || !Pattern.matches(
 					"^[A-Z]+$",
 					splitText[i + 3].substring(0, 1)
 			)) {
