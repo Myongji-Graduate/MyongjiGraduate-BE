@@ -177,15 +177,11 @@ public class BusinessCrossEnrollmentManager {
 		return result.getDetailCategory().stream()
 			.filter(r -> r.getDetailCategoryName().equals(name))
 			.findFirst()
-			.orElse(null);
+			.orElseThrow(() -> new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString()));
 	}
 
 	private DetailCategoryResult getRequiredDetailCategoryByName(DetailGraduationResult result, String name) {
-		DetailCategoryResult detailCategory = getDetailCategoryByName(result, name);
-		if (detailCategory == null) {
-			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
-		}
-		return detailCategory;
+		return getDetailCategoryByName(result, name);
 	}
 
 	private DetailCategoryResult getPrimaryElectiveCategory(DetailGraduationResult result) {
