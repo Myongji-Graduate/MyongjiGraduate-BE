@@ -697,7 +697,7 @@ class CalculateMajorGraduationServiceTest {
 
 		// primaryElectiveMajorDetailGraduationResult.isCompleted는 isolation 시점(교차인정 전) 기준으로 고정됨
 		// 교차인정 후 실제 완료 여부는 내부 DetailCategoryResult에서 확인
-		assertThat(primaryElective.getDetailCategory().get(0).isCompleted()).isTrue();
+		assertThat(primaryElective.getDetailCategory().getFirst().isCompleted()).isTrue();
 		assertThat(dualElective.isCompleted()).isTrue();
 	}
 
@@ -771,7 +771,7 @@ class CalculateMajorGraduationServiceTest {
 			.filter(r -> r.getGraduationCategory() == DUAL_ELECTIVE_MAJOR)
 			.findFirst().orElseThrow();
 
-		assertThat(primaryElective.getDetailCategory().get(0).isCompleted()).isFalse();
+		assertThat(primaryElective.getDetailCategory().getFirst().isCompleted()).isFalse();
 		assertThat(dualElective.isCompleted()).isTrue();
 	}
 
@@ -914,7 +914,7 @@ class CalculateMajorGraduationServiceTest {
 
 		assertThat(dualMandatory.isCompleted()).isTrue();
 		assertThat(dualMandatory.getTakenCredit()).isEqualTo(15);
-		assertThat(dualMandatory.getDetailCategory().get(0).getTakenLectures())
+		assertThat(dualMandatory.getDetailCategory().getFirst().getTakenLectures())
 			.extracting(Lecture::getId)
 			.contains("HBX01104", "HBX01105", "HBX01106", "HBX01143", "HBX01124");
 	}

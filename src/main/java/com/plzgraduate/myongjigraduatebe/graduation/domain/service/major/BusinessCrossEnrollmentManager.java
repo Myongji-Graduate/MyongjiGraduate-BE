@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
+import static com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode.UNFITTED_GRADUATION_CATEGORY;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.DUAL_ELECTIVE_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_ELECTIVE_MAJOR;
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory.PRIMARY_MANDATORY_MAJOR;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -49,10 +51,12 @@ public class BusinessCrossEnrollmentManager {
 		TakenLectureInventory takenLectureInventory,
 		DetailGraduationResult primaryMajorResult
 	) {
+		validateRequiredArgument(user);
+		validateRequiredArgument(takenLectureInventory);
+		validateRequiredArgument(primaryMajorResult);
+		validateSingleMajorUser(user);
+
 		DetailCategoryResult primaryElective = getPrimaryElectiveCategory(primaryMajorResult);
-		if (primaryElective == null) {
-			return;
-		}
 
 		Set<String> crossEnrollableLectureIds = ELIGIBLE_BUSINESS_CROSS_ENROLLMENT_MAJORS.stream()
 			.filter(major -> !major.equals(user.getPrimaryMajor()))
@@ -91,14 +95,20 @@ public class BusinessCrossEnrollmentManager {
 		DetailGraduationResult primaryMandatoryResult,
 		TakenLectureInventory takenLectureInventory
 	) {
+		validateRequiredArgument(user);
+		validateRequiredArgument(primaryMandatoryResult);
+		validateRequiredArgument(takenLectureInventory);
+		validateDualMajorUser(user);
+
 		Set<String> candidateIds = findMajorPort.findMajor(user.getDualMajor()).stream()
 			.filter(majorLecture -> majorLecture.getIsMandatory() == 1)
 			.map(majorLecture -> majorLecture.getLecture().getId())
 			.collect(Collectors.toSet());
 
-		Set<TakenLecture> toRestore = primaryMandatoryResult.getDetailCategory().stream()
-			.filter(c -> c.getDetailCategoryName().equals(PRIMARY_MANDATORY_MAJOR.getName()))
-			.flatMap(c -> c.getTakenLectures().stream())
+		Set<TakenLecture> toRestore = getRequiredDetailCategoryByName(
+			primaryMandatoryResult,
+			PRIMARY_MANDATORY_MAJOR.getName()
+		).getTakenLectures().stream()
 			.filter(lecture -> candidateIds.contains(lecture.getId()))
 			.map(lecture -> TakenLecture.custom(null, lecture))
 			.collect(Collectors.toSet());
@@ -111,11 +121,19 @@ public class BusinessCrossEnrollmentManager {
 		DetailGraduationResult dualMandatoryResult,
 		DetailGraduationResult dualElectiveResult
 	) {
-		DetailCategoryResult primaryElective = getDetailCategoryByName(primaryElectiveResult, PRIMARY_ELECTIVE_MAJOR.getName());
-		DetailCategoryResult dualElective = getDetailCategoryByName(dualElectiveResult, DUAL_ELECTIVE_MAJOR.getName());
-		if (primaryElective == null || dualElective == null) {
-			return;
-		}
+		validateRequiredArgument(primaryMandatoryResult);
+		validateRequiredArgument(primaryElectiveResult);
+		validateRequiredArgument(dualMandatoryResult);
+		validateRequiredArgument(dualElectiveResult);
+
+		DetailCategoryResult primaryElective = getRequiredDetailCategoryByName(
+			primaryElectiveResult,
+			PRIMARY_ELECTIVE_MAJOR.getName()
+		);
+		DetailCategoryResult dualElective = getRequiredDetailCategoryByName(
+			dualElectiveResult,
+			DUAL_ELECTIVE_MAJOR.getName()
+		);
 
 		Set<String> primaryExistingIds = collectTakenLectureIds(primaryMandatoryResult, primaryElectiveResult);
 		Set<String> dualExistingIds = collectTakenLectureIds(dualMandatoryResult, dualElectiveResult);
@@ -162,15 +180,40 @@ public class BusinessCrossEnrollmentManager {
 			.orElse(null);
 	}
 
-	private DetailCategoryResult getPrimaryElectiveCategory(DetailGraduationResult result) {
-		DetailCategoryResult separatedPrimaryElective = getDetailCategoryByName(
-			result,
-			PRIMARY_ELECTIVE_MAJOR.getName()
-		);
-		if (separatedPrimaryElective != null) {
-			return separatedPrimaryElective;
+	private DetailCategoryResult getRequiredDetailCategoryByName(DetailGraduationResult result, String name) {
+		DetailCategoryResult detailCategory = getDetailCategoryByName(result, name);
+		if (detailCategory == null) {
+			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
 		}
-		return getDetailCategoryByName(result, "전공선택");
+		return detailCategory;
+	}
+
+	private DetailCategoryResult getPrimaryElectiveCategory(DetailGraduationResult result) {
+		if (result.getGraduationCategory() == PRIMARY_ELECTIVE_MAJOR) {
+			return getRequiredDetailCategoryByName(result, PRIMARY_ELECTIVE_MAJOR.getName());
+		}
+		return result.getDetailCategory().stream()
+			.filter(category -> category.getDetailCategoryName().equals("전공선택"))
+			.findFirst()
+			.orElseThrow(() -> new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString()));
+	}
+
+	private void validateSingleMajorUser(User user) {
+		if (!supportsSingleMajor(user)) {
+			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
+		}
+	}
+
+	private void validateDualMajorUser(User user) {
+		if (!supportsDualMajor(user)) {
+			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
+		}
+	}
+
+	private void validateRequiredArgument(Object value) {
+		if (Objects.isNull(value)) {
+			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
+		}
 	}
 
 	private Set<String> collectTakenLectureIds(DetailGraduationResult... results) {
