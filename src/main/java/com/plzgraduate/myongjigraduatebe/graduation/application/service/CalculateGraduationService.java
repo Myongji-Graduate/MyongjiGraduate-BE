@@ -44,6 +44,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
 			user.getId()
 		);
+		TakenLectureInventory originalTakenLectureInventory = takenLectureInventory.copy();
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(
 			user,
 			takenLectureInventory,
@@ -58,8 +59,31 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 			user
 		);
 		handleDuplicatedTakenCredit(user, graduationResult);
+		overwriteTakenCreditWithActualEarnedCredits(user, graduationResult, originalTakenLectureInventory);
 		updateUserGraduationInformation(user, graduationResult);
 		return graduationResult;
+	}
+
+	void overwriteTakenCreditWithActualEarnedCredits(
+		User user,
+		GraduationResult graduationResult,
+		TakenLectureInventory originalTakenLectureInventory
+	) {
+		double actualTakenCredit = originalTakenLectureInventory.calculateTotalCredit()
+			+ user.getTransferCredit().getNormalCulture()
+			+ user.getTransferCredit().getMajorLecture()
+			+ user.getTransferCredit().getFreeElective()
+			+ user.getTransferCredit().getChristianLecture()
+			+ user.getExchangeCredit().getCommonCulture()
+			+ user.getExchangeCredit().getBasicAcademicalCulture()
+			+ user.getExchangeCredit().getNormalCulture()
+			+ user.getExchangeCredit().getMajor()
+			+ user.getExchangeCredit().getDualBasicAcademicalCulture()
+			+ user.getExchangeCredit().getDualMajor()
+			+ user.getExchangeCredit().getFusionMajor()
+			+ user.getExchangeCredit().getSubMajor()
+			+ user.getExchangeCredit().getFreeElective();
+		graduationResult.updateTakenCredit(actualTakenCredit);
 	}
 
 	DetailGraduationResult generateTransferChristianDetailGraduationResult(
