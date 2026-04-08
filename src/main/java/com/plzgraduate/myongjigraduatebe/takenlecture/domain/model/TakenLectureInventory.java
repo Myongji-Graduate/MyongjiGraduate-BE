@@ -44,6 +44,10 @@ public class TakenLectureInventory implements  Serializable {
 		this.takenLecture.removeAll(finishedTakenLecture);
 	}
 
+	public void restoreTakenLectures(Set<TakenLecture> lectures) {
+		this.takenLecture.addAll(lectures);
+	}
+
 	public void sync(Set<Lecture> finishedLectures) {
 		takenLecture.removeAll(
 			takenLecture.stream()

@@ -35,6 +35,7 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 
 		TakenLectureInventory takenLectureInventoryWithDuplicateCode =
 			TakenLectureInventory.from(takenLectureWithDuplicateCode);
+		TakenLectureInventory originalTakenLectureInventory = takenLectureInventoryWithDuplicateCode.copy();
 
 		GraduationRequirement graduationRequirement =
 			calculateGraduationService.determineGraduationRequirement(anonymous);
@@ -62,6 +63,11 @@ public class CheckGraduationRequirementService implements CheckGraduationRequire
 			anonymous
 		);
 		calculateGraduationService.handleDuplicatedTakenCredit(anonymous, graduationResult);
+		calculateGraduationService.overwriteTakenCreditWithActualEarnedCredits(
+			anonymous,
+			graduationResult,
+			originalTakenLectureInventory
+		);
 
 		return graduationResult;
 	}

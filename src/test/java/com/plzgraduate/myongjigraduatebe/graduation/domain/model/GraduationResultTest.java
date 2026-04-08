@@ -224,4 +224,16 @@ class GraduationResultTest {
 		//then
 		assertThat(graduationResult.isGraduated()).isFalse();
 	}
+
+	@DisplayName("전체 이수학점은 카테고리 합산이 아니라 실제 취득학점으로 덮어쓸 수 있다.")
+	@Test
+	void updateTakenCredit() {
+		GraduationResult graduationResult = GraduationResult.builder()
+			.takenCredit(160)
+			.build();
+
+		graduationResult.updateTakenCredit(133);
+
+		assertThat(graduationResult.getTakenCredit()).isEqualTo(133);
+	}
 }
