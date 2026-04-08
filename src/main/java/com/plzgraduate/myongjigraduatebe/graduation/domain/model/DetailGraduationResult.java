@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class DetailGraduationResult {
 
-	private final boolean isCompleted;
+	private boolean isCompleted;
 	private final int totalCredit;
 	private final List<DetailCategoryResult> detailCategory;
 	private GraduationCategory graduationCategory;
@@ -82,6 +82,7 @@ public class DetailGraduationResult {
 
 	public void addCredit(double takenCredit) {
 		this.takenCredit += takenCredit;
+		this.isCompleted = checkIsCompleted(detailCategory);
 	}
 
 	public int getNormalLeftCredit() {

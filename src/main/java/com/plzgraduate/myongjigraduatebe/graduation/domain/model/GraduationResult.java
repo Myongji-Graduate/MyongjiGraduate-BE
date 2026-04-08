@@ -68,6 +68,10 @@ public class GraduationResult {
 		this.takenCredit -= duplicatedCredit;
 	}
 
+	public void updateTakenCredit(double takenCredit) {
+		this.takenCredit = takenCredit;
+	}
+
 	private void addUpTotalCredit(int originTotalCredit) {
 		int combinedScore =
 			detailGraduationResults.stream().mapToInt(DetailGraduationResult::getTotalCredit).sum()

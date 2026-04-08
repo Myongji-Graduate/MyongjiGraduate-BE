@@ -5,6 +5,8 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.Builder;
@@ -125,6 +127,27 @@ public class DetailCategoryResult {
 	public void addTakenCredits(int credits) {
 		this.takenCredits += credits;
 		checkCompleted();
+	}
+
+	public int addRecognizedLectures(Collection<Lecture> lectures) {
+		Set<String> existingLectureIds = new HashSet<>();
+		takenLectures.forEach(lecture -> existingLectureIds.add(lecture.getId()));
+		Set<String> addedLectureIds = new HashSet<>();
+
+		int addedCredits = 0;
+		for (Lecture lecture : lectures) {
+			if (existingLectureIds.add(lecture.getId())) {
+				takenLectures.add(lecture);
+				takenCredits += lecture.getCredit();
+				addedCredits += lecture.getCredit();
+				addedLectureIds.add(lecture.getId());
+			}
+		}
+		if (!addedLectureIds.isEmpty()) {
+			haveToLectures.removeIf(lecture -> addedLectureIds.contains(lecture.getId()));
+		}
+		checkCompleted();
+		return addedCredits;
 	}
 
 	public void addChapleCreditToChritain() {
