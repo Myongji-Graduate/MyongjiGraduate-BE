@@ -800,13 +800,13 @@ class CalculateMajorGraduationServiceTest {
 		given(findMajorPort.findMajor("경영정보학과")).willReturn(primaryLectures);
 
 		// 교차수강 대상: 경영학전공 과목 3개(9학점)
-		Set<MajorLecture> 경영학전공Lectures = new HashSet<>();
+		Set<MajorLecture> businessMajorLectures = new HashSet<>();
 		for (int i = 1; i <= 3; i++) {
-			경영학전공Lectures.add(MajorLecture.of(
+			businessMajorLectures.add(MajorLecture.of(
 				Lecture.of(String.format("HBX005%02d", i), "경영학선택" + i, 3, 0, null),
 				"경영학전공", 0, 16, 24));
 		}
-		given(findMajorPort.findMajor("경영학전공")).willReturn(경영학전공Lectures);
+		given(findMajorPort.findMajor("경영학전공")).willReturn(businessMajorLectures);
 		given(findMajorPort.findMajor("국제통상학과")).willReturn(new HashSet<>());
 
 		// 수강: 선택필수2(6학점) + managementInfoElectiveLecture2(6학점) + 경영학전공과목3(9학점)
