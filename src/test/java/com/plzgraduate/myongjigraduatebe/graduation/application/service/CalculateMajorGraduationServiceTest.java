@@ -468,9 +468,9 @@ class CalculateMajorGraduationServiceTest {
 		// given
 		// 경영정보학과 선택필수(OptionalMandatory.MANAGEMENT_INFORMATION) 중 비폐지 과목
 		// 19학번부터 2개 선택 → 주전공에서 이미 소비된 경우 복수전공에서 못 찾는 문제를 복원으로 해결
-		Lecture 인적자원관리 = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture 재무관리 = Lecture.of("HBX01147", "재무관리", 3, 0, null);
-		Lecture 복전전용필수 = Lecture.of("HBX01401", "복전전용필수", 3, 0, null); // 경영정보학과 전용
+		Lecture hrManagementLecture = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture financeManagementLecture = Lecture.of("HBX01147", "financeManagementLecture", 3, 0, null);
+		Lecture dualExclusiveMandatoryLecture = Lecture.of("HBX01401", "dualExclusiveMandatoryLecture", 3, 0, null); // 경영정보학과 전용
 
 		// 방현우: 60190872, 국제통상학과 19학번, 경영정보학과 복수전공
 		User user = UserFixture.createUser(
@@ -481,20 +481,20 @@ class CalculateMajorGraduationServiceTest {
 			"0/0/0/0", "0/0/0/0/0/0/0/0"
 		);
 
-		// 주전공(국제통상학과): 인적자원관리 + 재무관리을 전공필수로 요구 (총 6학점)
+		// 주전공(국제통상학과): hrManagementLecture + financeManagementLecture을 전공필수로 요구 (총 6학점)
 		// → OptionalMandatoryMajorHandler가 "국제통상학과"에 미적용 (국제통상학전공만 적용)
 		Set<MajorLecture> primaryLectures = new HashSet<>(Set.of(
-			MajorLecture.of(인적자원관리, "국제통상학과", 1, 16, 24),
-			MajorLecture.of(재무관리, "국제통상학과", 1, 16, 24)
+			MajorLecture.of(hrManagementLecture, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(financeManagementLecture, "국제통상학과", 1, 16, 24)
 		));
 		given(findMajorPort.findMajor("국제통상학과")).willReturn(primaryLectures);
 
-		// 복수전공(경영정보학과): 같은 과목 + 복전전용필수 + 선택 10과목 (총 6+3+30=39학점)
-		// OptionalMandatoryMajorHandler가 적용 → 인적자원관리/재무관리 중 2개 이상 수강 확인
+		// 복수전공(경영정보학과): 같은 과목 + dualExclusiveMandatoryLecture + 선택 10과목 (총 6+3+30=39학점)
+		// OptionalMandatoryMajorHandler가 적용 → hrManagementLecture/financeManagementLecture 중 2개 이상 수강 확인
 		Set<MajorLecture> dualLectures = new HashSet<>();
-		dualLectures.add(MajorLecture.of(인적자원관리, "경영정보학과", 1, 16, 24));
-		dualLectures.add(MajorLecture.of(재무관리, "경영정보학과", 1, 16, 24));
-		dualLectures.add(MajorLecture.of(복전전용필수, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(hrManagementLecture, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(financeManagementLecture, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(dualExclusiveMandatoryLecture, "경영정보학과", 1, 16, 24));
 		for (int i = 1; i <= 10; i++) {
 			dualLectures.add(MajorLecture.of(
 				Lecture.of(String.format("HBX020%02d", i), "복전선택" + i, 3, 0, null),
@@ -503,12 +503,12 @@ class CalculateMajorGraduationServiceTest {
 		}
 		given(findMajorPort.findMajor("경영정보학과")).willReturn(dualLectures);
 
-		// 수강: 공유 전공필수 2과목(6학점) + 복전전용필수(3학점) + 복전선택 10과목(30학점)
-		// 인적자원관리/재무관리은 주전공이 먼저 소비 → 복수전공 인벤토리에 없음
+		// 수강: 공유 전공필수 2과목(6학점) + dualExclusiveMandatoryLecture(3학점) + 복전선택 10과목(30학점)
+		// hrManagementLecture/financeManagementLecture은 주전공이 먼저 소비 → 복수전공 인벤토리에 없음
 		Set<TakenLecture> takenLectures = new HashSet<>();
-		takenLectures.add(TakenLecture.builder().lecture(인적자원관리).build());
-		takenLectures.add(TakenLecture.builder().lecture(재무관리).build());
-		takenLectures.add(TakenLecture.builder().lecture(복전전용필수).build());
+		takenLectures.add(TakenLecture.builder().lecture(hrManagementLecture).build());
+		takenLectures.add(TakenLecture.builder().lecture(financeManagementLecture).build());
+		takenLectures.add(TakenLecture.builder().lecture(dualExclusiveMandatoryLecture).build());
 		for (int i = 1; i <= 10; i++) {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX020%02d", i), "복전선택" + i, 3, 0, null))
@@ -547,14 +547,14 @@ class CalculateMajorGraduationServiceTest {
 	void applyBusinessCollegeCrossEnrollmentForDualElective() {
 		// given
 		// 경영정보학과 선택필수 과목 (19학번+, 2개 선택)
-		Lecture 인적자원관리 = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture 재무관리 = Lecture.of("HBX01147", "재무관리", 3, 0, null);
-		Lecture 복전전용필수 = Lecture.of("HBX01402", "복전전용필수", 3, 0, null);
+		Lecture hrManagementLecture = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture financeManagementLecture = Lecture.of("HBX01147", "financeManagementLecture", 3, 0, null);
+		Lecture dualExclusiveMandatoryLecture = Lecture.of("HBX01402", "dualExclusiveMandatoryLecture", 3, 0, null);
 
 		// 주전공(국제통상학과): 선택필수 + 선택 12과목 → 선택 12과목 초과로 9학점 normalLeftCredit 발생
 		Set<MajorLecture> primaryLectures = new HashSet<>();
-		primaryLectures.add(MajorLecture.of(인적자원관리, "국제통상학과", 1, 16, 24));
-		primaryLectures.add(MajorLecture.of(재무관리, "국제통상학과", 1, 16, 24));
+		primaryLectures.add(MajorLecture.of(hrManagementLecture, "국제통상학과", 1, 16, 24));
+		primaryLectures.add(MajorLecture.of(financeManagementLecture, "국제통상학과", 1, 16, 24));
 		for (int i = 1; i <= 12; i++) {
 			primaryLectures.add(MajorLecture.of(
 				Lecture.of(String.format("HBX011%02d", i), "주전선택" + i, 3, 0, null),
@@ -566,9 +566,9 @@ class CalculateMajorGraduationServiceTest {
 		// 복수전공(경영정보학과): 선택필수 3과목(9학점) + 선택 9과목(27학점) 총 36학점
 		// 학생이 선택 6과목만 수강 → 9학점 부족, 교차인정으로 완료
 		Set<MajorLecture> dualLectures = new HashSet<>();
-		dualLectures.add(MajorLecture.of(인적자원관리, "경영정보학과", 1, 16, 24));
-		dualLectures.add(MajorLecture.of(재무관리, "경영정보학과", 1, 16, 24));
-		dualLectures.add(MajorLecture.of(복전전용필수, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(hrManagementLecture, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(financeManagementLecture, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(dualExclusiveMandatoryLecture, "경영정보학과", 1, 16, 24));
 		for (int i = 1; i <= 9; i++) {
 			dualLectures.add(MajorLecture.of(
 				Lecture.of(String.format("HBX020%02d", i), "복전선택" + i, 3, 0, null),
@@ -585,16 +585,16 @@ class CalculateMajorGraduationServiceTest {
 			"0/0/0/0", "0/0/0/0/0/0/0/0"
 		);
 
-		// 수강: 선택필수2과목(6) + 주전선택12과목(36) + 복전전용필수(3) + 복전선택6과목(18)
+		// 수강: 선택필수2과목(6) + 주전선택12과목(36) + dualExclusiveMandatoryLecture(3) + 복전선택6과목(18)
 		Set<TakenLecture> takenLectures = new HashSet<>();
-		takenLectures.add(TakenLecture.builder().lecture(인적자원관리).build());
-		takenLectures.add(TakenLecture.builder().lecture(재무관리).build());
+		takenLectures.add(TakenLecture.builder().lecture(hrManagementLecture).build());
+		takenLectures.add(TakenLecture.builder().lecture(financeManagementLecture).build());
 		for (int i = 1; i <= 12; i++) {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX011%02d", i), "주전선택" + i, 3, 0, null))
 				.build());
 		}
-		takenLectures.add(TakenLecture.builder().lecture(복전전용필수).build());
+		takenLectures.add(TakenLecture.builder().lecture(dualExclusiveMandatoryLecture).build());
 		for (int i = 1; i <= 6; i++) {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX020%02d", i), "복전선택" + i, 3, 0, null))
@@ -625,8 +625,8 @@ class CalculateMajorGraduationServiceTest {
 	@Test
 	void businessDualMajorCrossEnrollment_shortfall3Each_bothCompleted() {
 		// 경영정보학과 OptionalMandatory 후보 과목 (chooseNumber=2, HBX01113+HBX01147 선택)
-		Lecture 인적자원관리 = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture 재무관리 = Lecture.of("HBX01147", "재무관리", 3, 0, null);
+		Lecture hrManagementLecture = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture financeManagementLecture = Lecture.of("HBX01147", "financeManagementLecture", 3, 0, null);
 
 		User user = UserFixture.createUser(
 			"mj19", "1234", EnglishLevel.ENG34, KoreanLevel.FREE,
@@ -651,8 +651,8 @@ class CalculateMajorGraduationServiceTest {
 
 		// 복수전공(경영정보학과): 선택필수 2과목(6학점) + 선택 10과목(30학점 요건) = 총 36학점
 		Set<MajorLecture> dualLectures = new HashSet<>();
-		dualLectures.add(MajorLecture.of(인적자원관리, "경영정보학과", 1, 16, 24));
-		dualLectures.add(MajorLecture.of(재무관리, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(hrManagementLecture, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(financeManagementLecture, "경영정보학과", 1, 16, 24));
 		for (int i = 1; i <= 10; i++) {
 			dualLectures.add(MajorLecture.of(
 				Lecture.of(String.format("HBX003%02d", i), "복전선택" + i, 3, 0, null),
@@ -670,8 +670,8 @@ class CalculateMajorGraduationServiceTest {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX002%02d", i), "주전선택" + i, 3, 0, null)).build());
 		}
-		takenLectures.add(TakenLecture.builder().lecture(인적자원관리).build());
-		takenLectures.add(TakenLecture.builder().lecture(재무관리).build());
+		takenLectures.add(TakenLecture.builder().lecture(hrManagementLecture).build());
+		takenLectures.add(TakenLecture.builder().lecture(financeManagementLecture).build());
 		for (int i = 1; i <= 9; i++) {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX003%02d", i), "복전선택" + i, 3, 0, null)).build());
@@ -704,8 +704,8 @@ class CalculateMajorGraduationServiceTest {
 	@DisplayName("경영대학 복수전공자의 주전공선택/복수전공선택이 각 9학점 부족할 때(21/21) 복수전공선택만 충족되고 주전공선택은 미충족된다.")
 	@Test
 	void businessDualMajorCrossEnrollment_shortfall9Each_onlyDualCompleted() {
-		Lecture 인적자원관리 = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture 재무관리 = Lecture.of("HBX01147", "재무관리", 3, 0, null);
+		Lecture hrManagementLecture = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture financeManagementLecture = Lecture.of("HBX01147", "financeManagementLecture", 3, 0, null);
 
 		User user = UserFixture.createUser(
 			"mj19", "1234", EnglishLevel.ENG34, KoreanLevel.FREE,
@@ -728,8 +728,8 @@ class CalculateMajorGraduationServiceTest {
 		given(findMajorPort.findMajor("국제통상학과")).willReturn(primaryLectures);
 
 		Set<MajorLecture> dualLectures = new HashSet<>();
-		dualLectures.add(MajorLecture.of(인적자원관리, "경영정보학과", 1, 16, 24));
-		dualLectures.add(MajorLecture.of(재무관리, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(hrManagementLecture, "경영정보학과", 1, 16, 24));
+		dualLectures.add(MajorLecture.of(financeManagementLecture, "경영정보학과", 1, 16, 24));
 		for (int i = 1; i <= 10; i++) {
 			dualLectures.add(MajorLecture.of(
 				Lecture.of(String.format("HBX003%02d", i), "복전선택" + i, 3, 0, null),
@@ -747,8 +747,8 @@ class CalculateMajorGraduationServiceTest {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX002%02d", i), "주전선택" + i, 3, 0, null)).build());
 		}
-		takenLectures.add(TakenLecture.builder().lecture(인적자원관리).build());
-		takenLectures.add(TakenLecture.builder().lecture(재무관리).build());
+		takenLectures.add(TakenLecture.builder().lecture(hrManagementLecture).build());
+		takenLectures.add(TakenLecture.builder().lecture(financeManagementLecture).build());
 		for (int i = 1; i <= 7; i++) {
 			takenLectures.add(TakenLecture.builder()
 				.lecture(Lecture.of(String.format("HBX003%02d", i), "복전선택" + i, 3, 0, null)).build());
@@ -778,8 +778,8 @@ class CalculateMajorGraduationServiceTest {
 	@DisplayName("경영대학 단일전공자가 타 경영대 전공 과목을 수강하면 최대 9학점이 주전공선택으로 인정된다.")
 	@Test
 	void businessSingleMajorCrossEnrollment_crossCreditsAppliedToElective() {
-		Lecture 인적자원관리 = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture 재무관리 = Lecture.of("HBX01147", "재무관리", 3, 0, null);
+		Lecture hrManagementLecture = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture financeManagementLecture = Lecture.of("HBX01147", "financeManagementLecture", 3, 0, null);
 
 		User user = UserFixture.createUser(
 			"mj19", "1234", EnglishLevel.ENG34, KoreanLevel.FREE,
@@ -790,11 +790,11 @@ class CalculateMajorGraduationServiceTest {
 
 		// 주전공(경영정보학과): 선택필수2과목(6학점) + 선택5과목(15학점 요건) = 총 21학점
 		Set<MajorLecture> primaryLectures = new HashSet<>();
-		primaryLectures.add(MajorLecture.of(인적자원관리, "경영정보학과", 1, 16, 24));
-		primaryLectures.add(MajorLecture.of(재무관리, "경영정보학과", 1, 16, 24));
+		primaryLectures.add(MajorLecture.of(hrManagementLecture, "경영정보학과", 1, 16, 24));
+		primaryLectures.add(MajorLecture.of(financeManagementLecture, "경영정보학과", 1, 16, 24));
 		for (int i = 1; i <= 5; i++) {
 			primaryLectures.add(MajorLecture.of(
-				Lecture.of(String.format("HBX004%02d", i), "경영정보선택" + i, 3, 0, null),
+				Lecture.of(String.format("HBX004%02d", i), "managementInfoElectiveLecture" + i, 3, 0, null),
 				"경영정보학과", 0, 16, 24));
 		}
 		given(findMajorPort.findMajor("경영정보학과")).willReturn(primaryLectures);
@@ -809,14 +809,14 @@ class CalculateMajorGraduationServiceTest {
 		given(findMajorPort.findMajor("경영학전공")).willReturn(경영학전공Lectures);
 		given(findMajorPort.findMajor("국제통상학과")).willReturn(new HashSet<>());
 
-		// 수강: 선택필수2(6학점) + 경영정보선택2(6학점) + 경영학전공과목3(9학점)
+		// 수강: 선택필수2(6학점) + managementInfoElectiveLecture2(6학점) + 경영학전공과목3(9학점)
 		// 주전공 처리 후 인벤토리에 경영학전공 9학점 잔류 → 교차인정 적용
 		Set<TakenLecture> takenLectures = new HashSet<>();
-		takenLectures.add(TakenLecture.builder().lecture(인적자원관리).build());
-		takenLectures.add(TakenLecture.builder().lecture(재무관리).build());
+		takenLectures.add(TakenLecture.builder().lecture(hrManagementLecture).build());
+		takenLectures.add(TakenLecture.builder().lecture(financeManagementLecture).build());
 		for (int i = 1; i <= 2; i++) {
 			takenLectures.add(TakenLecture.builder()
-				.lecture(Lecture.of(String.format("HBX004%02d", i), "경영정보선택" + i, 3, 0, null)).build());
+				.lecture(Lecture.of(String.format("HBX004%02d", i), "managementInfoElectiveLecture" + i, 3, 0, null)).build());
 		}
 		for (int i = 1; i <= 3; i++) {
 			takenLectures.add(TakenLecture.builder()
@@ -858,44 +858,44 @@ class CalculateMajorGraduationServiceTest {
 			StudentCategory.DUAL_MAJOR, "0/0/0/0", "0/0/0/0/0/0/0/0"
 		);
 
-		Lecture 회계원리 = Lecture.of("HBX01104", "회계원리", 3, 0, null);
-		Lecture 재무관리원론 = Lecture.of("HBX01105", "재무관리원론", 3, 1, null);
-		Lecture 마케팅원론 = Lecture.of("HBX01106", "마케팅원론", 3, 0, null);
-		Lecture 운영관리 = Lecture.of("HBX01143", "운영관리", 3, 0, null);
-		Lecture 인적자원관리 = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture 글로벌경영전략 = Lecture.of("HBX01129", "글로벌경영전략", 3, 0, null);
-		Lecture 프로그래밍기초 = Lecture.of("HBX01124", "프로그래밍기초", 3, 0, null);
-		Lecture 경영정보선택 = Lecture.of("HCB03505", "모바일앱프로그래밍", 3, 0, null);
+		Lecture accountingPrinciplesLecture = Lecture.of("HBX01104", "accountingPrinciplesLecture", 3, 0, null);
+		Lecture financeManagementIntroLecture = Lecture.of("HBX01105", "financeManagementIntroLecture", 3, 1, null);
+		Lecture marketingIntroLecture = Lecture.of("HBX01106", "marketingIntroLecture", 3, 0, null);
+		Lecture operationsManagementLecture = Lecture.of("HBX01143", "operationsManagementLecture", 3, 0, null);
+		Lecture hrManagementLecture = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture globalBusinessStrategyLecture = Lecture.of("HBX01129", "globalBusinessStrategyLecture", 3, 0, null);
+		Lecture programmingBasicsLecture = Lecture.of("HBX01124", "programmingBasicsLecture", 3, 0, null);
+		Lecture managementInfoElectiveLecture = Lecture.of("HCB03505", "모바일앱프로그래밍", 3, 0, null);
 
 		Set<MajorLecture> primaryLectures = new HashSet<>(Set.of(
-			MajorLecture.of(회계원리, "국제통상학과", 1, 16, 24),
-			MajorLecture.of(재무관리원론, "국제통상학과", 1, 16, 24),
-			MajorLecture.of(마케팅원론, "국제통상학과", 1, 16, 24),
-			MajorLecture.of(운영관리, "국제통상학과", 1, 16, 24),
-			MajorLecture.of(인적자원관리, "국제통상학과", 1, 16, 24),
-			MajorLecture.of(글로벌경영전략, "국제통상학과", 1, 16, 24)
+			MajorLecture.of(accountingPrinciplesLecture, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(financeManagementIntroLecture, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(marketingIntroLecture, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(operationsManagementLecture, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(hrManagementLecture, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(globalBusinessStrategyLecture, "국제통상학과", 1, 16, 24)
 		));
 		given(findMajorPort.findMajor("국제통상학과")).willReturn(primaryLectures);
 
 		Set<MajorLecture> dualLectures = new HashSet<>(Set.of(
-			MajorLecture.of(회계원리, "경영정보학과", 1, 16, 24),
-			MajorLecture.of(재무관리원론, "경영정보학과", 1, 16, 24),
-			MajorLecture.of(마케팅원론, "경영정보학과", 1, 16, 24),
-			MajorLecture.of(운영관리, "경영정보학과", 1, 16, 24),
-			MajorLecture.of(프로그래밍기초, "경영정보학과", 1, 19, 24),
-			MajorLecture.of(경영정보선택, "경영정보학과", 0, 16, 24)
+			MajorLecture.of(accountingPrinciplesLecture, "경영정보학과", 1, 16, 24),
+			MajorLecture.of(financeManagementIntroLecture, "경영정보학과", 1, 16, 24),
+			MajorLecture.of(marketingIntroLecture, "경영정보학과", 1, 16, 24),
+			MajorLecture.of(operationsManagementLecture, "경영정보학과", 1, 16, 24),
+			MajorLecture.of(programmingBasicsLecture, "경영정보학과", 1, 19, 24),
+			MajorLecture.of(managementInfoElectiveLecture, "경영정보학과", 0, 16, 24)
 		));
 		given(findMajorPort.findMajor("경영정보학과")).willReturn(dualLectures);
 
 		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
-			TakenLecture.builder().lecture(회계원리).build(),
-			TakenLecture.builder().lecture(재무관리원론).build(),
-			TakenLecture.builder().lecture(마케팅원론).build(),
-			TakenLecture.builder().lecture(운영관리).build(),
-			TakenLecture.builder().lecture(인적자원관리).build(),
-			TakenLecture.builder().lecture(글로벌경영전략).build(),
-			TakenLecture.builder().lecture(프로그래밍기초).build(),
-			TakenLecture.builder().lecture(경영정보선택).build()
+			TakenLecture.builder().lecture(accountingPrinciplesLecture).build(),
+			TakenLecture.builder().lecture(financeManagementIntroLecture).build(),
+			TakenLecture.builder().lecture(marketingIntroLecture).build(),
+			TakenLecture.builder().lecture(operationsManagementLecture).build(),
+			TakenLecture.builder().lecture(hrManagementLecture).build(),
+			TakenLecture.builder().lecture(globalBusinessStrategyLecture).build(),
+			TakenLecture.builder().lecture(programmingBasicsLecture).build(),
+			TakenLecture.builder().lecture(managementInfoElectiveLecture).build()
 		));
 
 		TakenLectureInventory inventory = TakenLectureInventory.from(takenLectures);
@@ -1091,8 +1091,8 @@ class CalculateMajorGraduationServiceTest {
 			StudentCategory.NORMAL, "0/0/0/0", "0/0/0/0/0/0/0/0"
 		);
 
-		Lecture mandatory = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
-		Lecture elective = Lecture.of("HBX01200", "경영정보선택", 3, 0, null);
+		Lecture mandatory = Lecture.of("HBX01113", "hrManagementLecture", 3, 0, null);
+		Lecture elective = Lecture.of("HBX01200", "managementInfoElectiveLecture", 3, 0, null);
 		Lecture crossLecture = Lecture.of("HBX02200", "경영학선택", 3, 0, null);
 
 		Set<MajorLecture> primaryLectures = new HashSet<>(Set.of(

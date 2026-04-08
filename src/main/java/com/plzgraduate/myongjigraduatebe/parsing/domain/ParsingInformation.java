@@ -105,9 +105,6 @@ public class ParsingInformation {
 		String dualMajor = null;
 		String subMajor = null;
 		String associatedMajor = null;
-		StudentCategory studentCategory;
-		TransferCredit transferCredit;
-		ExchangeCredit exchangeCredit;
 		String secondLineText = splitText[2];
 		String thirdLineText = splitText[3];
 		String fourthLineText = splitText[4];
@@ -126,14 +123,10 @@ public class ParsingInformation {
 		for (String part : parts) {
 			if (part.startsWith("부전공 - ")) {
 				categories.add("부전공");
-				subMajor = extractLastMajor(
-						part.substring("부전공 - ".length())
-				);
+				subMajor = extractLastMajor(part.substring("부전공 - ".length()));
 			} else if (part.startsWith("복수전공 - ")) {
 				categories.add("복수전공");
-				dualMajor = extractLastMajor(
-						part.substring("복수전공 - ".length())
-				);
+				dualMajor = extractLastMajor(part.substring("복수전공 - ".length()));
 			} else if (part.startsWith("연계전공 - ")) {
 				categories.add("연계전공");
 				associatedMajor = part.substring("연계전공 - ".length());
@@ -142,31 +135,42 @@ public class ParsingInformation {
 			}
 		}
 
-		if (!categories.contains("편입")) {
-			for (int idx = splitText.length - 1; idx >= 0; idx--) {
-				if (!splitText[idx].isEmpty()) {
-					if (splitText[idx].startsWith("입학 -") && splitText[idx].contains("편입")) {
-						categories.add("편입");
-					}
-					break;
-				}
-			}
-		}
+		detectTransferFromLastLine(splitText, categories);
 
-		String fourthLine = fourthLineText.substring("편입생 인정학점 - ".length());
-		transferCredit = TransferCredit.from(Arrays.stream(fourthLine.split(","))
-				.map(s -> s.replaceAll("\\D", ""))
-				.collect(Collectors.joining("/")));
-
-		String fifthLine = fifthLineText.substring("교환학생 인정학점 - ".length());
-		exchangeCredit = ExchangeCredit.from(Arrays.stream(fifthLine.split(","))
-				.map(s -> s.replaceAll("\\D", ""))
-				.collect(Collectors.joining("/")));
-
-		studentCategory = StudentCategory.from(categories);
+		TransferCredit transferCredit = parseTransferCredit(fourthLineText);
+		ExchangeCredit exchangeCredit = parseExchangeCredit(fifthLineText);
+		StudentCategory studentCategory = StudentCategory.from(categories);
 		return ParsingStudentCategoryDto.of(
 				changeMajor, subMajor, dualMajor, associatedMajor, studentCategory, transferCredit, exchangeCredit
 		);
+	}
+
+	private static void detectTransferFromLastLine(String[] splitText, List<String> categories) {
+		if (categories.contains("편입")) {
+			return;
+		}
+		for (int idx = splitText.length - 1; idx >= 0; idx--) {
+			if (!splitText[idx].isEmpty()) {
+				if (splitText[idx].startsWith("입학 -") && splitText[idx].contains("편입")) {
+					categories.add("편입");
+				}
+				break;
+			}
+		}
+	}
+
+	private static TransferCredit parseTransferCredit(String fourthLineText) {
+		String fourthLine = fourthLineText.substring("편입생 인정학점 - ".length());
+		return TransferCredit.from(Arrays.stream(fourthLine.split(","))
+				.map(s -> s.replaceAll("\\D", ""))
+				.collect(Collectors.joining("/")));
+	}
+
+	private static ExchangeCredit parseExchangeCredit(String fifthLineText) {
+		String fifthLine = fifthLineText.substring("교환학생 인정학점 - ".length());
+		return ExchangeCredit.from(Arrays.stream(fifthLine.split(","))
+				.map(s -> s.replaceAll("\\D", ""))
+				.collect(Collectors.joining("/")));
 	}
 
 	private static List<ParsingTakenLectureDto> parseTakenLectureInformation(String[] splitText) {

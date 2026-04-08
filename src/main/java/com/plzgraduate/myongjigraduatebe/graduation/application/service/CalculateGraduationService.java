@@ -69,7 +69,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		GraduationResult graduationResult,
 		TakenLectureInventory originalTakenLectureInventory
 	) {
-		double actualTakenCredit = originalTakenLectureInventory.calculateTotalCredit()
+		double actualTakenCredit = (double) originalTakenLectureInventory.calculateTotalCredit()
 			+ user.getTransferCredit().getNormalCulture()
 			+ user.getTransferCredit().getMajorLecture()
 			+ user.getTransferCredit().getFreeElective()

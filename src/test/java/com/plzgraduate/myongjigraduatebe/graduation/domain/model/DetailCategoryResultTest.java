@@ -40,7 +40,7 @@ class DetailCategoryResultTest {
 		int added = result.addRecognizedLectures(List.of(lecture));
 
 		// then
-		assertThat(added).isEqualTo(0);
+		assertThat(added).isZero();
 		assertThat(result.getTakenCredits()).isEqualTo(3); // 변화 없음
 		assertThat(result.getTakenLectures()).hasSize(1); // 중복 추가 안됨
 	}
@@ -55,8 +55,8 @@ class DetailCategoryResultTest {
 		int added = result.addRecognizedLectures(List.of());
 
 		// then
-		assertThat(added).isEqualTo(0);
-		assertThat(result.getTakenCredits()).isEqualTo(0);
+		assertThat(added).isZero();
+		assertThat(result.getTakenCredits()).isZero();
 	}
 
 	@DisplayName("addRecognizedLectures - 추가된 강의가 haveToLectures에 있으면 제거된다.")

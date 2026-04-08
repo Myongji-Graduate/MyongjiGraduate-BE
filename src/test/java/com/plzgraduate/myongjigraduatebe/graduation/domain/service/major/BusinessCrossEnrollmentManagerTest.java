@@ -216,14 +216,15 @@ class BusinessCrossEnrollmentManagerTest {
 		manager.applySingleMajor(user, inventory, majorResult);
 
 		// then: 학점 추가 없음
-		assertThat(category.getTakenCredits()).isEqualTo(0);
+		assertThat(category.getTakenCredits()).isZero();
 	}
 
 	@DisplayName("applySingleMajor - null 인자 전달 시 IllegalArgumentException이 발생한다.")
 	@Test
 	void applySingleMajor_nullUser_throwsException() {
+		TakenLectureInventory emptyInventory = TakenLectureInventory.from(Set.of());
 		assertThatThrownBy(() ->
-			manager.applySingleMajor(null, TakenLectureInventory.from(Set.of()), null)
+			manager.applySingleMajor(null, emptyInventory, null)
 		).isInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -241,9 +242,10 @@ class BusinessCrossEnrollmentManagerTest {
 		DetailGraduationResult majorResult = DetailGraduationResult.create(
 			PRIMARY_ELECTIVE_MAJOR, 30, List.of(category)
 		);
+		TakenLectureInventory emptyInventory = TakenLectureInventory.from(Set.of());
 
 		assertThatThrownBy(() ->
-			manager.applySingleMajor(user, TakenLectureInventory.from(Set.of()), majorResult)
+			manager.applySingleMajor(user, emptyInventory, majorResult)
 		).isInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -276,10 +278,9 @@ class BusinessCrossEnrollmentManagerTest {
 			PRIMARY_MANDATORY_MAJOR, 6, List.of(mandatoryCategory)
 		);
 
+		TakenLectureInventory emptyInventory = TakenLectureInventory.from(Set.of());
 		assertThatThrownBy(() ->
-			manager.restorePrimaryMandatoryForDual(
-				user, mandatoryResult, TakenLectureInventory.from(Set.of())
-			)
+			manager.restorePrimaryMandatoryForDual(user, mandatoryResult, emptyInventory)
 		).isInstanceOf(IllegalArgumentException.class);
 	}
 

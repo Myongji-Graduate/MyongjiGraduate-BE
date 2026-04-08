@@ -237,17 +237,14 @@ public class BusinessCrossEnrollmentManager {
 		int selectedCredits = 0;
 
 		for (Lecture lecture : candidates) {
-			if (usedLectureIds.contains(lecture.getId())) {
-				continue;
-			}
-			if (selectedCredits + lecture.getCredit() > creditLimit) {
-				continue;
-			}
-			selectedLectures.add(lecture);
-			usedLectureIds.add(lecture.getId());
-			selectedCredits += lecture.getCredit();
-			if (selectedCredits == creditLimit) {
-				break;
+			if (!usedLectureIds.contains(lecture.getId())
+				&& selectedCredits + lecture.getCredit() <= creditLimit) {
+				selectedLectures.add(lecture);
+				usedLectureIds.add(lecture.getId());
+				selectedCredits += lecture.getCredit();
+				if (selectedCredits == creditLimit) {
+					break;
+				}
 			}
 		}
 		return selectedLectures;
@@ -264,13 +261,12 @@ public class BusinessCrossEnrollmentManager {
 		List<TakenLecture> selectedLectures = new ArrayList<>();
 		int selectedCredits = 0;
 		for (TakenLecture lecture : candidates) {
-			if (selectedCredits + lecture.getLecture().getCredit() > creditLimit) {
-				continue;
-			}
-			selectedLectures.add(lecture);
-			selectedCredits += lecture.getLecture().getCredit();
-			if (selectedCredits == creditLimit) {
-				break;
+			if (selectedCredits + lecture.getLecture().getCredit() <= creditLimit) {
+				selectedLectures.add(lecture);
+				selectedCredits += lecture.getLecture().getCredit();
+				if (selectedCredits == creditLimit) {
+					break;
+				}
 			}
 		}
 		return selectedLectures;
