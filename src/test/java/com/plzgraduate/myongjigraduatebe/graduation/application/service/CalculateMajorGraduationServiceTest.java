@@ -984,4 +984,195 @@ class CalculateMajorGraduationServiceTest {
 			.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 			.contains(DUAL_ELECTIVE_MAJOR, false, 67, 18.0); // 교환학생 인점 학점 15 + 전공 선택 수강 학점 3 = 18
 	}
+
+	@DisplayName("부전공 카테고리는 SubMajorGraduationManager를 통해 계산한다.")
+	@Test
+	void calculateSingleDetailGraduationForSubMajor() {
+		// given
+		User user = User.builder()
+			.id(1L)
+			.primaryMajor("응용소프트웨어전공")
+			.subMajor("데이터테크놀로지전공")
+			.entryYear(19)
+			.studentCategory(StudentCategory.SUB_MAJOR)
+			.build();
+
+		HashSet<MajorLecture> subMajorLectures = new HashSet<>(
+			Set.of(
+				MajorLecture.of(Lecture.builder().id("HED01201").credit(3).build(),
+					"데이터테크놀로지전공", 0, 16, 24),
+				MajorLecture.of(Lecture.builder().id("HED01202").credit(3).build(),
+					"데이터테크놀로지전공", 0, 16, 24)
+			)
+		);
+		given(findMajorPort.findMajor(user.getSubMajor())).willReturn(subMajorLectures);
+
+		HashSet<TakenLecture> takenLectures = new HashSet<>(
+			Set.of(
+				TakenLecture.builder()
+					.lecture(Lecture.builder().id("HED01201").credit(3).build())
+					.build()
+			)
+		);
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
+
+		GraduationRequirement graduationRequirement = GraduationRequirement.builder()
+			.subMajorCredit(21)
+			.build();
+
+		// when
+		DetailGraduationResult result = calculateMajorGraduationService.calculateSingleDetailGraduation(
+			user, SUB_MAJOR, takenLectureInventory, graduationRequirement
+		);
+
+		// then
+		assertThat(result.getGraduationCategory()).isEqualTo(SUB_MAJOR);
+		assertThat(result.getTakenCredit()).isEqualTo(3.0);
+	}
+
+	@DisplayName("경영대 복수전공 학생이 calculateSingleDetailGraduation 호출 시 교차인정 후 해당 카테고리 결과를 반환한다.")
+	@Test
+	void calculateSingleDetailGraduationForBusinessDualMajor() {
+		// given: 경영학전공(주) + 국제통상학과(복수), 19학번, DUAL_MAJOR
+		User user = UserFixture.createUser(
+			"mj19", "1234", EnglishLevel.ENG34, KoreanLevel.FREE,
+			"테스트", "60190010", 19,
+			"경영학전공", "국제통상학과", null,
+			StudentCategory.DUAL_MAJOR, "0/0/0/0", "0/0/0/0/0/0/0/0"
+		);
+
+		Lecture primaryMandatory = Lecture.of("HBX01001", "주전필수", 3, 0, null);
+		Lecture primaryElective = Lecture.of("HBX01100", "주전선택", 3, 0, null);
+		Lecture dualMandatory = Lecture.of("HBX02001", "복전필수", 3, 0, null);
+		Lecture dualElective = Lecture.of("HBX02100", "복전선택", 3, 0, null);
+
+		Set<MajorLecture> primaryLectures = new HashSet<>(Set.of(
+			MajorLecture.of(primaryMandatory, "경영학전공", 1, 16, 24),
+			MajorLecture.of(primaryElective, "경영학전공", 0, 16, 24)
+		));
+		given(findMajorPort.findMajor("경영학전공")).willReturn(primaryLectures);
+
+		Set<MajorLecture> dualLectures = new HashSet<>(Set.of(
+			MajorLecture.of(dualMandatory, "국제통상학과", 1, 16, 24),
+			MajorLecture.of(dualElective, "국제통상학과", 0, 16, 24)
+		));
+		given(findMajorPort.findMajor("국제통상학과")).willReturn(dualLectures);
+
+		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
+			TakenLecture.builder().lecture(primaryMandatory).build(),
+			TakenLecture.builder().lecture(primaryElective).build(),
+			TakenLecture.builder().lecture(dualMandatory).build(),
+			TakenLecture.builder().lecture(dualElective).build()
+		));
+		TakenLectureInventory inventory = TakenLectureInventory.from(takenLectures);
+
+		GraduationRequirement req = GraduationRequirement.builder()
+			.primaryMajorCredit(6)
+			.dualMajorCredit(6)
+			.build();
+
+		// when: PRIMARY_MANDATORY_MAJOR 카테고리 요청
+		DetailGraduationResult result = calculateMajorGraduationService.calculateSingleDetailGraduation(
+			user, PRIMARY_MANDATORY_MAJOR, inventory, req
+		);
+
+		// then
+		assertThat(result.getGraduationCategory()).isEqualTo(PRIMARY_MANDATORY_MAJOR);
+	}
+
+	@DisplayName("경영대 단일전공 학생의 주전공선택 calculateSingleDetailGraduation 호출 시 교차인정이 적용된다.")
+	@Test
+	void calculateSingleDetailGraduationForBusinessSingleMajorElective() {
+		// given: 경영정보학과 NORMAL, 19학번
+		User user = UserFixture.createUser(
+			"mj19", "1234", EnglishLevel.ENG34, KoreanLevel.FREE,
+			"테스트", "60190020", 19,
+			"경영정보학과", null, null,
+			StudentCategory.NORMAL, "0/0/0/0", "0/0/0/0/0/0/0/0"
+		);
+
+		Lecture mandatory = Lecture.of("HBX01113", "인적자원관리", 3, 0, null);
+		Lecture elective = Lecture.of("HBX01200", "경영정보선택", 3, 0, null);
+		Lecture crossLecture = Lecture.of("HBX02200", "경영학선택", 3, 0, null);
+
+		Set<MajorLecture> primaryLectures = new HashSet<>(Set.of(
+			MajorLecture.of(mandatory, "경영정보학과", 1, 16, 24),
+			MajorLecture.of(elective, "경영정보학과", 0, 16, 24)
+		));
+		given(findMajorPort.findMajor("경영정보학과")).willReturn(primaryLectures);
+		given(findMajorPort.findMajor("경영학전공")).willReturn(
+			Set.of(MajorLecture.of(crossLecture, "경영학전공", 0, 16, 24))
+		);
+		given(findMajorPort.findMajor("국제통상학과")).willReturn(Set.of());
+
+		// 교차인정 대상 강의(crossLecture)를 수강
+		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
+			TakenLecture.builder().lecture(mandatory).build(),
+			TakenLecture.builder().lecture(crossLecture).build()
+		));
+		TakenLectureInventory inventory = TakenLectureInventory.from(takenLectures);
+
+		GraduationRequirement req = GraduationRequirement.builder()
+			.primaryMajorCredit(9)
+			.build();
+
+		// when
+		DetailGraduationResult result = calculateMajorGraduationService.calculateSingleDetailGraduation(
+			user, PRIMARY_ELECTIVE_MAJOR, inventory, req
+		);
+
+		// then: 교차인정 강의 포함된 결과
+		assertThat(result.getGraduationCategory()).isEqualTo(PRIMARY_ELECTIVE_MAJOR);
+		assertThat(result.getTakenCredit()).isGreaterThanOrEqualTo(3.0);
+	}
+
+	@DisplayName("부전공 학생의 calculateAllDetailGraduation은 교환학점을 포함한 부전공 결과를 반환한다.")
+	@Test
+	void calculateAllDetailGraduationForSubMajor() {
+		// given
+		User user = UserFixture.createUser(
+			"mj19", "1234", EnglishLevel.ENG34, KoreanLevel.FREE,
+			"테스트", "60190030", 19,
+			"응용소프트웨어전공", null, "데이터테크놀로지전공",
+			StudentCategory.SUB_MAJOR, "0/0/0/0", "0/0/0/0/0/0/3/0" // subMajor 교환학점 3
+		);
+
+		Lecture primaryLecture = Lecture.of("HEC01211", "주전필수", 3, 0, null);
+		Lecture primaryElective = Lecture.of("HEC01305", "주전선택", 3, 0, null);
+		Set<MajorLecture> primaryLectures = new HashSet<>(Set.of(
+			MajorLecture.of(primaryLecture, "응용소프트웨어전공", 1, 16, 24),
+			MajorLecture.of(primaryElective, "응용소프트웨어전공", 0, 16, 24)
+		));
+		given(findMajorPort.findMajor("응용소프트웨어전공")).willReturn(primaryLectures);
+
+		Lecture subLecture = Lecture.of("HED01201", "부전공선택", 3, 0, null);
+		Set<MajorLecture> subMajorLectures = new HashSet<>(Set.of(
+			MajorLecture.of(subLecture, "데이터테크놀로지전공", 0, 16, 24)
+		));
+		given(findMajorPort.findMajor("데이터테크놀로지전공")).willReturn(subMajorLectures);
+
+		Set<TakenLecture> takenLectures = new HashSet<>(Set.of(
+			TakenLecture.builder().lecture(primaryLecture).build(),
+			TakenLecture.builder().lecture(subLecture).build()
+		));
+		TakenLectureInventory inventory = TakenLectureInventory.from(takenLectures);
+
+		GraduationRequirement req = GraduationRequirement.builder()
+			.primaryMajorCredit(6)
+			.subMajorCredit(21)
+			.build();
+
+		// when
+		List<DetailGraduationResult> results = calculateMajorGraduationService.calculateAllDetailGraduation(
+			user, inventory, req
+		);
+
+		// then: 부전공 결과 포함
+		DetailGraduationResult subMajorResult = results.stream()
+			.filter(r -> r.getGraduationCategory() == SUB_MAJOR)
+			.findFirst().orElseThrow();
+
+		// 교환학점 3 포함 → takenCredit >= 3
+		assertThat(subMajorResult.getTakenCredit()).isGreaterThanOrEqualTo(3.0);
+	}
 }

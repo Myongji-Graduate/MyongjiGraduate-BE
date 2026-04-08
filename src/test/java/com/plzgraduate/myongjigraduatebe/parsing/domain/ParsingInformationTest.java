@@ -220,4 +220,26 @@ class ParsingInformationTest {
 			"studentCategory"
 		).contains("홍길동", "60190001", "기계공학과", StudentCategory.TRANSFER);
 	}
+
+	@DisplayName("이수 학기 정보가 없는 경우 completedSemesterCount는 null이다.")
+	@Test
+	void 이수학기정보없는경우_null반환() {
+		// given - '이수 -' 패턴이 없는 두 번째 줄
+		String parsingText = "출력일자 :  2026/04/04|1/1"
+			+ "|공과대학 기계공학과, 테스트(60230999), 현학적 - 재학"
+			+ "|토익 - 700, 영어교과목면제 - 면제없음, 최종학적변동 - 신입학(2023/03/02)"
+			+ "|편입생 인정학점 - 교양 0, 전공 0, 자유선택 0, 성경과인간이해 0"
+			+ "|교환학생 인정학점 - 공통교양 0, 학문기초교양 0, 일반교양 0, 전공 0, 복수전공학문기초교양 0, 복수전공 0, 융합전공 0, 부전공 0, 자유선택 0"
+			+ "|공통교양 6, 핵심교양 0, 학문기초교양 0, 일반교양 0, 전공 9, 복수전공 0, 연계전공 0, 부전공 0, 교직 0, 자유선택 0"
+			+ "|총 취득학점 - 15, 총점 - 50, 평균평점 - 3.0"
+			+ "|이수구분|수강년도/학기|한글코드|과목코드|과목명|학점|등급|중복"
+			+ "|공통교양|2023년 1학기|교필101|KMA02101|채플|0.5|P"
+			+ "|입학 - 신입학(2023/03/02)|";
+
+		// when
+		ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
+
+		// then
+		assertThat(parsingInformation.getCompletedSemesterCount()).isNull();
+	}
 }
