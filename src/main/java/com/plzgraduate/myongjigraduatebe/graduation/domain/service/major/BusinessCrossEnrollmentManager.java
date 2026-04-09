@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,16 @@ public class BusinessCrossEnrollmentManager {
 			&& ELIGIBLE_BUSINESS_CROSS_ENROLLMENT_MAJORS.contains(user.getPrimaryMajor());
 	}
 
+	public boolean supportsPrimaryBusinessCrossEnrollment(User user) {
+		if (supportsSingleMajor(user)) {
+			return true;
+		}
+
+		return user.getStudentCategory() == StudentCategory.DUAL_MAJOR
+			&& ELIGIBLE_BUSINESS_CROSS_ENROLLMENT_MAJORS.contains(user.getPrimaryMajor())
+			&& isNonBusinessCollege(user.getDualMajor(), user.getEntryYear());
+	}
+
 	public boolean supportsDualMajor(User user) {
 		return user.getStudentCategory() == StudentCategory.DUAL_MAJOR
 			&& isBusinessCollege(user.getPrimaryMajor(), user.getEntryYear())
@@ -54,7 +65,7 @@ public class BusinessCrossEnrollmentManager {
 		validateRequiredArgument(user);
 		validateRequiredArgument(takenLectureInventory);
 		validateRequiredArgument(primaryMajorResult);
-		validateSingleMajorUser(user);
+		validatePrimaryBusinessCrossEnrollmentUser(user);
 
 		DetailCategoryResult primaryElective = getPrimaryElectiveCategory(primaryMajorResult);
 
@@ -165,11 +176,22 @@ public class BusinessCrossEnrollmentManager {
 	}
 
 	private boolean isBusinessCollege(String major, int entryYear) {
+		return findCollege(major, entryYear)
+			.map(college -> college == College.BUSINESS || college == College.BUSINESS_NEW)
+			.orElse(false);
+	}
+
+	private boolean isNonBusinessCollege(String major, int entryYear) {
+		return findCollege(major, entryYear)
+			.map(college -> college != College.BUSINESS && college != College.BUSINESS_NEW)
+			.orElse(false);
+	}
+
+	private Optional<College> findCollege(String major, int entryYear) {
 		try {
-			College college = College.findBelongingCollege(major, entryYear);
-			return college == College.BUSINESS || college == College.BUSINESS_NEW;
+			return Optional.of(College.findBelongingCollege(major, entryYear));
 		} catch (IllegalArgumentException e) {
-			return false;
+			return Optional.empty();
 		}
 	}
 
@@ -194,8 +216,8 @@ public class BusinessCrossEnrollmentManager {
 			.orElseThrow(() -> new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString()));
 	}
 
-	private void validateSingleMajorUser(User user) {
-		if (!supportsSingleMajor(user)) {
+	private void validatePrimaryBusinessCrossEnrollmentUser(User user) {
+		if (!supportsPrimaryBusinessCrossEnrollment(user)) {
 			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
 		}
 	}
@@ -254,10 +276,6 @@ public class BusinessCrossEnrollmentManager {
 		List<TakenLecture> candidates,
 		int creditLimit
 	) {
-		if (creditLimit <= 0) {
-			return List.of();
-		}
-
 		List<TakenLecture> selectedLectures = new ArrayList<>();
 		int selectedCredits = 0;
 		for (TakenLecture lecture : candidates) {
