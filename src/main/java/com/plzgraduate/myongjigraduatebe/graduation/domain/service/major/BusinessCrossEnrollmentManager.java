@@ -213,12 +213,6 @@ public class BusinessCrossEnrollmentManager {
 			.orElseThrow(() -> new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString()));
 	}
 
-	private void validateSingleMajorUser(User user) {
-		if (!supportsSingleMajor(user)) {
-			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
-		}
-	}
-
 	private void validatePrimaryBusinessCrossEnrollmentUser(User user) {
 		if (!supportsPrimaryBusinessCrossEnrollment(user)) {
 			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
