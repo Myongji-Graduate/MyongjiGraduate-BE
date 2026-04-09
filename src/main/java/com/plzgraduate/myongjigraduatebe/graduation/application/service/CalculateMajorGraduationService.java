@@ -64,7 +64,7 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 				.orElseThrow(() -> new RuntimeException("Not Found DetailGraduationResult"));
 		}
 
-		if (businessCrossEnrollmentManager.supportsSingleMajor(user)
+		if (businessCrossEnrollmentManager.supportsPrimaryBusinessCrossEnrollment(user)
 			&& graduationCategory == PRIMARY_ELECTIVE_MAJOR) {
 			DetailGraduationResult majorDetailGraduationResult = generateMajorDetailGraduationResult(
 				user,
@@ -132,14 +132,23 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 				takenLectureInventory,
 				graduationRequirement
 			);
-			if (businessCrossEnrollmentManager.supportsSingleMajor(user)) {
+			if (businessCrossEnrollmentManager.supportsPrimaryBusinessCrossEnrollment(user)) {
 				businessCrossEnrollmentManager.applySingleMajor(
 					user,
 					takenLectureInventory,
 					primaryMajorDetailGraduationResult
 				);
 			}
-			return List.of(primaryMajorDetailGraduationResult);
+			return List.of(
+				isolateMandatoryMajorDetailGraduation(
+					PRIMARY_MANDATORY_MAJOR,
+					primaryMajorDetailGraduationResult
+				),
+				isolateElectiveMajorDetailGraduation(
+					PRIMARY_ELECTIVE_MAJOR,
+					primaryMajorDetailGraduationResult
+				)
+			);
 		}
 
 		return calculateBusinessAwareMajorGraduationResults(user, takenLectureInventory, graduationRequirement);
@@ -169,7 +178,7 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 			List.of(primaryMandatoryMajorDetailGraduationResult, primaryElectiveMajorDetailGraduationResult)
 		);
 
-		if (businessCrossEnrollmentManager.supportsSingleMajor(user)) {
+		if (businessCrossEnrollmentManager.supportsPrimaryBusinessCrossEnrollment(user)) {
 			businessCrossEnrollmentManager.applySingleMajor(
 				user,
 				takenLectureInventory,

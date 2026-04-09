@@ -40,6 +40,16 @@ public class BusinessCrossEnrollmentManager {
 			&& ELIGIBLE_BUSINESS_CROSS_ENROLLMENT_MAJORS.contains(user.getPrimaryMajor());
 	}
 
+	public boolean supportsPrimaryBusinessCrossEnrollment(User user) {
+		if (supportsSingleMajor(user)) {
+			return true;
+		}
+
+		return user.getStudentCategory() == StudentCategory.DUAL_MAJOR
+			&& ELIGIBLE_BUSINESS_CROSS_ENROLLMENT_MAJORS.contains(user.getPrimaryMajor())
+			&& isNonBusinessCollege(user.getDualMajor(), user.getEntryYear());
+	}
+
 	public boolean supportsDualMajor(User user) {
 		return user.getStudentCategory() == StudentCategory.DUAL_MAJOR
 			&& isBusinessCollege(user.getPrimaryMajor(), user.getEntryYear())
@@ -54,7 +64,7 @@ public class BusinessCrossEnrollmentManager {
 		validateRequiredArgument(user);
 		validateRequiredArgument(takenLectureInventory);
 		validateRequiredArgument(primaryMajorResult);
-		validateSingleMajorUser(user);
+		validatePrimaryBusinessCrossEnrollmentUser(user);
 
 		DetailCategoryResult primaryElective = getPrimaryElectiveCategory(primaryMajorResult);
 
@@ -173,6 +183,15 @@ public class BusinessCrossEnrollmentManager {
 		}
 	}
 
+	private boolean isNonBusinessCollege(String major, int entryYear) {
+		try {
+			College college = College.findBelongingCollege(major, entryYear);
+			return college != College.BUSINESS && college != College.BUSINESS_NEW;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	private DetailCategoryResult getDetailCategoryByName(DetailGraduationResult result, String name) {
 		return result.getDetailCategory().stream()
 			.filter(r -> r.getDetailCategoryName().equals(name))
@@ -196,6 +215,12 @@ public class BusinessCrossEnrollmentManager {
 
 	private void validateSingleMajorUser(User user) {
 		if (!supportsSingleMajor(user)) {
+			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
+		}
+	}
+
+	private void validatePrimaryBusinessCrossEnrollmentUser(User user) {
+		if (!supportsPrimaryBusinessCrossEnrollment(user)) {
 			throw new IllegalArgumentException(UNFITTED_GRADUATION_CATEGORY.toString());
 		}
 	}
