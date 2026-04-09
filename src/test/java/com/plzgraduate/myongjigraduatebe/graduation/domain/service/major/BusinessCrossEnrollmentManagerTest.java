@@ -106,6 +106,20 @@ class BusinessCrossEnrollmentManagerTest {
 		assertThat(manager.supportsPrimaryBusinessCrossEnrollment(user)).isTrue();
 	}
 
+	@DisplayName("supportsPrimaryBusinessCrossEnrollment - 경영대 단일전공이면 true를 반환한다.")
+	@Test
+	void supportsPrimaryBusinessCrossEnrollment_singleMajor_returnsTrue() {
+		User user = User.builder()
+			.primaryMajor("경영학전공")
+			.entryYear(20)
+			.studentCategory(StudentCategory.NORMAL)
+			.transferCredit(TransferCredit.empty())
+			.exchangeCredit(ExchangeCredit.empty())
+			.build();
+
+		assertThat(manager.supportsPrimaryBusinessCrossEnrollment(user)).isTrue();
+	}
+
 	@DisplayName("supportsPrimaryBusinessCrossEnrollment - 주전공과 복수전공이 모두 경영대이면 false를 반환한다.")
 	@Test
 	void supportsPrimaryBusinessCrossEnrollment_bothBusinessDual_returnsFalse() {
@@ -121,7 +135,20 @@ class BusinessCrossEnrollmentManagerTest {
 		assertThat(manager.supportsPrimaryBusinessCrossEnrollment(user)).isFalse();
 	}
 
-	// ---------- supportsDualMajor ----------
+	@DisplayName("supportsPrimaryBusinessCrossEnrollment - 복수전공 소속을 알 수 없으면 false를 반환한다.")
+	@Test
+	void supportsPrimaryBusinessCrossEnrollment_unknownDualMajor_returnsFalse() {
+		User user = User.builder()
+			.primaryMajor("경영학전공")
+			.dualMajor("존재하지않는전공")
+			.entryYear(20)
+			.studentCategory(StudentCategory.DUAL_MAJOR)
+			.transferCredit(TransferCredit.empty())
+			.exchangeCredit(ExchangeCredit.empty())
+			.build();
+
+		assertThat(manager.supportsPrimaryBusinessCrossEnrollment(user)).isFalse();
+	}
 
 	@DisplayName("supportsDualMajor - DUAL_MAJOR이고 양 전공 모두 경영대이면 true를 반환한다.")
 	@Test

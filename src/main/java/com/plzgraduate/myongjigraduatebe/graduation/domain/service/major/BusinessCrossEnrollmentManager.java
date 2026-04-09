@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -175,20 +176,22 @@ public class BusinessCrossEnrollmentManager {
 	}
 
 	private boolean isBusinessCollege(String major, int entryYear) {
-		try {
-			College college = College.findBelongingCollege(major, entryYear);
-			return college == College.BUSINESS || college == College.BUSINESS_NEW;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
+		return findCollege(major, entryYear)
+			.map(college -> college == College.BUSINESS || college == College.BUSINESS_NEW)
+			.orElse(false);
 	}
 
 	private boolean isNonBusinessCollege(String major, int entryYear) {
+		return findCollege(major, entryYear)
+			.map(college -> college != College.BUSINESS && college != College.BUSINESS_NEW)
+			.orElse(false);
+	}
+
+	private Optional<College> findCollege(String major, int entryYear) {
 		try {
-			College college = College.findBelongingCollege(major, entryYear);
-			return college != College.BUSINESS && college != College.BUSINESS_NEW;
+			return Optional.of(College.findBelongingCollege(major, entryYear));
 		} catch (IllegalArgumentException e) {
-			return false;
+			return Optional.empty();
 		}
 	}
 
@@ -273,10 +276,6 @@ public class BusinessCrossEnrollmentManager {
 		List<TakenLecture> candidates,
 		int creditLimit
 	) {
-		if (creditLimit <= 0) {
-			return List.of();
-		}
-
 		List<TakenLecture> selectedLectures = new ArrayList<>();
 		int selectedCredits = 0;
 		for (TakenLecture lecture : candidates) {
