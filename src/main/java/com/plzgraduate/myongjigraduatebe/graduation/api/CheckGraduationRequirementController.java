@@ -39,7 +39,7 @@ public class CheckGraduationRequirementController implements CheckGraduationRequ
 		);
 
 		return new CheckGraduationRequirementResponse(
-			UserInformationResponse.from(anonymous),
+			UserInformationResponse.of(anonymous, graduationResult),
 			graduationResult
 		);
 	}
