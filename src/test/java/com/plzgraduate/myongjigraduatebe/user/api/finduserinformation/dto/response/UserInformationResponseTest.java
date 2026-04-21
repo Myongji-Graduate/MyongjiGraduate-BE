@@ -38,4 +38,34 @@ class UserInformationResponseTest {
 		assertThat(response.isGraduated()).isTrue();
 		assertThat(response.getCompleteDivision()).hasSize(2);
 	}
+
+	@DisplayName("부전공이 있으면 completeDivision에 SUB가 포함된다.")
+	@Test
+	void ofIncludesSubMajorInCompleteDivision() {
+		User user = User.builder()
+			.authId("anonymous")
+			.name("홍길동")
+			.studentNumber("60202000")
+			.primaryMajor("경영학과")
+			.subMajor("경제학과")
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduated(false)
+			.build();
+
+		GraduationResult graduationResult = GraduationResult.builder()
+			.totalCredit(120)
+			.takenCredit(120)
+			.graduated(true)
+			.build();
+
+		UserInformationResponse response = UserInformationResponse.of(user, graduationResult);
+
+		assertThat(response.getCompleteDivision())
+			.extracting(CompleteDivisionResponse::getMajorType, CompleteDivisionResponse::getMajor)
+			.contains(
+				org.assertj.core.groups.Tuple.tuple("PRIMARY", "경영학과"),
+				org.assertj.core.groups.Tuple.tuple("SUB", "경제학과")
+			);
+	}
 }
