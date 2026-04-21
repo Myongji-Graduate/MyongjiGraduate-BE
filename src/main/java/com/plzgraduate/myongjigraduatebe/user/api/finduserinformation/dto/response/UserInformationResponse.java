@@ -1,5 +1,6 @@
 package com.plzgraduate.myongjigraduatebe.user.api.finduserinformation.dto.response;
 
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -38,6 +39,29 @@ public class UserInformationResponse {
 			.totalCredit(user.getTotalCredit())
 			.takenCredit(user.getTakenCredit())
 			.graduated(user.isGraduated())
+			.build();
+		if (user.getPrimaryMajor() != null) {
+			userInformation.getCompleteDivision()
+				.add(CompleteDivisionResponse.of("PRIMARY", user.getPrimaryMajor()));
+		}
+		if (user.getDualMajor() != null) {
+			userInformation.getCompleteDivision()
+				.add(CompleteDivisionResponse.of("DUAL", user.getDualMajor()));
+		}
+		if (user.getSubMajor() != null) {
+			userInformation.getCompleteDivision()
+				.add(CompleteDivisionResponse.of("SUB", user.getSubMajor()));
+		}
+		return userInformation;
+	}
+
+	public static UserInformationResponse of(User user, GraduationResult graduationResult) {
+		UserInformationResponse userInformation = UserInformationResponse.builder()
+			.studentNumber(user.getStudentNumber())
+			.studentName(user.getName())
+			.totalCredit(graduationResult.getTotalCredit())
+			.takenCredit(graduationResult.getTakenCredit())
+			.graduated(graduationResult.isGraduated())
 			.build();
 		if (user.getPrimaryMajor() != null) {
 			userInformation.getCompleteDivision()
