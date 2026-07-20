@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -24,7 +25,8 @@ public class MandatoryMajorManager {
 	public DetailCategoryResult createDetailCategoryResult(
 		User user,
 		TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType,
+		List<OptionalMandatoryPolicy> optionalMandatoryPolicies
 	) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
@@ -33,7 +35,8 @@ public class MandatoryMajorManager {
 
 		for (MandatoryMajorSpecialCaseHandler mandatoryMajorSpecialCaseHandler : mandatoryMajorSpecialCaseHandlers) {
 			Optional<MandatorySpecialCaseInformation> evaluation = mandatoryMajorSpecialCaseHandler.evaluate(
-				user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures);
+				user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures,
+				optionalMandatoryPolicies);
 			if (evaluation.isPresent()) {
 				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = evaluation.get();
 				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();

@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -36,7 +37,8 @@ public class MajorGraduationManager {
 	public DetailGraduationResult createDetailGraduationResult(
 		User user, MajorType majorType,
 		TakenLectureInventory takenLectureInventory, Set<MajorLecture> majorLectures,
-		int graduationResultTotalCredit
+		int graduationResultTotalCredit,
+		List<OptionalMandatoryPolicy> optionalMandatoryPolicies
 	) {
 
 		removeDuplicateLectureIfTaken(takenLectureInventory, majorLectures);
@@ -56,7 +58,8 @@ public class MajorGraduationManager {
 		}
 
 		DetailCategoryResult mandantoryDetailCategoryResult = mandatoryMajorManager.createDetailCategoryResult(
-			user, takenLectureInventory, mandatoryLectures, electiveLectures, majorType);
+			user, takenLectureInventory, mandatoryLectures, electiveLectures, majorType,
+			optionalMandatoryPolicies);
 
 		int electiveMajorTotalCredit =
 			graduationResultTotalCredit - mandantoryDetailCategoryResult.getTotalCredits();

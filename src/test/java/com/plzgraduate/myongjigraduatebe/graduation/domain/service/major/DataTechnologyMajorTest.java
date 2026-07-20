@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 import static com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture.handler;
+import static com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture.policies;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
@@ -81,7 +82,8 @@ class DataTechnologyMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 데이터테크놀로지_전공, 70
+			takenLectureInventory, 데이터테크놀로지_전공, 70,
+			policies(user.getPrimaryMajor(), user.getEntryYear())
 		);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
@@ -150,7 +152,8 @@ class DataTechnologyMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 데이터테크놀로지_전공, 70
+			takenLectureInventory, 데이터테크놀로지_전공, 70,
+			policies(user.getPrimaryMajor(), user.getEntryYear())
 		);
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);

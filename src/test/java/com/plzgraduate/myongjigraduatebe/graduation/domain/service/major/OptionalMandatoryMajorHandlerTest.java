@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +52,9 @@ class OptionalMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = OptionalMandatoryPolicyFixture.handler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures).orElseThrow();
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures,
+			OptionalMandatoryPolicyFixture.policies(user.getPrimaryMajor(), user.getEntryYear()))
+			.orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -87,7 +88,9 @@ class OptionalMandatoryMajorHandlerTest {
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = OptionalMandatoryPolicyFixture.handler();
 		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures).orElseThrow();
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures,
+			OptionalMandatoryPolicyFixture.policies(user.getPrimaryMajor(), user.getEntryYear()))
+			.orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -114,15 +117,15 @@ class OptionalMandatoryMajorHandlerTest {
 				new CandidateLecture(newLecture, "REPLACEMENT"),
 				new CandidateLecture(another, "OTHER")))
 			.build();
-		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler(
-			(major, entryYear, majorType) -> List.of(policy));
+		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler();
 		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
 			TakenLecture.of(user, oldLecture, 2020, Semester.FIRST),
 			TakenLecture.of(user, newLecture, 2021, Semester.FIRST)));
 
 		MandatorySpecialCaseInformation result = handler.evaluate(
 			user, MAJOR_TYPE, inventory,
-			new HashSet<>(Set.of(oldLecture, newLecture, another)), new HashSet<>()).orElseThrow();
+			new HashSet<>(Set.of(oldLecture, newLecture, another)), new HashSet<>(),
+			List.of(policy)).orElseThrow();
 
 		assertThat(result.isCompleteMandatorySpecialCase()).isFalse();
 	}
@@ -141,8 +144,7 @@ class OptionalMandatoryMajorHandlerTest {
 				new CandidateLecture(oldLecture, "REPLACEMENT"),
 				new CandidateLecture(newLecture, "REPLACEMENT")))
 			.build();
-		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler(
-			(major, entryYear, majorType) -> List.of(policy));
+		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler();
 		MandatoryMajorManager manager = new MandatoryMajorManager(List.of(handler));
 		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(oldLecture, newLecture));
 		Set<Lecture> electiveLectures = new HashSet<>();
@@ -151,7 +153,7 @@ class OptionalMandatoryMajorHandlerTest {
 			TakenLecture.of(user, newLecture, 2021, Semester.FIRST)));
 
 		DetailCategoryResult result = manager.createDetailCategoryResult(
-			user, inventory, mandatoryLectures, electiveLectures, MAJOR_TYPE);
+			user, inventory, mandatoryLectures, electiveLectures, MAJOR_TYPE, List.of(policy));
 
 		assertThat(result.isSatisfiedMandatory()).isTrue();
 		assertThat(result.getTotalCredits()).isEqualTo(3);
@@ -164,32 +166,4 @@ class OptionalMandatoryMajorHandlerTest {
 			.containsExactly(newLecture);
 	}
 
-	@DisplayName("전공필수 계산 한 번에 선택필수 정책을 한 번만 조회한다.")
-	@Test
-	void 정책_단일조회() {
-		Lecture candidate = Lecture.of("POLICY001", "선택필수", 3, 0, null);
-		OptionalMandatoryPolicy policy = OptionalMandatoryPolicy.builder()
-			.name("조회 횟수 테스트")
-			.major(user.getPrimaryMajor())
-			.requiredCount(1)
-			.requiredCredit(3)
-			.candidateLectures(List.of(new CandidateLecture(candidate, candidate.getId())))
-			.build();
-		AtomicInteger queryCount = new AtomicInteger();
-		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler(
-			(major, entryYear, majorType) -> {
-				queryCount.incrementAndGet();
-				return List.of(policy);
-			});
-		MandatoryMajorManager manager = new MandatoryMajorManager(List.of(handler));
-
-		manager.createDetailCategoryResult(
-			user,
-			TakenLectureInventory.from(Set.of()),
-			new HashSet<>(Set.of(candidate)),
-			new HashSet<>(),
-			MAJOR_TYPE);
-
-		assertThat(queryCount).hasValue(1);
-	}
 }

@@ -8,11 +8,13 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.BusinessCrossEnrollmentManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorGraduationManager;
@@ -33,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CalculateMajorGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FindMajorPort findMajorPort;
+	private final FindOptionalMandatoryPolicyPort findOptionalMandatoryPolicyPort;
 	private final MajorGraduationManager majorGraduationManager;
 	private final SubMajorGraduationManager subMajorGraduationManager;
 	private final BusinessCrossEnrollmentManager businessCrossEnrollmentManager;
@@ -262,12 +265,15 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 		GraduationRequirement graduationRequirement
 	) {
 		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getMajorByMajorType(majorType));
+		List<OptionalMandatoryPolicy> optionalMandatoryPolicies = findOptionalMandatoryPolicyPort.findActivePolicies(
+			user.getMajorByMajorType(majorType), user.getEntryYear(), majorType);
 		return majorGraduationManager.createDetailGraduationResult(
 			user,
 			majorType,
 			takenLectureInventory,
 			graduationMajorLectures,
-			graduationRequirement.getMajorCreditByMajorType(majorType)
+			graduationRequirement.getMajorCreditByMajorType(majorType),
+			optionalMandatoryPolicies
 		);
 	}
 

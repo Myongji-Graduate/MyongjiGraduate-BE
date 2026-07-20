@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
 import static com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture.handler;
+import static com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture.policies;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
@@ -69,7 +70,8 @@ class InternationTradeMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63,
+			policies(user.getPrimaryMajor(), user.getEntryYear()));
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -130,7 +132,8 @@ class InternationTradeMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63,
+			policies(user.getPrimaryMajor(), user.getEntryYear()));
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -192,7 +195,8 @@ class InternationTradeMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63,
+			policies(user.getPrimaryMajor(), user.getEntryYear()));
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -251,7 +255,8 @@ class InternationTradeMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 국제통상_전공, 63);
+			takenLectureInventory, 국제통상_전공, 63,
+			policies(user.getPrimaryMajor(), user.getEntryYear()));
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -295,7 +300,8 @@ class InternationTradeMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 국제통상_전공, 70);
+			takenLectureInventory, 국제통상_전공, 70,
+			policies(user.getPrimaryMajor(), user.getEntryYear()));
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult mandatoryDetailCategory = detailCategory.get(0);
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
@@ -331,7 +337,8 @@ class InternationTradeMajorTest {
 		//when
 		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(user,
 			PRIMARY,
-			takenLectureInventory, 국제통상_전공, 70);
+			takenLectureInventory, 국제통상_전공, 70,
+			policies(user.getPrimaryMajor(), user.getEntryYear()));
 		List<DetailCategoryResult> detailCategory = detailGraduationResult.getDetailCategory();
 		DetailCategoryResult electiveDetailCategory = detailCategory.get(1);
 

@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
@@ -31,7 +32,8 @@ public class ReplaceMandatoryMajorHandler implements MandatoryMajorSpecialCaseHa
 	@Override
 	public Optional<MandatorySpecialCaseInformation> evaluate(User user,
 		MajorType majorType, TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures,
+		List<OptionalMandatoryPolicy> optionalMandatoryPolicies) {
 		String major = user.getMajorByMajorType(majorType);
 		if (!major.equals("철학과") || user.getEntryYear() > 21) {
 			return Optional.empty();

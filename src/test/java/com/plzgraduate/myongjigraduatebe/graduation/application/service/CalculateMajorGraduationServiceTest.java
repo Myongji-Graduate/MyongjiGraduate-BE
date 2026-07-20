@@ -65,6 +65,7 @@ class CalculateMajorGraduationServiceTest {
 			mandatoryMajorManager, electiveMajorManager);
 		BusinessCrossEnrollmentManager businessCrossEnrollmentManager = new BusinessCrossEnrollmentManager(findMajorPort);
 		calculateMajorGraduationService = new CalculateMajorGraduationService(findMajorPort,
+			(major, entryYear, majorType) -> OptionalMandatoryPolicyFixture.policies(major, entryYear),
 			majorGraduationManager, subMajorGraduationManager, businessCrossEnrollmentManager
 		);
 	}

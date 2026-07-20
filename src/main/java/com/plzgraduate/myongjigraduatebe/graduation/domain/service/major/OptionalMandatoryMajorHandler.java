@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
@@ -17,20 +16,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseHandler {
-
-	private final FindOptionalMandatoryPolicyPort policyPort;
 
 	@Override
 	public Optional<MandatorySpecialCaseInformation> evaluate(User user,
 		MajorType majorType, TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
-		List<OptionalMandatoryPolicy> policies = findPolicies(user, majorType);
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures,
+		List<OptionalMandatoryPolicy> policies) {
 		if (policies.isEmpty()) {
 			return Optional.empty();
 		}
@@ -95,10 +90,5 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 			.mapToInt(Lecture::getCredit)
 			.sum();
 		return Math.max(0, candidateCredit - policy.getRequiredCredit());
-	}
-
-	private List<OptionalMandatoryPolicy> findPolicies(User user, MajorType majorType) {
-		return policyPort.findActivePolicies(
-			user.getMajorByMajorType(majorType), user.getEntryYear(), majorType);
 	}
 }

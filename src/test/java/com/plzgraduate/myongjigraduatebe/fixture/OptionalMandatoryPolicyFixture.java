@@ -1,6 +1,5 @@
 package com.plzgraduate.myongjigraduatebe.fixture;
 
-import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.OptionalMandatoryMajorHandler;
@@ -28,14 +27,15 @@ public final class OptionalMandatoryPolicyFixture {
 	}
 
 	public static OptionalMandatoryMajorHandler handler() {
-		FindOptionalMandatoryPolicyPort port = (major, entryYear, majorType) -> {
-			return POLICIES.getOrDefault(major, List.of()).stream()
-				.filter(range -> entryYear >= range.startEntryYear()
-					&& entryYear <= range.endEntryYear())
-				.map(PolicyRange::policy)
-				.toList();
-		};
-		return new OptionalMandatoryMajorHandler(port);
+		return new OptionalMandatoryMajorHandler();
+	}
+
+	public static List<OptionalMandatoryPolicy> policies(String major, int entryYear) {
+		return POLICIES.getOrDefault(major, List.of()).stream()
+			.filter(range -> entryYear >= range.startEntryYear()
+				&& entryYear <= range.endEntryYear())
+			.map(PolicyRange::policy)
+			.toList();
 	}
 
 	private static OptionalMandatoryPolicy policy(
