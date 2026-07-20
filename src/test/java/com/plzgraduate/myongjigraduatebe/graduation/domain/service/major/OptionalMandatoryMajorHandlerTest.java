@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
@@ -124,6 +125,43 @@ class OptionalMandatoryMajorHandlerTest {
 			new HashSet<>(Set.of(oldLecture, newLecture, another)), new HashSet<>()).orElseThrow();
 
 		assertThat(result.isCompleteMandatorySpecialCase()).isFalse();
+	}
+
+	@DisplayName("동등 과목을 모두 수강하면 한 과목만 전공필수로 인정한다.")
+	@Test
+	void 동등과목_필수학점_중복제거() {
+		Lecture oldLecture = Lecture.of("OLD", "구과목", 3, 1, "OLD");
+		Lecture newLecture = Lecture.of("NEW", "신과목", 3, 0, "OLD");
+		OptionalMandatoryPolicy policy = OptionalMandatoryPolicy.builder()
+			.name("테스트 선택필수")
+			.major(user.getPrimaryMajor())
+			.requiredCount(1)
+			.requiredCredit(3)
+			.candidateLectures(List.of(
+				new CandidateLecture(oldLecture, "REPLACEMENT"),
+				new CandidateLecture(newLecture, "REPLACEMENT")))
+			.build();
+		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler(
+			(major, entryYear, majorType) -> List.of(policy));
+		MandatoryMajorManager manager = new MandatoryMajorManager(List.of(handler));
+		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(oldLecture, newLecture));
+		Set<Lecture> electiveLectures = new HashSet<>();
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+			TakenLecture.of(user, oldLecture, 2020, Semester.FIRST),
+			TakenLecture.of(user, newLecture, 2021, Semester.FIRST)));
+
+		DetailCategoryResult result = manager.createDetailCategoryResult(
+			user, inventory, mandatoryLectures, electiveLectures, MAJOR_TYPE);
+
+		assertThat(result.isSatisfiedMandatory()).isTrue();
+		assertThat(result.getTotalCredits()).isEqualTo(3);
+		assertThat(result.getTakenCredits()).isEqualTo(3);
+		assertThat(result.getTakenLectures()).containsExactly(oldLecture);
+		assertThat(mandatoryLectures).containsExactly(oldLecture);
+		assertThat(electiveLectures).containsExactly(newLecture);
+		assertThat(inventory.getTakenLectures())
+			.extracting(TakenLecture::getLecture)
+			.containsExactly(newLecture);
 	}
 
 	@DisplayName("전공필수 계산 한 번에 선택필수 정책을 한 번만 조회한다.")

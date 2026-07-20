@@ -8,6 +8,8 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -57,19 +59,28 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 		Set<String> policyMandatoryIds = policyMandatoryLectures.stream()
 			.map(Lecture::getId)
 			.collect(Collectors.toSet());
-		Set<String> takenEquivalenceKeys = takenLectureInventory.getTakenLectures().stream()
-			.map(TakenLecture::getLecture)
-			.filter(lecture -> policyMandatoryIds.contains(lecture.getId()))
-			.map(lecture -> candidatesById.get(lecture.getId()).equivalenceKey())
-			.collect(Collectors.toCollection(LinkedHashSet::new));
+		Map<String, String> representativeLectureIdsByKey = new LinkedHashMap<>();
+		takenLectureInventory.getTakenLectures().stream()
+			.filter(takenLecture -> policyMandatoryIds.contains(takenLecture.getLecture().getId()))
+			.sorted(Comparator
+				.comparing(TakenLecture::getYear, Comparator.nullsLast(Comparator.naturalOrder()))
+				.thenComparing(TakenLecture::getSemester,
+					Comparator.nullsLast(Comparator.naturalOrder()))
+				.thenComparing(takenLecture -> takenLecture.getLecture().getId()))
+			.forEach(takenLecture -> {
+				Lecture lecture = takenLecture.getLecture();
+				String equivalenceKey = candidatesById.get(lecture.getId()).equivalenceKey();
+				representativeLectureIdsByKey.putIfAbsent(equivalenceKey, lecture.getId());
+			});
+		Set<String> takenEquivalenceKeys = new LinkedHashSet<>(
+			representativeLectureIdsByKey.keySet());
 
 		if (takenEquivalenceKeys.size() >= policy.getRequiredCount()) {
-			Set<String> retainedMandatoryKeys = takenEquivalenceKeys.stream()
+			Set<String> retainedMandatoryLectureIds = representativeLectureIdsByKey.values().stream()
 				.limit(policy.getRequiredCount())
 				.collect(Collectors.toSet());
 			Set<Lecture> remainingMandatoryLectures = policyMandatoryLectures.stream()
-				.filter(lecture -> !retainedMandatoryKeys.contains(
-					candidatesById.get(lecture.getId()).equivalenceKey()))
+				.filter(lecture -> !retainedMandatoryLectureIds.contains(lecture.getId()))
 				.collect(Collectors.toSet());
 			electiveLectures.addAll(remainingMandatoryLectures);
 			mandatoryLectures.removeAll(remainingMandatoryLectures);
