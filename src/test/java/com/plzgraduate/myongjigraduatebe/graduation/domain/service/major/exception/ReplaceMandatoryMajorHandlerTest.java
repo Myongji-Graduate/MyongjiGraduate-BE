@@ -50,8 +50,8 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures).orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -85,8 +85,8 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures).orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -118,8 +118,8 @@ class ReplaceMandatoryMajorHandlerTest {
 
 		//when
 		MandatoryMajorSpecialCaseHandler exceptionHandler = new ReplaceMandatoryMajorHandler();
-		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures).orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 

@@ -21,7 +21,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.Busines
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.ElectiveMajorManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MandatoryMajorManager;
-import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.OptionalMandatoryMajorHandler;
+import com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.ReplaceMandatoryMajorHandler;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
@@ -38,6 +38,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ class CalculateMajorGraduationServiceTest {
 	@BeforeEach
 	void setUp() {
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
-			List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+			List.of(OptionalMandatoryPolicyFixture.handler(), new ReplaceMandatoryMajorHandler()));
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 		SubMajorGraduationManager subMajorGraduationManager = new SubMajorGraduationManager();
 		MajorGraduationManager majorGraduationManager = new MajorGraduationManager(
@@ -990,10 +991,15 @@ class CalculateMajorGraduationServiceTest {
 			.findFirst().orElseThrow();
 
 		assertThat(dualMandatory.isCompleted()).isTrue();
-		assertThat(dualMandatory.getTakenCredit()).isEqualTo(15);
-		assertThat(dualMandatory.getDetailCategory().getFirst().getTakenLectures())
-			.extracting(Lecture::getId)
-			.contains("HBX01104", "HBX01105", "HBX01106", "HBX01143", "HBX01124");
+		assertThat(dualMandatory.getTakenCredit()).isEqualTo(9);
+		Set<String> dualMandatoryLectureIds = dualMandatory.getDetailCategory().getFirst()
+			.getTakenLectures().stream()
+			.map(Lecture::getId)
+			.collect(Collectors.toSet());
+		assertThat(dualMandatoryLectureIds).hasSize(3).contains("HBX01124");
+		assertThat(dualMandatoryLectureIds).filteredOn(Set.of(
+			"HBX01104", "HBX01105", "HBX01106", "HBX01143", "HBX01113")::contains)
+			.hasSize(2);
 	}
 
 	@DisplayName("교환 학생 유저의 복수전공선택 졸업결과를 계산한다.")

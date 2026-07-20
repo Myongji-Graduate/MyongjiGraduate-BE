@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType.PRIMARY;
+import static com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture.handler;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
@@ -70,7 +71,7 @@ class DataTechnologyMajorTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
-			List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+			List.of(handler(), new ReplaceMandatoryMajorHandler()));
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 		MajorGraduationManager manager = new MajorGraduationManager(
 			mandatoryMajorManager,
@@ -139,7 +140,7 @@ class DataTechnologyMajorTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 		Set<MajorLecture> 데이터테크놀로지_전공 = MajorFixture.데이터테크놀로지_전공();
 		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
-			List.of(new OptionalMandatoryMajorHandler(), new ReplaceMandatoryMajorHandler()));
+			List.of(handler(), new ReplaceMandatoryMajorHandler()));
 		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
 		MajorGraduationManager manager = new MajorGraduationManager(
 			mandatoryMajorManager,

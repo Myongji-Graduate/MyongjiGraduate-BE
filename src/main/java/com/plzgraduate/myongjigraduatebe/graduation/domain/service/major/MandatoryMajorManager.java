@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,9 +32,10 @@ public class MandatoryMajorManager {
 		int removeMandatoryTotalCredit = 0;
 
 		for (MandatoryMajorSpecialCaseHandler mandatoryMajorSpecialCaseHandler : mandatoryMajorSpecialCaseHandlers) {
-			if (mandatoryMajorSpecialCaseHandler.isSupport(user, majorType)) {
-				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = mandatoryMajorSpecialCaseHandler.getMandatorySpecialCaseInformation(
-					user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures);
+			Optional<MandatorySpecialCaseInformation> evaluation = mandatoryMajorSpecialCaseHandler.evaluate(
+				user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures);
+			if (evaluation.isPresent()) {
+				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = evaluation.get();
 				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 				removeMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 			}
