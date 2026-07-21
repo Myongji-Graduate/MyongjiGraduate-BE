@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.response.AnalyzeExistingFailuresResponse;
+import com.plzgraduate.myongjigraduatebe.parsing.api.dto.response.AnalyzeExistingFailuresDryRunResponse;
 import com.plzgraduate.myongjigraduatebe.parsing.application.service.FailureAnalysisService;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
@@ -66,6 +67,19 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 		validateAdminApiKey(apiKey);
 		int analyzedCount = failureAnalysisService.analyzeExistingFailures();
 		return AnalyzeExistingFailuresResponse.of(analyzedCount);
+	}
+
+	/**
+	 * 기존 실패 데이터를 변경하지 않고 현재 데이터 기준으로 재분석합니다.
+	 * 개인정보와 개별 실패 상세는 반환하지 않고 집계만 제공합니다.
+	 */
+	@PostMapping("/analyze-existing-failures/dry-run")
+	public AnalyzeExistingFailuresDryRunResponse previewExistingFailures(
+		@RequestHeader(value = "X-Admin-Key", required = false) String apiKey
+	) {
+		validateAdminApiKey(apiKey);
+		return AnalyzeExistingFailuresDryRunResponse.from(
+			failureAnalysisService.previewExistingFailures());
 	}
 
 	private void validateAdminApiKey(String apiKey) {
