@@ -3,14 +3,19 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
+import com.plzgraduate.myongjigraduatebe.fixture.OptionalMandatoryPolicyFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
@@ -45,9 +50,11 @@ class OptionalMandatoryMajorHandlerTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
-		MandatoryMajorSpecialCaseHandler exceptionHandler = new OptionalMandatoryMajorHandler();
-		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
+		MandatoryMajorSpecialCaseHandler exceptionHandler = OptionalMandatoryPolicyFixture.handler();
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures,
+			OptionalMandatoryPolicyFixture.policies(user.getPrimaryMajor(), user.getEntryYear()))
+			.orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -79,9 +86,11 @@ class OptionalMandatoryMajorHandlerTest {
 		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(takenLectures);
 
 		//when
-		MandatoryMajorSpecialCaseHandler exceptionHandler = new OptionalMandatoryMajorHandler();
-		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.getMandatorySpecialCaseInformation(
-			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures);
+		MandatoryMajorSpecialCaseHandler exceptionHandler = OptionalMandatoryPolicyFixture.handler();
+		MandatorySpecialCaseInformation mandatorySpecialCaseInformation = exceptionHandler.evaluate(
+			user, MAJOR_TYPE, takenLectureInventory, mandatoryLectures, electiveLectures,
+			OptionalMandatoryPolicyFixture.policies(user.getPrimaryMajor(), user.getEntryYear()))
+			.orElseThrow();
 		boolean isCompleteMandatorySpecialCase = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 		int removedMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 
@@ -91,4 +100,80 @@ class OptionalMandatoryMajorHandlerTest {
 		assertThat(mandatoryLectures).hasSize(6);
 		assertThat(electiveLectures).isEmpty();
 	}
+
+	@DisplayName("구·신 과목을 모두 수강해도 하나의 선택지로 계산한다.")
+	@Test
+	void 동등과목_중복제거() {
+		Lecture oldLecture = Lecture.of("OLD", "구과목", 3, 1, "OLD");
+		Lecture newLecture = Lecture.of("NEW", "신과목", 3, 0, "OLD");
+		Lecture another = Lecture.of("OTHER", "다른과목", 3, 0, null);
+		OptionalMandatoryPolicy policy = OptionalMandatoryPolicy.builder()
+			.name("테스트 선택필수")
+			.major(user.getPrimaryMajor())
+			.requiredCount(2)
+			.requiredCredit(6)
+			.candidateLectures(List.of(
+				new CandidateLecture(oldLecture, "REPLACEMENT"),
+				new CandidateLecture(newLecture, "REPLACEMENT"),
+				new CandidateLecture(another, "OTHER")))
+			.build();
+		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler();
+		MandatoryMajorManager manager = new MandatoryMajorManager(List.of(handler));
+		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(oldLecture, newLecture, another));
+		Set<Lecture> electiveLectures = new HashSet<>();
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+			TakenLecture.of(user, oldLecture, 2020, Semester.FIRST),
+			TakenLecture.of(user, newLecture, 2021, Semester.FIRST)));
+
+		DetailCategoryResult result = manager.createDetailCategoryResult(
+			user, inventory, mandatoryLectures, electiveLectures, MAJOR_TYPE, List.of(policy));
+
+		assertThat(result.isSatisfiedMandatory()).isFalse();
+		assertThat(result.getTotalCredits()).isEqualTo(6);
+		assertThat(result.getTakenCredits()).isEqualTo(3);
+		assertThat(result.getTakenLectures()).containsExactly(oldLecture);
+		assertThat(result.getHaveToLectures()).containsExactly(another);
+		assertThat(mandatoryLectures).containsExactly(another);
+		assertThat(electiveLectures).containsExactly(newLecture);
+		assertThat(inventory.getTakenLectures())
+			.extracting(TakenLecture::getLecture)
+			.containsExactly(newLecture);
+	}
+
+	@DisplayName("동등 과목을 모두 수강하면 한 과목만 전공필수로 인정한다.")
+	@Test
+	void 동등과목_필수학점_중복제거() {
+		Lecture oldLecture = Lecture.of("OLD", "구과목", 3, 1, "OLD");
+		Lecture newLecture = Lecture.of("NEW", "신과목", 3, 0, "OLD");
+		OptionalMandatoryPolicy policy = OptionalMandatoryPolicy.builder()
+			.name("테스트 선택필수")
+			.major(user.getPrimaryMajor())
+			.requiredCount(1)
+			.requiredCredit(3)
+			.candidateLectures(List.of(
+				new CandidateLecture(oldLecture, "REPLACEMENT"),
+				new CandidateLecture(newLecture, "REPLACEMENT")))
+			.build();
+		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler();
+		MandatoryMajorManager manager = new MandatoryMajorManager(List.of(handler));
+		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(oldLecture, newLecture));
+		Set<Lecture> electiveLectures = new HashSet<>();
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+			TakenLecture.of(user, oldLecture, 2020, Semester.FIRST),
+			TakenLecture.of(user, newLecture, 2021, Semester.FIRST)));
+
+		DetailCategoryResult result = manager.createDetailCategoryResult(
+			user, inventory, mandatoryLectures, electiveLectures, MAJOR_TYPE, List.of(policy));
+
+		assertThat(result.isSatisfiedMandatory()).isTrue();
+		assertThat(result.getTotalCredits()).isEqualTo(3);
+		assertThat(result.getTakenCredits()).isEqualTo(3);
+		assertThat(result.getTakenLectures()).containsExactly(oldLecture);
+		assertThat(mandatoryLectures).containsExactly(oldLecture);
+		assertThat(electiveLectures).containsExactly(newLecture);
+		assertThat(inventory.getTakenLectures())
+			.extracting(TakenLecture::getLecture)
+			.containsExactly(newLecture);
+	}
+
 }

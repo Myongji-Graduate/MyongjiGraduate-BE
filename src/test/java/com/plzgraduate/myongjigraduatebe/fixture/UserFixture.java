@@ -55,7 +55,7 @@ public class UserFixture {
 			"김철학",
 			"60201011",
 			20,
-			"철학학과",
+			"철학과",
 			null,
 			null,
 			StudentCategory.NORMAL,

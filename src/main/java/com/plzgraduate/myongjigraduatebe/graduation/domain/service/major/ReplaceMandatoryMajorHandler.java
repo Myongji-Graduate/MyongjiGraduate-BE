@@ -1,12 +1,14 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -28,15 +30,14 @@ public class ReplaceMandatoryMajorHandler implements MandatoryMajorSpecialCaseHa
 	);
 
 	@Override
-	public boolean isSupport(User user, MajorType majorType) {
-		String major = user.getMajorByMajorType(majorType);
-		return major.equals("철학과") && user.getEntryYear() <= 21;
-	}
-
-	@Override
-	public MandatorySpecialCaseInformation getMandatorySpecialCaseInformation(User user,
+	public Optional<MandatorySpecialCaseInformation> evaluate(User user,
 		MajorType majorType, TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures) {
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures,
+		List<OptionalMandatoryPolicy> optionalMandatoryPolicies) {
+		String major = user.getMajorByMajorType(majorType);
+		if (!major.equals("철학과") || user.getEntryYear() > 21) {
+			return Optional.empty();
+		}
 		boolean completeMandatorySpecialCase = checkCompleteReplaceMandatory(takenLectureInventory,
 			mandatoryLectures,
 			electiveLectures);
@@ -44,8 +45,8 @@ public class ReplaceMandatoryMajorHandler implements MandatoryMajorSpecialCaseHa
 		if (!completeMandatorySpecialCase) {
 			removedMandatoryTotalCredit = 3;
 		}
-		return MandatorySpecialCaseInformation.of(completeMandatorySpecialCase,
-			removedMandatoryTotalCredit);
+		return Optional.of(MandatorySpecialCaseInformation.of(
+			completeMandatorySpecialCase, removedMandatoryTotalCredit));
 
 	}
 
