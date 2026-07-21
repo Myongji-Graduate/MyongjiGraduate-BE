@@ -69,6 +69,15 @@ public class OptionalMandatoryMajorHandler implements MandatoryMajorSpecialCaseH
 			});
 		Set<String> takenEquivalenceKeys = new LinkedHashSet<>(
 			representativeLectureIdsByKey.keySet());
+		Set<String> representativeLectureIds = new LinkedHashSet<>(
+			representativeLectureIdsByKey.values());
+		Set<Lecture> duplicatedTakenLectures = policyMandatoryLectures.stream()
+			.filter(lecture -> takenLectureInventory.getTakenLectures().stream()
+				.anyMatch(takenLecture -> takenLecture.getLecture().equals(lecture)))
+			.filter(lecture -> !representativeLectureIds.contains(lecture.getId()))
+			.collect(Collectors.toSet());
+		electiveLectures.addAll(duplicatedTakenLectures);
+		mandatoryLectures.removeAll(duplicatedTakenLectures);
 
 		if (takenEquivalenceKeys.size() >= policy.getRequiredCount()) {
 			Set<String> retainedMandatoryLectureIds = representativeLectureIdsByKey.values().stream()

@@ -118,16 +118,26 @@ class OptionalMandatoryMajorHandlerTest {
 				new CandidateLecture(another, "OTHER")))
 			.build();
 		OptionalMandatoryMajorHandler handler = new OptionalMandatoryMajorHandler();
+		MandatoryMajorManager manager = new MandatoryMajorManager(List.of(handler));
+		Set<Lecture> mandatoryLectures = new HashSet<>(Set.of(oldLecture, newLecture, another));
+		Set<Lecture> electiveLectures = new HashSet<>();
 		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
 			TakenLecture.of(user, oldLecture, 2020, Semester.FIRST),
 			TakenLecture.of(user, newLecture, 2021, Semester.FIRST)));
 
-		MandatorySpecialCaseInformation result = handler.evaluate(
-			user, MAJOR_TYPE, inventory,
-			new HashSet<>(Set.of(oldLecture, newLecture, another)), new HashSet<>(),
-			List.of(policy)).orElseThrow();
+		DetailCategoryResult result = manager.createDetailCategoryResult(
+			user, inventory, mandatoryLectures, electiveLectures, MAJOR_TYPE, List.of(policy));
 
-		assertThat(result.isCompleteMandatorySpecialCase()).isFalse();
+		assertThat(result.isSatisfiedMandatory()).isFalse();
+		assertThat(result.getTotalCredits()).isEqualTo(6);
+		assertThat(result.getTakenCredits()).isEqualTo(3);
+		assertThat(result.getTakenLectures()).containsExactly(oldLecture);
+		assertThat(result.getHaveToLectures()).containsExactly(another);
+		assertThat(mandatoryLectures).containsExactly(another);
+		assertThat(electiveLectures).containsExactly(newLecture);
+		assertThat(inventory.getTakenLectures())
+			.extracting(TakenLecture::getLecture)
+			.containsExactly(newLecture);
 	}
 
 	@DisplayName("동등 과목을 모두 수강하면 한 과목만 전공필수로 인정한다.")
