@@ -19,12 +19,15 @@ import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -35,6 +38,7 @@ public class FailureAnalysisService {
 
 	private static final String GRADUATION_CHECK_ERROR_PREFIX = "졸업 검사 중 오류 발생: ";
 	private static final int BATCH_SIZE = 100;
+	private static final String REANALYSIS_PASSED_DETAILS = "현재 데이터와 졸업요건으로 재분석을 통과했습니다.";
 
 	private final ParsingAnonymousUseCase parsingAnonymousUseCase;
 	private final CheckGraduationRequirementUseCase checkGraduationRequirementUseCase;
@@ -150,10 +154,44 @@ public class FailureAnalysisService {
 			return new FailureAnalysisResult(FailureReason.GRADUATION_CHECK_FAILED, GRADUATION_CHECK_ERROR_PREFIX + e.getMessage());
 		}
 
-		return new FailureAnalysisResult(
-			FailureReason.UNKNOWN_ERROR,
-			"모든 검증 단계를 통과했지만 실패로 기록되었습니다."
-		);
+		return FailureAnalysisResult.passed();
+	}
+
+	/**
+	 * failureReason이 없는 기존 실패 이력을 변경 없이 재분석한다.
+	 * 개인정보가 포함된 parsingText와 failureDetails는 결과에 포함하지 않는다.
+	 */
+	public FailureAnalysisPreview previewExistingFailures() {
+		int page = 0;
+		int totalCount = 0;
+		int passedCount = 0;
+		Map<FailureReason, Integer> failureCounts = new EnumMap<>(FailureReason.class);
+
+		while (true) {
+			List<ParsingTextHistory> batch = queryParsingTextHistoryPort
+				.findByParsingResultAndFailureReasonIsNull(
+					PageRequest.of(page, BATCH_SIZE, Sort.by(Sort.Direction.ASC, "id")));
+			if (batch.isEmpty()) {
+				break;
+			}
+
+			for (ParsingTextHistory history : batch) {
+				FailureAnalysisResult result = analyzeFailure(
+					history.getParsingText(),
+					history.getUser().getEnglishLevel(),
+					history.getUser().getKoreanLevel()
+				);
+				totalCount++;
+				if (result.isPassed()) {
+					passedCount++;
+				} else {
+					failureCounts.merge(result.getFailureReason(), 1, Integer::sum);
+				}
+			}
+			page++;
+		}
+
+		return new FailureAnalysisPreview(totalCount, passedCount, failureCounts);
 	}
 
 	private FailureAnalysisResult classifyGraduationIllegalArgument(IllegalArgumentException e) {
@@ -249,10 +287,53 @@ public class FailureAnalysisService {
 	public static class FailureAnalysisResult {
 		private final FailureReason failureReason;
 		private final String failureDetails;
+		private final boolean passed;
 
 		public FailureAnalysisResult(FailureReason failureReason, String failureDetails) {
+			this(failureReason, failureDetails, false);
+		}
+
+		private FailureAnalysisResult(
+			FailureReason failureReason,
+			String failureDetails,
+			boolean passed
+		) {
 			this.failureReason = failureReason;
 			this.failureDetails = failureDetails;
+			this.passed = passed;
+		}
+
+		private static FailureAnalysisResult passed() {
+			return new FailureAnalysisResult(
+				FailureReason.RESOLVED,
+				REANALYSIS_PASSED_DETAILS,
+				true
+			);
+		}
+	}
+
+	@Getter
+	public static class FailureAnalysisPreview {
+		private final int totalCount;
+		private final int passedCount;
+		private final Map<FailureReason, Integer> failureCounts;
+
+		private FailureAnalysisPreview(
+			int totalCount,
+			int passedCount,
+			Map<FailureReason, Integer> failureCounts
+		) {
+			this.totalCount = totalCount;
+			this.passedCount = passedCount;
+			this.failureCounts = Map.copyOf(failureCounts);
+		}
+
+		public static FailureAnalysisPreview of(
+			int totalCount,
+			int passedCount,
+			Map<FailureReason, Integer> failureCounts
+		) {
+			return new FailureAnalysisPreview(totalCount, passedCount, failureCounts);
 		}
 	}
 }

@@ -14,6 +14,7 @@ public enum FailureReason {
 	GRADUATION_REQUIREMENT_NOT_FOUND("졸업 요건을 찾을 수 없습니다.", "전공명/입학년도 조합에 맞는 졸업 요건을 찾을 수 없습니다."),
 	COLLEGE_NOT_FOUND("단과대를 찾을 수 없습니다.", "소속 단과대 정보를 시스템에서 찾을 수 없습니다."),
 	LECTURE_NOT_FOUND("과목 정보를 찾을 수 없습니다.", "성적표에 포함된 과목 정보를 시스템에서 찾을 수 없습니다."),
+	RESOLVED("재분석을 통과했습니다.", "현재 데이터와 졸업요건으로 기존 실패가 해소되었습니다."),
 	UNKNOWN_ERROR("알 수 없는 오류가 발생했습니다.", "예상치 못한 오류가 발생했습니다.");
 
 	private final String message;
@@ -24,4 +25,3 @@ public enum FailureReason {
 		this.description = description;
 	}
 }
-

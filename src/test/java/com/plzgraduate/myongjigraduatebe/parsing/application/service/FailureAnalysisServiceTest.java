@@ -29,6 +29,7 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -342,7 +344,7 @@ class FailureAnalysisServiceTest {
 		assertThat(result.getFailureDetails()).contains("졸업 검사 중 오류 발생");
 	}
 
-	@DisplayName("모든 검증 단계를 통과하면 UNKNOWN_ERROR를 반환한다")
+	@DisplayName("모든 검증 단계를 통과하면 재분석 통과 상태를 반환한다")
 	@Test
 	void analyzeFailure_allStepsPassed() {
 		//given
@@ -357,8 +359,51 @@ class FailureAnalysisServiceTest {
 		FailureAnalysisService.FailureAnalysisResult result = failureAnalysisService.analyzeFailure(VALID_PARSING_TEXT);
 
 		//then
-		assertThat(result.getFailureReason()).isEqualTo(FailureReason.UNKNOWN_ERROR);
-		assertThat(result.getFailureDetails()).contains("모든 검증 단계를 통과했지만 실패로 기록되었습니다");
+		assertThat(result.getFailureReason()).isEqualTo(FailureReason.RESOLVED);
+		assertThat(result.isPassed()).isTrue();
+		assertThat(result.getFailureDetails()).contains("재분석을 통과했습니다");
+	}
+
+	@DisplayName("기존 실패 데이터 dry-run은 이력을 저장하지 않고 결과를 집계한다")
+	@Test
+	void previewExistingFailures() {
+		//given
+		User user = createUser();
+		ParsingTextHistory passedHistory = ParsingTextHistory.builder()
+			.id(1L)
+			.user(user)
+			.parsingText(VALID_PARSING_TEXT)
+			.parsingResult(ParsingResult.FAIL)
+			.build();
+		ParsingTextHistory failedHistory = ParsingTextHistory.builder()
+			.id(2L)
+			.user(user)
+			.parsingText("잘못된 텍스트")
+			.parsingResult(ParsingResult.FAIL)
+			.build();
+		PageRequest firstPage = PageRequest.of(0, 100, Sort.by(Sort.Direction.ASC, "id"));
+		PageRequest secondPage = PageRequest.of(1, 100, Sort.by(Sort.Direction.ASC, "id"));
+
+		given(queryParsingTextHistoryPort.findByParsingResultAndFailureReasonIsNull(firstPage))
+			.willReturn(List.of(passedHistory, failedHistory));
+		given(queryParsingTextHistoryPort.findByParsingResultAndFailureReasonIsNull(secondPage))
+			.willReturn(Collections.emptyList());
+		User anonymous = createAnonymousUser();
+		TakenLectureInventory inventory = TakenLectureInventory.from(new HashSet<>());
+		given(parsingAnonymousUseCase.parseAnonymous(
+			eq(user.getEnglishLevel()), eq(user.getKoreanLevel()), eq(VALID_PARSING_TEXT)))
+			.willReturn(new ParsingAnonymousDto(anonymous, inventory));
+
+		//when
+		FailureAnalysisService.FailureAnalysisPreview preview =
+			failureAnalysisService.previewExistingFailures();
+
+		//then
+		assertThat(preview.getTotalCount()).isEqualTo(2);
+		assertThat(preview.getPassedCount()).isEqualTo(1);
+		assertThat(preview.getFailureCounts()).isEqualTo(
+			Map.of(FailureReason.PARSING_EXCEPTION, 1));
+		then(saveParsingTextHistoryPort).shouldHaveNoInteractions();
 	}
 
 	@DisplayName("기존 실패 데이터 재분석 - 개별 분석 중 오류 발생 시 건너뛰고 계속한다")
