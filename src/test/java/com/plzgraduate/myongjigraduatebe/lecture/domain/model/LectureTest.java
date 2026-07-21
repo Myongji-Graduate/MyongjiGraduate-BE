@@ -35,4 +35,20 @@ class LectureTest {
 		assertThat(isCulture).isFalse();
 	}
 
+	@DisplayName("동일과목 대표 코드가 있으면 대표 코드를 인정 코드로 사용한다.")
+	@Test
+	void getRecognitionCodeWithDuplicateCode() {
+		Lecture lecture = Lecture.of("KMC02234", "4차산업혁명시대의예술", 3, 0, "KMA02155");
+
+		assertThat(lecture.getRecognitionCode()).isEqualTo("KMA02155");
+	}
+
+	@DisplayName("동일과목 대표 코드가 없으면 과목 코드를 인정 코드로 사용한다.")
+	@Test
+	void getRecognitionCodeWithoutDuplicateCode() {
+		Lecture lecture = Lecture.of("KMA02155", "4차산업혁명시대의예술", 3, 0, null);
+
+		assertThat(lecture.getRecognitionCode()).isEqualTo("KMA02155");
+	}
+
 }

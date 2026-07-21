@@ -10,8 +10,11 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -24,10 +27,10 @@ public class CoreCultureDetailCategoryManager {
 		"데이터테크놀로지",
 		"디지털콘텐츠디자인"
 	);
-	private static final Lecture 과학과기술_예외_과목 = Lecture.from("KMA02136");
-	private static final Set<Lecture> 문화와예술_예외_과목 = Set.of(
-		Lecture.from("KMA02155"),
-		Lecture.from("KMA02156")
+	private static final String 과학과기술_예외_과목_인정코드 = "KMA02136";
+	private static final Set<String> 문화와예술_예외_과목_인정코드 = Set.of(
+		"KMA02155",
+		"KMA02156"
 	);
 
 	public DetailCategoryResult generate(
@@ -42,22 +45,39 @@ public class CoreCultureDetailCategoryManager {
 			graduationLectures,
 			category
 		);
-		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
-		Set<Lecture> taken = new HashSet<>();
-		takenLectureInventory.getTakenLectures()
+		Set<String> graduationRecognitionCodes = graduationCoreCultureLectures.stream()
+			.map(Lecture::getRecognitionCode)
+			.collect(Collectors.toSet());
+		List<TakenLecture> matchedTakenLectures = takenLectureInventory.getTakenLectures()
 			.stream()
-			.filter(
-				takenLecture -> graduationCoreCultureLectures.contains(takenLecture.getLecture()))
-			.forEach(takenLecture -> {
-				finishedTakenLecture.add(takenLecture);
-				taken.add(takenLecture.getLecture());
-			});
-		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
+			.filter(takenLecture -> graduationRecognitionCodes.contains(
+				takenLecture.getLecture().getRecognitionCode()))
+			.sorted(Comparator
+				.comparing(TakenLecture::getYear,
+					Comparator.nullsLast(Comparator.reverseOrder()))
+				.thenComparing(TakenLecture::getSemester,
+					Comparator.nullsLast(Comparator.reverseOrder()))
+				.thenComparing(takenLecture -> takenLecture.getLecture().getId(),
+					Comparator.reverseOrder()))
+			.collect(Collectors.toList());
+		Map<String, TakenLecture> latestTakenLectureByRecognitionCode = new LinkedHashMap<>();
+		matchedTakenLectures.forEach(
+			takenLecture -> latestTakenLectureByRecognitionCode.putIfAbsent(
+				takenLecture.getLecture().getRecognitionCode(), takenLecture));
+		Set<TakenLecture> recognizedTakenLectures = new HashSet<>(
+			latestTakenLectureByRecognitionCode.values());
+		Set<Lecture> taken = recognizedTakenLectures.stream()
+			.map(TakenLecture::getLecture)
+			.collect(Collectors.toSet());
+		graduationCoreCultureLectures.removeIf(lecture ->
+			latestTakenLectureByRecognitionCode.containsKey(lecture.getRecognitionCode()));
+		takenLectureInventory.handleFinishedTakenLectures(new HashSet<>(matchedTakenLectures));
 
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(), true, category.getTotalCredit());
 		calculateFreeElectiveLeftCredit(user, taken, commonCultureDetailCategoryResult);
-		calculateNormalLeftCredit(taken, finishedTakenLecture, commonCultureDetailCategoryResult);
+		calculateNormalLeftCredit(taken, recognizedTakenLectures,
+			commonCultureDetailCategoryResult);
 		commonCultureDetailCategoryResult.calculate(taken, graduationCoreCultureLectures);
 
 		return commonCultureDetailCategoryResult;
@@ -77,8 +97,8 @@ public class CoreCultureDetailCategoryManager {
 		User user, Set<Lecture> taken,
 		DetailCategoryResult commonCultureDetailCategoryResult
 	) {
-		if (ICT_DEPARTMENTS.contains(user.getPrimaryMajor()) && (taken.contains(과학과기술_예외_과목))) {
-			taken.remove(과학과기술_예외_과목);
+		if (ICT_DEPARTMENTS.contains(user.getPrimaryMajor()) && taken.removeIf(
+			lecture -> lecture.getRecognitionCode().equals(과학과기술_예외_과목_인정코드))) {
 			int exceptionLectureCredit = 3;
 			commonCultureDetailCategoryResult.addFreeElectiveLeftCredit(exceptionLectureCredit);
 		}
@@ -90,7 +110,8 @@ public class CoreCultureDetailCategoryManager {
 		DetailCategoryResult commonCultureDetailCategoryResult
 	) {
 		List<TakenLecture> cultureAndArtExceptionLectures = finishedTakenLecture.stream()
-			.filter(takenLecture -> 문화와예술_예외_과목.contains(takenLecture.getLecture())
+			.filter(takenLecture -> 문화와예술_예외_과목_인정코드.contains(
+				takenLecture.getLecture().getRecognitionCode())
 				&& takenLecture.getYear() == 2022
 				&& takenLecture.getSemester() == FIRST)
 			.collect(Collectors.toList());

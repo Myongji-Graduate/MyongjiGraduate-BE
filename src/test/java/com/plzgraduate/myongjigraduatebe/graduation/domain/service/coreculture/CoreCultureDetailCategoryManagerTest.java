@@ -233,4 +233,77 @@ class CoreCultureDetailCategoryManagerTest {
 			)
 			.contains(coreCultureCategory.getName(), false, categoryTotalCredit, 6, 0);
 	}
+
+	@DisplayName("핵심교양 대표 코드와 다른 동일과목 코드로 수강해도 핵심교양으로 인정한다.")
+	@Test
+	void recognizeEquivalentLectureByDuplicateCode() {
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Lecture representative = Lecture.of(
+			"KMA02155", "4차산업혁명시대의예술", 3, 0, "KMA02155");
+		Lecture equivalent = Lecture.of(
+			"KMC02234", "4차산업혁명시대의예술", 3, 0, "KMA02155");
+		TakenLecture equivalentTakenLecture = TakenLecture.of(
+			user, equivalent, 2023, Semester.FIRST);
+		TakenLectureInventory inventory = TakenLectureInventory.from(
+			Set.of(equivalentTakenLecture));
+
+		DetailCategoryResult result = manager.generate(
+			user,
+			inventory,
+			Set.of(CoreCulture.of(representative, CULTURE_ART)),
+			CULTURE_ART
+		);
+
+		assertThat(result.isCompleted()).isTrue();
+		assertThat(result.getTakenCredits()).isEqualTo(3);
+		assertThat(result.getTakenLectures()).containsExactly(equivalent);
+		assertThat(inventory.getTakenLectures()).isEmpty();
+	}
+
+	@DisplayName("같은 동일과목 그룹을 여러 번 수강하면 가장 최근 수강 한 건만 핵심교양으로 인정한다.")
+	@Test
+	void recognizeLatestLectureOnlyWithinDuplicateGroup() {
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Lecture representative = Lecture.of(
+			"KMA02155", "4차산업혁명시대의예술", 3, 1, "KMA02155");
+		Lecture equivalent = Lecture.of(
+			"KMC02234", "4차산업혁명시대의예술", 3, 0, "KMA02155");
+		TakenLecture earliest = TakenLecture.of(user, representative, 2022, Semester.SECOND);
+		TakenLecture later = TakenLecture.of(user, equivalent, 2023, Semester.FIRST);
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(earliest, later));
+
+		DetailCategoryResult result = manager.generate(
+			user,
+			inventory,
+			Set.of(CoreCulture.of(representative, CULTURE_ART)),
+			CULTURE_ART
+		);
+
+		assertThat(result.getTakenCredits()).isEqualTo(3);
+		assertThat(result.getTakenLectures()).containsExactly(equivalent);
+		assertThat(inventory.getTakenLectures()).isEmpty();
+	}
+
+	@DisplayName("2022년 1학기에 수강한 동일과목 코드도 핵심교양이 아닌 일반교양으로 처리한다.")
+	@Test
+	void applyCultureArtExceptionByDuplicateCode() {
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Lecture representative = Lecture.of(
+			"KMA02155", "4차산업혁명시대의예술", 3, 0, "KMA02155");
+		Lecture equivalent = Lecture.of(
+			"KMC02234", "4차산업혁명시대의예술", 3, 0, "KMA02155");
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+			TakenLecture.of(user, equivalent, 2022, Semester.FIRST)));
+
+		DetailCategoryResult result = manager.generate(
+			user,
+			inventory,
+			Set.of(CoreCulture.of(representative, CULTURE_ART)),
+			CULTURE_ART
+		);
+
+		assertThat(result.isCompleted()).isFalse();
+		assertThat(result.getTakenCredits()).isZero();
+		assertThat(result.getNormalLeftCredit()).isEqualTo(3);
+	}
 }

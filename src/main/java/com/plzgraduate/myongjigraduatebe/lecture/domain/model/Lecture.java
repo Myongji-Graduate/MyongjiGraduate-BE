@@ -74,6 +74,13 @@ public class Lecture implements Serializable {
 		return id.startsWith(CULTURE_CODE_START_PREFIX);
 	}
 
+	public String getRecognitionCode() {
+		if (duplicateCode == null || duplicateCode.isBlank()) {
+			return id;
+		}
+		return duplicateCode;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
