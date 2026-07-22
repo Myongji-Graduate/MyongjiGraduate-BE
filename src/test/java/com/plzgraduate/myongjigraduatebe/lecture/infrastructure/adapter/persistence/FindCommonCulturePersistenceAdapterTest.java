@@ -1,5 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence;
 
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CAREER;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.DIGITAL_LITERACY;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,6 +96,29 @@ class FindCommonCulturePersistenceAdapterTest extends PersistenceTestSupport {
 
 		//then
 		assertThat(commonCultures).hasSize(0);
+	}
+
+	@DisplayName("2023학번 이후 진로선택 과목을 디지털리터러시 선택지로 조회한다.")
+	@Test
+	void normalizeCareerAsDigitalLiteracyForCurrentEntryYear() {
+		User user = UserFixture.글로벌비즈니스학전공_25학번();
+		LectureJpaEntity lecture = LectureJpaEntity.builder()
+			.id("KMA02141")
+			.duplicateCode("KMA02137")
+			.build();
+		lectureRepository.save(lecture);
+		commonCultureRepository.save(CommonCultureJpaEntity.builder()
+			.lectureJpaEntity(lecture)
+			.commonCultureCategory(CAREER)
+			.startEntryYear(18)
+			.endEntryYear(99)
+			.build());
+
+		Set<CommonCulture> commonCultures = commonCulturePersistenceAdapter.findCommonCulture(user);
+
+		assertThat(commonCultures).singleElement()
+			.extracting(CommonCulture::getCommonCultureCategory)
+			.isEqualTo(DIGITAL_LITERACY);
 	}
 
 	private void createCommonCultures() {

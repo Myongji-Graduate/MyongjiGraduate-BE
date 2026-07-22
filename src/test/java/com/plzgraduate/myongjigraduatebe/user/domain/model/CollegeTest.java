@@ -58,6 +58,13 @@ class CollegeTest {
         assertEquals(College.BUSINESS_NEW, college);
     }
 
+	@Test
+	void findLegacyDataTechnologyMajorCollege() {
+		College college = College.findBelongingCollege("데이터테크놀로지전공", 19);
+
+		assertEquals(College.ICT, college);
+	}
+
     @Test
     void testFindBelongingCollege_ThrowsExceptionForInvalidMajor() {
         // given

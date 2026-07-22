@@ -15,8 +15,11 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -68,21 +71,35 @@ class CommonCultureDetailCategoryManager {
 			graduationLectures,
 			category
 		);
-		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
-		Set<Lecture> taken = new HashSet<>();
-		takenLectureInventory.getTakenLectures()
+		Set<String> graduationRecognitionCodes = graduationCommonCultureLectures.stream()
+			.map(Lecture::getRecognitionCode)
+			.collect(Collectors.toSet());
+		List<TakenLecture> matchedTakenLectures = takenLectureInventory.getTakenLectures()
 			.stream()
-			.filter(takenLecture -> graduationCommonCultureLectures.contains(takenLecture.getLecture()))
-			.forEach(takenLecture -> {
-				finishedTakenLecture.add(takenLecture);
-				taken.add(takenLecture.getLecture());
-			});
+			.filter(takenLecture -> graduationRecognitionCodes.contains(
+				takenLecture.getLecture().getRecognitionCode()))
+			.sorted(Comparator
+				.comparing(TakenLecture::getYear,
+					Comparator.nullsLast(Comparator.reverseOrder()))
+				.thenComparing(TakenLecture::getSemester,
+					Comparator.nullsLast(Comparator.reverseOrder()))
+				.thenComparing(takenLecture -> takenLecture.getLecture().getId(),
+					Comparator.reverseOrder()))
+			.collect(Collectors.toList());
+		Map<String, TakenLecture> latestTakenLectureByRecognitionCode = new LinkedHashMap<>();
+		matchedTakenLectures.forEach(takenLecture -> latestTakenLectureByRecognitionCode.putIfAbsent(
+			takenLecture.getLecture().getRecognitionCode(), takenLecture));
+		Set<Lecture> taken = latestTakenLectureByRecognitionCode.values().stream()
+			.map(TakenLecture::getLecture)
+			.collect(Collectors.toSet());
+		graduationCommonCultureLectures.removeIf(lecture ->
+			latestTakenLectureByRecognitionCode.containsKey(lecture.getRecognitionCode()));
 		boolean isSatisfiedMandatory = checkMandatorySatisfaction(
 			user,
 			takenLectureInventory,
 			category
 		);
-		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
+		takenLectureInventory.handleFinishedTakenLectures(new HashSet<>(matchedTakenLectures));
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
 			category.getName(),
 			isSatisfiedMandatory,

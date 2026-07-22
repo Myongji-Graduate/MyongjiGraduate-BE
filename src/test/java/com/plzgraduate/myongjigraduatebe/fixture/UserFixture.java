@@ -361,7 +361,7 @@ public class UserFixture {
 			"김응용",
 			"60191022",
 			19,
-			"데이터테사이언스전공",
+			"데이터테크놀로지전공",
 			null,
 			null,
 			StudentCategory.NORMAL,

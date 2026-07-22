@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategor
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.Comparator;
@@ -22,11 +23,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class CoreCultureDetailCategoryManager {
 
-	private static final List<String> ICT_DEPARTMENTS = List.of(
-		"응용소프트웨어",
-		"데이터테크놀로지",
-		"디지털콘텐츠디자인"
-	);
 	private static final String 과학과기술_예외_과목_인정코드 = "KMA02136";
 	private static final Set<String> 문화와예술_예외_과목_인정코드 = Set.of(
 		"KMA02155",
@@ -97,10 +93,20 @@ public class CoreCultureDetailCategoryManager {
 		User user, Set<Lecture> taken,
 		DetailCategoryResult commonCultureDetailCategoryResult
 	) {
-		if (ICT_DEPARTMENTS.contains(user.getPrimaryMajor()) && taken.removeIf(
+		if (isIctCollege(user) && taken.removeIf(
 			lecture -> lecture.getRecognitionCode().equals(과학과기술_예외_과목_인정코드))) {
 			int exceptionLectureCredit = 3;
 			commonCultureDetailCategoryResult.addFreeElectiveLeftCredit(exceptionLectureCredit);
+		}
+	}
+
+	private boolean isIctCollege(User user) {
+		try {
+			College college = College.findBelongingCollege(
+				user.getPrimaryMajor(), user.getEntryYear());
+			return college == College.ICT || college == College.ARTIFICIAL_INTELLIGENCE_SOFTWARE;
+		} catch (IllegalArgumentException exception) {
+			return false;
 		}
 	}
 
