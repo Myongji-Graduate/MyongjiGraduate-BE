@@ -30,6 +30,27 @@ class CommonCultureDetailCategoryManagerTest {
     Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
     CommonCultureDetailCategoryManager manager = new CommonCultureDetailCategoryManager();
 
+	@DisplayName("대표 코드와 다른 동일과목 코드로 수강해도 공통교양으로 한 번만 인정한다.")
+	@Test
+	void recognizeEquivalentLectureByDuplicateCode() {
+		User user = UserFixture.경영학과_19학번_ENG34();
+		Lecture representative = Lecture.of("KMA02141", "진로선택", 2, 0, "KMA02137");
+		Lecture equivalent = Lecture.of("KMA02137", "진로선택", 2, 1, "KMA02137");
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+			TakenLecture.of(user, representative, 2022, Semester.FIRST),
+			TakenLecture.of(user, equivalent, 2021, Semester.FIRST)));
+
+		DetailCategoryResult result = manager.generate(
+			user,
+			inventory,
+			Set.of(CommonCulture.of(representative, CommonCultureCategory.CAREER)),
+			CommonCultureCategory.CAREER);
+
+		assertThat(result.getTakenCredits()).isEqualTo(2);
+		assertThat(result.getTakenLectures()).containsExactly(representative);
+		assertThat(inventory.getTakenLectures()).isEmpty();
+	}
+
     @DisplayName("영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
     @ParameterizedTest
     @ArgumentsSource(CommonCultureCategoryFixture.class)
