@@ -22,6 +22,13 @@ public class MajorGraduationManager {
 
 	private static final int 경영학과_외국인학생_전공필수_학번 = 22;
 	private static final List<String> 국제학생을위한경영학개론_과목코드 = Arrays.asList("HCA02507", "HCA02508");
+	private static final int 프로그래밍_교과_중복_시작년도 = 2026;
+	private static final Set<Set<String>> 프로그래밍_교과_경과조치_조합 = Set.of(
+		Set.of("HEB01101", "HEB01102"),
+		Set.of("HEB01101", "HEF01101"),
+		Set.of("HEB01103", "HEB01105"),
+		Set.of("HEB01103", "HEF01102")
+	);
 
 	private final MandatoryMajorManager mandatoryMajorManager;
 	private final ElectiveMajorManager electiveMajorManager;
@@ -109,8 +116,36 @@ public class MajorGraduationManager {
 						&& duplicatedTakenLecture.getDuplicateCode()
 						.equals(graduationLecture.getLecture()
 							.getDuplicateCode())
+						&& !isProgrammingCourseRecognizedSeparately(
+							takenLectureInventory,
+							duplicatedTakenLecture,
+							graduationLecture.getLecture())
 				)
 		);
+	}
+
+	private boolean isProgrammingCourseRecognizedSeparately(
+		TakenLectureInventory takenLectureInventory,
+		Lecture firstLecture,
+		Lecture secondLecture
+	) {
+		if (!프로그래밍_교과_경과조치_조합.contains(
+			Set.of(firstLecture.getId(), secondLecture.getId()))) {
+			return false;
+		}
+		return wasTakenBeforeProgrammingDuplicatePolicy(takenLectureInventory, firstLecture)
+			&& wasTakenBeforeProgrammingDuplicatePolicy(takenLectureInventory, secondLecture);
+	}
+
+	private boolean wasTakenBeforeProgrammingDuplicatePolicy(
+		TakenLectureInventory takenLectureInventory,
+		Lecture lecture
+	) {
+		return takenLectureInventory.getTakenLectures()
+			.stream()
+			.anyMatch(takenLecture -> takenLecture.getLecture().equals(lecture)
+				&& takenLecture.getYear() != null
+				&& takenLecture.getYear() < 프로그래밍_교과_중복_시작년도);
 	}
 
 	/**
