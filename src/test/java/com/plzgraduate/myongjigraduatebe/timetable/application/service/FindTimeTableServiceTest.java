@@ -1,7 +1,12 @@
 package com.plzgraduate.myongjigraduatebe.timetable.application.service;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.application.port.TimetablePort;
 import com.plzgraduate.myongjigraduatebe.timetable.application.usecase.FindTimetableUseCase;
@@ -23,6 +28,7 @@ import org.mockito.quality.Strictness;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -34,6 +40,7 @@ class FindTimeTableServiceTest {
 
     @Mock private TimetablePort timetablePort;
     @Mock private FindTakenLecturePort findTakenLecturePort;
+    @Mock private FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
     @Mock private RecommendedLectureExtractor recommendedExtractor;
     @Mock private FindUserUseCase findUserUseCase;
 
@@ -149,6 +156,128 @@ class FindTimeTableServiceTest {
         ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(List.class);
         verify(findTakenLecturePort).findTakenLectureIdsByUserAndCodes(eq(1L), captor.capture());
         assertThat(captor.getValue()).containsExactlyInAnyOrder("A", "B");
+    }
+
+    @Test
+    @DisplayName("학문기초 ALL: 졸업요건 충족 여부와 무관하게 해당 학기 인정 과목 전체 반환")
+    void basicAcademicalAllReturnsAllApplicablePolicies() {
+        User user = userWithBasicAcademicalCulture();
+        when(findUserUseCase.findUserById(1L)).thenReturn(user);
+        when(timetablePort.findByYearAndSemester(2026, 2))
+                .thenReturn(List.of(t("OLD"), t("NEW"), t("UNTKEN")));
+        when(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공", 20))
+                .thenReturn(Set.of(
+                        basicPolicy(lecture("NEW", "GROUP-A"), 2026, Semester.FIRST, null, null),
+                        basicPolicy(lecture("UNTKEN", "GROUP-B"), null, null, null, null)
+                ));
+        when(findTakenLecturePort.findTakenLecturesByUser(user))
+                .thenReturn(List.of(TakenLecture.of(user, lecture("OLD", "GROUP-A"), 2025, Semester.SECOND)));
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(
+                eq(2026), eq(2), eq(campus), anyList()
+        )).thenAnswer(invocation -> {
+            List<String> ids = invocation.getArgument(3);
+            return ids.stream().map(this::t).toList();
+        });
+
+        List<Timetable> result = sut.searchCombined(
+                1L, 2026, 2, campus, TakenFilter.ALL, null,
+                GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
+        );
+
+        assertThat(result).extracting(Timetable::getLectureCode)
+                .containsExactlyInAnyOrder("NEW", "UNTKEN");
+        verifyNoInteractions(recommendedExtractor);
+    }
+
+    @Test
+    @DisplayName("학문기초 NOT_TAKEN: 동일인정 구과목을 이수한 경우 현재 개설 신과목 제외")
+    void basicAcademicalNotTakenExcludesTakenEquivalentLecture() {
+        User user = userWithBasicAcademicalCulture();
+        when(findUserUseCase.findUserById(1L)).thenReturn(user);
+        when(timetablePort.findByYearAndSemester(2026, 2))
+                .thenReturn(List.of(t("NEW"), t("UNTKEN")));
+        when(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공", 20))
+                .thenReturn(Set.of(
+                        basicPolicy(lecture("NEW", "GROUP-A"), 2026, Semester.FIRST, null, null),
+                        basicPolicy(lecture("UNTKEN", "GROUP-B"), null, null, null, null)
+                ));
+        when(findTakenLecturePort.findTakenLecturesByUser(user))
+                .thenReturn(List.of(TakenLecture.of(user, lecture("OLD", "GROUP-A"), 2025, Semester.SECOND)));
+        when(findTakenLecturePort.findTakenLectureIdsByUserAndCodes(1L, List.of("UNTKEN")))
+                .thenReturn(List.of());
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(
+                2026, 2, campus, List.of("UNTKEN")
+        )).thenReturn(List.of(t("UNTKEN")));
+
+        List<Timetable> result = sut.searchCombined(
+                1L, 2026, 2, campus, TakenFilter.NOT_TAKEN, null,
+                GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
+        );
+
+        assertThat(result).extracting(Timetable::getLectureCode)
+                .containsExactly("UNTKEN");
+        verifyNoInteractions(recommendedExtractor);
+    }
+
+    @Test
+    @DisplayName("학문기초 정책의 수강시점 범위 밖 과목은 조회하지 않음")
+    void basicAcademicalExcludesPolicyOutsideRequestedSemester() {
+        User user = userWithBasicAcademicalCulture();
+        when(findUserUseCase.findUserById(1L)).thenReturn(user);
+        when(timetablePort.findByYearAndSemester(2026, 2))
+                .thenReturn(List.of(t("EXPIRED"), t("CURRENT")));
+        when(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용소프트웨어전공", 20))
+                .thenReturn(Set.of(
+                        basicPolicy(lecture("EXPIRED", "EXPIRED"), null, null, 2025, Semester.SECOND),
+                        basicPolicy(lecture("CURRENT", "CURRENT"), 2026, Semester.FIRST, null, null)
+                ));
+        when(findTakenLecturePort.findTakenLecturesByUser(user)).thenReturn(List.of());
+        when(findTakenLecturePort.findTakenLectureIdsByUserAndCodes(1L, List.of("CURRENT")))
+                .thenReturn(List.of());
+        when(timetablePort.findByYearSemesterAndLectureCodeIn(
+                2026, 2, campus, List.of("CURRENT")
+        )).thenReturn(List.of(t("CURRENT")));
+
+        List<Timetable> result = sut.searchCombined(
+                1L, 2026, 2, campus, TakenFilter.NOT_TAKEN, null,
+                GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
+        );
+
+        assertThat(result).extracting(Timetable::getLectureCode)
+                .containsExactly("CURRENT");
+    }
+
+    private User userWithBasicAcademicalCulture() {
+        return User.builder()
+                .id(1L)
+                .entryYear(20)
+                .primaryMajor("응용소프트웨어전공")
+                .studentCategory(com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.NORMAL)
+                .build();
+    }
+
+    private Lecture lecture(String id, String recognitionCode) {
+        return Lecture.of(id, id, 3, 0, recognitionCode);
+    }
+
+    private BasicAcademicalCultureLecture basicPolicy(
+            Lecture lecture,
+            Integer startYear,
+            Semester startSemester,
+            Integer endYear,
+            Semester endSemester
+    ) {
+        return BasicAcademicalCultureLecture.builder()
+                .lecture(lecture)
+                .college("인공지능·소프트웨어융합대학")
+                .major("응용소프트웨어전공")
+                .startEntryYear(16)
+                .endEntryYear(99)
+                .startTakenYear(startYear)
+                .startTakenSemester(startSemester)
+                .endTakenYear(endYear)
+                .endTakenSemester(endSemester)
+                .build();
     }
 
     @Test

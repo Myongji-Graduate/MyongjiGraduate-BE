@@ -2,8 +2,10 @@ package com.plzgraduate.myongjigraduatebe.completedcredit.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -22,6 +24,8 @@ class FindCompletedCreditServiceTest {
 	private FindUserUseCase findUserUseCase;
 	@Mock
 	private FindCompletedCreditPort findCompletedCreditPort;
+	@Mock
+	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@InjectMocks
 	private FindCompletedCreditService findCompletedCreditService;
 
@@ -47,5 +51,9 @@ class FindCompletedCreditServiceTest {
 
 		//then
 		assertThat(result).hasSize(3);
+		then(generateOrModifyCompletedCreditUseCase).should()
+			.generateOrModifyCompletedCredit(user);
+		then(findCompletedCreditPort).should()
+			.findCompletedCredit(user);
 	}
 }
