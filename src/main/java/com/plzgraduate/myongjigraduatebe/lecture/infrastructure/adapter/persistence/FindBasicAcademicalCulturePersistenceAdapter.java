@@ -21,11 +21,20 @@ public class FindBasicAcademicalCulturePersistenceAdapter implements
 
 	@Override
 	public Set<BasicAcademicalCultureLecture> findBasicAcademicalCulture(String major, int entryYear) {
-		College userCollege = College.findBelongingCollege(major, entryYear);
-		return basicAcademicalCultureRepository.findAllByCollege(userCollege.getName())
+		String fallbackCollege = findFallbackCollege(major, entryYear);
+		return basicAcademicalCultureRepository.findAllApplicable(
+				fallbackCollege, major, entryYear)
 			.stream()
 			.map(lectureMapper::mapToBasicAcademicalCultureLectureModel)
 			.collect(Collectors.toSet());
+	}
+
+	private String findFallbackCollege(String major, int entryYear) {
+		try {
+			return College.findBelongingCollege(major, entryYear).getName();
+		} catch (IllegalArgumentException exception) {
+			return null;
+		}
 	}
 
 	@Override

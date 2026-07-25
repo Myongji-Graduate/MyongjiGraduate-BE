@@ -85,6 +85,11 @@ public class DetailGraduationResult {
 		this.isCompleted = checkIsCompleted(detailCategory);
 	}
 
+	public void refreshCompletion() {
+		this.isCompleted = checkIsCompleted(detailCategory);
+		this.takenCredit = calculateTakenCredit(detailCategory);
+	}
+
 	public int getNormalLeftCredit() {
 		return detailCategory.stream()
 			.mapToInt(DetailCategoryResult::getNormalLeftCredit)

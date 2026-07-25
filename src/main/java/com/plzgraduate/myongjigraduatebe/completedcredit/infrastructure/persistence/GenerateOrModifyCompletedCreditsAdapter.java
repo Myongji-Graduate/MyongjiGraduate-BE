@@ -7,6 +7,8 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persiste
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.repository.CompletedCreditRepository;
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
+import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper.UserMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,17 @@ public class GenerateOrModifyCompletedCreditsAdapter implements
 
 	private final CompletedCreditPersistenceMapper completedCreditPersistenceMapper;
 	private final CompletedCreditRepository completedCreditRepository;
+	private final UserMapper userMapper;
 
 	@Override
 	public void generateOrModifyCompletedCredits(User user,
 		List<CompletedCredit> completedCredits) {
+		UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
+		completedCreditRepository.deleteAllByUserJpaEntity(userJpaEntity);
+		completedCreditRepository.flush();
+
 		List<CompletedCreditJpaEntity> completedCreditJpaEntities = completedCredits.stream()
-			.map(completedCredit -> completedCreditPersistenceMapper.mapToJpaEntity(user,
+			.map(completedCredit -> completedCreditPersistenceMapper.mapToNewJpaEntity(user,
 				completedCredit))
 			.collect(Collectors.toList());
 

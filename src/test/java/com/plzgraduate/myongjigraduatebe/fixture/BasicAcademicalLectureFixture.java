@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.fixture;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -46,15 +47,15 @@ BasicAcademicalLectureFixture {
 		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMM02106"), 사회과학대));
 
 		//2023-1 이후 수강부터 가능
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02102"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02108"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02140"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02186"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02113"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02104"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02114"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02115"), 사회과학대));
-		lectureSet.add(BasicAcademicalCultureLecture.of(mockLectureMap.get("KMB02163"), 사회과학대));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02102"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02108"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02140"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02186"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02113"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02104"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02114"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMD02115"), 사회과학대, 2023, Semester.FIRST));
+		lectureSet.add(BasicAcademicalCultureLecture.fromTaken(mockLectureMap.get("KMB02163"), 사회과학대, 2023, Semester.FIRST));
 		return lectureSet;
 	}
 

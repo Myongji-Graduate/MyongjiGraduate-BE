@@ -24,7 +24,7 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 	@Autowired
 	private GenerateOrModifyCompletedCreditsAdapter generateOrModifyCompletedCreditsAdapter;
 
-	@DisplayName("이수 학점을 저장 혹은 업데이트한다.")
+	@DisplayName("기존 중복 이수 학점을 제거하고 현재 계산 결과로 교체한다.")
 	@Test
 	void saveOrModifyCompletedCredits() {
 		//given
@@ -37,17 +37,28 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 			.id(userJpaEntity.getId())
 			.build();
 
-		List<CompletedCredit> completedCredits = List.of(CompletedCredit.builder()
-				.id(1L)
+		completedCreditRepository.saveAll(List.of(
+			CompletedCreditJpaEntity.builder()
+				.userJpaEntity(userJpaEntity)
 				.graduationCategory(GraduationCategory.COMMON_CULTURE)
-				.totalCredit(10)
-				.takenCredit(5)
+				.totalCredit(12)
+				.takenCredit(12)
 				.build(),
+			CompletedCreditJpaEntity.builder()
+				.userJpaEntity(userJpaEntity)
+				.graduationCategory(GraduationCategory.COMMON_CULTURE)
+				.totalCredit(12)
+				.takenCredit(12)
+				.build()
+		));
+
+		List<CompletedCredit> completedCredits = List.of(
 			CompletedCredit.builder()
 				.graduationCategory(GraduationCategory.COMMON_CULTURE)
 				.totalCredit(10)
 				.takenCredit(5)
-				.build());
+				.build()
+		);
 
 		//when
 		generateOrModifyCompletedCreditsAdapter.generateOrModifyCompletedCredits(user,
@@ -56,8 +67,9 @@ class GenerateOrModifyCompletedCreditsAdapterTest extends PersistenceTestSupport
 		//then
 		List<CompletedCreditJpaEntity> foundCompletedCredits = completedCreditRepository.findAllByUserJpaEntity(
 			userJpaEntity);
-		assertThat(foundCompletedCredits).hasSize(completedCredits.size())
-			.extracting("userJpaEntity.id")
-			.contains(user.getId());
+		assertThat(foundCompletedCredits).hasSize(1);
+		assertThat(foundCompletedCredits.getFirst().getUserJpaEntity().getId()).isEqualTo(user.getId());
+		assertThat(foundCompletedCredits.getFirst().getTotalCredit()).isEqualTo(10);
+		assertThat(foundCompletedCredits.getFirst().getTakenCredit()).isEqualTo(5);
 	}
 }

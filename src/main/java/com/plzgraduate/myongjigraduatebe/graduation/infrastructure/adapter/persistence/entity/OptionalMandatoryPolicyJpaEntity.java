@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.infrastructure.adapter.persistence.entity;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.PolicyCategory;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,6 +29,7 @@ public class OptionalMandatoryPolicyJpaEntity {
 	private Long id;
 
 	private String name;
+	private String policyKey;
 	private String major;
 	private int requiredCount;
 	private int requiredCredit;
@@ -37,6 +39,9 @@ public class OptionalMandatoryPolicyJpaEntity {
 
 	@Enumerated(EnumType.STRING)
 	private MajorType majorType;
+
+	@Enumerated(EnumType.STRING)
+	private PolicyCategory policyCategory;
 
 	@Enumerated(EnumType.STRING)
 	private PolicyStatus status;

@@ -45,11 +45,111 @@ class BasicAcademicalCultureLectureRepositoryTest extends PersistenceTestSupport
 
 		//when
 		List<BasicAcademicalCultureLectureJpaEntity> basicAcademicalCultureJpaEntities =
-			basicAcademicalCultureRepository.findAllByCollege(college);
+			basicAcademicalCultureRepository.findAllApplicable(college, "테스트전공", 20);
 
 		//then
 		assertThat(basicAcademicalCultureJpaEntities).extracting("college")
 			.contains(college);
+	}
+
+	@DisplayName("전공 정책이 있으면 같은 학번의 단과대 공통 정책 대신 전공 정책을 조회한다.")
+	@Test
+	void findApplicablePolicies() {
+		LectureJpaEntity commonLecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("COMMON")
+			.build());
+		LectureJpaEntity scopedLecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("SCOPED")
+			.build());
+		LectureJpaEntity excludedLecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("EXCLUDED")
+			.build());
+
+		basicAcademicalCultureRepository.saveAll(List.of(
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(commonLecture)
+				.college(BUSINESS.getName())
+				.startEntryYear(16)
+				.endEntryYear(99)
+				.build(),
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(scopedLecture)
+				.college(BUSINESS.getName())
+				.major("경영학전공")
+				.startEntryYear(20)
+				.endEntryYear(24)
+				.build(),
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(excludedLecture)
+				.college(BUSINESS.getName())
+				.major("국제통상학과")
+				.startEntryYear(20)
+				.endEntryYear(24)
+				.build()
+		));
+
+		List<BasicAcademicalCultureLectureJpaEntity> result =
+			basicAcademicalCultureRepository.findAllApplicable(
+				BUSINESS.getName(), "경영학전공", 22);
+
+		assertThat(result).extracting(policy -> policy.getLectureJpaEntity().getId())
+			.containsExactly("SCOPED");
+	}
+
+	@DisplayName("전공 정책은 현재 단과대명이 학번 기반 fallback과 달라도 조회한다.")
+	@Test
+	void findMajorPolicyRegardlessOfFallbackCollege() {
+		LectureJpaEntity lecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("MEDIA")
+			.build());
+		basicAcademicalCultureRepository.save(
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(lecture)
+				.college("미디어·휴먼라이프대")
+				.major("디지털미디어학부")
+				.startEntryYear(18)
+				.endEntryYear(24)
+				.build()
+		);
+
+		List<BasicAcademicalCultureLectureJpaEntity> result =
+			basicAcademicalCultureRepository.findAllApplicable(
+				"사회과학대", "디지털미디어학부", 23);
+
+		assertThat(result).extracting(policy -> policy.getLectureJpaEntity().getId())
+			.containsExactly("MEDIA");
+	}
+
+	@DisplayName("적재된 범위 정책이 있으면 기존 무범위 단과대 행을 조회하지 않는다.")
+	@Test
+	void preferManagedCollegePolicyOverLegacyRow() {
+		LectureJpaEntity legacyLecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("LEGACY")
+			.build());
+		LectureJpaEntity managedLecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("MANAGED")
+			.build());
+
+		basicAcademicalCultureRepository.saveAll(List.of(
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(legacyLecture)
+				.college(BUSINESS.getName())
+				.build(),
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(managedLecture)
+				.college(BUSINESS.getName())
+				.mappingKey("managed-business-policy")
+				.startEntryYear(20)
+				.endEntryYear(24)
+				.build()
+		));
+
+		List<BasicAcademicalCultureLectureJpaEntity> result =
+			basicAcademicalCultureRepository.findAllApplicable(
+				BUSINESS.getName(), "테스트전공", 22);
+
+		assertThat(result).extracting(policy -> policy.getLectureJpaEntity().getId())
+			.containsExactly("MANAGED");
 	}
 
 	@DisplayName("유저가 수강한 과목 중 유저의 주전공, 복수전공 양쪽 모두에 해당하는 학문기초교양의 수를 조회한다.")
