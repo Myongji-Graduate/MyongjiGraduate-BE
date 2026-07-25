@@ -9,13 +9,16 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryR
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-import java.util.HashSet;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -39,28 +42,37 @@ public class DefaultBasicAcademicalGraduationManager implements BasicAcademicalG
 					basicAcademicalCredit, List.of()
 			);
 		}
-			Set<Lecture> basicAcademicalLectures = convertToLectureSet(graduationLectures);
+		Set<Lecture> basicAcademicalLectures =
+			convertToLectureSet(findCurrentlyRecognizedPolicies(graduationLectures));
 
-		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
-		Set<Lecture> taken = new HashSet<>();
-
-		takenLectureInventory.getTakenLectures()
-			.stream()
-			.filter(takenLecture -> basicAcademicalLectures.contains(takenLecture.getLecture()))
-			.forEach(takenLecture -> {
-				finishedTakenLecture.add(takenLecture);
-				taken.add(takenLecture.getLecture());
-			});
+		Set<TakenLecture> finishedTakenLecture =
+			findRecognizedTakenLectures(graduationLectures, takenLectureInventory);
+		Set<Lecture> taken = finishedTakenLecture.stream()
+			.map(TakenLecture::getLecture)
+			.collect(Collectors.toSet());
 		takenLectureInventory.handleFinishedTakenLectures(finishedTakenLecture);
 
 		int exchangeCredit = user.getExchangeCredit().getBasicAcademicalCulture();
 
 		DetailCategoryResult detailCategoryResult = DetailCategoryResult.create(
 			"학문기초교양", true, basicAcademicalCredit);
+		removeRecognizedLectures(basicAcademicalLectures, taken);
 		detailCategoryResult.calculate(taken, basicAcademicalLectures);
 		detailCategoryResult.addTakenCredits(exchangeCredit);
 
 		return DetailGraduationResult.createNonCategorizedGraduationResult(basicAcademicalCredit,
 			List.of(detailCategoryResult));
+	}
+
+	private Set<BasicAcademicalCultureLecture> findCurrentlyRecognizedPolicies(
+		Set<BasicAcademicalCultureLecture> graduationLectures
+	) {
+		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+		Semester currentSemester = today.getMonthValue() <= 6
+			? Semester.FIRST
+			: Semester.SECOND;
+		return graduationLectures.stream()
+			.filter(policy -> policy.recognizesAt(today.getYear(), currentSemester))
+			.collect(Collectors.toSet());
 	}
 }

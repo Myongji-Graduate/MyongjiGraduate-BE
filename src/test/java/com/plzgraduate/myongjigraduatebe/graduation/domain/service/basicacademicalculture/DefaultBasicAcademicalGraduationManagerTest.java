@@ -13,6 +13,8 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +24,43 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("기본 단과대에 대해 학문기초교양 결과를 반환한다.")
 class DefaultBasicAcademicalGraduationManagerTest {
+
+	@Test
+	@DisplayName("과거 수강은 인정하지만 인정 기간이 끝난 과목은 미이수 목록에서 제외한다.")
+	void expiredPolicyRecognizesPastTakenLectureButIsNotRecommended() {
+		User user = UserFixture.영문학과_18학번();
+		int currentYear = LocalDate.now(ZoneId.of("Asia/Seoul")).getYear();
+		Lecture takenExpired = Lecture.of("EXPIRED-TAKEN", "과거이수과목", 3, 0, "EXPIRED-TAKEN");
+		Lecture untakenExpired = Lecture.of("EXPIRED-UNTKEN", "과거미이수과목", 3, 0, "EXPIRED-UNTKEN");
+		Lecture current = Lecture.of("CURRENT", "현재인정과목", 3, 0, "CURRENT");
+		Set<BasicAcademicalCultureLecture> policies = Set.of(
+			policyEndingAt(takenExpired, currentYear - 1),
+			policyEndingAt(untakenExpired, currentYear - 1),
+			BasicAcademicalCultureLecture.builder().lecture(current).college("인문대학").build()
+		);
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of(
+			TakenLecture.of(user, takenExpired, currentYear - 1, Semester.SECOND)
+		));
+
+		DetailCategoryResult result = new DefaultBasicAcademicalGraduationManager()
+			.createDetailGraduationResult(user, inventory, policies, 6)
+			.getDetailCategory()
+			.get(0);
+
+		assertThat(result.getTakenLectures()).extracting(Lecture::getId)
+			.containsExactly("EXPIRED-TAKEN");
+		assertThat(result.getHaveToLectures()).extracting(Lecture::getId)
+			.containsExactly("CURRENT");
+	}
+
+	private BasicAcademicalCultureLecture policyEndingAt(Lecture lecture, int year) {
+		return BasicAcademicalCultureLecture.builder()
+			.lecture(lecture)
+			.college("인문대학")
+			.endTakenYear(year)
+			.endTakenSemester(Semester.SECOND)
+			.build();
+	}
 
 	@DisplayName("인문대의 학문기초교양을 계산한다.")
 	@Nested

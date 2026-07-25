@@ -28,13 +28,15 @@ class BusinessBasicAcademicalGraduationManagerTest {
 	class 경영학과_학문기초교양 {
 
 		Map<String, Lecture> mockLectureMap = LectureFixture.getMockLectureMap();
-		Set<BasicAcademicalCultureLecture> basicAcademicalLectures = BasicAcademicalLectureFixture.경영대_학문기초교양();
-
 		@DisplayName("경영대 19학번이 필요 학문 기초교양을 다 들었을 경우 통과한다.")
 		@Test
 		void 경영학과_19학번() {
 			//given
 			User user = UserFixture.경영학과_19학번_ENG34();
+			Set<BasicAcademicalCultureLecture> basicAcademicalLectures = Set.of(
+				BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02114"), "경영대"),
+				BasicAcademicalCultureLecture.of(mockLectureMap.get("KMD02107"), "경영대")
+			);
 
 			Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),
@@ -70,6 +72,8 @@ class BusinessBasicAcademicalGraduationManagerTest {
 
 			//given
 			User user = UserFixture.경영학과_22학번();
+			Set<BasicAcademicalCultureLecture> basicAcademicalLectures =
+				BasicAcademicalLectureFixture.경영대_학문기초교양();
 
 			Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
 				TakenLecture.of(user, mockLectureMap.get("KMD02114"), 2019, Semester.FIRST),

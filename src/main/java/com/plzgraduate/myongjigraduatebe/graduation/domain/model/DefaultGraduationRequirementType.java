@@ -48,7 +48,8 @@ public enum DefaultGraduationRequirementType {
 		return Arrays.stream(DefaultGraduationRequirementType.values())
 				.filter(gr -> gr.getCollageName().equals(college.getName()))
 				.filter(gr -> {
-					if (user.getPrimaryMajor().equals("글로벌비즈니스학전공")) {
+					if (user.getPrimaryMajor().equals("글로벌비즈니스학전공")
+						&& user.getEntryYear() >= 25) {
 						return gr.name().contains("BUSINESS_GLOBAL");
 					}
 					return !gr.name().contains("BUSINESS_GLOBAL");

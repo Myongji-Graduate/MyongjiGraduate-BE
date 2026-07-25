@@ -64,4 +64,28 @@ class FindBasicAcademicalCulturePersistenceAdapterTest extends PersistenceTestSu
 			.contains(ICT.getName());
 	}
 
+	@DisplayName("학번 기반 단과대를 찾지 못해도 명시적인 전공 정책을 반환한다.")
+	@Test
+	void findMajorPolicyWithoutLegacyCollegeMapping() {
+		LectureJpaEntity lecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("GLOBAL")
+			.build());
+		basicAcademicalCultureRepository.save(
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(lecture)
+				.college(BUSINESS.getName())
+				.major("글로벌비즈니스학전공")
+				.startEntryYear(18)
+				.endEntryYear(24)
+				.build()
+		);
+
+		Set<BasicAcademicalCultureLecture> result =
+			basicAcademicalCulturePersistenceAdapter.findBasicAcademicalCulture(
+				"글로벌비즈니스학전공", 23);
+
+		assertThat(result).extracting(policy -> policy.getLecture().getId())
+			.containsExactly("GLOBAL");
+	}
+
 }

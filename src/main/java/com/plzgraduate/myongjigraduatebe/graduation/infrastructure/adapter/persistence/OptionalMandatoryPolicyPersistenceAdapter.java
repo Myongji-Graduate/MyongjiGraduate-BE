@@ -5,6 +5,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptiona
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.PolicyCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.infrastructure.adapter.persistence.entity.OptionalMandatoryPolicyJpaEntity;
 import com.plzgraduate.myongjigraduatebe.graduation.infrastructure.adapter.persistence.entity.OptionalMandatoryPolicyJpaEntity.PolicyStatus;
 import com.plzgraduate.myongjigraduatebe.graduation.infrastructure.adapter.persistence.repository.OptionalMandatoryPolicyRepository;
@@ -22,7 +23,18 @@ public class OptionalMandatoryPolicyPersistenceAdapter implements FindOptionalMa
 	@Override
 	public List<OptionalMandatoryPolicy> findActivePolicies(
 		String major, int entryYear, MajorType majorType) {
-		return repository.findActivePolicies(major, entryYear, majorType, PolicyStatus.ACTIVE).stream()
+		return repository.findActivePolicies(
+				major, entryYear, majorType, PolicyCategory.MAJOR_MANDATORY,
+				PolicyStatus.ACTIVE).stream()
+			.map(this::mapToDomain)
+			.toList();
+	}
+
+	@Override
+	public List<OptionalMandatoryPolicy> findActiveBasicPolicies(String major, int entryYear) {
+		return repository.findActiveBasicPolicies(
+				major, entryYear, PolicyCategory.BASIC_ACADEMICAL_CULTURE,
+				PolicyStatus.ACTIVE).stream()
 			.map(this::mapToDomain)
 			.toList();
 	}
