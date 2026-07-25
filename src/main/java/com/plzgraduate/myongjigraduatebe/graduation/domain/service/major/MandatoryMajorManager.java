@@ -2,12 +2,14 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.major;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,8 @@ public class MandatoryMajorManager {
 	public DetailCategoryResult createDetailCategoryResult(
 		User user,
 		TakenLectureInventory takenLectureInventory,
-		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType
+		Set<Lecture> mandatoryLectures, Set<Lecture> electiveLectures, MajorType majorType,
+		List<OptionalMandatoryPolicy> optionalMandatoryPolicies
 	) {
 		Set<Lecture> takenMandatory = new HashSet<>();
 		Set<TakenLecture> finishedTakenLecture = new HashSet<>();
@@ -31,9 +34,11 @@ public class MandatoryMajorManager {
 		int removeMandatoryTotalCredit = 0;
 
 		for (MandatoryMajorSpecialCaseHandler mandatoryMajorSpecialCaseHandler : mandatoryMajorSpecialCaseHandlers) {
-			if (mandatoryMajorSpecialCaseHandler.isSupport(user, majorType)) {
-				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = mandatoryMajorSpecialCaseHandler.getMandatorySpecialCaseInformation(
-					user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures);
+			Optional<MandatorySpecialCaseInformation> evaluation = mandatoryMajorSpecialCaseHandler.evaluate(
+				user, majorType, takenLectureInventory, mandatoryLectures, electiveLectures,
+				optionalMandatoryPolicies);
+			if (evaluation.isPresent()) {
+				MandatorySpecialCaseInformation mandatorySpecialCaseInformation = evaluation.get();
 				isSatisfiedMandatory = mandatorySpecialCaseInformation.isCompleteMandatorySpecialCase();
 				removeMandatoryTotalCredit = mandatorySpecialCaseInformation.getRemovedMandatoryTotalCredit();
 			}

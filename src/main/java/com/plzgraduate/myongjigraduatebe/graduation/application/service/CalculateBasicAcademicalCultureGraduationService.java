@@ -5,12 +5,15 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.GraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicalGraduationManager;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicMandatoryPolicyEvaluator;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicMandatoryPolicyEvaluator.Evaluation;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
@@ -31,6 +34,7 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 	CalculateDetailGraduationUseCase {
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
+	private final FindOptionalMandatoryPolicyPort findOptionalMandatoryPolicyPort;
 	private final List<BasicAcademicalGraduationManager> basicAcademicalGraduationManagers;
 
 	@Override
@@ -50,12 +54,22 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 		int entryYear = user.getEntryYear();
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures =
 			findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor,entryYear);
+		Evaluation mandatoryEvaluation = BasicAcademicMandatoryPolicyEvaluator.evaluate(
+			findOptionalMandatoryPolicyPort.findActiveBasicPolicies(userMajor, entryYear),
+			takenLectureInventory
+		);
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager =
 			determineBasicAcademicalCultureGraduationManager(userMajor,entryYear);
 		DetailGraduationResult detailGraduationResult = basicAcademicalCultureGraduationManager.createDetailGraduationResult(
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
 			graduationRequirement.getBasicCreditByMajorType(majorType)
 		);
+		detailGraduationResult.getDetailCategory().forEach(category ->
+			category.applyMandatoryPolicyResult(
+				mandatoryEvaluation.satisfied(),
+				mandatoryEvaluation.remainingCandidates()
+			));
+		detailGraduationResult.refreshCompletion();
 		detailGraduationResult.assignGraduationCategory(graduationCategory);
 		return detailGraduationResult;
 	}
@@ -105,9 +119,22 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 		String userMajor, int entryYear
 	) {
 		return basicAcademicalGraduationManagers.stream()
-			.filter(basicAcademicalManager -> basicAcademicalManager.isSatisfied(userMajor, entryYear))
+			.filter(basicAcademicalManager ->
+				isSatisfiedSafely(basicAcademicalManager, userMajor, entryYear))
 			.findFirst()
 			.orElse(new DefaultBasicAcademicalGraduationManager());
+	}
+
+	private boolean isSatisfiedSafely(
+		BasicAcademicalGraduationManager manager,
+		String major,
+		int entryYear
+	) {
+		try {
+			return manager.isSatisfied(major, entryYear);
+		} catch (IllegalArgumentException exception) {
+			return false;
+		}
 	}
 
 	private void syncOriginalTakenLectureInventory(

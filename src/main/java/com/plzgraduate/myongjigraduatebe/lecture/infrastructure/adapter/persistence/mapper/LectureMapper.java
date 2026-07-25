@@ -72,6 +72,13 @@ public class LectureMapper {
 					.build()
 			)
 			.college(entity.getCollege())
+			.major(entity.getMajor())
+			.startEntryYear(entity.getStartEntryYear())
+			.endEntryYear(entity.getEndEntryYear())
+			.startTakenYear(entity.getStartTakenYear())
+			.startTakenSemester(entity.getStartTakenSemester())
+			.endTakenYear(entity.getEndTakenYear())
+			.endTakenSemester(entity.getEndTakenSemester())
 			.build();
 	}
 

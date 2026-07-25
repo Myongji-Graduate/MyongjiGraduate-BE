@@ -12,8 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
+import com.plzgraduate.myongjigraduatebe.parsing.application.service.FailureAnalysisService.FailureAnalysisPreview;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.FailureReason;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -134,6 +137,41 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 
 		//then
 		actions
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@DisplayName("올바른 API Key로 기존 실패 데이터 dry-run 결과를 조회한다.")
+	@Test
+	void previewExistingFailuresWithValidApiKey() throws Exception {
+		//given
+		FailureAnalysisPreview preview = FailureAnalysisPreview.of(
+			5, 3, Map.of(FailureReason.LECTURE_NOT_FOUND, 2));
+		given(failureAnalysisService.previewExistingFailures()).willReturn(preview);
+
+		//when
+		ResultActions actions = mockMvc.perform(
+			post("/api/v1/parsing-text/analyze-existing-failures/dry-run")
+				.header("X-Admin-Key", "test-admin-key")
+				.with(csrf())
+		);
+
+		//then
+		actions
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.totalCount").value(5))
+			.andExpect(jsonPath("$.passedCount").value(3))
+			.andExpect(jsonPath("$.failureCounts.LECTURE_NOT_FOUND").value(2));
+	}
+
+	@DisplayName("API Key가 없으면 기존 실패 데이터 dry-run 요청이 401로 실패한다.")
+	@Test
+	void previewExistingFailuresWithoutApiKey() throws Exception {
+		mockMvc.perform(
+			post("/api/v1/parsing-text/analyze-existing-failures/dry-run")
+				.with(csrf())
+		)
 			.andDo(print())
 			.andExpect(status().isUnauthorized());
 	}

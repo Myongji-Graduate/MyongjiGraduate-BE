@@ -13,10 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
+import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BasicAcademicalGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.BusinessBasicAcademicalGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademicalculture.DefaultBasicAcademicalGraduationManager;
@@ -43,6 +47,8 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 
 	@Mock
 	private FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
+	@Mock
+	private FindOptionalMandatoryPolicyPort findOptionalMandatoryPolicyPort;
 
 	private CalculateBasicAcademicalCultureGraduationService calculateBasicAcademicalCultureGraduationService;
 
@@ -56,7 +62,10 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 				new BusinessBasicAcademicalGraduationManager(),
 				new SocialScienceBasicAcademicGraduationManager());
 		calculateBasicAcademicalCultureGraduationService = new CalculateBasicAcademicalCultureGraduationService(
-			findBasicAcademicalCulturePort, basicAcademicalGraduationManagers);
+			findBasicAcademicalCulturePort, findOptionalMandatoryPolicyPort,
+			basicAcademicalGraduationManagers);
+		lenient().when(findOptionalMandatoryPolicyPort.findActiveBasicPolicies(
+			anyString(), anyInt())).thenReturn(List.of());
 
 		user = User.builder()
 			.id(1L)
@@ -223,6 +232,87 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		assertThat(dualResult)
 				.extracting("graduationCategory", "isCompleted", "totalCredit", "takenCredit")
 				.containsExactly(GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE, false, 18, 9.0);
+	}
+
+	@Test
+	@DisplayName("과거 학번의 현재 전공명을 College가 찾지 못해도 기본 학문기초 계산을 수행한다.")
+	void calculateLegacyRenamedMajorWithDefaultManager() {
+		User legacyGlobalBusinessUser = User.builder()
+			.id(2L)
+			.primaryMajor("글로벌비즈니스학전공")
+			.entryYear(23)
+			.build();
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(
+			"글로벌비즈니스학전공", 23)).willReturn(Set.of());
+		GraduationRequirement requirement = GraduationRequirement.builder()
+			.primaryBasicAcademicalCultureCredit(6)
+			.build();
+
+		DetailGraduationResult result =
+			calculateBasicAcademicalCultureGraduationService.calculateSingleDetailGraduation(
+				legacyGlobalBusinessUser,
+				PRIMARY_BASIC_ACADEMICAL_CULTURE,
+				TakenLectureInventory.from(Set.of()),
+				requirement
+			);
+
+		assertThat(result)
+			.extracting("graduationCategory", "totalCredit", "takenCredit")
+			.containsExactly(PRIMARY_BASIC_ACADEMICAL_CULTURE, 6, 0.0);
+	}
+
+	@Test
+	@DisplayName("총 학점을 채워도 전공별 지정필수를 충족하지 못하면 미완료로 판정한다.")
+	void requiresMajorSpecificMandatoryPolicyInAdditionToTotalCredit() {
+		Lecture optionalLecture = Lecture.builder()
+			.id("OPTIONAL")
+			.name("일반 학문기초")
+			.credit(3)
+			.duplicateCode("OPTIONAL")
+			.build();
+		Lecture mandatoryLecture = Lecture.builder()
+			.id("MANDATORY")
+			.name("미적분학1")
+			.credit(3)
+			.duplicateCode("MANDATORY")
+			.build();
+		User statisticsUser = User.builder()
+			.id(3L)
+			.primaryMajor("응용통계학전공")
+			.entryYear(25)
+			.build();
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture(
+			"응용통계학전공", 25)).willReturn(Set.of(
+			BasicAcademicalCultureLecture.of(optionalLecture, "사회과학대")
+		));
+		given(findOptionalMandatoryPolicyPort.findActiveBasicPolicies(
+			"응용통계학전공", 25)).willReturn(List.of(
+			OptionalMandatoryPolicy.builder()
+				.name("응용통계 지정필수")
+				.major("응용통계학전공")
+				.requiredCount(1)
+				.requiredCredit(3)
+				.candidateLectures(List.of(
+					new CandidateLecture(mandatoryLecture, "MANDATORY")
+				))
+				.build()
+		));
+
+		DetailGraduationResult result =
+			calculateBasicAcademicalCultureGraduationService.calculateSingleDetailGraduation(
+				statisticsUser,
+				PRIMARY_BASIC_ACADEMICAL_CULTURE,
+				TakenLectureInventory.from(Set.of(
+					TakenLecture.builder().lecture(optionalLecture).build()
+				)),
+				GraduationRequirement.builder()
+					.primaryBasicAcademicalCultureCredit(3)
+					.build()
+			);
+
+		assertThat(result.isCompleted()).isFalse();
+		assertThat(result.getDetailCategory().get(0).getHaveToLectures())
+			.contains(mandatoryLecture);
 	}
 
 }

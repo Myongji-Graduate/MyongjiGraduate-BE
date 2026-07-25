@@ -29,4 +29,15 @@ public class CompletedCreditPersistenceMapper {
 			.takenCredit(completedCredit.getTakenCredit())
 			.build();
 	}
+
+	public CompletedCreditJpaEntity mapToNewJpaEntity(User user, CompletedCredit completedCredit) {
+		return CompletedCreditJpaEntity.builder()
+			.graduationCategory(completedCredit.getGraduationCategory())
+			.userJpaEntity(UserJpaEntity.builder()
+				.id(user.getId())
+				.build())
+			.totalCredit(completedCredit.getTotalCredit())
+			.takenCredit(completedCredit.getTakenCredit())
+			.build();
+	}
 }

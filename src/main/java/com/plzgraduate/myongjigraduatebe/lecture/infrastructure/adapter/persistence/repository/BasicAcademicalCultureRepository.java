@@ -11,8 +11,28 @@ import org.springframework.data.repository.query.Param;
 public interface BasicAcademicalCultureRepository extends
 	JpaRepository<BasicAcademicalCultureLectureJpaEntity, Long> {
 
-	@Query("select bac from BasicAcademicalCultureLectureJpaEntity bac join fetch bac.lectureJpaEntity where bac.college = :college")
-	List<BasicAcademicalCultureLectureJpaEntity> findAllByCollege(@Param("college") String college);
+	@Query("select bac from BasicAcademicalCultureLectureJpaEntity bac " +
+		"join fetch bac.lectureJpaEntity where " +
+		"(bac.major = :major or (bac.major is null and bac.college = :college and not exists (" +
+			"select specific.id from BasicAcademicalCultureLectureJpaEntity specific " +
+			"where specific.major = :major " +
+			"and (specific.startEntryYear is null or specific.startEntryYear <= :entryYear) " +
+			"and (specific.endEntryYear is null or specific.endEntryYear >= :entryYear)" +
+		"))) " +
+		"and (bac.startEntryYear is null or bac.startEntryYear <= :entryYear) " +
+		"and (bac.endEntryYear is null or bac.endEntryYear >= :entryYear) " +
+		"and (bac.mappingKey is not null or not exists (" +
+			"select managed.id from BasicAcademicalCultureLectureJpaEntity managed " +
+			"where managed.mappingKey is not null " +
+			"and (managed.major = :major or (managed.major is null and managed.college = :college)) " +
+			"and (managed.startEntryYear is null or managed.startEntryYear <= :entryYear) " +
+			"and (managed.endEntryYear is null or managed.endEntryYear >= :entryYear)" +
+		"))")
+	List<BasicAcademicalCultureLectureJpaEntity> findAllApplicable(
+		@Param("college") String college,
+		@Param("major") String major,
+		@Param("entryYear") int entryYear
+	);
 
 	@Query("SELECT pb " +
 		"FROM BasicAcademicalCultureLectureJpaEntity pb " +

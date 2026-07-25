@@ -135,6 +135,23 @@ class DefaultGraduationRequirementTypeTest {
 		assertThat(graduationRequirement.getPrimaryMajorCredit()).isEqualTo(defaultGraduationRequirementType.getMajorLectureCredit());
 	}
 
+	@DisplayName("조직개편된 글로벌비즈니스학전공의 24학번 이전 학생은 당시 경영대 요건을 적용한다.")
+	@Test
+	void determineLegacyGlobalBusinessRequirement() {
+		User user = User.builder()
+			.primaryMajor("글로벌비즈니스학전공")
+			.entryYear(23)
+			.build();
+		College college = College.findBelongingCollege(
+			user.getPrimaryMajor(), user.getEntryYear());
+
+		DefaultGraduationRequirementType type =
+			DefaultGraduationRequirementType.determineGraduationRequirement(college, user);
+
+		assertThat(type).isEqualTo(DefaultGraduationRequirementType.BUSINESS_18_24);
+		assertThat(type.getBasicAcademicalLectureCredit()).isEqualTo(6);
+	}
+
 	@DisplayName("일반 경영학전공 학생의 졸업요건을 결정한다.")
 	@Test()
 	void determineGraduationRequirementWithRegularBusinessMajor() {

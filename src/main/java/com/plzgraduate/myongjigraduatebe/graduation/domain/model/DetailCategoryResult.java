@@ -15,7 +15,7 @@ import lombok.Getter;
 @Getter
 public class DetailCategoryResult {
 
-	private final boolean isSatisfiedMandatory;
+	private boolean isSatisfiedMandatory;
 	private final List<Lecture> takenLectures = new ArrayList<>();
 	private final List<Lecture> haveToLectures = new ArrayList<>();
 	private int totalCredits;
@@ -126,6 +126,23 @@ public class DetailCategoryResult {
 
 	public void addTakenCredits(int credits) {
 		this.takenCredits += credits;
+		checkCompleted();
+	}
+
+	public void applyMandatoryPolicyResult(
+		boolean satisfied,
+		Collection<Lecture> remainingCandidates
+	) {
+		isSatisfiedMandatory = isSatisfiedMandatory && satisfied;
+		if (!satisfied) {
+			Set<String> existingIds = haveToLectures.stream()
+				.map(Lecture::getId)
+				.collect(java.util.stream.Collectors.toSet());
+			remainingCandidates.stream()
+				.filter(lecture -> lecture.getIsRevoked() == 0)
+				.filter(lecture -> existingIds.add(lecture.getId()))
+				.forEach(haveToLectures::add);
+		}
 		checkCompleted();
 	}
 

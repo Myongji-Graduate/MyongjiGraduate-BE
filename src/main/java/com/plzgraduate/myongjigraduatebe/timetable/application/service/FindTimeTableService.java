@@ -2,6 +2,10 @@ package com.plzgraduate.myongjigraduatebe.timetable.application.service;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.BasicAcademicalCultureLecture;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.timetable.api.dto.request.TimetableSearchConditionRequest;
 import com.plzgraduate.myongjigraduatebe.timetable.application.port.TimetablePort;
@@ -28,6 +32,7 @@ public class FindTimeTableService implements FindTimetableUseCase {
 
     private final TimetablePort timetablePort;
     private final FindTakenLecturePort findTakenLecturePort;
+    private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
     private final RecommendedLectureExtractor recommendedExtractor;
     private final FindUserUseCase findUserUseCase;
 
@@ -57,7 +62,9 @@ public class FindTimeTableService implements FindTimetableUseCase {
                 ? List.of(recommendedCategory)
                 : determineCategories(userId);
         RecommendedLectureExtractor.ExtractMode mode = resolveExtractMode(filter);
-        Set<String> recommendedIds = extractRecommendedLectureCodes(userId, sourceCategories, mode);
+        Set<String> recommendedIds = extractRecommendedLectureCodes(
+                userId, sourceCategories, mode, year, semester
+        );
         if (recommendedIds.isEmpty()) return List.of();
 
         List<String> candidate = filterOpenSubjects(recommendedIds, baseCodes);
@@ -75,15 +82,87 @@ public class FindTimeTableService implements FindTimetableUseCase {
         };
     }
 
-    private Set<String> extractRecommendedLectureCodes(Long userId, List<GraduationCategory> categories, RecommendedLectureExtractor.ExtractMode mode) {
+    private Set<String> extractRecommendedLectureCodes(
+            Long userId,
+            List<GraduationCategory> categories,
+            RecommendedLectureExtractor.ExtractMode mode,
+            int year,
+            int semester
+    ) {
         Set<String> result = new HashSet<>();
         for (GraduationCategory cat : categories) {
-            List<String> ids = recommendedExtractor.extractLectureIds(userId, cat, mode);
+            List<String> ids = isBasicAcademicalCulture(cat)
+                    ? extractBasicAcademicalCultureLectureIds(userId, cat, mode, year, semester)
+                    : recommendedExtractor.extractLectureIds(userId, cat, mode);
             if (ids != null && !ids.isEmpty()) {
                 result.addAll(ids);
             }
         }
         return result;
+    }
+
+    private boolean isBasicAcademicalCulture(GraduationCategory category) {
+        return category == GraduationCategory.PRIMARY_BASIC_ACADEMICAL_CULTURE
+                || category == GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE;
+    }
+
+    private List<String> extractBasicAcademicalCultureLectureIds(
+            Long userId,
+            GraduationCategory category,
+            RecommendedLectureExtractor.ExtractMode mode,
+            int year,
+            int semester
+    ) {
+        User user = findUserUseCase.findUserById(userId);
+        String major = category == GraduationCategory.DUAL_BASIC_ACADEMICAL_CULTURE
+                ? user.getDualMajor()
+                : user.getPrimaryMajor();
+        if (major == null || major.isBlank()) {
+            return List.of();
+        }
+
+        Semester targetSemester = toSemester(semester);
+        Set<String> takenRecognitionCodes = findTakenLecturePort.findTakenLecturesByUser(user).stream()
+                .map(TakenLecture::getLecture)
+                .filter(Objects::nonNull)
+                .map(lecture -> lecture.getRecognitionCode())
+                .collect(Collectors.toSet());
+
+        return findBasicAcademicalCulturePort
+                .findBasicAcademicalCulture(major, user.getEntryYear())
+                .stream()
+                .filter(policy -> recognizesAt(policy, user, year, targetSemester))
+                .map(BasicAcademicalCultureLecture::getLecture)
+                .filter(Objects::nonNull)
+                .filter(lecture -> switch (mode) {
+                    case BOTH -> true;
+                    case TAKEN -> takenRecognitionCodes.contains(lecture.getRecognitionCode());
+                    case HAVE_TO -> !takenRecognitionCodes.contains(lecture.getRecognitionCode());
+                })
+                .map(lecture -> lecture.getId())
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+    }
+
+    private boolean recognizesAt(
+            BasicAcademicalCultureLecture policy,
+            User user,
+            int year,
+            Semester semester
+    ) {
+        if (policy == null || policy.getLecture() == null) {
+            return false;
+        }
+        return policy.recognizes(TakenLecture.of(user, policy.getLecture(), year, semester));
+    }
+
+    private Semester toSemester(int semester) {
+        return switch (semester) {
+            case 1 -> Semester.FIRST;
+            case 2 -> Semester.SECOND;
+            default -> throw new IllegalArgumentException("지원하지 않는 학기입니다: " + semester);
+        };
     }
 
     private List<String> extractBaseCodes(List<Timetable> base) {

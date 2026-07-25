@@ -7,6 +7,7 @@ import static com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.E
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindCommonCulturePort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.mapper.LectureMapper;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.repository.CommonCultureRepository;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePort {
+	private static final int DIGITAL_LITERACY_START_ENTRY_YEAR = 23;
+	private static final String CAREER_RECOGNITION_CODE = "KMA02137";
 
 	private final CommonCultureRepository commonCultureRepository;
 	private final LectureMapper lectureMapper;
@@ -39,6 +42,7 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 		return commonCultureRepository.findEngBasicGraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
+			.map(commonCulture -> normalizeCareerCategory(user, commonCulture))
 			.collect(Collectors.toSet());
 	}
 
@@ -46,6 +50,7 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 		return commonCultureRepository.findEng12GraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
+			.map(commonCulture -> normalizeCareerCategory(user, commonCulture))
 			.collect(Collectors.toSet());
 	}
 
@@ -53,6 +58,7 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 		return commonCultureRepository.findEng34GraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
+			.map(commonCulture -> normalizeCareerCategory(user, commonCulture))
 			.collect(Collectors.toSet());
 	}
 
@@ -60,6 +66,17 @@ public class FindCommonCulturePersistenceAdapter implements FindCommonCulturePor
 		return commonCultureRepository.findEngFreeGraduationCommonCulturesByEntryYear(user.getEntryYear())
 			.stream()
 			.map(lectureMapper::mapToCommonCultureModel)
+			.map(commonCulture -> normalizeCareerCategory(user, commonCulture))
 			.collect(Collectors.toSet());
+	}
+
+	private CommonCulture normalizeCareerCategory(User user, CommonCulture commonCulture) {
+		if (user.getEntryYear() >= DIGITAL_LITERACY_START_ENTRY_YEAR
+			&& commonCulture.getCommonCultureCategory() == CommonCultureCategory.CAREER
+			&& CAREER_RECOGNITION_CODE.equals(commonCulture.getLecture().getRecognitionCode())) {
+			return CommonCulture.of(
+				commonCulture.getLecture(), CommonCultureCategory.DIGITAL_LITERACY);
+		}
+		return commonCulture;
 	}
 }
