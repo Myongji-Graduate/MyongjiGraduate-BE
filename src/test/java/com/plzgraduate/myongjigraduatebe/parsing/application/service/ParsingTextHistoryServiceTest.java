@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.then;
 import com.plzgraduate.myongjigraduatebe.parsing.application.port.SaveParsingTextHistoryPort;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.FailureReason;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingRequesterType;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
@@ -85,6 +86,50 @@ class ParsingTextHistoryServiceTest {
 		assertThat(captureArgument.getParsingText()).isEqualTo(parsingText);
 		assertThat(captureArgument.getFailureReason()).isEqualTo(failureReason);
 		assertThat(captureArgument.getFailureDetails()).isEqualTo(failureDetails);
+	}
+
+	@DisplayName("비회원 성공 이력은 사용자 없이 추적 코드와 함께 저장한다.")
+	@Test
+	void generateAnonymousSucceedParsingTextHistory() {
+		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
+
+		String trackingCode = parsingTextHistoryService
+			.generateAnonymousSucceedParsingTextHistory("anonymous text");
+
+		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
+		assertThat(trackingCode).isNotBlank();
+		assertThat(captor.getValue().getUser()).isNull();
+		assertThat(captor.getValue().getTrackingCode()).isEqualTo(trackingCode);
+		assertThat(captor.getValue().getRequesterType()).isEqualTo(ParsingRequesterType.ANONYMOUS);
+	}
+
+	@DisplayName("비회원 실패 이력은 분석 결과와 추적 코드를 함께 저장한다.")
+	@Test
+	void generateAnonymousFailedParsingTextHistory() {
+		FailureAnalysisService.FailureAnalysisResult analysisResult =
+			new FailureAnalysisService.FailureAnalysisResult(
+				FailureReason.PARSING_EXCEPTION,
+				"파싱 실패"
+			);
+		given(failureAnalysisService.analyzeFailure(
+			"invalid text",
+			EnglishLevel.ENG12,
+			KoreanLevel.KOR12
+		)).willReturn(analysisResult);
+		ArgumentCaptor<ParsingTextHistory> captor = ArgumentCaptor.forClass(ParsingTextHistory.class);
+
+		String trackingCode = parsingTextHistoryService.generateAnonymousFailedParsingTextHistory(
+			"invalid text",
+			EnglishLevel.ENG12,
+			KoreanLevel.KOR12
+		);
+
+		then(saveParsingTextHistoryPort).should().saveParsingTextHistory(captor.capture());
+		assertThat(trackingCode).isNotBlank();
+		assertThat(captor.getValue().getUser()).isNull();
+		assertThat(captor.getValue().getFailureReason()).isEqualTo(FailureReason.PARSING_EXCEPTION);
+		assertThat(captor.getValue().getTrackingCode()).isEqualTo(trackingCode);
+		assertThat(captor.getValue().getRequesterType()).isEqualTo(ParsingRequesterType.ANONYMOUS);
 	}
 
 	private User createUser(Long id, String authId, String password, EnglishLevel englishLevel,

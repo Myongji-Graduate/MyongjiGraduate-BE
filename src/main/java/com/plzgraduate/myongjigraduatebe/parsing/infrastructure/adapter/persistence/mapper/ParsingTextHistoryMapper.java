@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.mapper;
 
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingRequesterType;
 import com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persistence.entity.ParsingTextHistoryJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.ExchangeCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
@@ -20,6 +21,10 @@ public class ParsingTextHistoryMapper {
 			.parsingResult(parsingTextHistory.getParsingResult())
 			.failureReason(parsingTextHistory.getFailureReason())
 			.failureDetails(parsingTextHistory.getFailureDetails())
+			.trackingCode(parsingTextHistory.getTrackingCode())
+			.requesterType(parsingTextHistory.getRequesterType() == null
+				? ParsingRequesterType.MEMBER
+				: parsingTextHistory.getRequesterType())
 			.build();
 	}
 
@@ -31,10 +36,15 @@ public class ParsingTextHistoryMapper {
 			.parsingResult(parsingTextHistoryJpaEntity.getParsingResult())
 			.failureReason(parsingTextHistoryJpaEntity.getFailureReason())
 			.failureDetails(parsingTextHistoryJpaEntity.getFailureDetails())
+			.trackingCode(parsingTextHistoryJpaEntity.getTrackingCode())
+			.requesterType(parsingTextHistoryJpaEntity.getRequesterType())
 			.build();
 	}
 
 	public UserJpaEntity mapToUserJpaEntity(User user) {
+		if (user == null) {
+			return null;
+		}
 
 		return UserJpaEntity.builder()
 			.id(user.getId())
@@ -53,6 +63,9 @@ public class ParsingTextHistoryMapper {
 	}
 
 	private User mapToUserDomainEntity(UserJpaEntity user) {
+		if (user == null) {
+			return null;
+		}
 		return User.builder()
 			.id(user.getId())
 			.authId(user.getAuthId())

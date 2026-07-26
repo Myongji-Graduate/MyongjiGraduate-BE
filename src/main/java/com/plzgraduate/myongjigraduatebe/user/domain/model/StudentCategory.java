@@ -46,8 +46,11 @@ public enum StudentCategory {
 		)
 	),
 	ASSOCIATED_MAJOR(
-		List.of("연계전공"),
-		List.of()
+		List.of("연계전공", "융합전공"),
+		List.of(COMMON_CULTURE, CORE_CULTURE, PRIMARY_BASIC_ACADEMICAL_CULTURE,
+			PRIMARY_MANDATORY_MAJOR, PRIMARY_ELECTIVE_MAJOR,
+			FUSION_BASIC_ACADEMICAL_CULTURE, FUSION_MAJOR,
+			NORMAL_CULTURE, FREE_ELECTIVE, CHAPEL)
 	),
 	DOUBLE_SUB(
 		List.of("복수전공", "부전공"),
@@ -73,6 +76,9 @@ public enum StudentCategory {
 	private final List<GraduationCategory> includedGraduationCategories;
 
 	public static StudentCategory from(List<String> categories) {
+		if (categories.equals(List.of("연계전공")) || categories.equals(List.of("융합전공"))) {
+			return ASSOCIATED_MAJOR;
+		}
 		return Arrays.stream(StudentCategory.values())
 			.filter(studentCategory -> Objects.equals(studentCategory.getCategories(), categories))
 			.findFirst()

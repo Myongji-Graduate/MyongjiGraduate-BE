@@ -36,6 +36,8 @@ class CalculateGraduationServiceTest {
 	@Mock
 	private CalculateMajorGraduationService calculateMajorGraduationService;
 	@Mock
+	private CalculateFusionMajorGraduationService calculateFusionMajorGraduationService;
+	@Mock
 	private com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	@Mock
 	private com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGraduationStrategyFactory strategyFactory;
@@ -51,6 +53,7 @@ class CalculateGraduationServiceTest {
 			calculateCoreCultureGraduationService,
 			calculateBasicAcademicalCultureGraduationService,
 			calculateMajorGraduationService,
+			calculateFusionMajorGraduationService,
 			updateStudentInformationUseCase,
 			strategyFactory
 		);

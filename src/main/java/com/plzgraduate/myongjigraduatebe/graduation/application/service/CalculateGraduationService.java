@@ -34,6 +34,7 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private final CalculateCoreCultureGraduationService calculateCoreCultureGraduationService;
 	private final CalculateBasicAcademicalCultureGraduationService calculateBasicAcademicalCultureGraduationService;
 	private final CalculateMajorGraduationService calculateMajorGraduationService;
+	private final CalculateFusionMajorGraduationService calculateFusionMajorGraduationService;
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final StudentGraduationStrategyFactory strategyFactory;
 
@@ -171,6 +172,12 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 				public List<DetailGraduationResult> generateMajor(User user,
 					TakenLectureInventory inventory, GraduationRequirement requirement) {
 					return generateMajorDetailGraduationResult(user, inventory, requirement);
+				}
+
+				@Override
+				public List<DetailGraduationResult> generateFusionMajor(
+					User user, TakenLectureInventory inventory) {
+					return calculateFusionMajorGraduationService.calculate(user, inventory);
 				}
 
 				@Override
