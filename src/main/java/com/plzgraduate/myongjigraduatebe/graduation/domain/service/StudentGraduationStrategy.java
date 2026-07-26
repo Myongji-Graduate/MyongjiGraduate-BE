@@ -49,8 +49,13 @@ public interface StudentGraduationStrategy {
 		List<DetailGraduationResult> generateMajor(User user, TakenLectureInventory inventory,
 			GraduationRequirement requirement);
 
+		default List<DetailGraduationResult> generateFusionMajor(
+			User user, TakenLectureInventory inventory
+		) {
+			throw new UnsupportedOperationException("융합전공 계산기가 연결되지 않았습니다.");
+		}
+
 		DetailGraduationResult generateTransferChristian(User user,
 			TakenLectureInventory inventory, GraduationRequirement requirement);
 	}
 }
-

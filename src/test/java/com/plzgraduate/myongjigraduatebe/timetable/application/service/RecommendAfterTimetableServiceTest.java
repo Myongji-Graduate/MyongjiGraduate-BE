@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.lecture.application.port.BasicCultureMe
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.CoreCultureMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.CommonCultureMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.PopularLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FusionMajorMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.usecase.dto.PopularLectureDto;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.PopularLectureCategory;
 import java.util.HashMap;
@@ -65,6 +66,8 @@ class RecommendAfterTimetableServiceTest {
     private CoreCultureMembershipPort coreCultureMembershipPort;
     @Mock
     private CommonCultureMembershipPort commonCultureMembershipPort;
+    @Mock
+    private FusionMajorMembershipPort fusionMajorMembershipPort;
 
     @InjectMocks
     private RecommendAfterTimetableService sut;
@@ -218,7 +221,8 @@ class RecommendAfterTimetableServiceTest {
                 findUserPort, remainingSemesterCalculator, creditTargetPolicy, remainingCreditsProvider,
                 requirementSnapshotQueryPort, takenLectureQuery, findLecturePort,
                 recommendedLectureExtractor, majorLectureOfferingPort, null,
-                majorMembershipPort, basicCultureMembershipPort, coreCultureMembershipPort, commonCultureMembershipPort
+                majorMembershipPort, basicCultureMembershipPort, coreCultureMembershipPort,
+                commonCultureMembershipPort, fusionMajorMembershipPort
         );
 
         Method method = RecommendAfterTimetableService.class.getDeclaredMethod(

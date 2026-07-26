@@ -130,6 +130,9 @@ public class ParsingInformation {
 			} else if (part.startsWith("연계전공 - ")) {
 				categories.add("연계전공");
 				associatedMajor = part.substring("연계전공 - ".length());
+			} else if (part.startsWith("융합전공 - ")) {
+				categories.add("융합전공");
+				associatedMajor = part.substring("융합전공 - ".length());
 			} else if (part.contains("편입")) {
 				categories.add("편입");
 			}
