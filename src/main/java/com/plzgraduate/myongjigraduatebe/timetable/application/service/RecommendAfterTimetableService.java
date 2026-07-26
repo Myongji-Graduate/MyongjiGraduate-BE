@@ -4,6 +4,7 @@ import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.ChapelResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
+import com.plzgraduate.myongjigraduatebe.lecture.application.port.FusionMajorMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.MajorLectureOfferingPort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.MajorMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.BasicCultureMembershipPort;
@@ -55,6 +56,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
     private final BasicCultureMembershipPort basicCultureMembershipPort;
     private final CoreCultureMembershipPort coreCultureMembershipPort;
     private final CommonCultureMembershipPort commonCultureMembershipPort;
+    private final FusionMajorMembershipPort fusionMajorMembershipPort;
 
     private DetailRequirementContext buildDetailRequirementContext(Long userId, RequirementSnapshot snapshot, User user) {
         Map<DetailKey, DetailRequirement> requirements = new LinkedHashMap<>();
@@ -291,7 +293,7 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         int chapelLeft = calcChapelLeft(snapshot);
 
         Set<String> takenCodes = takenLectureQuery.findAlreadyTakenLectureCodes(user);
-        List<Lecture> availableLectures = buildAvailableLectures(takenCodes, chapelLeft);
+        List<Lecture> availableLectures = buildAvailableLectures(takenCodes, chapelLeft, user);
 
         DetailRequirementContext detailRequirementContext = buildDetailRequirementContext(userId, snapshot, user);
         Map<String, DetailKey> detailKeyByLectureId = detailRequirementContext.lectureToDetailKey();
@@ -336,10 +338,17 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         return (int) Math.round(remainingCredit / ChapelResult.CHAPEL_CREDIT);
     }
 
-    private List<Lecture> buildAvailableLectures(Set<String> takenCodes, int chapelLeft) {
+    private List<Lecture> buildAvailableLectures(Set<String> takenCodes, int chapelLeft, User user) {
         final int finalChapelLeft = chapelLeft;
-        return findLecturePort.findAllLectures().stream()
+        List<Lecture> allLectures = findLecturePort.findAllLectures();
+        List<String> allIds = allLectures.stream().map(Lecture::getId).toList();
+        Set<String> fusionOnlyIds = fusionMajorMembershipPort.findFusionMajorLectureIds(allIds);
+        Set<String> allowedFusionIds = fusionMajorMembershipPort
+                .findLectures(user.getAssociatedMajor(), user.getEntryYear()).stream()
+                .map(Lecture::getId).collect(Collectors.toSet());
+        return allLectures.stream()
                 .filter(l -> l.getIsRevoked() == 0)
+                .filter(l -> !fusionOnlyIds.contains(l.getId()) || allowedFusionIds.contains(l.getId()))
                 .filter(l -> {
                     if (isChapel(l) && finalChapelLeft > 0) return true;
                     return !takenCodes.contains(l.getId());
@@ -1042,6 +1051,9 @@ public class RecommendAfterTimetableService implements RecommendAfterTimetableUs
         }
         if (commonCultureMembershipPort != null) {
             cache.addAll(commonCultureMembershipPort.findCommonLectureIds(lectureIds));
+        }
+        if (fusionMajorMembershipPort != null) {
+            cache.addAll(fusionMajorMembershipPort.findFusionMajorLectureIds(lectureIds));
         }
         return cache;
     }

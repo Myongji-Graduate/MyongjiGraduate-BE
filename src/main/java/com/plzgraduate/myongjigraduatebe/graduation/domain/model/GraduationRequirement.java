@@ -77,6 +77,17 @@ public class GraduationRequirement {
 		freeElectiveCredit = calculateFreeElectiveCreditWithDualMajorStudent();
 	}
 
+	public void modifyCreditForFusionMajor(int requiredPrimaryMajorCredit) {
+		if (requiredPrimaryMajorCredit <= 0) {
+			return;
+		}
+		primaryMajorCredit = requiredPrimaryMajorCredit;
+		freeElectiveCredit = Math.max(
+			totalCredit - commonCultureCredit - coreCultureCredit
+				- primaryMajorCredit - primaryBasicAcademicalCultureCredit,
+			0);
+	}
+
 	private int calculateFreeElectiveCreditWithDualMajorStudent() {
 		int freeElectiveCredit = totalCredit - commonCultureCredit - coreCultureCredit - primaryMajorCredit - dualMajorCredit - primaryBasicAcademicalCultureCredit - dualBasicAcademicalCultureCredit;
 		return Math.max(freeElectiveCredit, 0);
