@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +22,24 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+	@ExceptionHandler(AnonymousGraduationCheckException.class)
+	public ResponseEntity<ExceptionResponse> handleAnonymousGraduationCheckException(
+		AnonymousGraduationCheckException e
+	) {
+		Throwable cause = e.getCause();
+		boolean badRequest = cause instanceof IllegalArgumentException
+			|| cause instanceof IllegalStateException
+			|| cause instanceof PdfParsingException
+			|| cause instanceof InvalidPdfException;
+		HttpStatus status = badRequest ? HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR;
+		String errorCode = badRequest
+			? cause.getMessage()
+			: ErrorCode.INTERNAL_SEVER_ERROR.toString();
+		log.warn("Anonymous graduation check failed. trackingCode={}", e.getTrackingCode(), cause);
+		return ResponseEntity.status(status)
+			.body(ExceptionResponse.tracked(errorCode, e.getTrackingCode()));
+	}
 
 	@ExceptionHandler({
 			IllegalArgumentException.class,

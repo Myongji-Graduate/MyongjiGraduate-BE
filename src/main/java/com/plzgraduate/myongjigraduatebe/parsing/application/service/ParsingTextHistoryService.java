@@ -6,9 +6,13 @@ import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingText
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTextHistory;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
+import com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 @Slf4j
 @UseCase
@@ -48,5 +52,36 @@ class ParsingTextHistoryService implements ParsingTextHistoryUseCase {
 				analysisResult.getFailureDetails()
 			)
 		);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public String generateAnonymousSucceedParsingTextHistory(String parsingText) {
+		String trackingCode = UUID.randomUUID().toString();
+		saveParsingTextHistoryPort.saveParsingTextHistory(
+			ParsingTextHistory.anonymousSuccess(parsingText, trackingCode)
+		);
+		return trackingCode;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public String generateAnonymousFailedParsingTextHistory(
+		String parsingText,
+		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel
+	) {
+		String trackingCode = UUID.randomUUID().toString();
+		FailureAnalysisService.FailureAnalysisResult analysisResult =
+			failureAnalysisService.analyzeFailure(parsingText, englishLevel, koreanLevel);
+		saveParsingTextHistoryPort.saveParsingTextHistory(
+			ParsingTextHistory.anonymousFail(
+				parsingText,
+				analysisResult.getFailureReason(),
+				analysisResult.getFailureDetails(),
+				trackingCode
+			)
+		);
+		return trackingCode;
 	}
 }

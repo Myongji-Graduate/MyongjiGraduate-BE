@@ -13,6 +13,8 @@ public class ParsingTextHistory {
 	private final ParsingResult parsingResult;
 	private final FailureReason failureReason;
 	private final String failureDetails;
+	private final String trackingCode;
+	private final ParsingRequesterType requesterType;
 
 	@Builder
 	private ParsingTextHistory(
@@ -21,7 +23,9 @@ public class ParsingTextHistory {
 		String parsingText,
 		ParsingResult parsingResult,
 		FailureReason failureReason,
-		String failureDetails
+		String failureDetails,
+		String trackingCode,
+		ParsingRequesterType requesterType
 	) {
 		this.id = id;
 		this.user = user;
@@ -29,6 +33,8 @@ public class ParsingTextHistory {
 		this.parsingResult = parsingResult;
 		this.failureReason = failureReason;
 		this.failureDetails = failureDetails;
+		this.trackingCode = trackingCode;
+		this.requesterType = requesterType;
 	}
 
 	public static ParsingTextHistory success(User user, String parsingText) {
@@ -36,6 +42,7 @@ public class ParsingTextHistory {
 			.user(user)
 			.parsingText(parsingText)
 			.parsingResult(ParsingResult.SUCCESS)
+			.requesterType(ParsingRequesterType.MEMBER)
 			.build();
 	}
 
@@ -44,6 +51,7 @@ public class ParsingTextHistory {
 			.user(user)
 			.parsingText(parsingText)
 			.parsingResult(ParsingResult.FAIL)
+			.requesterType(ParsingRequesterType.MEMBER)
 			.build();
 	}
 
@@ -54,6 +62,32 @@ public class ParsingTextHistory {
 			.parsingResult(ParsingResult.FAIL)
 			.failureReason(failureReason)
 			.failureDetails(failureDetails)
+			.requesterType(ParsingRequesterType.MEMBER)
+			.build();
+	}
+
+	public static ParsingTextHistory anonymousSuccess(String parsingText, String trackingCode) {
+		return ParsingTextHistory.builder()
+			.parsingText(parsingText)
+			.parsingResult(ParsingResult.SUCCESS)
+			.trackingCode(trackingCode)
+			.requesterType(ParsingRequesterType.ANONYMOUS)
+			.build();
+	}
+
+	public static ParsingTextHistory anonymousFail(
+		String parsingText,
+		FailureReason failureReason,
+		String failureDetails,
+		String trackingCode
+	) {
+		return ParsingTextHistory.builder()
+			.parsingText(parsingText)
+			.parsingResult(ParsingResult.FAIL)
+			.failureReason(failureReason)
+			.failureDetails(failureDetails)
+			.trackingCode(trackingCode)
+			.requesterType(ParsingRequesterType.ANONYMOUS)
 			.build();
 	}
 }
