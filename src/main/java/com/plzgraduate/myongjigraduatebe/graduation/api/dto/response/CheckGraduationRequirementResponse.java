@@ -9,11 +9,15 @@ public class CheckGraduationRequirementResponse {
 
 	private final UserInformationResponse user;
 	private final GraduationResult graduationResult;
+	private final String trackingCode;
 
 	public CheckGraduationRequirementResponse(
-		UserInformationResponse user, GraduationResult graduationResult
+		UserInformationResponse user,
+		GraduationResult graduationResult,
+		String trackingCode
 	) {
 		this.user = user;
 		this.graduationResult = graduationResult;
+		this.trackingCode = trackingCode;
 	}
 }

@@ -11,6 +11,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.api.dto.request.CheckGraduat
 import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CheckGraduationRequirementUseCase;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingAnonymousUseCase;
+import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.dto.ParsingAnonymousDto;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel;
@@ -43,6 +44,9 @@ class CheckGraduationRequirementControllerTest {
 
 	@MockBean
 	private CheckGraduationRequirementUseCase checkGraduationRequirementUseCase;
+
+	@MockBean
+	private ParsingTextHistoryUseCase parsingTextHistoryUseCase;
 
 	@DisplayName("비회원 졸업진단 응답의 user 정보는 계산된 졸업 결과를 반영한다.")
 	@Test
@@ -79,6 +83,8 @@ class CheckGraduationRequirementControllerTest {
 			.willReturn(parsingAnonymousDto);
 		given(checkGraduationRequirementUseCase.checkGraduationRequirement(any(User.class), any(TakenLectureInventory.class)))
 			.willReturn(graduationResult);
+		given(parsingTextHistoryUseCase.generateAnonymousSucceedParsingTextHistory("mock parsing text"))
+			.willReturn("tracking-code");
 
 		mockMvc.perform(
 				post("/api/v1/graduations/check")
@@ -89,6 +95,36 @@ class CheckGraduationRequirementControllerTest {
 			.andExpect(jsonPath("$.user.studentNumber").value("60190872"))
 			.andExpect(jsonPath("$.user.totalCredit").value(128))
 			.andExpect(jsonPath("$.user.takenCredit").value(133))
-			.andExpect(jsonPath("$.user.graduated").value(true));
+			.andExpect(jsonPath("$.user.graduated").value(true))
+			.andExpect(jsonPath("$.trackingCode").value("tracking-code"));
+	}
+
+	@DisplayName("비회원 졸업진단 실패 응답에 문의용 추적 코드를 포함한다.")
+	@Test
+	void checkGraduationRequirementReturnsTrackingCodeOnFailure() throws Exception {
+		CheckGraduationRequirementRequest request = CheckGraduationRequirementRequest.builder()
+			.engLv("ENG34")
+			.korLv("FREE")
+			.parsingText("invalid parsing text")
+			.build();
+		given(parsingAnonymousUseCase.parseAnonymous(
+			EnglishLevel.ENG34,
+			KoreanLevel.FREE,
+			"invalid parsing text"
+		)).willThrow(new IllegalArgumentException("PARSING_FAILED"));
+		given(parsingTextHistoryUseCase.generateAnonymousFailedParsingTextHistory(
+			"invalid parsing text",
+			EnglishLevel.ENG34,
+			KoreanLevel.FREE
+		)).willReturn("failure-tracking-code");
+
+		mockMvc.perform(
+				post("/api/v1/graduations/check")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request))
+			)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.errorCode").value("PARSING_FAILED"))
+			.andExpect(jsonPath("$.trackingCode").value("failure-tracking-code"));
 	}
 }

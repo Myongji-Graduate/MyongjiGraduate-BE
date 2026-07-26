@@ -3,9 +3,11 @@ package com.plzgraduate.myongjigraduatebe.parsing.infrastructure.adapter.persist
 import com.plzgraduate.myongjigraduatebe.core.entity.TimeBaseEntity;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.FailureReason;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingResult;
+import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingRequesterType;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -37,4 +39,12 @@ public class ParsingTextHistoryJpaEntity extends TimeBaseEntity {
 
 	@Column(columnDefinition = "TEXT")
 	private String failureDetails;
+
+	@Column(length = 36, unique = true)
+	private String trackingCode;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20, nullable = false)
+	@Builder.Default
+	private ParsingRequesterType requesterType = ParsingRequesterType.MEMBER;
 }
