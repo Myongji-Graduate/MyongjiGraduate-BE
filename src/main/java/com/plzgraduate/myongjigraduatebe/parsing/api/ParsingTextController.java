@@ -40,7 +40,8 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 	) {
 		takenLectureCacheEvict.evictTakenLecturesCache(userId);
 		try {
-			parsingTextUseCase.enrollParsingText(userId, parsingTextRequest.getParsingText());
+			parsingTextUseCase.enrollParsingText(userId, parsingTextRequest.getParsingText(),
+				parsingTextRequest.isHonorsCollege(), parsingTextRequest.getHonorsTargetMajor());
 			parsingTextHistoryUseCase.generateSucceedParsingTextHistory(
 				userId,
 				parsingTextRequest.getParsingText()

@@ -39,6 +39,8 @@ public class User implements Serializable {
 	private int totalCredit;
 	private double takenCredit;
 	private boolean graduated;
+	private boolean honorsCollege;
+	private String honorsTargetMajor;
 
 	@Builder
 	private User(
@@ -62,6 +64,8 @@ public class User implements Serializable {
 		int totalCredit,
 		double takenCredit,
 		boolean graduated,
+		boolean honorsCollege,
+		String honorsTargetMajor,
 		Instant createdAt,
 		Instant updatedAt
 	) {
@@ -85,6 +89,8 @@ public class User implements Serializable {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduated;
+		this.honorsCollege = honorsCollege;
+		this.honorsTargetMajor = honorsTargetMajor;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
@@ -121,7 +127,9 @@ public class User implements Serializable {
 		String associatedMajor,
 		StudentCategory studentCategory,
 		TransferCredit transferCredit,
-		ExchangeCredit exchangeCredit
+		ExchangeCredit exchangeCredit,
+		boolean honorsCollege,
+		String honorsTargetMajor
 	) {
 		return User.builder()
 			.authId("anonymous")
@@ -140,7 +148,28 @@ public class User implements Serializable {
 			.graduated(false)
 			.transferCredit(transferCredit)
 			.exchangeCredit(exchangeCredit)
+			.honorsCollege(honorsCollege)
+			.honorsTargetMajor(honorsTargetMajor)
 			.build();
+	}
+
+	public static User createAnonymous(
+		EnglishLevel englishLevel,
+		KoreanLevel koreanLevel,
+		String name,
+		String studentNumber,
+		String primaryMajor,
+		String subMajor,
+		String dualMajor,
+		String associatedMajor,
+		StudentCategory studentCategory,
+		TransferCredit transferCredit,
+		ExchangeCredit exchangeCredit,
+		boolean honorsCollege
+	) {
+		return createAnonymous(englishLevel, koreanLevel, name, studentNumber, primaryMajor,
+			subMajor, dualMajor, associatedMajor, studentCategory, transferCredit, exchangeCredit,
+			honorsCollege, null);
 	}
 
 	private static int parseEntryYearInStudentNumber(String studentNumber) {
@@ -187,6 +216,7 @@ public class User implements Serializable {
 		int totalCredit,
 		double takenCredit,
 		boolean graduate
+		, boolean honorsCollege, String honorsTargetMajor
 	) {
 		this.name = name;
 		this.primaryMajor = major;
@@ -200,6 +230,18 @@ public class User implements Serializable {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduated = graduate;
+		this.honorsCollege = honorsCollege;
+		this.honorsTargetMajor = honorsTargetMajor;
+	}
+
+	public void updateStudentInformation(
+		String name, String major, String dualMajor, String subMajor, String associatedMajor,
+		Integer completedSemesterCount, StudentCategory studentCategory, TransferCredit transferCredit,
+		ExchangeCredit exchangeCredit, int totalCredit, double takenCredit, boolean graduate
+	) {
+		updateStudentInformation(name, major, dualMajor, subMajor, associatedMajor, completedSemesterCount,
+			studentCategory, transferCredit, exchangeCredit, totalCredit, takenCredit, graduate, honorsCollege,
+			honorsTargetMajor);
 	}
 
 	private void updateTransferCredit(TransferCredit transferCredit) {
@@ -223,7 +265,7 @@ public class User implements Serializable {
 	}
 
 	public boolean checkMajor(String major) {
-		return this.primaryMajor.equals(major);
+		return this.getPrimaryMajor().equals(major);
 	}
 
 	public boolean compareStudentNumber(String studentNumber) {
@@ -260,11 +302,18 @@ public class User implements Serializable {
 
 	public String getMajorByMajorType(MajorType majorType) {
 		if (majorType == PRIMARY) {
-			return primaryMajor;
+			return getPrimaryMajor();
 		} else if (majorType == DUAL) {
 			return dualMajor;
 		}
 		return subMajor;
+	}
+
+	public String getPrimaryMajor() {
+		if (honorsCollege && honorsTargetMajor != null && !honorsTargetMajor.isBlank()) {
+			return honorsTargetMajor;
+		}
+		return primaryMajor;
 	}
 
 	public boolean isAnyMajorMatched(String major) {

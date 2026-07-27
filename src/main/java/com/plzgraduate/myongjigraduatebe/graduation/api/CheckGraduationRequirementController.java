@@ -43,7 +43,9 @@ public class CheckGraduationRequirementController implements CheckGraduationRequ
 			ParsingAnonymousDto parsingAnonymousDto = parsingAnonymousUseCase.parseAnonymous(
 				englishLevel,
 				koreanLevel,
-				parsingText
+				parsingText,
+				checkGraduationRequirementRequest.isHonorsCollege(),
+				checkGraduationRequirementRequest.getHonorsTargetMajor()
 			);
 			User anonymous = parsingAnonymousDto.getAnonymous();
 			GraduationResult graduationResult = checkGraduationRequirementUseCase.checkGraduationRequirement(

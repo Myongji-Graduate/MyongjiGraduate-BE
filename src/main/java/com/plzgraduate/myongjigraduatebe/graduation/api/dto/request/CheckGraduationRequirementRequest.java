@@ -28,11 +28,18 @@ public class CheckGraduationRequirementRequest {
 	)
 	private String parsingText;
 
+	private boolean honorsCollege;
+
+	private String honorsTargetMajor;
+
 	@Builder
-	public CheckGraduationRequirementRequest(String engLv, String korLv, String parsingText) {
+	public CheckGraduationRequirementRequest(String engLv, String korLv, String parsingText, boolean honorsCollege,
+		String honorsTargetMajor) {
 		this.engLv = engLv;
 		this.korLv = korLv;
 		this.parsingText = parsingText;
+		this.honorsCollege = honorsCollege;
+		this.honorsTargetMajor = honorsTargetMajor;
 	}
 
 	public EnglishLevel getEngLv() {
