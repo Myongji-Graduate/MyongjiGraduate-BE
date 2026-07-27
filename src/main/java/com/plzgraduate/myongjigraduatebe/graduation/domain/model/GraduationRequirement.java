@@ -63,11 +63,13 @@ public class GraduationRequirement {
 	public void modifyCreditForDualMajor(User user) {
 		DualMajorGraduationRequirementType primaryMajorGraduationRequirementType =
 			findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear()).getName()
+				College.findBelongingCollege(user.getPrimaryMajor(), user.getEntryYear()).getName(),
+				user.getPrimaryMajor(), user.getEntryYear()
 			);
 		DualMajorGraduationRequirementType dualMajorGraduationRequirementType =
 			findBelongingDualMajorGraduationRequirementType(
-				College.findBelongingCollege(user.getDualMajor(), user.getEntryYear()).getName()
+				College.findBelongingCollege(user.getDualMajor(), user.getEntryYear()).getName(),
+				user.getDualMajor(), user.getEntryYear()
 			);
 
 		primaryMajorCredit = primaryMajorGraduationRequirementType.getMajorCredit();
