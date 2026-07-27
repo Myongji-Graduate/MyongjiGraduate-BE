@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persist
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureJpaEntity;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.MajorLectureJpaEntity;
@@ -56,6 +57,36 @@ class FindMajorPersistenceAdapterTest extends PersistenceTestSupport {
 		assertThat(majors).hasSize(1)
 			.extracting("major")
 			.contains(user.getPrimaryMajor());
+	}
+
+	@DisplayName("국제통상학전공으로 조회해도 국제통상학과 전공 과목을 함께 조회한다.")
+	@Test
+	void findMajor_alias() {
+		//given
+		LectureJpaEntity lectureJpaEntity = LectureJpaEntity.builder()
+			.id("HBH01101")
+			.name("국제통상원론")
+			.credit(3)
+			.isRevoked(0)
+			.build();
+		lectureRepository.save(lectureJpaEntity);
+
+		MajorLectureJpaEntity majorLectureJpaEntity = MajorLectureJpaEntity.builder()
+			.lectureJpaEntity(lectureJpaEntity)
+			.major("국제통상학과")
+			.mandatory(1)
+			.startEntryYear(25)
+			.endEntryYear(99)
+			.build();
+		majorLectureRepository.save(majorLectureJpaEntity);
+
+		//when
+		Set<MajorLecture> majors = majorPersistenceAdapter.findMajor("국제통상학전공");
+
+		//then
+		assertThat(majors).hasSize(1)
+			.extracting("major")
+			.contains("국제통상학과");
 	}
 
 }

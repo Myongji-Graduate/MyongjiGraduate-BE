@@ -72,6 +72,7 @@ public class LectureMapper {
 					.build()
 			)
 			.college(entity.getCollege())
+			.sourcePolicyKey(entity.getSourcePolicyKey())
 			.major(entity.getMajor())
 			.startEntryYear(entity.getStartEntryYear())
 			.endEntryYear(entity.getEndEntryYear())

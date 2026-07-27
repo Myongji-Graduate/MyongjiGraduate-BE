@@ -40,6 +40,10 @@ public class MajorLecture {
 		}
 	}
 
+	public boolean isApplicableByEntryYear(int entryYear) {
+		return entryYear >= appliedStartEntryYear && entryYear <= appliedEndEntryYear;
+	}
+
 	private boolean checkMandatoryByEntryYear(int entryYear) {
 		return isMandatory == 1 && !(entryYear >= appliedStartEntryYear
 			&& entryYear <= appliedEndEntryYear);

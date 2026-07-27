@@ -48,6 +48,7 @@ public class MajorGraduationManager {
 		List<OptionalMandatoryPolicy> optionalMandatoryPolicies
 	) {
 
+		majorLectures.removeIf(major -> !major.isApplicableByEntryYear(user.getEntryYear()));
 		removeDuplicateLectureIfTaken(takenLectureInventory, majorLectures);
 		changeMandatoryToElectiveByMajorRange(user, majorLectures);
 

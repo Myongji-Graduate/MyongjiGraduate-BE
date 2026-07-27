@@ -22,6 +22,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -64,11 +65,26 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
 			graduationRequirement.getBasicCreditByMajorType(majorType)
 		);
-		detailGraduationResult.getDetailCategory().forEach(category ->
+		List<Lecture> mandatoryLectures = graduationBasicAcademicalCultureLectures.stream()
+			.filter(BasicAcademicalCultureLecture::isMandatoryPolicy)
+			.map(BasicAcademicalCultureLecture::getLecture)
+			.collect(java.util.stream.Collectors.collectingAndThen(
+				java.util.stream.Collectors.toMap(
+					Lecture::getId,
+					lecture -> lecture,
+					(existing, replacement) -> existing,
+					LinkedHashMap::new
+				),
+				map -> map.values().stream().toList()
+			));
+		detailGraduationResult.getDetailCategory().forEach(category -> {
+			category.addMandatoryLectures(mandatoryLectures);
 			category.applyMandatoryPolicyResult(
 				mandatoryEvaluation.satisfied(),
 				mandatoryEvaluation.remainingCandidates()
-			));
+			);
+			category.addMandatoryOptions(mandatoryEvaluation.mandatoryOptions());
+		});
 		detailGraduationResult.refreshCompletion();
 		detailGraduationResult.assignGraduationCategory(graduationCategory);
 		return detailGraduationResult;

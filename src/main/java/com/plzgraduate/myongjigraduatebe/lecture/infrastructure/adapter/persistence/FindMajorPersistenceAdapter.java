@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.core.MajorNameNormalizer;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
 import com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.mapper.LectureMapper;
@@ -18,7 +19,8 @@ public class FindMajorPersistenceAdapter implements FindMajorPort {
 
 	@Override
 	public Set<MajorLecture> findMajor(String major) {
-		return majorLectureRepository.findAllByMajor(major)
+		return majorLectureRepository.findAllByMajors(
+				MajorNameNormalizer.resolveLookupMajors(major))
 			.stream()
 			.map(mapper::mapToMajorLectureModel)
 			.collect(Collectors.toSet());

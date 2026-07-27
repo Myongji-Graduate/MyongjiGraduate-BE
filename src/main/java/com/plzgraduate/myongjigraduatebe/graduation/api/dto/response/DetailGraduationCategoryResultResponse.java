@@ -18,19 +18,29 @@ public class DetailGraduationCategoryResultResponse {
 	private final int takenCredit;
 	private final List<LectureResponse> takenLectures;
 	private final List<LectureResponse> haveToLectures;
+	private final List<LectureResponse> mandatoryLectures;
+	private final List<MandatoryOptionResponse> mandatoryOptions;
 	@Schema(name = "completed", example = "true")
 	private final boolean completed;
 
 	@Builder
-	private DetailGraduationCategoryResultResponse(String categoryName, int totalCredit,
+	private DetailGraduationCategoryResultResponse(
+		String categoryName,
+		int totalCredit,
 		int takenCredit,
-		List<LectureResponse> takenLectures, List<LectureResponse> haveToLectures,
-		boolean completed) {
+		List<LectureResponse> takenLectures,
+		List<LectureResponse> haveToLectures,
+		List<LectureResponse> mandatoryLectures,
+		List<MandatoryOptionResponse> mandatoryOptions,
+		boolean completed
+	) {
 		this.categoryName = categoryName;
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.takenLectures = takenLectures;
 		this.haveToLectures = haveToLectures;
+		this.mandatoryLectures = mandatoryLectures;
+		this.mandatoryOptions = mandatoryOptions;
 		this.completed = completed;
 	}
 
@@ -48,7 +58,31 @@ public class DetailGraduationCategoryResultResponse {
 				.stream()
 				.map(LectureResponse::from)
 				.collect(Collectors.toList()))
+			.mandatoryLectures(detailCategoryResult.getMandatoryLectures()
+				.stream()
+				.map(LectureResponse::from)
+				.collect(Collectors.toList()))
+			.mandatoryOptions(detailCategoryResult.getMandatoryOptions().stream()
+				.map(MandatoryOptionResponse::from)
+				.toList())
 			.completed(detailCategoryResult.isCompleted())
 			.build();
+	}
+
+	public record MandatoryOptionResponse(
+		String name,
+		int requiredCount,
+		int takenCount,
+		List<LectureResponse> candidates
+	) {
+		static MandatoryOptionResponse from(
+			com.plzgraduate.myongjigraduatebe.graduation.domain.model.MandatoryOptionResult result) {
+			return new MandatoryOptionResponse(
+				result.name(),
+				result.requiredCount(),
+				result.takenCount(),
+				result.candidateLectures().stream().map(LectureResponse::from).toList()
+			);
+		}
 	}
 }

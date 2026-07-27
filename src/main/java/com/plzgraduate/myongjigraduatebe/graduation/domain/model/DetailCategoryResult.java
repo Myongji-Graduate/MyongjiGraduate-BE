@@ -18,6 +18,8 @@ public class DetailCategoryResult {
 	private boolean isSatisfiedMandatory;
 	private final List<Lecture> takenLectures = new ArrayList<>();
 	private final List<Lecture> haveToLectures = new ArrayList<>();
+	private final List<MandatoryOptionResult> mandatoryOptions = new ArrayList<>();
+	private final List<Lecture> mandatoryLectures = new ArrayList<>();
 	private int totalCredits;
 	private String detailCategoryName;
 	private boolean isCompleted;
@@ -63,6 +65,7 @@ public class DetailCategoryResult {
 			", totalCredits=" + totalCredits +
 			", takenLectures=" + takenLectures +
 			", haveToLectures=" + haveToLectures +
+			", mandatoryLectures=" + mandatoryLectures +
 			", detailCategoryName='" + detailCategoryName + '\'' +
 			", isCompleted=" + isCompleted +
 			", takenCredits=" + takenCredits +
@@ -144,6 +147,19 @@ public class DetailCategoryResult {
 				.forEach(haveToLectures::add);
 		}
 		checkCompleted();
+	}
+
+	public void addMandatoryOptions(Collection<MandatoryOptionResult> mandatoryOptions) {
+		this.mandatoryOptions.addAll(mandatoryOptions);
+	}
+
+	public void addMandatoryLectures(Collection<Lecture> lectures) {
+		Set<String> existingLectureIds = mandatoryLectures.stream()
+			.map(Lecture::getId)
+			.collect(java.util.stream.Collectors.toSet());
+		lectures.stream()
+			.filter(lecture -> existingLectureIds.add(lecture.getId()))
+			.forEach(mandatoryLectures::add);
 	}
 
 	public int addRecognizedLectures(Collection<Lecture> lectures) {
