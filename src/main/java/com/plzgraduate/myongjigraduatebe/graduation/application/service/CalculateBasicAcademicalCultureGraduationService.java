@@ -34,6 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class CalculateBasicAcademicalCultureGraduationService implements
 	CalculateDetailGraduationUseCase {
 
+	private static final Set<String> PRIMARY_ONLY_BASIC_MANDATORY_POLICIES = Set.of(
+		"basic-2025-plus-economics-mandatory",
+		"basic-2025-plus-international-trade-mandatory"
+	);
+
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindOptionalMandatoryPolicyPort findOptionalMandatoryPolicyPort;
 	private final List<BasicAcademicalGraduationManager> basicAcademicalGraduationManagers;
@@ -56,7 +61,7 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures =
 			findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor,entryYear);
 		Evaluation mandatoryEvaluation = BasicAcademicMandatoryPolicyEvaluator.evaluate(
-			findOptionalMandatoryPolicyPort.findActiveBasicPolicies(userMajor, entryYear),
+			findOptionalMandatoryPolicyPort.findActiveBasicPolicies(userMajor, entryYear, majorType),
 			takenLectureInventory
 		);
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager =
@@ -67,6 +72,8 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 		);
 		List<Lecture> mandatoryLectures = graduationBasicAcademicalCultureLectures.stream()
 			.filter(BasicAcademicalCultureLecture::isMandatoryPolicy)
+			.filter(lecture -> majorType == MajorType.PRIMARY
+				|| !PRIMARY_ONLY_BASIC_MANDATORY_POLICIES.contains(lecture.getSourcePolicyKey()))
 			.map(BasicAcademicalCultureLecture::getLecture)
 			.collect(java.util.stream.Collectors.collectingAndThen(
 				java.util.stream.Collectors.toMap(

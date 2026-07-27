@@ -13,20 +13,25 @@ public interface BasicAcademicalCultureRepository extends
 
 	@Query("select bac from BasicAcademicalCultureLectureJpaEntity bac " +
 		"join fetch bac.lectureJpaEntity where " +
-		"(bac.major = :major or (bac.major is null and bac.college = :college and not exists (" +
-			"select specific.id from BasicAcademicalCultureLectureJpaEntity specific " +
-			"where specific.major = :major " +
-			"and (specific.startEntryYear is null or specific.startEntryYear <= :entryYear) " +
-			"and (specific.endEntryYear is null or specific.endEntryYear >= :entryYear)" +
+		"(bac.major = :major or (bac.major is null and bac.college = :college and (" +
+			"bac.mappingKey is not null or not exists (" +
+				"select managed.id from BasicAcademicalCultureLectureJpaEntity managed " +
+				"where managed.mappingKey is not null " +
+				"and managed.major is null " +
+				"and managed.college = :college " +
+				"and (managed.startEntryYear is null or managed.startEntryYear <= :entryYear) " +
+				"and (managed.endEntryYear is null or managed.endEntryYear >= :entryYear)" +
+			")" +
 		"))) " +
 		"and (bac.startEntryYear is null or bac.startEntryYear <= :entryYear) " +
 		"and (bac.endEntryYear is null or bac.endEntryYear >= :entryYear) " +
-		"and (bac.mappingKey is not null or not exists (" +
-			"select managed.id from BasicAcademicalCultureLectureJpaEntity managed " +
-			"where managed.mappingKey is not null " +
-			"and (managed.major = :major or (managed.major is null and managed.college = :college)) " +
-			"and (managed.startEntryYear is null or managed.startEntryYear <= :entryYear) " +
-			"and (managed.endEntryYear is null or managed.endEntryYear >= :entryYear)" +
+		"and (bac.mappingKey is not null or bac.major is not null or not exists (" +
+			"select legacy.id from BasicAcademicalCultureLectureJpaEntity legacy " +
+			"where legacy.mappingKey is not null " +
+			"and legacy.major is null " +
+			"and legacy.college = :college " +
+			"and (legacy.startEntryYear is null or legacy.startEntryYear <= :entryYear) " +
+			"and (legacy.endEntryYear is null or legacy.endEntryYear >= :entryYear)" +
 		"))")
 	List<BasicAcademicalCultureLectureJpaEntity> findAllApplicable(
 		@Param("college") String college,

@@ -2,10 +2,14 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commoncultur
 
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_B;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CAREER;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.DIGITAL_LITERACY;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.EXPRESSION;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.KOREAN;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MandatoryOptionResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -28,10 +32,8 @@ import org.springframework.stereotype.Component;
 class CommonCultureDetailCategoryManager {
 
 	private static final List<String> CHRISTAIN_MANDATORY_LECTURE_CODE_LIST = List.of(
-		"KMA02100",
-		"KMA00100",
 		"KMA00101"
-	); // 성경개론, 성서의이해, 성서와인간이해
+	); // 성서와인간이해
 	private static final String BASIC_ENGLISH_LECTURE_CODE = "KMP02126"; // 기초영어
 	private static final List<String> ENGLISH_12_MANDATORY_LECTURE_CODE_LIST = List.of(
 		"KMA02106",
@@ -71,6 +73,10 @@ class CommonCultureDetailCategoryManager {
 			graduationLectures,
 			category
 		);
+		List<Lecture> optionCandidates = graduationCommonCultureLectures.stream()
+			.filter(lecture -> lecture.getIsRevoked() == 0)
+			.sorted(Comparator.comparing(Lecture::getId))
+			.toList();
 		Set<String> graduationRecognitionCodes = graduationCommonCultureLectures.stream()
 			.map(Lecture::getRecognitionCode)
 			.collect(Collectors.toSet());
@@ -107,7 +113,38 @@ class CommonCultureDetailCategoryManager {
 		);
 		checkForignerStudentChristian(user, taken, category, commonCultureDetailCategoryResult);
 		commonCultureDetailCategoryResult.calculate(taken, graduationCommonCultureLectures);
+		addChoiceOption(user, category, taken, optionCandidates,
+			commonCultureDetailCategoryResult);
 		return commonCultureDetailCategoryResult;
+	}
+
+	private void addChoiceOption(
+		User user,
+		CommonCultureCategory category,
+		Set<Lecture> taken,
+		List<Lecture> candidates,
+		DetailCategoryResult result
+	) {
+		int requiredCount;
+		List<Lecture> choiceCandidates = candidates;
+		if (category == CHRISTIAN_A && user.checkBeforeEntryYear(20)) {
+			requiredCount = 1;
+			choiceCandidates = candidates.stream()
+				.filter(lecture -> !CHRISTAIN_MANDATORY_LECTURE_CODE_LIST.contains(lecture.getId()))
+				.toList();
+		} else if (category == CHRISTIAN_B && user.checkAfterEntryYear(20)) {
+			requiredCount = 2;
+		} else if (category == EXPRESSION || category == DIGITAL_LITERACY) {
+			requiredCount = 1;
+		} else {
+			return;
+		}
+		result.addMandatoryOptions(List.of(new MandatoryOptionResult(
+			category.getName() + " 선택",
+			requiredCount,
+			Math.min(taken.size(), requiredCount),
+			choiceCandidates
+		)));
 	}
 
 	private void checkForignerStudentChristian(
@@ -138,7 +175,9 @@ class CommonCultureDetailCategoryManager {
 		Set<CommonCulture> graduationLectures, CommonCultureCategory category
 	) {
 		return graduationLectures.stream()
-			.filter(commonCulture -> commonCulture.getCommonCultureCategory() == category)
+			.filter(commonCulture -> commonCulture.getCommonCultureCategory() == category
+				|| (category == DIGITAL_LITERACY
+					&& commonCulture.getCommonCultureCategory() == CAREER))
 			.map(CommonCulture::getLecture)
 			.collect(Collectors.toSet());
 	}

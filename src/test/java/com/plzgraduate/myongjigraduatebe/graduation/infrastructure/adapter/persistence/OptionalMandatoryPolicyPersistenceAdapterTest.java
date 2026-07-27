@@ -56,15 +56,17 @@ class OptionalMandatoryPolicyPersistenceAdapterTest {
 		when(repository.findActiveBasicPolicies(
 			eq(List.of("국제통상학전공", "국제통상학과")),
 			eq(25),
+			eq(MajorType.PRIMARY),
 			any(),
 			eq(PolicyStatus.ACTIVE)
 		)).thenReturn(List.of());
 
-		assertThat(sut.findActiveBasicPolicies("국제통상학전공", 25)).isEmpty();
+		assertThat(sut.findActiveBasicPolicies("국제통상학전공", 25, MajorType.PRIMARY)).isEmpty();
 
 		verify(repository).findActiveBasicPolicies(
 			eq(List.of("국제통상학전공", "국제통상학과")),
 			eq(25),
+			eq(MajorType.PRIMARY),
 			any(),
 			eq(PolicyStatus.ACTIVE)
 		);

@@ -32,9 +32,11 @@ public class OptionalMandatoryPolicyPersistenceAdapter implements FindOptionalMa
 	}
 
 	@Override
-	public List<OptionalMandatoryPolicy> findActiveBasicPolicies(String major, int entryYear) {
+	public List<OptionalMandatoryPolicy> findActiveBasicPolicies(
+		String major, int entryYear, MajorType majorType) {
 		return repository.findActiveBasicPolicies(
-				MajorNameNormalizer.resolveLookupMajors(major), entryYear, PolicyCategory.BASIC_ACADEMICAL_CULTURE,
+				MajorNameNormalizer.resolveLookupMajors(major), entryYear, majorType,
+				PolicyCategory.BASIC_ACADEMICAL_CULTURE,
 				PolicyStatus.ACTIVE).stream()
 			.map(this::mapToDomain)
 			.toList();

@@ -32,10 +32,12 @@ public interface OptionalMandatoryPolicyRepository
 		+ "left join fetch pl.lecture "
 		+ "where p.major in :majors "
 		+ "and p.startEntryYear <= :entryYear and p.endEntryYear >= :entryYear "
+		+ "and (p.majorType is null or p.majorType = :majorType) "
 		+ "and p.policyCategory = :category and p.status = :status")
 	List<OptionalMandatoryPolicyJpaEntity> findActiveBasicPolicies(
 		@Param("majors") Collection<String> majors,
 		@Param("entryYear") int entryYear,
+		@Param("majorType") MajorType majorType,
 		@Param("category") PolicyCategory category,
 		@Param("status") PolicyStatus status);
 }

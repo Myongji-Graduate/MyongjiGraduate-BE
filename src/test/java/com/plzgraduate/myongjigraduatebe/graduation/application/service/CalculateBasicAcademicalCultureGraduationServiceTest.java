@@ -12,12 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
@@ -65,7 +67,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 			findBasicAcademicalCulturePort, findOptionalMandatoryPolicyPort,
 			basicAcademicalGraduationManagers);
 		lenient().when(findOptionalMandatoryPolicyPort.findActiveBasicPolicies(
-			anyString(), anyInt())).thenReturn(List.of());
+			anyString(), anyInt(), any())).thenReturn(List.of());
 
 		user = User.builder()
 			.id(1L)
@@ -286,7 +288,7 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 			BasicAcademicalCultureLecture.of(optionalLecture, "사회과학대")
 		));
 		given(findOptionalMandatoryPolicyPort.findActiveBasicPolicies(
-			"응용통계학전공", 25)).willReturn(List.of(
+			"응용통계학전공", 25, MajorType.PRIMARY)).willReturn(List.of(
 			OptionalMandatoryPolicy.builder()
 				.name("응용통계 지정필수")
 				.major("응용통계학전공")
@@ -313,6 +315,46 @@ class CalculateBasicAcademicalCultureGraduationServiceTest {
 		assertThat(result.isCompleted()).isFalse();
 		assertThat(result.getDetailCategory().get(0).getHaveToLectures())
 			.contains(mandatoryLecture);
+	}
+
+	@Test
+	@DisplayName("학문기초 택1 지정조건은 일반 필수가 아니라 선택조건으로 응답한다.")
+	void exposesBasicAcademicChoicePolicyAsMandatoryOption() {
+		Lecture economics = Lecture.builder().id("KMD02123").name("경제학원론")
+			.credit(3).duplicateCode("KMD02123").build();
+		Lecture business = Lecture.builder().id("KMD02192").name("경영학입문")
+			.credit(3).duplicateCode("KMD02192").build();
+		User statisticsUser = User.builder().id(4L).primaryMajor("응용통계학전공")
+			.entryYear(25).build();
+		given(findBasicAcademicalCulturePort.findBasicAcademicalCulture("응용통계학전공", 25))
+			.willReturn(Set.of(
+				BasicAcademicalCultureLecture.builder().lecture(economics).college("사회과학대")
+					.sourcePolicyKey("basic-2025-plus-applied-statistics-mandatory").build(),
+				BasicAcademicalCultureLecture.builder().lecture(business).college("사회과학대")
+					.sourcePolicyKey("basic-2025-plus-applied-statistics-mandatory").build()
+			));
+		given(findOptionalMandatoryPolicyPort.findActiveBasicPolicies(
+			"응용통계학전공", 25, MajorType.PRIMARY))
+			.willReturn(List.of(OptionalMandatoryPolicy.builder()
+				.name("응용통계학전공 학문기초 지정조건 (2)")
+				.major("응용통계학전공").requiredCount(1).requiredCredit(3)
+				.candidateLectures(List.of(
+					new CandidateLecture(economics, "KMD02123"),
+					new CandidateLecture(business, "KMD02192")
+				)).build()));
+
+		DetailGraduationResult result =
+			calculateBasicAcademicalCultureGraduationService.calculateSingleDetailGraduation(
+				statisticsUser, PRIMARY_BASIC_ACADEMICAL_CULTURE,
+				TakenLectureInventory.from(Set.of()),
+				GraduationRequirement.builder().primaryBasicAcademicalCultureCredit(12).build()
+			);
+
+		assertThat(result.getDetailCategory().get(0).getMandatoryOptions()).singleElement()
+			.satisfies(option -> {
+				assertThat(option.requiredCount()).isEqualTo(1);
+				assertThat(option.candidateLectures()).containsExactlyInAnyOrder(economics, business);
+			});
 	}
 
 }

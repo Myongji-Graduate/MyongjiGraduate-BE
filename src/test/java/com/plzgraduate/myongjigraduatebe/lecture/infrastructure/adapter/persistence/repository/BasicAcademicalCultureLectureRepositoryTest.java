@@ -93,7 +93,7 @@ class BasicAcademicalCultureLectureRepositoryTest extends PersistenceTestSupport
 				BUSINESS.getName(), "경영학전공", 22);
 
 		assertThat(result).extracting(policy -> policy.getLectureJpaEntity().getId())
-			.containsExactly("SCOPED");
+			.containsExactlyInAnyOrder("COMMON", "SCOPED");
 	}
 
 	@DisplayName("전공 정책은 현재 단과대명이 학번 기반 fallback과 달라도 조회한다.")

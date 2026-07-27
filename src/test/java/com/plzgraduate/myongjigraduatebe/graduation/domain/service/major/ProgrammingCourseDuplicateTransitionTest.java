@@ -31,6 +31,10 @@ class ProgrammingCourseDuplicateTransitionTest {
 		"HEB01105", "기초프로그래밍2", 1, "HEB01103");
 	private static final Lecture BASIC_PROGRAMMING_2 = lecture(
 		"HEF01102", "기초프로그래밍2", 0, "HEB01103");
+	private static final Lecture OLD_DATABASE = lecture(
+		"HEC01204", "DB설계및구현1", 1, "HEB01207");
+	private static final Lecture DATABASE = lecture(
+		"HEB01207", "데이터베이스", 0, "HEB01207");
 
 	private final MajorGraduationManager manager = new MajorGraduationManager(
 		new MandatoryMajorManager(List.of()),
@@ -123,6 +127,63 @@ class ProgrammingCourseDuplicateTransitionTest {
 		assertThat(result.getDetailCategory().get(0).getTakenLectures()).isEmpty();
 		assertThat(result.getDetailCategory().get(1).getTakenLectures())
 			.containsExactly(BASIC_PROGRAMMING_2);
+	}
+
+	@DisplayName("폐강 구과목 수강 이력은 같은 학과·학번의 활성 대체 전필로 인정한다.")
+	@Test
+	void recognizesRevokedTakenLectureByActiveMandatoryReplacementPolicy() {
+		DetailGraduationResult result = manager.createDetailGraduationResult(
+			user,
+			PRIMARY,
+			TakenLectureInventory.from(Set.of(
+				TakenLecture.of(user, OLD_DATABASE, 2020, Semester.FIRST)
+			)),
+			new HashSet<>(Set.of(major(DATABASE, 1, 16, 24))),
+			30,
+			List.of());
+
+		DetailCategoryResult mandatory = result.getDetailCategory().get(0);
+		assertThat(mandatory.getTotalCredits()).isEqualTo(3);
+		assertThat(mandatory.getTakenCredits()).isEqualTo(3);
+		assertThat(mandatory.getTakenLectures()).containsExactly(OLD_DATABASE);
+		assertThat(mandatory.getHaveToLectures()).isEmpty();
+	}
+
+	@DisplayName("대체 활성 과목이 전필이 아니면 폐강 구과목도 전필로 인정하지 않는다.")
+	@Test
+	void doesNotRecognizeRevokedTakenLectureAsMandatoryWhenReplacementIsElective() {
+		DetailGraduationResult result = manager.createDetailGraduationResult(
+			user,
+			PRIMARY,
+			TakenLectureInventory.from(Set.of(
+				TakenLecture.of(user, OLD_DATABASE, 2020, Semester.FIRST)
+			)),
+			new HashSet<>(Set.of(major(DATABASE, 0, 16, 24))),
+			30,
+			List.of());
+
+		assertThat(result.getDetailCategory().get(0).getTakenLectures()).isEmpty();
+		assertThat(result.getDetailCategory().get(1).getTakenLectures()).containsExactly(OLD_DATABASE);
+	}
+
+	@DisplayName("폐강 과목에 남은 옛 전필 행은 활성 대체 과목이 전선이면 무시한다.")
+	@Test
+	void ignoresLegacyMandatoryMappingOfRevokedLecture() {
+		DetailGraduationResult result = manager.createDetailGraduationResult(
+			user,
+			PRIMARY,
+			TakenLectureInventory.from(Set.of(
+				TakenLecture.of(user, OLD_DATABASE, 2020, Semester.FIRST)
+			)),
+			new HashSet<>(Set.of(
+				major(OLD_DATABASE, 1, 16, 24),
+				major(DATABASE, 0, 16, 24)
+			)),
+			30,
+			List.of());
+
+		assertThat(result.getDetailCategory().get(0).getTakenLectures()).isEmpty();
+		assertThat(result.getDetailCategory().get(1).getTakenLectures()).containsExactly(OLD_DATABASE);
 	}
 
 	private DetailCategoryResult calculateElectiveResult(Set<TakenLecture> takenLectures) {
