@@ -73,7 +73,7 @@ spring:
       on-profile: dev
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
@@ -81,6 +81,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        # "user" 등 Postgres 예약어를 테이블/컬럼명으로 쓸 때 자동으로 quoting 처리
+        auto_quote_keyword: true
 
   flyway:
     enabled: false
