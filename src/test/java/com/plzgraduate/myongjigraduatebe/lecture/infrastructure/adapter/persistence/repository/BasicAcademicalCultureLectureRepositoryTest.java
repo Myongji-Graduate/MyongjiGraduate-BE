@@ -96,6 +96,38 @@ class BasicAcademicalCultureLectureRepositoryTest extends PersistenceTestSupport
 			.containsExactlyInAnyOrder("COMMON", "SCOPED");
 	}
 
+	@DisplayName("같은 과목의 전공 정책이 있으면 무범위 단과대 구 행을 제외한다.")
+	@Test
+	void excludeLegacyCollegePolicyWhenMajorPolicyExistsForSameLecture() {
+		LectureJpaEntity lecture = lectureRepository.save(LectureJpaEntity.builder()
+			.id("DUPLICATE_POLICY")
+			.build());
+
+		basicAcademicalCultureRepository.saveAll(List.of(
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(lecture)
+				.college(ICT.getName())
+				.build(),
+			BasicAcademicalCultureLectureJpaEntity.builder()
+				.lectureJpaEntity(lecture)
+				.college(ICT.getName())
+				.major("응용소프트웨어전공")
+				.startEntryYear(18)
+				.endEntryYear(24)
+				.mappingKey("application-software-policy")
+				.build()
+		));
+
+		List<BasicAcademicalCultureLectureJpaEntity> result =
+			basicAcademicalCultureRepository.findAllApplicable(
+				ICT.getName(), "응용소프트웨어전공", 20);
+
+		assertThat(result).singleElement()
+			.extracting(policy -> policy.getLectureJpaEntity().getId(),
+				BasicAcademicalCultureLectureJpaEntity::getMajor)
+			.containsExactly("DUPLICATE_POLICY", "응용소프트웨어전공");
+	}
+
 	@DisplayName("전공 정책은 현재 단과대명이 학번 기반 fallback과 달라도 조회한다.")
 	@Test
 	void findMajorPolicyRegardlessOfFallbackCollege() {

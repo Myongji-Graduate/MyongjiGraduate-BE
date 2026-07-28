@@ -13,7 +13,14 @@ public interface BasicAcademicalCultureRepository extends
 
 	@Query("select bac from BasicAcademicalCultureLectureJpaEntity bac " +
 		"join fetch bac.lectureJpaEntity where " +
-		"(bac.major = :major or (bac.major is null and bac.college = :college and (" +
+		"(bac.major = :major or (bac.major is null and bac.college = :college " +
+			"and not exists (" +
+				"select scoped.id from BasicAcademicalCultureLectureJpaEntity scoped " +
+				"where scoped.lectureJpaEntity.id = bac.lectureJpaEntity.id " +
+				"and scoped.major = :major " +
+				"and (scoped.startEntryYear is null or scoped.startEntryYear <= :entryYear) " +
+				"and (scoped.endEntryYear is null or scoped.endEntryYear >= :entryYear)" +
+			") and (" +
 			"bac.mappingKey is not null or not exists (" +
 				"select managed.id from BasicAcademicalCultureLectureJpaEntity managed " +
 				"where managed.mappingKey is not null " +
