@@ -1,0 +1,9 @@
+.git
+.gradle
+build
+.idea
+.cursor
+.claude
+.omc
+*.md
+*.log
