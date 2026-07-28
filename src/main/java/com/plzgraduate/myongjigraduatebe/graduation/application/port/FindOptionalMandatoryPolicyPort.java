@@ -9,7 +9,8 @@ public interface FindOptionalMandatoryPolicyPort {
 	List<OptionalMandatoryPolicy> findActivePolicies(
 		String major, int entryYear, MajorType majorType);
 
-	default List<OptionalMandatoryPolicy> findActiveBasicPolicies(String major, int entryYear) {
+	default List<OptionalMandatoryPolicy> findActiveBasicPolicies(
+		String major, int entryYear, MajorType majorType) {
 		return List.of();
 	}
 }

@@ -115,7 +115,8 @@ public class GraduationResult {
 			graduationRequirement.getNormalCultureCredit(),
 			acknowledgedCredit,
 			takenLectureInventory,
-			detailGraduationResults
+			detailGraduationResults,
+			user
 		);
 
 		normalCultureGraduationResult.checkCompleted();

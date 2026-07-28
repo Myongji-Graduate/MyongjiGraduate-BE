@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.graduation.infrastructure.adapter.persistence;
 
 import com.plzgraduate.myongjigraduatebe.core.meta.PersistenceAdapter;
+import com.plzgraduate.myongjigraduatebe.core.MajorNameNormalizer;
 import com.plzgraduate.myongjigraduatebe.graduation.application.port.FindOptionalMandatoryPolicyPort;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MajorType;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
@@ -24,16 +25,18 @@ public class OptionalMandatoryPolicyPersistenceAdapter implements FindOptionalMa
 	public List<OptionalMandatoryPolicy> findActivePolicies(
 		String major, int entryYear, MajorType majorType) {
 		return repository.findActivePolicies(
-				major, entryYear, majorType, PolicyCategory.MAJOR_MANDATORY,
+				MajorNameNormalizer.resolveLookupMajors(major), entryYear, majorType, PolicyCategory.MAJOR_MANDATORY,
 				PolicyStatus.ACTIVE).stream()
 			.map(this::mapToDomain)
 			.toList();
 	}
 
 	@Override
-	public List<OptionalMandatoryPolicy> findActiveBasicPolicies(String major, int entryYear) {
+	public List<OptionalMandatoryPolicy> findActiveBasicPolicies(
+		String major, int entryYear, MajorType majorType) {
 		return repository.findActiveBasicPolicies(
-				major, entryYear, PolicyCategory.BASIC_ACADEMICAL_CULTURE,
+				MajorNameNormalizer.resolveLookupMajors(major), entryYear, majorType,
+				PolicyCategory.BASIC_ACADEMICAL_CULTURE,
 				PolicyStatus.ACTIVE).stream()
 			.map(this::mapToDomain)
 			.toList();

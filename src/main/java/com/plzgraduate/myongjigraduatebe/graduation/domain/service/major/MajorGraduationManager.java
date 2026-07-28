@@ -48,7 +48,9 @@ public class MajorGraduationManager {
 		List<OptionalMandatoryPolicy> optionalMandatoryPolicies
 	) {
 
-		removeDuplicateLectureIfTaken(takenLectureInventory, majorLectures);
+		majorLectures.removeIf(major -> !major.isApplicableByEntryYear(user.getEntryYear())
+			|| (major.getLecture().getIsRevoked() == 1 && major.getIsMandatory() == 1));
+		replaceRevokedLectureWithActivePolicyIfTaken(takenLectureInventory, majorLectures);
 		changeMandatoryToElectiveByMajorRange(user, majorLectures);
 
 		Set<Lecture> mandatoryLectures = filterMandatoryLectures(majorLectures);
@@ -100,28 +102,41 @@ public class MajorGraduationManager {
 	}
 
 	/**
-	 * 전공과목에서 사용자의 수강과목 중 중복과목들을 삭제한다. ex) A(폐지) -> B(폐지) -> C(진행) 인 과목이 있다고하면 A,B,C의 과목중복코드는 같다.
-	 * 사용자가 B과목을 들었다면 A,C는 전공과목에서 삭제한다. 사용자가 B과목을 들었다면 A,C는 전공과목에서 삭제한다. B과목만 takenLectures(수강했던
-	 * 전공과목)에 넣어주면 되고 A,C 과목은 haveToTLectures(들어야하는 전공과목)에 넣어주면 안되기 떄문이다.
+	 * 폐강 과목은 전공 정책의 후보가 아니다. 다만 실제 수강 이력이 있고 같은 중복인정 코드의
+	 * 활성 과목이 해당 학과·학번 전공 정책에 있으면, 활성 과목 정책을 수강한 폐강 과목에 적용한다.
+	 * 폐강 전필 행은 계산 후보에서 제외하지만, 폐강 전선 이력은 기존 전공선택 학점으로 유지한다.
 	 */
-	private void removeDuplicateLectureIfTaken(
+	private void replaceRevokedLectureWithActivePolicyIfTaken(
 		TakenLectureInventory takenLectureInventory,
 		Set<MajorLecture> graduationLectures
 	) {
 		Set<Lecture> duplicatedTakenLectures = findDuplicatedTakenLecture(takenLectureInventory);
-		graduationLectures.removeIf(graduationLecture ->
-			duplicatedTakenLectures.stream()
-				.anyMatch(duplicatedTakenLecture ->
-					!duplicatedTakenLecture.equals(graduationLecture.getLecture())
-						&& duplicatedTakenLecture.getDuplicateCode()
-						.equals(graduationLecture.getLecture()
-							.getDuplicateCode())
-						&& !isProgrammingCourseRecognizedSeparately(
-							takenLectureInventory,
-							duplicatedTakenLecture,
-							graduationLecture.getLecture())
-				)
-		);
+		for (Lecture duplicatedTakenLecture : duplicatedTakenLectures) {
+			Set<MajorLecture> activeReplacementPolicies = graduationLectures.stream()
+				.filter(graduationLecture -> graduationLecture.getLecture().getIsRevoked() == 0)
+				.filter(graduationLecture -> duplicatedTakenLecture.getDuplicateCode()
+					.equals(graduationLecture.getLecture().getDuplicateCode()))
+				.collect(Collectors.toSet());
+
+			if (activeReplacementPolicies.isEmpty()) {
+				continue;
+			}
+
+			for (MajorLecture policy : activeReplacementPolicies) {
+				if (!isProgrammingCourseRecognizedSeparately(
+					takenLectureInventory,
+					duplicatedTakenLecture,
+					policy.getLecture())) {
+					graduationLectures.remove(policy);
+				}
+				graduationLectures.add(MajorLecture.of(
+					duplicatedTakenLecture,
+					policy.getMajor(),
+					policy.getIsMandatory(),
+					policy.getAppliedStartEntryYear(),
+					policy.getAppliedEndEntryYear()));
+			}
+		}
 	}
 
 	private boolean isProgrammingCourseRecognizedSeparately(

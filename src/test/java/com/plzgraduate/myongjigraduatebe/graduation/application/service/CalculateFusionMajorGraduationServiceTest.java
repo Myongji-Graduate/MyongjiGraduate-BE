@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FusionMajorMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -107,5 +108,36 @@ class CalculateFusionMajorGraduationServiceTest {
 
 		assertThat(results.get(1).isCompleted()).isFalse();
 		assertThat(results.get(1).getTakenCredit()).isEqualTo(3);
+	}
+
+	@Test
+	void returnsOnlyRequestedFusionMajorAreaForDetailPage() {
+		User user = User.builder()
+			.primaryMajor("데이터사이언스전공")
+			.associatedMajor("응용데이터사이언스전공")
+			.entryYear(25)
+			.build();
+		Lecture lecture = Lecture.from("HED00202", "융합기초프로그래밍", 3);
+		TakenLectureInventory inventory = TakenLectureInventory.from(
+			Set.of(TakenLecture.custom(user, lecture)));
+
+		given(membershipPort.findRequiredCredit("응용데이터사이언스전공", 25, "데이터사이언스전공"))
+			.willReturn(36);
+		given(membershipPort.findLectures("응용데이터사이언스전공", 25, "MAJOR"))
+			.willReturn(new HashSet<>(Set.of(lecture)));
+		given(membershipPort.findEquivalenceKeys("응용데이터사이언스전공", 25)).willReturn(Map.of());
+		given(membershipPort.findMandatoryLectureIds("응용데이터사이언스전공", 25, "MAJOR"))
+			.willReturn(Set.of());
+
+		DetailGraduationResult result = service.calculateSingleDetailGraduation(
+			user, GraduationCategory.FUSION_MAJOR, inventory, GraduationRequirement.builder().build());
+
+		assertThat(service.supports(GraduationCategory.FUSION_MAJOR)).isTrue();
+		assertThat(service.supports(GraduationCategory.FUSION_BASIC_ACADEMICAL_CULTURE)).isTrue();
+		assertThat(result.getGraduationCategory()).isEqualTo(GraduationCategory.FUSION_MAJOR);
+		assertThat(result.getTotalCredit()).isEqualTo(36);
+		assertThat(result.getDetailCategory().getFirst().getTakenLectures())
+			.extracting(Lecture::getId)
+			.containsExactly("HED00202");
 	}
 }

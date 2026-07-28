@@ -10,6 +10,7 @@ public class BasicAcademicalCultureLecture {
 
 	private final Lecture lecture;
 	private final String college;
+	private final String sourcePolicyKey;
 	private final String major;
 	private final Integer startEntryYear;
 	private final Integer endEntryYear;
@@ -22,6 +23,7 @@ public class BasicAcademicalCultureLecture {
 	private BasicAcademicalCultureLecture(
 		Lecture lecture,
 		String college,
+		String sourcePolicyKey,
 		String major,
 		Integer startEntryYear,
 		Integer endEntryYear,
@@ -32,6 +34,7 @@ public class BasicAcademicalCultureLecture {
 	) {
 		this.lecture = lecture;
 		this.college = college;
+		this.sourcePolicyKey = sourcePolicyKey;
 		this.major = major;
 		this.startEntryYear = startEntryYear;
 		this.endEntryYear = endEntryYear;
@@ -46,6 +49,10 @@ public class BasicAcademicalCultureLecture {
 			.lecture(lecture)
 			.college(college)
 			.build();
+	}
+
+	public boolean isMandatoryPolicy() {
+		return sourcePolicyKey != null && sourcePolicyKey.contains("mandatory");
 	}
 
 	public static BasicAcademicalCultureLecture fromTaken(

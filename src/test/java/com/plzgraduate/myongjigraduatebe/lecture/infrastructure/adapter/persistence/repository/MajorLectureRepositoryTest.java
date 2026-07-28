@@ -44,7 +44,7 @@ class MajorLectureRepositoryTest extends PersistenceTestSupport {
         String major = "응용소프트웨어";
 
         //when
-        List<MajorLectureJpaEntity> majorLectures = majorLectureRepository.findAllByMajor(major);
+        List<MajorLectureJpaEntity> majorLectures = majorLectureRepository.findAllByMajors(List.of(major));
 
         //then
         assertThat(majorLectures).hasSize(2)

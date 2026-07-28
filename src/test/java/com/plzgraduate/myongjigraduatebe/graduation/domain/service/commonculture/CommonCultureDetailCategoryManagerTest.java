@@ -1,7 +1,9 @@
 package com.plzgraduate.myongjigraduatebe.graduation.domain.service.commonculture;
 
 import static com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture.공통교양_16_17;
+import static com.plzgraduate.myongjigraduatebe.fixture.CommonCultureFixture.공통교양_20_21_22;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_A;
+import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.CHRISTIAN_B;
 import static com.plzgraduate.myongjigraduatebe.lecture.domain.model.CommonCultureCategory.ENGLISH;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,6 +51,27 @@ class CommonCultureDetailCategoryManagerTest {
 		assertThat(result.getTakenCredits()).isEqualTo(2);
 		assertThat(result.getTakenLectures()).containsExactly(representative);
 		assertThat(inventory.getTakenLectures()).isEmpty();
+	}
+
+	@DisplayName("16~19학번 기독교 카테고리는 3과목 중 택1 선택 정보를 제공한다.")
+	@Test
+	void generateChristianChoiceOptionBefore2020() {
+		User user = UserFixture.경영학과_19학번_ENG34();
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of());
+
+		DetailCategoryResult result = manager.generate(
+			user,
+			inventory,
+			공통교양_16_17(),
+			CHRISTIAN_A
+		);
+
+		assertThat(result.getMandatoryOptions()).singleElement().satisfies(option -> {
+			assertThat(option.name()).isEqualTo("기독교 선택");
+			assertThat(option.requiredCount()).isEqualTo(1);
+			assertThat(option.takenCount()).isZero();
+			assertThat(option.candidateLectures()).hasSize(3);
+		});
 	}
 
     @DisplayName("영어 레벨 기초: 각 카테고리의 해당하는 과목의 이수 학점을 만족한 경우 이수 완료의 카테고리 졸업 결과를 생성한다.")
@@ -322,9 +345,9 @@ class CommonCultureDetailCategoryManagerTest {
                 .contains(CHRISTIAN_A.getName(), true, true, CHRISTIAN_A.getTotalCredit());
     }
 
-    @DisplayName("16~19 학번의 기독교 카테고리는 필수 과목을 수강하지 않으면 수강 학점이 카테고리의 총 학점 이상이어도 이수 미완료 졸업 결과를 생성한다.")
-    @Test
-    void generateMandatoryUnSatisfactionCommonCultureDetailCategory() {
+	@DisplayName("16~19 학번의 기독교 카테고리는 필수 과목을 수강하지 않으면 수강 학점이 카테고리의 총 학점 이상이어도 이수 미완료 졸업 결과를 생성한다.")
+	@Test
+	void generateMandatoryUnSatisfactionCommonCultureDetailCategory() {
         //given
         User user = UserFixture.경영학과_19학번_ENG34();
         Set<TakenLecture> takenLectures = new HashSet<>((Set.of(
@@ -345,6 +368,27 @@ class CommonCultureDetailCategoryManagerTest {
 		assertThat(detailCategoryResult)
 			.extracting("detailCategoryName", "isCompleted", "isSatisfiedMandatory", "totalCredits")
 			.contains(CHRISTIAN_A.getName(), false, false, CHRISTIAN_A.getTotalCredit());
+	}
+
+	@DisplayName("20학번 이상 기독교 카테고리는 4과목 중 택2 선택 정보를 제공한다.")
+	@Test
+	void generateChristianChoiceOptionAfter2020() {
+		User user = UserFixture.경영학과_22학번();
+		TakenLectureInventory inventory = TakenLectureInventory.from(Set.of());
+
+		DetailCategoryResult result = manager.generate(
+			user,
+			inventory,
+			공통교양_20_21_22(),
+			CHRISTIAN_B
+		);
+
+		assertThat(result.getMandatoryOptions()).singleElement().satisfies(option -> {
+			assertThat(option.name()).isEqualTo("기독교 선택");
+			assertThat(option.requiredCount()).isEqualTo(2);
+			assertThat(option.takenCount()).isZero();
+			assertThat(option.candidateLectures()).hasSize(4);
+		});
 	}
 
 	@Test

@@ -3,6 +3,8 @@ package com.plzgraduate.myongjigraduatebe.graduation.application.service;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationRequirement;
+import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.CalculateDetailGraduationUseCase;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FusionMajorMembershipPort;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CalculateFusionMajorGraduationService {
+public class CalculateFusionMajorGraduationService implements CalculateDetailGraduationUseCase {
 
 	private final FusionMajorMembershipPort membershipPort;
 
@@ -32,6 +34,32 @@ public class CalculateFusionMajorGraduationService {
 			membershipPort.findRequiredCredit(
 				user.getAssociatedMajor(), user.getEntryYear(), user.getPrimaryMajor()));
 		return List.of(basic, major);
+	}
+
+	@Override
+	public boolean supports(GraduationCategory graduationCategory) {
+		return graduationCategory == GraduationCategory.FUSION_BASIC_ACADEMICAL_CULTURE
+			|| graduationCategory == GraduationCategory.FUSION_MAJOR;
+	}
+
+	@Override
+	public DetailGraduationResult calculateSingleDetailGraduation(
+		User user,
+		GraduationCategory graduationCategory,
+		TakenLectureInventory inventory,
+		GraduationRequirement graduationRequirement
+	) {
+		if (graduationCategory == GraduationCategory.FUSION_BASIC_ACADEMICAL_CULTURE) {
+			return calculateArea(
+				user, inventory, "BASIC", graduationCategory,
+				membershipPort.findRequiredBasicCredit(
+					user.getAssociatedMajor(), user.getEntryYear(), user.getPrimaryMajor()));
+		}
+
+		return calculateArea(
+			user, inventory, "MAJOR", graduationCategory,
+			membershipPort.findRequiredCredit(
+				user.getAssociatedMajor(), user.getEntryYear(), user.getPrimaryMajor()));
 	}
 
 	private DetailGraduationResult calculateArea(

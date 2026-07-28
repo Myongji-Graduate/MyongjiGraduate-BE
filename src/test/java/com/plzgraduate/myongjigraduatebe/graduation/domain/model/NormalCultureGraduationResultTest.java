@@ -144,4 +144,24 @@ class NormalCultureGraduationResultTest {
 				.contains(NORMAL_CULTURE.getName(),
 						takenNormalCultureCredit + remainCredit + exchangeCredit);
 	}
+
+	@DisplayName("아너칼리지 25학번 이후는 일반교양 학점이 충분해도 M프레시맨세미나를 이수하지 않으면 미완료다.")
+	@Test
+	void honorsCollegeRequiresMFreshmanSeminar() {
+		User user = User.builder()
+			.entryYear(25)
+			.honorsCollege(true)
+			.build();
+		TakenLectureInventory withoutMFreshman = TakenLectureInventory.from(new HashSet<>(Set.of(
+			TakenLecture.of(user, Lecture.from("KMA02104", "글쓰기", 10), 2025, Semester.FIRST)
+		)));
+
+		NormalCultureGraduationResult result = NormalCultureGraduationResult.create(
+			10, 0, withoutMFreshman, List.of(), user);
+		result.checkCompleted();
+
+		assertThat(result.isMFreshmanSeminarRequired()).isTrue();
+		assertThat(result.isMFreshmanSeminarCompleted()).isFalse();
+		assertThat(result.isCompleted()).isFalse();
+	}
 }

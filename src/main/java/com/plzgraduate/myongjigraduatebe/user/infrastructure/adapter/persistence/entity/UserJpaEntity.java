@@ -63,6 +63,11 @@ public class UserJpaEntity extends TimeBaseEntity {
 
 	private boolean graduated;
 
+	@Column(nullable = false)
+	private boolean honorsCollege;
+
+	private String honorsTargetMajor;
+
 	@Enumerated(value = EnumType.STRING)
 	private StudentCategory studentCategory;
 }

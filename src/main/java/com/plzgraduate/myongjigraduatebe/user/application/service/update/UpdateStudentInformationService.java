@@ -30,7 +30,9 @@ class UpdateStudentInformationService implements UpdateStudentInformationUseCase
 			updateStudentInformationCommand.getExchangeCredit(),
 			updateStudentInformationCommand.getTotalCredit(),
 			updateStudentInformationCommand.getTakenCredit(),
-			updateStudentInformationCommand.isGraduate()
+			updateStudentInformationCommand.isGraduate(),
+			updateStudentInformationCommand.isHonorsCollege(),
+			updateStudentInformationCommand.getHonorsTargetMajor()
 		);
 		updateUserPort.updateUser(user);
 		return user;
