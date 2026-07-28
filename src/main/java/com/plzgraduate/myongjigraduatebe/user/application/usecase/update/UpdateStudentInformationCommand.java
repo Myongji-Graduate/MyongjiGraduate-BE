@@ -41,10 +41,14 @@ UpdateStudentInformationCommand {
 
 	private boolean graduate;
 
+	private boolean honorsCollege;
+
+	private String honorsTargetMajor;
+
 	@Builder
 	private UpdateStudentInformationCommand(User user, String name, String major, String dualMajor,
 											String subMajor, String associatedMajor, Integer completedSemesterCount, TransferCredit transferCredit, ExchangeCredit exchangeCredit, StudentCategory studentCategory, int totalCredit, double takenCredit,
-											boolean graduate) {
+										boolean graduate, boolean honorsCollege, String honorsTargetMajor) {
 		this.user = user;
 		this.name = name;
 		this.major = major;
@@ -58,10 +62,12 @@ UpdateStudentInformationCommand {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.graduate = graduate;
+		this.honorsCollege = honorsCollege;
+		this.honorsTargetMajor = honorsTargetMajor;
 	}
 
 	public static UpdateStudentInformationCommand of(User user,
-													 ParsingInformation parsingInformation) {
+		ParsingInformation parsingInformation, boolean honorsCollege, String honorsTargetMajor) {
 		return UpdateStudentInformationCommand.builder()
 				.user(user)
 				.name(parsingInformation.getStudentName())
@@ -73,7 +79,13 @@ UpdateStudentInformationCommand {
 				.transferCredit(parsingInformation.getTransferCredit())
 				.exchangeCredit(parsingInformation.getExchangeCredit())
 				.studentCategory(parsingInformation.getStudentCategory())
+				.honorsCollege(honorsCollege)
+				.honorsTargetMajor(honorsCollege ? honorsTargetMajor : null)
 				.build();
+	}
+
+	public static UpdateStudentInformationCommand of(User user, ParsingInformation parsingInformation) {
+		return of(user, parsingInformation, user.isHonorsCollege(), user.getHonorsTargetMajor());
 	}
 
 	public static UpdateStudentInformationCommand update(User user,
@@ -90,6 +102,8 @@ UpdateStudentInformationCommand {
 				.totalCredit(graduationResult.getTotalCredit())
 				.takenCredit(graduationResult.getTakenCredit())
 				.graduate(graduationResult.isGraduated())
+				.honorsCollege(user.isHonorsCollege())
+				.honorsTargetMajor(user.getHonorsTargetMajor())
 				.build();
 	}
 }

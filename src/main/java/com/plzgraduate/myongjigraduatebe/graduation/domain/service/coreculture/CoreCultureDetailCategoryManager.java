@@ -3,6 +3,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.coreculture;
 import static com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester.FIRST;
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MandatoryOptionResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -41,6 +42,12 @@ public class CoreCultureDetailCategoryManager {
 			graduationLectures,
 			category
 		);
+		Set<Lecture> displayCoreCultureLectures = new HashSet<>(graduationCoreCultureLectures);
+		removeIctCoreCultureExceptionFromDisplay(user, displayCoreCultureLectures);
+		List<Lecture> optionCandidates = displayCoreCultureLectures.stream()
+			.filter(lecture -> lecture.getIsRevoked() == 0)
+			.sorted(Comparator.comparing(Lecture::getId))
+			.toList();
 		Set<String> graduationRecognitionCodes = graduationCoreCultureLectures.stream()
 			.map(Lecture::getRecognitionCode)
 			.collect(Collectors.toSet());
@@ -65,8 +72,6 @@ public class CoreCultureDetailCategoryManager {
 		Set<Lecture> taken = recognizedTakenLectures.stream()
 			.map(TakenLecture::getLecture)
 			.collect(Collectors.toSet());
-		graduationCoreCultureLectures.removeIf(lecture ->
-			latestTakenLectureByRecognitionCode.containsKey(lecture.getRecognitionCode()));
 		takenLectureInventory.handleFinishedTakenLectures(new HashSet<>(matchedTakenLectures));
 
 		DetailCategoryResult commonCultureDetailCategoryResult = DetailCategoryResult.create(
@@ -74,9 +79,29 @@ public class CoreCultureDetailCategoryManager {
 		calculateFreeElectiveLeftCredit(user, taken, commonCultureDetailCategoryResult);
 		calculateNormalLeftCredit(taken, recognizedTakenLectures,
 			commonCultureDetailCategoryResult);
-		commonCultureDetailCategoryResult.calculate(taken, graduationCoreCultureLectures);
+		displayCoreCultureLectures.removeIf(lecture ->
+			latestTakenLectureByRecognitionCode.containsKey(lecture.getRecognitionCode()));
+		commonCultureDetailCategoryResult.calculate(taken, displayCoreCultureLectures);
+		commonCultureDetailCategoryResult.addMandatoryOptions(List.of(
+			new MandatoryOptionResult(
+				category.getName() + " 선택",
+				1,
+				taken.isEmpty() ? 0 : 1,
+				optionCandidates
+			)
+		));
 
 		return commonCultureDetailCategoryResult;
+	}
+
+	private void removeIctCoreCultureExceptionFromDisplay(
+		User user, Set<Lecture> displayCoreCultureLectures
+	) {
+		if (!isIctCollege(user)) {
+			return;
+		}
+		displayCoreCultureLectures.removeIf(lecture ->
+			lecture.getRecognitionCode().equals(과학과기술_예외_과목_인정코드));
 	}
 
 	private Set<Lecture> categorizeCoreCultures(

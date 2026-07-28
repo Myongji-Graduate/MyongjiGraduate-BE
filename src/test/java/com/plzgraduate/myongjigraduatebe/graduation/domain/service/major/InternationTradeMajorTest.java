@@ -348,4 +348,50 @@ class InternationTradeMajorTest {
 			.doesNotContain(mockLectureMap.get("HBX01143"));
 	}
 
+	@DisplayName("25학번 이후에는 16~24학번 전공필수 후보가 제외된다.")
+	@Test
+	void entryYear_25plus_filters_old_mandatory_rows() {
+		// given
+		User user = User.builder()
+			.authId("mj25")
+			.englishLevel(com.plzgraduate.myongjigraduatebe.user.domain.model.EnglishLevel.ENG34)
+			.koreanLevel(com.plzgraduate.myongjigraduatebe.user.domain.model.KoreanLevel.FREE)
+			.studentNumber("60250001")
+			.entryYear(25)
+			.primaryMajor("국제통상학전공")
+			.studentCategory(com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory.NORMAL)
+			.totalCredit(0)
+			.takenCredit(0)
+			.graduated(false)
+			.build();
+		Set<MajorLecture> majorLectures = new HashSet<>(Set.of(
+			MajorLecture.of(mockLectureMap.get("HBX01104"), "국제통상학전공", 1, 16, 24),
+			MajorLecture.of(Lecture.of("HBH01101", "국제통상원론", 3, 0, null), "국제통상학전공", 1, 25, 99),
+			MajorLecture.of(mockLectureMap.get("HBX01106"), "국제통상학전공", 0, 16, 24)
+		));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(Set.of());
+		MandatoryMajorManager mandatoryMajorManager = new MandatoryMajorManager(
+			List.of(handler(), new ReplaceMandatoryMajorHandler()));
+		ElectiveMajorManager electiveMajorManager = new ElectiveMajorManager();
+		MajorGraduationManager manager = new MajorGraduationManager(
+			mandatoryMajorManager, electiveMajorManager);
+
+		// when
+		DetailGraduationResult detailGraduationResult = manager.createDetailGraduationResult(
+			user,
+			PRIMARY,
+			takenLectureInventory,
+			majorLectures,
+			3,
+			List.of()
+		);
+		DetailCategoryResult mandatoryDetailCategory = detailGraduationResult.getDetailCategory().get(0);
+
+		// then
+		assertThat(mandatoryDetailCategory.getTotalCredits()).isEqualTo(3);
+		assertThat(mandatoryDetailCategory.getHaveToLectures())
+			.extracting(Lecture::getId)
+			.containsExactly("HBH01101");
+	}
+
 }

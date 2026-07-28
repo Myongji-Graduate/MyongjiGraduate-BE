@@ -10,6 +10,7 @@ import com.plzgraduate.myongjigraduatebe.fixture.CoreCultureCategoryFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.LectureFixture;
 import com.plzgraduate.myongjigraduatebe.fixture.UserFixture;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailCategoryResult;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MandatoryOptionResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCulture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.CoreCultureCategory;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
@@ -146,6 +147,36 @@ class CoreCultureDetailCategoryManagerTest {
 				"freeElectiveLeftCredit"
 			)
 			.contains(coreCultureCategory.getName(), true, categoryTotalCredit, 3, 3);
+	}
+
+	@DisplayName(
+		"응용소프트웨어전공 학생은 핵심교양 세부 카테고리 '과학과기술'에서 컴퓨팅사고와코딩입문을 남은 과목 목록과 선택 후보에서 제외한다."
+	)
+	@Test
+	void generateScienceTechnologyDetailCategoryResult_HidesCodingIntroForICT() {
+
+		//given
+		User user = UserFixture.응용소프트웨어전공_19학번();
+		Set<CoreCulture> graduationLectures = new HashSet<>(핵심교양_과학과기술());
+		graduationLectures.add(CoreCulture.of(
+			Lecture.of("KMA02170", "컴퓨팅사고와코딩입문", 3, 0, "KMA02136"),
+			SCIENCE_TECHNOLOGY
+		));
+		TakenLectureInventory takenLectureInventory = TakenLectureInventory.from(new HashSet<>());
+
+		//when
+		DetailCategoryResult detailCategoryResult = manager.generate(
+			user, takenLectureInventory, graduationLectures, SCIENCE_TECHNOLOGY
+		);
+
+		//then
+		assertThat(detailCategoryResult.getHaveToLectures())
+			.extracting(Lecture::getId)
+			.doesNotContain("KMA02170");
+		assertThat(detailCategoryResult.getMandatoryOptions())
+			.flatExtracting(MandatoryOptionResult::candidateLectures)
+			.extracting(Lecture::getId)
+			.doesNotContain("KMA02170");
 	}
 
 	@DisplayName("4차산업혁명시대의예술 과목은 2022년 1학기 이후 수강한 경우에는 핵심교양으로 인정된다.")

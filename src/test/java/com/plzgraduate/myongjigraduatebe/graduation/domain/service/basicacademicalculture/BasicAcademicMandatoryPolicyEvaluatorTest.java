@@ -29,6 +29,12 @@ class BasicAcademicMandatoryPolicyEvaluatorTest {
 
 		assertThat(result.satisfied()).isTrue();
 		assertThat(result.remainingCandidates()).isEmpty();
+		assertThat(result.mandatoryOptions()).singleElement()
+			.satisfies(option -> {
+				assertThat(option.requiredCount()).isEqualTo(1);
+				assertThat(option.takenCount()).isEqualTo(1);
+				assertThat(option.candidateLectures()).containsExactly(ECONOMICS, BUSINESS);
+			});
 	}
 
 	@Test
@@ -38,6 +44,8 @@ class BasicAcademicMandatoryPolicyEvaluatorTest {
 
 		assertThat(result.satisfied()).isFalse();
 		assertThat(result.remainingCandidates()).containsExactly(ECONOMICS, BUSINESS);
+		assertThat(result.mandatoryOptions()).singleElement()
+			.satisfies(option -> assertThat(option.requiredCount()).isEqualTo(1));
 	}
 
 	@Test
@@ -69,6 +77,7 @@ class BasicAcademicMandatoryPolicyEvaluatorTest {
 
 		assertThat(result.satisfied()).isFalse();
 		assertThat(result.remainingCandidates()).containsExactly(BUSINESS);
+		assertThat(result.mandatoryOptions()).isEmpty();
 	}
 
 	private static OptionalMandatoryPolicy policy(int requiredCount) {

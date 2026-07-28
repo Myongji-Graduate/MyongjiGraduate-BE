@@ -2,6 +2,7 @@ package com.plzgraduate.myongjigraduatebe.graduation.domain.service.basicacademi
 
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.OptionalMandatoryPolicy.CandidateLecture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.MandatoryOptionResult;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import java.util.LinkedHashSet;
@@ -22,6 +23,7 @@ public final class BasicAcademicMandatoryPolicyEvaluator {
 	) {
 		boolean satisfied = true;
 		Set<Lecture> remainingCandidates = new LinkedHashSet<>();
+		List<MandatoryOptionResult> mandatoryOptions = new java.util.ArrayList<>();
 		Set<String> takenRecognitionCodes = inventory.getTakenLectures().stream()
 			.map(taken -> taken.getLecture().getRecognitionCode())
 			.collect(Collectors.toSet());
@@ -39,6 +41,18 @@ public final class BasicAcademicMandatoryPolicyEvaluator {
 				.filter(candidate -> candidate != null)
 				.map(CandidateLecture::equivalenceKey)
 				.collect(Collectors.toSet());
+			if (isChoicePolicy(policy)) {
+				mandatoryOptions.add(new MandatoryOptionResult(
+					policy.getName(),
+					policy.getRequiredCount(),
+					takenKeys.size(),
+					policy.getCandidateLectures().stream()
+						.map(CandidateLecture::lecture)
+						.filter(lecture -> lecture.getIsRevoked() == 0)
+						.distinct()
+						.toList()
+				));
+			}
 			if (takenKeys.size() >= policy.getRequiredCount()) {
 				continue;
 			}
@@ -48,9 +62,20 @@ public final class BasicAcademicMandatoryPolicyEvaluator {
 				.map(CandidateLecture::lecture)
 				.forEach(remainingCandidates::add);
 		}
-		return new Evaluation(satisfied, remainingCandidates);
+		return new Evaluation(satisfied, remainingCandidates, mandatoryOptions);
 	}
 
-	public record Evaluation(boolean satisfied, Set<Lecture> remainingCandidates) {
+	private static boolean isChoicePolicy(OptionalMandatoryPolicy policy) {
+		return policy.getCandidateLectures().stream()
+			.map(CandidateLecture::equivalenceKey)
+			.distinct()
+			.count() > policy.getRequiredCount();
+	}
+
+	public record Evaluation(
+		boolean satisfied,
+		Set<Lecture> remainingCandidates,
+		List<MandatoryOptionResult> mandatoryOptions
+	) {
 	}
 }

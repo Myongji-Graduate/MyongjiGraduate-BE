@@ -137,6 +137,28 @@ class CalculateMajorGraduationServiceTest {
 			.contains(PRIMARY_MANDATORY_MAJOR, false, 6, 3.0);
 	}
 
+	@DisplayName("아너칼리지 25학번 이후는 진입 전공 계열 전공탐색세미나를 전공필수로 추가한다.")
+	@Test
+	void addHonorsExplorationSeminarToPrimaryMandatory() {
+		User user = User.builder()
+			.id(1L)
+			.primaryMajor("경영학전공")
+			.entryYear(25)
+			.honorsCollege(true)
+			.build();
+		given(findMajorPort.findMajor("경영학전공")).willReturn(new HashSet<>());
+
+		DetailGraduationResult result = calculateMajorGraduationService.calculateSingleDetailGraduation(
+			user,
+			PRIMARY_MANDATORY_MAJOR,
+			TakenLectureInventory.from(new HashSet<>()),
+			GraduationRequirement.builder().primaryMajorCredit(63).build()
+		);
+
+		assertThat(result.getTotalCredit()).isEqualTo(1);
+		assertThat(result.getTakenCredit()).isZero();
+	}
+
 	@DisplayName("유저의 주전공선택 상세 졸업결과를 계산한다.")
 	@Test
 	void calculateSingleDetailGraduationIfPrimaryElective() {

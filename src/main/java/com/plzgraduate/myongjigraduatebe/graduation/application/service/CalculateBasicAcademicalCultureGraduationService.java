@@ -22,6 +22,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureI
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CalculateBasicAcademicalCultureGraduationService implements
 	CalculateDetailGraduationUseCase {
+
+	private static final Set<String> PRIMARY_ONLY_BASIC_MANDATORY_POLICIES = Set.of(
+		"basic-2025-plus-economics-mandatory",
+		"basic-2025-plus-international-trade-mandatory"
+	);
 
 	private final FindBasicAcademicalCulturePort findBasicAcademicalCulturePort;
 	private final FindOptionalMandatoryPolicyPort findOptionalMandatoryPolicyPort;
@@ -55,7 +61,7 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 		Set<BasicAcademicalCultureLecture> graduationBasicAcademicalCultureLectures =
 			findBasicAcademicalCulturePort.findBasicAcademicalCulture(userMajor,entryYear);
 		Evaluation mandatoryEvaluation = BasicAcademicMandatoryPolicyEvaluator.evaluate(
-			findOptionalMandatoryPolicyPort.findActiveBasicPolicies(userMajor, entryYear),
+			findOptionalMandatoryPolicyPort.findActiveBasicPolicies(userMajor, entryYear, majorType),
 			takenLectureInventory
 		);
 		GraduationManager<BasicAcademicalCultureLecture> basicAcademicalCultureGraduationManager =
@@ -64,11 +70,28 @@ public class CalculateBasicAcademicalCultureGraduationService implements
 			user, takenLectureInventory, graduationBasicAcademicalCultureLectures,
 			graduationRequirement.getBasicCreditByMajorType(majorType)
 		);
-		detailGraduationResult.getDetailCategory().forEach(category ->
+		List<Lecture> mandatoryLectures = graduationBasicAcademicalCultureLectures.stream()
+			.filter(BasicAcademicalCultureLecture::isMandatoryPolicy)
+			.filter(lecture -> majorType == MajorType.PRIMARY
+				|| !PRIMARY_ONLY_BASIC_MANDATORY_POLICIES.contains(lecture.getSourcePolicyKey()))
+			.map(BasicAcademicalCultureLecture::getLecture)
+			.collect(java.util.stream.Collectors.collectingAndThen(
+				java.util.stream.Collectors.toMap(
+					Lecture::getId,
+					lecture -> lecture,
+					(existing, replacement) -> existing,
+					LinkedHashMap::new
+				),
+				map -> map.values().stream().toList()
+			));
+		detailGraduationResult.getDetailCategory().forEach(category -> {
+			category.addMandatoryLectures(mandatoryLectures);
 			category.applyMandatoryPolicyResult(
 				mandatoryEvaluation.satisfied(),
 				mandatoryEvaluation.remainingCandidates()
-			));
+			);
+			category.addMandatoryOptions(mandatoryEvaluation.mandatoryOptions());
+		});
 		detailGraduationResult.refreshCompletion();
 		detailGraduationResult.assignGraduationCategory(graduationCategory);
 		return detailGraduationResult;

@@ -19,7 +19,9 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.Busines
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.major.MajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.service.submajor.SubMajorGraduationManager;
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindMajorPort;
+import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.MajorLecture;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.HonorsCollegeMajorPolicy;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
@@ -265,6 +267,9 @@ public class CalculateMajorGraduationService implements CalculateDetailGraduatio
 		GraduationRequirement graduationRequirement
 	) {
 		Set<MajorLecture> graduationMajorLectures = findMajorPort.findMajor(user.getMajorByMajorType(majorType));
+		HonorsCollegeMajorPolicy.findMandatoryExplorationSeminar(user, majorType)
+			.ifPresent(lectureId -> graduationMajorLectures.add(MajorLecture.of(
+				Lecture.from(lectureId, "전공탐색세미나", 1), user.getPrimaryMajor(), 1, 25, 99)));
 		List<OptionalMandatoryPolicy> optionalMandatoryPolicies = findOptionalMandatoryPolicyPort.findActivePolicies(
 			user.getMajorByMajorType(majorType), user.getEntryYear(), majorType);
 		return majorGraduationManager.createDetailGraduationResult(

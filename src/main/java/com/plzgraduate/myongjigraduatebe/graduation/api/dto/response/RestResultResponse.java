@@ -15,12 +15,17 @@ public class RestResultResponse {
 	private final int takenCredit;
 	@Schema(name = "completed", example = "false")
 	private final boolean completed;
+	private final boolean mFreshmanSeminarRequired;
+	private final boolean mFreshmanSeminarCompleted;
 
 	@Builder
-	private RestResultResponse(int totalCredit, int takenCredit, boolean completed) {
+	private RestResultResponse(int totalCredit, int takenCredit, boolean completed,
+		boolean mFreshmanSeminarRequired, boolean mFreshmanSeminarCompleted) {
 		this.totalCredit = totalCredit;
 		this.takenCredit = takenCredit;
 		this.completed = completed;
+		this.mFreshmanSeminarRequired = mFreshmanSeminarRequired;
+		this.mFreshmanSeminarCompleted = mFreshmanSeminarCompleted;
 	}
 
 	public static RestResultResponse fromNormalCultureResult(
@@ -29,6 +34,8 @@ public class RestResultResponse {
 			.totalCredit(normalCultureGraduationResult.getTotalCredit())
 			.takenCredit(normalCultureGraduationResult.getTakenCredit())
 			.completed(normalCultureGraduationResult.isCompleted())
+			.mFreshmanSeminarRequired(normalCultureGraduationResult.isMFreshmanSeminarRequired())
+			.mFreshmanSeminarCompleted(normalCultureGraduationResult.isMFreshmanSeminarCompleted())
 			.build();
 	}
 
@@ -38,6 +45,8 @@ public class RestResultResponse {
 			.totalCredit(freeElectiveGraduationResult.getTotalCredit())
 			.takenCredit(freeElectiveGraduationResult.getTakenCredit())
 			.completed(freeElectiveGraduationResult.isCompleted())
+			.mFreshmanSeminarRequired(false)
+			.mFreshmanSeminarCompleted(false)
 			.build();
 	}
 }

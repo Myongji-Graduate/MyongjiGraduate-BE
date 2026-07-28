@@ -29,6 +29,8 @@ public class UserMapper {
 				.totalCredit(user.getTotalCredit())
 				.takenCredit(user.getTakenCredit())
 				.graduated(user.isGraduated())
+				.honorsCollege(user.isHonorsCollege())
+				.honorsTargetMajor(user.getHonorsTargetMajor())
 				.createdAt(user.getCreatedAt())
 				.updatedAt(user.getUpdatedAt())
 				.build();
@@ -55,6 +57,8 @@ public class UserMapper {
 				.totalCredit(user.getTotalCredit())
 				.takenCredit(user.getTakenCredit())
 				.graduated(user.isGraduated())
+				.honorsCollege(user.isHonorsCollege())
+				.honorsTargetMajor(user.getHonorsTargetMajor())
 				.createdAt(user.getCreatedAt())
 				.updatedAt(user.getUpdatedAt())
 				.build();

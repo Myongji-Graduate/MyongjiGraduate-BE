@@ -8,6 +8,7 @@ import com.plzgraduate.myongjigraduatebe.core.exception.ErrorCode;
 import com.plzgraduate.myongjigraduatebe.core.exception.InvalidPdfException;
 import com.plzgraduate.myongjigraduatebe.core.exception.PdfParsingException;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
+import com.plzgraduate.myongjigraduatebe.graduation.domain.model.HonorsCollegeMajorPolicy;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
@@ -37,14 +38,15 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final DeleteTakenLectureUseCase deleteTakenLectureByUserUseCase;
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@Override
-	public void enrollParsingText(Long userId, String parsingText) {
+	public void enrollParsingText(Long userId, String parsingText, boolean honorsCollege, String honorsTargetMajor) {
 		User user = findUserUseCase.findUserById(userId);
 		try {
 			validateParsingText(parsingText);
 			ParsingInformation parsingInformation = ParsingInformation.parsing(parsingText);
 			checkUnSupportedUser(parsingInformation);
+			validateHonorsTargetMajor(honorsCollege, honorsTargetMajor);
 			validateStudentNumber(user, parsingInformation);
-			User updatedUser = updateUser(user, parsingInformation);
+			User updatedUser = updateUser(user, parsingInformation, honorsCollege, honorsTargetMajor);
 			deleteTakenLecturesIfAlreadyEnrolled(updatedUser);
 			saveTakenLectures(updatedUser, parsingInformation);
 			generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(updatedUser);
@@ -66,9 +68,10 @@ class ParsingTextService implements ParsingTextUseCase {
 		saveTakenLectureFromParsingTextUseCase.saveTakenLectures(user, saveTakenLectureCommand);
 	}
 
-	private User updateUser(User user, ParsingInformation parsingInformation) {
+	private User updateUser(User user, ParsingInformation parsingInformation, boolean honorsCollege,
+		String honorsTargetMajor) {
 		UpdateStudentInformationCommand updateStudentInfoCommand = UpdateStudentInformationCommand.of(
-			user, parsingInformation);
+			user, parsingInformation, honorsCollege, honorsTargetMajor);
 		return updateStudentInformationUseCase.updateUser(updateStudentInfoCommand);
 	}
 
@@ -102,6 +105,18 @@ class ParsingTextService implements ParsingTextUseCase {
 	private void checkUnSupportedUser(ParsingInformation parsingInformation) {
 		if (parsingInformation.getStudentCategory() == DOUBLE_SUB) {
 			throw new IllegalArgumentException(ErrorCode.UNSUPPORTED_STUDENT_CATEGORY.toString());
+		}
+	}
+
+	private void validateHonorsTargetMajor(boolean honorsCollege, String honorsTargetMajor) {
+		if (!honorsCollege) {
+			return;
+		}
+		if (honorsTargetMajor == null || honorsTargetMajor.isBlank()) {
+			throw new IllegalArgumentException("아너칼리지 졸업요건 기준 학과를 선택해 주세요.");
+		}
+		if (!HonorsCollegeMajorPolicy.isSupportedTargetMajor(honorsTargetMajor)) {
+			throw new IllegalArgumentException("선택할 수 없는 아너칼리지 졸업요건 기준 학과입니다.");
 		}
 	}
 }
