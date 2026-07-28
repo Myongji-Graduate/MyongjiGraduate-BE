@@ -79,7 +79,9 @@ class CheckGraduationRequirementControllerTest {
 			.graduated(true)
 			.build();
 
-		given(parsingAnonymousUseCase.parseAnonymous(EnglishLevel.ENG34, KoreanLevel.FREE, "mock parsing text"))
+		given(parsingAnonymousUseCase.parseAnonymous(
+			EnglishLevel.ENG34, KoreanLevel.FREE, "mock parsing text", false, null
+		))
 			.willReturn(parsingAnonymousDto);
 		given(checkGraduationRequirementUseCase.checkGraduationRequirement(any(User.class), any(TakenLectureInventory.class)))
 			.willReturn(graduationResult);
@@ -110,7 +112,9 @@ class CheckGraduationRequirementControllerTest {
 		given(parsingAnonymousUseCase.parseAnonymous(
 			EnglishLevel.ENG34,
 			KoreanLevel.FREE,
-			"invalid parsing text"
+			"invalid parsing text",
+			false,
+			null
 		)).willThrow(new IllegalArgumentException("PARSING_FAILED"));
 		given(parsingTextHistoryUseCase.generateAnonymousFailedParsingTextHistory(
 			"invalid parsing text",

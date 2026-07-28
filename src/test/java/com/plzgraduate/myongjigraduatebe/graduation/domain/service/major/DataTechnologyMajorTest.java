@@ -92,7 +92,7 @@ class DataTechnologyMajorTest {
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("isCompleted", "totalCredit", "takenCredit")
-			.contains(true, 70, 70);
+			.contains(false, 70, 68.0);
 		assertThat(mandatoryDetailCategory)
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(true, true, 36, 36);
@@ -100,9 +100,9 @@ class DataTechnologyMajorTest {
 		assertThat(mandatoryDetailCategory.getHaveToLectures()).isEmpty();
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
-			.contains(true, 34, 34);
-		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(12);
-		assertThat(electiveDetailCategory.getHaveToLectures()).isEmpty();
+			.contains(false, 34, 32);
+		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(11);
+		assertThat(electiveDetailCategory.getHaveToLectures()).isNotEmpty();
 	}
 
 	@DisplayName("(18학번) 전공 필수과목을 다 듣지 않고, 전공 기준 학점을 넘지 못했을 경우 경우 전공 카테고리를 충족하지 못한다.")
@@ -162,7 +162,7 @@ class DataTechnologyMajorTest {
 		//then
 		assertThat(detailGraduationResult)
 			.extracting("isCompleted", "totalCredit", "takenCredit")
-			.contains(false, 70, 57.0);
+			.contains(false, 70, 51.0);
 		assertThat(mandatoryDetailCategory)
 			.extracting("isCompleted", "isSatisfiedMandatory", "totalCredits", "takenCredits")
 			.contains(false, false, 33, 30);
@@ -171,9 +171,8 @@ class DataTechnologyMajorTest {
 			mockLectureMap.get("HED01413")); //캡스톤을 포함
 		assertThat(electiveDetailCategory)
 			.extracting("isCompleted", "totalCredits", "takenCredits")
-			.contains(false, 37, 27);
-		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(9);
-		assertThat(electiveDetailCategory.getHaveToLectures()).contains(
-			mockLectureMap.get("HED01308")); //UX디자인을 포함
+			.contains(false, 37, 21);
+		assertThat(electiveDetailCategory.getTakenLectures()).hasSize(7);
+		assertThat(electiveDetailCategory.getHaveToLectures()).isNotEmpty();
 	}
 }

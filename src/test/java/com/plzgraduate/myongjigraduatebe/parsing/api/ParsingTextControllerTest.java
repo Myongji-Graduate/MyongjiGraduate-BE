@@ -4,6 +4,8 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,7 +55,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.andExpect(status().isOk());
 
 		then(parsingTextUseCase).should()
-			.enrollParsingText(any(Long.class), any(String.class));
+			.enrollParsingText(any(Long.class), any(String.class), anyBoolean(), isNull());
 		then(parsingTextHistoryUseCase).should()
 			.generateSucceedParsingTextHistory(any(Long.class), any(String.class));
 
@@ -70,7 +72,7 @@ class ParsingTextControllerTest extends WebAdaptorTestSupport {
 			.build();
 
 		doThrow(new InvalidPdfException("")).when(parsingTextUseCase)
-			.enrollParsingText(any(Long.class), any(String.class));
+			.enrollParsingText(any(Long.class), any(String.class), anyBoolean(), isNull());
 
 		//when
 		ResultActions actions = mockMvc.perform(
