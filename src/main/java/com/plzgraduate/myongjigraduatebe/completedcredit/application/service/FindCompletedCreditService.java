@@ -5,7 +5,7 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.Gen
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.FindCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
+import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class FindCompletedCreditService implements FindCompletedCreditUseCase {
 
-	private final FindUserUseCase findUserUseCase;
-	private final FindCompletedCreditPort findCompletedCreditPort;
-	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+    private final FindUserPort findUserPort;
+    private final FindCompletedCreditPort findCompletedCreditPort;
+    private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 
-	@Override
-	public List<CompletedCredit> findCompletedCredits(Long userId) {
-		User user = findUserUseCase.findUserById(userId);
-		generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
-		return findCompletedCreditPort.findCompletedCredit(user);
-	}
+    @Override
+    public List<CompletedCredit> findCompletedCredits(Long userId) {
+        // Serialize before any snapshot read: waiting until replacement is too late
+        // under REPEATABLE READ. The parent exists even before credits are created.
+        User user = findUserPort.findUserByIdForUpdate(userId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+        generateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);
+        return findCompletedCreditPort.findCompletedCredit(user);
+    }
 }
