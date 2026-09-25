@@ -49,6 +49,12 @@ public class UserPersistenceAdapter implements FindUserPort, SaveUserPort, Check
 		return Optional.of(userMapper.mapToDomainEntity(userJpaEntity));
 	}
 
+    @Override
+    public Optional<User> findUserByIdForUpdate(Long id) {
+        return userRepository.findByIdForUpdate(id)
+            .map(userMapper::mapToDomainEntity);
+    }
+
 	@Override
 	public Optional<User> findUserByStudentNumber(String studentNumber) {
 		return userRepository.findByStudentNumber(studentNumber)
