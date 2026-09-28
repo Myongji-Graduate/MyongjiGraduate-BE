@@ -33,6 +33,12 @@ Render 대시보드 → `MyongjiGraduate-BE` 서비스 → Settings에서 다음
 
 환경 변수 `SPRING_PROFILES_ACTIVE=dev`도 확인한다. 공용 Dockerfile의 기본 프로필은 `prod`다.
 
+공유 캐시는 기본 OFF다. 비교 검증을 시작할 때 `SHARED_MASTER_CACHE_ENABLED=true`,
+`SHARED_MASTER_CACHE_NAMESPACE=dev`를 설정하고 Redis 접속도 확인한다.
+`SHARED_MASTER_CACHE_VERSION`은 설정하지 않으면 앱 기동마다 자동 생성된다.
+기존 고정 version은 제거해야 재배포 시 과거 캐시를 재사용하지 않는다.
+자세한 적용·롤백 절차는 [공유 캐시 운영 가이드](DEV-113_SHARED_CACHE_ROLLOUT.md)를 따른다.
+
 이 구성은 GitHub 연동으로 저장소를 직접 빌드하는 서비스를 전제로 한다.
 Docker Hub 이미지를 가져오는 서비스라면 해당 이미지의 빌드·업로드와 배포 트리거가 별도로 필요하다.
 

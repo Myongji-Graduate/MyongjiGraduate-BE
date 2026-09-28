@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eu
+
+printf '%s\n' "$*" >> "$MOCK_TRACE"
+case "$*" in
+  "container inspect mg-redis")
+    [ "$MOCK_REDIS_STATE" != absent ] ;;
+  "inspect --format {{.State.Running}} mg-redis")
+    [ "$MOCK_REDIS_STATE" = running ] && echo true || echo false ;;
+  "exec mg-redis redis-cli ping")
+    [ "$MOCK_REDIS_READY" = true ] && echo PONG || exit 1 ;;
+  "inspect --format {{.State.Health.Status}} mju-graduate-server")
+    [ "$MOCK_APP_READY" = true ] && echo healthy || echo unhealthy ;;
+  pull\ *)
+    [ "$MOCK_PULL_FAIL" = false ] ;;
+  *) exit 0 ;;
+esac
