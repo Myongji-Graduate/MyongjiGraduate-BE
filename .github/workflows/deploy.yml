@@ -5,9 +5,17 @@ on:
   push:
     branches: [ main ]
 
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_ID: gha-${{ github.run_id }}-${{ github.run_attempt }}
+      DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server
+      SHARED_MASTER_CACHE_ENABLED: ${{ vars.SHARED_MASTER_CACHE_ENABLED || 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,9 +56,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
-          build-args: |
-            PROFILE=prod  # 시크릿 아님만 유지
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:v2
+            ${{ env.DOCKER_IMAGE }}:${{ env.DEPLOYMENT_ID }}
 
       # 원격 배포 (런타임에 -e로 시크릿 주입)
       - name: Deploy via SSH
@@ -59,8 +67,14 @@ jobs:
           host: ${{ secrets.WAS_HOST }}
           username: ${{ secrets.WAS_USERNAME }}
           key: ${{ secrets.WAS_KEY }}
+          envs: DEPLOYMENT_ID,DOCKER_IMAGE,SHARED_MASTER_CACHE_ENABLED
           script: |
             set -euo pipefail
+
+            case "$SHARED_MASTER_CACHE_ENABLED" in
+              true|false) ;;
+              *) echo "SHARED_MASTER_CACHE_ENABLED must be true or false"; exit 1 ;;
+            esac
 
             echo "[Disk before]"
             docker system df || true
@@ -71,46 +85,45 @@ jobs:
               docker network create mju-net
             fi
 
-            echo "[Light cleanup] stop/rm exited, dangling images, builder cache, dangling volumes"
-            docker ps -aq --filter status=exited | xargs -r docker rm || true
+            echo "[Light cleanup] dangling images and builder cache only; preserve data volumes"
             docker images -f "dangling=true" -q | xargs -r docker rmi || true
             docker builder prune -af || true
-            docker volume ls -qf dangling=true | xargs -r docker volume rm || true
 
-            # If still low space under /var/lib/docker (<1GB free), do deep prune including volumes
-            DOCKER_DIR=/var/lib/docker
-            if [ -d "$DOCKER_DIR" ]; then
-              AVAIL_KB=$(df --output=avail -k "$DOCKER_DIR" | tail -1 | tr -d ' ')
-              if [ -n "$AVAIL_KB" ] && [ "$AVAIL_KB" -lt 1048576 ]; then  # <1GB
-                echo "[Deep cleanup] docker system prune --volumes"
-                docker system prune -af --volumes || true
+            echo "Ensure Redis is running without replacing it"
+            if docker container inspect mg-redis >/dev/null 2>&1; then
+              if [ "$(docker inspect --format '{{.State.Running}}' mg-redis)" != "true" ]; then
+                docker start mg-redis
               fi
+            else
+              docker volume create mg-redis-data >/dev/null
+              docker run -d --name mg-redis \
+                --network mju-net \
+                --restart unless-stopped \
+                --log-opt max-size=10m --log-opt max-file=3 \
+                -p 6379:6379 \
+                -v mg-redis-data:/data \
+                redis:7-alpine
             fi
 
-            echo "Redis restart"
-            docker rm -f mg-redis || true
-            docker volume create mg-redis-data >/dev/null 2>&1 || true
-            docker run -d --name mg-redis \
-              --network mju-net \
-              --restart unless-stopped \
-              --log-opt max-size=10m --log-opt max-file=3 \
-              -p 6379:6379 \
-              -v mg-redis-data:/data \
-              redis:7-alpine
-
             echo "Waiting for Redis to be ready..."
+            REDIS_READY=false
             for i in $(seq 1 30); do
-              if docker run --rm --network mju-net redis:7-alpine redis-cli -h mg-redis ping 2>/dev/null | grep -q "PONG"; then
+              if docker exec mg-redis redis-cli ping 2>/dev/null | grep -q "PONG"; then
                 echo "Redis is ready."
+                REDIS_READY=true
                 break
               fi
               echo "  still waiting ($i/30)..."
               sleep 1
             done
+            if [ "$REDIS_READY" != "true" ]; then
+              echo "Redis is not ready; keeping the current application container."
+              exit 1
+            fi
 
+            docker pull "$DOCKER_IMAGE:$DEPLOYMENT_ID"
             echo "App restart"
             docker rm -f mju-graduate-server || true
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
 
             docker run -d --name mju-graduate-server \
               --network mju-net \
@@ -118,6 +131,9 @@ jobs:
               --log-opt max-size=10m --log-opt max-file=3 \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
+              -e SHARED_MASTER_CACHE_ENABLED="$SHARED_MASTER_CACHE_ENABLED" \
+              -e SHARED_MASTER_CACHE_NAMESPACE=prod \
+              -e SHARED_MASTER_CACHE_VERSION="$DEPLOYMENT_ID" \
               -e SPRING_DATASOURCE_URL='${{ secrets.DATASOURCE_URL }}' \
               -e SPRING_DATASOURCE_USERNAME='${{ secrets.DATASOURCE_USERNAME }}' \
               -e SPRING_DATASOURCE_PASSWORD='${{ secrets.DATASOURCE_PASSWORD }}' \
@@ -125,7 +141,21 @@ jobs:
               -e SPRING_DATA_REDIS_HOST=mg-redis \
               -e SPRING_DATA_REDIS_PORT=6379 \
               -e ADMIN_API_KEY='${{ secrets.ADMIN_API_KEY }}' \
-              ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server:v2
+              "$DOCKER_IMAGE:$DEPLOYMENT_ID"
+
+            APP_READY=false
+            for i in $(seq 1 60); do
+              if [ "$(docker inspect --format '{{.State.Health.Status}}' mju-graduate-server)" = "healthy" ]; then
+                APP_READY=true
+                break
+              fi
+              sleep 5
+            done
+            if [ "$APP_READY" != "true" ]; then
+              echo "Application did not become healthy; check startup and migration logs."
+              exit 1
+            fi
+            echo "Deployment ready: $DEPLOYMENT_ID"
 
             echo "Autoheal restart"
             docker rm -f autoheal || true

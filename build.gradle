@@ -94,6 +94,7 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:mysql'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'com.github.ben-manes.caffeine:caffeine'
 }
 
 tasks.named('test') {
