@@ -80,8 +80,8 @@ class ProductionDeploymentWorkflowTest {
         Map<String, Object> job = map(map(workflow.get("jobs")).get("build"));
         assertThat(map(job.get("env"))).containsEntry("DEPLOYMENT_ID", "gha-${{ github.run_id }}-${{ github.run_attempt }}")
             .containsEntry("SHARED_MASTER_CACHE_ENABLED", "${{ vars.SHARED_MASTER_CACHE_ENABLED || 'false' }}");
-        assertThat(map(step("Deploy via SSH").get("with")).get("envs"))
-            .isEqualTo("DEPLOYMENT_ID,DOCKER_IMAGE,SHARED_MASTER_CACHE_ENABLED");
+        assertThat(map(step("Deploy via SSH").get("with")))
+            .containsEntry("envs", "DEPLOYMENT_ID,DOCKER_IMAGE,SHARED_MASTER_CACHE_ENABLED");
         assertThat(map(step("Build and Push Docker image").get("with")).get("tags").toString())
             .contains("${{ env.DOCKER_IMAGE }}:${{ env.DEPLOYMENT_ID }}");
     }
