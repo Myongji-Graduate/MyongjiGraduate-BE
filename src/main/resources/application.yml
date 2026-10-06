@@ -25,6 +25,12 @@ spring:
       host: localhost
       port: 6380
 
+cache:
+  graduation-master:
+    enabled: ${SHARED_MASTER_CACHE_ENABLED:false}
+    namespace: ${SHARED_MASTER_CACHE_NAMESPACE:}
+    version: ${SHARED_MASTER_CACHE_VERSION:}
+
 logging:
   level:
     com.plzgraduate.myongjigraduatebe.timetable.application.service: DEBUG
