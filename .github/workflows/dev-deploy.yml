@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Test Autoheal deployment script
+        run: python3 -m unittest discover -s infra/deployment -p 'test_*.py'
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:

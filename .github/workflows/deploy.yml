@@ -1,4 +1,4 @@
-name: Dev
+name: Production Deploy
 
 on:
   workflow_dispatch:
@@ -19,6 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Test Autoheal deployment script
+        run: python3 -m unittest discover -s infra/deployment -p 'test_*.py'
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -63,10 +66,12 @@ jobs:
       # 원격 배포 (런타임에 -e로 시크릿 주입)
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
+        timeout-minutes: 22
         with:
           host: ${{ secrets.WAS_HOST }}
           username: ${{ secrets.WAS_USERNAME }}
           key: ${{ secrets.WAS_KEY }}
+          command_timeout: 20m
           envs: DEPLOYMENT_ID,DOCKER_IMAGE,SHARED_MASTER_CACHE_ENABLED
           script: |
             set -euo pipefail
@@ -157,15 +162,17 @@ jobs:
             fi
             echo "Deployment ready: $DEPLOYMENT_ID"
 
-            echo "Autoheal restart"
-            docker rm -f autoheal || true
-            docker run -d --name autoheal \
-              --restart unless-stopped \
-              -e AUTOHEAL_CONTAINER_LABEL=all \
-              -e AUTOHEAL_INTERVAL=30 \
-              -v /var/run/docker.sock:/var/run/docker.sock \
-              willfarrell/autoheal
-
             echo "[Disk after]"
             docker system df || true
             df -h || true
+
+      # Autoheal gets its own time budget and failure status after app readiness.
+      - name: Ensure Autoheal via SSH
+        uses: appleboy/ssh-action@master
+        timeout-minutes: 14
+        with:
+          host: ${{ secrets.WAS_HOST }}
+          username: ${{ secrets.WAS_USERNAME }}
+          key: ${{ secrets.WAS_KEY }}
+          command_timeout: 12m
+          script_path: infra/deployment/ensure-autoheal.sh
