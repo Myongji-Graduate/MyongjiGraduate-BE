@@ -22,8 +22,8 @@ ENV DEFAULT_PROFILE=prod
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:8080/actuator/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=5 \
+  CMD curl --fail --silent --show-error --max-time 8 http://localhost:8080/actuator/health || exit 1
 
 # -D 옵션은 반드시 -jar 앞에 와야 함
 # SPRING_PROFILES_ACTIVE가 없으면 DEFAULT_PROFILE 사용
