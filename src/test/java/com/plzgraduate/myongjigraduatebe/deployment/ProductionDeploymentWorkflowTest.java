@@ -23,6 +23,9 @@ class ProductionDeploymentWorkflowTest {
         assertThat(result.trace()).doesNotContain("rm -f mg-redis", "start mg-redis", "--name mg-redis",
             "volume rm", "--volumes", "FLUSHDB", "FLUSHALL");
         assertThat(result.trace()).contains("pull test/image:gha-123-2",
+            "--memory=640m --memory-reservation=512m --memory-swap=1g",
+            "--label autoheal=true", "--health-start-period=300s",
+            "-e JAVA_OPTS=-Xms64m -Xmx256m -XX:ActiveProcessorCount=2",
             "-e SHARED_MASTER_CACHE_ENABLED=true", "-e SHARED_MASTER_CACHE_NAMESPACE=prod",
             "-e SHARED_MASTER_CACHE_VERSION=gha-123-2", "test/image:gha-123-2");
         assertThat(result.trace().indexOf("pull test/image:gha-123-2"))

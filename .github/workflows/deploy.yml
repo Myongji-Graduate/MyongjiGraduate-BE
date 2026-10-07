@@ -63,6 +63,16 @@ jobs:
             ${{ env.DOCKER_IMAGE }}:v2
             ${{ env.DOCKER_IMAGE }}:${{ env.DEPLOYMENT_ID }}
 
+      - name: Prepare production host memory
+        uses: appleboy/ssh-action@master
+        timeout-minutes: 3
+        with:
+          host: ${{ secrets.WAS_HOST }}
+          username: ${{ secrets.WAS_USERNAME }}
+          key: ${{ secrets.WAS_KEY }}
+          command_timeout: 2m
+          script_path: infra/deployment/prepare-host-memory.sh
+
       # 원격 배포 (런타임에 -e로 시크릿 주입)
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
@@ -131,6 +141,10 @@ jobs:
             docker rm -f mju-graduate-server || true
 
             docker run -d --name mju-graduate-server \
+              --memory=640m --memory-reservation=512m --memory-swap=1g \
+              --label autoheal=true \
+              --health-start-period=300s --health-timeout=10s --health-retries=5 \
+              -e JAVA_OPTS="-Xms64m -Xmx256m -XX:ActiveProcessorCount=2" \
               --network mju-net \
               --restart unless-stopped \
               --log-opt max-size=10m --log-opt max-file=3 \
@@ -149,7 +163,7 @@ jobs:
               "$DOCKER_IMAGE:$DEPLOYMENT_ID"
 
             APP_READY=false
-            for i in $(seq 1 60); do
+            for i in $(seq 1 90); do
               if [ "$(docker inspect --format '{{.State.Health.Status}}' mju-graduate-server)" = "healthy" ]; then
                 APP_READY=true
                 break
