@@ -15,10 +15,11 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
 @RequiredArgsConstructor
 public class CalculateSingleDetailGraduationService implements
 	CalculateSingleDetailGraduationUseCase {

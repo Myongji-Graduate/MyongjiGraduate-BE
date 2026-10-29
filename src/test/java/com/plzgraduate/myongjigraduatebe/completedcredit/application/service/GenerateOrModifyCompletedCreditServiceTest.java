@@ -15,6 +15,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCateg
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.NormalCultureGraduationResult;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class GenerateOrModifyCompletedCreditServiceTest {
 
+    @Mock
+    private com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort takenLectureRevisionPort;
+
+    @Mock
+    private com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase updateStudentInformationUseCase;
+
 	@Mock
 	private FindCompletedCreditPort findCompletedCreditPort;
 	@Mock
@@ -36,6 +43,31 @@ class GenerateOrModifyCompletedCreditServiceTest {
 	private CalculateGraduationUseCase calculateGraduationUseCase;
 	@InjectMocks
 	private GenerateOrModifyCompletedCreditService generateOrModifyCompletedCreditService;
+
+    @Test
+    void readCalculatesFromSuppliedInventoryWithoutStoredSummariesOrWrites() {
+        User user = User.builder().id(1L).build();
+        var inventory = TakenLectureInventory.from(java.util.Set.of());
+        var result = GraduationResult.builder()
+            .detailGraduationResults(createDetailGraduationResults(10, 5))
+            .chapelResult(ChapelResult.builder().takenCount(3).build())
+            .normalCultureGraduationResult(NormalCultureGraduationResult.builder()
+                .totalCredit(10).takenCredit(5).build())
+            .freeElectiveGraduationResult(FreeElectiveGraduationResult.builder()
+                .totalCredit(10).takenCredit(5).build())
+            .build();
+        given(calculateGraduationUseCase.calculateGraduation(user, inventory)).willReturn(result);
+
+        var credits = generateOrModifyCompletedCreditService.calculateCompletedCredits(user, inventory);
+
+        Assertions.assertThat(credits).hasSize(8).allMatch(credit -> credit.getId() == null);
+        Assertions.assertThat(credits).filteredOn(credit -> credit.getGraduationCategory() == GraduationCategory.CHAPEL)
+            .extracting("totalCredit", "takenCredit").containsExactly(tuple(2.0, 1.5));
+        org.mockito.Mockito.verifyNoInteractions(findCompletedCreditPort, generateOrModifyCompletedCreditPort,
+            updateStudentInformationUseCase, takenLectureRevisionPort);
+        then(calculateGraduationUseCase).should().calculateGraduation(user, inventory);
+        then(calculateGraduationUseCase).shouldHaveNoMoreInteractions();
+    }
 
 	@DisplayName("새로운 기이수 학점을 저장한다.")
 	@Test

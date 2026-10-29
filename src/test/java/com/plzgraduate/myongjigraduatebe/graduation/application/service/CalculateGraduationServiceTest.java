@@ -54,7 +54,6 @@ class CalculateGraduationServiceTest {
 			calculateBasicAcademicalCultureGraduationService,
 			calculateMajorGraduationService,
 			calculateFusionMajorGraduationService,
-			updateStudentInformationUseCase,
 			strategyFactory
 		);
 	}
