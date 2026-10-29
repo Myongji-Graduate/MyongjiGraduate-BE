@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.api.resetpassword.dto.request.ResetPasswordRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -20,9 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 class ResetPasswordControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@DisplayName("학번으로 유저 정보 조회 후 로그인 이아디와 일치하는지 확인한다.")
 	@Test

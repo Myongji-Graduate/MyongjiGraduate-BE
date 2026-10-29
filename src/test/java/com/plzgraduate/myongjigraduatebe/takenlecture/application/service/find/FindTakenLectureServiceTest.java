@@ -11,6 +11,7 @@ import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTaken
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureRead;
 import com.plzgraduate.myongjigraduatebe.user.application.usecase.find.FindUserUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.time.Instant;
@@ -32,6 +33,17 @@ class FindTakenLectureServiceTest {
 	private FindTakenLecturePort findTakenLecturePort;
 	@InjectMocks
 	private FindTakenLectureService findTakenLectureService;
+
+    @Test
+    void snapshotReturnsItsUserWithoutAnotherUserLookup() {
+        User user = User.builder().id(1L).build();
+        var snapshot = new TakenLectureRead(user, TakenLectureInventory.from(java.util.Set.of()));
+        given(findTakenLecturePort.findReadOnlySnapshotByUserId(1L))
+            .willReturn(java.util.Optional.of(snapshot));
+
+        assertThat(findTakenLectureService.findTakenLecturesWithUser(1L)).isSameAs(snapshot);
+        org.mockito.Mockito.verifyNoInteractions(findUserUseCase);
+    }
 
 	@DisplayName("해당 학생의 수강정보를 조회한다.")
 	@Test

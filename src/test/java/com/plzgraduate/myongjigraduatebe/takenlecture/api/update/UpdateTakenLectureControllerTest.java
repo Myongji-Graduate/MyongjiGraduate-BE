@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.takenlecture.api.dto.request.GenerateCustomizedTakenLectureRequest;
@@ -16,9 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 class UpdateTakenLectureControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@WithMockAuthenticationUser
 	@DisplayName("수강과목을 생성한다.")

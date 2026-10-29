@@ -28,8 +28,6 @@ import org.springframework.test.web.servlet.ResultActions;
 class ParsingTextControllerTest extends WebAdaptorTestSupport {
 
 	@SuppressWarnings("unused")
-	@MockBean
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@WithMockAuthenticationUser
 	@DisplayName("파싱 텍스트를 등록한다.")

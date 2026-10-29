@@ -5,7 +5,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.DeleteTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.FindTakenLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
@@ -22,14 +21,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DeleteTakenLectureServiceTest {
 
+    @Mock
+    private com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort takenLectureRevisionPort;
+
 	@Mock
 	private FindUserUseCase findUserUseCase;
 
 	@Mock
 	private DeleteTakenLecturePort deleteTakenLecturePort;
-
-	@Mock
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@Mock
 	private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;

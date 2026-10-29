@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.Semester;
@@ -21,9 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@WithMockAuthenticationUser
 	@DisplayName("사용자의 수강과목을 조회한다.")

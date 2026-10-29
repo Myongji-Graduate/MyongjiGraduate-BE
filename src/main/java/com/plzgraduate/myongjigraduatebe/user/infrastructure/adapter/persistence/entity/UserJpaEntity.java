@@ -27,6 +27,10 @@ public class UserJpaEntity extends TimeBaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+    // Bulk revision increments must not be overwritten by UserMapper's detached updates.
+    @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "bigint default 0")
+    private long takenLectureRevision;
+
 	@Column(unique = true, nullable = false)
 	private String authId;
 

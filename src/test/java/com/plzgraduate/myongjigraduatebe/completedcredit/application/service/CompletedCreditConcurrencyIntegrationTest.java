@@ -61,7 +61,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 class CompletedCreditConcurrencyIntegrationTest {
 
     @Configuration
-    @EntityScan(basePackageClasses = {UserJpaEntity.class, CompletedCreditJpaEntity.class})
+    @EntityScan(basePackageClasses = {UserJpaEntity.class, CompletedCreditJpaEntity.class,
+        com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureCatalogRevisionJpaEntity.class})
     @EnableJpaRepositories(basePackageClasses = {UserRepository.class, CompletedCreditRepository.class})
     @Import({FindCompletedCreditService.class, FindCompletedCreditAdapter.class,
         GenerateOrModifyCompletedCreditsAdapter.class, CompletedCreditPersistenceMapper.class,

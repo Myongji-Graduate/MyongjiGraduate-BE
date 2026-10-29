@@ -7,13 +7,12 @@ import com.plzgraduate.myongjigraduatebe.lecture.domain.model.Lecture;
 import com.plzgraduate.myongjigraduatebe.log.application.usecase.LogInvalidLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.log.domain.InvalidTakenLectureLog;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.SaveTakenLecturePort;
-
-import java.time.LocalDateTime;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLecture;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromParsingTextUseCase {
+    private final TakenLectureRevisionPort takenLectureRevisionPort;
 	private final SaveTakenLecturePort saveTakenLecturePort;
 	private final FindLecturesUseCase findLecturesUseCase;
 	private final LogInvalidLectureUseCase logInvalidLectureUseCase;
@@ -35,6 +35,7 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 	@Override
 	public void saveTakenLectures(User user,
 		List<TakenLectureInformation> takenLectureInformationList) {
+        takenLectureRevisionPort.lockForChange(user.getId());
 		Map<String, Lecture> lectureMap = makeLectureMapByLectureCodes(takenLectureInformationList);
 		List<TakenLecture> takenLectures = makeTakenLectures(user, takenLectureInformationList,
 			lectureMap);
@@ -76,7 +77,6 @@ class SaveTakenLectureFromParsingTextService implements SaveTakenLectureFromPars
 
 		return result;
 	}
-
 
 	private Map<String, Lecture> makeLectureMapByLectureCodes(
 		List<TakenLectureInformation> takenLectureInformationList) {

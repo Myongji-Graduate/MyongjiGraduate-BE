@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
@@ -16,9 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindUserInformationControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@WithMockAuthenticationUser
 	@DisplayName("로그인 한 회원 정보를 조회한다.")

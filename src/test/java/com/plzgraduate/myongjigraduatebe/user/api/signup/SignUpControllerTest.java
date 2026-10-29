@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.plzgraduate.myongjigraduatebe.parsing.api.TakenLectureCacheEvict;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.request.SignUpRequest;
 import com.plzgraduate.myongjigraduatebe.user.api.signup.dto.response.AuthIdDuplicationResponse;
@@ -22,9 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 class SignUpControllerTest extends WebAdaptorTestSupport {
-
-	@MockBean
-	private TakenLectureCacheEvict takenLectureCacheEvict;
 
 	@DisplayName("회원가입을 진행한다.")
 	@Test
