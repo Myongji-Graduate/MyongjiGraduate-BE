@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-29",
+  "timezone": "Asia/Seoul",
+  "branch": "fix/DEV-121",
+  "head": "b3aa186af5acfb4a643d64717487105f6eb63174",
+  "scope": "Migration renumbering and production deployment environment wiring; no production operation.",
+  "testCommand": "DOCKER_HOST=unix:///Users/jinhyeon/.docker/run/docker.sock TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock TESTCONTAINERS_HOST_OVERRIDE=127.0.0.1 RUN_TAKEN_LECTURE_CACHE_REPRODUCTION=true RUN_TAKEN_LECTURE_CACHE_BENCHMARK=false ./gradlew test --tests '*ProductionDeploymentWorkflowTest' --tests '*TakenLectureCacheConsistencyIntegrationTest' --tests '*TakenLectureCacheConfigurationTest' --offline --no-daemon --no-build-cache",
+  "suites": [
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.deployment.ProductionDeploymentWorkflowTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheConfigurationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 50,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "migrationRenames": [
+    {
+      "old": "src/main/resources/db/migration/V12__add_taken_lecture_revision.sql",
+      "new": "src/main/resources/db/migration/V14__add_taken_lecture_revision.sql",
+      "sha256": "371a67a44b4401e25682cb2b122965d44bf4f724ca2cb4a1de35219de168e0c0",
+      "contentUnchanged": true
+    },
+    {
+      "old": "src/main/resources/db/migration/V13__version_lecture_catalog.sql",
+      "new": "src/main/resources/db/migration/V15__version_lecture_catalog.sql",
+      "sha256": "8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164",
+      "contentUnchanged": true
+    }
+  ],
+  "migrationVersionConflicts": {},
+  "migrationFiles": {
+    "DEV-121": [
+      "V10__add_honors_college_to_user.sql",
+      "V11__add_honors_target_major_to_user.sql",
+      "V14__add_taken_lecture_revision.sql",
+      "V15__version_lecture_catalog.sql",
+      "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "V2__create_optional_mandatory_policy.sql",
+      "V3__scope_basic_academical_culture_policy.sql",
+      "V4__map_basic_programming_major_transition.sql",
+      "V5__create_fusion_major_policy.sql",
+      "V6__expand_humanities_fusion_majors.sql",
+      "V7__complete_fusion_basic_course_mappings.sql",
+      "V8__track_anonymous_parsing_requests.sql",
+      "V9__correct_applied_data_science_fusion_basic_credit.sql"
+    ],
+    "DEV-116": [
+      "V10__add_honors_college_to_user.sql",
+      "V11__add_honors_target_major_to_user.sql",
+      "V12__create_graduation_policy_snapshot_archive.sql",
+      "V13__create_graduation_policy_release.sql",
+      "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "V2__create_optional_mandatory_policy.sql",
+      "V3__scope_basic_academical_culture_policy.sql",
+      "V4__map_basic_programming_major_transition.sql",
+      "V5__create_fusion_major_policy.sql",
+      "V6__expand_humanities_fusion_majors.sql",
+      "V7__complete_fusion_basic_course_mappings.sql",
+      "V8__track_anonymous_parsing_requests.sql",
+      "V9__correct_applied_data_science_fusion_basic_credit.sql"
+    ],
+    "origin/main": [
+      "V10__add_honors_college_to_user.sql",
+      "V11__add_honors_target_major_to_user.sql",
+      "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "V2__create_optional_mandatory_policy.sql",
+      "V3__scope_basic_academical_culture_policy.sql",
+      "V4__map_basic_programming_major_transition.sql",
+      "V5__create_fusion_major_policy.sql",
+      "V6__expand_humanities_fusion_majors.sql",
+      "V7__complete_fusion_basic_course_mappings.sql",
+      "V8__track_anonymous_parsing_requests.sql",
+      "V9__correct_applied_data_science_fusion_basic_credit.sql"
+    ],
+    "origin/develop": [
+      "V10__add_honors_college_to_user.sql",
+      "V11__add_honors_target_major_to_user.sql",
+      "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "V2__create_optional_mandatory_policy.sql",
+      "V3__scope_basic_academical_culture_policy.sql",
+      "V4__map_basic_programming_major_transition.sql",
+      "V5__create_fusion_major_policy.sql",
+      "V6__expand_humanities_fusion_majors.sql",
+      "V7__complete_fusion_basic_course_mappings.sql",
+      "V8__track_anonymous_parsing_requests.sql",
+      "V9__correct_applied_data_science_fusion_basic_credit.sql"
+    ]
+  },
+  "remoteRefCommits": {
+    "origin/main": "5699f0e7435b2f070466ed9de469d44289b383e6",
+    "origin/develop": "b3aa186af5acfb4a643d64717487105f6eb63174"
+  },
+  "flyway": {
+    "database": "new disposable synthetic_cache_probe only",
+    "mysql": "8.4.8",
+    "redis": "7.4",
+    "fixtureBaseline": "13",
+    "appliedVersions": [
+      "14",
+      "15"
+    ],
+    "secondMigrateApplied": 0,
+    "validatePassed": true,
+    "productionBaselineUnchanged": true,
+    "logMarkers": [
+      "DEV121 Flyway migrations: synthetic baseline 13 -> V14/V15; validate and repeat migrate passed",
+      "DEV121 catalog migration SHA256=8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164"
+    ]
+  },
+  "deploymentDefaults": {
+    "TAKEN_LECTURE_CACHE_MODE": "off",
+    "TAKEN_LECTURE_CACHE_NAMESPACE": "prod-dev121-v3"
+  },
+  "deploymentChecks": {
+    "allowedModes": [
+      "off",
+      "shadow",
+      "on"
+    ],
+    "invalidModeRejectedBeforeDocker": true,
+    "invalidNamespacesRejectedBeforeDocker": true,
+    "sshAndContainerVariableWiringVerified": true,
+    "dockerCommandsStubbed": true
+  },
+  "build": {
+    "command": "./gradlew bootJar --offline --no-daemon",
+    "artifact": "build/libs/MyongjiGraduate-BE-0.0.1-SNAPSHOT.jar",
+    "sha256": "9cec1d2bc9954a8a7367c6143b589cc7042ab2910d7a3d56b7aade818bec4bd6",
+    "packagedMigrations": [
+      "V10__add_honors_college_to_user.sql",
+      "V11__add_honors_target_major_to_user.sql",
+      "V14__add_taken_lecture_revision.sql",
+      "V15__version_lecture_catalog.sql",
+      "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "V2__create_optional_mandatory_policy.sql",
+      "V3__scope_basic_academical_culture_policy.sql",
+      "V4__map_basic_programming_major_transition.sql",
+      "V5__create_fusion_major_policy.sql",
+      "V6__expand_humanities_fusion_majors.sql",
+      "V7__complete_fusion_basic_course_mappings.sql",
+      "V8__track_anonymous_parsing_requests.sql",
+      "V9__correct_applied_data_science_fusion_basic_credit.sql"
+    ]
+  },
+  "sourceSha256": {
+    ".github/workflows/deploy.yml": "9842348bb6ac60ba008c0bf8409ada9de7f797d71399ced456a90dd315ab3cfd",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/deployment/ProductionDeploymentWorkflowTest.java": "a5cc98eb910ffed3f449cf32c6f80fe108876e1b58a8abc09430c70ab4563150",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheConsistencyIntegrationTest.java": "42c299787c9e4386547ed1d13882066e93212256a22fca0d0eda3b69bfc7dd86",
+    "src/main/resources/db/migration/V14__add_taken_lecture_revision.sql": "371a67a44b4401e25682cb2b122965d44bf4f724ca2cb4a1de35219de168e0c0",
+    "src/main/resources/db/migration/V15__version_lecture_catalog.sql": "8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164"
+  },
+  "applicationContentMatches20261027": true,
+  "testXmlSha256": {
+    "TEST-com.plzgraduate.myongjigraduatebe.deployment.ProductionDeploymentWorkflowTest.xml": "3e31bb601b38dc9d9b4f24031e39e4d934f912c1df47d6ee4cdfeda14c6f4265",
+    "TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheConfigurationTest.xml": "406bc97de5cf62c746f193421c2c955e6c3112d7e256a8166f278ba4d288ea15",
+    "TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml": "00d9524bc517d4b9a5ed573bd10e34d6ce3c1dca8665159b95cb6bae9c3adb5b"
+  },
+  "savedTestReport": "build/reports/tests/dev121-deployment-prep-20261029/index.html",
+  "savedTestXml": "build/test-results/dev121-deployment-prep-20261029",
+  "limitations": [
+    "DEV-116 V12/V13 must be deployed before/together with V14/V15, or its unapplied versions must be reassigned if DEV-121 deploys first.",
+    "Fixture baseline 13 does not verify DEV-116 policy migrations or production history.",
+    "Production trigger privileges and DEFINER have not been inspected.",
+    "No full regression or performance benchmark rerun in this preparation step."
+  ],
+  "productionDatabaseAccessed": false,
+  "externalSettingsChanged": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false
+}

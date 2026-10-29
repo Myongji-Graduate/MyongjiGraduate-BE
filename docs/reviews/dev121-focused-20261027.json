@@ -1,0 +1,45 @@
+{
+  "suites": [
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheBenchmarkIntegrationTest",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T00:54:57",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "0.0"
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheConfigurationTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T00:54:55",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "2.057"
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+      "tests": "11",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T00:54:57",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "0.171"
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+      "tests": "24",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T00:55:07",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "6.706"
+    }
+  ],
+  "note": "Benchmark intentionally disabled in this focused run; integration includes abrupt child JVM halt after real commit."
+}

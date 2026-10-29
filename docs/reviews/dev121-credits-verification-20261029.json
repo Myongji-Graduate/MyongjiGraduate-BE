@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-29",
+  "branch": "fix/DEV-121",
+  "jarSha256": {
+    "previous": "862d5098b036e2e4337af9dc7b362bc6174ac003831ac632aceffc714cc8d458",
+    "optimized": "17b167f5b40f455e5726e98a05ce24852b5e19a20b687a1cecc51c5e8f2e8c06"
+  },
+  "baselineVerification": "dev121-http-verification-20261029.json",
+  "http": {
+    "shortWarmup": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "skippedSuites": []
+    },
+    "expandedWarmup": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "skippedSuites": []
+    },
+    "performanceGetRequests": 119232,
+    "actualApiRequests": 168426,
+    "correctnessFaultBundles": 9
+  },
+  "fullRegression": {
+    "tests": 834,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "passed": 830,
+    "skippedSuites": [
+      "com.plzgraduate.myongjigraduatebe.benchmark.GraduationDetailBenchmarkTest",
+      "com.plzgraduate.myongjigraduatebe.benchmark.SharedMasterCacheBenchmarkTest",
+      "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheBenchmarkIntegrationTest",
+      "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheHttpIntegrationTest"
+    ]
+  },
+  "postValidation": {
+    "allMeasuredResponsesEqual": true,
+    "allOnBatchesLocalHitForEveryRequest": true,
+    "getDmlStatements": 0,
+    "cacheMismatch": 0,
+    "cacheErrorDuringPerformance": 0,
+    "cpuTimeAvailable": false,
+    "remainingGeneratedProperties": 0,
+    "remainingOwnedContainers": {
+      "dev121-http": [],
+      "dev121-cache": []
+    }
+  },
+  "executedHarnessSha256": {
+    "shortWarmup": "4652891892914e8c5a67c64a3a60b63512eb92c17333b1a79033f9b8a4d425f6",
+    "expandedWarmup": "7d4961934bfe9686ba8fc385ed5fd63391eb22622d05463d32be4b7ba8046f5c"
+  },
+  "harnessMetadataNote": "After both HTTP runs, only the human-readable protocol.order description was corrected to match the already correct modeOrder for future expanded runs; app JAR and measurement logic unchanged. Executed harness copies remain in ignored build/dev121/baseline-credits.",
+  "sourceSha256": {
+    ".github/workflows/deploy.yml": "9842348bb6ac60ba008c0bf8409ada9de7f797d71399ced456a90dd315ab3cfd",
+    "infra/cache/compare_http_results.py": "eb4e3593e7a18fc5cd9daa9e8aa6254285256b8afb239efa5db593d590a165b2",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/completedcredit/application/service/FindCompletedCreditService.java": "b491151c68a0765c68a030b6fb96a972ff6a7df68d85026fe34e44afaa275211",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/completedcredit/application/service/GenerateOrModifyCompletedCreditService.java": "8a1ae340528d9b5b18c10f14e7d0965c796e91c1b2d7c72d422399e6f75f4bce",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/completedcredit/application/usecase/CalculateCompletedCreditUseCase.java": "345404f79b29659551bc5c5e641d84c22b3105589cbf3427280d5057478b31a8",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/core/config/RedisCacheConfig.java": "0ac8998925a2e0161cd32a392df25a5a81cd267124a37bd4dbf7a75da18c7f85",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/graduation/application/service/CalculateGraduationService.java": "d1e26db8cba53656a9811eb26f6cb13ab3766ca47035e39b207ef454c5e6369f",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/graduation/application/service/CalculateSingleDetailGraduationService.java": "a41385038ae00b0ce2e3153ae627d7d3962720f40b3a1aa5b59a5624c622c9fa",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/graduation/application/usecase/CalculateGraduationUseCase.java": "53e5b341cbae81156ca8588c723634ad6aab0cfca0f90e85be35395ccb79f652",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/lecture/infrastructure/adapter/persistence/entity/LectureCatalogRevisionJpaEntity.java": "52c784aaf80e70560ee175cdf7c42c202635dec1f3be17ba79735e83f40e18ac",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/parsing/api/ParsingTextController.java": "60624159a1cea3d41350dcb50432ddbc230eb7aeb45d212cdb2f02ab7017658a",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/parsing/application/service/ParsingTextService.java": "e49e00504ae4ce94b541a8600b7938a2a283ce0fd2f29beb794013aee7197ca9",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/port/FindTakenLecturePort.java": "466711d5aeae8edee86082918ab1a3233dcfea641f97b1848ea3b091e01b1b90",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/port/TakenLectureReadContextPort.java": "e61f3c7ae1bdb16cd67eaf6b4d398c71c463b50bdb11f8f47d0824d5d53282cb",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/port/TakenLectureRevisionPort.java": "405a385160544f81f559930fdcf7b137e3d6df77fe7cbf28dd831ce90e3d2336",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/delete/DeleteTakenLectureService.java": "e477c306e6be3e50cb19363fa0a93c7a74e42ed82e0a996387bffbf62139731a",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/find/FindTakenLectureService.java": "be0fae0d949022e299b9d92c8de317374f2bab779e4ca6fa4b1da6d1943ac5b4",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/save/GenerateCustomizedTakenLectureService.java": "248947f35a2a199a223b7cdfaffad81b62e4b4b6f847b61282b6e926d1eccb29",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/save/SaveTakenLectureFromParsingTextService.java": "806bd53b2af7f01b86475c743eec8c4bec28cd764dd9bd4b604112a5d27bcfd8",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/usecase/find/FindTakenLectureUseCase.java": "f62199ef0a22dd91639732d18cc749b28bc95437ae2fb42400504763a668fee9",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/domain/model/TakenLectureRead.java": "e6c903f7f61e6d272530aab4d53d981814ac58df8e962e17b15bb4a2b3a8182a",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/CachedTakenLectureAdapter.java": "a354ed9a750c3b19873d2a1fc4d8a81621110c3bc8d7f68a544ad735dd6cdcf1",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCache.java": "81e95bda760a8bdcf17cc44ea28630dbb7f9e540b06d6cf7656f6a3aa8c605d3",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheConfiguration.java": "5e87668e2fad87038094561a5035f38c24ac90f1cb4a63665ca17d470ee2c5c7",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheStore.java": "4ec9c09cc47c23f47bef31c05d759916c7bec7cd0c17aaf1e750ea0293ea61bd",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureRedisStore.java": "913445a469a9a1218351091d8a793c15973eb18dfb4a9dfd5a23c2e644f1880d",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureSnapshot.java": "d5e3482c5df65c252851aad8c2148293e8e89da44b8178ec10441c8130f86bef",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLecturePersistenceAdapter.java": "a845733b7d189b8d2b531e0cac67c21cb66358c82acee387abc9d9edd8a4530c",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/user/infrastructure/adapter/persistence/entity/UserJpaEntity.java": "8102bf8c1c9253da3b271327c9e0d3f83208a55991323c28c38a386a882777ad",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/user/infrastructure/adapter/persistence/repository/TakenLectureReadContextRow.java": "2d8acc043ef36f5c786631d66fa79ee2cd9e183e119cb26f524d0237c68c5202",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/user/infrastructure/adapter/persistence/repository/UserRepository.java": "4665eff57d8e9fbca2daf0ddda816d17342322df0b115bae946808516693f99a",
+    "src/main/resources/application.yml": "17449a71fb06e5b0f1af5f1babe7c7d28c0bef52c6098de5a76162b610873d61",
+    "src/main/resources/db/migration/V14__add_taken_lecture_revision.sql": "371a67a44b4401e25682cb2b122965d44bf4f724ca2cb4a1de35219de168e0c0",
+    "src/main/resources/db/migration/V15__version_lecture_catalog.sql": "8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/auth/api/signin/SignInControllerTest.java": "d97e1f494e9c7934c8075b2108d4989e0f6fc184e2695792d9218038bd75e98f",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/auth/api/token/TokenControllerTest.java": "7bbf5a32ca3f6262443e7bef11e79453d1c9743998b524b6771192786ed52071",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/completedcredit/api/FindCompletedCreditsControllerTest.java": "5bcf7ca52cd77f08a3ea7ae9d12f3b8ff0ea1a76c48094e1a65646aba4ce2144",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/completedcredit/application/service/CompletedCreditConcurrencyIntegrationTest.java": "edd342d85e5f209cef74416ab0c7d3b789ed43098e14e110ba4e87e13cc4e8e1",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/completedcredit/application/service/FindCompletedCreditServiceTest.java": "aa004f7e12889182a6e3d25949dba7fe219dde3b2f403e0d17f77bf24aad8d25",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/completedcredit/application/service/GenerateOrModifyCompletedCreditServiceTest.java": "9c848bbeac88cfd8e5f31e2d68f2f574ccc7604626183f85d8a9fd991e059961",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/deployment/ProductionDeploymentWorkflowTest.java": "a5cc98eb910ffed3f449cf32c6f80fe108876e1b58a8abc09430c70ab4563150",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/graduation/api/FindDetailGraduationsControllerTest.java": "e50cd6fec71e189f2bb96055e81680f86564b39da21b6d0843d5ebc2ad5dfd17",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/graduation/application/service/CalculateGraduationServiceTest.java": "f5c1cdb4ee9f53bee0d6c280b1e925ced4402cf1bed6cb976e937743d54bc72a",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/lecture/api/SearchLectureControllerTest.java": "52338ebd8b8abe909ad0dd82bf9216a29b72a32a5bcfe4cf1b0bb742babf5bee",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/parsing/api/ParsingTextControllerTest.java": "fc6bde3ddde02e3111cd700d4e09e9c1a64d5a2d7d8e13374d64a067634769bb",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/parsing/application/service/ParsingTextServiceTest.java": "8b1a5641b183ede3417a13ec328eab5ee4cd639fb7d8ff82ff885f1e65a6dd98",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/api/find/FindTakenLectureControllerTest.java": "2d8890d61d51ccc9043a37764947a294d9f439476c86a45498375782020568bc",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/api/update/UpdateTakenLectureControllerTest.java": "42834597b24d6420577d9c587787775d79cc90b6e0449f38c17ff95f64c29234",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/delete/DeleteTakenLectureServiceTest.java": "4e175037c7241a23df1a89ebd1278405ec3c068a5ae892d231fda1b57f389828",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/find/FindTakenLectureServiceTest.java": "0d0d7ef590bfdb8aaef5f0d323e58e347b03986900611b7368211bbd962e1ff5",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/save/GenerateTakenLectureServiceTest.java": "ed18444d89a868e102dc44fe986fe2682c9484f959fce3acaf0b959c94e88b02",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/save/SaveTakenLectureFromParsingTextServiceTest.java": "18b624e6ef4389f74259ca3cd214a98561a52fe2ee41142a04da4f649bf84259",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheConfigurationTest.java": "a75a1e2e6a339795813adb6cbc06aa90302251bb74052c33728572abffa0befc",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheTest.java": "af87990f56be96fa13edd1cc4abdb5e22f42bb89e556a0b7f7ebf16fd02d2b89",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/PreviousMembershipCacheReader.java": "3dc1de1ad86e84f06d3cbe7462b7f028f63a976908dd1cbd5204bd5490f9d165",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheBenchmarkIntegrationTest.java": "71eb634bff191b585aa0cc7812301087a22aa256a16213105fa1ed9623fc865c",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheConsistencyIntegrationTest.java": "4d00e3278cf57927245e40fa9a59a47f6582e2f7a943a7b363d526290aebea7e",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheHttpIntegrationTest.java": "5b1be203fed96788c25fb3730de9d754d9116c4978a859a23f809a906cf9652b",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/user/api/findauthid/FindAuthIdControllerTest.java": "07ddd33fda08bff224606782b176b944f4dab924309d0f7481d718d961df9e31",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/user/api/finduserinformation/FindUserInformationControllerTest.java": "38780c59b0e6d207000ba34d6d8a894a5999c195bf55fb7dc30bd8542ddf80ba",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/user/api/resetpassword/ResetPasswordControllerTest.java": "3b80f64e87a91fc177e168a30353ee2c2a748c09e58420d14fee5a21c510bc1a",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/user/api/signup/SignUpControllerTest.java": "68d599356b4954923eb80fc9e4c63159875aebf75d12a0d34b5d9743fb821835",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/user/api/withdraw/WithDrawControllerTest.java": "2b383a2a63002730e6d3787d729396fc123541654053cb4679f2b8ae7a5da82d"
+  },
+  "evidenceSha256": {
+    "dev121-credits-paired-20261029.json": "1537060f0dc2b46d224c9b7c565ef54124922794144a2609287dee4911d11762",
+    "dev121-credits-paired-comparison-20261029.json": "5c591ca062b3484c969eb20ae148e5fac3a4128b923cbc9c71c30270f86f9f8a",
+    "dev121-credits-expanded-warmup-20261029.json": "cadcadb490073aaf50c0ef8165dfadf0d54215e71a60bf57f362daa2b447f640",
+    "dev121-credits-expanded-comparison-20261029.json": "c7d83561a4b7a515f93b69c29151aef0e8b45890e0ac49f3c62fa7202ebd1880"
+  },
+  "productionAccessed": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false,
+  "documentationValidation": {
+    "localLinks": 62,
+    "missingLinks": 0,
+    "gitDiffCheck": "passed"
+  }
+}

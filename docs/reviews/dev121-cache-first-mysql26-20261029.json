@@ -1,0 +1,27 @@
+{
+  "databaseVersion" : "26.7.0",
+  "imageId" : "sha256:87491a2172fe6cf721c0c6257e084ffddf67de9dc4dd5d1bdfd5a58a7c84d9d1",
+  "sourceSha256" : {
+    "V14__add_taken_lecture_revision.sql" : "371a67a44b4401e25682cb2b122965d44bf4f724ca2cb4a1de35219de168e0c0",
+    "V15__version_lecture_catalog.sql" : "8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164"
+  },
+  "cacheReleaseAppliedVersions" : [ "14", "15" ],
+  "checks" : {
+    "policyTablesCreated" : 0,
+    "triggerInsertUpdateDelete" : true,
+    "triggerRollback" : true,
+    "existingUserRevision" : 0,
+    "validate" : true,
+    "triggers" : 3,
+    "repeatMigrateCount" : 0
+  },
+  "futureMigrationSimulation" : {
+    "late12And13Rejected" : true,
+    "repeatMigrateCount" : 0,
+    "validate" : true,
+    "renumberedAppliedVersions" : [ "16", "17" ]
+  },
+  "dev116SourceAccessed" : false,
+  "productionAccessed" : false,
+  "scope" : "minimal synthetic schema baseline 11; not a full production upgrade or DEV-116 application test"
+}

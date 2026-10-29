@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-29",
+  "branch": "fix/DEV-121",
+  "jarSha256": "9cec1d2bc9954a8a7367c6143b589cc7042ab2910d7a3d56b7aade818bec4bd6",
+  "complete": false,
+  "finding": "Graduation detail API outer transaction used DEFAULT isolation, causing shadow/on snapshot-cache bypass.",
+  "probes": [
+    {
+      "cache": {
+        "transaction_bypass": 1.0
+      },
+      "mode": "off",
+      "endpoint": "/api/v1/taken-lectures"
+    },
+    {
+      "cache": {
+        "transaction_bypass": 1.0
+      },
+      "mode": "off",
+      "endpoint": "/api/v1/graduations/credits"
+    },
+    {
+      "cache": {
+        "transaction_bypass": 1.0
+      },
+      "mode": "off",
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE"
+    },
+    {
+      "cache": {
+        "transaction_bypass": 1.0
+      },
+      "mode": "off",
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE"
+    },
+    {
+      "cache": {
+        "transaction_bypass": 1.0
+      },
+      "mode": "off",
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR"
+    },
+    {
+      "cache": {
+        "load": 1.0,
+        "miss": 0.0,
+        "put": 1.0,
+        "shadow": 1.0
+      },
+      "mode": "shadow",
+      "endpoint": "/api/v1/taken-lectures"
+    },
+    {
+      "cache": {
+        "load": 1.0,
+        "miss": 0.0,
+        "put": 1.0,
+        "shadow": 1.0
+      },
+      "mode": "shadow",
+      "endpoint": "/api/v1/graduations/credits"
+    },
+    {
+      "cache": {
+        "load": 0.0,
+        "miss": 0.0,
+        "put": 0.0,
+        "shadow": 0.0,
+        "transaction_bypass": 1.0
+      },
+      "mode": "shadow",
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE"
+    }
+  ],
+  "sqlCountsUsable": false,
+  "sqlCountLimitation": "Initial observer used a new JDBC connection for each status query; connection initialization SELECTs contaminated counts. Final harness uses a warmed probe pool.",
+  "productionAccessed": false
+}

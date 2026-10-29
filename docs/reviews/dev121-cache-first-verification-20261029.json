@@ -1,0 +1,66 @@
+{
+  "verifiedAtKst": "2026-10-29T15:01:42.309170+09:00",
+  "branch": "fix/DEV-121",
+  "decision": "DEV-121 before DEV-116; V11 -> V14 -> V15; later unapplied migrations must use versions above the latest deployed version",
+  "tests": {
+    "full": {
+      "tests": 836,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "passed": 832,
+      "skippedSuites": [
+        "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheHttpIntegrationTest",
+        "com.plzgraduate.myongjigraduatebe.benchmark.GraduationDetailBenchmarkTest",
+        "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheBenchmarkIntegrationTest",
+        "com.plzgraduate.myongjigraduatebe.benchmark.SharedMasterCacheBenchmarkTest"
+      ]
+    },
+    "mysql26": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 32,
+      "skippedSuites": []
+    },
+    "python": {
+      "tests": 8,
+      "passed": 8,
+      "failures": 0
+    }
+  },
+  "cacheMigrationSqlUnchanged": true,
+  "dev116SourceAccessed": false,
+  "dev116FilesEdited": false,
+  "productionAccessed": false,
+  "githubSettingsChanged": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false,
+  "remainingOwnedContainers": {
+    "dev121-migration": [],
+    "dev121-cache": [],
+    "dev121-http": []
+  },
+  "sourceSha256": {
+    "infra/cache/check_release.py": "120e152c88f8623c368ace91140f04f551f0325eb894f6ebb0ffd9451434b9b5",
+    "infra/cache/test_check_release.py": "7404d1033fba9d3f646139233141cf4f4d5b0b63514d169878de1dc2e5e55365",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/deployment/CacheMigrationOrderIntegrationTest.java": "2b9c93bdfc2f5e6fb5830d83ea1fa114801e11326862c36a09a2c708711d17d3",
+    "docs/DEV-121_CACHE_DEPLOYMENT.md": "218674eba7353560f4bb2f490a4dfae03428dad7bf12cffe8b4ef69876673477",
+    "docs/PERSONAL_TAKEN_LECTURE_CACHE_FIX_PLAN.md": "71b18f9c5761d8b982309ffbdd61161cce311c398fb5206cba6a17a2c36c09fd",
+    "docs/DEV-121_CACHE_OPTIMIZATION_RESULT.md": "f69d515113b8005de8394b98d6839dd201eb2f92d140ad5056b46925aedaa35f",
+    "docs/DEV-121_COMPLETED_CREDIT_PERFORMANCE.md": "fa85255ef52323d3efd971f0640f37ab75cf21336a62d5ca371048cbe7e030be"
+  },
+  "evidenceSha256": {
+    "dev121-cache-first-release-gate-20261029.json": "d484def2bc3bdc624f6987ed61fd36c54f4e2411e75d9abadfec65e52dc7b327",
+    "dev121-cache-first-mysql84-20261029.json": "4071f69b44569558523da55d7b089252a581acd51f7984bc82f8725a698910b4",
+    "dev121-cache-first-mysql26-20261029.json": "dd4a251276aa85b945cd0a7d7607a21fe06b757a3fa056d8527b433f7732af27"
+  },
+  "limitations": [
+    "Synthetic baseline 11 is only a fixture; production baseline 0 unchanged.",
+    "MySQL Community 26.7.0 is not the production Cloud distribution or workload.",
+    "Late V12/V13 and subsequent V16/V17 are hand-authored synthetic test SQL, not DEV-116 migrations.",
+    "Existing HTTP performance evidence was preserved; HTTP performance was not rerun for this release-check-only change."
+  ]
+}

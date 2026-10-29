@@ -1,0 +1,3522 @@
+{
+  "modes": [
+    "off",
+    "on",
+    "shadow"
+  ],
+  "statistic": "median of three per-batch p95 values; not pooled-request p95",
+  "performanceRequests": 77760,
+  "comparisons": [
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 30,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 12.353625,
+          "p95Ms": 23.057542,
+          "p99Ms": 32.303625,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 9.225583,
+          "p95Ms": 12.273875,
+          "p99Ms": 14.895083,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 10.930583,
+          "p95Ms": 18.976375,
+          "p99Ms": 23.187833,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 8.763083,
+          "p95Ms": 11.587792,
+          "p99Ms": 20.861458,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 8.908917,
+          "p95Ms": 12.881458,
+          "p99Ms": 22.899167,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 10.345083,
+          "p95Ms": 13.547541,
+          "p99Ms": 19.945583,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": 11.164042295546906,
+      "optimizedOnVsOffPercent": -46.76850203720762,
+      "optimizedOnVsPreviousOnPercent": -4.7167253893154015,
+      "roundP95Ms": {
+        "optimized_off": [
+          23.057542,
+          10.404167,
+          32.131917
+        ],
+        "optimized_on": [
+          11.897417,
+          12.273875,
+          18.570584
+        ],
+        "optimized_shadow": [
+          20.146416,
+          14.579416,
+          18.976375
+        ],
+        "previous_off": [
+          16.321416,
+          11.587792,
+          11.270167
+        ],
+        "previous_on": [
+          13.06225,
+          12.741042,
+          12.881458
+        ],
+        "previous_shadow": [
+          19.986375,
+          12.398292,
+          13.547541
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 30,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 17.888125,
+          "p95Ms": 24.165375,
+          "p99Ms": 27.815584,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 12.205333,
+          "p95Ms": 18.803333,
+          "p99Ms": 20.764584,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 16.216125,
+          "p95Ms": 23.559041,
+          "p99Ms": 29.271,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 13.300125,
+          "p95Ms": 23.267417,
+          "p99Ms": 23.41975,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 12.357125,
+          "p95Ms": 15.711167,
+          "p99Ms": 23.245375,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 14.823083,
+          "p95Ms": 20.414792,
+          "p99Ms": 25.130916,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -32.47567188055296,
+      "optimizedOnVsOffPercent": -22.188945960904817,
+      "optimizedOnVsPreviousOnPercent": 19.681326027531874,
+      "roundP95Ms": {
+        "optimized_off": [
+          38.027459,
+          13.337167,
+          24.165375
+        ],
+        "optimized_on": [
+          18.803333,
+          14.627417,
+          24.179709
+        ],
+        "optimized_shadow": [
+          23.559041,
+          19.892875,
+          25.980833
+        ],
+        "previous_off": [
+          24.732334,
+          23.267417,
+          17.527666
+        ],
+        "previous_on": [
+          54.46675,
+          15.711167,
+          15.519959
+        ],
+        "previous_shadow": [
+          20.414792,
+          20.584167,
+          18.175375
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 30,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 17.294708,
+          "p95Ms": 22.660375,
+          "p99Ms": 24.355375,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 13.481917,
+          "p95Ms": 18.74275,
+          "p99Ms": 21.482334,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 20.395459,
+          "p95Ms": 33.832459,
+          "p99Ms": 34.691833,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 16.177458,
+          "p95Ms": 22.175209,
+          "p99Ms": 23.00975,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 15.320125,
+          "p95Ms": 19.927584,
+          "p99Ms": 21.093708,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 17.279125,
+          "p95Ms": 25.457833,
+          "p99Ms": 25.753833,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -10.13575565398278,
+      "optimizedOnVsOffPercent": -17.288438518780012,
+      "optimizedOnVsPreviousOnPercent": -5.94569818398456,
+      "roundP95Ms": {
+        "optimized_off": [
+          22.10425,
+          22.660375,
+          30.867584
+        ],
+        "optimized_on": [
+          16.250833,
+          19.705958,
+          18.74275
+        ],
+        "optimized_shadow": [
+          37.203666,
+          33.832459,
+          22.824208
+        ],
+        "previous_off": [
+          22.640875,
+          22.175209,
+          19.895375
+        ],
+        "previous_on": [
+          17.910208,
+          19.927584,
+          34.438208
+        ],
+        "previous_shadow": [
+          25.457833,
+          19.290958,
+          29.539208
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 60,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 7.564667,
+          "p95Ms": 14.017875,
+          "p99Ms": 27.912291,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 7.923833,
+          "p95Ms": 10.802709,
+          "p99Ms": 16.688583,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.759834,
+          "p95Ms": 13.652667,
+          "p99Ms": 24.352042,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 7.619542,
+          "p95Ms": 12.779708,
+          "p99Ms": 32.508625,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 7.125875,
+          "p95Ms": 9.216667,
+          "p99Ms": 14.2985,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.996292,
+          "p95Ms": 11.6765,
+          "p99Ms": 19.610542,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -27.8804570495664,
+      "optimizedOnVsOffPercent": -22.93618683288301,
+      "optimizedOnVsPreviousOnPercent": 17.20841167419851,
+      "roundP95Ms": {
+        "optimized_off": [
+          11.197875,
+          15.001,
+          14.017875
+        ],
+        "optimized_on": [
+          11.713,
+          8.352833,
+          10.802709
+        ],
+        "optimized_shadow": [
+          13.652667,
+          13.036125,
+          14.813584
+        ],
+        "previous_off": [
+          13.215125,
+          12.779708,
+          11.077667
+        ],
+        "previous_on": [
+          9.216667,
+          9.123583,
+          9.233875
+        ],
+        "previous_shadow": [
+          11.116208,
+          13.34625,
+          11.6765
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 60,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 12.054042,
+          "p95Ms": 19.053417,
+          "p99Ms": 22.34675,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 10.985833,
+          "p95Ms": 13.15175,
+          "p99Ms": 16.341667,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 14.001625,
+          "p95Ms": 22.52,
+          "p99Ms": 28.78575,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 11.194416,
+          "p95Ms": 16.922916,
+          "p99Ms": 18.937125,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 10.256417,
+          "p95Ms": 14.211375,
+          "p99Ms": 18.10925,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 13.788833,
+          "p95Ms": 19.312792,
+          "p99Ms": 20.296333,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -16.022894635888996,
+      "optimizedOnVsOffPercent": -30.974323398264993,
+      "optimizedOnVsPreviousOnPercent": -7.45617507102585,
+      "roundP95Ms": {
+        "optimized_off": [
+          23.621209,
+          19.053417,
+          15.078625
+        ],
+        "optimized_on": [
+          15.821792,
+          10.239458,
+          13.15175
+        ],
+        "optimized_shadow": [
+          16.455875,
+          22.957417,
+          22.52
+        ],
+        "previous_off": [
+          19.170083,
+          13.121542,
+          16.922916
+        ],
+        "previous_on": [
+          16.308667,
+          12.572625,
+          14.211375
+        ],
+        "previous_shadow": [
+          19.312792,
+          17.076375,
+          56.268417
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 60,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 15.438583,
+          "p95Ms": 25.134042,
+          "p99Ms": 26.417208,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 13.757666,
+          "p95Ms": 25.759166,
+          "p99Ms": 26.101458,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 18.557292,
+          "p95Ms": 25.400709,
+          "p99Ms": 26.917125,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 15.209958,
+          "p95Ms": 19.48875,
+          "p99Ms": 21.193333,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 14.072083,
+          "p95Ms": 23.175083,
+          "p99Ms": 23.909208,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 17.991625,
+          "p95Ms": 25.951583,
+          "p99Ms": 27.658125,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": 18.915184401257147,
+      "optimizedOnVsOffPercent": 2.487160640536845,
+      "optimizedOnVsPreviousOnPercent": 11.150264273055676,
+      "roundP95Ms": {
+        "optimized_off": [
+          28.524875,
+          20.685375,
+          25.134042
+        ],
+        "optimized_on": [
+          26.561625,
+          19.149292,
+          25.759166
+        ],
+        "optimized_shadow": [
+          67.788042,
+          24.818042,
+          25.400709
+        ],
+        "previous_off": [
+          19.48875,
+          27.375334,
+          19.273708
+        ],
+        "previous_on": [
+          17.701125,
+          23.175083,
+          23.900458
+        ],
+        "previous_shadow": [
+          22.435667,
+          25.951583,
+          47.137708
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 120,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.561625,
+          "p95Ms": 9.154,
+          "p99Ms": 11.42975,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.520167,
+          "p95Ms": 8.910167,
+          "p99Ms": 16.026542,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.042791,
+          "p95Ms": 12.526333,
+          "p99Ms": 19.823917,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 6.812417,
+          "p95Ms": 9.44025,
+          "p99Ms": 14.479083,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 6.556833,
+          "p95Ms": 8.693708,
+          "p99Ms": 13.278541,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.7875,
+          "p95Ms": 12.00375,
+          "p99Ms": 15.324667,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -7.9080744683668325,
+      "optimizedOnVsOffPercent": -2.6636770810574695,
+      "optimizedOnVsPreviousOnPercent": 2.4898351773489313,
+      "roundP95Ms": {
+        "optimized_off": [
+          9.000291,
+          9.154,
+          10.15425
+        ],
+        "optimized_on": [
+          8.831083,
+          8.910167,
+          9.395167
+        ],
+        "optimized_shadow": [
+          15.774791,
+          9.443292,
+          12.526333
+        ],
+        "previous_off": [
+          11.175166,
+          9.035417,
+          9.44025
+        ],
+        "previous_on": [
+          10.093916,
+          8.39,
+          8.693708
+        ],
+        "previous_shadow": [
+          10.883958,
+          12.00375,
+          14.578167
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 120,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 10.571541,
+          "p95Ms": 15.58025,
+          "p99Ms": 18.464792,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 9.209959,
+          "p95Ms": 12.441416,
+          "p99Ms": 14.545208,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 13.5825,
+          "p95Ms": 16.26625,
+          "p99Ms": 16.511166,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 10.717167,
+          "p95Ms": 15.15675,
+          "p99Ms": 19.208125,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 9.602459,
+          "p95Ms": 15.070125,
+          "p99Ms": 17.223125,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 13.550709,
+          "p95Ms": 19.827958,
+          "p99Ms": 21.603291,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -0.571527537235883,
+      "optimizedOnVsOffPercent": -20.146236421110054,
+      "optimizedOnVsPreviousOnPercent": -17.44317980109654,
+      "roundP95Ms": {
+        "optimized_off": [
+          15.929125,
+          15.58025,
+          14.878083
+        ],
+        "optimized_on": [
+          13.421708,
+          12.441416,
+          11.080625
+        ],
+        "optimized_shadow": [
+          16.26625,
+          14.33875,
+          20.352292
+        ],
+        "previous_off": [
+          15.15675,
+          14.296541,
+          15.180666
+        ],
+        "previous_on": [
+          17.12075,
+          10.802791,
+          15.070125
+        ],
+        "previous_shadow": [
+          19.505833,
+          19.827958,
+          20.529291
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 120,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 12.782042,
+          "p95Ms": 18.572875,
+          "p99Ms": 19.080833,
+          "selectsPerRequest": 9.0
+        },
+        "optimized_on": {
+          "p50Ms": 13.735125,
+          "p95Ms": 21.042,
+          "p99Ms": 22.41525,
+          "selectsPerRequest": 8.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 17.786875,
+          "p95Ms": 23.445042,
+          "p99Ms": 26.087,
+          "selectsPerRequest": 9.0
+        },
+        "previous_off": {
+          "p50Ms": 14.891542,
+          "p95Ms": 22.094666,
+          "p99Ms": 24.198417,
+          "selectsPerRequest": 10.0
+        },
+        "previous_on": {
+          "p50Ms": 13.185042,
+          "p95Ms": 17.93625,
+          "p99Ms": 19.267583,
+          "selectsPerRequest": 10.0
+        },
+        "previous_shadow": {
+          "p50Ms": 19.095958,
+          "p95Ms": 29.1485,
+          "p99Ms": 31.43275,
+          "selectsPerRequest": 11.0
+        }
+      },
+      "previousOnVsOffPercent": -18.82090455678307,
+      "optimizedOnVsOffPercent": 13.294253043753335,
+      "optimizedOnVsPreviousOnPercent": 17.315492368806183,
+      "roundP95Ms": {
+        "optimized_off": [
+          18.719167,
+          18.572875,
+          16.634083
+        ],
+        "optimized_on": [
+          21.042,
+          17.547084,
+          29.770125
+        ],
+        "optimized_shadow": [
+          23.445042,
+          22.950708,
+          37.71025
+        ],
+        "previous_off": [
+          27.935084,
+          20.60525,
+          22.094666
+        ],
+        "previous_on": [
+          17.410958,
+          17.93625,
+          19.761375
+        ],
+        "previous_shadow": [
+          29.1485,
+          25.498958,
+          29.796958
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 30,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 4.803959,
+          "p95Ms": 8.366333,
+          "p99Ms": 11.136,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 4.480291,
+          "p95Ms": 7.103292,
+          "p99Ms": 13.637958,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 6.406375,
+          "p95Ms": 10.43075,
+          "p99Ms": 15.399666,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 3.63275,
+          "p95Ms": 5.051709,
+          "p99Ms": 5.861708,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 3.552584,
+          "p95Ms": 5.520459,
+          "p99Ms": 11.911416,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 5.144417,
+          "p95Ms": 7.085833,
+          "p99Ms": 11.574459,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": 9.279038044352905,
+      "optimizedOnVsOffPercent": -15.096709633718852,
+      "optimizedOnVsPreviousOnPercent": 28.67212671989774,
+      "roundP95Ms": {
+        "optimized_off": [
+          8.366333,
+          5.396916,
+          10.979875
+        ],
+        "optimized_on": [
+          7.535125,
+          4.802542,
+          7.103292
+        ],
+        "optimized_shadow": [
+          10.43075,
+          11.447041,
+          9.418625
+        ],
+        "previous_off": [
+          5.364666,
+          4.949042,
+          5.051709
+        ],
+        "previous_on": [
+          4.908541,
+          5.520459,
+          8.682583
+        ],
+        "previous_shadow": [
+          9.585542,
+          7.085833,
+          6.415
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 30,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 7.349833,
+          "p95Ms": 9.482667,
+          "p99Ms": 11.205417,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.01075,
+          "p95Ms": 8.099042,
+          "p99Ms": 8.531583,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 10.5775,
+          "p95Ms": 13.615542,
+          "p99Ms": 15.965709,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 5.33,
+          "p95Ms": 7.483,
+          "p99Ms": 15.667959,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 5.474041,
+          "p95Ms": 7.477208,
+          "p99Ms": 7.573083,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.050417,
+          "p95Ms": 10.624292,
+          "p99Ms": 11.419084,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -0.077402111452618,
+      "optimizedOnVsOffPercent": -14.591095521966535,
+      "optimizedOnVsPreviousOnPercent": 8.316392963790765,
+      "roundP95Ms": {
+        "optimized_off": [
+          9.482667,
+          7.291666,
+          10.790834
+        ],
+        "optimized_on": [
+          8.5935,
+          7.308375,
+          8.099042
+        ],
+        "optimized_shadow": [
+          14.408666,
+          13.115625,
+          13.615542
+        ],
+        "previous_off": [
+          10.6005,
+          7.483,
+          6.728541
+        ],
+        "previous_on": [
+          7.719042,
+          7.477208,
+          6.562333
+        ],
+        "previous_shadow": [
+          10.624292,
+          12.667291,
+          9.492917
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 30,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 9.536,
+          "p95Ms": 12.093625,
+          "p99Ms": 12.8675,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 8.439417,
+          "p95Ms": 14.275625,
+          "p99Ms": 14.394125,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 12.442708,
+          "p95Ms": 19.209291,
+          "p99Ms": 20.733041,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 7.940375,
+          "p95Ms": 11.886459,
+          "p99Ms": 12.608417,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 8.293791,
+          "p95Ms": 14.020583,
+          "p99Ms": 15.547667,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 10.716167,
+          "p95Ms": 14.594583,
+          "p99Ms": 15.060917,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": 17.954245246628965,
+      "optimizedOnVsOffPercent": 18.042563747428918,
+      "optimizedOnVsPreviousOnPercent": 1.8190541719984132,
+      "roundP95Ms": {
+        "optimized_off": [
+          12.093625,
+          8.371917,
+          12.491625
+        ],
+        "optimized_on": [
+          12.802,
+          14.275625,
+          15.081708
+        ],
+        "optimized_shadow": [
+          17.469791,
+          19.209291,
+          33.890417
+        ],
+        "previous_off": [
+          11.886459,
+          9.682625,
+          14.161584
+        ],
+        "previous_on": [
+          15.073875,
+          14.020583,
+          10.575917
+        ],
+        "previous_shadow": [
+          14.594583,
+          13.929875,
+          18.291416
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 60,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 3.605667,
+          "p95Ms": 6.889542,
+          "p99Ms": 13.119792,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 4.1425,
+          "p95Ms": 6.667541,
+          "p99Ms": 8.915458,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 5.20425,
+          "p95Ms": 7.420917,
+          "p99Ms": 14.095042,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 3.395459,
+          "p95Ms": 6.129875,
+          "p99Ms": 12.033166,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 2.990291,
+          "p95Ms": 6.061542,
+          "p99Ms": 8.805208,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 5.136125,
+          "p95Ms": 8.422125,
+          "p99Ms": 13.502791,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -1.1147535634902783,
+      "optimizedOnVsOffPercent": -3.2222896674408807,
+      "optimizedOnVsPreviousOnPercent": 9.997439595403268,
+      "roundP95Ms": {
+        "optimized_off": [
+          6.889542,
+          6.08675,
+          6.966792
+        ],
+        "optimized_on": [
+          6.667541,
+          4.373917,
+          7.257042
+        ],
+        "optimized_shadow": [
+          7.420917,
+          6.92575,
+          9.401833
+        ],
+        "previous_off": [
+          9.111292,
+          4.860958,
+          6.129875
+        ],
+        "previous_on": [
+          4.142333,
+          6.061542,
+          12.832917
+        ],
+        "previous_shadow": [
+          8.422125,
+          7.442125,
+          41.498125
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 60,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.521584,
+          "p95Ms": 8.120791,
+          "p99Ms": 9.604625,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.406375,
+          "p95Ms": 10.141083,
+          "p99Ms": 16.076917,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.187708,
+          "p95Ms": 13.07375,
+          "p99Ms": 13.284875,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 5.868375,
+          "p95Ms": 10.264083,
+          "p99Ms": 10.972167,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 5.397417,
+          "p95Ms": 7.429583,
+          "p99Ms": 8.684917,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.535125,
+          "p95Ms": 12.989167,
+          "p99Ms": 18.078375,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -27.61571589006051,
+      "optimizedOnVsOffPercent": 24.878019887471538,
+      "optimizedOnVsPreviousOnPercent": 36.49599176696727,
+      "roundP95Ms": {
+        "optimized_off": [
+          12.75175,
+          7.589,
+          8.120791
+        ],
+        "optimized_on": [
+          11.073167,
+          6.211916,
+          10.141083
+        ],
+        "optimized_shadow": [
+          13.07375,
+          17.56375,
+          11.978709
+        ],
+        "previous_off": [
+          10.264083,
+          7.499875,
+          24.629416
+        ],
+        "previous_on": [
+          7.429583,
+          7.350875,
+          7.723084
+        ],
+        "previous_shadow": [
+          11.502583,
+          12.989167,
+          48.986917
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 60,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 9.44625,
+          "p95Ms": 12.263125,
+          "p99Ms": 13.10675,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 8.763125,
+          "p95Ms": 13.296875,
+          "p99Ms": 13.508333,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 12.492375,
+          "p95Ms": 16.649875,
+          "p99Ms": 19.091625,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 8.408084,
+          "p95Ms": 15.714334,
+          "p99Ms": 16.39425,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 6.866666,
+          "p95Ms": 12.787583,
+          "p99Ms": 13.818,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 10.322291,
+          "p95Ms": 14.85375,
+          "p99Ms": 14.948125,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -18.624721862218273,
+      "optimizedOnVsOffPercent": 8.429743642016208,
+      "optimizedOnVsPreviousOnPercent": 3.982707287217613,
+      "roundP95Ms": {
+        "optimized_off": [
+          22.33,
+          9.446458,
+          12.263125
+        ],
+        "optimized_on": [
+          28.846,
+          12.830958,
+          13.296875
+        ],
+        "optimized_shadow": [
+          16.080916,
+          29.615209,
+          16.649875
+        ],
+        "previous_off": [
+          17.705292,
+          13.732875,
+          15.714334
+        ],
+        "previous_on": [
+          12.787583,
+          7.843417,
+          15.163709
+        ],
+        "previous_shadow": [
+          14.85375,
+          11.463083,
+          24.198833
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 120,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 3.771875,
+          "p95Ms": 6.860875,
+          "p99Ms": 8.022875,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 3.563167,
+          "p95Ms": 5.56075,
+          "p99Ms": 6.414958,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 5.436833,
+          "p95Ms": 7.586291,
+          "p99Ms": 10.399875,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 3.356083,
+          "p95Ms": 4.805875,
+          "p99Ms": 5.915083,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 2.857,
+          "p95Ms": 4.258541,
+          "p99Ms": 5.472625,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 5.149666,
+          "p95Ms": 7.642084,
+          "p99Ms": 13.575958,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -11.388852186126364,
+      "optimizedOnVsOffPercent": -18.94984240348353,
+      "optimizedOnVsPreviousOnPercent": 30.578759251114395,
+      "roundP95Ms": {
+        "optimized_off": [
+          6.860875,
+          5.194167,
+          7.542375
+        ],
+        "optimized_on": [
+          5.56075,
+          4.929084,
+          6.035541
+        ],
+        "optimized_shadow": [
+          7.586291,
+          6.961875,
+          8.7315
+        ],
+        "previous_off": [
+          5.921167,
+          4.805875,
+          4.526042
+        ],
+        "previous_on": [
+          4.258541,
+          6.93325,
+          4.166541
+        ],
+        "previous_shadow": [
+          7.642084,
+          9.802208,
+          7.561
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 120,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.490208,
+          "p95Ms": 8.914917,
+          "p99Ms": 13.96875,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 5.855709,
+          "p95Ms": 8.530583,
+          "p99Ms": 8.772541,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.97925,
+          "p95Ms": 12.817417,
+          "p99Ms": 14.980708,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 5.920542,
+          "p95Ms": 9.738958,
+          "p99Ms": 12.626375,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 5.202833,
+          "p95Ms": 7.893792,
+          "p99Ms": 12.704375,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 9.416084,
+          "p95Ms": 17.064667,
+          "p99Ms": 20.759667,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -18.9462363427381,
+      "optimizedOnVsOffPercent": -4.311133799675315,
+      "optimizedOnVsPreviousOnPercent": 8.066984790072995,
+      "roundP95Ms": {
+        "optimized_off": [
+          8.152167,
+          9.463542,
+          8.914917
+        ],
+        "optimized_on": [
+          7.86875,
+          8.530583,
+          11.290625
+        ],
+        "optimized_shadow": [
+          14.455458,
+          11.172208,
+          12.817417
+        ],
+        "previous_off": [
+          7.242834,
+          9.738958,
+          9.95125
+        ],
+        "previous_on": [
+          6.95175,
+          10.141,
+          7.893792
+        ],
+        "previous_shadow": [
+          11.984417,
+          17.064667,
+          19.484125
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 120,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.67,
+          "p95Ms": 11.157792,
+          "p99Ms": 11.908125,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.925458,
+          "p95Ms": 11.223167,
+          "p99Ms": 11.4805,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 12.453875,
+          "p95Ms": 18.703917,
+          "p99Ms": 19.330042,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 7.856625,
+          "p95Ms": 10.164875,
+          "p99Ms": 10.647958,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 6.500125,
+          "p95Ms": 8.693542,
+          "p99Ms": 9.325625,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 12.012958,
+          "p95Ms": 14.897208,
+          "p99Ms": 16.359625,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -14.474678734367119,
+      "optimizedOnVsOffPercent": 0.5859134136933175,
+      "optimizedOnVsPreviousOnPercent": 29.097748650665057,
+      "roundP95Ms": {
+        "optimized_off": [
+          11.157792,
+          10.034,
+          12.916334
+        ],
+        "optimized_on": [
+          11.5675,
+          11.223167,
+          9.460292
+        ],
+        "optimized_shadow": [
+          22.800042,
+          13.879958,
+          18.703917
+        ],
+        "previous_off": [
+          12.49975,
+          9.539709,
+          10.164875
+        ],
+        "previous_on": [
+          8.693542,
+          8.277125,
+          9.176291
+        ],
+        "previous_shadow": [
+          13.092625,
+          14.897208,
+          21.291584
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 30,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 4.344125,
+          "p95Ms": 6.507125,
+          "p99Ms": 14.928459,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 4.264459,
+          "p95Ms": 5.969125,
+          "p99Ms": 15.116125,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 6.340917,
+          "p95Ms": 8.516125,
+          "p99Ms": 13.064625,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 3.721666,
+          "p95Ms": 5.422708,
+          "p99Ms": 6.547416,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 3.177958,
+          "p95Ms": 4.699375,
+          "p99Ms": 10.001375,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 4.952042,
+          "p95Ms": 7.840417,
+          "p99Ms": 11.695042,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -13.338962747026029,
+      "optimizedOnVsOffPercent": -8.267860230132362,
+      "optimizedOnVsPreviousOnPercent": 27.019550472137265,
+      "roundP95Ms": {
+        "optimized_off": [
+          6.507125,
+          6.230292,
+          9.21675
+        ],
+        "optimized_on": [
+          5.724667,
+          5.969125,
+          7.286584
+        ],
+        "optimized_shadow": [
+          8.516125,
+          8.491916,
+          9.201583
+        ],
+        "previous_off": [
+          5.422708,
+          5.03625,
+          6.821375
+        ],
+        "previous_on": [
+          4.699375,
+          4.679875,
+          6.380875
+        ],
+        "previous_shadow": [
+          8.41725,
+          7.568833,
+          7.840417
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 30,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.808666,
+          "p95Ms": 9.393291,
+          "p99Ms": 9.967125,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.191416,
+          "p95Ms": 8.174958,
+          "p99Ms": 8.561541,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.966792,
+          "p95Ms": 12.363125,
+          "p99Ms": 16.290083,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 6.456875,
+          "p95Ms": 11.056666,
+          "p99Ms": 15.700833,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 5.25175,
+          "p95Ms": 7.677167,
+          "p99Ms": 8.064375,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.822125,
+          "p95Ms": 12.532625,
+          "p99Ms": 14.272375,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -30.565262620757473,
+      "optimizedOnVsOffPercent": -12.970246530209694,
+      "optimizedOnVsPreviousOnPercent": 6.4840454818815285,
+      "roundP95Ms": {
+        "optimized_off": [
+          17.267625,
+          6.62075,
+          9.393291
+        ],
+        "optimized_on": [
+          10.605375,
+          6.432583,
+          8.174958
+        ],
+        "optimized_shadow": [
+          11.399708,
+          18.506833,
+          12.363125
+        ],
+        "previous_off": [
+          13.077709,
+          11.056666,
+          8.208792
+        ],
+        "previous_on": [
+          13.546334,
+          7.677167,
+          7.276292
+        ],
+        "previous_shadow": [
+          11.553292,
+          12.532625,
+          18.526041
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 30,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.969125,
+          "p95Ms": 18.0555,
+          "p99Ms": 18.53475,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 8.216375,
+          "p95Ms": 9.961083,
+          "p99Ms": 10.417125,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 11.560125,
+          "p95Ms": 17.603541,
+          "p99Ms": 19.023458,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 8.659875,
+          "p95Ms": 10.592291,
+          "p99Ms": 10.788834,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 7.363792,
+          "p95Ms": 9.860541,
+          "p99Ms": 10.250416,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 10.475583,
+          "p95Ms": 14.679917,
+          "p99Ms": 14.783542,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -6.908326064682324,
+      "optimizedOnVsOffPercent": -44.83075517155437,
+      "optimizedOnVsPreviousOnPercent": 1.019639794611682,
+      "roundP95Ms": {
+        "optimized_off": [
+          17.59075,
+          19.152042,
+          18.0555
+        ],
+        "optimized_on": [
+          9.961083,
+          10.943833,
+          9.696875
+        ],
+        "optimized_shadow": [
+          17.603541,
+          18.300709,
+          12.824083
+        ],
+        "previous_off": [
+          10.592291,
+          9.944875,
+          17.068083
+        ],
+        "previous_on": [
+          15.778791,
+          9.860541,
+          8.459375
+        ],
+        "previous_shadow": [
+          30.534417,
+          12.857792,
+          14.679917
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 60,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 3.358833,
+          "p95Ms": 5.344208,
+          "p99Ms": 9.095917,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 3.941208,
+          "p95Ms": 6.156458,
+          "p99Ms": 9.814833,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 5.526125,
+          "p95Ms": 8.298708,
+          "p99Ms": 11.272666,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 3.772542,
+          "p95Ms": 6.384291,
+          "p99Ms": 8.659291,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 3.360042,
+          "p95Ms": 10.437,
+          "p99Ms": 15.730375,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 4.928417,
+          "p95Ms": 7.300833,
+          "p99Ms": 11.805209,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": 63.47939027215392,
+      "optimizedOnVsOffPercent": 15.198697356090918,
+      "optimizedOnVsPreviousOnPercent": -41.013145539906105,
+      "roundP95Ms": {
+        "optimized_off": [
+          5.344208,
+          4.298042,
+          6.77975
+        ],
+        "optimized_on": [
+          6.332292,
+          5.285416,
+          6.156458
+        ],
+        "optimized_shadow": [
+          8.298708,
+          7.271875,
+          8.512917
+        ],
+        "previous_off": [
+          11.724125,
+          4.635416,
+          6.384291
+        ],
+        "previous_on": [
+          4.551542,
+          10.949708,
+          10.437
+        ],
+        "previous_shadow": [
+          6.570375,
+          7.300833,
+          13.005709
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 60,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 7.205125,
+          "p95Ms": 10.839208,
+          "p99Ms": 11.3335,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.034334,
+          "p95Ms": 7.212542,
+          "p99Ms": 8.192292,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.752458,
+          "p95Ms": 12.512292,
+          "p99Ms": 17.118917,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 6.77575,
+          "p95Ms": 9.051084,
+          "p99Ms": 15.6695,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 5.353333,
+          "p95Ms": 7.689042,
+          "p99Ms": 12.946667,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.984875,
+          "p95Ms": 19.250625,
+          "p99Ms": 21.199166,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -15.048385364670136,
+      "optimizedOnVsOffPercent": -33.45877300260314,
+      "optimizedOnVsPreviousOnPercent": -6.197130929965001,
+      "roundP95Ms": {
+        "optimized_off": [
+          11.382125,
+          7.911,
+          10.839208
+        ],
+        "optimized_on": [
+          7.212542,
+          7.146917,
+          9.237208
+        ],
+        "optimized_shadow": [
+          12.405333,
+          12.512292,
+          18.159875
+        ],
+        "previous_off": [
+          11.448417,
+          9.051084,
+          7.767958
+        ],
+        "previous_on": [
+          6.441291,
+          8.337667,
+          7.689042
+        ],
+        "previous_shadow": [
+          10.806375,
+          22.8045,
+          19.250625
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 60,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 9.444125,
+          "p95Ms": 14.813375,
+          "p99Ms": 15.336458,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 7.842667,
+          "p95Ms": 8.881375,
+          "p99Ms": 9.432084,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 12.722,
+          "p95Ms": 16.603625,
+          "p99Ms": 17.387584,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 7.138125,
+          "p95Ms": 8.707958,
+          "p99Ms": 10.131542,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 7.540084,
+          "p95Ms": 10.291917,
+          "p99Ms": 11.029708,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 12.544334,
+          "p95Ms": 19.049042,
+          "p99Ms": 20.355334,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": 18.189786859330283,
+      "optimizedOnVsOffPercent": -40.04489186292793,
+      "optimizedOnVsPreviousOnPercent": -13.705337887975578,
+      "roundP95Ms": {
+        "optimized_off": [
+          17.692083,
+          14.813375,
+          13.589417
+        ],
+        "optimized_on": [
+          8.881375,
+          8.554375,
+          12.215833
+        ],
+        "optimized_shadow": [
+          15.318583,
+          24.357,
+          16.603625
+        ],
+        "previous_off": [
+          12.063125,
+          8.289375,
+          8.707958
+        ],
+        "previous_on": [
+          8.444792,
+          10.291917,
+          13.946708
+        ],
+        "previous_shadow": [
+          19.049042,
+          12.455416,
+          20.409375
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 120,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 3.340625,
+          "p95Ms": 5.5765,
+          "p99Ms": 7.232083,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 3.074667,
+          "p95Ms": 5.181584,
+          "p99Ms": 12.243375,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 5.77125,
+          "p95Ms": 8.287334,
+          "p99Ms": 11.180834,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 3.74275,
+          "p95Ms": 7.008542,
+          "p99Ms": 10.503375,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 2.655125,
+          "p95Ms": 4.07725,
+          "p99Ms": 5.32125,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 5.0185,
+          "p95Ms": 7.906375,
+          "p99Ms": 11.772875,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -41.824562084382165,
+      "optimizedOnVsOffPercent": -7.081789653008164,
+      "optimizedOnVsPreviousOnPercent": 27.0852658041572,
+      "roundP95Ms": {
+        "optimized_off": [
+          5.5765,
+          4.32075,
+          5.658541
+        ],
+        "optimized_on": [
+          5.329917,
+          4.8465,
+          5.181584
+        ],
+        "optimized_shadow": [
+          8.287334,
+          6.934959,
+          8.76425
+        ],
+        "previous_off": [
+          7.830041,
+          7.008542,
+          5.468708
+        ],
+        "previous_on": [
+          4.674292,
+          3.99775,
+          4.07725
+        ],
+        "previous_shadow": [
+          7.07975,
+          9.553458,
+          7.906375
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 120,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.5795,
+          "p95Ms": 8.707667,
+          "p99Ms": 9.676416,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 5.377125,
+          "p95Ms": 8.949291,
+          "p99Ms": 14.643625,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.854792,
+          "p95Ms": 14.831125,
+          "p99Ms": 18.179209,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 5.956125,
+          "p95Ms": 9.215584,
+          "p99Ms": 10.730667,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 4.714833,
+          "p95Ms": 6.287958,
+          "p99Ms": 6.977167,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 8.649042,
+          "p95Ms": 12.124875,
+          "p99Ms": 13.170333,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -31.768209155274374,
+      "optimizedOnVsOffPercent": 2.7748419869524144,
+      "optimizedOnVsPreviousOnPercent": 42.32428079195187,
+      "roundP95Ms": {
+        "optimized_off": [
+          7.871042,
+          8.707667,
+          10.815166
+        ],
+        "optimized_on": [
+          8.949291,
+          7.962375,
+          10.759125
+        ],
+        "optimized_shadow": [
+          19.517416,
+          11.820625,
+          14.831125
+        ],
+        "previous_off": [
+          11.774958,
+          9.215584,
+          7.708916
+        ],
+        "previous_on": [
+          6.431042,
+          6.287958,
+          5.470875
+        ],
+        "previous_shadow": [
+          11.321958,
+          15.072417,
+          12.124875
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 120,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 9.703167,
+          "p95Ms": 15.717416,
+          "p99Ms": 16.08625,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.82425,
+          "p95Ms": 9.189542,
+          "p99Ms": 11.451917,
+          "selectsPerRequest": 4.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 12.025958,
+          "p95Ms": 15.189791,
+          "p99Ms": 15.80925,
+          "selectsPerRequest": 5.0
+        },
+        "previous_off": {
+          "p50Ms": 9.895417,
+          "p95Ms": 16.245167,
+          "p99Ms": 18.054333,
+          "selectsPerRequest": 4.0
+        },
+        "previous_on": {
+          "p50Ms": 6.499417,
+          "p95Ms": 7.7505,
+          "p99Ms": 8.528125,
+          "selectsPerRequest": 4.0
+        },
+        "previous_shadow": {
+          "p50Ms": 13.10025,
+          "p95Ms": 20.318458,
+          "p99Ms": 22.161959,
+          "selectsPerRequest": 5.0
+        }
+      },
+      "previousOnVsOffPercent": -52.29042582326178,
+      "optimizedOnVsOffPercent": -41.53274304122255,
+      "optimizedOnVsPreviousOnPercent": 18.567085994451958,
+      "roundP95Ms": {
+        "optimized_off": [
+          15.310125,
+          15.717416,
+          18.558584
+        ],
+        "optimized_on": [
+          9.189542,
+          8.473625,
+          14.11275
+        ],
+        "optimized_shadow": [
+          27.95,
+          14.961625,
+          15.189791
+        ],
+        "previous_off": [
+          16.245167,
+          16.501167,
+          13.68275
+        ],
+        "previous_on": [
+          8.775167,
+          7.512583,
+          7.7505
+        ],
+        "previous_shadow": [
+          20.515708,
+          15.308917,
+          20.318458
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 30,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 5.025375,
+          "p95Ms": 8.023084,
+          "p99Ms": 13.665625,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 5.310042,
+          "p95Ms": 7.150209,
+          "p99Ms": 9.128541,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 7.757042,
+          "p95Ms": 15.187,
+          "p99Ms": 27.806167,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 4.615625,
+          "p95Ms": 6.139084,
+          "p99Ms": 10.187959,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 4.198708,
+          "p95Ms": 6.288584,
+          "p99Ms": 16.443209,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 5.779541,
+          "p95Ms": 8.115792,
+          "p99Ms": 13.267958,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": 2.435216719627875,
+      "optimizedOnVsOffPercent": -10.87954457413135,
+      "optimizedOnVsPreviousOnPercent": 13.701415135744387,
+      "roundP95Ms": {
+        "optimized_off": [
+          12.597,
+          6.497,
+          8.023084
+        ],
+        "optimized_on": [
+          7.150209,
+          5.652083,
+          7.771083
+        ],
+        "optimized_shadow": [
+          15.187,
+          10.740542,
+          22.076375
+        ],
+        "previous_off": [
+          6.139084,
+          6.593167,
+          5.868209
+        ],
+        "previous_on": [
+          6.288584,
+          5.765208,
+          6.54225
+        ],
+        "previous_shadow": [
+          8.115792,
+          7.447333,
+          9.624042
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 30,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.073334,
+          "p95Ms": 9.76925,
+          "p99Ms": 12.529042,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 7.75325,
+          "p95Ms": 9.871709,
+          "p99Ms": 10.557,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 12.085333,
+          "p95Ms": 30.709042,
+          "p99Ms": 32.681417,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 6.805833,
+          "p95Ms": 8.852875,
+          "p99Ms": 9.140833,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 6.537584,
+          "p95Ms": 8.386167,
+          "p99Ms": 11.910542,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 9.572833,
+          "p95Ms": 11.905916,
+          "p99Ms": 13.042333,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": -5.2718241249311575,
+      "optimizedOnVsOffPercent": 1.0487908488369113,
+      "optimizedOnVsPreviousOnPercent": 17.714195293272827,
+      "roundP95Ms": {
+        "optimized_off": [
+          9.215959,
+          9.76925,
+          13.16125
+        ],
+        "optimized_on": [
+          11.026708,
+          8.0855,
+          9.871709
+        ],
+        "optimized_shadow": [
+          15.493291,
+          50.091334,
+          30.709042
+        ],
+        "previous_off": [
+          8.852875,
+          7.756708,
+          10.031458
+        ],
+        "previous_on": [
+          11.495667,
+          8.352209,
+          8.386167
+        ],
+        "previous_shadow": [
+          11.905916,
+          11.39775,
+          13.952042
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 30,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 9.564459,
+          "p95Ms": 13.142125,
+          "p99Ms": 14.432375,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 10.15725,
+          "p95Ms": 26.708333,
+          "p99Ms": 26.939375,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 13.741583,
+          "p95Ms": 23.671666,
+          "p99Ms": 25.789416,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 9.165708,
+          "p95Ms": 16.34275,
+          "p99Ms": 16.755666,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 8.608125,
+          "p95Ms": 12.04675,
+          "p99Ms": 12.873459,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 12.619084,
+          "p95Ms": 18.659917,
+          "p99Ms": 18.857458,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": -26.286885622064826,
+      "optimizedOnVsOffPercent": 103.22689823753768,
+      "optimizedOnVsPreviousOnPercent": 121.7057131591508,
+      "roundP95Ms": {
+        "optimized_off": [
+          13.142125,
+          12.70475,
+          22.979417
+        ],
+        "optimized_on": [
+          37.692042,
+          18.624792,
+          26.708333
+        ],
+        "optimized_shadow": [
+          23.671666,
+          59.541167,
+          16.209417
+        ],
+        "previous_off": [
+          28.089791,
+          16.34275,
+          10.538875
+        ],
+        "previous_on": [
+          25.087333,
+          9.735,
+          12.04675
+        ],
+        "previous_shadow": [
+          18.659917,
+          24.266542,
+          13.354333
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 60,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 4.403375,
+          "p95Ms": 7.551542,
+          "p99Ms": 12.858375,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 4.850375,
+          "p95Ms": 6.677375,
+          "p99Ms": 8.227083,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 6.64625,
+          "p95Ms": 9.837417,
+          "p99Ms": 16.621875,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 4.369458,
+          "p95Ms": 6.995333,
+          "p99Ms": 13.805458,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 4.160333,
+          "p95Ms": 7.37425,
+          "p99Ms": 13.659667,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 6.202,
+          "p95Ms": 10.016917,
+          "p99Ms": 11.4095,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": 5.416711398871232,
+      "optimizedOnVsOffPercent": -11.576006595738997,
+      "optimizedOnVsPreviousOnPercent": -9.450113570871622,
+      "roundP95Ms": {
+        "optimized_off": [
+          5.489584,
+          10.16425,
+          7.551542
+        ],
+        "optimized_on": [
+          6.677375,
+          5.577458,
+          7.597458
+        ],
+        "optimized_shadow": [
+          9.837417,
+          10.630084,
+          9.774292
+        ],
+        "previous_off": [
+          6.995333,
+          5.353958,
+          7.566333
+        ],
+        "previous_on": [
+          7.37425,
+          6.084291,
+          12.171042
+        ],
+        "previous_shadow": [
+          8.020084,
+          10.016917,
+          13.520625
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 60,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.409625,
+          "p95Ms": 8.523084,
+          "p99Ms": 10.04725,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 7.411666,
+          "p95Ms": 9.161667,
+          "p99Ms": 9.405541,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 11.176209,
+          "p95Ms": 16.7435,
+          "p99Ms": 19.859167,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 6.821125,
+          "p95Ms": 9.01025,
+          "p99Ms": 10.386583,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 6.691833,
+          "p95Ms": 8.597583,
+          "p99Ms": 15.278458,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 10.889875,
+          "p95Ms": 13.621375,
+          "p99Ms": 16.147291,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": -4.57997280874558,
+      "optimizedOnVsOffPercent": 7.492393598373526,
+      "optimizedOnVsPreviousOnPercent": 6.560960214050859,
+      "roundP95Ms": {
+        "optimized_off": [
+          8.403583,
+          8.523084,
+          17.560166
+        ],
+        "optimized_on": [
+          9.161667,
+          7.024667,
+          12.241583
+        ],
+        "optimized_shadow": [
+          16.7435,
+          14.45375,
+          17.228375
+        ],
+        "previous_off": [
+          10.020334,
+          8.143458,
+          9.01025
+        ],
+        "previous_on": [
+          7.981708,
+          8.597583,
+          14.486334
+        ],
+        "previous_shadow": [
+          13.025292,
+          16.026125,
+          13.621375
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 60,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 10.319208,
+          "p95Ms": 18.717,
+          "p99Ms": 19.275834,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 9.10475,
+          "p95Ms": 16.523375,
+          "p99Ms": 17.024958,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 14.053875,
+          "p95Ms": 20.780292,
+          "p99Ms": 22.706959,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 9.028875,
+          "p95Ms": 11.741875,
+          "p99Ms": 11.771417,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 8.395708,
+          "p95Ms": 14.128542,
+          "p99Ms": 15.078542,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 12.650583,
+          "p95Ms": 16.992958,
+          "p99Ms": 18.450667,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": 20.326114866663115,
+      "optimizedOnVsOffPercent": -11.719960463749523,
+      "optimizedOnVsPreviousOnPercent": 16.950319431403482,
+      "roundP95Ms": {
+        "optimized_off": [
+          14.02325,
+          18.717,
+          22.251917
+        ],
+        "optimized_on": [
+          16.523375,
+          15.961167,
+          30.799042
+        ],
+        "optimized_shadow": [
+          15.740583,
+          20.780292,
+          22.172208
+        ],
+        "previous_off": [
+          16.453917,
+          10.544333,
+          11.741875
+        ],
+        "previous_on": [
+          11.731209,
+          14.128542,
+          24.445125
+        ],
+        "previous_shadow": [
+          22.340292,
+          16.895084,
+          16.992958
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 120,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 4.72325,
+          "p95Ms": 10.258375,
+          "p99Ms": 15.834375,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 3.943542,
+          "p95Ms": 5.691584,
+          "p99Ms": 7.069916,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 6.210209,
+          "p95Ms": 9.24475,
+          "p99Ms": 13.253459,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 3.936209,
+          "p95Ms": 7.602208,
+          "p99Ms": 9.629834,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 3.564458,
+          "p95Ms": 5.241167,
+          "p99Ms": 11.0965,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 5.78475,
+          "p95Ms": 8.587333,
+          "p99Ms": 13.878667,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": -31.057305982682927,
+      "optimizedOnVsOffPercent": -44.51768433109532,
+      "optimizedOnVsPreviousOnPercent": 8.593830343509378,
+      "roundP95Ms": {
+        "optimized_off": [
+          14.571958,
+          7.502583,
+          10.258375
+        ],
+        "optimized_on": [
+          5.29825,
+          6.107042,
+          5.691584
+        ],
+        "optimized_shadow": [
+          10.4175,
+          9.24475,
+          8.519042
+        ],
+        "previous_off": [
+          7.742833,
+          5.074917,
+          7.602208
+        ],
+        "previous_on": [
+          5.638458,
+          5.241167,
+          5.233
+        ],
+        "previous_shadow": [
+          7.919875,
+          8.587333,
+          11.453792
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 120,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.440417,
+          "p95Ms": 11.423,
+          "p99Ms": 12.859542,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.471958,
+          "p95Ms": 8.911542,
+          "p99Ms": 9.887208,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 10.132541,
+          "p95Ms": 14.234042,
+          "p99Ms": 15.449083,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 8.192584,
+          "p95Ms": 15.45425,
+          "p99Ms": 17.115542,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 5.752125,
+          "p95Ms": 8.073375,
+          "p99Ms": 9.934833,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 9.876959,
+          "p95Ms": 13.120542,
+          "p99Ms": 19.608541,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": -47.759515990746884,
+      "optimizedOnVsOffPercent": -21.985975663135772,
+      "optimizedOnVsPreviousOnPercent": 10.381866319847655,
+      "roundP95Ms": {
+        "optimized_off": [
+          10.614,
+          16.070083,
+          11.423
+        ],
+        "optimized_on": [
+          8.911542,
+          8.812,
+          9.988625
+        ],
+        "optimized_shadow": [
+          14.512708,
+          11.109292,
+          14.234042
+        ],
+        "previous_off": [
+          16.124667,
+          10.341166,
+          15.45425
+        ],
+        "previous_on": [
+          9.76075,
+          7.303667,
+          8.073375
+        ],
+        "previous_shadow": [
+          13.120542,
+          22.740458,
+          12.690541
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 120,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 11.023625,
+          "p95Ms": 17.479625,
+          "p99Ms": 21.183458,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_on": {
+          "p50Ms": 8.220708,
+          "p95Ms": 11.23425,
+          "p99Ms": 11.675875,
+          "selectsPerRequest": 5.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 13.171,
+          "p95Ms": 19.101083,
+          "p99Ms": 21.559042,
+          "selectsPerRequest": 6.0
+        },
+        "previous_off": {
+          "p50Ms": 14.982292,
+          "p95Ms": 30.376125,
+          "p99Ms": 31.345583,
+          "selectsPerRequest": 5.0
+        },
+        "previous_on": {
+          "p50Ms": 8.227958,
+          "p95Ms": 9.87975,
+          "p99Ms": 10.716334,
+          "selectsPerRequest": 5.0
+        },
+        "previous_shadow": {
+          "p50Ms": 14.196167,
+          "p95Ms": 21.932459,
+          "p99Ms": 22.905083,
+          "selectsPerRequest": 6.0
+        }
+      },
+      "previousOnVsOffPercent": -67.47527869338172,
+      "optimizedOnVsOffPercent": -35.729456438567766,
+      "optimizedOnVsPreviousOnPercent": 13.709861079480756,
+      "roundP95Ms": {
+        "optimized_off": [
+          30.633125,
+          17.479625,
+          13.657125
+        ],
+        "optimized_on": [
+          9.694292,
+          11.23425,
+          11.752375
+        ],
+        "optimized_shadow": [
+          27.616375,
+          16.0425,
+          19.101083
+        ],
+        "previous_off": [
+          30.376125,
+          11.467458,
+          30.399875
+        ],
+        "previous_on": [
+          9.431583,
+          16.519333,
+          9.87975
+        ],
+        "previous_shadow": [
+          23.174708,
+          21.932459,
+          18.313792
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 30,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 4.3555,
+          "p95Ms": 6.590167,
+          "p99Ms": 8.98025,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 3.951916,
+          "p95Ms": 5.891208,
+          "p99Ms": 7.513958,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 5.957625,
+          "p95Ms": 8.232167,
+          "p99Ms": 13.250458,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 3.802417,
+          "p95Ms": 6.621875,
+          "p99Ms": 8.888292,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 2.884833,
+          "p95Ms": 4.481542,
+          "p99Ms": 6.14025,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 4.5795,
+          "p95Ms": 6.261291,
+          "p99Ms": 7.901958,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -32.32215950920245,
+      "optimizedOnVsOffPercent": -10.606089344928593,
+      "optimizedOnVsPreviousOnPercent": 31.454932253228908,
+      "roundP95Ms": {
+        "optimized_off": [
+          7.2045,
+          5.57775,
+          6.590167
+        ],
+        "optimized_on": [
+          6.436542,
+          4.047375,
+          5.891208
+        ],
+        "optimized_shadow": [
+          8.232167,
+          8.292583,
+          7.751042
+        ],
+        "previous_off": [
+          6.78125,
+          6.621875,
+          5.201375
+        ],
+        "previous_on": [
+          4.481542,
+          4.563709,
+          4.308792
+        ],
+        "previous_shadow": [
+          8.007584,
+          6.17825,
+          6.261291
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 30,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 7.564,
+          "p95Ms": 10.685125,
+          "p99Ms": 13.795416,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 5.36625,
+          "p95Ms": 6.996458,
+          "p99Ms": 11.403375,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 8.841167,
+          "p95Ms": 16.271083,
+          "p99Ms": 23.677166,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 5.664959,
+          "p95Ms": 10.335875,
+          "p99Ms": 14.413084,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 4.391333,
+          "p95Ms": 6.80575,
+          "p99Ms": 12.101958,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 7.780208,
+          "p95Ms": 14.684292,
+          "p99Ms": 15.568167,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -34.15409919334357,
+      "optimizedOnVsOffPercent": -34.521514722569925,
+      "optimizedOnVsPreviousOnPercent": 2.802159938287474,
+      "roundP95Ms": {
+        "optimized_off": [
+          14.648958,
+          8.849917,
+          10.685125
+        ],
+        "optimized_on": [
+          6.996458,
+          6.18825,
+          8.473792
+        ],
+        "optimized_shadow": [
+          18.745541,
+          16.271083,
+          12.18825
+        ],
+        "previous_off": [
+          12.58475,
+          8.264459,
+          10.335875
+        ],
+        "previous_on": [
+          7.071125,
+          6.281667,
+          6.80575
+        ],
+        "previous_shadow": [
+          12.195083,
+          14.932875,
+          14.684292
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 30,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.564917,
+          "p95Ms": 12.756167,
+          "p99Ms": 14.459458,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 7.386125,
+          "p95Ms": 9.476458,
+          "p99Ms": 10.710125,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 11.381791,
+          "p95Ms": 18.040166,
+          "p99Ms": 22.009666,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 8.494292,
+          "p95Ms": 11.343,
+          "p99Ms": 13.142666,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 6.071208,
+          "p95Ms": 8.430042,
+          "p99Ms": 8.520875,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 10.087334,
+          "p95Ms": 15.574084,
+          "p99Ms": 16.988834,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -25.68066649034647,
+      "optimizedOnVsOffPercent": -25.710771895664276,
+      "optimizedOnVsPreviousOnPercent": 12.412939342413697,
+      "roundP95Ms": {
+        "optimized_off": [
+          14.368,
+          12.621958,
+          12.756167
+        ],
+        "optimized_on": [
+          9.476458,
+          8.977792,
+          16.819667
+        ],
+        "optimized_shadow": [
+          22.674125,
+          18.040166,
+          13.876125
+        ],
+        "previous_off": [
+          11.343,
+          10.299333,
+          19.7375
+        ],
+        "previous_on": [
+          8.430042,
+          7.674417,
+          8.523375
+        ],
+        "previous_shadow": [
+          18.378666,
+          11.977958,
+          15.574084
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 60,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 3.641917,
+          "p95Ms": 5.8345,
+          "p99Ms": 11.578542,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 2.72175,
+          "p95Ms": 4.319791,
+          "p99Ms": 5.87675,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 5.279792,
+          "p95Ms": 8.260916,
+          "p99Ms": 11.961625,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 3.042042,
+          "p95Ms": 4.697583,
+          "p99Ms": 7.622875,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 2.150583,
+          "p95Ms": 3.552,
+          "p99Ms": 6.518917,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 4.742041,
+          "p95Ms": 6.841209,
+          "p99Ms": 9.918166,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -24.38664734609266,
+      "optimizedOnVsOffPercent": -25.96124775044991,
+      "optimizedOnVsPreviousOnPercent": 21.61573761261262,
+      "roundP95Ms": {
+        "optimized_off": [
+          7.249417,
+          4.216792,
+          5.8345
+        ],
+        "optimized_on": [
+          4.987958,
+          3.368667,
+          4.319791
+        ],
+        "optimized_shadow": [
+          8.578625,
+          7.879541,
+          8.260916
+        ],
+        "previous_off": [
+          4.697583,
+          4.201167,
+          6.742458
+        ],
+        "previous_on": [
+          3.552,
+          3.429542,
+          4.397834
+        ],
+        "previous_shadow": [
+          6.841209,
+          5.888583,
+          7.484458
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 60,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 6.185375,
+          "p95Ms": 9.625875,
+          "p99Ms": 14.522208,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 4.845292,
+          "p95Ms": 6.389375,
+          "p99Ms": 7.269292,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 8.543917,
+          "p95Ms": 10.485292,
+          "p99Ms": 10.589042,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 6.017792,
+          "p95Ms": 11.340292,
+          "p99Ms": 12.334791,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 3.553625,
+          "p95Ms": 5.524292,
+          "p99Ms": 5.696417,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 7.041125,
+          "p95Ms": 9.198041,
+          "p99Ms": 14.381042,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -51.286157358205585,
+      "optimizedOnVsOffPercent": -33.62291739711974,
+      "optimizedOnVsPreviousOnPercent": 15.659617558231908,
+      "roundP95Ms": {
+        "optimized_off": [
+          10.2195,
+          6.370417,
+          9.625875
+        ],
+        "optimized_on": [
+          5.813667,
+          6.525292,
+          6.389375
+        ],
+        "optimized_shadow": [
+          9.757667,
+          11.025625,
+          10.485292
+        ],
+        "previous_off": [
+          7.018458,
+          11.911583,
+          11.340292
+        ],
+        "previous_on": [
+          5.908292,
+          5.524292,
+          4.429208
+        ],
+        "previous_shadow": [
+          14.375208,
+          9.198041,
+          8.192166
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 60,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.053959,
+          "p95Ms": 11.353292,
+          "p99Ms": 13.377583,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 6.296041,
+          "p95Ms": 9.540708,
+          "p99Ms": 11.185625,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 11.380959,
+          "p95Ms": 18.910792,
+          "p99Ms": 19.426084,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 7.97775,
+          "p95Ms": 12.440167,
+          "p99Ms": 15.01575,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 5.401584,
+          "p95Ms": 7.503333,
+          "p99Ms": 8.704917,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 9.551,
+          "p95Ms": 14.636792,
+          "p99Ms": 16.293625,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -39.68462802790349,
+      "optimizedOnVsOffPercent": -15.965272451373568,
+      "optimizedOnVsPreviousOnPercent": 27.15293323646972,
+      "roundP95Ms": {
+        "optimized_off": [
+          11.353292,
+          15.456416,
+          11.0365
+        ],
+        "optimized_on": [
+          11.278541,
+          8.763833,
+          9.540708
+        ],
+        "optimized_shadow": [
+          19.653417,
+          16.350833,
+          18.910792
+        ],
+        "previous_off": [
+          12.440167,
+          10.766834,
+          44.325291
+        ],
+        "previous_on": [
+          7.503333,
+          9.255875,
+          7.338166
+        ],
+        "previous_shadow": [
+          14.084417,
+          16.500625,
+          14.636792
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 120,
+      "concurrency": 1,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 3.126583,
+          "p95Ms": 6.044166,
+          "p99Ms": 12.5,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 2.846041,
+          "p95Ms": 5.038583,
+          "p99Ms": 6.821042,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 4.715292,
+          "p95Ms": 7.374667,
+          "p99Ms": 12.99325,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 3.112583,
+          "p95Ms": 5.061542,
+          "p99Ms": 9.333625,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 2.153542,
+          "p95Ms": 3.524291,
+          "p99Ms": 4.868208,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 4.6875,
+          "p95Ms": 7.514792,
+          "p99Ms": 12.605583,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -30.37119913259636,
+      "optimizedOnVsOffPercent": -16.637249870370862,
+      "optimizedOnVsPreviousOnPercent": 42.96728051117233,
+      "roundP95Ms": {
+        "optimized_off": [
+          4.688625,
+          6.044166,
+          10.1415
+        ],
+        "optimized_on": [
+          5.038583,
+          3.095208,
+          6.061209
+        ],
+        "optimized_shadow": [
+          6.828333,
+          7.374667,
+          7.509208
+        ],
+        "previous_off": [
+          6.191917,
+          5.061542,
+          4.976
+        ],
+        "previous_on": [
+          3.385458,
+          3.524291,
+          3.767084
+        ],
+        "previous_shadow": [
+          7.255583,
+          7.514792,
+          7.794042
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 120,
+      "concurrency": 4,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 5.81425,
+          "p95Ms": 7.825292,
+          "p99Ms": 8.68125,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 4.417708,
+          "p95Ms": 6.004458,
+          "p99Ms": 6.602916,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 9.1085,
+          "p95Ms": 12.04275,
+          "p99Ms": 19.581875,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 5.807375,
+          "p95Ms": 8.2195,
+          "p99Ms": 9.440958,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 4.183792,
+          "p95Ms": 7.032458,
+          "p99Ms": 9.420333,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 7.741416,
+          "p95Ms": 12.730167,
+          "p99Ms": 15.7585,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -14.441778697001029,
+      "optimizedOnVsOffPercent": -23.26857579244328,
+      "optimizedOnVsPreviousOnPercent": -14.617933018583262,
+      "roundP95Ms": {
+        "optimized_off": [
+          7.037458,
+          7.825292,
+          10.4975
+        ],
+        "optimized_on": [
+          6.401834,
+          4.863542,
+          6.004458
+        ],
+        "optimized_shadow": [
+          12.04275,
+          11.395792,
+          15.168042
+        ],
+        "previous_off": [
+          10.137834,
+          7.630375,
+          8.2195
+        ],
+        "previous_on": [
+          6.202125,
+          7.032458,
+          8.576875
+        ],
+        "previous_shadow": [
+          12.520917,
+          14.033625,
+          12.730167
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 120,
+      "concurrency": 8,
+      "medianOfThreeRuns": {
+        "optimized_off": {
+          "p50Ms": 8.21125,
+          "p95Ms": 10.552584,
+          "p99Ms": 12.371583,
+          "selectsPerRequest": 3.0
+        },
+        "optimized_on": {
+          "p50Ms": 5.555625,
+          "p95Ms": 6.846375,
+          "p99Ms": 7.118959,
+          "selectsPerRequest": 2.0
+        },
+        "optimized_shadow": {
+          "p50Ms": 11.541541,
+          "p95Ms": 16.398417,
+          "p99Ms": 19.677167,
+          "selectsPerRequest": 3.0
+        },
+        "previous_off": {
+          "p50Ms": 8.859584,
+          "p95Ms": 15.171416,
+          "p99Ms": 16.399791,
+          "selectsPerRequest": 3.0
+        },
+        "previous_on": {
+          "p50Ms": 5.018917,
+          "p95Ms": 6.904208,
+          "p99Ms": 7.665,
+          "selectsPerRequest": 2.0
+        },
+        "previous_shadow": {
+          "p50Ms": 11.543959,
+          "p95Ms": 16.852375,
+          "p99Ms": 18.471666,
+          "selectsPerRequest": 3.0
+        }
+      },
+      "previousOnVsOffPercent": -54.491999955706184,
+      "optimizedOnVsOffPercent": -35.121340896220296,
+      "optimizedOnVsPreviousOnPercent": -0.8376485760568042,
+      "roundP95Ms": {
+        "optimized_off": [
+          9.4895,
+          10.552584,
+          14.18025
+        ],
+        "optimized_on": [
+          6.846375,
+          6.01625,
+          7.406875
+        ],
+        "optimized_shadow": [
+          29.594041,
+          14.71325,
+          16.398417
+        ],
+        "previous_off": [
+          10.532083,
+          16.639625,
+          15.171416
+        ],
+        "previous_on": [
+          6.438041,
+          6.904208,
+          7.109042
+        ],
+        "previous_shadow": [
+          18.781375,
+          13.400125,
+          16.852375
+        ]
+      }
+    }
+  ],
+  "sourceSha256": "1537060f0dc2b46d224c9b7c565ef54124922794144a2609287dee4911d11762"
+}

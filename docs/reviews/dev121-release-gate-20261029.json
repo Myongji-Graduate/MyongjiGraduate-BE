@@ -1,0 +1,11 @@
+{
+  "currentCheckout": {
+    "exitCode": 1,
+    "output": "DEV-121 release requires V12__create_graduation_policy_snapshot_archive.sql; resolve the V12/V13 -> V14/V15 release order before deployment\nDEV-121 release requires V13__create_graduation_policy_release.sql; resolve the V12/V13 -> V14/V15 release order before deployment"
+  },
+  "withReservedPolicySchemas": {
+    "exitCode": 0,
+    "output": "DEV-121 release inputs valid: V12/V13 -> V14/V15 and cache settings checked (offline only)"
+  },
+  "productionActions": false
+}
