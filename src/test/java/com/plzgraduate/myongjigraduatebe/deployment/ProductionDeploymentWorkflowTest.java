@@ -115,6 +115,9 @@ class ProductionDeploymentWorkflowTest {
             .contains("python3 infra/cache/check_release.py");
         assertThat(step("Test and build").get("run"))
             .hasToString("./gradlew clean build --no-daemon");
+        assertThat(map(step("Test and build").get("env")))
+            .containsEntry("SHARED_MASTER_CACHE_ENABLED", "false")
+            .containsEntry("TAKEN_LECTURE_CACHE_MODE", "off");
         assertThat(names.indexOf("Check DEV-121 release inputs")).isLessThan(names.indexOf("Test and build"));
         assertThat(names.indexOf("Test and build")).isLessThan(names.indexOf("Build and Push Docker image"));
         assertThat(names.indexOf("Build and Push Docker image")).isLessThan(names.indexOf("Prepare production host memory"));
