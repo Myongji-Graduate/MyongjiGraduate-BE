@@ -1,24 +1,23 @@
 package com.plzgraduate.myongjigraduatebe.parsing.api;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-
 import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.core.meta.LoginUser;
 import com.plzgraduate.myongjigraduatebe.core.meta.WebAdapter;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.request.ParsingTextRequest;
-import com.plzgraduate.myongjigraduatebe.parsing.api.dto.response.AnalyzeExistingFailuresResponse;
 import com.plzgraduate.myongjigraduatebe.parsing.api.dto.response.AnalyzeExistingFailuresDryRunResponse;
+import com.plzgraduate.myongjigraduatebe.parsing.api.dto.response.AnalyzeExistingFailuresResponse;
 import com.plzgraduate.myongjigraduatebe.parsing.application.service.FailureAnalysisService;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextHistoryUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
+import jakarta.validation.Valid;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import jakarta.validation.Valid;
 
 @WebAdapter
 @RequestMapping("/api/v1/parsing-text")
@@ -27,7 +26,6 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 
 	private final ParsingTextUseCase parsingTextUseCase;
 	private final ParsingTextHistoryUseCase parsingTextHistoryUseCase;
-	private final TakenLectureCacheEvict takenLectureCacheEvict;
 	private final FailureAnalysisService failureAnalysisService;
 
 	@Value("${admin.api-key}")
@@ -38,7 +36,6 @@ public class ParsingTextController implements ParsingTextApiPresentation {
 		@LoginUser Long userId,
 		@Valid @RequestBody ParsingTextRequest parsingTextRequest
 	) {
-		takenLectureCacheEvict.evictTakenLecturesCache(userId);
 		try {
 			parsingTextUseCase.enrollParsingText(userId, parsingTextRequest.getParsingText(),
 				parsingTextRequest.isHonorsCollege(), parsingTextRequest.getHonorsTargetMajor());

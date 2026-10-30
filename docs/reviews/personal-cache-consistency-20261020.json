@@ -1,0 +1,82 @@
+{
+  "captured_at": "2026-10-20T01:19:32.869928+09:00",
+  "scope": "Synthetic characterization of production personal-cache read/write transaction boundaries; defects reproduced, not fixed.",
+  "command": "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION=true DOCKER_HOST=unix:///Users/jinhyeon/.docker/run/docker.sock TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock TESTCONTAINERS_HOST_OVERRIDE=127.0.0.1 ./gradlew test --tests '*TakenLectureCacheConsistencyIntegrationTest' --offline --no-daemon --no-build-cache -x jacocoTestReport",
+  "junit": {
+    "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+    "tests": "12",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "1.768"
+  },
+  "xml_sha256": "981f82a14e2fc1d597e6749a9d015c71b4ee4c1af9831e7703bce888736d66e3",
+  "observations": [
+    "CACHE_PROBE environment: mysql=8.4.8, isolation=REPEATABLE-READ, redis=redis:7.4-alpine",
+    "CACHE_PROBE rollback-before-read: DB=3, cacheMiss=true, subsequentRead=3",
+    "CACHE_PROBE sequential: DB=6, cache=6, calculationInput=6",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6"
+  ],
+  "images": {
+    "mysql:8.4.8": "sha256:6bcfd5ef06fdf8de754cd4a1f18991f84b2fccd10f26c8b15755597ff690468f",
+    "redis:7.4-alpine": "sha256:ec4f171e9ff071bb2a1c936057d3be00206069b028b6c0d61df2477e1dd02c42"
+  },
+  "fixture": {
+    "existing_course_credits": 3,
+    "added_course_credits": 3,
+    "student_source": "new hand-authored SYN-CACHE identifiers; no source database reads"
+  },
+  "boundaries": {
+    "real": [
+      "MySQL transactions and rollback",
+      "Redis storage and production cache-manager factory",
+      "Spring cache and transaction proxies",
+      "production add/find services and taken-lecture persistence adapter/repository/mapper"
+    ],
+    "test_doubles": [
+      "FindUserUseCase: synthetic identity lookup",
+      "FindLecturePort: synthetic added course",
+      "GenerateOrModifyCompletedCreditUseCase: calls real cached reader, captures credits, controls pause/exception; no full graduation calculation or completed-credit persistence"
+    ]
+  },
+  "cleanup": {
+    "owned_mysql_redis_containers_remaining": 0,
+    "preexisting_four_running_container_ids_preserved": true,
+    "checked_via": "docker ps and docker ps -a --filter label=mju.test=taken-lecture-cache-consistency"
+  },
+  "initial_harness_failures": [
+    "Docker Desktop Ryuk socket mount; fixed with TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock",
+    "create-drop with halt_on_error attempted FK drop on empty database; switched new test DB to create-only",
+    "two shared EntityManager beans; selected the named test bean"
+  ],
+  "source_sha256": {
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheConsistencyIntegrationTest.java": "d2c2a9817164a32928ac3433e72e3322b8434328d13f1412d105c9c300bc0f7b",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/core/config/RedisCacheConfig.java": "315573b6c217b23827603c0a4583d29102aef3c716fddc157ff6184f1de4b1ff",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/parsing/api/TakenLectureCacheEvict.java": "d855827b5f4730f3eb86f2750180b2d84e96bc7887cbc1cf2ea49e4c458d6225",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/find/FindTakenLectureService.java": "f6c5ee1a75df371fdc1b025ca0b471b6e56859f008f353ed6abe8d84affd19d8",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/save/GenerateCustomizedTakenLectureService.java": "4523c49c809ecba1ed02334fb74ff80891528fe938daa6e0de840e4b08d9bf91",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLecturePersistenceAdapter.java": "8ed3bb5d267941691e24eaefe802e14ac8109140b2779d7ccf12464cde1fe5cf",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureRepository.java": "fd4075b032aaadfb6887e53ac5a15ae820e428a5b6b699863934276352671570",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/mapper/TakenLectureMapper.java": "bf186afd3229226207a7559e68cfb7ad1eb87c89f8412c917958ad3d3198373a"
+  },
+  "opt_in_guard": {
+    "enabled": false,
+    "docker_endpoint": "nonexistent loopback-local socket",
+    "junit": {
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "4"
+    },
+    "probe_output_present": false
+  }
+}

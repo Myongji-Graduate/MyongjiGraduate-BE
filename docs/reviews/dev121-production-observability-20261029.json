@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-10-29T05:31:59.968823+00:00",
+  "healthHttpStatus": 200,
+  "health": "UP",
+  "prometheusHttpStatus": 200,
+  "metricFamiliesPresent": {
+    "http_server_requests_seconds": true,
+    "hikaricp_connections": true,
+    "jvm_memory_used_bytes": true,
+    "takenlecture_cache_total": false
+  }
+}

@@ -29,6 +29,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ParsingTextServiceTest {
 
+    @Mock
+    private com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort takenLectureRevisionPort;
+
 	@Mock
 	private FindUserUseCase findUserUseCase;
 	@Mock

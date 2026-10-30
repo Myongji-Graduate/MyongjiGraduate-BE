@@ -1,0 +1,24 @@
+{
+  "repositoryVariables": [
+    {
+      "name": "SHARED_MASTER_CACHE_ENABLED",
+      "value": "true",
+      "created_at": "2026-10-07T03:07:12Z",
+      "updated_at": "2026-10-07T03:07:12Z"
+    }
+  ],
+  "organizationVariablesStatus": "unavailable",
+  "organizationCacheVariables": [],
+  "latestDeployment": [
+    {
+      "id": 37565266834,
+      "head_sha": "5699f0e7435b2f070466ed9de469d44289b383e6",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-07T03:07:20Z",
+      "html_url": "https://github.com/Myongji-Graduate/MyongjiGraduate-BE/actions/runs/37565266834"
+    }
+  ],
+  "mainProtection": null,
+  "mutations": []
+}

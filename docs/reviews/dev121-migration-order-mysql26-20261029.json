@@ -1,0 +1,21 @@
+{
+  "databaseVersion" : "26.7.0",
+  "imageId" : "sha256:87491a2172fe6cf721c0c6257e084ffddf67de9dc4dd5d1bdfd5a58a7c84d9d1",
+  "sourceSha256" : {
+    "V12__create_graduation_policy_snapshot_archive.sql" : "76ec1d416805de50621d002e6fe8bb8c4d7ff3d758ec7fbdd51733736bdc6f30",
+    "V13__create_graduation_policy_release.sql" : "2c0f8e01ab279cdd13c0ddc66d36864143fbf63567a9c30a809e70e6a11ac19b",
+    "V14__add_taken_lecture_revision.sql" : "371a67a44b4401e25682cb2b122965d44bf4f724ca2cb4a1de35219de168e0c0",
+    "V15__version_lecture_catalog.sql" : "8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164"
+  },
+  "appliedVersions" : [ "12", "13", "14", "15" ],
+  "checks" : {
+    "repeatMigrateCount" : 0,
+    "triggers" : 3,
+    "existingUserRevision" : 0,
+    "validate" : true,
+    "triggerRollback" : true,
+    "triggerInsertUpdateDelete" : true
+  },
+  "productionAccessed" : false,
+  "scope" : "minimal synthetic schema baseline 11; not a full production upgrade or DEV-116 application test"
+}

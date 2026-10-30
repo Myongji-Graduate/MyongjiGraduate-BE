@@ -1,0 +1,31 @@
+{
+  "command": "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION=false RUN_TAKEN_LECTURE_CACHE_BENCHMARK=false DOCKER_HOST=unix:///private/tmp/dev121-deliberately-unavailable.sock ./gradlew test --tests *TakenLectureCacheConsistencyIntegrationTest --tests *TakenLectureCacheBenchmarkIntegrationTest --offline --no-daemon --no-build-cache -x jacocoTestReport",
+  "totals": {
+    "tests": 17,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 17
+  },
+  "suites": [
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheBenchmarkIntegrationTest",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T00:59:34",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "0.0"
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+      "tests": "16",
+      "skipped": "16",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T00:59:34",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "0.003"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.model.HonorsCollegeMa
 import com.plzgraduate.myongjigraduatebe.parsing.application.usecase.ParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingInformation;
 import com.plzgraduate.myongjigraduatebe.parsing.domain.ParsingTakenLectureDto;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.delete.DeleteTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.save.SaveTakenLectureFromParsingTextUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInformation;
@@ -21,7 +22,6 @@ import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateS
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class ParsingTextService implements ParsingTextUseCase {
 
+    private final TakenLectureRevisionPort takenLectureRevisionPort;
 	private final FindUserUseCase findUserUseCase;
 	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final SaveTakenLectureFromParsingTextUseCase saveTakenLectureFromParsingTextUseCase;
@@ -39,6 +40,7 @@ class ParsingTextService implements ParsingTextUseCase {
 	private final GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
 	@Override
 	public void enrollParsingText(Long userId, String parsingText, boolean honorsCollege, String honorsTargetMajor) {
+        takenLectureRevisionPort.lockForChange(userId);
 		User user = findUserUseCase.findUserById(userId);
 		try {
 			validateParsingText(parsingText);

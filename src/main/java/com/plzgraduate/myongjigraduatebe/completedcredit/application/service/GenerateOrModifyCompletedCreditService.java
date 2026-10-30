@@ -7,6 +7,7 @@ import static com.plzgraduate.myongjigraduatebe.graduation.domain.model.Graduati
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.GenerateOrModifyCompletedCreditPort;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.CalculateCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.core.meta.UseCase;
@@ -14,6 +15,10 @@ import com.plzgraduate.myongjigraduatebe.graduation.application.usecase.Calculat
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.DetailGraduationResult;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationResult;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
+import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.ArrayList;
@@ -28,18 +33,37 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @Transactional
 @RequiredArgsConstructor
-class GenerateOrModifyCompletedCreditService implements GenerateOrModifyCompletedCreditUseCase {
+class GenerateOrModifyCompletedCreditService implements GenerateOrModifyCompletedCreditUseCase,
+    CalculateCompletedCreditUseCase {
 
 	private final FindCompletedCreditPort findCompletedCreditPort;
 	private final GenerateOrModifyCompletedCreditPort generateOrModifyCompletedCreditPort;
 
 	private final CalculateGraduationUseCase calculateGraduationUseCase;
+    private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
+    private final TakenLectureRevisionPort takenLectureRevisionPort;
 
-	//TODO()
-	@Override
-	public void generateOrModifyCompletedCredit(User user) {
-		List<CompletedCredit> completedCredits = findCompletedCreditPort.findCompletedCredit(user);
-		GraduationResult graduationResult = calculateGraduationUseCase.calculateGraduation(user);
+    @Override
+    public void generateOrModifyCompletedCredit(User user) {
+        takenLectureRevisionPort.lockForChange(user.getId());
+        List<CompletedCredit> completedCredits = findCompletedCreditPort.findCompletedCredit(user);
+        GraduationResult graduationResult = calculateGraduationUseCase.calculateGraduation(user);
+        List<CompletedCredit> calculated = mapCompletedCredits(user, completedCredits, graduationResult);
+        updateStudentInformationUseCase.updateUser(
+            UpdateStudentInformationCommand.update(user, graduationResult));
+        generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, calculated);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompletedCredit> calculateCompletedCredits(User user, TakenLectureInventory inventory) {
+        // The GET response uses calculated credits, not persistence IDs. Only writers need stored rows.
+        return mapCompletedCredits(user, List.of(),
+            calculateGraduationUseCase.calculateGraduation(user, inventory));
+    }
+
+    private List<CompletedCredit> mapCompletedCredits(User user, List<CompletedCredit> completedCredits,
+        GraduationResult graduationResult) {
 		List<DetailGraduationResult> detailGraduationResults = graduationResult.getDetailGraduationResults();
 
 		List<CompletedCredit> updatedCompletedCredits = createGeneralCompletedCreditModel(
@@ -63,7 +87,7 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 				normalCultureCompletedCreditModel,
 				freeElectiveCompletedCreditModel
 			));
-		generateOrModifyCompletedCreditPort.generateOrModifyCompletedCredits(user, allCompletedCreditModels);
+		return allCompletedCreditModels;
 	}
 
 	private List<CompletedCredit> createGeneralCompletedCreditModel(
@@ -121,7 +145,6 @@ class GenerateOrModifyCompletedCreditService implements GenerateOrModifyComplete
 			.orElseGet(() -> CompletedCredit.createChapelCompletedCreditModel(
 				graduationResult.getChapelResult(), user));
 	}
-
 
 	private CompletedCredit createOrUpdateNormalCultureCompletedCreditModel(
 		List<CompletedCredit> completedCredits,

@@ -14,17 +14,16 @@ import com.plzgraduate.myongjigraduatebe.graduation.domain.service.StudentGradua
 import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindBasicAcademicalCulturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationCommand;
-import com.plzgraduate.myongjigraduatebe.user.application.usecase.update.UpdateStudentInformationUseCase;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.College;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
-@Transactional
+@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
 @RequiredArgsConstructor
 class CalculateGraduationService implements CalculateGraduationUseCase {
 
@@ -35,16 +34,16 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 	private final CalculateBasicAcademicalCultureGraduationService calculateBasicAcademicalCultureGraduationService;
 	private final CalculateMajorGraduationService calculateMajorGraduationService;
 	private final CalculateFusionMajorGraduationService calculateFusionMajorGraduationService;
-	private final UpdateStudentInformationUseCase updateStudentInformationUseCase;
 	private final StudentGraduationStrategyFactory strategyFactory;
-
 
 	@Override
 	public GraduationResult calculateGraduation(User user) {
-		GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
-		TakenLectureInventory takenLectureInventory = findTakenLectureUseCase.findTakenLectures(
-			user.getId()
-		);
+        return calculateGraduation(user, findTakenLectureUseCase.findTakenLectures(user.getId()));
+    }
+
+    @Override
+    public GraduationResult calculateGraduation(User user, TakenLectureInventory takenLectureInventory) {
+        GraduationRequirement graduationRequirement = determineGraduationRequirement(user);
 		TakenLectureInventory originalTakenLectureInventory = takenLectureInventory.copy();
 		List<DetailGraduationResult> detailGraduationResults = generateDetailGraduationResults(
 			user,
@@ -61,7 +60,6 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		);
 		handleDuplicatedTakenCredit(user, graduationResult);
 		overwriteTakenCreditWithActualEarnedCredits(user, graduationResult, originalTakenLectureInventory);
-		updateUserGraduationInformation(user, graduationResult);
 		return graduationResult;
 	}
 
@@ -266,11 +264,4 @@ class CalculateGraduationService implements CalculateGraduationUseCase {
 		}
 	}
 
-	private void updateUserGraduationInformation(User user, GraduationResult graduationResult) {
-		UpdateStudentInformationCommand updateStudentInformationCommand = UpdateStudentInformationCommand.update(
-			user,
-			graduationResult
-		);
-		updateStudentInformationUseCase.updateUser(updateStudentInformationCommand);
-	}
 }

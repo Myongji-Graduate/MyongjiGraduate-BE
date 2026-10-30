@@ -26,6 +26,15 @@ spring:
       port: 6380
 
 cache:
+  taken-lecture:
+    # Expand schema and drain all legacy writers before switching off -> shadow -> on.
+    mode: ${TAKEN_LECTURE_CACHE_MODE:off}
+    namespace: ${TAKEN_LECTURE_CACHE_NAMESPACE:local}
+    timeout: 200ms
+    ttl: 10m
+    cooldown: 5s
+    max-concurrent: 16
+    local-entries: 128
   graduation-master:
     enabled: ${SHARED_MASTER_CACHE_ENABLED:false}
     namespace: ${SHARED_MASTER_CACHE_NAMESPACE:}

@@ -1,0 +1,1453 @@
+{
+  "source": "dev121-http-benchmark-20261029.json",
+  "method": "p95 median over three independent app-JVM runs for each endpoint, size and concurrency; percent change = (on/off - 1) * 100",
+  "comparisons": [
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 30,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 7.426125,
+        "shadow": 7.516167,
+        "on": 6.230708
+      },
+      "onChangePercent": -16.0974532478244,
+      "p95PerRound": {
+        "off": [
+          16.566,
+          6.08,
+          7.426
+        ],
+        "shadow": [
+          7.899,
+          7.516,
+          6.93
+        ],
+        "on": [
+          6.231,
+          6.631,
+          5.295
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 30,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 8.489625,
+        "shadow": 10.914292,
+        "on": 6.577917
+      },
+      "onChangePercent": -22.518167763593798,
+      "p95PerRound": {
+        "off": [
+          17.792,
+          8.49,
+          7.909
+        ],
+        "shadow": [
+          9.702,
+          14.669,
+          10.914
+        ],
+        "on": [
+          6.378,
+          6.958,
+          6.578
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 30,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 16.081417,
+        "shadow": 15.483417,
+        "on": 14.838292
+      },
+      "onChangePercent": -7.730195666215234,
+      "p95PerRound": {
+        "off": [
+          12.292,
+          18.266,
+          16.081
+        ],
+        "shadow": [
+          15.483,
+          16.018,
+          13.234
+        ],
+        "on": [
+          14.838,
+          15.145,
+          12.899
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 60,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 4.987917,
+        "shadow": 6.035667,
+        "on": 3.574541
+      },
+      "onChangePercent": -28.33599676979389,
+      "p95PerRound": {
+        "off": [
+          4.259,
+          4.988,
+          9.425
+        ],
+        "shadow": [
+          5.53,
+          6.036,
+          7.423
+        ],
+        "on": [
+          4.396,
+          3.575,
+          3.295
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 60,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 6.821834,
+        "shadow": 16.496291,
+        "on": 5.245958
+      },
+      "onChangePercent": -23.100474154017824,
+      "p95PerRound": {
+        "off": [
+          8.18,
+          6.508,
+          6.822
+        ],
+        "shadow": [
+          41.334,
+          16.496,
+          9.828
+        ],
+        "on": [
+          4.787,
+          5.246,
+          5.814
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 60,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 15.315458,
+        "shadow": 12.166208,
+        "on": 7.658167
+      },
+      "onChangePercent": -49.99714014429082,
+      "p95PerRound": {
+        "off": [
+          16.448,
+          15.315,
+          12.199
+        ],
+        "shadow": [
+          12.101,
+          13.232,
+          12.166
+        ],
+        "on": [
+          7.658,
+          10.726,
+          6.673
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 120,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 4.706333,
+        "shadow": 9.131791,
+        "on": 3.192541
+      },
+      "onChangePercent": -32.164999799206726,
+      "p95PerRound": {
+        "off": [
+          5.079,
+          4.706,
+          4.104
+        ],
+        "shadow": [
+          11.155,
+          9.132,
+          7.733
+        ],
+        "on": [
+          2.721,
+          3.193,
+          3.915
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 120,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 7.767375,
+        "shadow": 13.752708,
+        "on": 5.106625
+      },
+      "onChangePercent": -34.25545953426994,
+      "p95PerRound": {
+        "off": [
+          9.277,
+          7.249,
+          7.767
+        ],
+        "shadow": [
+          10.065,
+          16.319,
+          13.753
+        ],
+        "on": [
+          5.107,
+          4.82,
+          8.209
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "size": 120,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 11.607083,
+        "shadow": 17.552917,
+        "on": 7.591333
+      },
+      "onChangePercent": -34.5974091854086,
+      "p95PerRound": {
+        "off": [
+          11.607,
+          12.619,
+          11.439
+        ],
+        "shadow": [
+          25.555,
+          15.383,
+          17.553
+        ],
+        "on": [
+          6.851,
+          9.437,
+          7.591
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 30,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 11.917375,
+        "shadow": 15.586833,
+        "on": 12.594292
+      },
+      "onChangePercent": 5.680084750207159,
+      "p95PerRound": {
+        "off": [
+          14.864,
+          11.421,
+          11.917
+        ],
+        "shadow": [
+          20.45,
+          15.587,
+          14.424
+        ],
+        "on": [
+          13.61,
+          12.594,
+          12.586
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 30,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 18.312708,
+        "shadow": 18.116208,
+        "on": 18.329958
+      },
+      "onChangePercent": 0.0941968822961714,
+      "p95PerRound": {
+        "off": [
+          18.588,
+          18.313,
+          16.496
+        ],
+        "shadow": [
+          28.284,
+          17.354,
+          18.116
+        ],
+        "on": [
+          23.316,
+          18.33,
+          16.506
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 30,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 23.222833,
+        "shadow": 39.759125,
+        "on": 27.56275
+      },
+      "onChangePercent": 18.688146273970972,
+      "p95PerRound": {
+        "off": [
+          23.613,
+          23.223,
+          21.588
+        ],
+        "shadow": [
+          83.041,
+          30.822,
+          39.759
+        ],
+        "on": [
+          31.255,
+          27.563,
+          21.813
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 60,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 12.048875,
+        "shadow": 13.061542,
+        "on": 9.6945
+      },
+      "onChangePercent": -19.54020603583323,
+      "p95PerRound": {
+        "off": [
+          12.049,
+          9.742,
+          12.336
+        ],
+        "shadow": [
+          18.237,
+          11.906,
+          13.062
+        ],
+        "on": [
+          9.712,
+          9.321,
+          9.694
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 60,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 17.775458,
+        "shadow": 15.338792,
+        "on": 15.3
+      },
+      "onChangePercent": -13.926268453954883,
+      "p95PerRound": {
+        "off": [
+          19.005,
+          15.317,
+          17.775
+        ],
+        "shadow": [
+          15.339,
+          20.107,
+          14.979
+        ],
+        "on": [
+          15.3,
+          11.875,
+          27.75
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 60,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 18.940458,
+        "shadow": 24.393792,
+        "on": 20.647042
+      },
+      "onChangePercent": 9.01025730212015,
+      "p95PerRound": {
+        "off": [
+          31.142,
+          16.351,
+          18.94
+        ],
+        "shadow": [
+          26.553,
+          23.003,
+          24.394
+        ],
+        "on": [
+          20.647,
+          22.266,
+          18.056
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 120,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 9.83725,
+        "shadow": 11.399209,
+        "on": 8.57875
+      },
+      "onChangePercent": -12.793209484357925,
+      "p95PerRound": {
+        "off": [
+          8.908,
+          9.837,
+          9.917
+        ],
+        "shadow": [
+          11.639,
+          11.011,
+          11.399
+        ],
+        "on": [
+          8.579,
+          8.715,
+          8.425
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 120,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 13.037584,
+        "shadow": 15.955416,
+        "on": 15.290167
+      },
+      "onChangePercent": 17.277610637062814,
+      "p95PerRound": {
+        "off": [
+          27.838,
+          13.038,
+          12.302
+        ],
+        "shadow": [
+          18.576,
+          15.955,
+          15.859
+        ],
+        "on": [
+          15.736,
+          11.648,
+          15.29
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "size": 120,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 27.521958,
+        "shadow": 28.007459,
+        "on": 18.041834
+      },
+      "onChangePercent": -34.44567425035675,
+      "p95PerRound": {
+        "off": [
+          27.522,
+          19.834,
+          28.811
+        ],
+        "shadow": [
+          35.653,
+          23.813,
+          28.007
+        ],
+        "on": [
+          18.042,
+          21.322,
+          14.653
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 30,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 5.8075,
+        "shadow": 8.129833,
+        "on": 4.931792
+      },
+      "onChangePercent": -15.078915195867415,
+      "p95PerRound": {
+        "off": [
+          5.868,
+          5.808,
+          5.365
+        ],
+        "shadow": [
+          23.996,
+          8.013,
+          8.13
+        ],
+        "on": [
+          7.314,
+          4.925,
+          4.932
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 30,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 7.685209,
+        "shadow": 12.533292,
+        "on": 6.848041
+      },
+      "onChangePercent": -10.893236605536693,
+      "p95PerRound": {
+        "off": [
+          8.54,
+          7.685,
+          7.252
+        ],
+        "shadow": [
+          13.507,
+          12.533,
+          10.805
+        ],
+        "on": [
+          6.577,
+          8.024,
+          6.848
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 30,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 14.663584,
+        "shadow": 20.900208,
+        "on": 11.478042
+      },
+      "onChangePercent": -21.72417057112368,
+      "p95PerRound": {
+        "off": [
+          14.664,
+          12.318,
+          18.562
+        ],
+        "shadow": [
+          20.9,
+          24.395,
+          11.718
+        ],
+        "on": [
+          11.478,
+          9.746,
+          14.979
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 60,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 5.684875,
+        "shadow": 7.670375,
+        "on": 4.795959
+      },
+      "onChangePercent": -15.636509158072954,
+      "p95PerRound": {
+        "off": [
+          5.685,
+          5.969,
+          4.536
+        ],
+        "shadow": [
+          9.899,
+          7.589,
+          7.67
+        ],
+        "on": [
+          4.125,
+          4.796,
+          5.414
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 60,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 7.3275,
+        "shadow": 10.458458,
+        "on": 7.476625
+      },
+      "onChangePercent": 2.035141589901057,
+      "p95PerRound": {
+        "off": [
+          9.514,
+          7.057,
+          7.327
+        ],
+        "shadow": [
+          10.458,
+          16.773,
+          9.945
+        ],
+        "on": [
+          10.182,
+          6.071,
+          7.477
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 60,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 9.77125,
+        "shadow": 15.525792,
+        "on": 10.696417
+      },
+      "onChangePercent": 9.468256364334149,
+      "p95PerRound": {
+        "off": [
+          9.771,
+          31.784,
+          9.26
+        ],
+        "shadow": [
+          16.768,
+          12.633,
+          15.526
+        ],
+        "on": [
+          8.506,
+          10.696,
+          13.354
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 120,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 5.117542,
+        "shadow": 7.428459,
+        "on": 4.378042
+      },
+      "onChangePercent": -14.450296646319671,
+      "p95PerRound": {
+        "off": [
+          4.463,
+          5.118,
+          6.66
+        ],
+        "shadow": [
+          6.955,
+          7.786,
+          7.428
+        ],
+        "on": [
+          4.007,
+          4.378,
+          4.561
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 120,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 7.985792,
+        "shadow": 13.486625,
+        "on": 7.212833
+      },
+      "onChangePercent": -9.679177719630061,
+      "p95PerRound": {
+        "off": [
+          8.018,
+          7.986,
+          7.85
+        ],
+        "shadow": [
+          18.385,
+          13.487,
+          11.648
+        ],
+        "on": [
+          7.213,
+          6.404,
+          7.875
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "size": 120,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 10.327416,
+        "shadow": 16.529709,
+        "on": 7.507833
+      },
+      "onChangePercent": -27.301921409963537,
+      "p95PerRound": {
+        "off": [
+          10.216,
+          10.327,
+          11.186
+        ],
+        "shadow": [
+          16.613,
+          13.097,
+          16.53
+        ],
+        "on": [
+          10.207,
+          7.508,
+          7.41
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 30,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 5.404084,
+        "shadow": 7.250166,
+        "on": 4.988167
+      },
+      "onChangePercent": -7.696345948730632,
+      "p95PerRound": {
+        "off": [
+          5.524,
+          4.973,
+          5.404
+        ],
+        "shadow": [
+          18.078,
+          7.25,
+          6.867
+        ],
+        "on": [
+          4.759,
+          4.988,
+          5.874
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 30,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 8.105333,
+        "shadow": 12.387834,
+        "on": 7.314167
+      },
+      "onChangePercent": -9.761054851170204,
+      "p95PerRound": {
+        "off": [
+          8.379,
+          6.342,
+          8.105
+        ],
+        "shadow": [
+          11.094,
+          12.388,
+          12.519
+        ],
+        "on": [
+          6.791,
+          8.8,
+          7.314
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 30,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 14.966625,
+        "shadow": 17.62425,
+        "on": 9.024916
+      },
+      "onChangePercent": -39.699725221952185,
+      "p95PerRound": {
+        "off": [
+          14.967,
+          15.896,
+          13.491
+        ],
+        "shadow": [
+          14.53,
+          17.624,
+          24.153
+        ],
+        "on": [
+          9.025,
+          8.467,
+          10.96
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 60,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 5.636916,
+        "shadow": 7.029,
+        "on": 4.9535
+      },
+      "onChangePercent": -12.123934435070527,
+      "p95PerRound": {
+        "off": [
+          4.938,
+          5.776,
+          5.637
+        ],
+        "shadow": [
+          6.847,
+          7.695,
+          7.029
+        ],
+        "on": [
+          4.744,
+          4.954,
+          5.173
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 60,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 8.576792,
+        "shadow": 11.391167,
+        "on": 7.005125
+      },
+      "onChangePercent": -18.324648656513997,
+      "p95PerRound": {
+        "off": [
+          8.577,
+          9.542,
+          7.136
+        ],
+        "shadow": [
+          8.687,
+          11.391,
+          11.882
+        ],
+        "on": [
+          6.514,
+          9.321,
+          7.005
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 60,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 12.132792,
+        "shadow": 13.571833,
+        "on": 13.894333
+      },
+      "onChangePercent": 14.518842818701572,
+      "p95PerRound": {
+        "off": [
+          12.133,
+          9.37,
+          18.295
+        ],
+        "shadow": [
+          17.877,
+          12.995,
+          13.572
+        ],
+        "on": [
+          12.943,
+          14.247,
+          13.894
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 120,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 5.037208,
+        "shadow": 7.063042,
+        "on": 4.583334
+      },
+      "onChangePercent": -9.010427999002623,
+      "p95PerRound": {
+        "off": [
+          6.127,
+          5.037,
+          4.969
+        ],
+        "shadow": [
+          7.063,
+          9.811,
+          6.645
+        ],
+        "on": [
+          4.665,
+          4.153,
+          4.583
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 120,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 9.595875,
+        "shadow": 12.080958,
+        "on": 7.027208
+      },
+      "onChangePercent": -26.768449985019604,
+      "p95PerRound": {
+        "off": [
+          8.122,
+          9.596,
+          10.092
+        ],
+        "shadow": [
+          12.081,
+          10.828,
+          14.457
+        ],
+        "on": [
+          7.027,
+          6.409,
+          7.474
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "size": 120,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 13.783167,
+        "shadow": 18.122625,
+        "on": 9.756208
+      },
+      "onChangePercent": -29.216500097546515,
+      "p95PerRound": {
+        "off": [
+          13.783,
+          19.257,
+          10.821
+        ],
+        "shadow": [
+          18.526,
+          17.475,
+          18.123
+        ],
+        "on": [
+          7.987,
+          9.756,
+          20.343
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 30,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 7.282458,
+        "shadow": 9.101542,
+        "on": 7.243208
+      },
+      "onChangePercent": -0.5389663764624575,
+      "p95PerRound": {
+        "off": [
+          7.847,
+          6.742,
+          7.282
+        ],
+        "shadow": [
+          9.261,
+          9.102,
+          7.811
+        ],
+        "on": [
+          7.243,
+          6.095,
+          8.046
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 30,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 9.438875,
+        "shadow": 14.017292,
+        "on": 8.497459
+      },
+      "onChangePercent": -9.97381573545576,
+      "p95PerRound": {
+        "off": [
+          9.439,
+          15.186,
+          7.911
+        ],
+        "shadow": [
+          15.052,
+          11.366,
+          14.017
+        ],
+        "on": [
+          8.323,
+          11.095,
+          8.497
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 30,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 19.896709,
+        "shadow": 19.229708,
+        "on": 11.240959
+      },
+      "onChangePercent": -43.503425616769086,
+      "p95PerRound": {
+        "off": [
+          23.438,
+          12.925,
+          19.897
+        ],
+        "shadow": [
+          20.728,
+          19.23,
+          14.017
+        ],
+        "on": [
+          11.241,
+          9.856,
+          13.241
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 60,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 8.562333,
+        "shadow": 8.231708,
+        "on": 6.85125
+      },
+      "onChangePercent": -19.983840852720867,
+      "p95PerRound": {
+        "off": [
+          14.184,
+          8.562,
+          6.412
+        ],
+        "shadow": [
+          8.232,
+          8.434,
+          7.741
+        ],
+        "on": [
+          12.127,
+          5.966,
+          6.851
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 60,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 9.426041,
+        "shadow": 15.892708,
+        "on": 8.711833
+      },
+      "onChangePercent": -7.576966830507093,
+      "p95PerRound": {
+        "off": [
+          9.384,
+          9.799,
+          9.426
+        ],
+        "shadow": [
+          96.983,
+          11.408,
+          15.893
+        ],
+        "on": [
+          9.72,
+          8.712,
+          8.616
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 60,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 19.269917,
+        "shadow": 16.787417,
+        "on": 10.734584
+      },
+      "onChangePercent": -44.29356390066444,
+      "p95PerRound": {
+        "off": [
+          16.521,
+          19.27,
+          19.348
+        ],
+        "shadow": [
+          57.992,
+          16.183,
+          16.787
+        ],
+        "on": [
+          10.735,
+          17.801,
+          9.554
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 120,
+      "concurrency": 1,
+      "p95MedianMs": {
+        "off": 6.697666,
+        "shadow": 9.0375,
+        "on": 5.785
+      },
+      "onChangePercent": -13.62662754458045,
+      "p95PerRound": {
+        "off": [
+          6.698,
+          6.923,
+          6.307
+        ],
+        "shadow": [
+          9.037,
+          12.674,
+          8.199
+        ],
+        "on": [
+          5.785,
+          5.081,
+          7.561
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 120,
+      "concurrency": 4,
+      "p95MedianMs": {
+        "off": 12.72575,
+        "shadow": 11.488209,
+        "on": 7.841292
+      },
+      "onChangePercent": -38.38247647486396,
+      "p95PerRound": {
+        "off": [
+          13.21,
+          12.726,
+          9.273
+        ],
+        "shadow": [
+          25.514,
+          11.488,
+          10.506
+        ],
+        "on": [
+          7.19,
+          7.841,
+          9.373
+        ]
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "size": 120,
+      "concurrency": 8,
+      "p95MedianMs": {
+        "off": 12.711042,
+        "shadow": 22.939375,
+        "on": 9.937
+      },
+      "onChangePercent": -21.823875650792445,
+      "p95PerRound": {
+        "off": [
+          12.711,
+          12.155,
+          14.777
+        ],
+        "shadow": [
+          22.939,
+          23.828,
+          16.871
+        ],
+        "on": [
+          8.29,
+          15.652,
+          9.937
+        ]
+      }
+    }
+  ],
+  "perEndpoint": [
+    {
+      "endpoint": "/api/v1/taken-lectures",
+      "fasterConditions": 9,
+      "totalConditions": 9,
+      "changeRangePercent": [
+        -50.0,
+        -7.7
+      ],
+      "worst": {
+        "endpoint": "/api/v1/taken-lectures",
+        "size": 30,
+        "concurrency": 8,
+        "p95MedianMs": {
+          "off": 16.081417,
+          "shadow": 15.483417,
+          "on": 14.838292
+        },
+        "onChangePercent": -7.730195666215234,
+        "p95PerRound": {
+          "off": [
+            12.292,
+            18.266,
+            16.081
+          ],
+          "shadow": [
+            15.483,
+            16.018,
+            13.234
+          ],
+          "on": [
+            14.838,
+            15.145,
+            12.899
+          ]
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/credits",
+      "fasterConditions": 4,
+      "totalConditions": 9,
+      "changeRangePercent": [
+        -34.4,
+        18.7
+      ],
+      "worst": {
+        "endpoint": "/api/v1/graduations/credits",
+        "size": 30,
+        "concurrency": 8,
+        "p95MedianMs": {
+          "off": 23.222833,
+          "shadow": 39.759125,
+          "on": 27.56275
+        },
+        "onChangePercent": 18.688146273970972,
+        "p95PerRound": {
+          "off": [
+            23.613,
+            23.223,
+            21.588
+          ],
+          "shadow": [
+            83.041,
+            30.822,
+            39.759
+          ],
+          "on": [
+            31.255,
+            27.563,
+            21.813
+          ]
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+      "fasterConditions": 7,
+      "totalConditions": 9,
+      "changeRangePercent": [
+        -27.3,
+        9.5
+      ],
+      "worst": {
+        "endpoint": "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE",
+        "size": 60,
+        "concurrency": 8,
+        "p95MedianMs": {
+          "off": 9.77125,
+          "shadow": 15.525792,
+          "on": 10.696417
+        },
+        "onChangePercent": 9.468256364334149,
+        "p95PerRound": {
+          "off": [
+            9.771,
+            31.784,
+            9.26
+          ],
+          "shadow": [
+            16.768,
+            12.633,
+            15.526
+          ],
+          "on": [
+            8.506,
+            10.696,
+            13.354
+          ]
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+      "fasterConditions": 8,
+      "totalConditions": 9,
+      "changeRangePercent": [
+        -39.7,
+        14.5
+      ],
+      "worst": {
+        "endpoint": "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE",
+        "size": 60,
+        "concurrency": 8,
+        "p95MedianMs": {
+          "off": 12.132792,
+          "shadow": 13.571833,
+          "on": 13.894333
+        },
+        "onChangePercent": 14.518842818701572,
+        "p95PerRound": {
+          "off": [
+            12.133,
+            9.37,
+            18.295
+          ],
+          "shadow": [
+            17.877,
+            12.995,
+            13.572
+          ],
+          "on": [
+            12.943,
+            14.247,
+            13.894
+          ]
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+      "fasterConditions": 9,
+      "totalConditions": 9,
+      "changeRangePercent": [
+        -44.3,
+        -0.5
+      ],
+      "worst": {
+        "endpoint": "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR",
+        "size": 30,
+        "concurrency": 1,
+        "p95MedianMs": {
+          "off": 7.282458,
+          "shadow": 9.101542,
+          "on": 7.243208
+        },
+        "onChangePercent": -0.5389663764624575,
+        "p95PerRound": {
+          "off": [
+            7.847,
+            6.742,
+            7.282
+          ],
+          "shadow": [
+            9.261,
+            9.102,
+            7.811
+          ],
+          "on": [
+            7.243,
+            6.095,
+            8.046
+          ]
+        }
+      }
+    }
+  ]
+}

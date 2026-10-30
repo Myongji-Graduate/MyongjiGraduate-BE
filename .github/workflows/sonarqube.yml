@@ -36,7 +36,14 @@ jobs:
         run: chmod +x gradlew
 
       # 테스트 + 커버리지 리포트 생성(sonar가 jacoco xml을 소비)
+      - name: Prepare isolated cache test images
+        run: |
+          docker pull mysql:8.4.8
+          docker pull redis:7.4-alpine
+
       - name: Test & Jacoco
+        env:
+          RUN_TAKEN_LECTURE_CACHE_REPRODUCTION: 'true'
         run: ./gradlew clean test jacocoTestReport --no-daemon --info
 
       # Sonar 분석 (JDK 21에서 그대로 실행)

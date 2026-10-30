@@ -1,0 +1,152 @@
+{
+  "observedAtUtc": "2026-10-29T05:26:35.840580+00:00",
+  "scope": "read-only metadata; no DDL, DML, migration, restart, deploy, or configuration mutation",
+  "runtime": {
+    "image": "stophwan/mju-graduate-server:gha-37565266834-1",
+    "health": "healthy",
+    "startedAt": "2026-10-07T03:09:37.364966251Z",
+    "restartCount": 0,
+    "memoryBytes": 671088640,
+    "environment": {
+      "SPRING_DATA_REDIS_HOST": "mg-redis",
+      "SPRING_PROFILES_ACTIVE": "prod",
+      "SHARED_MASTER_CACHE_ENABLED": "true",
+      "SPRING_DATA_REDIS_PORT": "6379",
+      "JAVA_OPTS": "-Xms64m -Xmx256m -XX:ActiveProcessorCount=2"
+    },
+    "redisImage": "redis:7-alpine",
+    "redisVersion": "7.4.11"
+  },
+  "server": [
+    {
+      "logBin": 1,
+      "comment": "MySQL Enterprise - Cloud",
+      "version": "26.7.0-cloud",
+      "transactionIsolation": "REPEATABLE-READ",
+      "trustFunctionCreators": 1
+    }
+  ],
+  "history": [
+    {
+      "rank": 1,
+      "type": "BASELINE",
+      "script": "<< Flyway Baseline >>",
+      "success": 1,
+      "version": "0",
+      "checksum": null
+    },
+    {
+      "rank": 2,
+      "type": "SQL",
+      "script": "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "success": 1,
+      "version": "1",
+      "checksum": -864888812
+    },
+    {
+      "rank": 3,
+      "type": "SQL",
+      "script": "V2__create_optional_mandatory_policy.sql",
+      "success": 1,
+      "version": "2",
+      "checksum": 1726619294
+    },
+    {
+      "rank": 4,
+      "type": "SQL",
+      "script": "V3__scope_basic_academical_culture_policy.sql",
+      "success": 1,
+      "version": "3",
+      "checksum": -1427786421
+    },
+    {
+      "rank": 5,
+      "type": "SQL",
+      "script": "V4__map_basic_programming_major_transition.sql",
+      "success": 1,
+      "version": "4",
+      "checksum": 771382942
+    },
+    {
+      "rank": 6,
+      "type": "SQL",
+      "script": "V5__create_fusion_major_policy.sql",
+      "success": 1,
+      "version": "5",
+      "checksum": -1578064319
+    },
+    {
+      "rank": 7,
+      "type": "SQL",
+      "script": "V6__expand_humanities_fusion_majors.sql",
+      "success": 1,
+      "version": "6",
+      "checksum": 1964654068
+    },
+    {
+      "rank": 8,
+      "type": "SQL",
+      "script": "V7__complete_fusion_basic_course_mappings.sql",
+      "success": 1,
+      "version": "7",
+      "checksum": -121641514
+    },
+    {
+      "rank": 9,
+      "type": "SQL",
+      "script": "V8__track_anonymous_parsing_requests.sql",
+      "success": 1,
+      "version": "8",
+      "checksum": 98638109
+    },
+    {
+      "rank": 10,
+      "type": "SQL",
+      "script": "V9__correct_applied_data_science_fusion_basic_credit.sql",
+      "success": 1,
+      "version": "9",
+      "checksum": -1589948152
+    },
+    {
+      "rank": 11,
+      "type": "SQL",
+      "script": "V10__add_honors_college_to_user.sql",
+      "success": 1,
+      "version": "10",
+      "checksum": -1668794568
+    },
+    {
+      "rank": 12,
+      "type": "SQL",
+      "script": "V11__add_honors_target_major_to_user.sql",
+      "success": 1,
+      "version": "11",
+      "checksum": -176484264
+    }
+  ],
+  "engines": [
+    {
+      "table": "lecture",
+      "engine": "InnoDB"
+    },
+    {
+      "table": "taken_lecture",
+      "engine": "InnoDB"
+    },
+    {
+      "table": "user",
+      "engine": "InnoDB"
+    }
+  ],
+  "revisionColumn": [],
+  "lectureTriggers": [],
+  "migrationPrivileges": {
+    "SELECT": true,
+    "INSERT": true,
+    "UPDATE": true,
+    "CREATE": true,
+    "ALTER": true,
+    "REFERENCES": true,
+    "TRIGGER": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "scope": "offline check of actual bootJar migration entries",
+  "jarSha256": "281615e013033cf399663bfa69366d7735dd30ddb46b18d29eac871ee185ee25",
+  "migrationSha256": {
+    "V5__create_fusion_major_policy.sql": "2516871f58fd9e7f3e33f9ece3595dd74253f569ea87f8eebfb4bffeff94029b",
+    "V15__version_lecture_catalog.sql": "8fb7d8d85d02c9ff3fb7880fcc6a7f2a5eae2f08b42d8017f10255986ee4c164",
+    "V11__add_honors_target_major_to_user.sql": "e3bbd4e87d3f9e5abd0d0df6276a7cde3e2ec576e3d890ee9abd4eab9aa8e31f",
+    "V7__complete_fusion_basic_course_mappings.sql": "4d477d3ccfb23978687fb5a5119802e6134d01a67584126b0daa96441976f5b0",
+    "V9__correct_applied_data_science_fusion_basic_credit.sql": "c3af258964d3eac2be89c869bdd6a072a047afdbeac3518ea19794378b7d22ee",
+    "V2__create_optional_mandatory_policy.sql": "5effa91a0183693cc1d83ff748c86f8b97d15a23f97a55dbf3c46a4c7395e6be",
+    "V14__add_taken_lecture_revision.sql": "371a67a44b4401e25682cb2b122965d44bf4f724ca2cb4a1de35219de168e0c0",
+    "V6__expand_humanities_fusion_majors.sql": "38a953b3d814a5666dbc4745e7e7df1bbf14c9c39b1a80d8a3f837e5095e1677",
+    "V3__scope_basic_academical_culture_policy.sql": "a0835ae168ab08ea575407293d9a0edb466c0fc4cdaac3b0cb82b4fc7a86d027",
+    "V1__add_failure_reason_and_details_to_parsing_text_history.sql": "993b2ea05e9974b0194b8b547e552e7f4e210573064a4b52c8417f3ea45369ea",
+    "V8__track_anonymous_parsing_requests.sql": "4b7334a92e1500caf0bb4b61582cd071c971c448737db8363f28ad11c4505b7c",
+    "V10__add_honors_college_to_user.sql": "d6d6c6eea5a801c2389d8338c7917d943024fd549adaaa2186689502cc49b08e",
+    "V4__map_basic_programming_major_transition.sql": "112c8b5df47b9d080742ae34491b169795118eb5dcc3d616beca872a1aa93993"
+  },
+  "modeValidationErrors": {
+    "off": [],
+    "shadow": [],
+    "on": []
+  },
+  "sameBytesAsSource": true,
+  "dev116MigrationsIncluded": false,
+  "productionAccessed": false
+}

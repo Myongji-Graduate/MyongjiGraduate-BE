@@ -27,6 +27,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SaveTakenLectureFromParsingTextServiceTest {
 
+    @Mock
+    private com.plzgraduate.myongjigraduatebe.takenlecture.application.port.TakenLectureRevisionPort takenLectureRevisionPort;
+
 	@Mock
 	private SaveTakenLecturePort saveTakenLecturePort;
 	@Mock

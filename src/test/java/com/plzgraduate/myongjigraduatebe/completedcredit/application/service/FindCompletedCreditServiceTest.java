@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.CalculateCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
-import com.plzgraduate.myongjigraduatebe.user.application.port.FindUserPort;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureRead;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,11 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class FindCompletedCreditServiceTest {
 
     @Mock
-    private FindUserPort findUserPort;
+    private FindTakenLectureUseCase findTakenLectureUseCase;
     @Mock
-    private FindCompletedCreditPort findCompletedCreditPort;
-    @Mock
-    private GenerateOrModifyCompletedCreditUseCase generateOrModifyCompletedCreditUseCase;
+    private CalculateCompletedCreditUseCase calculateCompletedCreditUseCase;
     @InjectMocks
     private FindCompletedCreditService findCompletedCreditService;
 
@@ -37,8 +35,10 @@ class FindCompletedCreditServiceTest {
         User user = User.builder()
             .id(1L)
             .build();
-        given(findUserPort.findUserByIdForUpdate(1L)).willReturn(Optional.of(user));
-        given(findCompletedCreditPort.findCompletedCredit(user)).willReturn(List.of(
+        var inventory = TakenLectureInventory.from(java.util.Set.of());
+        given(findTakenLectureUseCase.findTakenLecturesWithUser(1L))
+            .willReturn(new TakenLectureRead(user, inventory));
+        given(calculateCompletedCreditUseCase.calculateCompletedCredits(user, inventory)).willReturn(List.of(
             CompletedCredit.builder()
                 .build(),
             CompletedCredit.builder()
@@ -52,9 +52,9 @@ class FindCompletedCreditServiceTest {
 
         //then
         assertThat(result).hasSize(3);
-        then(generateOrModifyCompletedCreditUseCase).should()
-            .generateOrModifyCompletedCredit(user);
-        then(findCompletedCreditPort).should()
-            .findCompletedCredit(user);
+        then(calculateCompletedCreditUseCase).should()
+            .calculateCompletedCredits(user, inventory);
+        then(findTakenLectureUseCase).should().findTakenLecturesWithUser(1L);
+        then(findTakenLectureUseCase).shouldHaveNoMoreInteractions();
     }
 }
