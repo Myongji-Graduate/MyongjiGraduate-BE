@@ -7,6 +7,8 @@ import com.plzgraduate.myongjigraduatebe.user.domain.model.StudentCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -77,5 +79,18 @@ class TakenLectureTest {
                 .isNotEqualTo(c)
                 .isNotEqualTo(null)
                 .isNotEqualTo("str");
+    }
+
+    @ParameterizedTest
+    @CsvSource({"2021,FIRST", "2020,SECOND"})
+    @DisplayName("같은 과목도 수강 연도나 학기가 다르면 서로 다른 수강내역이다")
+    void sameLectureInDifferentAcademicTermIsNotEqual(int year, Semester semester) {
+        User u = user("u5");
+        Lecture l = lecture("KME00001", "데이터베이스", 3);
+        TakenLecture original = TakenLecture.of(u, l, 2020, Semester.FIRST);
+        TakenLecture differentTerm = TakenLecture.of(u, l, year, semester);
+
+        assertThat(original).isNotEqualTo(differentTerm);
+        assertThat(differentTerm).isNotEqualTo(original);
     }
 }
