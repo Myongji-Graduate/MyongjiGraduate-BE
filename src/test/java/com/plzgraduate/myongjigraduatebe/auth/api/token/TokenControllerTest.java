@@ -14,7 +14,6 @@ import com.plzgraduate.myongjigraduatebe.auth.api.token.dto.response.AccessToken
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 class TokenControllerTest extends WebAdaptorTestSupport {

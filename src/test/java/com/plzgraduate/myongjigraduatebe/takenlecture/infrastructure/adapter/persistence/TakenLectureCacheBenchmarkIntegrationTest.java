@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plzgraduate.myongjigraduatebe.core.config.RedisCacheConfig;
-import com.plzgraduate.myongjigraduatebe.lecture.application.port.FindLecturePort;
 import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
 import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.*;
@@ -63,13 +62,16 @@ class TakenLectureCacheBenchmarkIntegrationTest {
         var users = context.getBean(FindUserUseCase.class);
         var reader = context.getBean(FindTakenLectureUseCase.class);
         var registry = context.getBean(SimpleMeterRegistry.class);
-        var source = context.getBean(HikariDataSource.class);
         var store = context.getBean(FaultStore.class);
-        var shadowCache = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.SHADOW,
-            namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16);
+        var shadowCache = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.SHADOW, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 0));
         var shadow = new CachedTakenLectureAdapter(delegate, delegate, shadowCache);
-        var redisOnlyCache = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.ON,
-            namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16);
+        var redisOnlyCache = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 0));
         var redisOnly = new CachedTakenLectureAdapter(delegate, delegate, redisOnlyCache);
         var previous = new PreviousMembershipCacheReader(context, redis, mapper);
         for (int size : List.of(30, 60, 120)) {
@@ -195,7 +197,7 @@ class TakenLectureCacheBenchmarkIntegrationTest {
             assertThat(result.get("sqlPerRequest")).as("one versioned context query per warm read").isEqualTo(1.0);
         }
         if (arm.equals("revision_warm")) {
-            assertThat(counterDelta.getOrDefault("local_hit", 0.0)).isEqualTo((double) requests);
+            assertThat(counterDelta).containsEntry("local_hit", (double) requests);
         }
         result.put("processCpuMs", (os.getProcessCpuTime() - cpuBefore) / 1e6);
         result.put("heapUsedDeltaBytes", memory.getHeapMemoryUsage().getUsed() - heapBefore);

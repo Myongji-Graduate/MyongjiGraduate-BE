@@ -19,7 +19,6 @@ import com.plzgraduate.myongjigraduatebe.support.WithMockAuthenticationUser;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindDetailGraduationsControllerTest extends WebAdaptorTestSupport {
 

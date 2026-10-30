@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindAuthIdControllerTest extends WebAdaptorTestSupport {
 

@@ -28,8 +28,11 @@ class TakenLectureCacheTest {
         new TakenLectureSnapshot.Entry(1L, "SYN-ONE", 2026, null, Instant.EPOCH, new TakenLectureSnapshot.Course("Synthetic course", 3, null, 0))));
 
     TakenLectureCache cache(TakenLectureCache.Mode mode) {
-        return new TakenLectureCache(store, mapper, registry, mode, "synthetic", Duration.ofMinutes(10),
-            Duration.ofSeconds(5), 1, clock::get);
+        return new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(mode, "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 1, 0),
+            clock::get);
     }
 
     @AfterEach
@@ -152,8 +155,11 @@ class TakenLectureCacheTest {
 
     @Test
     void earlierSuccessCannotCloseCircuitOpenedByConcurrentFailure() throws Exception {
-        var cache = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.ON,
-            "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, clock::get);
+        var cache = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 0),
+            clock::get);
         var entered = new CountDownLatch(1);
         var resume = new CountDownLatch(1);
         var calls = new java.util.concurrent.atomic.AtomicInteger();
@@ -191,8 +197,11 @@ class TakenLectureCacheTest {
 
     @Test
     void boundedLocalCacheReusesOnlyTheExactTwoRevisionsAndExpires() throws Exception {
-        var cache = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.ON,
-            "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 1, clock::get);
+        var cache = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 1),
+            clock::get);
         when(store.get(anyString())).thenReturn(mapper.writeValueAsString(value));
         cache.get(1L, 7, 9, () -> value);
         cache.get(1L, 7, 9, () -> { throw new AssertionError("local hit loaded DB"); });
@@ -210,8 +219,11 @@ class TakenLectureCacheTest {
 
     @Test
     void localCacheDoesNotPublishDatabaseMissUntilCommitAndNotAfterRollback() {
-        var cache = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.ON,
-            "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 8, clock::get);
+        var cache = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 8),
+            clock::get);
         begin(true);
         cache.get(1L, 7, 9, () -> value);
         cache.get(1L, 7, 9, () -> value);
@@ -227,15 +239,21 @@ class TakenLectureCacheTest {
 
     @Test
     void committedMissPopulatesLocalAndShadowStillReadsDatabase() {
-        var cache = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.ON,
-            "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 8, clock::get);
+        var cache = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 8),
+            clock::get);
         begin(true);
         cache.get(1L, 7, 9, () -> value);
         commit();
         assertThat(cache.get(1L, 7, 9, () -> { throw new AssertionError(); })).isEqualTo(value);
         verify(store, times(1)).get(anyString());
-        var shadow = new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.SHADOW,
-            "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 8, clock::get);
+        var shadow = new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.SHADOW, "synthetic", Duration.ofMinutes(10), Duration.ofSeconds(5), 2, 8),
+            clock::get);
         shadow.get(1L, 7, 9, () -> value);
         shadow.get(1L, 7, 9, () -> value);
         verify(store, times(3)).get(anyString());

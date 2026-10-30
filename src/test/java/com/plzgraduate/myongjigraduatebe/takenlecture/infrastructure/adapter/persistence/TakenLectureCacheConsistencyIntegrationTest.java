@@ -46,6 +46,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
+import org.awaitility.Awaitility;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -347,7 +348,8 @@ class TakenLectureCacheConsistencyIntegrationTest {
     void ownershipFailureCannotChangeAnotherStudentsRevisionOrList() {
         Long another = seedStudent(1);
         Long foreignId = jdbc.queryForObject("select id from taken_lecture where user_id=?", Long.class, another);
-        assertThatThrownBy(() -> context.getBean(DeleteTakenLectureUseCase.class).deleteTakenLecture(userId, foreignId))
+        var deleter = context.getBean(DeleteTakenLectureUseCase.class);
+        assertThatThrownBy(() -> deleter.deleteTakenLecture(userId, foreignId))
             .isInstanceOf(IllegalArgumentException.class);
         assertState(3, 0);
         assertThat(jdbc.queryForObject("select taken_lecture_revision from user where id=?", Long.class, another)).isZero();
@@ -437,9 +439,10 @@ class TakenLectureCacheConsistencyIntegrationTest {
         jdbc.update("insert into taken_lecture(user_id,lecture_id,year,created_at,updated_at) values (?,?,2099,current_timestamp(6),current_timestamp(6))", userId, ADDED);
         assertThat(reader.findTakenLectures(userId).calculateTotalCredit()).isEqualTo(3);
         var delegate = context.getBean(TakenLecturePersistenceAdapter.class);
-        var shadowCache = new TakenLectureCache(store, context.getBean(ObjectMapper.class),
-            context.getBean(SimpleMeterRegistry.class), TakenLectureCache.Mode.SHADOW,
-            namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16);
+        var shadowCache = new TakenLectureCache(store,
+            context.getBean(ObjectMapper.class),
+            context.getBean(SimpleMeterRegistry.class),
+            new TakenLectureCache.Options(TakenLectureCache.Mode.SHADOW, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 0));
         var shadow = new CachedTakenLectureAdapter(delegate, delegate,
             shadowCache);
         tx(context, true).executeWithoutResult(status -> {
@@ -447,9 +450,10 @@ class TakenLectureCacheConsistencyIntegrationTest {
             assertThat(TakenLectureInventory.from(new HashSet<>(shadow.findTakenLecturesByUser(current))).calculateTotalCredit()).isEqualTo(6);
         });
         assertThat(context.getBean(SimpleMeterRegistry.class).get("takenlecture.cache").tag("outcome", "mismatch").counter().count()).isPositive();
-        var freshCache = new TakenLectureCache(store, context.getBean(ObjectMapper.class),
-            context.getBean(SimpleMeterRegistry.class), TakenLectureCache.Mode.ON,
-            namespace + "-cutover", Duration.ofMinutes(10), Duration.ofSeconds(5), 16);
+        var freshCache = new TakenLectureCache(store,
+            context.getBean(ObjectMapper.class),
+            context.getBean(SimpleMeterRegistry.class),
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, namespace + "-cutover", Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 0));
         var fresh = new CachedTakenLectureAdapter(delegate, delegate,
             freshCache);
         tx(context, true).executeWithoutResult(status -> {
@@ -502,21 +506,18 @@ class TakenLectureCacheConsistencyIntegrationTest {
         assertThat(redis.hasKey(cache.key(userId, 1, catalogRevision()))).isFalse();
         REDIS.getDockerClient().restartContainerCmd(REDIS.getContainerId()).withTimeout(1).exec();
         assertThat(reader.findTakenLectures(userId).calculateTotalCredit()).isEqualTo(6);
-        long deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
-        boolean ready = false;
-        while (!ready && System.nanoTime() < deadline) {
-            try (var connection = redis.getConnectionFactory().getConnection()) { ready = "PONG".equals(connection.ping()); }
-            catch (RuntimeException ignored) { Thread.sleep(20); }
-        }
-        assertThat(ready).isTrue();
+        Awaitility.await().atMost(Duration.ofSeconds(5)).pollInterval(Duration.ofMillis(20))
+            .ignoreExceptions().until(() -> {
+                try (var connection = redis.getConnectionFactory().getConnection()) {
+                    return "PONG".equals(connection.ping());
+                }
+            });
         // Each app owns an independent connection; the shared probe being ready does not imply both reconnected.
-        long recoveryDeadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
-        while (!Boolean.TRUE.equals(redis.hasKey(cache.key(userId, 1, catalogRevision())))
-            && System.nanoTime() < recoveryDeadline) {
+        Awaitility.await().atMost(Duration.ofSeconds(5)).pollInterval(Duration.ofMillis(20)).untilAsserted(() -> {
             other.getBean(AtomicLong.class).addAndGet(Duration.ofSeconds(6).toNanos());
             assertThat(other.getBean(FindTakenLectureUseCase.class).findTakenLectures(userId).calculateTotalCredit()).isEqualTo(6);
-            Thread.sleep(20);
-        }
+            assertThat(redis.hasKey(cache.key(userId, 1, catalogRevision()))).isTrue();
+        });
         assertThat(redis.hasKey(cache.key(userId, 1, catalogRevision()))).isTrue();
         assertSavedCredits(6);
     }
@@ -544,7 +545,8 @@ class TakenLectureCacheConsistencyIntegrationTest {
         assertThat(catalogRevision()).isEqualTo(version + 1);
         jdbc.update("update lecture set name='Synthetic catalog renamed',duplicate_code='SYN-ALIAS',is_revoked=1 where id='SYN-CATALOG-TEMP'");
         assertThat(catalogRevision()).isEqualTo(version + 2);
-        assertThatThrownBy(() -> tx(context, false).executeWithoutResult(status -> {
+        var transaction = tx(context, false);
+        assertThatThrownBy(() -> transaction.executeWithoutResult(status -> {
             jdbc.update("update lecture set credit=9 where id=?", BASE);
             assertThat(reader.findTakenLectures(userId).calculateTotalCredit()).isEqualTo(9);
             throw new PlannedRollback();
@@ -582,7 +584,8 @@ class TakenLectureCacheConsistencyIntegrationTest {
     @Test
     void readContextUsesScalarRevisionEvenWhenUserEntityIsManaged() {
         var delegate = context.getBean(TakenLecturePersistenceAdapter.class);
-        assertThatThrownBy(() -> tx(context, false).executeWithoutResult(status -> {
+        var transaction = tx(context, false);
+        assertThatThrownBy(() -> transaction.executeWithoutResult(status -> {
             var initial = delegate.findReadContext(userId);
             var managed = context.getBean("entityManager", EntityManager.class).find(UserJpaEntity.class, userId);
             assertThat(managed.getTakenLectureRevision()).isZero();
@@ -606,8 +609,10 @@ class TakenLectureCacheConsistencyIntegrationTest {
 
     @Test
     void combinedReadKeepsUserInSnapshotAndRefreshesUserOnLocalHit() {
-        var local = new TakenLectureCache(store, context.getBean(ObjectMapper.class), context.getBean(SimpleMeterRegistry.class),
-            TakenLectureCache.Mode.ON, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 8,
+        var local = new TakenLectureCache(store,
+            context.getBean(ObjectMapper.class),
+            context.getBean(SimpleMeterRegistry.class),
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 8),
             context.getBean(AtomicLong.class)::get);
         var persistence = context.getBean(TakenLecturePersistenceAdapter.class);
         var adapter = new CachedTakenLectureAdapter(persistence, persistence, local);
@@ -637,8 +642,10 @@ class TakenLectureCacheConsistencyIntegrationTest {
 
     @Test
     void localHitStillChecksDatabaseAndRefreshesAfterOtherWriterAndCatalogChange() {
-        var local = new TakenLectureCache(store, context.getBean(ObjectMapper.class), context.getBean(SimpleMeterRegistry.class),
-            TakenLectureCache.Mode.ON, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 8,
+        var local = new TakenLectureCache(store,
+            context.getBean(ObjectMapper.class),
+            context.getBean(SimpleMeterRegistry.class),
+            new TakenLectureCache.Options(TakenLectureCache.Mode.ON, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, 8),
             context.getBean(AtomicLong.class)::get);
         var persistence = context.getBean(TakenLecturePersistenceAdapter.class);
         var adapter = new CachedTakenLectureAdapter(persistence, persistence, local);
@@ -716,6 +723,7 @@ class TakenLectureCacheConsistencyIntegrationTest {
         FaultStore(LettuceConnectionFactory factory) { delegate = new TakenLectureRedisStore(factory, Duration.ofMillis(200)); }
         public String get(String key) { beforeGet.run(); if (failGet) throw new IllegalStateException("synthetic read failure"); return delegate.get(key); }
         public void put(String key, String value, Duration ttl) { beforePut.run(); if (failPut) throw new IllegalStateException("synthetic publication failure"); delegate.put(key, value, ttl); }
+        @Override
         public void close() { delegate.close(); }
     }
 
@@ -769,7 +777,11 @@ class TakenLectureCacheConsistencyIntegrationTest {
         @Bean ObjectMapper objectMapper() { return new ObjectMapper().findAndRegisterModules(); }
         @Bean AtomicLong ticker() { return new AtomicLong(System.nanoTime()); }
         @Bean TakenLectureCache takenLectureCache(FaultStore store, ObjectMapper mapper, SimpleMeterRegistry metrics, AtomicLong ticker) {
-            return new TakenLectureCache(store, mapper, metrics, mode, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, localEntryLimit, ticker::get);
+            return new TakenLectureCache(store,
+            mapper,
+            metrics,
+            new TakenLectureCache.Options(mode, namespace, Duration.ofMinutes(10), Duration.ofSeconds(5), 16, localEntryLimit),
+            ticker::get);
         }
         @Bean @Primary FindTakenLecturePort cachedTakenLectures(TakenLecturePersistenceAdapter delegate, FindLecturePort lectures,
             TakenLectureCache cache, DataSource ds) { return new CachedTakenLectureAdapter(delegate, delegate, cache); }

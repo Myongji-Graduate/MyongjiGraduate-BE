@@ -33,11 +33,12 @@ public class TakenLecturePersistenceAdapter implements FindTakenLecturePort, Sav
 	private final TakenLectureMapper takenLectureMapper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private static final String USER_NOT_FOUND = "해당 사용자를 찾을 수 없습니다.";
 
     @Override
     public ReadContext findReadContext(Long userId) {
         var row = userRepository.findTakenLectureReadContext(userId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
         if (row.catalogRevision() == null || row.catalogRevision() < 0) {
             throw new IllegalStateException("Lecture catalog revision is not initialized; apply V15 before enabling cache");
         }
@@ -47,19 +48,19 @@ public class TakenLecturePersistenceAdapter implements FindTakenLecturePort, Sav
     @Override
     public long findRevision(Long userId) {
         return userRepository.findTakenLectureRevision(userId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
     }
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public void lockForChange(Long userId) {
         userRepository.findByIdForUpdate(userId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
     }
 
     private void advanceRevision(Long userId) {
         if (userRepository.advanceTakenLectureRevision(userId) != 1) {
-            throw new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.");
+            throw new IllegalArgumentException(USER_NOT_FOUND);
         }
     }
 

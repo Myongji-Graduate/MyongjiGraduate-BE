@@ -20,8 +20,12 @@ public class TakenLectureCacheConfiguration {
         @Value("${cache.taken-lecture.mode:off}") String mode) {
         if (TakenLectureCache.Mode.valueOf(mode.toUpperCase(Locale.ROOT)) == TakenLectureCache.Mode.OFF) {
             return new TakenLectureCacheStore() {
+                @Override
                 public String get(String key) { return null; }
-                public void put(String key, String value, Duration ttl) { }
+                @Override
+                public void put(String key, String value, Duration ttl) {
+                    // OFF mode deliberately avoids opening a Redis connection or storing values.
+                }
             };
         }
         return new TakenLectureRedisStore(factory, timeout);
@@ -35,8 +39,11 @@ public class TakenLectureCacheConfiguration {
         @Value("${cache.taken-lecture.cooldown:5s}") Duration cooldown,
         @Value("${cache.taken-lecture.max-concurrent:16}") int maxConcurrent,
         @Value("${cache.taken-lecture.local-entries:128}") int localEntries) {
-        return new TakenLectureCache(store, mapper, registry, TakenLectureCache.Mode.valueOf(mode.toUpperCase(Locale.ROOT)),
-            namespace, ttl, cooldown, maxConcurrent, localEntries, System::nanoTime);
+        return new TakenLectureCache(store,
+            mapper,
+            registry,
+            new TakenLectureCache.Options(TakenLectureCache.Mode.valueOf(mode.toUpperCase(Locale.ROOT)), namespace, ttl, cooldown, maxConcurrent, localEntries),
+            System::nanoTime);
     }
 
     @Bean

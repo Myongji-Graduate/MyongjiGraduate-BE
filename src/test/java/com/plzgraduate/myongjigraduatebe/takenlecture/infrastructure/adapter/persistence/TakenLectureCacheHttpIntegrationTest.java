@@ -1,6 +1,7 @@
 package com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -360,7 +361,7 @@ class TakenLectureCacheHttpIntegrationTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "java:S2925"})
     private void steadyWarm(App app, int round) throws Exception {
         List<Student> group = students.stream().filter(student -> student.size() > 1).toList();
         long start = System.nanoTime();
@@ -376,6 +377,7 @@ class TakenLectureCacheHttpIntegrationTest {
                 count += tasks.size();
             } while (count < 3072 || System.nanoTime() - start < Duration.ofSeconds(10).toNanos());
         }
+        // The benchmark protocol requires a fixed quiet period after warmup, not a readiness condition.
         Thread.sleep(1500);
         metrics(app);
         assertThat(app.jvm.keySet()).anyMatch(name -> name.startsWith("jvm_compilation_time_"));
@@ -521,9 +523,15 @@ class TakenLectureCacheHttpIntegrationTest {
         }
         var failedMetrics = difference(metrics(app), before);
         if (!app.mode.equals("off")) assertThat(failedMetrics.getOrDefault("error", 0.0)).isPositive();
-        Thread.sleep(5500);
-        verify(app, faultStudent, LIST);
-        verify(app, faultStudent, LIST);
+        if (app.mode.equals("off")) {
+            verify(app, faultStudent, LIST);
+        } else {
+            await().atMost(Duration.ofSeconds(15)).pollInterval(Duration.ofMillis(250)).untilAsserted(() -> {
+                verify(app, faultStudent, LIST);
+                verify(app, faultStudent, LIST);
+                assertThat(difference(metrics(app), before).getOrDefault("put", 0.0)).isPositive();
+            });
+        }
         var recovered = difference(metrics(app), before);
         assertThat(recovered.getOrDefault("mismatch", 0.0)).isZero();
         if (app.mode.equals("on")) assertThat(recovered.getOrDefault("hit", 0.0)).isPositive();
@@ -618,16 +626,18 @@ class TakenLectureCacheHttpIntegrationTest {
         Process process = builder.redirectErrorStream(true).redirectOutput(log.toFile()).start();
         App app = new App(mode, port, process, config, log);
         APPS.add(app);
-        for (int i = 0; i < 180; i++) {
+        await().atMost(Duration.ofSeconds(45)).pollInterval(Duration.ofMillis(250)).until(() -> {
             if (!process.isAlive()) throw new AssertionError("Synthetic app startup failed: " + safeLog(log));
             try {
                 var response = client.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/actuator/health"))
                     .timeout(Duration.ofSeconds(1)).build(), HttpResponse.BodyHandlers.ofString());
-                if (response.statusCode() == 200) return app;
-            } catch (java.io.IOException ignored) { }
-            Thread.sleep(250);
-        }
-        throw new AssertionError("Synthetic app readiness timeout: " + safeLog(log));
+                return response.statusCode() == 200;
+            } catch (java.io.IOException ignored) {
+                // Connection refusal is expected until the disposable app binds its HTTP port.
+                return false;
+            }
+        });
+        return app;
     }
 
     private Map<String, Double> metrics(App app) throws Exception {
@@ -635,9 +645,16 @@ class TakenLectureCacheHttpIntegrationTest {
             .timeout(Duration.ofSeconds(5)).build(), HttpResponse.BodyHandlers.ofString());
         assertThat(response.statusCode()).isEqualTo(200);
         Map<String, Double> counters = new TreeMap<>();
-        var pattern = Pattern.compile("(?m)^takenlecture_cache_total\\{[^\\n]*outcome=\"([^\"]+)\"[^\\n]*}\\s+([0-9.Ee+-]+)");
-        var matcher = pattern.matcher(response.body());
-        while (matcher.find()) counters.merge(matcher.group(1), Double.parseDouble(matcher.group(2)), Double::sum);
+        var outcome = Pattern.compile("(?:^|,)outcome=\"([^\"]+)\"(?:,|$)");
+        for (String line : response.body().lines().toList()) {
+            if (!line.startsWith("takenlecture_cache_total{")) continue;
+            int end = line.indexOf('}');
+            if (end < 0) continue;
+            var matcher = outcome.matcher(line.substring(line.indexOf('{') + 1, end));
+            if (matcher.find()) {
+                counters.merge(matcher.group(1), Double.parseDouble(line.substring(end + 1).trim()), Double::sum);
+            }
+        }
         app.jvm.clear();
         var runtime = Pattern.compile("(?m)^(jvm_compilation_time_[a-z_]+|jvm_gc_pause_seconds_sum|jvm_gc_pause_seconds_count)(?:\\{[^\\n]*})?\\s+([0-9.Ee+-]+)")
             .matcher(response.body());

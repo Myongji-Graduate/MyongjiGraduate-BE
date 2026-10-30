@@ -12,7 +12,6 @@ import com.plzgraduate.myongjigraduatebe.core.exception.UnAuthorizedException;
 import com.plzgraduate.myongjigraduatebe.support.WebAdaptorTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 class SignInControllerTest extends WebAdaptorTestSupport {

@@ -24,10 +24,12 @@ public final class TakenLectureRedisStore implements TakenLectureCacheStore {
                 .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS).build());
         if (source.getClientConfiguration().isUseSsl()) builder.useSsl();
         var configuration = builder.build();
-        if (source.getClusterConfiguration() != null) {
-            factory = new LettuceConnectionFactory(source.getClusterConfiguration(), configuration);
-        } else if (source.getSentinelConfiguration() != null) {
-            factory = new LettuceConnectionFactory(source.getSentinelConfiguration(), configuration);
+        var cluster = source.getClusterConfiguration();
+        var sentinel = source.getSentinelConfiguration();
+        if (cluster != null) {
+            factory = new LettuceConnectionFactory(cluster, configuration);
+        } else if (sentinel != null) {
+            factory = new LettuceConnectionFactory(sentinel, configuration);
         } else {
             factory = new LettuceConnectionFactory(source.getStandaloneConfiguration(), configuration);
         }

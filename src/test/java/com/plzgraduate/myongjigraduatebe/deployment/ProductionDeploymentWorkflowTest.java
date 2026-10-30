@@ -113,8 +113,8 @@ class ProductionDeploymentWorkflowTest {
         var names = steps.stream().map(s -> s.get("name").toString()).toList();
         assertThat(step("Check DEV-121 release inputs").get("run").toString())
             .contains("python3 infra/cache/check_release.py");
-        assertThat(step("Test and build").get("run").toString())
-            .isEqualTo("./gradlew clean build --no-daemon");
+        assertThat(step("Test and build").get("run"))
+            .hasToString("./gradlew clean build --no-daemon");
         assertThat(names.indexOf("Check DEV-121 release inputs")).isLessThan(names.indexOf("Test and build"));
         assertThat(names.indexOf("Test and build")).isLessThan(names.indexOf("Build and Push Docker image"));
         assertThat(names.indexOf("Build and Push Docker image")).isLessThan(names.indexOf("Prepare production host memory"));

@@ -15,6 +15,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public final class TakenLectureCache {
     public enum Mode { OFF, SHADOW, ON }
+    public record Options(Mode mode, String namespace, Duration ttl, Duration cooldown,
+                          int maxConcurrent, int localEntries) { }
     private final TakenLectureCacheStore store;
     private final ObjectMapper mapper;
     private final MeterRegistry metrics;
@@ -30,18 +32,17 @@ public final class TakenLectureCache {
     private final LinkedHashMap<String, LocalEntry> local = new LinkedHashMap<>(16, 0.75f, true);
     private record LocalEntry(TakenLectureSnapshot value, long createdAt) { }
 
-    public TakenLectureCache(TakenLectureCacheStore store, ObjectMapper mapper, MeterRegistry metrics,
-        Mode mode, String namespace, Duration ttl, Duration cooldown, int maxConcurrent) {
-        this(store, mapper, metrics, mode, namespace, ttl, cooldown, maxConcurrent, 0, System::nanoTime);
+    public TakenLectureCache(TakenLectureCacheStore store, ObjectMapper mapper, MeterRegistry metrics, Options options) {
+        this(store, mapper, metrics, options, System::nanoTime);
     }
 
     public TakenLectureCache(TakenLectureCacheStore store, ObjectMapper mapper, MeterRegistry metrics,
-        Mode mode, String namespace, Duration ttl, Duration cooldown, int maxConcurrent, LongSupplier ticker) {
-        this(store, mapper, metrics, mode, namespace, ttl, cooldown, maxConcurrent, 0, ticker);
-    }
-
-    public TakenLectureCache(TakenLectureCacheStore store, ObjectMapper mapper, MeterRegistry metrics,
-        Mode mode, String namespace, Duration ttl, Duration cooldown, int maxConcurrent, int localEntries, LongSupplier ticker) {
+        Options options, LongSupplier ticker) {
+        int localEntries = options.localEntries();
+        String namespace = options.namespace();
+        Duration ttl = options.ttl();
+        Duration cooldown = options.cooldown();
+        int maxConcurrent = options.maxConcurrent();
         if (localEntries < 0 || localEntries > 10000) throw new IllegalArgumentException("Invalid local cache limit");
         this.localEntries = localEntries;
         if (!namespace.matches("[A-Za-z0-9._-]+") || ttl.isNegative() || ttl.isZero()
@@ -51,7 +52,7 @@ public final class TakenLectureCache {
         this.store = store;
         this.mapper = mapper.copy();
         this.metrics = metrics;
-        this.mode = mode;
+        this.mode = options.mode();
         this.prefix = "takenLectures:v3:" + namespace + ":";
         this.ttl = ttl;
         this.cooldownNanos = cooldown.toNanos();
@@ -79,13 +80,7 @@ public final class TakenLectureCache {
         TakenLectureSnapshot cached = null;
         boolean cacheAvailable = true;
         try {
-            String json = store.get(key);
-            if (json != null) {
-                cached = mapper.readValue(json, TakenLectureSnapshot.class);
-                if (!userId.equals(cached.userId()) || revision != cached.revision() || catalogRevision != cached.catalogRevision()) {
-                    throw new IllegalArgumentException("Snapshot version mismatch");
-                }
-            }
+            cached = readSnapshot(key, userId, revision, catalogRevision);
             failedAt.compareAndSet(attempt.observedFailure(), 0);
         } catch (RuntimeException | JsonProcessingException exception) {
             fail();
@@ -105,6 +100,18 @@ public final class TakenLectureCache {
         if (mode == Mode.SHADOW && cached != null && !cached.equals(loaded)) count("mismatch");
         if (cacheAvailable) publishAfterCommit(key, loaded);
         return loaded;
+    }
+
+    private TakenLectureSnapshot readSnapshot(String key, Long userId, long revision, long catalogRevision)
+        throws JsonProcessingException {
+        String json = store.get(key);
+        if (json == null) return null;
+        TakenLectureSnapshot snapshot = mapper.readValue(json, TakenLectureSnapshot.class);
+        if (!userId.equals(snapshot.userId()) || revision != snapshot.revision()
+            || catalogRevision != snapshot.catalogRevision()) {
+            throw new IllegalArgumentException("Snapshot version mismatch");
+        }
+        return snapshot;
     }
 
     private TakenLectureSnapshot load(Supplier<TakenLectureSnapshot> loader) {

@@ -45,6 +45,7 @@ final class PreviousMembershipCacheReader {
                         t.getYear(), t.getSemester(), t.getCreatedAt())).sorted(Comparator.comparing(Entry::id)).toList());
                     String encoded = mapper.writeValueAsString(snapshot);
                     TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                        @Override
                         public void afterCommit() { redis.opsForValue().set(key, encoded, Duration.ofMinutes(10)); }
                     });
                     return TakenLectureInventory.from(new HashSet<>(list));

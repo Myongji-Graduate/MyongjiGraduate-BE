@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 class FindTakenLectureControllerTest extends WebAdaptorTestSupport {
 
