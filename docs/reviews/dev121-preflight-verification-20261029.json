@@ -1,0 +1,68 @@
+{
+  "observedAtUtc": "2026-10-29T05:35:21.254164+00:00",
+  "branch": "fix/DEV-121",
+  "tests": {
+    "focused": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 18
+    },
+    "full": {
+      "tests": 836,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "passed": 832
+    },
+    "mysql26": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 32
+    },
+    "offlinePython": {
+      "tests": 6,
+      "passed": 6,
+      "failures": 0
+    }
+  },
+  "policyMigrationSourceUnchanged": true,
+  "dev116FilesEdited": false,
+  "productionMetadataRead": true,
+  "productionMutation": false,
+  "githubVariablesChanged": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false,
+  "remainingOwnedContainers": {
+    "dev121-http": [],
+    "dev121-cache": [],
+    "dev121-migration": []
+  },
+  "releaseOrderDecision": "pending; reserved V12/V13 -> V14/V15 rehearsed, DEV-116 not merged or modified",
+  "releaseGate": "blocks current checkout missing V12/V13; passes combined temporary release directory",
+  "sourceSha256": {
+    ".github/workflows/deploy.yml": "941938209f0ebdcd1814fe6150f68b27c76004c5d59f8c2a7877c93650e7fa36",
+    "infra/cache/check_release.py": "0702c9b0014ba7c067334ace72a03ca95004c16b5ba76ea50606094683d3440a",
+    "infra/cache/test_check_release.py": "d6112a0869300b7c1567d669fb2e3f8822c3d67f46ff30a8a774604078640ef1",
+    "infra/cache/inspect_production_readonly.py": "a028a03f1babdf74484f59ffae6e259a4e379cd483155fae2afd8c7cd386aa5b",
+    "infra/cache/FlywayReadOnlyCheck.java": "bb96b26fb8c3a72d47396cf0a13ecbfd05d0def5a0e29151047479116ec7f3e3",
+    "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLecturePersistenceAdapter.java": "8314d0a712af250787a62af81a062c8a703da29097175c2235f4627a43068f73",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/deployment/ProductionDeploymentWorkflowTest.java": "be1aa1aed8a5636a02570731cc66f7e0046d8e63b59903ce1ab547d1444424dd",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/deployment/CacheMigrationOrderIntegrationTest.java": "d6b1702851ac522126db5de9fbd3661c8cdef5cbecb21ef118e5b93637f27db0",
+    "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheConsistencyIntegrationTest.java": "7a0be044d28718127bb0c19e237fe8cb99cadc223c745aadfb57dd209aba6d2a",
+    "docs/DEV-121_CACHE_DEPLOYMENT.md": "153405c33644f80a10a23773147efbb94deb07c31d835db51e046b45d43f3760"
+  },
+  "evidenceSha256": {
+    "dev121-production-preflight-20261029.json": "e2858dd8bb8540b264523d4f918fce15c71f8656498bc788d039dfaa933f1019",
+    "dev121-production-flyway-readonly-20261029.json": "8add00a3cbce6e593d56d663dd2ed58eaf50dda00621999fcdffe3422a567d12",
+    "dev121-github-preflight-20261029.json": "4b5b54adbe8165bded625fc8b4cfc14446b0290527418f70632b2339f1c2dc45",
+    "dev121-production-observability-20261029.json": "3845d466cdf2a2c3ac9f56fc2e0f5ba4c3a4bf3d899f228e2c7951b6a977cce4",
+    "dev121-release-gate-20261029.json": "3b630d33910ccbbd3324f8e9b20915d781765282ce65892667c0b7be385f8e22",
+    "dev121-migration-order-rehearsal-20261029.json": "dd6a5ba678174d8ee0789d1c6fd72232bb77d25db2a2172eaecc6f5cfe24f867",
+    "dev121-migration-order-mysql26-20261029.json": "cf87ef232d46d8af39fa097d76b7508dc7763d55dda3c66fb8919b2e8d571a25"
+  }
+}

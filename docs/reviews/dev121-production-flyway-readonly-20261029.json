@@ -1,0 +1,85 @@
+{
+  "databaseVersion": "26.7.0-cloud",
+  "driverVersion": "mysql-connector-j-8.4.0 (Revision: 1c3f5c149e0bfe31c7fbeb24e2d260cd890972c4)",
+  "jdbcReadOnly": true,
+  "migrations": [
+    {
+      "script": "<< Flyway Baseline >>",
+      "version": "0",
+      "state": "BASELINE"
+    },
+    {
+      "script": "V1__add_failure_reason_and_details_to_parsing_text_history.sql",
+      "version": "1",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V2__create_optional_mandatory_policy.sql",
+      "version": "2",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V3__scope_basic_academical_culture_policy.sql",
+      "version": "3",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V4__map_basic_programming_major_transition.sql",
+      "version": "4",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V5__create_fusion_major_policy.sql",
+      "version": "5",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V6__expand_humanities_fusion_majors.sql",
+      "version": "6",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V7__complete_fusion_basic_course_mappings.sql",
+      "version": "7",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V8__track_anonymous_parsing_requests.sql",
+      "version": "8",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V9__correct_applied_data_science_fusion_basic_credit.sql",
+      "version": "9",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V10__add_honors_college_to_user.sql",
+      "version": "10",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V11__add_honors_target_major_to_user.sql",
+      "version": "11",
+      "state": "SUCCESS"
+    },
+    {
+      "script": "V14__add_taken_lecture_revision.sql",
+      "version": "14",
+      "state": "PENDING"
+    },
+    {
+      "script": "V15__version_lecture_catalog.sql",
+      "version": "15",
+      "state": "PENDING"
+    }
+  ],
+  "validationSuccessful": true,
+  "validationErrors": [],
+  "operations": [
+    "jdbc metadata",
+    "flyway info",
+    "flyway validate"
+  ],
+  "migrateInvoked": false
+}

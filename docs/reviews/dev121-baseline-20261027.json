@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-27",
+  "base_commit": "b3aa186af5acfb4a643d64717487105f6eb63174",
+  "kind": "defect characterization before DEV-121 changes",
+  "tests": {
+    "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+    "tests": "12",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-27T00:40:41",
+    "hostname": "bagjinhyeon-ui-MacBookPro.local",
+    "time": "1.165"
+  },
+  "observations": [
+    "CACHE_PROBE environment: mysql=8.4.8, isolation=REPEATABLE-READ, redis=redis:7.4-alpine",
+    "CACHE_PROBE rollback-before-read: DB=3, cacheMiss=true, subsequentRead=3",
+    "CACHE_PROBE sequential: DB=6, cache=6, calculationInput=6",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE concurrent: committedDB=6, cache=3, calculationInput=3, subsequentRead=3",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6",
+    "CACHE_PROBE rollback: committedDB=3, cache=6, calculationInput=6, subsequentRead=6"
+  ],
+  "xml_sha256": "da66eeee935cb8a8d25ad28b6eb603232bfa889c64e97fefc3d0c2e65b0d6e91"
+}

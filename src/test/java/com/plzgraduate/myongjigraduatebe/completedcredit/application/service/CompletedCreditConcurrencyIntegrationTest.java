@@ -2,10 +2,13 @@ package com.plzgraduate.myongjigraduatebe.completedcredit.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.port.FindCompletedCreditPort;
 import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.FindCompletedCreditUseCase;
-import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.GenerateOrModifyCompletedCreditUseCase;
+import com.plzgraduate.myongjigraduatebe.completedcredit.application.usecase.CalculateCompletedCreditUseCase;
 import com.plzgraduate.myongjigraduatebe.completedcredit.domain.model.CompletedCredit;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.FindCompletedCreditAdapter;
 import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persistence.GenerateOrModifyCompletedCreditsAdapter;
@@ -15,12 +18,16 @@ import com.plzgraduate.myongjigraduatebe.completedcredit.infrastructure.persiste
 import com.plzgraduate.myongjigraduatebe.graduation.domain.model.GraduationCategory;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.TransferCredit;
 import com.plzgraduate.myongjigraduatebe.user.domain.model.User;
+import com.plzgraduate.myongjigraduatebe.takenlecture.application.usecase.find.FindTakenLectureUseCase;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureRead;
+import com.plzgraduate.myongjigraduatebe.takenlecture.domain.model.TakenLectureInventory;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.UserPersistenceAdapter;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.entity.UserJpaEntity;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.mapper.UserMapper;
 import com.plzgraduate.myongjigraduatebe.user.infrastructure.adapter.persistence.repository.UserRepository;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -61,7 +68,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 class CompletedCreditConcurrencyIntegrationTest {
 
     @Configuration
-    @EntityScan(basePackageClasses = {UserJpaEntity.class, CompletedCreditJpaEntity.class})
+    @EntityScan(basePackageClasses = {UserJpaEntity.class, CompletedCreditJpaEntity.class,
+        com.plzgraduate.myongjigraduatebe.lecture.infrastructure.adapter.persistence.entity.LectureCatalogRevisionJpaEntity.class})
     @EnableJpaRepositories(basePackageClasses = {UserRepository.class, CompletedCreditRepository.class})
     @Import({FindCompletedCreditService.class, FindCompletedCreditAdapter.class,
         GenerateOrModifyCompletedCreditsAdapter.class, CompletedCreditPersistenceMapper.class,
@@ -82,14 +90,22 @@ class CompletedCreditConcurrencyIntegrationTest {
     @Autowired
     private PlatformTransactionManager transactionManager;
     @MockBean
-    private GenerateOrModifyCompletedCreditUseCase generateUseCase;
+    private CalculateCompletedCreditUseCase generateUseCase;
+
+    @MockBean
+    private FindTakenLectureUseCase takenLectureReads;
 
     @BeforeEach
     void useRealPersistenceWithFixedCalculation() {
+        when(takenLectureReads.findTakenLecturesWithUser(anyLong()))
+            .thenAnswer(invocation -> {
+                Long id = invocation.getArgument(0);
+                User user = new UserMapper().mapToDomainEntity(userRepository.findById(id).orElseThrow());
+                return new TakenLectureRead(user, TakenLectureInventory.from(Set.of()));
+            });
         doAnswer(invocation -> {
-            persistCalculation(invocation.getArgument(0));
-            return null;
-        }).when(generateUseCase).generateOrModifyCompletedCredit(org.mockito.ArgumentMatchers.any());
+            return calculatedCredits();
+        }).when(generateUseCase).calculateCompletedCredits(any(), any());
     }
 
     @DisplayName("동일 사용자의 동시 학점 조회는 기존 데이터 유무와 관계없이 모두 성공한다")
@@ -104,7 +120,7 @@ class CompletedCreditConcurrencyIntegrationTest {
         AtomicInteger calls = new AtomicInteger();
         doAnswer(invocation -> {
             User user = invocation.getArgument(0);
-            // Read before replacement, as the real calculation service does.
+            // Hold a real RR database snapshot while the fixed calculation is paused.
             findCompletedCreditPort.findCompletedCredit(user);
             if (calls.incrementAndGet() == 1) {
                 firstRead.countDown();
@@ -112,9 +128,8 @@ class CompletedCreditConcurrencyIntegrationTest {
             } else {
                 secondCalculation.countDown();
             }
-            persistCalculation(user);
-            return null;
-        }).when(generateUseCase).generateOrModifyCompletedCredit(org.mockito.ArgumentMatchers.any());
+            return calculatedCredits();
+        }).when(generateUseCase).calculateCompletedCredits(any(), any());
 
         try (var executor = Executors.newFixedThreadPool(2)) {
             var first = executor.submit(() -> findCompletedCreditUseCase.findCompletedCredits(userId));
@@ -125,9 +140,9 @@ class CompletedCreditConcurrencyIntegrationTest {
                     return findCompletedCreditUseCase.findCompletedCredits(userId);
                 });
                 assertThat(secondStarted.await(10, TimeUnit.SECONDS)).isTrue();
-                assertThat(secondCalculation.await(300, TimeUnit.MILLISECONDS))
-                    .as("The second request must wait before calculation, not just before writing")
-                    .isFalse();
+                assertThat(secondCalculation.await(5, TimeUnit.SECONDS))
+                    .as("Read-only requests must not serialize on the user row")
+                    .isTrue();
                 releaseFirst.countDown();
                 assertCredits(first.get(30, TimeUnit.SECONDS), 5);
                 assertCredits(second.get(30, TimeUnit.SECONDS), 5);
@@ -135,7 +150,9 @@ class CompletedCreditConcurrencyIntegrationTest {
                 releaseFirst.countDown();
             }
         }
-        assertStoredCredits(userId, 5);
+        if (hasExistingCredits) assertStoredCredits(userId, 3);
+        else transaction().executeWithoutResult(status -> assertThat(completedCreditRepository.findAllByUserJpaEntity(
+            UserJpaEntity.builder().id(userId).build())).isEmpty());
         assertCredits(findCompletedCreditUseCase.findCompletedCredits(userId), 5);
     }
 
@@ -152,9 +169,8 @@ class CompletedCreditConcurrencyIntegrationTest {
                 firstRead.countDown();
                 assertThat(releaseFirst.await(10, TimeUnit.SECONDS)).isTrue();
             }
-            persistCalculation(user);
-            return null;
-        }).when(generateUseCase).generateOrModifyCompletedCredit(org.mockito.ArgumentMatchers.any());
+            return calculatedCredits();
+        }).when(generateUseCase).calculateCompletedCredits(any(), any());
 
         try (var executor = Executors.newFixedThreadPool(2)) {
             var first = executor.submit(() -> findCompletedCreditUseCase.findCompletedCredits(firstUser));
@@ -181,10 +197,9 @@ class CompletedCreditConcurrencyIntegrationTest {
         assertCredits(findCompletedCreditUseCase.findCompletedCredits(userId), 5);
     }
 
-    private void persistCalculation(User user) {
-        adapter.generateOrModifyCompletedCredits(user, List.of(CompletedCredit.builder()
-            .graduationCategory(GraduationCategory.COMMON_CULTURE)
-            .totalCredit(10).takenCredit(5).build()));
+    private List<CompletedCredit> calculatedCredits() {
+        return List.of(CompletedCredit.builder().graduationCategory(GraduationCategory.COMMON_CULTURE)
+            .totalCredit(10).takenCredit(5).build());
     }
 
     private Long createUser(boolean withCredits) {

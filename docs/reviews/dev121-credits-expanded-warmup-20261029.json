@@ -1,0 +1,3850 @@
+{
+  "startedAt" : "2026-10-29T04:56:28.855315Z",
+  "branch" : "fix/DEV-121",
+  "head" : "b3aa186af5acfb4a643d64717487105f6eb63174",
+  "jarSha256" : {
+    "previous" : "862d5098b036e2e4337af9dc7b362bc6174ac003831ac632aceffc714cc8d458",
+    "optimized" : "17b167f5b40f455e5726e98a05ce24852b5e19a20b687a1cecc51c5e8f2e8c06"
+  },
+  "variantOrder" : "previous/optimized; optimized/previous; previous/optimized",
+  "environment" : {
+    "appJvm" : "-Xms64m -Xmx256m -XX:ActiveProcessorCount=2",
+    "poolSize" : 10,
+    "mysql" : "8.4.8",
+    "redis" : "Redis server v=7.4.11 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=dc395baf3ab4da8b",
+    "sharedMasterCache" : "off",
+    "java" : "21.0.6",
+    "instrumentation" : "external app JVM; no JaCoCo agent",
+    "redisImageId" : "sha256:ec4f171e9ff071bb2a1c936057d3be00206069b028b6c0d61df2477e1dd02c42",
+    "mysqlImageId" : "sha256:6bcfd5ef06fdf8de754cd4a1f18991f84b2fccd10f26c8b15755597ff690468f"
+  },
+  "dataset" : {
+    "major" : "영어영문학전공",
+    "source" : "hand-authored synthetic students, courses and mappings; no snapshot",
+    "functionalStudents" : 2,
+    "takenCounts" : [ 30, 60, 120 ],
+    "limitations" : "single major/cohort; synthetic mappings are not certified academic policy",
+    "entryYear" : 20,
+    "benchmarkStudents" : 12,
+    "studentCategory" : "NORMAL"
+  },
+  "endpoints" : [ "/api/v1/taken-lectures", "/api/v1/graduations/credits", "/api/v1/graduations/detail?graduationCategory=COMMON_CULTURE", "/api/v1/graduations/detail?graduationCategory=CORE_CULTURE", "/api/v1/graduations/detail?graduationCategory=PRIMARY_MANDATORY_MAJOR" ],
+  "probes" : [ {
+    "variant" : "previous",
+    "endpoint" : "/api/v1/graduations/credits",
+    "selects" : 10,
+    "cache" : {
+      "transaction_bypass" : 1.0
+    },
+    "sqlProfile" : [ {
+      "sql" : "SELECT DISTINCTROW `ompje1_0` . `id` , `ompje1_0` . `end_entry_year` , `l1_0` . `policy_id` , `l1_0` . `id` , `l1_0` . `equivalence_key` , `l1_0` . `lecture_id` , `l2_0` . `id` , `l2_0` . `credit` , `l2_0` . `duplicate_code` , `l2_0` . `is_revoked` , `l2_0` . `name` , `ompje1_0` . `major` , `ompje1_0` . `major_type` , `ompje1_0` . `name` , `ompje1_0` . `policy_category` , `ompje1_0` . `policy_key` , `ompje1_0` . `policy_version` , `ompje1_0` . `required_count` , `ompje1_0` . `required_credit` , `ompje1_0` . `start_entry_year` , `ompje1_0` . `status` FROM `optional_mandatory_policy` `ompje1_0` LEFT JOIN `optional_mandatory_policy_lecture` `l1_0` ON `ompje1_0` . `id` = `l1_0` . `policy_id` LEFT JOIN `lecture` `l2_0` ON `l2_0` . `id` = `l1_0` . `lecture_id` WHERE `ompje1_0` . `major` IN (...) AND `ompje1_0` . `start_entry_year` <= ? AND `ompje1_0` . `end_entry_year` >= ? AND ( `ompje1_0` . `major_type` IS NULL OR `ompje1_0` . `major_type` = ? ) AND `ompje1_0` . `policy_category` = ? AND `ompje1_0` .",
+      "count" : 2,
+      "serverMs" : 0.244583,
+      "rows" : 0
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `common_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `common_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ? AND `ccje1_0` . `lecture_id` NOT IN (...)",
+      "count" : 1,
+      "serverMs" : 0.156583,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT DISTINCTROW `mlje1_0` . `id` , `mlje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `mlje1_0` . `major` , `mlje1_0` . `mandatory` , `mlje1_0` . `start_entry_year` FROM `major` `mlje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `mlje1_0` . `lecture_id` WHERE `mlje1_0` . `major` IN (...) OR `mlje1_0` . `major` = ?",
+      "count" : 1,
+      "serverMs" : 0.212042,
+      "rows" : 64
+    }, {
+      "sql" : "SELECT `baclje1_0` . `id` , `baclje1_0` . `college` , `baclje1_0` . `end_entry_year` , `baclje1_0` . `end_taken_semester` , `baclje1_0` . `end_taken_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `baclje1_0` . `major` , `baclje1_0` . `mapping_key` , `baclje1_0` . `source_policy_key` , `baclje1_0` . `start_entry_year` , `baclje1_0` . `start_taken_semester` , `baclje1_0` . `start_taken_year` FROM `basic_academical_culture` `baclje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `baclje1_0` . `lecture_id` WHERE ( `baclje1_0` . `major` = ? OR ( `baclje1_0` . `major` IS NULL AND `baclje1_0` . `college` = ? AND ( `baclje1_0` . `mapping_key` IS NOT NULL OR NOT EXISTS ( SELECT `baclje2_0` . `id` FROM `basic_academical_culture` `baclje2_0` WHERE `baclje2_0` . `mapping_key` IS NOT NULL AND `baclje2_0` . `major` IS NULL AND `baclje2_0` . `college` = ? AND ( `baclje2_0` . `start_entry_year` IS NULL OR `baclje2_0` . `start_entry_year` <= ? ) AND (",
+      "count" : 1,
+      "serverMs" : 0.21425,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT `uje1_0` . `id` , `uje1_0` . `associated_major` , `uje1_0` . `auth_id` , `uje1_0` . `completed_semester_count` , `uje1_0` . `created_at` , `uje1_0` . `dual_major` , `uje1_0` . `english_level` , `uje1_0` . `entry_year` , `uje1_0` . `exchange_credit` , `uje1_0` . `graduated` , `uje1_0` . `honors_college` , `uje1_0` . `honors_target_major` , `uje1_0` . `major` , `uje1_0` . `name` , `uje1_0` . `password` , `uje1_0` . `student_category` , `uje1_0` . `student_number` , `uje1_0` . `sub_major` , `uje1_0` . `taken_credit` , `uje1_0` . `taken_lecture_revision` , `uje1_0` . `total_credit` , `uje1_0` . `transfer_credit` , `uje1_0` . `updated_at` FROM SYSTEM_USER `uje1_0` WHERE `uje1_0` . `id` = ?",
+      "count" : 1,
+      "serverMs" : 0.165459,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT @@SESSION . `transaction_isolation`",
+      "count" : 1,
+      "serverMs" : 0.087,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT `tlje1_0` . `id` , `tlje1_0` . `created_at` , `l1_0` . `id` , `l1_0` . `credit` , `l1_0` . `duplicate_code` , `l1_0` . `is_revoked` , `l1_0` . `name` , `tlje1_0` . `semester` , `tlje1_0` . `updated_at` , `u1_0` . `id` , `u1_0` . `associated_major` , `u1_0` . `auth_id` , `u1_0` . `completed_semester_count` , `u1_0` . `created_at` , `u1_0` . `dual_major` , `u1_0` . `english_level` , `u1_0` . `entry_year` , `u1_0` . `exchange_credit` , `u1_0` . `graduated` , `u1_0` . `honors_college` , `u1_0` . `honors_target_major` , `u1_0` . `major` , `u1_0` . `name` , `u1_0` . `password` , `u1_0` . `student_category` , `u1_0` . `student_number` , `u1_0` . `sub_major` , `u1_0` . `taken_credit` , `u1_0` . `taken_lecture_revision` , `u1_0` . `total_credit` , `u1_0` . `transfer_credit` , `u1_0` . `updated_at` , `tlje1_0` . `year` FROM `taken_lecture` `tlje1_0` JOIN `lecture` `l1_0` ON `l1_0` . `id` = `tlje1_0` . `lecture_id` JOIN SYSTEM_USER `u1_0` ON `u1_0` . `id` =",
+      "count" : 1,
+      "serverMs" : 0.387541,
+      "rows" : 120
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `core_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `core_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ?",
+      "count" : 1,
+      "serverMs" : 0.113209,
+      "rows" : 32
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `graduation_category` , `ccje1_0` . `taken_credit` , `ccje1_0` . `total_credit` , `ccje1_0` . `user_id` FROM `completed_credit` `ccje1_0` WHERE `ccje1_0` . `user_id` = ?",
+      "count" : 1,
+      "serverMs" : 0.139709,
+      "rows" : 0
+    } ],
+    "mode" : "off"
+  }, {
+    "variant" : "previous",
+    "endpoint" : "/api/v1/graduations/credits",
+    "selects" : 10,
+    "cache" : {
+      "hit" : 1.0,
+      "load" : 0.0,
+      "local_hit" : 1.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "sqlProfile" : [ {
+      "sql" : "SELECT DISTINCTROW `ompje1_0` . `id` , `ompje1_0` . `end_entry_year` , `l1_0` . `policy_id` , `l1_0` . `id` , `l1_0` . `equivalence_key` , `l1_0` . `lecture_id` , `l2_0` . `id` , `l2_0` . `credit` , `l2_0` . `duplicate_code` , `l2_0` . `is_revoked` , `l2_0` . `name` , `ompje1_0` . `major` , `ompje1_0` . `major_type` , `ompje1_0` . `name` , `ompje1_0` . `policy_category` , `ompje1_0` . `policy_key` , `ompje1_0` . `policy_version` , `ompje1_0` . `required_count` , `ompje1_0` . `required_credit` , `ompje1_0` . `start_entry_year` , `ompje1_0` . `status` FROM `optional_mandatory_policy` `ompje1_0` LEFT JOIN `optional_mandatory_policy_lecture` `l1_0` ON `ompje1_0` . `id` = `l1_0` . `policy_id` LEFT JOIN `lecture` `l2_0` ON `l2_0` . `id` = `l1_0` . `lecture_id` WHERE `ompje1_0` . `major` IN (...) AND `ompje1_0` . `start_entry_year` <= ? AND `ompje1_0` . `end_entry_year` >= ? AND ( `ompje1_0` . `major_type` IS NULL OR `ompje1_0` . `major_type` = ? ) AND `ompje1_0` . `policy_category` = ? AND `ompje1_0` .",
+      "count" : 2,
+      "serverMs" : 0.755208,
+      "rows" : 0
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `common_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `common_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ? AND `ccje1_0` . `lecture_id` NOT IN (...)",
+      "count" : 1,
+      "serverMs" : 0.30075,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT DISTINCTROW `mlje1_0` . `id` , `mlje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `mlje1_0` . `major` , `mlje1_0` . `mandatory` , `mlje1_0` . `start_entry_year` FROM `major` `mlje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `mlje1_0` . `lecture_id` WHERE `mlje1_0` . `major` IN (...) OR `mlje1_0` . `major` = ?",
+      "count" : 1,
+      "serverMs" : 1.062584,
+      "rows" : 64
+    }, {
+      "sql" : "SELECT `baclje1_0` . `id` , `baclje1_0` . `college` , `baclje1_0` . `end_entry_year` , `baclje1_0` . `end_taken_semester` , `baclje1_0` . `end_taken_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `baclje1_0` . `major` , `baclje1_0` . `mapping_key` , `baclje1_0` . `source_policy_key` , `baclje1_0` . `start_entry_year` , `baclje1_0` . `start_taken_semester` , `baclje1_0` . `start_taken_year` FROM `basic_academical_culture` `baclje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `baclje1_0` . `lecture_id` WHERE ( `baclje1_0` . `major` = ? OR ( `baclje1_0` . `major` IS NULL AND `baclje1_0` . `college` = ? AND ( `baclje1_0` . `mapping_key` IS NOT NULL OR NOT EXISTS ( SELECT `baclje2_0` . `id` FROM `basic_academical_culture` `baclje2_0` WHERE `baclje2_0` . `mapping_key` IS NOT NULL AND `baclje2_0` . `major` IS NULL AND `baclje2_0` . `college` = ? AND ( `baclje2_0` . `start_entry_year` IS NULL OR `baclje2_0` . `start_entry_year` <= ? ) AND (",
+      "count" : 1,
+      "serverMs" : 0.496042,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT `uje1_0` . `id` , `uje1_0` . `associated_major` , `uje1_0` . `auth_id` , `uje1_0` . `completed_semester_count` , `uje1_0` . `created_at` , `uje1_0` . `dual_major` , `uje1_0` . `english_level` , `uje1_0` . `entry_year` , `uje1_0` . `exchange_credit` , `uje1_0` . `graduated` , `uje1_0` . `honors_college` , `uje1_0` . `honors_target_major` , `uje1_0` . `major` , `uje1_0` . `name` , `uje1_0` . `password` , `uje1_0` . `student_category` , `uje1_0` . `student_number` , `uje1_0` . `sub_major` , `uje1_0` . `taken_credit` , `uje1_0` . `taken_lecture_revision` , `uje1_0` . `total_credit` , `uje1_0` . `transfer_credit` , `uje1_0` . `updated_at` FROM SYSTEM_USER `uje1_0` WHERE `uje1_0` . `id` = ?",
+      "count" : 1,
+      "serverMs" : 0.239,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT `uje1_0` . `id` , `uje1_0` . `associated_major` , `uje1_0` . `auth_id` , `uje1_0` . `completed_semester_count` , `uje1_0` . `created_at` , `uje1_0` . `dual_major` , `uje1_0` . `english_level` , `uje1_0` . `entry_year` , `uje1_0` . `exchange_credit` , `uje1_0` . `graduated` , `uje1_0` . `honors_college` , `uje1_0` . `honors_target_major` , `uje1_0` . `major` , `uje1_0` . `name` , `uje1_0` . `password` , `uje1_0` . `student_category` , `uje1_0` . `student_number` , `uje1_0` . `sub_major` , `uje1_0` . `taken_credit` , `uje1_0` . `taken_lecture_revision` , `uje1_0` . `total_credit` , `uje1_0` . `transfer_credit` , `uje1_0` . `updated_at` , ( SELECT `lcrje1_0` . `revision` FROM `lecture_catalog_revision` `lcrje1_0` WHERE `lcrje1_0` . `id` = ? ) FROM SYSTEM_USER `uje1_0` WHERE `uje1_0` . `id` = ?",
+      "count" : 1,
+      "serverMs" : 0.233167,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT @@SESSION . `transaction_isolation`",
+      "count" : 1,
+      "serverMs" : 0.0785,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `core_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `core_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ?",
+      "count" : 1,
+      "serverMs" : 0.1875,
+      "rows" : 32
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `graduation_category` , `ccje1_0` . `taken_credit` , `ccje1_0` . `total_credit` , `ccje1_0` . `user_id` FROM `completed_credit` `ccje1_0` WHERE `ccje1_0` . `user_id` = ?",
+      "count" : 1,
+      "serverMs" : 0.207792,
+      "rows" : 0
+    } ],
+    "mode" : "on"
+  }, {
+    "variant" : "optimized",
+    "endpoint" : "/api/v1/graduations/credits",
+    "selects" : 9,
+    "cache" : {
+      "transaction_bypass" : 1.0
+    },
+    "sqlProfile" : [ {
+      "sql" : "SELECT DISTINCTROW `ompje1_0` . `id` , `ompje1_0` . `end_entry_year` , `l1_0` . `policy_id` , `l1_0` . `id` , `l1_0` . `equivalence_key` , `l1_0` . `lecture_id` , `l2_0` . `id` , `l2_0` . `credit` , `l2_0` . `duplicate_code` , `l2_0` . `is_revoked` , `l2_0` . `name` , `ompje1_0` . `major` , `ompje1_0` . `major_type` , `ompje1_0` . `name` , `ompje1_0` . `policy_category` , `ompje1_0` . `policy_key` , `ompje1_0` . `policy_version` , `ompje1_0` . `required_count` , `ompje1_0` . `required_credit` , `ompje1_0` . `start_entry_year` , `ompje1_0` . `status` FROM `optional_mandatory_policy` `ompje1_0` LEFT JOIN `optional_mandatory_policy_lecture` `l1_0` ON `ompje1_0` . `id` = `l1_0` . `policy_id` LEFT JOIN `lecture` `l2_0` ON `l2_0` . `id` = `l1_0` . `lecture_id` WHERE `ompje1_0` . `major` IN (...) AND `ompje1_0` . `start_entry_year` <= ? AND `ompje1_0` . `end_entry_year` >= ? AND ( `ompje1_0` . `major_type` IS NULL OR `ompje1_0` . `major_type` = ? ) AND `ompje1_0` . `policy_category` = ? AND `ompje1_0` .",
+      "count" : 2,
+      "serverMs" : 0.971709,
+      "rows" : 0
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `common_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `common_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ? AND `ccje1_0` . `lecture_id` NOT IN (...)",
+      "count" : 1,
+      "serverMs" : 0.872792,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT DISTINCTROW `mlje1_0` . `id` , `mlje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `mlje1_0` . `major` , `mlje1_0` . `mandatory` , `mlje1_0` . `start_entry_year` FROM `major` `mlje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `mlje1_0` . `lecture_id` WHERE `mlje1_0` . `major` IN (...) OR `mlje1_0` . `major` = ?",
+      "count" : 1,
+      "serverMs" : 0.729542,
+      "rows" : 64
+    }, {
+      "sql" : "SELECT `baclje1_0` . `id` , `baclje1_0` . `college` , `baclje1_0` . `end_entry_year` , `baclje1_0` . `end_taken_semester` , `baclje1_0` . `end_taken_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `baclje1_0` . `major` , `baclje1_0` . `mapping_key` , `baclje1_0` . `source_policy_key` , `baclje1_0` . `start_entry_year` , `baclje1_0` . `start_taken_semester` , `baclje1_0` . `start_taken_year` FROM `basic_academical_culture` `baclje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `baclje1_0` . `lecture_id` WHERE ( `baclje1_0` . `major` = ? OR ( `baclje1_0` . `major` IS NULL AND `baclje1_0` . `college` = ? AND ( `baclje1_0` . `mapping_key` IS NOT NULL OR NOT EXISTS ( SELECT `baclje2_0` . `id` FROM `basic_academical_culture` `baclje2_0` WHERE `baclje2_0` . `mapping_key` IS NOT NULL AND `baclje2_0` . `major` IS NULL AND `baclje2_0` . `college` = ? AND ( `baclje2_0` . `start_entry_year` IS NULL OR `baclje2_0` . `start_entry_year` <= ? ) AND (",
+      "count" : 1,
+      "serverMs" : 0.520042,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT `uje1_0` . `id` , `uje1_0` . `associated_major` , `uje1_0` . `auth_id` , `uje1_0` . `completed_semester_count` , `uje1_0` . `created_at` , `uje1_0` . `dual_major` , `uje1_0` . `english_level` , `uje1_0` . `entry_year` , `uje1_0` . `exchange_credit` , `uje1_0` . `graduated` , `uje1_0` . `honors_college` , `uje1_0` . `honors_target_major` , `uje1_0` . `major` , `uje1_0` . `name` , `uje1_0` . `password` , `uje1_0` . `student_category` , `uje1_0` . `student_number` , `uje1_0` . `sub_major` , `uje1_0` . `taken_credit` , `uje1_0` . `taken_lecture_revision` , `uje1_0` . `total_credit` , `uje1_0` . `transfer_credit` , `uje1_0` . `updated_at` FROM SYSTEM_USER `uje1_0` WHERE `uje1_0` . `id` = ?",
+      "count" : 1,
+      "serverMs" : 0.207708,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT @@SESSION . `transaction_isolation`",
+      "count" : 1,
+      "serverMs" : 0.074542,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT `tlje1_0` . `id` , `tlje1_0` . `created_at` , `l1_0` . `id` , `l1_0` . `credit` , `l1_0` . `duplicate_code` , `l1_0` . `is_revoked` , `l1_0` . `name` , `tlje1_0` . `semester` , `tlje1_0` . `updated_at` , `u1_0` . `id` , `u1_0` . `associated_major` , `u1_0` . `auth_id` , `u1_0` . `completed_semester_count` , `u1_0` . `created_at` , `u1_0` . `dual_major` , `u1_0` . `english_level` , `u1_0` . `entry_year` , `u1_0` . `exchange_credit` , `u1_0` . `graduated` , `u1_0` . `honors_college` , `u1_0` . `honors_target_major` , `u1_0` . `major` , `u1_0` . `name` , `u1_0` . `password` , `u1_0` . `student_category` , `u1_0` . `student_number` , `u1_0` . `sub_major` , `u1_0` . `taken_credit` , `u1_0` . `taken_lecture_revision` , `u1_0` . `total_credit` , `u1_0` . `transfer_credit` , `u1_0` . `updated_at` , `tlje1_0` . `year` FROM `taken_lecture` `tlje1_0` JOIN `lecture` `l1_0` ON `l1_0` . `id` = `tlje1_0` . `lecture_id` JOIN SYSTEM_USER `u1_0` ON `u1_0` . `id` =",
+      "count" : 1,
+      "serverMs" : 1.251416,
+      "rows" : 120
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `core_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `core_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ?",
+      "count" : 1,
+      "serverMs" : 0.498083,
+      "rows" : 32
+    } ],
+    "mode" : "off"
+  }, {
+    "variant" : "optimized",
+    "endpoint" : "/api/v1/graduations/credits",
+    "selects" : 8,
+    "cache" : {
+      "hit" : 1.0,
+      "load" : 0.0,
+      "local_hit" : 1.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "sqlProfile" : [ {
+      "sql" : "SELECT DISTINCTROW `ompje1_0` . `id` , `ompje1_0` . `end_entry_year` , `l1_0` . `policy_id` , `l1_0` . `id` , `l1_0` . `equivalence_key` , `l1_0` . `lecture_id` , `l2_0` . `id` , `l2_0` . `credit` , `l2_0` . `duplicate_code` , `l2_0` . `is_revoked` , `l2_0` . `name` , `ompje1_0` . `major` , `ompje1_0` . `major_type` , `ompje1_0` . `name` , `ompje1_0` . `policy_category` , `ompje1_0` . `policy_key` , `ompje1_0` . `policy_version` , `ompje1_0` . `required_count` , `ompje1_0` . `required_credit` , `ompje1_0` . `start_entry_year` , `ompje1_0` . `status` FROM `optional_mandatory_policy` `ompje1_0` LEFT JOIN `optional_mandatory_policy_lecture` `l1_0` ON `ompje1_0` . `id` = `l1_0` . `policy_id` LEFT JOIN `lecture` `l2_0` ON `l2_0` . `id` = `l1_0` . `lecture_id` WHERE `ompje1_0` . `major` IN (...) AND `ompje1_0` . `start_entry_year` <= ? AND `ompje1_0` . `end_entry_year` >= ? AND ( `ompje1_0` . `major_type` IS NULL OR `ompje1_0` . `major_type` = ? ) AND `ompje1_0` . `policy_category` = ? AND `ompje1_0` .",
+      "count" : 2,
+      "serverMs" : 0.664333,
+      "rows" : 0
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `common_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `common_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ? AND `ccje1_0` . `lecture_id` NOT IN (...)",
+      "count" : 1,
+      "serverMs" : 0.255958,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT DISTINCTROW `mlje1_0` . `id` , `mlje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `mlje1_0` . `major` , `mlje1_0` . `mandatory` , `mlje1_0` . `start_entry_year` FROM `major` `mlje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `mlje1_0` . `lecture_id` WHERE `mlje1_0` . `major` IN (...) OR `mlje1_0` . `major` = ?",
+      "count" : 1,
+      "serverMs" : 0.544167,
+      "rows" : 64
+    }, {
+      "sql" : "SELECT `baclje1_0` . `id` , `baclje1_0` . `college` , `baclje1_0` . `end_entry_year` , `baclje1_0` . `end_taken_semester` , `baclje1_0` . `end_taken_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `baclje1_0` . `major` , `baclje1_0` . `mapping_key` , `baclje1_0` . `source_policy_key` , `baclje1_0` . `start_entry_year` , `baclje1_0` . `start_taken_semester` , `baclje1_0` . `start_taken_year` FROM `basic_academical_culture` `baclje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `baclje1_0` . `lecture_id` WHERE ( `baclje1_0` . `major` = ? OR ( `baclje1_0` . `major` IS NULL AND `baclje1_0` . `college` = ? AND ( `baclje1_0` . `mapping_key` IS NOT NULL OR NOT EXISTS ( SELECT `baclje2_0` . `id` FROM `basic_academical_culture` `baclje2_0` WHERE `baclje2_0` . `mapping_key` IS NOT NULL AND `baclje2_0` . `major` IS NULL AND `baclje2_0` . `college` = ? AND ( `baclje2_0` . `start_entry_year` IS NULL OR `baclje2_0` . `start_entry_year` <= ? ) AND (",
+      "count" : 1,
+      "serverMs" : 0.217541,
+      "rows" : 12
+    }, {
+      "sql" : "SELECT `uje1_0` . `id` , `uje1_0` . `associated_major` , `uje1_0` . `auth_id` , `uje1_0` . `completed_semester_count` , `uje1_0` . `created_at` , `uje1_0` . `dual_major` , `uje1_0` . `english_level` , `uje1_0` . `entry_year` , `uje1_0` . `exchange_credit` , `uje1_0` . `graduated` , `uje1_0` . `honors_college` , `uje1_0` . `honors_target_major` , `uje1_0` . `major` , `uje1_0` . `name` , `uje1_0` . `password` , `uje1_0` . `student_category` , `uje1_0` . `student_number` , `uje1_0` . `sub_major` , `uje1_0` . `taken_credit` , `uje1_0` . `taken_lecture_revision` , `uje1_0` . `total_credit` , `uje1_0` . `transfer_credit` , `uje1_0` . `updated_at` , ( SELECT `lcrje1_0` . `revision` FROM `lecture_catalog_revision` `lcrje1_0` WHERE `lcrje1_0` . `id` = ? ) FROM SYSTEM_USER `uje1_0` WHERE `uje1_0` . `id` = ?",
+      "count" : 1,
+      "serverMs" : 0.215833,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT @@SESSION . `transaction_isolation`",
+      "count" : 1,
+      "serverMs" : 0.061125,
+      "rows" : 1
+    }, {
+      "sql" : "SELECT `ccje1_0` . `id` , `ccje1_0` . `core_culture_category` , `ccje1_0` . `end_entry_year` , `lje1_0` . `id` , `lje1_0` . `credit` , `lje1_0` . `duplicate_code` , `lje1_0` . `is_revoked` , `lje1_0` . `name` , `ccje1_0` . `start_entry_year` FROM `core_culture` `ccje1_0` JOIN `lecture` `lje1_0` ON `lje1_0` . `id` = `ccje1_0` . `lecture_id` WHERE `ccje1_0` . `start_entry_year` <= ? AND `ccje1_0` . `end_entry_year` >= ?",
+      "count" : 1,
+      "serverMs" : 0.147292,
+      "rows" : 32
+    } ],
+    "mode" : "on"
+  } ],
+  "measurements" : [ {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.181708,
+    "p95Ms" : 8.65675,
+    "p99Ms" : 13.040042,
+    "maxMs" : 17.40525,
+    "throughputPerSecond" : 151.0714367513736,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 513.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.773625,
+    "p95Ms" : 14.507709,
+    "p99Ms" : 24.006208,
+    "maxMs" : 25.073333,
+    "throughputPerSecond" : 386.781409320135,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 267.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 15.363041,
+    "p95Ms" : 20.460125,
+    "p99Ms" : 25.003583,
+    "maxMs" : 25.122541,
+    "throughputPerSecond" : 507.21884225220185,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 453.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.009000000000000008
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.901666,
+    "p95Ms" : 8.361291,
+    "p99Ms" : 11.112958,
+    "maxMs" : 13.954167,
+    "throughputPerSecond" : 160.2336044383827,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 231.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.0069999999999999785
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 10.489584,
+    "p95Ms" : 14.91375,
+    "p99Ms" : 22.023625,
+    "maxMs" : 22.782,
+    "throughputPerSecond" : 361.3042521221869,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 62.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 13.45725,
+    "p95Ms" : 17.839625,
+    "p99Ms" : 20.176792,
+    "maxMs" : 20.298667,
+    "throughputPerSecond" : 566.5028978585332,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 133.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.655417,
+    "p95Ms" : 10.220917,
+    "p99Ms" : 14.817542,
+    "maxMs" : 32.958667,
+    "throughputPerSecond" : 138.78983396995037,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 610.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.01200000000000001
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 10.889541,
+    "p95Ms" : 14.789292,
+    "p99Ms" : 17.950166,
+    "maxMs" : 17.998959,
+    "throughputPerSecond" : 354.56488059621836,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 544.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.011999999999999983
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 15.556375,
+    "p95Ms" : 22.416625,
+    "p99Ms" : 24.928916,
+    "maxMs" : 25.481958,
+    "throughputPerSecond" : 488.7235373688472,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 370.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.01200000000000001
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.64425,
+    "p95Ms" : 8.2585,
+    "p99Ms" : 12.650167,
+    "maxMs" : 15.163375,
+    "throughputPerSecond" : 163.733853866223,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 456.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0049999999999999906
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.767458,
+    "p95Ms" : 12.360709,
+    "p99Ms" : 17.860917,
+    "maxMs" : 17.998333,
+    "throughputPerSecond" : 401.1291681623048,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 349.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.8715,
+    "p95Ms" : 15.523,
+    "p99Ms" : 17.418791,
+    "maxMs" : 18.339291,
+    "throughputPerSecond" : 644.6177006343258,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 276.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.625667,
+    "p95Ms" : 7.565666,
+    "p99Ms" : 9.19125,
+    "maxMs" : 11.775916,
+    "throughputPerSecond" : 169.2046320841425,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 189.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.646125,
+    "p95Ms" : 13.020167,
+    "p99Ms" : 14.311833,
+    "maxMs" : 15.168166,
+    "throughputPerSecond" : 410.48879032881996,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 204.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.00799999999999998
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.294583,
+    "p95Ms" : 16.065042,
+    "p99Ms" : 20.300625,
+    "maxMs" : 21.407125,
+    "throughputPerSecond" : 623.6532682720054,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 394.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.103,
+    "p95Ms" : 11.816166,
+    "p99Ms" : 20.266542,
+    "maxMs" : 30.687333,
+    "throughputPerSecond" : 144.24146246193413,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 513.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.96925,
+    "p95Ms" : 14.877583,
+    "p99Ms" : 22.774542,
+    "maxMs" : 25.374458,
+    "throughputPerSecond" : 376.34530878545525,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 307.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0040000000000000036
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.564291,
+    "p95Ms" : 17.220167,
+    "p99Ms" : 25.560042,
+    "maxMs" : 26.078583,
+    "throughputPerSecond" : 596.4742778234281,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 386.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.00899999999999998
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.536958,
+    "p95Ms" : 8.271042,
+    "p99Ms" : 14.943417,
+    "maxMs" : 26.052583,
+    "throughputPerSecond" : 162.80643818382018,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 453.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.018000000000000016
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.092542,
+    "p95Ms" : 12.286875,
+    "p99Ms" : 17.546625,
+    "maxMs" : 18.2945,
+    "throughputPerSecond" : 421.49367109471086,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 190.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.848417,
+    "p95Ms" : 15.977459,
+    "p99Ms" : 19.608,
+    "maxMs" : 19.983125,
+    "throughputPerSecond" : 643.7796571915238,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 248.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.009999999999999981
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.586042,
+    "p95Ms" : 7.429417,
+    "p99Ms" : 10.378917,
+    "maxMs" : 11.845333,
+    "throughputPerSecond" : 169.60900376463528,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 116.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.010000000000000009
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.509542,
+    "p95Ms" : 13.604125,
+    "p99Ms" : 17.908959,
+    "maxMs" : 18.695333,
+    "throughputPerSecond" : 404.4070540962563,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 74.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.578834,
+    "p95Ms" : 17.404667,
+    "p99Ms" : 38.323917,
+    "maxMs" : 40.72275,
+    "throughputPerSecond" : 591.1062377138414,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 366.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.009000000000000008
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.86575,
+    "p95Ms" : 8.990208,
+    "p99Ms" : 11.323709,
+    "maxMs" : 26.968084,
+    "throughputPerSecond" : 155.03576037891864,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 665.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.009999999999999981
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.98325,
+    "p95Ms" : 13.764959,
+    "p99Ms" : 22.781041,
+    "maxMs" : 25.884875,
+    "throughputPerSecond" : 384.8824874333738,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 291.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.908291,
+    "p95Ms" : 18.795041,
+    "p99Ms" : 20.989459,
+    "maxMs" : 22.430166,
+    "throughputPerSecond" : 584.8229685590126,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 288.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.013000000000000012
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.995125,
+    "p95Ms" : 6.83375,
+    "p99Ms" : 9.106,
+    "maxMs" : 12.848584,
+    "throughputPerSecond" : 187.0955474792103,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 651.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 7.93175,
+    "p95Ms" : 11.793417,
+    "p99Ms" : 16.388708,
+    "maxMs" : 16.746625,
+    "throughputPerSecond" : 484.62743477170295,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 199.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.509708,
+    "p95Ms" : 15.202041,
+    "p99Ms" : 18.343125,
+    "maxMs" : 21.154084,
+    "throughputPerSecond" : 716.345407204588,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 263.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.005999999999999978
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.815125,
+    "p95Ms" : 6.959875,
+    "p99Ms" : 9.840042,
+    "maxMs" : 12.7115,
+    "throughputPerSecond" : 191.20218898144725,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 174.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.186291,
+    "p95Ms" : 11.378209,
+    "p99Ms" : 12.438209,
+    "maxMs" : 12.509208,
+    "throughputPerSecond" : 477.9491250837568,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 256.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0040000000000000036
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.035708,
+    "p95Ms" : 13.5785,
+    "p99Ms" : 17.223375,
+    "maxMs" : 18.658083,
+    "throughputPerSecond" : 763.6117766387669,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 104.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.721667,
+    "p95Ms" : 6.614709,
+    "p99Ms" : 11.8265,
+    "maxMs" : 13.653167,
+    "throughputPerSecond" : 197.41702870490587,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 116.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.498,
+    "p95Ms" : 11.567666,
+    "p99Ms" : 12.884917,
+    "maxMs" : 12.902625,
+    "throughputPerSecond" : 447.24333881128774,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 51.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 1,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.742458,
+    "p95Ms" : 16.818208,
+    "p99Ms" : 20.880417,
+    "maxMs" : 22.528417,
+    "throughputPerSecond" : 698.4021856583701,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 285.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.005999999999999978
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.900875,
+    "p95Ms" : 7.225209,
+    "p99Ms" : 11.602417,
+    "maxMs" : 13.600917,
+    "throughputPerSecond" : 185.83558580702723,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 514.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0059999999999999915
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.033459,
+    "p95Ms" : 12.548958,
+    "p99Ms" : 18.748709,
+    "maxMs" : 19.74125,
+    "throughputPerSecond" : 471.6279164949907,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 127.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.77075,
+    "p95Ms" : 16.788958,
+    "p99Ms" : 22.54875,
+    "maxMs" : 24.552167,
+    "throughputPerSecond" : 686.8373469517344,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 411.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.808584,
+    "p95Ms" : 6.692625,
+    "p99Ms" : 9.528459,
+    "maxMs" : 10.979834,
+    "throughputPerSecond" : 193.69435346281304,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 144.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0069999999999999785
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.069375,
+    "p95Ms" : 11.333584,
+    "p99Ms" : 15.981292,
+    "maxMs" : 16.050042,
+    "throughputPerSecond" : 471.19626210018197,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 426.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.752542,
+    "p95Ms" : 13.586791,
+    "p99Ms" : 16.436,
+    "maxMs" : 18.222917,
+    "throughputPerSecond" : 720.2871586822697,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 408.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0040000000000000036
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.840042,
+    "p95Ms" : 7.051791,
+    "p99Ms" : 10.396459,
+    "maxMs" : 23.366,
+    "throughputPerSecond" : 189.48174413439364,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 414.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.093333,
+    "p95Ms" : 10.578375,
+    "p99Ms" : 13.978084,
+    "maxMs" : 14.274167,
+    "throughputPerSecond" : 489.5378807025506,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 78.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.418916,
+    "p95Ms" : 14.105209,
+    "p99Ms" : 16.472,
+    "maxMs" : 17.200833,
+    "throughputPerSecond" : 725.688376371473,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 360.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.6795,
+    "p95Ms" : 8.471166,
+    "p99Ms" : 11.466208,
+    "maxMs" : 17.240042,
+    "throughputPerSecond" : 164.63944820697915,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 499.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.860709,
+    "p95Ms" : 12.738292,
+    "p99Ms" : 18.966334,
+    "maxMs" : 20.021583,
+    "throughputPerSecond" : 426.0593148527509,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 230.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.00799999999999998
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.624375,
+    "p95Ms" : 16.413333,
+    "p99Ms" : 21.513292,
+    "maxMs" : 23.891958,
+    "throughputPerSecond" : 655.1979531574993,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 245.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.009000000000000008
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.59875,
+    "p95Ms" : 8.260291,
+    "p99Ms" : 11.830041,
+    "maxMs" : 14.97175,
+    "throughputPerSecond" : 162.80937473559507,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 95.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.01100000000000001
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.620833,
+    "p95Ms" : 12.65175,
+    "p99Ms" : 24.983,
+    "maxMs" : 26.642625,
+    "throughputPerSecond" : 404.27425270457104,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 130.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.00899999999999998
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.084292,
+    "p95Ms" : 16.891958,
+    "p99Ms" : 22.46875,
+    "maxMs" : 24.150959,
+    "throughputPerSecond" : 628.3444718572447,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 309.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.812042,
+    "p95Ms" : 8.333709,
+    "p99Ms" : 11.818542,
+    "maxMs" : 14.548334,
+    "throughputPerSecond" : 160.58249070420894,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 301.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.010000000000000009
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 10.771916,
+    "p95Ms" : 15.50925,
+    "p99Ms" : 17.805375,
+    "maxMs" : 19.896125,
+    "throughputPerSecond" : 360.7419590680735,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 395.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.720291,
+    "p95Ms" : 19.071125,
+    "p99Ms" : 21.951375,
+    "maxMs" : 23.079333,
+    "throughputPerSecond" : 586.2573419533641,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 73.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.010999999999999982
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 8.228666,
+    "p95Ms" : 37.400791,
+    "p99Ms" : 83.6595,
+    "maxMs" : 123.450166,
+    "throughputPerSecond" : 77.54903644943555,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 1017.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.027999999999999997
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 11.8985,
+    "p95Ms" : 21.138417,
+    "p99Ms" : 32.594375,
+    "maxMs" : 33.271958,
+    "throughputPerSecond" : 289.65871236787575,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 597.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 14.852,
+    "p95Ms" : 24.43825,
+    "p99Ms" : 27.828209,
+    "maxMs" : 28.640083,
+    "throughputPerSecond" : 502.905978679728,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 280.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.0040000000000000036
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.611917,
+    "p95Ms" : 17.658042,
+    "p99Ms" : 26.599875,
+    "maxMs" : 41.017416,
+    "throughputPerSecond" : 122.81883783014374,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 126.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0069999999999999785
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 18.382875,
+    "p95Ms" : 39.857667,
+    "p99Ms" : 74.579916,
+    "maxMs" : 77.998875,
+    "throughputPerSecond" : 182.85668571542857,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 290.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.04400000000000001
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 19.649208,
+    "p95Ms" : 42.713666,
+    "p99Ms" : 90.815,
+    "maxMs" : 118.663959,
+    "throughputPerSecond" : 329.8260682843032,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 713.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.017000000000000015
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.033167,
+    "p95Ms" : 8.858125,
+    "p99Ms" : 16.957,
+    "maxMs" : 22.808917,
+    "throughputPerSecond" : 154.50070822883245,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 591.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.00899999999999998
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.208459,
+    "p95Ms" : 12.783167,
+    "p99Ms" : 30.785583,
+    "maxMs" : 31.992,
+    "throughputPerSecond" : 402.1015039276887,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 326.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 13.894542,
+    "p95Ms" : 89.097625,
+    "p99Ms" : 148.405917,
+    "maxMs" : 185.090334,
+    "throughputPerSecond" : 328.1071049455753,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 161.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.010000000000000009
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.985833,
+    "p95Ms" : 7.8505,
+    "p99Ms" : 12.84375,
+    "maxMs" : 18.697291,
+    "throughputPerSecond" : 158.50934895632187,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 237.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.597792,
+    "p95Ms" : 13.396333,
+    "p99Ms" : 26.718542,
+    "maxMs" : 26.98975,
+    "throughputPerSecond" : 395.59818028422177,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 405.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.009000000000000008
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 13.293125,
+    "p95Ms" : 18.859959,
+    "p99Ms" : 20.586167,
+    "maxMs" : 21.120417,
+    "throughputPerSecond" : 578.4577585552717,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 407.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.04625,
+    "p95Ms" : 7.617458,
+    "p99Ms" : 13.35725,
+    "maxMs" : 37.116458,
+    "throughputPerSecond" : 156.65475998700867,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 158.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.005999999999999978
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.865709,
+    "p95Ms" : 14.153167,
+    "p99Ms" : 22.516875,
+    "maxMs" : 22.586333,
+    "throughputPerSecond" : 389.15185138375114,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 43.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 13.009875,
+    "p95Ms" : 17.881959,
+    "p99Ms" : 24.069959,
+    "maxMs" : 26.5305,
+    "throughputPerSecond" : 588.6644907685312,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 299.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.257292,
+    "p95Ms" : 8.322625,
+    "p99Ms" : 10.189875,
+    "maxMs" : 12.034083,
+    "throughputPerSecond" : 154.3517315204374,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 544.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.808,
+    "p95Ms" : 12.953917,
+    "p99Ms" : 16.482792,
+    "maxMs" : 17.129334,
+    "throughputPerSecond" : 396.1397183053352,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 235.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 2,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 13.474167,
+    "p95Ms" : 17.921791,
+    "p99Ms" : 19.823208,
+    "maxMs" : 20.901417,
+    "throughputPerSecond" : 575.3575770177323,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 226.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.005999999999999978
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.066667,
+    "p95Ms" : 8.348209,
+    "p99Ms" : 12.949458,
+    "maxMs" : 19.373,
+    "throughputPerSecond" : 157.22125084623673,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 212.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.209625,
+    "p95Ms" : 12.404708,
+    "p99Ms" : 16.469833,
+    "maxMs" : 16.518125,
+    "throughputPerSecond" : 421.51165684888815,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 576.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0069999999999999785
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.068,
+    "p95Ms" : 16.929333,
+    "p99Ms" : 21.483042,
+    "maxMs" : 26.178292,
+    "throughputPerSecond" : 620.9892754715493,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 272.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.955166,
+    "p95Ms" : 8.014125,
+    "p99Ms" : 9.531209,
+    "maxMs" : 15.174,
+    "throughputPerSecond" : 161.25372811690536,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 257.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.250208,
+    "p95Ms" : 12.050625,
+    "p99Ms" : 14.912542,
+    "maxMs" : 15.18475,
+    "throughputPerSecond" : 421.92344641205466,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 61.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.171541,
+    "p95Ms" : 18.900083,
+    "p99Ms" : 25.598792,
+    "maxMs" : 26.495666,
+    "throughputPerSecond" : 608.7359959590583,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 298.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.00899999999999998
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 6.30125,
+    "p95Ms" : 8.790792,
+    "p99Ms" : 11.597583,
+    "maxMs" : 14.311042,
+    "throughputPerSecond" : 150.95944753559684,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 257.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 10.800583,
+    "p95Ms" : 17.631875,
+    "p99Ms" : 25.660083,
+    "maxMs" : 28.292042,
+    "throughputPerSecond" : 341.95049074628406,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 170.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 14.745625,
+    "p95Ms" : 23.779125,
+    "p99Ms" : 29.336708,
+    "maxMs" : 30.824458,
+    "throughputPerSecond" : 502.62714833314595,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 190.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.013999999999999985
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.874666,
+    "p95Ms" : 8.859709,
+    "p99Ms" : 13.107292,
+    "maxMs" : 15.409,
+    "throughputPerSecond" : 157.7484017836725,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 556.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0049999999999999906
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.048125,
+    "p95Ms" : 12.461917,
+    "p99Ms" : 16.656083,
+    "maxMs" : 17.074375,
+    "throughputPerSecond" : 421.4446939066559,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 342.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.838333,
+    "p95Ms" : 16.907333,
+    "p99Ms" : 22.420042,
+    "maxMs" : 24.526166,
+    "throughputPerSecond" : 635.333255927462,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 263.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.688458,
+    "p95Ms" : 8.098875,
+    "p99Ms" : 11.973167,
+    "maxMs" : 20.709375,
+    "throughputPerSecond" : 163.2462595455758,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 104.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0069999999999999785
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.5045,
+    "p95Ms" : 15.628042,
+    "p99Ms" : 20.56425,
+    "maxMs" : 21.736708,
+    "throughputPerSecond" : 389.35742856097534,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 66.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.01200000000000001
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.80025,
+    "p95Ms" : 18.778417,
+    "p99Ms" : 21.589834,
+    "maxMs" : 27.388,
+    "throughputPerSecond" : 586.9069693671152,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 341.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.770833,
+    "p95Ms" : 7.609375,
+    "p99Ms" : 10.056083,
+    "maxMs" : 15.515458,
+    "throughputPerSecond" : 165.73919137463622,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 402.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.249667,
+    "p95Ms" : 14.132292,
+    "p99Ms" : 17.174292,
+    "maxMs" : 17.32775,
+    "throughputPerSecond" : 411.62718154366627,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 441.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0040000000000000036
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "previous",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.759,
+    "p95Ms" : 17.137583,
+    "p99Ms" : 40.578833,
+    "maxMs" : 54.067958,
+    "throughputPerSecond" : 605.9958871153829,
+    "selectsPerRequest" : 10.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3840,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 271.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.005999999999999978
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.752292,
+    "p95Ms" : 7.668042,
+    "p99Ms" : 10.916583,
+    "maxMs" : 18.59475,
+    "throughputPerSecond" : 166.39116860569598,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 440.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.630375,
+    "p95Ms" : 12.592,
+    "p99Ms" : 16.290959,
+    "maxMs" : 18.171083,
+    "throughputPerSecond" : 443.6348365410693,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 244.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.748083,
+    "p95Ms" : 16.862041,
+    "p99Ms" : 20.047542,
+    "maxMs" : 20.650041,
+    "throughputPerSecond" : 649.7664862771636,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 213.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.606625,
+    "p95Ms" : 6.92075,
+    "p99Ms" : 8.804292,
+    "maxMs" : 12.055208,
+    "throughputPerSecond" : 174.19480175557132,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 94.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.0985,
+    "p95Ms" : 11.297041,
+    "p99Ms" : 15.330833,
+    "maxMs" : 16.85475,
+    "throughputPerSecond" : 432.319707016214,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 118.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.003999999999999976
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 12.0365,
+    "p95Ms" : 18.441291,
+    "p99Ms" : 21.935583,
+    "maxMs" : 24.01675,
+    "throughputPerSecond" : 635.4255544885555,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 329.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.948375,
+    "p95Ms" : 8.388584,
+    "p99Ms" : 11.87675,
+    "maxMs" : 22.759291,
+    "throughputPerSecond" : 158.88731708369156,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 348.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 9.363208,
+    "p95Ms" : 11.998042,
+    "p99Ms" : 13.89825,
+    "maxMs" : 14.533417,
+    "throughputPerSecond" : 417.53577808084736,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 247.0,
+      "jvm_gc_pause_seconds_count" : 4.0,
+      "jvm_gc_pause_seconds_sum" : 0.008000000000000007
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "off",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 13.042625,
+    "p95Ms" : 17.930292,
+    "p99Ms" : 19.526375,
+    "maxMs" : 20.086708,
+    "throughputPerSecond" : 596.3626157477522,
+    "selectsPerRequest" : 9.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3456,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "transaction_bypass" : 384.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 257.0,
+      "jvm_gc_pause_seconds_count" : 5.0,
+      "jvm_gc_pause_seconds_sum" : 0.010999999999999982
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.14475,
+    "p95Ms" : 6.952459,
+    "p99Ms" : 12.707125,
+    "maxMs" : 15.150583,
+    "throughputPerSecond" : 182.96424951893042,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 490.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 7.788584,
+    "p95Ms" : 10.924875,
+    "p99Ms" : 15.909042,
+    "maxMs" : 20.175125,
+    "throughputPerSecond" : 481.9649361020301,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 174.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.0040000000000000036
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 30,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.465834,
+    "p95Ms" : 15.546084,
+    "p99Ms" : 19.317,
+    "maxMs" : 21.002875,
+    "throughputPerSecond" : 713.3368210673999,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 216.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 705.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 5.270792,
+    "p95Ms" : 10.023375,
+    "p99Ms" : 36.954291,
+    "maxMs" : 159.165875,
+    "throughputPerSecond" : 144.2625240001841,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 128.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.0069999999999999785
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 8.732958,
+    "p95Ms" : 14.3795,
+    "p99Ms" : 24.395375,
+    "maxMs" : 25.369917,
+    "throughputPerSecond" : 414.6192331639309,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 449.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.007000000000000006
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 60,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 11.050709,
+    "p95Ms" : 18.206792,
+    "p99Ms" : 21.685833,
+    "maxMs" : 24.059458,
+    "throughputPerSecond" : 661.8234438535454,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 297.0,
+      "jvm_gc_pause_seconds_count" : 2.0,
+      "jvm_gc_pause_seconds_sum" : 0.0050000000000000044
+    },
+    "responseBytesMean" : 705.0,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 1,
+    "requests" : 384,
+    "p50Ms" : 4.996792,
+    "p95Ms" : 8.378208,
+    "p99Ms" : 11.348584,
+    "maxMs" : 12.684125,
+    "throughputPerSecond" : 182.69866985691024,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 475.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 4,
+    "requests" : 384,
+    "p50Ms" : 7.821666,
+    "p95Ms" : 10.961334,
+    "p99Ms" : 14.941542,
+    "maxMs" : 15.097459,
+    "throughputPerSecond" : 480.19828227422096,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 67.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.006000000000000005
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  }, {
+    "variant" : "optimized",
+    "mode" : "on",
+    "round" : 3,
+    "size" : 120,
+    "endpoint" : "/api/v1/graduations/credits",
+    "concurrency" : 8,
+    "requests" : 384,
+    "p50Ms" : 10.847041,
+    "p95Ms" : 15.805208,
+    "p99Ms" : 27.620167,
+    "maxMs" : 29.294792,
+    "throughputPerSecond" : 689.7421953829484,
+    "selectsPerRequest" : 8.0,
+    "dbStatements" : {
+      "Com_delete" : 0,
+      "Com_insert" : 0,
+      "Com_select" : 3072,
+      "Com_update" : 0
+    },
+    "cache" : {
+      "hit" : 384.0,
+      "load" : 0.0,
+      "local_hit" : 384.0,
+      "miss" : 0.0,
+      "put" : 0.0
+    },
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 266.0,
+      "jvm_gc_pause_seconds_count" : 3.0,
+      "jvm_gc_pause_seconds_sum" : 0.004999999999999977
+    },
+    "responseBytesMean" : 706.75,
+    "appCpuAvailable" : false
+  } ],
+  "checks" : [ ],
+  "runtimeMetricsDefinition" : "Prometheus JVM compilation cumulative ms and GC pause cumulative seconds/count; per-batch deltas; labels aggregated",
+  "warmups" : [ {
+    "requests" : 3072,
+    "variant" : "previous",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16633.0,
+      "jvm_gc_pause_seconds_count" : 38.0,
+      "jvm_gc_pause_seconds_sum" : 0.145
+    },
+    "elapsedMs" : 12030.54825,
+    "round" : 1,
+    "mode" : "off"
+  }, {
+    "requests" : 3456,
+    "variant" : "previous",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 15738.0,
+      "jvm_gc_pause_seconds_count" : 32.0,
+      "jvm_gc_pause_seconds_sum" : 0.114
+    },
+    "elapsedMs" : 11834.029791,
+    "round" : 1,
+    "mode" : "on"
+  }, {
+    "requests" : 3456,
+    "variant" : "optimized",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16503.0,
+      "jvm_gc_pause_seconds_count" : 41.0,
+      "jvm_gc_pause_seconds_sum" : 0.142
+    },
+    "elapsedMs" : 11900.186459,
+    "round" : 1,
+    "mode" : "off"
+  }, {
+    "requests" : 3840,
+    "variant" : "optimized",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16754.0,
+      "jvm_gc_pause_seconds_count" : 36.0,
+      "jvm_gc_pause_seconds_sum" : 0.122
+    },
+    "elapsedMs" : 11631.592459,
+    "round" : 1,
+    "mode" : "on"
+  }, {
+    "requests" : 4032,
+    "variant" : "optimized",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16101.0,
+      "jvm_gc_pause_seconds_count" : 34.0,
+      "jvm_gc_pause_seconds_sum" : 0.114
+    },
+    "elapsedMs" : 11823.483375,
+    "round" : 2,
+    "mode" : "on"
+  }, {
+    "requests" : 3456,
+    "variant" : "optimized",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 15986.0,
+      "jvm_gc_pause_seconds_count" : 37.0,
+      "jvm_gc_pause_seconds_sum" : 0.134
+    },
+    "elapsedMs" : 11802.651667,
+    "round" : 2,
+    "mode" : "off"
+  }, {
+    "requests" : 3456,
+    "variant" : "previous",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16473.0,
+      "jvm_gc_pause_seconds_count" : 30.0,
+      "jvm_gc_pause_seconds_sum" : 0.126
+    },
+    "elapsedMs" : 11997.566375,
+    "round" : 2,
+    "mode" : "on"
+  }, {
+    "requests" : 3264,
+    "variant" : "previous",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16906.0,
+      "jvm_gc_pause_seconds_count" : 33.0,
+      "jvm_gc_pause_seconds_sum" : 0.143
+    },
+    "elapsedMs" : 11889.17675,
+    "round" : 2,
+    "mode" : "off"
+  }, {
+    "requests" : 3264,
+    "variant" : "previous",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16403.0,
+      "jvm_gc_pause_seconds_count" : 38.0,
+      "jvm_gc_pause_seconds_sum" : 0.133
+    },
+    "elapsedMs" : 11721.589625,
+    "round" : 3,
+    "mode" : "off"
+  }, {
+    "requests" : 3456,
+    "variant" : "previous",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16552.0,
+      "jvm_gc_pause_seconds_count" : 29.0,
+      "jvm_gc_pause_seconds_sum" : 0.115
+    },
+    "elapsedMs" : 11719.190209,
+    "round" : 3,
+    "mode" : "on"
+  }, {
+    "requests" : 3456,
+    "variant" : "optimized",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 15955.0,
+      "jvm_gc_pause_seconds_count" : 35.0,
+      "jvm_gc_pause_seconds_sum" : 0.142
+    },
+    "elapsedMs" : 11759.253083,
+    "round" : 3,
+    "mode" : "off"
+  }, {
+    "requests" : 3840,
+    "variant" : "optimized",
+    "jvm" : {
+      "jvm_compilation_time_ms_total" : 16090.0,
+      "jvm_gc_pause_seconds_count" : 31.0,
+      "jvm_gc_pause_seconds_sum" : 0.12
+    },
+    "elapsedMs" : 11571.45675,
+    "round" : 3,
+    "mode" : "on"
+  } ],
+  "protocol" : {
+    "performanceEndpoints" : [ "/api/v1/graduations/credits" ],
+    "order" : "off/shadow/on; shadow/on/off; on/off/shadow",
+    "warmup" : "at least 3072 credits GETs and 10 seconds, concurrency 4, then 1500ms quiet",
+    "requestsPerBatch" : 384,
+    "steady" : true,
+    "concurrency" : [ 1, 4, 8 ],
+    "rounds" : 3,
+    "comparison" : "all fields; taken-list ordering preserved; other collection ordering normalized"
+  },
+  "productionAccessed" : false,
+  "sqlObservation" : "server Com_select; warmed independent observer pool adds zero SELECTs; includes app transaction metadata SELECTs",
+  "modeOrder" : [ [ "off", "on" ], [ "on", "off" ], [ "off", "on" ] ],
+  "complete" : true,
+  "httpRequests" : 83822,
+  "finishedAt" : "2026-10-29T05:02:59.911864Z"
+}

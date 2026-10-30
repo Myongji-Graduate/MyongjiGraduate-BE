@@ -1,0 +1,31 @@
+{
+  "totals": {
+    "tests": 23,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 23
+  },
+  "suites": [
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheBenchmarkIntegrationTest",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T05:21:54",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "0.0"
+    },
+    {
+      "name": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+      "tests": "22",
+      "skipped": "22",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-27T05:21:54",
+      "hostname": "bagjinhyeon-ui-MacBookPro.local",
+      "time": "0.003"
+    }
+  ],
+  "command": "Both opt-in flags=false, deliberately unavailable Docker socket; targeted two container test classes"
+}

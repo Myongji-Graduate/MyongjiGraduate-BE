@@ -16,9 +16,18 @@ jobs:
       DEPLOYMENT_ID: gha-${{ github.run_id }}-${{ github.run_attempt }}
       DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/mju-graduate-server
       SHARED_MASTER_CACHE_ENABLED: ${{ vars.SHARED_MASTER_CACHE_ENABLED || 'false' }}
+      # Keep off until migrations and all revision-aware writers have been verified.
+      TAKEN_LECTURE_CACHE_MODE: ${{ vars.TAKEN_LECTURE_CACHE_MODE || 'off' }}
+      TAKEN_LECTURE_CACHE_NAMESPACE: ${{ vars.TAKEN_LECTURE_CACHE_NAMESPACE || 'prod-dev121-v3' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Run before image publication or any production SSH step.
+      - name: Check DEV-121 release inputs
+        run: |
+          python3 -m unittest discover -s infra/cache -p 'test_*.py'
+          python3 infra/cache/check_release.py
 
       - name: Test Autoheal deployment script
         run: python3 -m unittest discover -s infra/deployment -p 'test_*.py'
@@ -43,9 +52,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle 8.10 기준 빌드 (테스트 제외)
-      - name: Build without tests
-        run: ./gradlew clean build -x test --no-daemon
+      # The deploy workflow must verify its own revision before publishing an image.
+      - name: Test and build
+        run: ./gradlew clean build --no-daemon
 
       # Docker 빌드 (시크릿은 빌드 인자에서 제거)
       - name: Login to Docker Hub
@@ -82,7 +91,7 @@ jobs:
           username: ${{ secrets.WAS_USERNAME }}
           key: ${{ secrets.WAS_KEY }}
           command_timeout: 20m
-          envs: DEPLOYMENT_ID,DOCKER_IMAGE,SHARED_MASTER_CACHE_ENABLED
+          envs: DEPLOYMENT_ID,DOCKER_IMAGE,SHARED_MASTER_CACHE_ENABLED,TAKEN_LECTURE_CACHE_MODE,TAKEN_LECTURE_CACHE_NAMESPACE
           script: |
             set -euo pipefail
 
@@ -90,6 +99,15 @@ jobs:
               true|false) ;;
               *) echo "SHARED_MASTER_CACHE_ENABLED must be true or false"; exit 1 ;;
             esac
+
+            case "$TAKEN_LECTURE_CACHE_MODE" in
+              off|shadow|on) ;;
+              *) echo "TAKEN_LECTURE_CACHE_MODE must be off, shadow, or on"; exit 1 ;;
+            esac
+            if [[ ! "$TAKEN_LECTURE_CACHE_NAMESPACE" =~ ^[A-Za-z0-9._-]+$ ]]; then
+              echo "TAKEN_LECTURE_CACHE_NAMESPACE must contain only letters, digits, dot, underscore, or hyphen"
+              exit 1
+            fi
 
             echo "[Disk before]"
             docker system df || true
@@ -153,6 +171,8 @@ jobs:
               -e SHARED_MASTER_CACHE_ENABLED="$SHARED_MASTER_CACHE_ENABLED" \
               -e SHARED_MASTER_CACHE_NAMESPACE=prod \
               -e SHARED_MASTER_CACHE_VERSION="$DEPLOYMENT_ID" \
+              -e TAKEN_LECTURE_CACHE_MODE="$TAKEN_LECTURE_CACHE_MODE" \
+              -e TAKEN_LECTURE_CACHE_NAMESPACE="$TAKEN_LECTURE_CACHE_NAMESPACE" \
               -e SPRING_DATASOURCE_URL='${{ secrets.DATASOURCE_URL }}' \
               -e SPRING_DATASOURCE_USERNAME='${{ secrets.DATASOURCE_USERNAME }}' \
               -e SPRING_DATASOURCE_PASSWORD='${{ secrets.DATASOURCE_PASSWORD }}' \
