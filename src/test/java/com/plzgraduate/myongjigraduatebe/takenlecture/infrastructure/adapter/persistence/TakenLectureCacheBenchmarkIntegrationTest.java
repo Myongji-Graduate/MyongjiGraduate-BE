@@ -194,7 +194,7 @@ class TakenLectureCacheBenchmarkIntegrationTest {
         counterDelta.replaceAll((key, value) -> value - countersBefore.getOrDefault(key, 0.0));
         result.put("cacheCounters", counterDelta);
         if (arm.equals("revision_warm") || arm.equals("redis_v3")) {
-            assertThat(result.get("sqlPerRequest")).as("one versioned context query per warm read").isEqualTo(1.0);
+            assertThat(result).as("one versioned context query per warm read").containsEntry("sqlPerRequest", 1.0);
         }
         if (arm.equals("revision_warm")) {
             assertThat(counterDelta).containsEntry("local_hit", (double) requests);

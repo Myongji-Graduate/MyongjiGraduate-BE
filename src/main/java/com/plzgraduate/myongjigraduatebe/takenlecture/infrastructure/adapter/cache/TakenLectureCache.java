@@ -38,14 +38,14 @@ public final class TakenLectureCache {
 
     public TakenLectureCache(TakenLectureCacheStore store, ObjectMapper mapper, MeterRegistry metrics,
         Options options, LongSupplier ticker) {
-        int localEntries = options.localEntries();
+        int localEntryLimit = options.localEntries();
         String namespace = options.namespace();
-        Duration ttl = options.ttl();
+        Duration cacheTtl = options.ttl();
         Duration cooldown = options.cooldown();
         int maxConcurrent = options.maxConcurrent();
-        if (localEntries < 0 || localEntries > 10000) throw new IllegalArgumentException("Invalid local cache limit");
-        this.localEntries = localEntries;
-        if (!namespace.matches("[A-Za-z0-9._-]+") || ttl.isNegative() || ttl.isZero()
+        if (localEntryLimit < 0 || localEntryLimit > 10000) throw new IllegalArgumentException("Invalid local cache limit");
+        this.localEntries = localEntryLimit;
+        if (!namespace.matches("[A-Za-z0-9._-]+") || cacheTtl.isNegative() || cacheTtl.isZero()
             || cooldown.isNegative() || cooldown.isZero() || maxConcurrent < 1) {
             throw new IllegalArgumentException("Invalid taken lecture cache configuration");
         }
@@ -54,7 +54,7 @@ public final class TakenLectureCache {
         this.metrics = metrics;
         this.mode = options.mode();
         this.prefix = "takenLectures:v3:" + namespace + ":";
-        this.ttl = ttl;
+        this.ttl = cacheTtl;
         this.cooldownNanos = cooldown.toNanos();
         this.ticker = ticker;
         this.redisCapacity = new Semaphore(maxConcurrent);

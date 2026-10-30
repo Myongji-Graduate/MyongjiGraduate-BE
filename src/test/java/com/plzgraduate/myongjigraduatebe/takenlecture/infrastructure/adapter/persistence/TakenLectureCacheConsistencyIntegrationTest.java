@@ -500,7 +500,7 @@ class TakenLectureCacheConsistencyIntegrationTest {
     }
 
     @Test
-    void redisRestartAndMissingPostCommitPublicationAreRecoverable() throws Exception {
+    void redisRestartAndMissingPostCommitPublicationAreRecoverable() {
         writer.generateCustomizedTakenLecture(userId, ADDED);
         // The writer never publishes a personal snapshot; a process loss here cannot expose old revision 0.
         assertThat(redis.hasKey(cache.key(userId, 1, catalogRevision()))).isFalse();
