@@ -54,6 +54,10 @@ jobs:
 
       # The deploy workflow must verify its own revision before publishing an image.
       - name: Test and build
+        # Tests use isolated database fixtures; deployment cache flags belong to the runtime app.
+        env:
+          SHARED_MASTER_CACHE_ENABLED: 'false'
+          TAKEN_LECTURE_CACHE_MODE: 'off'
         run: ./gradlew clean build --no-daemon
 
       # Docker 빌드 (시크릿은 빌드 인자에서 제거)
