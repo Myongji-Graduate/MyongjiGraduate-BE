@@ -107,7 +107,9 @@ class TakenLectureCacheHttpIntegrationTest {
     @Test
     @Timeout(value = 15, unit = TimeUnit.MINUTES)
     void compareModesThroughAuthenticatedProductionJar() throws Exception {
-        output = Path.of("build/dev121/http", Instant.now().toString().replace(':', '-'));
+        output = System.getenv("MJU_HARNESS_HTTP_OUTPUT") == null
+            ? Path.of("build/dev121/http", Instant.now().toString().replace(':', '-'))
+            : Path.of(System.getenv("MJU_HARNESS_HTTP_OUTPUT"));
         Files.createDirectories(output);
         jar = Path.of("build/libs/MyongjiGraduate-BE-0.0.1-SNAPSHOT.jar").toAbsolutePath();
         assertThat(jar).as("Run bootJar before this opt-in test").exists();
@@ -743,9 +745,15 @@ class TakenLectureCacheHttpIntegrationTest {
     }
 
     private static GenericContainer<?> container(String image, int port) {
+        if (System.getenv("MJU_HARNESS_RUN_ID") != null) {
+            assertThat(org.testcontainers.DockerClientFactory.instance().getTransportConfig().getDockerHost())
+                .as("Testcontainers and harness cleanup must use the same Docker endpoint")
+                .isEqualTo(URI.create(System.getenv("DOCKER_HOST")));
+        }
         // Docker chooses the unused host port; these containers are paused, not restarted.
         return new GenericContainer<>(image).withExposedPorts(port).withImagePullPolicy(ignored -> false).withReuse(false)
             .withLabel("mju.test", "dev121-http")
+            .withLabel("mju.harness.run", System.getenv().getOrDefault("MJU_HARNESS_RUN_ID", "manual"))
             .withCreateContainerCmdModifier(command -> command.getHostConfig().withPortBindings(
                 new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1", 0), new ExposedPort(port))));
     }
@@ -765,6 +773,7 @@ class TakenLectureCacheHttpIntegrationTest {
         public void close() throws Exception {
             process.destroy();
             if (!process.waitFor(10, TimeUnit.SECONDS)) { process.destroyForcibly(); process.waitFor(5, TimeUnit.SECONDS); }
+            assertThat(process.isAlive()).as("synthetic HTTP app must stop").isFalse();
             Files.deleteIfExists(config);
             String logs = Files.readString(log);
             assertThat(logs.contains(PASSWORD) || logs.contains(JWT_SECRET)).as("synthetic credentials must not be logged").isFalse();

@@ -111,6 +111,11 @@ class TakenLectureCacheConsistencyIntegrationTest {
     FaultStore store;
 
     static GenericContainer<?> loopbackContainer(String image, int port) {
+        if (System.getenv("MJU_HARNESS_RUN_ID") != null) {
+            assertThat(org.testcontainers.DockerClientFactory.instance().getTransportConfig().getDockerHost())
+                .as("Testcontainers and harness cleanup must use the same Docker endpoint")
+                .isEqualTo(java.net.URI.create(System.getenv("DOCKER_HOST")));
+        }
         // Docker reallocates a host port specified as 0 on restart. Keep the selected
         // loopback-only endpoint stable so the test exercises Redis reconnect, not endpoint changes.
         final int hostPort;
@@ -119,6 +124,7 @@ class TakenLectureCacheConsistencyIntegrationTest {
         } catch (java.io.IOException exception) { throw new IllegalStateException(exception); }
         return new GenericContainer<>(image).withExposedPorts(port).withImagePullPolicy(ignored -> false)
             .withReuse(false).withLabel("mju.test", "dev121-cache")
+            .withLabel("mju.harness.run", System.getenv().getOrDefault("MJU_HARNESS_RUN_ID", "manual"))
             .withCreateContainerCmdModifier(command -> command.getHostConfig().withPortBindings(
                 new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1", hostPort), new ExposedPort(port))));
     }
@@ -240,7 +246,7 @@ class TakenLectureCacheConsistencyIntegrationTest {
         assertSavedCredits(3);
     }
 
-    @RepeatedTest(5)
+    @RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalRepetitions}")
     void concurrentReadCannotPoisonCalculationOrSubsequentRead() throws Exception {
         var inserted = new CountDownLatch(1);
         var resume = new CountDownLatch(1);
@@ -260,7 +266,7 @@ class TakenLectureCacheConsistencyIntegrationTest {
         }
     }
 
-    @RepeatedTest(5)
+    @RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalRepetitions}")
     void rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() {
         probe.after = user -> { throw new PlannedRollback(); };
         assertThatThrownBy(() -> writer.generateCustomizedTakenLecture(userId, ADDED)).isInstanceOf(PlannedRollback.class);
