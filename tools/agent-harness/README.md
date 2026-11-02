@@ -103,4 +103,6 @@ npm run eval:check --prefix tools/agent-harness
 5개 과제의 source anchor가 각각 한 번만 나타나는지, 참조 테스트/요청 경로, 예산을 검사하고
 파일 지문을 출력한다. 파일을 수정하거나 Gradle·Docker·모델을 실행하지 않는다.
 `preparation-valid`는 정적 준비 검사 통과이며 실험 실행 가능/Skill 효과 판정이 아니다.
-실제 모델 비교 실행기는 아직 없고 기준선 커밋·모델 설정·격리 검증도 별도로 필요하다.
+T01 파일럿의 기준선·모델·격리 사전 검사는 [pilot-lock.json](eval/pilot-lock.json)에 고정했다.
+실제 모델 호출은 전송 승인 대기 중이며, 전체 자동 비교·외부 채점 실행기는 아직 없다.
+파일럿의 모델 접근 가능 여부와 실행 결과는 아직 검증되지 않았다.

@@ -1,9 +1,14 @@
 {
   "schemaVersion": 1,
-  "status": "preparation",
+  "status": "pilot-prepared-awaiting-approval",
   "preparationHead": "861228e42f779afa8a517fd3ed05a6bfafc46906",
-  "frozenCommit": null,
-  "agent": { "model": null, "reasoning": null, "clientVersion": null, "configSha256": null },
+  "frozenCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "agent": {
+    "model": "gpt-6-astra",
+    "reasoning": "high",
+    "clientVersion": "0.166.0",
+    "configSha256": "a780c26b5a6ac80089009decf996918d590c08d0c9231090b0291ebedc1553a1"
+  },
   "conditions": ["without-skill", "with-skill"],
   "pilot": { "taskId": "T01", "repetitionsPerCondition": 1, "includedInMainResults": false },
   "main": { "repetitionsPerCondition": 3, "orderSeed": "DEV-122-P3-v1" },
