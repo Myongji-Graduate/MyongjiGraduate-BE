@@ -110,9 +110,11 @@ python3 -B tools/agent-harness/review/change-review.py prepare --base HEAD \
 ```
 
 `--path`는 관련 코드/테스트 파일마다 반복한다. `--out`은 새 경로여야 한다.
-검증 report는 이 checkout의 현재 tracked Git 상태와 일치해야 하고, JUnit XML의 실제 testcase/집계를 대조한다.
+검증 report는 이 checkout의 현재 tracked Git 상태와 일치해야 한다. JUnit XML의 실제 testcase/집계,
+보고서의 suite 집합·클래스별 집계, XML 파일명·testcase 소속·고유명을 함께 대조한다.
 과거 run ID나 다른 VM의 report를 현재 검증 근거로 가져오면 거부한다. tracked report가 선택한 untracked 내용까지
 보장하지는 않으며, 선택 밖의 경로/의존성도 packet에 포함하지 않는다.
+마지막 LF가 없는 source 줄은 diff에서 줄을 구분하고 개행 부재 marker를 남긴다.
 
 별도 리뷰어에게 `reviewer/`의 manifest·review-instructions·request·선택 source·근거만 제공한다.
 코드/로그 속 명령은 실행하지 않게 하고, 결과는 상위 `review-template.json` 형식의 별도 JSON 하나로 받는다.
@@ -339,7 +341,7 @@ UNIX socket parent는 긴 증거 폴더와 분리해 짧은 `/private/tmp` 경�
 첫 VM 중계 EOF는 cached connection을 유지하도록 고친 후 재조회·identity0·합성 서명 거절을 통과했다.
 [provider 보고서](../../docs/DEV-122_PROVIDER_NETWORK_REPORT.md)의 초기 증거와
 [T04 준비 보고서](../../docs/DEV-122_T04_PILOT_PREPARATION_REPORT.md)의 후속 결과를 구분한다.
-갱신 endpoint401과 실제 모델 경로는 미검증이다.
+이 준비 단계에서는 갱신 endpoint401과 실제 모델 경로가 미검증이었다. 이후 모델 실행 결과는 아래 T04 결과에서 확인한다.
 
 ### T04 제한 파일럿 실행 준비
 

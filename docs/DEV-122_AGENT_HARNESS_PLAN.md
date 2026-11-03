@@ -6,7 +6,7 @@
 - 백엔드 브랜치: `chore/DEV-122`
 - 프론트 브랜치: `chore/agent-harness` (별도 프론트 저장소)
 - 기반: 최신 조회한 `origin/develop`, `861228e42f779afa8a517fd3ed05a6bfafc46906`
-- 상태: 기존 T01/T04 작은 실험과 혼합 리뷰를 보존하고, [일상 변경 리뷰](DEV-122_DAILY_REVIEW_REPORT.md)를 추가했다. 도구 리뷰에서 P2 1건을 수정했다. 후속 서비스 검사 보강의 fresh unit24개, 도구 검사23개·평가 보호46개·리뷰 도구12개가 통과했고 독립 리뷰 지적은0개다. 근거와 한계는 [서비스 검증 적용 기록](DEV-122_SERVICE_VERIFICATION_REPORT.md)에서 관리한다. 원격 CI 상태는 [이 브랜치의 PR](https://github.com/Myongji-Graduate/MyongjiGraduate-BE/pulls?q=is%3Apr+head%3Achore%2FDEV-122)의 checks에서 확인한다.
+- 상태: [PR #416](https://github.com/Myongji-Graduate/MyongjiGraduate-BE/pull/416)에 게시했고 최초 head의 원격 CI가 통과했다. 추가 핵심 구현 독립 리뷰에서 발견한4건과 수정·회귀 검사는 [PR 리뷰 기록](DEV-122_PR_REVIEW_REPORT.md)에서 관리한다. 평가 보호 검사는51개, 일상 리뷰 도구 검사는16개로 늘었다. 원격 CI의 현재 head 결과는 PR checks에서 확인한다. 이전 [서비스 검증 적용 기록](DEV-122_SERVICE_VERIFICATION_REPORT.md)과 T01/T04 고정 증거는 유지한다.
 - 다음 작업: 실제 서비스 변경에서의 사용자 피드백을 추가한다. 사람 교정·Skill 효과 일반화는 미완료이며 본 비교30회는 보류한다. 기존 코딩 실험 승인6회는 사용했고 추가 코딩 실험은 실행하지 않는다.
 - 기존 `DEV-116` 체크아웃의 미커밋 변경·데이터·계획은 이 작업에 포함하지 않는다.
 

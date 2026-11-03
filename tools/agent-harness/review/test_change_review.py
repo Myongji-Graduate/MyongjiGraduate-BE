@@ -44,12 +44,15 @@ class ChangeReviewTest(unittest.TestCase):
         code = {'revision': state['head'], 'trackedDiffSha256': state['trackedDiffSha256']}
         report = {'schemaVersion': 1, 'command': 'verify', 'repositoryRoot': str(self.root),
                   'codeBefore': code, 'codeAfter': code, 'suite': 'takenlecture-unit', 'validationScope': 'unit',
-                  'status': 'passed', 'junit': {'totals': {'tests': 1, 'failures': 0, 'errors': 0, 'skipped': 0}},
+                  'status': 'passed', 'junit': {
+                      'suites': [{'name': 'Fixture', 'tests': 1, 'failures': 0, 'errors': 0, 'skipped': 0}],
+                      'totals': {'tests': 1, 'failures': 0, 'errors': 0, 'skipped': 0}},
                   'execution': {'exitCode': 0, 'timedOut': False, 'signal': None}, 'problems': [],
                   'limitations': ['Synthetic fixture'], 'finishedAt': '2026-11-03T00:00:00Z'}
         path = self.write('build/agent-harness/verify-fixture/report.json', json.dumps(report))
         self.write('build/agent-harness/verify-fixture/junit/TEST-Fixture.xml',
-                   '<testsuite tests="1" failures="0" errors="0" skipped="0"><testcase name="synthetic"/></testsuite>')
+                   '<testsuite name="Fixture" tests="1" failures="0" errors="0" skipped="0">'
+                   '<testcase name="synthetic" classname="Fixture"/></testsuite>')
         return path, report
 
     def form(self):
@@ -120,6 +123,58 @@ class ChangeReviewTest(unittest.TestCase):
                    '<testsuite tests="1" failures="0" errors="0" skipped="0"><testcase name="x"><failure/></testcase></testsuite>')
         with self.assertRaisesRegex(ValueError, 'JUnit counters disagree'):self.prepare(reports=[path])
         self.assertFalse(self.out.exists())
+
+    def test_same_totals_from_a_different_suite_are_rejected(self):
+        path, _ = self.report()
+        (path.parent / 'junit/TEST-Fixture.xml').unlink()
+        self.write('build/agent-harness/verify-fixture/junit/TEST-Foreign.xml',
+                   '<testsuite name="Foreign" tests="1" failures="0" errors="0" skipped="0">'
+                   '<testcase name="synthetic" classname="Foreign"/></testsuite>')
+        with self.assertRaisesRegex(ValueError, 'Report/JUnit suite mismatch'):
+            self.prepare(reports=[path])
+
+    def test_per_suite_counts_must_match_even_when_combined_totals_match(self):
+        path, report = self.report()
+        report['junit']['suites'][0]['tests'] = 2
+        report['junit']['suites'].append({'name': 'Other', 'tests': 1, 'failures': 0, 'errors': 0, 'skipped': 0})
+        report['junit']['totals']['tests'] = 3
+        path.write_text(json.dumps(report))
+        self.write('build/agent-harness/verify-fixture/junit/TEST-Other.xml',
+                   '<testsuite name="Other" tests="2" failures="0" errors="0" skipped="0">'
+                   '<testcase name="one" classname="Other"/><testcase name="two" classname="Other"/></testsuite>')
+        with self.assertRaisesRegex(ValueError, 'Report/JUnit suite mismatch'):
+            self.prepare(reports=[path])
+
+    def test_xml_filename_and_testcase_identities_cannot_be_substituted(self):
+        path, report = self.report()
+        for label, suite, cases in [
+            ('filename', 'Foreign', [('Foreign', 'one')]),
+            ('classname', 'Fixture', [('Foreign', 'one')]),
+            ('duplicate', 'Fixture', [('Fixture', 'same'), ('Fixture', 'same')]),
+        ]:
+            with self.subTest(label=label):
+                report['junit']['totals']['tests'] = len(cases)
+                report['junit']['suites'][0]['tests'] = len(cases)
+                path.write_text(json.dumps(report))
+                body = ''.join(f'<testcase classname="{cls}" name="{name}"/>' for cls, name in cases)
+                self.write('build/agent-harness/verify-fixture/junit/TEST-Fixture.xml',
+                           f'<testsuite name="{suite}" tests="{len(cases)}" failures="0" errors="0" skipped="0">{body}</testsuite>')
+                with self.assertRaisesRegex(ValueError, 'JUnit .*identity'):
+                    review.prepare(self.root, [self.name], 'Review', self.root / ('bad-' + label), reports=[path])
+
+    def test_diff_preserves_line_boundaries_when_sources_have_no_final_lf(self):
+        other = 'src/main/java/Other.java'
+        self.write(self.name, 'class Example { int value = 1; }')
+        self.write(other, 'class Other { int value = 1; }')
+        self.git('add', self.name, other)
+        self.git('-c', 'user.name=Synthetic Fixture', '-c', 'user.email=fixture@localhost',
+                 '-c', 'commit.gpgsign=false', 'commit', '-qm', 'test: 개행 없는 합성 입력')
+        self.write(self.name, 'class Example { int value = 2; }')
+        self.write(other, 'class Other { int value = 2; }')
+        review.prepare(self.root, [self.name, other], 'Review', self.out)
+        diff = self.out / 'reviewer/change.diff'
+        self.assertEqual(4, diff.read_text().count('\\ No newline at end of file\n'))
+        self.git('apply', '--check', '--reverse', str(diff))
 
     def test_review_requires_real_source_line_and_discloses_missing_verification(self):
         self.prepare(); form = self.form(); path = self.root / 'model-review.json'

@@ -140,8 +140,11 @@ def prepare(root, paths, request, out, base='HEAD', receipts=(), reports=()):
     for name, (before, current) in sources.items():
         if before is not None:files['base/' + name] = before
         if current is not None:files['current/' + name] = current
-        diff.extend(difflib.unified_diff((before or b'').decode().splitlines(keepends=True),
-                    (current or b'').decode().splitlines(keepends=True), fromfile='base/' + name, tofile='current/' + name))
+        for line in difflib.unified_diff((before or b'').decode().splitlines(keepends=True),
+                    (current or b'').decode().splitlines(keepends=True), fromfile='base/' + name, tofile='current/' + name):
+            diff.append(line)
+            if not line.endswith('\n'):
+                diff.extend(['\n', '\\ No newline at end of file\n'])
     files['change.diff'] = ''.join(diff).encode()
     checks = []
     for index, receipt_path in enumerate(receipts):
@@ -164,6 +167,7 @@ def prepare(root, paths, request, out, base='HEAD', receipts=(), reports=()):
                 and code['trackedDiffSha256'] == state['trackedDiffSha256'], 'Verification report does not match tracked state')
         prefix = f'verification/suite-{index}'
         totals = {k: 0 for k in ['tests', 'failures', 'errors', 'skipped']}
+        suites = []
         report_absolute = report_path.resolve() if report_path.is_absolute() else root / report_path
         for xml in sorted((report_absolute.parent / 'junit').glob('TEST-*.xml')):
             raw = evidence_file(root, xml); tree = ET.fromstring(raw)
@@ -171,9 +175,22 @@ def prepare(root, paths, request, out, base='HEAD', receipts=(), reports=()):
             counts = {k: int(tree.attrib[k]) for k in totals}; cases = tree.findall('testcase')
             require(counts == {'tests': len(cases), **{k: sum(c.find(tag) is not None for c in cases)
                     for k, tag in [('failures', 'failure'), ('errors', 'error'), ('skipped', 'skipped')]}}, 'JUnit counters disagree')
+            name = tree.attrib.get('name')
+            require(name and xml.name == 'TEST-' + name + '.xml', 'JUnit filename identity mismatch')
+            names = [case.attrib.get('name') for case in cases]
+            require(all(names) and len(set(names)) == len(names)
+                    and all(case.attrib.get('classname') == name for case in cases), 'JUnit testcase identity mismatch')
+            suites.append({'name': name, **counts})
             for k in totals:totals[k] += counts[k]
             files[prefix + '/junit/' + xml.name] = raw
-        if item['junit'] is not None:require(totals == item['junit']['totals'], 'Report/JUnit mismatch')
+        if item['junit'] is not None:
+            expected = item['junit']['suites']
+            require(isinstance(expected, list) and all(isinstance(row, dict) and isinstance(row.get('name'), str)
+                    and row['name'] and all(type(row.get(k)) is int for k in totals) for row in expected)
+                    and len({row['name'] for row in expected}) == len(expected), 'Invalid report suite identities')
+            require(sorted(suites, key=lambda row: row['name']) == sorted(expected, key=lambda row: row['name']),
+                    'Report/JUnit suite mismatch')
+            require(totals == item['junit']['totals'], 'Report/JUnit mismatch')
         if item['status'] == 'passed':
             execution = item['execution']
             require(item['junit'] is not None and totals['tests'] > 0 and not any(totals[k] for k in ['failures', 'errors', 'skipped'])

@@ -112,21 +112,37 @@ class Server:
         return result
 
     def close(self):
-        self.process.stdin.close()
         try:
-            self.process.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            pass
-        for sig in (signal.SIGTERM, signal.SIGKILL):
             try:
-                os.killpg(self.process.pid, sig)
-            except ProcessLookupError:
-                break
-            time.sleep(0.2)
-        self.process.wait(timeout=5)
-        self.reader.join(timeout=1)
-        self.process.stdout.close()
-        self.stderr.close()
+                self.process.stdin.close()
+            except BrokenPipeError:
+                pass
+        finally:
+            try:
+                # Retain the unreaped leader until the final group signal:
+                # its PID must not be reused by an unrelated process group.
+                for sig in (signal.SIGTERM, signal.SIGKILL):
+                    try:
+                        os.killpg(self.process.pid, sig)
+                    except ProcessLookupError:
+                        break
+                    except PermissionError:
+                        # macOS may reject a group containing only zombies.
+                        rows = subprocess.check_output(['ps', '-axo', 'pgid=,stat='], text=True, timeout=5)
+                        if any(int(parts[0]) == self.process.pid and not parts[1].startswith('Z')
+                               for line in rows.splitlines() if len(parts := line.split()) == 2):
+                            raise
+                        break
+                    time.sleep(0.2)
+                self.process.wait(timeout=5)
+            finally:
+                try:
+                    self.reader.join(timeout=1)
+                finally:
+                    try:
+                        self.process.stdout.close()
+                    finally:
+                        self.stderr.close()
 
 
 def enabled_skills(response):
