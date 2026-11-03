@@ -1,7 +1,9 @@
 {
   "schemaVersion": 1,
-  "status": "awaiting-explicit-egress-approval",
-  "agentRunsExecuted": 0,
+  "status": "pilot-completed-runtime-followup-required",
+  "agentRunsExecuted": 2,
+  "egressApproval": "User explicitly approved the specified repository content transfer and two pilot runs.",
+  "resultFile": "tools/agent-harness/eval/pilot-result.json",
   "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
   "taskId": "T01",
   "conditions": ["with-skill", "without-skill"],

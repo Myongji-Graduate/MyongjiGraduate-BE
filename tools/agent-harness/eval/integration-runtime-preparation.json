@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "status": "provider-profile-http-policy-checked-usage-get-accepted",
+  "candidate": "Docker Sandboxes local mountless shell VM",
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osVersion": "15.7.7"
+  },
+  "existingDocker": {
+    "clientVersion": "27.5.1",
+    "context": "desktop-linux",
+    "endpoint": "unix:///Users/jinhyeon/.docker/run/docker.sock",
+    "exposedToEvaluationAgent": false
+  },
+  "release": {
+    "version": "0.50.1",
+    "publishedAt": "2026-10-28T17:26:57Z",
+    "source": "https://github.com/docker/sbx-releases/releases/tag/v0.50.1",
+    "archiveUrl": "https://github.com/docker/sbx-releases/releases/download/v0.50.1/DockerSandboxes-darwin.tar.gz",
+    "archiveBytes": 164158662,
+    "sha256": "dc5f001c42698f5e18d274843ddb81c911ab2eee92000b1ddd722bfbf5028992",
+    "matchesGitHubReleaseDigest": true,
+    "macOSDeepStrictSignatureVerified": true,
+    "signatureTeamIdentifier": "9BNSXJN65R",
+    "signatureCheckRequiredUnsandboxedRead": true,
+    "localExecutable": "/private/tmp/dev122-sbx-0.50.1/native-extracted/bin/sbx",
+    "globalInstallationChanged": false
+  },
+  "creationAttempt": {
+    "sandboxName": "dev122-isolation-probe",
+    "agent": "shell",
+    "cloud": false,
+    "workspacePaths": [],
+    "sharedSkills": "off",
+    "denyNetwork": [
+      "**",
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "cpus": 2,
+    "memory": "4g",
+    "exitCode": 1,
+    "error": "not signed in to Docker; try: sbx login"
+  },
+  "authentication": {
+    "userApproved": true,
+    "firstAttempt": "provider-rate-limited",
+    "firstError": "oauth2 access_denied: Global rate limit exceeded",
+    "retry": "provider-rate-limited",
+    "retryError": "oauth2 access_denied: Global rate limit exceeded",
+    "attempts": 4,
+    "status": "signed-in",
+    "afterConfirmedBrowserLogin": {
+      "exitCode": 0,
+      "cliAuthenticationSucceeded": true
+    },
+    "userRequestedRetry": {
+      "date": "2026-11-02",
+      "status": "provider-rate-limited",
+      "exitCode": 1,
+      "error": "oauth2 access_denied: Global rate limit exceeded"
+    },
+    "loginProcessRemaining": false
+  },
+  "diagnosis": {
+    "observedOn": "2026-11-02",
+    "matchingIssue": "https://github.com/docker/sbx-releases/issues/716",
+    "maintainerUpdateDate": "2026-11-01",
+    "maintainerUpdate": "SBX fix pull request prepared; awaiting release cycle",
+    "assessment": "Earlier errors matched a known issue, but CLI authentication succeeded after the user confirmed browser login; server-side cause of earlier failures remains unconfirmed",
+    "repeatLoginIsVerifiedRemedy": false
+  },
+  "networkInitialization": {
+    "previouslyInitialized": false,
+    "preset": "deny-all",
+    "exitCode": 0
+  },
+  "latestCreationAttempt": {
+    "exitCode": 0,
+    "sandboxName": "dev122-isolation-probe",
+    "sandboxId": "f936719e-b582-45fc-bc77-9fdbae8f23c5"
+  },
+  "vmCreated": true,
+  "vmCurrentStatus": "stopped",
+  "basicProbeEvidence": "build/agent-harness/dev122-vm-basic-probe",
+  "basicProbeChecksPassed": 9,
+  "basicProbeEvidenceFiles": 8,
+  "hostCanaryResourcesCleaned": true,
+  "guestVersions": {
+    "java": "25.0.4.1",
+    "node": "22.22.1",
+    "git": "2.53.0"
+  },
+  "requiredJava21Prepared": true,
+  "workloadPreflight": {
+    "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+    "evidenceDirectory": "build/agent-harness/dev122-vm-workload-2c15mchs",
+    "result": "final-audit.json",
+    "matrixDirectory": "matrix-utf8",
+    "status": "workload-and-cleanup-audited",
+    "verificationJava": "Temurin 21.0.13+9 linux/aarch64",
+    "locale": "C.utf8",
+    "inputFiles": 909,
+    "dependencyFiles": 3709,
+    "cliArtifactFilesMatchedV2": 266,
+    "imageIdentitiesVerified": 3,
+    "suiteRunsVerified": 8,
+    "healthy": {
+      "unitPassed": 21,
+      "integrationPassed": 31
+    },
+    "T04": {
+      "unitPassed": 21,
+      "integrationPassed": 30,
+      "expectedOracleFailures": 1
+    },
+    "T05": {
+      "unitPassed": 21,
+      "integrationPassed": 30,
+      "expectedOracleFailures": 1
+    },
+    "restored": {
+      "unitPassed": 21,
+      "integrationPassed": 31
+    },
+    "errors": 0,
+    "skipped": 0,
+    "initialLocaleEnvironmentFailurePreserved": true,
+    "originalTestFilesMatched": 198,
+    "containersRemaining": 0,
+    "volumesRemaining": 0,
+    "customNetworksRemaining": 0,
+    "independentAuditCompleted": true
+  },
+  "vmReusableForActualEvaluation": false,
+  "runtimeBoundaryVerified": false,
+  "integrationPreflightExecuted": true,
+  "sourceCopiedToVm": true,
+  "modelCallsExecuted": 0,
+  "approvedModelRunsRemaining": 0,
+  "codexBoundaryResult": "codex-vm-boundary-result.json",
+  "oauthRegistered": true,
+  "oauthBootstrapMaskingVerified": true,
+  "oauthFollowupResult": "codex-vm-oauth-result.json",
+  "providerNetworkResult": "provider-network-result.json",
+  "readOnlyUsageRequestAccepted": true,
+  "modelPathAuthenticationVerified": false,
+  "realOAuthVerified": false,
+  "followupT04Preparation": "tools/agent-harness/eval/integration-pilot-preparation-result.json",
+  "followupT04PilotResult": "tools/agent-harness/eval/integration-pilot-result.json"
+}

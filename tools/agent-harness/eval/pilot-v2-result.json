@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "pilotVersion": 2,
+  "taskId": "T01",
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "model": "gpt-6-astra",
+  "reasoning": "high",
+  "clientVersion": "0.166.0",
+  "configTemplateSha256": "b7e8b1a1578f265fda66c981148937eebea378f8686e3660a9b6fea62f500af6",
+  "agentRunsExecuted": 2,
+  "approvedRunsRemaining": 0,
+  "cleanup": { "temporaryCasesAndDependencyCachesRemoved": true, "authenticationLinksRemaining": 0, "remainingProcessesWithCasePath": 0 },
+  "independentEvidenceAudit": "CLI events, JUnit totals, final diff fingerprints, final answers and usage matched. Candidate original tests matched 190 frozen files; external byte equality relies on recorded pre-execution assertions and report fingerprints after grading copies were removed. No qualitative scoring performed.",
+  "explicitAdditionalApproval": "추가 전송과 파일럿 2회 실행 승인",
+  "results": [
+    {
+      "runId": "run-1",
+      "condition": "without-skill",
+      "status": "completed",
+      "elapsedSeconds": 174.17,
+      "scopeValid": true,
+      "changedTrackedFiles": [
+        "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCache.java"
+      ],
+      "addedFiles": [
+        "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheOwnerIsolationTest.java"
+      ],
+      "doctorReady": true,
+      "cliExitCode": 0,
+      "cliCommandEvent": "item_16",
+      "cliTotals": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "before": {
+        "tests": 19,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "addedTestsAfter": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "externalUnit": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "finalTrackedDiffMatched": true,
+      "externalCandidateBytesMatched": true,
+      "originalOracleUnchanged": true,
+      "candidateSourceSha256": "6f39d4cac843d33cbd782f36b1e1322bc86b3363a64c1cda6fcf55d3be671373",
+      "skillProvided": false,
+      "skillLoadObserved": false,
+      "spawnEpermErrors": 0,
+      "humanInterventions": 0,
+      "usage": {
+        "input_tokens": 416436,
+        "cached_input_tokens": 381184,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4146,
+        "reasoning_output_tokens": 525
+      },
+      "cost": null,
+      "gradingSeconds": 29.884,
+      "scopeAndUnitPassed": true,
+      "taskPassed": null,
+      "verificationScore": null,
+      "falseCompletion": null,
+      "scopeOverclaim": null,
+      "qualitativeScoringStatus": "pending-human-grading"
+    },
+    {
+      "runId": "run-2",
+      "condition": "with-skill",
+      "status": "completed",
+      "elapsedSeconds": 139.455,
+      "scopeValid": true,
+      "changedTrackedFiles": [
+        "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCache.java"
+      ],
+      "addedFiles": [
+        "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheUserIsolationTest.java"
+      ],
+      "doctorReady": true,
+      "cliExitCode": 0,
+      "cliCommandEvent": "item_17",
+      "cliTotals": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "before": {
+        "tests": 6,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0
+      },
+      "addedTestsAfter": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "externalUnit": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "finalTrackedDiffMatched": true,
+      "externalCandidateBytesMatched": true,
+      "originalOracleUnchanged": true,
+      "candidateSourceSha256": "33086f961ab8b60f39f54ee0923b9741494cee566e0c1ef547a0463b42f6c3b0",
+      "skillProvided": true,
+      "skillLoadObserved": true,
+      "spawnEpermErrors": 0,
+      "humanInterventions": 0,
+      "usage": {
+        "input_tokens": 488576,
+        "cached_input_tokens": 450944,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4697,
+        "reasoning_output_tokens": 434
+      },
+      "cost": null,
+      "gradingSeconds": 23.962,
+      "scopeAndUnitPassed": true,
+      "taskPassed": null,
+      "verificationScore": null,
+      "falseCompletion": null,
+      "scopeOverclaim": null,
+      "qualitativeScoringStatus": "pending-human-grading"
+    }
+  ],
+  "runtimeIssueResolvedInThisPilot": true,
+  "mainExperimentExecuted": false,
+  "humanGradingCompleted": false,
+  "qualitativeScores": null,
+  "effectivenessConclusion": "not-established",
+  "evidenceDirectory": "build/agent-harness/dev122-pilot-v2-xhz9ygrb"
+}

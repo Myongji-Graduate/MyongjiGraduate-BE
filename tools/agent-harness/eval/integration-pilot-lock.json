@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "status": "frozen-awaiting-new-model-transfer-approval",
+  "taskId": "T04",
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "model": "gpt-6-astra",
+  "reasoning": "high",
+  "clientVersion": "0.166.0-linux-arm64",
+  "profileSha256": "2c48b5bc7d3dba5e5e008a32d199a90ccd70896873f390aee0aa144f0a94c76e",
+  "kitSha256": "2256b72a87daaa8234f099512acf65184374eefd06eb8834d30d884c482e8ce3",
+  "promptSha256": "6d3f50a0432d7620c441c94275929bef0249c5db3aaf4605a7bb3373b068568f",
+  "freezeSha256": "e9953ba2e0b9abbefcbbafc831e2b4cdf443d9ae3008fa6eb6c7e7cc63e9d1d6",
+  "launcherSha256": "6b2b9a5840081cacee0d96d7c53a3589bfa00cc1d62f172a9333fa61d99d71fc",
+  "watchdogSha256": "c49ef5ea5d32da7ab76c3c93e8e8dee7e14d62a099120e919796754f682a0321",
+  "emptySshAgentSha256": "95e7e9c0214a631cdf5019aaf81f855094240048cbe040dd89f78a000ac68e4a",
+  "orderSeed": "DEV-122-T04-v1",
+  "order": [
+    "without-skill",
+    "with-skill"
+  ],
+  "maximumAgentExecutions": 2,
+  "secondsPerAgentExecution": 1200,
+  "maximumAgentMinutes": 40,
+  "outerAgentExecutionRetries": 0,
+  "stopPairOnAuthOrEnvironmentFailure": true,
+  "changeConfigurationBetweenConditions": false,
+  "directRefreshEndpoint401Known": true,
+  "refreshVerified": false,
+  "hostTokenRotationObserved": false,
+  "fullEvaluationReady": false,
+  "modelCallsExecuted": 0,
+  "approvedModelRunsRemaining": 0,
+  "conditionFileDifferences": [
+    ".agents/skills/mju-verify/SKILL.md",
+    ".agents/skills/mju-verify/references/takenlecture-integration.md",
+    ".agents/skills/mju-verify/references/takenlecture-unit.md",
+    "AGENTS.md"
+  ],
+  "sourceScope": "Only frozen private backend source/tests/AGENTS and condition-specific mju-verify; no student snapshots or real DB records",
+  "networkForAgent": [
+    {
+      "host": "chatgpt.com:443",
+      "method": "POST",
+      "path": "/backend-api/codex/responses"
+    }
+  ],
+  "ownership": "All harness prolog/execute/collect operations reserve the same fixed-user VM-name lease; external CLI/UI delete/rename is outside this cooperative contract",
+  "grading": "Fresh independent synthetic grade VM; apply only candidate product bytes to the same regression root and original tests/CLI; verify unit21 and integration31, report auth/environment failures separately; human qualitative scores remain null",
+  "cases": [
+    {
+      "condition": "without-skill",
+      "vmName": "dev122-t04-without",
+      "vmId": "0ef96883-e7a2-4063-8590-0275e1b7c1e7",
+      "rootCommit": "12e69da74980dcdcb52b37c68d92606c0f19d857",
+      "linuxInputInventorySha256": "9d333db2efae3b83644b2463698d4dc0b50ca0646b79a7e9cc21c6b8d7d24470",
+      "expectedEnabledSkills": 0,
+      "guestCommand": [
+        "python3",
+        "/opt/dev122/launch-agent.py",
+        "--prompt-sha256",
+        "6d3f50a0432d7620c441c94275929bef0249c5db3aaf4605a7bb3373b068568f",
+        "--profile-sha256",
+        "2c48b5bc7d3dba5e5e008a32d199a90ccd70896873f390aee0aa144f0a94c76e",
+        "--seconds",
+        "1200"
+      ]
+    },
+    {
+      "condition": "with-skill",
+      "vmName": "dev122-t04-with",
+      "vmId": "cc7be987-6cad-48ea-bb3e-df3e10474226",
+      "rootCommit": "b9702c8a4e65f8de6085e5e63d24ac482c00abc2",
+      "linuxInputInventorySha256": "1ef9d74ca8b3298ec4ee1d1e442161e17155022c4bad9e690d9da90c8e95adbc",
+      "expectedEnabledSkills": 1,
+      "guestCommand": [
+        "python3",
+        "/opt/dev122/launch-agent.py",
+        "--prompt-sha256",
+        "6d3f50a0432d7620c441c94275929bef0249c5db3aaf4605a7bb3373b068568f",
+        "--profile-sha256",
+        "2c48b5bc7d3dba5e5e008a32d199a90ccd70896873f390aee0aa144f0a94c76e",
+        "--seconds",
+        "1200"
+      ]
+    }
+  ],
+  "runnerSha256": "9f1767f438de34e27e5021467f9fc36c176711e7e6da2773b52238e00b7fda9f",
+  "runtimeAuditSha256": "094fc156ee9944e321a9f359718ec12fc846501a8c5b3f336119b3eb6fd9c78c",
+  "usageProbeSha256": "d3ac9052be4b79fa125343fff802d3dea4950dde496db4fdabbf8c845ae3e019",
+  "transportStaticCheck": {
+    "customProviderSupportsWebsocketsDefault": false,
+    "source": "https://raw.githubusercontent.com/openai/codex/rust-v0.166.0/codex-rs/model-provider-info/src/lib.rs",
+    "scope": "Pinned source serde default bool; runtime inference remains unverified"
+  },
+  "collectorSha256": "c696e976db89fcfda134bfadbacedfa3c38c01832f44cb7b7f4cd054b24893a1",
+  "candidateEvidence": "Final workspace hash/type/mode inventory; source/new-test bytes and existing test/config/CLI bytes; bounded CLI report/JUnit/Gradle logs; scope audit separate from original-oracle external grading"
+}

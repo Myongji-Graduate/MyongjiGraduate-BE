@@ -1,17 +1,29 @@
 {
   "schemaVersion": 1,
-  "status": "pilot-prepared-awaiting-approval",
+  "status": "t04-pilot-completed-main-schedule-preparation",
+  "latestPilotLock": "integration-pilot-lock.json",
+  "previousPilotLock": "pilot-v2-lock.json",
   "preparationHead": "861228e42f779afa8a517fd3ed05a6bfafc46906",
   "frozenCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
   "agent": {
     "model": "gpt-6-astra",
     "reasoning": "high",
-    "clientVersion": "0.166.0",
-    "configSha256": "a780c26b5a6ac80089009decf996918d590c08d0c9231090b0291ebedc1553a1"
+    "clientVersion": "0.166.0-linux-arm64",
+    "configSha256": "2c48b5bc7d3dba5e5e008a32d199a90ccd70896873f390aee0aa144f0a94c76e"
   },
-  "conditions": ["without-skill", "with-skill"],
-  "pilot": { "taskId": "T01", "repetitionsPerCondition": 1, "includedInMainResults": false },
-  "main": { "repetitionsPerCondition": 3, "orderSeed": "DEV-122-P3-v1" },
+  "conditions": [
+    "without-skill",
+    "with-skill"
+  ],
+  "pilot": {
+    "taskId": "T01",
+    "repetitionsPerCondition": 1,
+    "includedInMainResults": false
+  },
+  "main": {
+    "repetitionsPerCondition": 3,
+    "orderSeed": "DEV-122-P3-v1"
+  },
   "tasks": [
     {
       "id": "T01",
@@ -23,10 +35,14 @@
         "before": "if (!userId.equals(snapshot.userId()) || revision != snapshot.revision()",
         "after": "if (revision != snapshot.revision()"
       },
-      "requiredSuites": ["takenlecture-unit"],
+      "requiredSuites": [
+        "takenlecture-unit"
+      ],
       "oracle": {
         "testFile": "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheTest.java",
-        "mustFailWhenSeeded": ["malformedAndForeignUserPayloadsFallBack"],
+        "mustFailWhenSeeded": [
+          "malformedAndForeignUserPayloadsFallBack"
+        ],
         "behavior": "userId가 다르면 revision이 같아도 DB로 fallback한다. 정상 캐시 hit와 두 revision 검증은 유지한다."
       }
     },
@@ -40,10 +56,14 @@
         "before": "if (mode == Mode.ON && cached != null && cacheAvailable)",
         "after": "if (mode != Mode.OFF && cached != null && cacheAvailable)"
       },
-      "requiredSuites": ["takenlecture-unit"],
+      "requiredSuites": [
+        "takenlecture-unit"
+      ],
       "oracle": {
         "testFile": "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheTest.java",
-        "mustFailWhenSeeded": ["shadowReturnsDatabaseTruthAndReportsMismatch"],
+        "mustFailWhenSeeded": [
+          "shadowReturnsDatabaseTruthAndReportsMismatch"
+        ],
         "behavior": "SHADOW는 DB 값을 반환하고 차이를 계측한다. ON hit와 OFF bypass도 유지한다."
       }
     },
@@ -57,10 +77,15 @@
         "before": "TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {\n            @Override\n            public void afterCommit() { put(key, snapshot); }\n        });",
         "after": "put(key, snapshot);"
       },
-      "requiredSuites": ["takenlecture-unit"],
+      "requiredSuites": [
+        "takenlecture-unit"
+      ],
       "oracle": {
         "testFile": "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCacheTest.java",
-        "mustFailWhenSeeded": ["rollbackDoesNotPublishAndNoTransactionDoesNotPublish", "localCacheDoesNotPublishDatabaseMissUntilCommitAndNotAfterRollback"],
+        "mustFailWhenSeeded": [
+          "rollbackDoesNotPublishAndNoTransactionDoesNotPublish",
+          "localCacheDoesNotPublishDatabaseMissUntilCommitAndNotAfterRollback"
+        ],
         "behavior": "읽기 transaction 성공 후에만 Redis와 local cache를 채운다. rollback, 쓰기 transaction, transaction 부재에서는 발행하지 않는다."
       }
     },
@@ -74,10 +99,15 @@
         "before": "\t\t// 학점 재계산\n\t\tgenerateOrModifyCompletedCreditUseCase.generateOrModifyCompletedCredit(user);",
         "after": ""
       },
-      "requiredSuites": ["takenlecture-unit", "takenlecture-integration"],
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ],
       "oracle": {
         "testFile": "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheConsistencyIntegrationTest.java",
-        "mustFailWhenSeeded": ["sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned"],
+        "mustFailWhenSeeded": [
+          "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned"
+        ],
         "behavior": "단일 삭제 commit 후 목록, revision, 실제 계산, 저장된 이수 학점이 함께 갱신된다. 타인 과목 삭제와 rollback 보호를 유지한다."
       }
     },
@@ -91,12 +121,24 @@
         "before": "if (!TransactionSynchronizationManager.isActualTransactionActive()\n            || !TransactionSynchronizationManager.isCurrentTransactionReadOnly()) return false;",
         "after": "if (!TransactionSynchronizationManager.isActualTransactionActive()) return false;"
       },
-      "requiredSuites": ["takenlecture-unit", "takenlecture-integration"],
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ],
       "oracle": {
         "testFile": "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/TakenLectureCacheConsistencyIntegrationTest.java",
-        "mustFailWhenSeeded": ["unsafeTransactionBoundariesAlwaysBypassPersonalCache"],
+        "mustFailWhenSeeded": [
+          "unsafeTransactionBoundariesAlwaysBypassPersonalCache"
+        ],
         "behavior": "쓰기/transaction 부재/READ_COMMITTED/격리 미지정 요청은 cache를 우회한다. 명시적 snapshot 읽기 transaction의 hit는 유지한다."
       }
     }
-  ]
+  ],
+  "initialPilotLock": "pilot-lock.json",
+  "latestDiagnosticPilot": {
+    "taskId": "T04",
+    "agentExecutions": 2,
+    "includedInMainResults": false,
+    "result": "integration-pilot-result.json"
+  }
 }

@@ -51,6 +51,6 @@ for (const task of manifest.tasks) {
 const mainRuns = tasks.length * manifest.conditions.length * manifest.main.repetitionsPerCondition;
 const maxMainWallMinutes = manifest.tasks.reduce((sum, task) => sum + task.wallTimeSeconds / 60, 0)
   * manifest.conditions.length * manifest.main.repetitionsPerCondition;
-console.log(JSON.stringify({ status: 'preparation-valid', agentRunsExecuted: 0,
+console.log(JSON.stringify({ status: 'preparation-valid', agentRunsExecutedByThisCheck: 0,
   experimentReady: false, note: 'Static anchors and prompt checks only; freeze and isolation gates are separate.',
   manifestSha256: hash(raw), mainRuns, maxMainWallMinutes, tasks }, null, 2));

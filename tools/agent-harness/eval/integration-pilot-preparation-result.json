@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "status": "t04-two-frozen-vms-awaiting-new-model-transfer-approval",
+  "taskId": "T04",
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "historicalPilotExecutionsCompleted": 4,
+  "approvedModelRunsRemaining": 0,
+  "agentExecutionsStartedThisPreparation": 0,
+  "sourceTransferredToModelThisPreparation": false,
+  "sourceCopiedToLocalVms": true,
+  "modelCallsExecutedThisPreparation": 0,
+  "evidenceDirectories": [
+    "build/agent-harness/dev122-gates-ea9pr5ci",
+    "build/agent-harness/dev122-vm-job-oyffaymg",
+    "build/agent-harness/dev122-integration-pilot-o9ljg88z"
+  ],
+  "pilotLockSha256": "0646ace4f7f5da2b13bcf66bd7313ea7697ef7143c77ffb76beb6873b7238820",
+  "sshRelay": {
+    "emptyIdentities": true,
+    "cachedConnectionAfterIdlePassed": true,
+    "syntheticSigningRejected": true,
+    "personalAgentConnected": false
+  },
+  "httpsNegativeProbe": {
+    "statuses": [
+      403,
+      403,
+      403
+    ],
+    "controlledDenialFingerprintMatched": true,
+    "blockerIdentified": true,
+    "rawBodySaved": false
+  },
+  "refresh": {
+    "formAttempts": 1,
+    "jsonAttempts": 1,
+    "httpStatuses": [
+      401,
+      401
+    ],
+    "rawTokenOrBodySaved": false,
+    "hostTokenRotationObserved": false,
+    "refreshVerified": false
+  },
+  "frozenConditions": [
+    {
+      "condition": "without-skill",
+      "vmName": "dev122-t04-without",
+      "vmId": "0ef96883-e7a2-4063-8590-0275e1b7c1e7",
+      "rootCommit": "12e69da74980dcdcb52b37c68d92606c0f19d857",
+      "enabledSkills": 0,
+      "mcpServers": 0,
+      "unit": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integration": {
+        "tests": 31,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "expectedRegressionDetected": true,
+        "method": "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned()",
+        "expected": 3.0,
+        "actual": 6.0
+      },
+      "finalStopped": true,
+      "containers": 0,
+      "volumes": 0,
+      "customNetworks": 0
+    },
+    {
+      "condition": "with-skill",
+      "vmName": "dev122-t04-with",
+      "vmId": "cc7be987-6cad-48ea-bb3e-df3e10474226",
+      "rootCommit": "b9702c8a4e65f8de6085e5e63d24ac482c00abc2",
+      "enabledSkills": 1,
+      "mcpServers": 0,
+      "unit": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integration": {
+        "tests": 31,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "expectedRegressionDetected": true,
+        "method": "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned()",
+        "expected": 3.0,
+        "actual": 6.0
+      },
+      "finalStopped": true,
+      "containers": 0,
+      "volumes": 0,
+      "customNetworks": 0
+    }
+  ],
+  "inputDifferences": [
+    ".agents/skills/mju-verify/SKILL.md",
+    ".agents/skills/mju-verify/references/takenlecture-integration.md",
+    ".agents/skills/mju-verify/references/takenlecture-unit.md",
+    "AGENTS.md"
+  ],
+  "runtime": {
+    "codex": "0.166.0-linux-arm64",
+    "java": "21.0.13+9",
+    "dependencyFiles": 3709,
+    "images": 3,
+    "finalAuditPassed": true,
+    "stateReset": true
+  },
+  "watchdog": {
+    "pythonTestsPassed": 29,
+    "nativeModelFreeVmCasesPassed": 5,
+    "leaseAcrossPrologExecuteCollect": true,
+    "externalCliOrUiRenameAtomicallyProtected": false
+  },
+  "preparedRunner": {
+    "approvalGuardPassed": true,
+    "metadataCheckPassed": true,
+    "exactLauncherEnvironmentTlsProbesPassed": 2,
+    "candidateInventoryNewTestsRawVerificationEvidenceChecked": true,
+    "independentReview": "no remaining preparation blockers",
+    "executionNotInvoked": true
+  },
+  "proposedAgentExecutions": 2,
+  "secondsPerAgentExecution": 1200,
+  "outerRetries": 0,
+  "abortPairOnAuthOrEnvironmentFailure": true,
+  "configurationChangesBetweenConditions": false,
+  "verificationNotRunThisPreparation": [
+    "backend HTTP",
+    "browser UI",
+    "actual Codex inference",
+    "independent candidate grading",
+    "human qualitative scoring"
+  ],
+  "skillEffectiveness": null,
+  "fullEvaluationReady": false,
+  "report": "docs/DEV-122_T04_PILOT_PREPARATION_REPORT.md",
+  "followupT04PilotResult": "tools/agent-harness/eval/integration-pilot-result.json"
+}

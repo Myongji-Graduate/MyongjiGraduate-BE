@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-02",
+  "status": "model-free-checks-passed-oauth-bootstrap-checked",
+  "updatedOn": "2026-11-03",
+  "evidenceDirectory": "build/agent-harness/dev122-agent-boundary-ivhukbb5",
+  "clientVersion": "0.166.0-linux-arm64",
+  "modelConfiguration": "gpt-6-astra/high",
+  "profileSha256": "2bf47e18e5681540adf7030ffb0afaa2ced6be37d5dc5bf0616f60aec2fff27d",
+  "checkerSha256": "29266e9ca5f0e5a32f5e25f022e02d4a950bc69ed14d500c85a3a3c58ecba115",
+  "executedChecker": "check-vm-command-cleanup-reviewed.py",
+  "finalCommandEvidence": "command-final",
+  "rpcCalls": 11,
+  "unit": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "integration": {
+    "tests": 31,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mcpServers": 0,
+  "enabledSkillsWithout": 0,
+  "enabledSkillsWith": 1,
+  "credentialVariablesInheritedByCommands": false,
+  "syntheticProxyPassed": true,
+  "crossVmRootProbesPassed": true,
+  "watchdogGuestProcessCleanupPassed": true,
+  "pythonRegressionTestsPassed": 15,
+  "independentCodeAndEvidenceReviewCompleted": true,
+  "oauthRegistered": true,
+  "oauthStorageScope": "global-only in sbx 0.50.1",
+  "oauthConnectionApprovalRequired": false,
+  "oauthBootstrapMaskingVerified": true,
+  "oauthMetadataChecked": true,
+  "oauthFollowupResult": "codex-vm-oauth-result.json",
+  "providerNetworkResult": "provider-network-result.json",
+  "realOAuthVerified": false,
+  "fullEvaluationReady": false,
+  "modelRunsExecuted": 0,
+  "approvedModelRunsRemaining": 0,
+  "cleanup": {
+    "observedBeforeOAuthRegistration": true,
+    "storedServiceSecretCount": 0,
+    "registeredMcpCount": 0,
+    "workloadVmStopped": true,
+    "disposableVmRemoved": true,
+    "hostResolverRemoved": true,
+    "hostCanaryRemoved": true
+  },
+  "remaining": [
+    "Upstream OAuth authentication and refresh checks",
+    "Executable evaluation profile preserving the Docker ChatGPT provider and sentinel",
+    "Fresh per-run fixtures and selective provider network policy",
+    "New explicit model-run/data-transfer approval and human grading"
+  ],
+  "followupT04Preparation": "tools/agent-harness/eval/integration-pilot-preparation-result.json",
+  "followupT04PilotResult": "tools/agent-harness/eval/integration-pilot-result.json"
+}

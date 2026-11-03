@@ -36,6 +36,10 @@ jobs:
         run: npm ci --prefix tools/agent-harness --ignore-scripts
       - name: Build and test the harness
         run: npm test --prefix tools/agent-harness
+      - name: Test model-free evaluation guards
+        run: python3 -B -m unittest discover -s tools/agent-harness/eval -p 'test_*.py'
+      - name: Test daily change review bundles
+        run: python3 -B -m unittest discover -s tools/agent-harness/review -p 'test_*.py'
       - name: Verify the selected backend unit contracts
         run: node tools/agent-harness/dist/cli.js verify takenlecture-unit
       - name: Preserve verification evidence

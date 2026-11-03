@@ -16,8 +16,8 @@ node tools/agent-harness/dist/cli.js verify takenlecture-unit --offline
 | 클래스 | 소스 경로 | 검증하는 것 |
 | --- | --- | --- |
 | TakenLectureCacheTest | infrastructure/adapter/cache/TakenLectureCacheTest.java | cache hit/fallback, 사용자·revision 구분, publication과 local cache 계약 |
-| DeleteTakenLectureServiceTest | application/service/delete/DeleteTakenLectureServiceTest.java | 단일·전체 삭제 포트 호출 |
-| GenerateTakenLectureServiceTest | application/service/save/GenerateTakenLectureServiceTest.java | 맞춤 과목 저장 포트 호출 |
+| DeleteTakenLectureServiceTest | application/service/delete/DeleteTakenLectureServiceTest.java | 잠금·조회·단일 삭제·학점 재계산 호출 순서, 목록 밖 ID/삭제 실패 시 후속 호출 차단, 전체 삭제 포트 호출 |
+| GenerateTakenLectureServiceTest | application/service/save/GenerateTakenLectureServiceTest.java | 저장 과목의 사용자·과목, 잠금·저장·학점 재계산 호출 순서, 저장 실패 시 후속 호출 차단 |
 | FindTakenLectureServiceTest | application/service/find/FindTakenLectureServiceTest.java | snapshot, 이수 목록과 학점 계산 |
 
 첫 기준 `861228e4`에는 총 21개의 `@Test`가 선언돼 있다. 이 숫자는 앞으로의 고정 합격

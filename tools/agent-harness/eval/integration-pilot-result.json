@@ -1,0 +1,1530 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "pilotId": "T04-v1",
+  "taskId": "T04",
+  "status": "two-agent-executions-and-independent-original-oracle-grading-complete",
+  "model": "gpt-6-astra",
+  "reasoning": "high",
+  "clientVersion": "0.166.0-linux-arm64",
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "pilotLockSha256": "0646ace4f7f5da2b13bcf66bd7313ea7697ef7143c77ffb76beb6873b7238820",
+  "evidenceDirectory": "build/agent-harness/dev122-t04-pilot-v1",
+  "agentExecutionsStarted": 2,
+  "outerRetries": 0,
+  "approvedModelRunsRemaining": 0,
+  "historicalPilotExecutionsBeforeThisPair": 4,
+  "sourceTransferredToModel": true,
+  "studentSnapshotsOrRealDbRecordsIncluded": false,
+  "providerInferenceVerified": true,
+  "refreshVerified": false,
+  "hostTokenRotationObserved": false,
+  "fullEvaluationReady": false,
+  "skillEffectiveness": null,
+  "records": [
+    {
+      "taskId": "T04",
+      "condition": "without-skill",
+      "orderIndex": 1,
+      "status": "completed",
+      "agentSeconds": 240.347,
+      "supervisionSeconds": 245.097,
+      "candidateSourceSha256": "153882859830393c58f862328b03389b916173566654ee7245ba555dfefecde2",
+      "finalProductDiffSha256": "7bddb04ece162968e2eb0eb731df7ad2923fecf39c161deb250058008b7ce2cc",
+      "changedPaths": [
+        "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/delete/DeleteTakenLectureService.java",
+        "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/DeleteTakenLectureCreditIntegrationTest.java"
+      ],
+      "forbiddenChangedPaths": [],
+      "addedTests": [
+        "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/DeleteTakenLectureCreditIntegrationTest.java"
+      ],
+      "skillProvided": false,
+      "skillReadCommandObserved": false,
+      "agentVerification": [
+        {
+          "path": "build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/report.json",
+          "suite": "takenlecture-integration",
+          "status": "failed",
+          "totals": {
+            "tests": 31,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "execution": {
+            "executable": "./gradlew",
+            "args": [
+              "test",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+              "--no-daemon",
+              "--rerun-tasks",
+              "--no-build-cache",
+              "--init-script",
+              "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/junit.init.gradle",
+              "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/junit",
+              "-Djolbu.test.home=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/test-home",
+              "--offline"
+            ],
+            "environmentOverrides": {
+              "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "true",
+              "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+              "DEV121_HTTP_STEADY": "false",
+              "DEV121_MYSQL_IMAGE": "mysql:8.4.8",
+              "DOCKER_HOST": "unix:///var/run/docker.sock",
+              "TESTCONTAINERS_HOST_OVERRIDE": "127.0.0.1",
+              "TESTCONTAINERS_REUSE_ENABLE": "false",
+              "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock",
+              "TESTCONTAINERS_RYUK_DISABLED": "false",
+              "TESTCONTAINERS_RYUK_CONTAINER_IMAGE": "testcontainers/ryuk:0.13.0",
+              "TESTCONTAINERS_CHECKS_DISABLE": "true",
+              "MJU_HARNESS_RUN_ID": "2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c"
+            },
+            "offline": true,
+            "timeoutMs": 600000,
+            "exitCode": 1,
+            "signal": null,
+            "timedOut": false
+          },
+          "trackedCodeStable": true,
+          "matchesFinalProductDiff": false
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/report.json",
+          "suite": "takenlecture-unit",
+          "status": "passed",
+          "totals": {
+            "tests": 21,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "execution": {
+            "executable": "./gradlew",
+            "args": [
+              "test",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+              "--no-daemon",
+              "--rerun-tasks",
+              "--no-build-cache",
+              "--init-script",
+              "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit.init.gradle",
+              "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit",
+              "--offline"
+            ],
+            "environmentOverrides": {
+              "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "false",
+              "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+              "DEV121_HTTP_STEADY": "false",
+              "DEV121_MYSQL_IMAGE": "mysql:8.4.8"
+            },
+            "offline": true,
+            "timeoutMs": 600000,
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false
+          },
+          "trackedCodeStable": true,
+          "matchesFinalProductDiff": true
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/report.json",
+          "suite": "takenlecture-integration",
+          "status": "passed",
+          "totals": {
+            "tests": 31,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "execution": {
+            "executable": "./gradlew",
+            "args": [
+              "test",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+              "--no-daemon",
+              "--rerun-tasks",
+              "--no-build-cache",
+              "--init-script",
+              "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/junit.init.gradle",
+              "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/junit",
+              "-Djolbu.test.home=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/test-home",
+              "--offline"
+            ],
+            "environmentOverrides": {
+              "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "true",
+              "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+              "DEV121_HTTP_STEADY": "false",
+              "DEV121_MYSQL_IMAGE": "mysql:8.4.8",
+              "DOCKER_HOST": "unix:///var/run/docker.sock",
+              "TESTCONTAINERS_HOST_OVERRIDE": "127.0.0.1",
+              "TESTCONTAINERS_REUSE_ENABLE": "false",
+              "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock",
+              "TESTCONTAINERS_RYUK_DISABLED": "false",
+              "TESTCONTAINERS_RYUK_CONTAINER_IMAGE": "testcontainers/ryuk:0.13.0",
+              "TESTCONTAINERS_CHECKS_DISABLE": "true",
+              "MJU_HARNESS_RUN_ID": "2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b"
+            },
+            "offline": true,
+            "timeoutMs": 600000,
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false
+          },
+          "trackedCodeStable": true,
+          "matchesFinalProductDiff": true
+        }
+      ],
+      "verificationArtifacts": [
+        "build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/gradle.log",
+        "build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+        "build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/junit.init.gradle",
+        "build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/report.json",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/gradle.log",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest.xml",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest.xml",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest.xml",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest.xml",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit.init.gradle",
+        "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/report.json",
+        "build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/gradle.log",
+        "build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+        "build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/junit.init.gradle",
+        "build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/report.json",
+        "build/test-results/test/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.DeleteTakenLectureCreditIntegrationTest.xml"
+      ],
+      "rawJUnit": [
+        {
+          "path": "build/agent-harness/2026-11-03T00-50-19.590Z-68efe5e7-5910-474c-a596-f8091fe3551c/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+          "totals": {
+            "tests": 31,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "oldWritersMustBeDrainedAndFreshNamespaceSelectedBeforeActivation()",
+              "status": "passed"
+            },
+            {
+              "name": "oldCatalogReaderCannotOverwriteNewCatalogSnapshot()",
+              "status": "passed"
+            },
+            {
+              "name": "lateReaderPublicationStaysInOldRevisionAfterWriterCommits()",
+              "status": "passed"
+            },
+            {
+              "name": "redisRestartAndMissingPostCommitPublicationAreRecoverable()",
+              "status": "passed"
+            },
+            {
+              "name": "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned()",
+              "status": "failure"
+            },
+            {
+              "name": "malformedOrForeignRevisionFallsBackWithoutPoisoningOtherStudents()",
+              "status": "passed"
+            },
+            {
+              "name": "abruptWriterProcessExitAfterCommitStillAllowsOtherAppToRebuild()",
+              "status": "passed"
+            },
+            {
+              "name": "unsafeTransactionBoundariesAlwaysBypassPersonalCache()",
+              "status": "passed"
+            },
+            {
+              "name": "cacheHitUsesCurrentCatalogAndUserWithoutStoringCredentials()",
+              "status": "passed"
+            },
+            {
+              "name": "actualRedisDelayHasBoundedTimeoutAndDatabaseFallback()",
+              "status": "passed"
+            },
+            {
+              "name": "warmSnapshotUsesOneSqlAndNeverQueriesCourseRows()",
+              "status": "passed"
+            },
+            {
+              "name": "readContextUsesScalarRevisionEvenWhenUserEntityIsManaged()",
+              "status": "passed"
+            },
+            {
+              "name": "combinedReadKeepsUserInSnapshotAndRefreshesUserOnLocalHit()",
+              "status": "passed"
+            },
+            {
+              "name": "readOnlyGraduationAndCreditRequestsDoNotChangeAcademicRows()",
+              "status": "passed"
+            },
+            {
+              "name": "catalogInsertUpdateDeleteAndRollbackAdvanceAtomically()",
+              "status": "passed"
+            },
+            {
+              "name": "missingCatalogVersionFailsClosedInsteadOfServingCachedData()",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "twoAppWritersSerializeBeforeReadingAndSaveCombinedSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "actualReuploadReplacesWholeListAndFailureRollsBackListRevisionAndSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "ownershipFailureCannotChangeAnotherStudentsRevisionOrList()",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "localHitStillChecksDatabaseAndRefreshesAfterOtherWriterAndCatalogChange()",
+              "status": "passed"
+            },
+            {
+              "name": "publicationFailureDoesNotFailReadAndOtherAppCanRebuild()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+          "totals": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "사용자의 모든 수강과목을 삭제한다.",
+              "status": "passed"
+            },
+            {
+              "name": "deleteTakenLecture()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+          "totals": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "snapshotReturnsItsUserWithoutAnotherUserLookup()",
+              "status": "passed"
+            },
+            {
+              "name": "채플을 4개 이상 수강했을 경우에 2점을 추가한다.",
+              "status": "passed"
+            },
+            {
+              "name": "해당 학생의 수강정보를 조회한다.",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+          "totals": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "새로운 custom 과목을 추가한다.",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-08.581Z-6d89e841-edd3-40f7-b1c7-de66d32134d3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+          "totals": {
+            "tests": 15,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "failuresOpenCooldownAndOneRecoveryReadRestoresHits()",
+              "status": "passed"
+            },
+            {
+              "name": "cacheHitDoesNotCallDatabaseLoader()",
+              "status": "passed"
+            },
+            {
+              "name": "boundedLocalCacheReusesOnlyTheExactTwoRevisionsAndExpires()",
+              "status": "passed"
+            },
+            {
+              "name": "malformedAndForeignUserPayloadsFallBack()",
+              "status": "passed"
+            },
+            {
+              "name": "immutableMembershipOnlyIsPublishedAfterSuccessfulReadTransaction()",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackDoesNotPublishAndNoTransactionDoesNotPublish()",
+              "status": "passed"
+            },
+            {
+              "name": "earlierSuccessCannotCloseCircuitOpenedByConcurrentFailure()",
+              "status": "passed"
+            },
+            {
+              "name": "localCacheDoesNotPublishDatabaseMissUntilCommitAndNotAfterRollback()",
+              "status": "passed"
+            },
+            {
+              "name": "publicationFailureDoesNotEscapeCommittedRequest()",
+              "status": "passed"
+            },
+            {
+              "name": "shadowReturnsDatabaseTruthAndReportsMismatch()",
+              "status": "passed"
+            },
+            {
+              "name": "committedMissPopulatesLocalAndShadowStillReadsDatabase()",
+              "status": "passed"
+            },
+            {
+              "name": "databaseFailureIsNotHiddenAsCacheFailure()",
+              "status": "passed"
+            },
+            {
+              "name": "writeTransactionNeverRegistersPublication()",
+              "status": "passed"
+            },
+            {
+              "name": "offModeUsesNoRedisAndKeysSeparateNamespacesAndRevisions()",
+              "status": "passed"
+            },
+            {
+              "name": "redisConcurrencyBudgetFallsBackWithoutQueuing()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-52-30.320Z-6f5f5d45-2f96-4121-bb91-15531481a15b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+          "totals": {
+            "tests": 31,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "oldWritersMustBeDrainedAndFreshNamespaceSelectedBeforeActivation()",
+              "status": "passed"
+            },
+            {
+              "name": "oldCatalogReaderCannotOverwriteNewCatalogSnapshot()",
+              "status": "passed"
+            },
+            {
+              "name": "lateReaderPublicationStaysInOldRevisionAfterWriterCommits()",
+              "status": "passed"
+            },
+            {
+              "name": "redisRestartAndMissingPostCommitPublicationAreRecoverable()",
+              "status": "passed"
+            },
+            {
+              "name": "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned()",
+              "status": "passed"
+            },
+            {
+              "name": "malformedOrForeignRevisionFallsBackWithoutPoisoningOtherStudents()",
+              "status": "passed"
+            },
+            {
+              "name": "abruptWriterProcessExitAfterCommitStillAllowsOtherAppToRebuild()",
+              "status": "passed"
+            },
+            {
+              "name": "unsafeTransactionBoundariesAlwaysBypassPersonalCache()",
+              "status": "passed"
+            },
+            {
+              "name": "cacheHitUsesCurrentCatalogAndUserWithoutStoringCredentials()",
+              "status": "passed"
+            },
+            {
+              "name": "actualRedisDelayHasBoundedTimeoutAndDatabaseFallback()",
+              "status": "passed"
+            },
+            {
+              "name": "warmSnapshotUsesOneSqlAndNeverQueriesCourseRows()",
+              "status": "passed"
+            },
+            {
+              "name": "readContextUsesScalarRevisionEvenWhenUserEntityIsManaged()",
+              "status": "passed"
+            },
+            {
+              "name": "combinedReadKeepsUserInSnapshotAndRefreshesUserOnLocalHit()",
+              "status": "passed"
+            },
+            {
+              "name": "readOnlyGraduationAndCreditRequestsDoNotChangeAcademicRows()",
+              "status": "passed"
+            },
+            {
+              "name": "catalogInsertUpdateDeleteAndRollbackAdvanceAtomically()",
+              "status": "passed"
+            },
+            {
+              "name": "missingCatalogVersionFailsClosedInsteadOfServingCachedData()",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "twoAppWritersSerializeBeforeReadingAndSaveCombinedSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "actualReuploadReplacesWholeListAndFailureRollsBackListRevisionAndSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "ownershipFailureCannotChangeAnotherStudentsRevisionOrList()",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "localHitStillChecksDatabaseAndRefreshesAfterOtherWriterAndCatalogChange()",
+              "status": "passed"
+            },
+            {
+              "name": "publicationFailureDoesNotFailReadAndOtherAppCanRebuild()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/test-results/test/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.DeleteTakenLectureCreditIntegrationTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.DeleteTakenLectureCreditIntegrationTest",
+          "totals": {
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "deletingOneOfTwoThreeCreditCoursesCommitsListAndStoredCreditsTogether()",
+              "status": "passed"
+            },
+            {
+              "name": "deletingLastCourseCommitsEmptyListAndZeroStoredCredits()",
+              "status": "passed"
+            },
+            {
+              "name": "[1] foreignCourse=false",
+              "status": "passed"
+            },
+            {
+              "name": "[2] foreignCourse=true",
+              "status": "passed"
+            },
+            {
+              "name": "recalculationFailureRollsBackDeletionRevisionAndBothStoredCreditSummaries()",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "externalGrading": {
+        "condition": "without-skill",
+        "candidateSourceSha256": "153882859830393c58f862328b03389b916173566654ee7245ba555dfefecde2",
+        "candidateBytesMatched": true,
+        "originalTestsCliConfigUnchanged": true,
+        "engineId": "2684b95c-d45b-49ba-884f-c0a51f5efabc",
+        "suites": [
+          {
+            "suite": "takenlecture-unit",
+            "exitCode": 0,
+            "status": "passed",
+            "totals": {
+              "tests": 21,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "failingCases": [],
+            "execution": {
+              "executable": "./gradlew",
+              "args": [
+                "test",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+                "--no-daemon",
+                "--rerun-tasks",
+                "--no-build-cache",
+                "--init-script",
+                "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-59-43.962Z-201d85de-26e8-48f9-aadb-8242adac2c6e/junit.init.gradle",
+                "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-59-43.962Z-201d85de-26e8-48f9-aadb-8242adac2c6e/junit",
+                "--offline"
+              ],
+              "environmentOverrides": {
+                "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "false",
+                "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+                "DEV121_HTTP_STEADY": "false",
+                "DEV121_MYSQL_IMAGE": "mysql:8.4.8"
+              },
+              "offline": true,
+              "timeoutMs": 600000,
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false
+            },
+            "problems": [],
+            "reportPath": "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-59-43.962Z-201d85de-26e8-48f9-aadb-8242adac2c6e/report.json",
+            "reportSha256": "7573472c416a48966bbd2e929531653443f43f0d1a2e27eee87259bb5768cbaf"
+          },
+          {
+            "suite": "takenlecture-integration",
+            "exitCode": 0,
+            "status": "passed",
+            "totals": {
+              "tests": 31,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "failingCases": [],
+            "execution": {
+              "executable": "./gradlew",
+              "args": [
+                "test",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+                "--no-daemon",
+                "--rerun-tasks",
+                "--no-build-cache",
+                "--init-script",
+                "/opt/dev122/workspace/build/agent-harness/2026-11-03T01-00-13.980Z-c073a61e-4b08-4106-9ca4-17ce9720c650/junit.init.gradle",
+                "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T01-00-13.980Z-c073a61e-4b08-4106-9ca4-17ce9720c650/junit",
+                "-Djolbu.test.home=/opt/dev122/workspace/build/agent-harness/2026-11-03T01-00-13.980Z-c073a61e-4b08-4106-9ca4-17ce9720c650/test-home",
+                "--offline"
+              ],
+              "environmentOverrides": {
+                "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "true",
+                "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+                "DEV121_HTTP_STEADY": "false",
+                "DEV121_MYSQL_IMAGE": "mysql:8.4.8",
+                "DOCKER_HOST": "unix:///var/run/docker.sock",
+                "TESTCONTAINERS_HOST_OVERRIDE": "127.0.0.1",
+                "TESTCONTAINERS_REUSE_ENABLE": "false",
+                "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock",
+                "TESTCONTAINERS_RYUK_DISABLED": "false",
+                "TESTCONTAINERS_RYUK_CONTAINER_IMAGE": "testcontainers/ryuk:0.13.0",
+                "TESTCONTAINERS_CHECKS_DISABLE": "true",
+                "MJU_HARNESS_RUN_ID": "2026-11-03T01-00-13.980Z-c073a61e-4b08-4106-9ca4-17ce9720c650"
+              },
+              "offline": true,
+              "timeoutMs": 600000,
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false
+            },
+            "problems": [],
+            "reportPath": "/opt/dev122/workspace/build/agent-harness/2026-11-03T01-00-13.980Z-c073a61e-4b08-4106-9ca4-17ce9720c650/report.json",
+            "reportSha256": "287f4efc775aa27af7da078d6c48c981b0a5d1da09f794b663709e469d8d3bc8"
+          }
+        ],
+        "gradingSeconds": 63.011,
+        "modelCalls": 0,
+        "forbiddenChangedPaths": [],
+        "externalRequiredSuitesPassed": true,
+        "gradeStatus": "original-required-suites-passed",
+        "taskPassed": null,
+        "functionalDefectEstablished": false,
+        "humanQualitativeScores": null
+      },
+      "usage": {
+        "input_tokens": 783849,
+        "cached_input_tokens": 746368,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7703,
+        "reasoning_output_tokens": 1275
+      },
+      "observedCost": null,
+      "providerApiRequestCount": null,
+      "taskPassed": null,
+      "verificationScore": null,
+      "falseCompletion": null,
+      "scopeOverclaim": null,
+      "humanQualitativeScoring": "pending"
+    },
+    {
+      "taskId": "T04",
+      "condition": "with-skill",
+      "orderIndex": 2,
+      "status": "completed",
+      "agentSeconds": 249.006,
+      "supervisionSeconds": 253.608,
+      "candidateSourceSha256": "153882859830393c58f862328b03389b916173566654ee7245ba555dfefecde2",
+      "finalProductDiffSha256": "7bddb04ece162968e2eb0eb731df7ad2923fecf39c161deb250058008b7ce2cc",
+      "changedPaths": [
+        "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/delete/DeleteTakenLectureService.java",
+        "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/DeleteTakenLectureCreditRegressionIntegrationTest.java"
+      ],
+      "forbiddenChangedPaths": [],
+      "addedTests": [
+        "src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/persistence/DeleteTakenLectureCreditRegressionIntegrationTest.java"
+      ],
+      "skillProvided": true,
+      "skillReadCommandObserved": true,
+      "agentVerification": [
+        {
+          "path": "build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/report.json",
+          "suite": "takenlecture-integration",
+          "status": "failed",
+          "totals": {
+            "tests": 31,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "execution": {
+            "executable": "./gradlew",
+            "args": [
+              "test",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+              "--no-daemon",
+              "--rerun-tasks",
+              "--no-build-cache",
+              "--init-script",
+              "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/junit.init.gradle",
+              "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/junit",
+              "-Djolbu.test.home=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/test-home",
+              "--offline"
+            ],
+            "environmentOverrides": {
+              "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "true",
+              "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+              "DEV121_HTTP_STEADY": "false",
+              "DEV121_MYSQL_IMAGE": "mysql:8.4.8",
+              "DOCKER_HOST": "unix:///var/run/docker.sock",
+              "TESTCONTAINERS_HOST_OVERRIDE": "127.0.0.1",
+              "TESTCONTAINERS_REUSE_ENABLE": "false",
+              "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock",
+              "TESTCONTAINERS_RYUK_DISABLED": "false",
+              "TESTCONTAINERS_RYUK_CONTAINER_IMAGE": "testcontainers/ryuk:0.13.0",
+              "TESTCONTAINERS_CHECKS_DISABLE": "true",
+              "MJU_HARNESS_RUN_ID": "2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe"
+            },
+            "offline": true,
+            "timeoutMs": 600000,
+            "exitCode": 1,
+            "signal": null,
+            "timedOut": false
+          },
+          "trackedCodeStable": true,
+          "matchesFinalProductDiff": false
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/report.json",
+          "suite": "takenlecture-unit",
+          "status": "passed",
+          "totals": {
+            "tests": 21,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "execution": {
+            "executable": "./gradlew",
+            "args": [
+              "test",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+              "--no-daemon",
+              "--rerun-tasks",
+              "--no-build-cache",
+              "--init-script",
+              "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit.init.gradle",
+              "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit",
+              "--offline"
+            ],
+            "environmentOverrides": {
+              "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "false",
+              "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+              "DEV121_HTTP_STEADY": "false",
+              "DEV121_MYSQL_IMAGE": "mysql:8.4.8"
+            },
+            "offline": true,
+            "timeoutMs": 600000,
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false
+          },
+          "trackedCodeStable": true,
+          "matchesFinalProductDiff": true
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/report.json",
+          "suite": "takenlecture-integration",
+          "status": "passed",
+          "totals": {
+            "tests": 31,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "execution": {
+            "executable": "./gradlew",
+            "args": [
+              "test",
+              "--tests",
+              "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+              "--no-daemon",
+              "--rerun-tasks",
+              "--no-build-cache",
+              "--init-script",
+              "/opt/dev122/workspace/build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/junit.init.gradle",
+              "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/junit",
+              "-Djolbu.test.home=/opt/dev122/workspace/build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/test-home",
+              "--offline"
+            ],
+            "environmentOverrides": {
+              "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "true",
+              "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+              "DEV121_HTTP_STEADY": "false",
+              "DEV121_MYSQL_IMAGE": "mysql:8.4.8",
+              "DOCKER_HOST": "unix:///var/run/docker.sock",
+              "TESTCONTAINERS_HOST_OVERRIDE": "127.0.0.1",
+              "TESTCONTAINERS_REUSE_ENABLE": "false",
+              "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock",
+              "TESTCONTAINERS_RYUK_DISABLED": "false",
+              "TESTCONTAINERS_RYUK_CONTAINER_IMAGE": "testcontainers/ryuk:0.13.0",
+              "TESTCONTAINERS_CHECKS_DISABLE": "true",
+              "MJU_HARNESS_RUN_ID": "2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3"
+            },
+            "offline": true,
+            "timeoutMs": 600000,
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false
+          },
+          "trackedCodeStable": true,
+          "matchesFinalProductDiff": true
+        }
+      ],
+      "verificationArtifacts": [
+        "build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/gradle.log",
+        "build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+        "build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/junit.init.gradle",
+        "build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/report.json",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/gradle.log",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest.xml",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest.xml",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest.xml",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest.xml",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit.init.gradle",
+        "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/report.json",
+        "build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/gradle.log",
+        "build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+        "build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/junit.init.gradle",
+        "build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/report.json",
+        "build/agent-harness/delete-credit-regression-20261103T005643Z-3296c368-7f97-46da-acdb-391a95f96bd6/gradle.log",
+        "build/agent-harness/delete-credit-regression-20261103T005643Z-3296c368-7f97-46da-acdb-391a95f96bd6/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.DeleteTakenLectureCreditRegressionIntegrationTest.xml",
+        "build/agent-harness/delete-credit-regression-20261103T005643Z-3296c368-7f97-46da-acdb-391a95f96bd6/report.json"
+      ],
+      "rawJUnit": [
+        {
+          "path": "build/agent-harness/2026-11-03T00-54-45.783Z-629af21e-198a-48aa-96eb-489d2e0abbfe/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+          "totals": {
+            "tests": 31,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "oldWritersMustBeDrainedAndFreshNamespaceSelectedBeforeActivation()",
+              "status": "passed"
+            },
+            {
+              "name": "oldCatalogReaderCannotOverwriteNewCatalogSnapshot()",
+              "status": "passed"
+            },
+            {
+              "name": "lateReaderPublicationStaysInOldRevisionAfterWriterCommits()",
+              "status": "passed"
+            },
+            {
+              "name": "redisRestartAndMissingPostCommitPublicationAreRecoverable()",
+              "status": "passed"
+            },
+            {
+              "name": "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned()",
+              "status": "failure"
+            },
+            {
+              "name": "malformedOrForeignRevisionFallsBackWithoutPoisoningOtherStudents()",
+              "status": "passed"
+            },
+            {
+              "name": "abruptWriterProcessExitAfterCommitStillAllowsOtherAppToRebuild()",
+              "status": "passed"
+            },
+            {
+              "name": "unsafeTransactionBoundariesAlwaysBypassPersonalCache()",
+              "status": "passed"
+            },
+            {
+              "name": "cacheHitUsesCurrentCatalogAndUserWithoutStoringCredentials()",
+              "status": "passed"
+            },
+            {
+              "name": "actualRedisDelayHasBoundedTimeoutAndDatabaseFallback()",
+              "status": "passed"
+            },
+            {
+              "name": "warmSnapshotUsesOneSqlAndNeverQueriesCourseRows()",
+              "status": "passed"
+            },
+            {
+              "name": "readContextUsesScalarRevisionEvenWhenUserEntityIsManaged()",
+              "status": "passed"
+            },
+            {
+              "name": "combinedReadKeepsUserInSnapshotAndRefreshesUserOnLocalHit()",
+              "status": "passed"
+            },
+            {
+              "name": "readOnlyGraduationAndCreditRequestsDoNotChangeAcademicRows()",
+              "status": "passed"
+            },
+            {
+              "name": "catalogInsertUpdateDeleteAndRollbackAdvanceAtomically()",
+              "status": "passed"
+            },
+            {
+              "name": "missingCatalogVersionFailsClosedInsteadOfServingCachedData()",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "twoAppWritersSerializeBeforeReadingAndSaveCombinedSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "actualReuploadReplacesWholeListAndFailureRollsBackListRevisionAndSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "ownershipFailureCannotChangeAnotherStudentsRevisionOrList()",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "localHitStillChecksDatabaseAndRefreshesAfterOtherWriterAndCatalogChange()",
+              "status": "passed"
+            },
+            {
+              "name": "publicationFailureDoesNotFailReadAndOtherAppCanRebuild()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+          "totals": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "사용자의 모든 수강과목을 삭제한다.",
+              "status": "passed"
+            },
+            {
+              "name": "deleteTakenLecture()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+          "totals": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "snapshotReturnsItsUserWithoutAnotherUserLookup()",
+              "status": "passed"
+            },
+            {
+              "name": "채플을 4개 이상 수강했을 경우에 2점을 추가한다.",
+              "status": "passed"
+            },
+            {
+              "name": "해당 학생의 수강정보를 조회한다.",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+          "totals": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "새로운 custom 과목을 추가한다.",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-56-05.279Z-747aa8a9-0c9e-44ab-a45c-de162899395b/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+          "totals": {
+            "tests": 15,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "failuresOpenCooldownAndOneRecoveryReadRestoresHits()",
+              "status": "passed"
+            },
+            {
+              "name": "cacheHitDoesNotCallDatabaseLoader()",
+              "status": "passed"
+            },
+            {
+              "name": "boundedLocalCacheReusesOnlyTheExactTwoRevisionsAndExpires()",
+              "status": "passed"
+            },
+            {
+              "name": "malformedAndForeignUserPayloadsFallBack()",
+              "status": "passed"
+            },
+            {
+              "name": "immutableMembershipOnlyIsPublishedAfterSuccessfulReadTransaction()",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackDoesNotPublishAndNoTransactionDoesNotPublish()",
+              "status": "passed"
+            },
+            {
+              "name": "earlierSuccessCannotCloseCircuitOpenedByConcurrentFailure()",
+              "status": "passed"
+            },
+            {
+              "name": "localCacheDoesNotPublishDatabaseMissUntilCommitAndNotAfterRollback()",
+              "status": "passed"
+            },
+            {
+              "name": "publicationFailureDoesNotEscapeCommittedRequest()",
+              "status": "passed"
+            },
+            {
+              "name": "shadowReturnsDatabaseTruthAndReportsMismatch()",
+              "status": "passed"
+            },
+            {
+              "name": "committedMissPopulatesLocalAndShadowStillReadsDatabase()",
+              "status": "passed"
+            },
+            {
+              "name": "databaseFailureIsNotHiddenAsCacheFailure()",
+              "status": "passed"
+            },
+            {
+              "name": "writeTransactionNeverRegistersPublication()",
+              "status": "passed"
+            },
+            {
+              "name": "offModeUsesNoRedisAndKeysSeparateNamespacesAndRevisions()",
+              "status": "passed"
+            },
+            {
+              "name": "redisConcurrencyBudgetFallsBackWithoutQueuing()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/2026-11-03T00-57-14.511Z-c3719123-b6eb-4512-966e-fe87b2c51fc3/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+          "totals": {
+            "tests": 31,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "oldWritersMustBeDrainedAndFreshNamespaceSelectedBeforeActivation()",
+              "status": "passed"
+            },
+            {
+              "name": "oldCatalogReaderCannotOverwriteNewCatalogSnapshot()",
+              "status": "passed"
+            },
+            {
+              "name": "lateReaderPublicationStaysInOldRevisionAfterWriterCommits()",
+              "status": "passed"
+            },
+            {
+              "name": "redisRestartAndMissingPostCommitPublicationAreRecoverable()",
+              "status": "passed"
+            },
+            {
+              "name": "sequentialCommitAndDeleteKeepActualCalculationAndSavedCreditsAligned()",
+              "status": "passed"
+            },
+            {
+              "name": "malformedOrForeignRevisionFallsBackWithoutPoisoningOtherStudents()",
+              "status": "passed"
+            },
+            {
+              "name": "abruptWriterProcessExitAfterCommitStillAllowsOtherAppToRebuild()",
+              "status": "passed"
+            },
+            {
+              "name": "unsafeTransactionBoundariesAlwaysBypassPersonalCache()",
+              "status": "passed"
+            },
+            {
+              "name": "cacheHitUsesCurrentCatalogAndUserWithoutStoringCredentials()",
+              "status": "passed"
+            },
+            {
+              "name": "actualRedisDelayHasBoundedTimeoutAndDatabaseFallback()",
+              "status": "passed"
+            },
+            {
+              "name": "warmSnapshotUsesOneSqlAndNeverQueriesCourseRows()",
+              "status": "passed"
+            },
+            {
+              "name": "readContextUsesScalarRevisionEvenWhenUserEntityIsManaged()",
+              "status": "passed"
+            },
+            {
+              "name": "combinedReadKeepsUserInSnapshotAndRefreshesUserOnLocalHit()",
+              "status": "passed"
+            },
+            {
+              "name": "readOnlyGraduationAndCreditRequestsDoNotChangeAcademicRows()",
+              "status": "passed"
+            },
+            {
+              "name": "catalogInsertUpdateDeleteAndRollbackAdvanceAtomically()",
+              "status": "passed"
+            },
+            {
+              "name": "missingCatalogVersionFailsClosedInsteadOfServingCachedData()",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "rollbackCannotPublishUncommittedDataAndRevisionCanBeReused() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "twoAppWritersSerializeBeforeReadingAndSaveCombinedSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "actualReuploadReplacesWholeListAndFailureRollsBackListRevisionAndSummary()",
+              "status": "passed"
+            },
+            {
+              "name": "ownershipFailureCannotChangeAnotherStudentsRevisionOrList()",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 1/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 2/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 3/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 4/5",
+              "status": "passed"
+            },
+            {
+              "name": "concurrentReadCannotPoisonCalculationOrSubsequentRead() 5/5",
+              "status": "passed"
+            },
+            {
+              "name": "localHitStillChecksDatabaseAndRefreshesAfterOtherWriterAndCatalogChange()",
+              "status": "passed"
+            },
+            {
+              "name": "publicationFailureDoesNotFailReadAndOtherAppCanRebuild()",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "build/agent-harness/delete-credit-regression-20261103T005643Z-3296c368-7f97-46da-acdb-391a95f96bd6/junit/TEST-com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.DeleteTakenLectureCreditRegressionIntegrationTest.xml",
+          "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.DeleteTakenLectureCreditRegressionIntegrationTest",
+          "totals": {
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "cases": [
+            {
+              "name": "committedDeleteUpdatesListAndBothStoredCreditSummaries()",
+              "status": "passed"
+            },
+            {
+              "name": "failureAfterCreditPersistenceRollsBackDeletionCreditsAndRevisionAndAllowsRetry()",
+              "status": "passed"
+            },
+            {
+              "name": "deletingLastCoursePersistsZeroCredits()",
+              "status": "passed"
+            },
+            {
+              "name": "foreignCourseIsRejectedBeforeRecalculationWithoutChangingEitherUser()",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "externalGrading": {
+        "condition": "with-skill",
+        "candidateSourceSha256": "153882859830393c58f862328b03389b916173566654ee7245ba555dfefecde2",
+        "candidateBytesMatched": true,
+        "originalTestsCliConfigUnchanged": true,
+        "engineId": "928f7a13-14f7-40ac-b458-3e025066f742",
+        "suites": [
+          {
+            "suite": "takenlecture-unit",
+            "exitCode": 0,
+            "status": "passed",
+            "totals": {
+              "tests": 21,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "failingCases": [],
+            "execution": {
+              "executable": "./gradlew",
+              "args": [
+                "test",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+                "--no-daemon",
+                "--rerun-tasks",
+                "--no-build-cache",
+                "--init-script",
+                "/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-19.414Z-e8b4df49-f1dc-4c59-b332-91ffa2623323/junit.init.gradle",
+                "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-19.414Z-e8b4df49-f1dc-4c59-b332-91ffa2623323/junit",
+                "--offline"
+              ],
+              "environmentOverrides": {
+                "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "false",
+                "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+                "DEV121_HTTP_STEADY": "false",
+                "DEV121_MYSQL_IMAGE": "mysql:8.4.8"
+              },
+              "offline": true,
+              "timeoutMs": 600000,
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false
+            },
+            "problems": [],
+            "reportPath": "/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-19.414Z-e8b4df49-f1dc-4c59-b332-91ffa2623323/report.json",
+            "reportSha256": "e185456cd372190547056cc8a4d55d975428e8641ff79a9a8049237004c4c167"
+          },
+          {
+            "suite": "takenlecture-integration",
+            "exitCode": 0,
+            "status": "passed",
+            "totals": {
+              "tests": 31,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "failingCases": [],
+            "execution": {
+              "executable": "./gradlew",
+              "args": [
+                "test",
+                "--tests",
+                "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.persistence.TakenLectureCacheConsistencyIntegrationTest",
+                "--no-daemon",
+                "--rerun-tasks",
+                "--no-build-cache",
+                "--init-script",
+                "/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-47.720Z-ca8049db-8f25-480b-89f3-91a0848e7112/junit.init.gradle",
+                "-Djolbu.junit.output=/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-47.720Z-ca8049db-8f25-480b-89f3-91a0848e7112/junit",
+                "-Djolbu.test.home=/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-47.720Z-ca8049db-8f25-480b-89f3-91a0848e7112/test-home",
+                "--offline"
+              ],
+              "environmentOverrides": {
+                "RUN_TAKEN_LECTURE_CACHE_REPRODUCTION": "true",
+                "RUN_TAKEN_LECTURE_CACHE_HTTP": "false",
+                "DEV121_HTTP_STEADY": "false",
+                "DEV121_MYSQL_IMAGE": "mysql:8.4.8",
+                "DOCKER_HOST": "unix:///var/run/docker.sock",
+                "TESTCONTAINERS_HOST_OVERRIDE": "127.0.0.1",
+                "TESTCONTAINERS_REUSE_ENABLE": "false",
+                "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE": "/var/run/docker.sock",
+                "TESTCONTAINERS_RYUK_DISABLED": "false",
+                "TESTCONTAINERS_RYUK_CONTAINER_IMAGE": "testcontainers/ryuk:0.13.0",
+                "TESTCONTAINERS_CHECKS_DISABLE": "true",
+                "MJU_HARNESS_RUN_ID": "2026-11-03T01-01-47.720Z-ca8049db-8f25-480b-89f3-91a0848e7112"
+              },
+              "offline": true,
+              "timeoutMs": 600000,
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false
+            },
+            "problems": [],
+            "reportPath": "/opt/dev122/workspace/build/agent-harness/2026-11-03T01-01-47.720Z-ca8049db-8f25-480b-89f3-91a0848e7112/report.json",
+            "reportSha256": "5ea3befb2462d31a5d130420df82835ef373200378d3b1c5e0ad044f962114cf"
+          }
+        ],
+        "gradingSeconds": 63.283,
+        "modelCalls": 0,
+        "forbiddenChangedPaths": [],
+        "externalRequiredSuitesPassed": true,
+        "gradeStatus": "original-required-suites-passed",
+        "taskPassed": null,
+        "functionalDefectEstablished": false,
+        "humanQualitativeScores": null
+      },
+      "usage": {
+        "input_tokens": 780002,
+        "cached_input_tokens": 738560,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7517,
+        "reasoning_output_tokens": 1589
+      },
+      "observedCost": null,
+      "providerApiRequestCount": null,
+      "taskPassed": null,
+      "verificationScore": null,
+      "falseCompletion": null,
+      "scopeOverclaim": null,
+      "humanQualitativeScoring": "pending"
+    }
+  ],
+  "humanReviewPacket": "build/agent-harness/dev122-t04-pilot-v1/human-review",
+  "humanScoringCompleted": false,
+  "notExecuted": [
+    "full 30-run comparison",
+    "HTTP/UI this phase",
+    "human qualitative scoring"
+  ],
+  "report": "docs/DEV-122_T04_PILOT_REPORT.md",
+  "finalRuntimeCheck": "build/agent-harness/dev122-t04-pilot-v1/final-runtime-state.json",
+  "finalEvaluationVmsStopped": true,
+  "gradeVmsRemoved": true,
+  "independentReview": "build/agent-harness/dev122-t04-pilot-v1/independent-review.json"
+}

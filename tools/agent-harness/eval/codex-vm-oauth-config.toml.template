@@ -1,0 +1,69 @@
+# DEV-122 ChatGPT proxy candidate. VM-only; not a host/user configuration.
+# Requires a separately verified host policy and a fresh per-run source fixture.
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+model_provider = "sandboxd"
+forced_login_method = "api"
+approval_policy = "never"
+allow_login_shell = false
+sandbox_mode = "danger-full-access"
+web_search = "disabled"
+project_doc_max_bytes = 32768
+
+[model_providers.sandboxd]
+name = "Docker OpenAI OAuth proxy"
+base_url = "https://chatgpt.com/backend-api/codex"
+wire_api = "responses"
+experimental_bearer_token = "oai-oat01-proxy-managed"
+requires_openai_auth = false
+
+[features]
+apps = false
+plugins = false
+hooks = false
+plugin_hooks = false
+browser_use = false
+browser_use_external = false
+computer_use = false
+in_app_browser = false
+image_generation = false
+memories = false
+multi_agent = false
+shell_snapshot = false
+
+[[skills.config]]
+path = "/opt/dev122/codex-state/skills/.system/skill-creator/SKILL.md"
+enabled = false
+[[skills.config]]
+path = "/opt/dev122/codex-state/skills/.system/skill-installer/SKILL.md"
+enabled = false
+[[skills.config]]
+path = "/opt/dev122/codex-state/skills/.system/imagegen/SKILL.md"
+enabled = false
+[[skills.config]]
+path = "/opt/dev122/codex-state/skills/.system/openai-docs/SKILL.md"
+enabled = false
+[[skills.config]]
+path = "/opt/dev122/codex-state/skills/.system/plugin-creator/SKILL.md"
+enabled = false
+[[skills.config]]
+path = "/opt/dev122/codex-state/skills/.system/review-agent/SKILL.md"
+enabled = false
+
+[shell_environment_policy]
+inherit = "none"
+
+[shell_environment_policy.set]
+PATH = "/opt/dev122/java/jdk-21.0.13+9/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+JAVA_HOME = "/opt/dev122/java/jdk-21.0.13+9"
+JAVA_TOOL_OPTIONS = ""
+GRADLE_USER_HOME = "/opt/dev122/gradle-home"
+GRADLE_OPTS = "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+DOCKER_HOST = "unix:///var/run/docker.sock"
+TMPDIR = "/opt/dev122/agent-tmp/"
+LANG = "C.utf8"
+LC_ALL = "C.utf8"
+GIT_CONFIG_GLOBAL = "/dev/null"
+GIT_CONFIG_NOSYSTEM = "1"
+NPM_CONFIG_USERCONFIG = "/dev/null"
+NPM_CONFIG_CACHE = "/opt/dev122/agent-tmp/npm"
