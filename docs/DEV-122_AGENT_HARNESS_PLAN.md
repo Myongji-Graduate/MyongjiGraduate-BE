@@ -2,11 +2,12 @@
 
 ## 현재 상태
 
-- 기준일: 2026-11-03
+- 기준일: 2026-11-06
 - 백엔드 브랜치: `chore/DEV-122`
 - 프론트 브랜치: `chore/agent-harness` (별도 프론트 저장소)
 - 기반: 최신 조회한 `origin/develop`, `861228e42f779afa8a517fd3ed05a6bfafc46906`
 - 상태: [PR #416](https://github.com/Myongji-Graduate/MyongjiGraduate-BE/pull/416)에 게시했고 최초 head의 원격 CI가 통과했다. 추가 핵심 구현 독립 리뷰에서 발견한4건과 수정·회귀 검사는 [PR 리뷰 기록](DEV-122_PR_REVIEW_REPORT.md)에서 관리한다. 평가 보호 검사는51개, 일상 리뷰 도구 검사는16개로 늘었다. 원격 CI의 현재 head 결과는 PR checks에서 확인한다. 이전 [서비스 검증 적용 기록](DEV-122_SERVICE_VERIFICATION_REPORT.md)과 T01/T04 고정 증거는 유지한다.
+- 후속: SonarCloud의 java:S5778 경고에 따라 예외 검증 람다 밖에서 userId를 준비한다. 수정 후 실행 근거와 Sonar 재분석 결과는 해당 PR의 최신 head/checks에서 확인한다.
 - 다음 작업: 실제 서비스 변경에서의 사용자 피드백을 추가한다. 사람 교정·Skill 효과 일반화는 미완료이며 본 비교30회는 보류한다. 기존 코딩 실험 승인6회는 사용했고 추가 코딩 실험은 실행하지 않는다.
 - 기존 `DEV-116` 체크아웃의 미커밋 변경·데이터·계획은 이 작업에 포함하지 않는다.
 

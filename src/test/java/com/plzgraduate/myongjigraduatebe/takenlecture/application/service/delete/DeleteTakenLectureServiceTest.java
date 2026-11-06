@@ -77,7 +77,8 @@ class DeleteTakenLectureServiceTest {
         given(findUserUseCase.findUserById(user.getId())).willReturn(user);
         given(findTakenLecturePort.findTakenLecturesByUser(user)).willReturn(List.of(ownLecture));
 
-        assertThatThrownBy(() -> deleteTakenLectureService.deleteTakenLecture(user.getId(), 102L))
+        Long userId = user.getId();
+        assertThatThrownBy(() -> deleteTakenLectureService.deleteTakenLecture(userId, 102L))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("102");
 
