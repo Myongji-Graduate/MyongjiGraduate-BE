@@ -44,3 +44,7 @@ Never commit dumps, credentials, or snapshot `state/`. The restored snapshot con
 ## DEV-116 Workflow
 
 Read [the implementation plan](docs/DEV-116_AI_IMPLEMENTATION_PLAN.md) before DEV-116 work. Update the relevant task, evidence, decisions, and next step after each work unit; check off only verified results. Do not expand the authorized phase. Use `mju-policy-change` for graduation-policy changes and `mju-local-data` for snapshot/development-data work. For OpenAI/Codex questions, use OpenAI Docs MCP with `openai-docs` when available; otherwise use official documentation. Repository guidance never grants extra permissions.
+
+## DEV-122 Verification Harness
+
+Read [the DEV-122 plan](docs/DEV-122_AGENT_HARNESS_PLAN.md) for harness work. Keep its current state and observed evidence concise. The CLI lives in `tools/agent-harness`; its README owns build and usage commands. Use `mju-verify` for supported change verification and read only the relevant feature map. Report unit, integration, UI, and Skill-effectiveness evidence separately. A passing unit suite does not complete an untested user journey. Review meaningful harness changes independently when useful, with explicit file ownership for parallel edits. Commit, push, and deployment still require a user request.

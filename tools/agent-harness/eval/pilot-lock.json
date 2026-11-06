@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "status": "pilot-completed-runtime-followup-required",
+  "agentRunsExecuted": 2,
+  "egressApproval": "User explicitly approved the specified repository content transfer and two pilot runs.",
+  "resultFile": "tools/agent-harness/eval/pilot-result.json",
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "taskId": "T01",
+  "conditions": ["with-skill", "without-skill"],
+  "repetitionsPerCondition": 1,
+  "wallTimeSecondsPerRun": 900,
+  "agent": { "model": "gpt-6-astra", "reasoning": "high", "clientVersion": "0.166.0", "authentication": "existing-chatgpt-login", "modelSnapshot": null },
+  "runtime": { "node": "24.11.0", "java": "Amazon Corretto 21.0.6", "gradle": "8.10", "byteBuddyAgent": "1.14.19", "javaIpv4Stack": true, "javaTempDirectory": "per-run" },
+  "configTemplateSha256": "a780c26b5a6ac80089009decf996918d590c08d0c9231090b0291ebedc1553a1",
+  "configNormalization": "Replace each run's absolute case root with ${CASE_ROOT}; retain actual per-run config hashes in preparation.json.",
+  "promptSha256": "a375054d1042a36391d54387f9c9506c4e0855a367c6cad079ba3526c73f8f86",
+  "dependencyCache": { "files": 3709, "sha256": "432ea78f80e990c6cf618b71adabc12bdfa2ce86d3dca688d588d796368874f8" },
+  "preparedArtifacts": { "files": 266, "sha256": "df0b67e23dfc6382974e43ff785eaa860ffc6b10e914ffc21034f716261fd6d2" },
+  "trackedInputCounts": { "without-skill": 642, "with-skill": 645 },
+  "permittedInputDifferences": [
+    "AGENTS.md",
+    ".agents/skills/mju-verify/SKILL.md",
+    ".agents/skills/mju-verify/references/takenlecture-unit.md",
+    ".agents/skills/mju-verify/references/takenlecture-integration.md"
+  ],
+  "preflight": {
+    "without-skill": { "unmodified": { "tests": 21, "failures": 1, "errors": 0, "skipped": 0 }, "restored": { "tests": 21, "failures": 0, "errors": 0, "skipped": 0 } },
+    "with-skill": { "unmodified": { "tests": 21, "failures": 1, "errors": 0, "skipped": 0 }, "restored": { "tests": 21, "failures": 0, "errors": 0, "skipped": 0 } }
+  },
+  "isolation": {
+    "originalRepositoryRead": "denied",
+    "evaluatorAnswerRead": "denied",
+    "personalSkillRead": "denied",
+    "otherRunRead": "denied",
+    "authFileReadByCommands": "denied",
+    "answerSymlinkRead": "denied",
+    "commandInternet": "denied",
+    "loopback": "allowed-for-local-test-processes",
+    "activeSkillsWithout": [],
+    "activeSkillsWith": ["mju-verify"],
+    "otherAgentCapabilities": "apps/plugins/browser/computer-use/memories/multi-agent/web-search disabled"
+  },
+  "evidenceDirectory": "build/agent-harness/dev122-pilot-aiwq66cb",
+  "scope": "T01 backend unit pilot only; neither integration isolation nor main experiment completed"
+}

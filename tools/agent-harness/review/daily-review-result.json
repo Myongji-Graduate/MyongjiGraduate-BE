@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "status": "daily-change-review-ready-scoped-local-checks",
+  "report": "docs/DEV-122_DAILY_REVIEW_REPORT.md",
+  "artifactRoot": "build/agent-harness/dev122-daily-review",
+  "finalChecks": "build/agent-harness/dev122-daily-review/final-checks.json",
+  "finalBundle": "build/agent-harness/dev122-daily-review/bundle-final",
+  "packetId": "d88c5638b6392b333c35ed77664885a801c2c39f1823bc16b77525a9cb49fcd7",
+  "selectedFiles": [
+    "tools/agent-harness/review/change-review.py",
+    "tools/agent-harness/review/test_change_review.py",
+    ".agents/skills/mju-verify/SKILL.md",
+    ".agents/skills/mju-verify/references/change-review.md",
+    ".github/workflows/agent-harness.yml"
+  ],
+  "localChecks": {
+    "reviewToolTestsPassed": 12,
+    "receiptFingerprintsMatch": true,
+    "receiptLogHashMatches": true,
+    "executionIndependentlyVerified": false,
+    "skillStaticValidationPassed": true,
+    "ciYamlParsed": true,
+    "remoteCiExecuted": false
+  },
+  "independentModelReview": {
+    "reviewers": 1,
+    "passes": 3,
+    "modelId": null,
+    "findingsByPass": [1, 0, 0],
+    "initialP2Resolved": true,
+    "finalReviewValidated": true,
+    "selectedSnapshotMatches": true,
+    "globalTrackedStateMatches": false,
+    "oldReviewRejectedAsStale": true,
+    "wholeRepositoryReviewed": false,
+    "humanReviewCompleted": false,
+    "judgmentCorrectnessVerified": false
+  },
+  "previousT04Evidence": {
+    "filesHashChecked": 242,
+    "allUnchanged": true
+  },
+  "newCodingPilotRuns": 0,
+  "newDatabaseOrAppRuns": 0,
+  "backendUnitIntegrationHttpUiRunThisPhase": false,
+  "updatedSkillEffectiveness": null,
+  "actualServiceChangeFeedbackCollected": false,
+  "mainComparison30RunsOnHold": true,
+  "committed": false,
+  "pushed": false,
+  "deployed": false
+}

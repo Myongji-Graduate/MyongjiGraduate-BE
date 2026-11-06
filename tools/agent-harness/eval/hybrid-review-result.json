@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "status": "t04-hybrid-review-complete-human-calibration-pending",
+  "evidenceDirectory": "build/agent-harness/dev122-hybrid-review-v1",
+  "sourcePilotResult": "tools/agent-harness/eval/integration-pilot-result.json",
+  "records": [
+    {
+      "condition": "without-skill",
+      "candidateId": "candidate-81a604b6",
+      "automaticRequiredSuitesPassed": true,
+      "automaticScopeValid": true,
+      "modelJudgments": {
+        "taskPassed": true,
+        "verificationScore": 2,
+        "falseCompletion": false,
+        "scopeOverclaim": false
+      },
+      "suggestedHumanReview": true,
+      "humanJudgments": null
+    },
+    {
+      "condition": "with-skill",
+      "candidateId": "candidate-c2e57fff",
+      "automaticRequiredSuitesPassed": true,
+      "automaticScopeValid": true,
+      "modelJudgments": {
+        "taskPassed": true,
+        "verificationScore": 2,
+        "falseCompletion": false,
+        "scopeOverclaim": false
+      },
+      "suggestedHumanReview": false,
+      "humanJudgments": null
+    }
+  ],
+  "codingAgentExecutionsStartedThisWork": 0,
+  "modelReviewSessions": 1,
+  "modelId": null,
+  "observedUsage": null,
+  "observedCost": null,
+  "modelApiRequestCount": null,
+  "citationCount": 32,
+  "unresolvedModelJudgments": 0,
+  "humanReviewQueueCount": 1,
+  "humanSampleDirectory": "build/agent-harness/dev122-hybrid-review-v1/human-sample/reviewer",
+  "humanScoringCompleted": false,
+  "humanCalibrationCompleted": false,
+  "qualitativeJudgmentsVerified": false,
+  "skillEffectiveness": null,
+  "mainComparisonOnHold": true,
+  "newVmOrProductTestExecutions": 0,
+  "relatedReviewTestsPassed": 20,
+  "report": "docs/DEV-122_HYBRID_REVIEW_REPORT.md"
+}

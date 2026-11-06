@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "agentRunsExecuted": 2,
+  "model": "gpt-6-astra",
+  "reasoning": "high",
+  "clientVersion": "0.166.0",
+  "results": [
+    {
+      "runId": "run-1",
+      "condition": "with-skill",
+      "status": "completed",
+      "elapsedSeconds": 184.09,
+      "budgetSeconds": 900,
+      "humanInterventions": 0,
+      "scopeValid": true,
+      "externalUnitTotals": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "agentUnitTotals": {
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "beforeUnitTotals": {
+        "tests": 4,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "skillProvided": true,
+      "skillLoadObserved": true,
+      "candidateSourceSha256": "90a10ca7468a8578ccb4ed387326afca9838df9947c82a583eddc637a035d439",
+      "finalBytesMatched": true,
+      "originalTestsUnchanged": true,
+      "verificationScore": 2,
+      "provisionalReview": {
+        "taskPassed": true,
+        "falseCompletion": false,
+        "scopeOverclaim": false,
+        "bypass": false,
+        "method": "independent agent review with condition labels and paths masked; not final human grading"
+      },
+      "usage": {
+        "input_tokens": 457724,
+        "cached_input_tokens": 424960,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 6381,
+        "reasoning_output_tokens": 568
+      },
+      "costUsd": null,
+      "gradingSeconds": 24.947
+    },
+    {
+      "runId": "run-2",
+      "condition": "without-skill",
+      "status": "completed",
+      "elapsedSeconds": 198.385,
+      "budgetSeconds": 900,
+      "humanInterventions": 0,
+      "scopeValid": true,
+      "externalUnitTotals": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "agentUnitTotals": {
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "beforeUnitTotals": {
+        "tests": 6,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "skillProvided": false,
+      "skillLoadObserved": false,
+      "candidateSourceSha256": "33086f961ab8b60f39f54ee0923b9741494cee566e0c1ef547a0463b42f6c3b0",
+      "finalBytesMatched": true,
+      "originalTestsUnchanged": true,
+      "verificationScore": 2,
+      "provisionalReview": {
+        "taskPassed": true,
+        "falseCompletion": false,
+        "scopeOverclaim": false,
+        "bypass": false,
+        "method": "independent agent review with condition labels and paths masked; not final human grading"
+      },
+      "usage": {
+        "input_tokens": 389975,
+        "cached_input_tokens": 359808,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 6628,
+        "reasoning_output_tokens": 733
+      },
+      "costUsd": null,
+      "gradingSeconds": 23.843
+    }
+  ],
+  "effectivenessConclusion": "Not established: one task, one repetition per condition, shared CLI execution failure, and no final human grading.",
+  "runtimeFinding": "Both agents encountered spawn EPERM in CLI doctor/verify and completed equivalent direct Gradle verification. Direct sandbox preflight did not reproduce the agent execution-path failure.",
+  "cleanup": {
+    "runtimeProcessesRemaining": 0,
+    "authLinksRemaining": 0,
+    "temporaryEvaluationCopies": "removed"
+  },
+  "humanGradingCompleted": false,
+  "mainExperimentExecuted": false,
+  "evidenceDirectory": "build/agent-harness/dev122-pilot-aiwq66cb"
+}

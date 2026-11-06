@@ -1,0 +1,81 @@
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+approval_policy = "never"
+allow_login_shell = false
+default_permissions = "eval"
+web_search = "disabled"
+project_doc_max_bytes = 32768
+[features]
+network_proxy = true
+apps = false
+plugins = false
+hooks = false
+plugin_hooks = false
+browser_use = false
+browser_use_external = false
+computer_use = false
+in_app_browser = false
+image_generation = false
+memories = false
+multi_agent = false
+shell_snapshot = false
+[permissions.eval.filesystem]
+":minimal" = "read"
+"/private/tmp" = "deny"
+"/private/var/folders" = "deny"
+"${CASE_ROOT}/codex-home/tmp" = "write"
+"${CASE_ROOT}/workspace" = "write"
+"${CASE_ROOT}/workspace/.git" = "read"
+"${CASE_ROOT}/workspace/.agents" = "read"
+"${CASE_ROOT}/gradle-home" = "write"
+"${CASE_ROOT}/tmp" = "write"
+"/Users/jinhyeon/Library/Java/JavaVirtualMachines/corretto-21.0.6/Contents/Home" = "read"
+"/Users/jinhyeon/.nvm/versions/node/v24.11.0" = "read"
+"/System/Library/OpenSSL" = "read"
+"/private/etc/ssl" = "read"
+"/Library/Developer/CommandLineTools" = "read"
+[permissions.eval.network]
+enabled = true
+allow_local_binding = true
+proxy_url = "http://127.0.0.1:32180"
+socks_url = "http://127.0.0.1:32181"
+[permissions.eval.network.domains]
+"127.0.0.1" = "allow"
+"localhost" = "allow"
+[[skills.config]]
+path = "${CASE_ROOT}/codex-home/skills/.system/skill-creator/SKILL.md"
+enabled = false
+[[skills.config]]
+path = "${CASE_ROOT}/codex-home/skills/.system/skill-installer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "${CASE_ROOT}/codex-home/skills/.system/imagegen/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "${CASE_ROOT}/codex-home/skills/.system/openai-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "${CASE_ROOT}/codex-home/skills/.system/plugin-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "${CASE_ROOT}/codex-home/skills/.system/review-agent/SKILL.md"
+enabled = false
+
+[shell_environment_policy]
+inherit = "all"
+
+[shell_environment_policy.set]
+PATH = "/Library/Developer/CommandLineTools/usr/bin:/Users/jinhyeon/.nvm/versions/node/v24.11.0/bin:/Users/jinhyeon/Library/Java/JavaVirtualMachines/corretto-21.0.6/Contents/Home/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+JAVA_HOME = "/Users/jinhyeon/Library/Java/JavaVirtualMachines/corretto-21.0.6/Contents/Home"
+GRADLE_USER_HOME = "${CASE_ROOT}/gradle-home"
+TMPDIR = "${CASE_ROOT}/tmp/"
+GIT_CONFIG_GLOBAL = "/dev/null"
+GIT_CONFIG_NOSYSTEM = "1"
+NPM_CONFIG_USERCONFIG = "/dev/null"
+NPM_CONFIG_CACHE = "${CASE_ROOT}/tmp/npm"
+JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true -Djava.io.tmpdir=${CASE_ROOT}/tmp/ -javaagent:${CASE_ROOT}/gradle-home/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.19/154da3a65b4f4a909d3e5bdec55d1b2b4cbb6ce1/byte-buddy-agent-1.14.19.jar"
+

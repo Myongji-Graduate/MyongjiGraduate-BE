@@ -1,0 +1,465 @@
+{
+  "schemaVersion": 1,
+  "status": "unapproved-schedule-only",
+  "evaluatorOnly": true,
+  "baselineCommit": "b579ff46f3571c487415a004434093cf15a7dd67",
+  "taskManifestSha256": "5ac156b4f129dddfc0b55ae6cfbb3375d2f2090442cf3f364e87d331b090c52c",
+  "orderSeed": "DEV-122-P3-v1",
+  "agent": {
+    "model": "gpt-6-astra",
+    "reasoning": "high",
+    "clientVersion": "0.166.0-linux-arm64",
+    "profileSha256": "2c48b5bc7d3dba5e5e008a32d199a90ccd70896873f390aee0aa144f0a94c76e",
+    "kitSha256": "2256b72a87daaa8234f099512acf65184374eefd06eb8834d30d884c482e8ce3",
+    "watchdogSha256": "c49ef5ea5d32da7ab76c3c93e8e8dee7e14d62a099120e919796754f682a0321",
+    "emptySshAgentSha256": "95e7e9c0214a631cdf5019aaf81f855094240048cbe040dd89f78a000ac68e4a"
+  },
+  "maximumAgentExecutions": 30,
+  "maximumAgentMinutes": 510,
+  "outerRetries": 0,
+  "maximumConcurrentAgents": 1,
+  "stopOnRequiredAuthOrEnvironmentFailure": true,
+  "authorizedAgentExecutions": 0,
+  "agentExecutionsStarted": 0,
+  "experimentReady": false,
+  "remainingGates": [
+    "Freeze complete readable input inventories and fresh-run VM lifecycle",
+    "Verify all five task red/green suites under the main runtime",
+    "Resolve or explicitly bound host OAuth rotation reliability",
+    "Confirm review protocol and finish human/model-review distinction",
+    "Obtain explicit source-transfer and bounded main-execution authorization"
+  ],
+  "tasks": [
+    {
+      "taskId": "T01",
+      "source": "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCache.java",
+      "healthySourceSha256": "3a5092c46b9ce282e52f0e065f5f18ca8799113e2c34b76c16452daaa18b4c67",
+      "regressionSourceSha256": "282bd040db4609d9f2bce51db65b17d958144979925f36e265ada6c157bc3de4",
+      "promptSha256": "a375054d1042a36391d54387f9c9506c4e0855a367c6cad079ba3526c73f8f86",
+      "oracleFileSha256": "cc66c014781dad161f34a3c70e92ff93fde9490f8379db99e9267084726be5f1",
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "taskId": "T02",
+      "source": "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCache.java",
+      "healthySourceSha256": "3a5092c46b9ce282e52f0e065f5f18ca8799113e2c34b76c16452daaa18b4c67",
+      "regressionSourceSha256": "c53517b2ea787fc60975050c2d02227db40be2a0f6d616e7d420d5f0d27fee97",
+      "promptSha256": "a07014e4bdad427273137af265ed531a82304d46c134995817cc556b70d0068c",
+      "oracleFileSha256": "cc66c014781dad161f34a3c70e92ff93fde9490f8379db99e9267084726be5f1",
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "taskId": "T03",
+      "source": "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/TakenLectureCache.java",
+      "healthySourceSha256": "3a5092c46b9ce282e52f0e065f5f18ca8799113e2c34b76c16452daaa18b4c67",
+      "regressionSourceSha256": "2241df07b3a4f72d8a28d921a4ff82ef8a57d630d7387c757753e7e495945bb8",
+      "promptSha256": "57a62c0af5b10aee44ad7615dfe8b305449f6ed1128c725f3988b4c759b5ed8a",
+      "oracleFileSha256": "cc66c014781dad161f34a3c70e92ff93fde9490f8379db99e9267084726be5f1",
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "taskId": "T04",
+      "source": "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/application/service/delete/DeleteTakenLectureService.java",
+      "healthySourceSha256": "e477c306e6be3e50cb19363fa0a93c7a74e42ed82e0a996387bffbf62139731a",
+      "regressionSourceSha256": "37f9862f41453db9cdf88f8a2c0098d1c48abb5dbef08d9b42a1b8e0df3e74ca",
+      "promptSha256": "6d3f50a0432d7620c441c94275929bef0249c5db3aaf4605a7bb3373b068568f",
+      "oracleFileSha256": "b500f4118e1d8ae7500c0bbcd45dcf01117c804e420f099f7683e6ce6f356160",
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "taskId": "T05",
+      "source": "src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/infrastructure/adapter/cache/CachedTakenLectureAdapter.java",
+      "healthySourceSha256": "a354ed9a750c3b19873d2a1fc4d8a81621110c3bc8d7f68a544ad735dd6cdcf1",
+      "regressionSourceSha256": "f2be9bd8114ef3b2cffa56f3086024fe8b808c7a598dd579248bd60b3f06221c",
+      "promptSha256": "143d9cf38dfb4ff01234165def3b766622e9c2eebd52358d0def5e50daa5d084",
+      "oracleFileSha256": "b500f4118e1d8ae7500c0bbcd45dcf01117c804e420f099f7683e6ce6f356160",
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "orderIndex": 1,
+      "runId": "T03-r2-without-skill",
+      "taskId": "T03",
+      "repetition": 2,
+      "condition": "without-skill",
+      "orderKeySha256": "1b92096322e3787ab2b75a256ae2b823f54ceeb7382f69b092d8a8d706ab4216",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 2,
+      "runId": "T01-r1-with-skill",
+      "taskId": "T01",
+      "repetition": 1,
+      "condition": "with-skill",
+      "orderKeySha256": "2936b7aa368c796b9b72321a21c0dbdc4c272bb341f963e09ed440acb5b75647",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 3,
+      "runId": "T05-r1-without-skill",
+      "taskId": "T05",
+      "repetition": 1,
+      "condition": "without-skill",
+      "orderKeySha256": "2f033603a426ad26e7c0e1aa652026cd3488d4407c074d0d0298ed4c0f6686d6",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 4,
+      "runId": "T03-r1-without-skill",
+      "taskId": "T03",
+      "repetition": 1,
+      "condition": "without-skill",
+      "orderKeySha256": "4eb9e0767b97f242df27d776307aa7db693c404cea7f8d7c74c24d973b681673",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 5,
+      "runId": "T05-r2-without-skill",
+      "taskId": "T05",
+      "repetition": 2,
+      "condition": "without-skill",
+      "orderKeySha256": "512312e1bd4bcec6cae8b2f5da1dd1ebad58e33bb4b1496be5446ffcdd4ab701",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 6,
+      "runId": "T03-r3-with-skill",
+      "taskId": "T03",
+      "repetition": 3,
+      "condition": "with-skill",
+      "orderKeySha256": "527012e922a33263f2a53b72c312b09b270e1347003285ec4eea1e35fab64351",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 7,
+      "runId": "T01-r2-with-skill",
+      "taskId": "T01",
+      "repetition": 2,
+      "condition": "with-skill",
+      "orderKeySha256": "5557ce7278781c4d8df058e0c018ab784f6ed392857e3defb7cf93b123dee87d",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 8,
+      "runId": "T04-r2-without-skill",
+      "taskId": "T04",
+      "repetition": 2,
+      "condition": "without-skill",
+      "orderKeySha256": "583878eff545834f540f8348936bdd4ab9d7c8903b9341de77e740882873945d",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 9,
+      "runId": "T04-r3-with-skill",
+      "taskId": "T04",
+      "repetition": 3,
+      "condition": "with-skill",
+      "orderKeySha256": "5a7844fa65e9901dcdaa782795e1f8076425a74da7b02f79bbe912665b687127",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 10,
+      "runId": "T04-r1-with-skill",
+      "taskId": "T04",
+      "repetition": 1,
+      "condition": "with-skill",
+      "orderKeySha256": "64a5a1ee9e109501d04c1da0bc4bdf0133ad9c67863439b0fcb6bbd403b8065e",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 11,
+      "runId": "T03-r1-with-skill",
+      "taskId": "T03",
+      "repetition": 1,
+      "condition": "with-skill",
+      "orderKeySha256": "6da50f47e457d67150c9fa3855ff14fa4f41884f569dc2e8099054753d942dde",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 12,
+      "runId": "T02-r3-without-skill",
+      "taskId": "T02",
+      "repetition": 3,
+      "condition": "without-skill",
+      "orderKeySha256": "73cb04dd8ce4687c2ff9dc2be575cd76a525316bbf5a1acf1d248caa66f338fe",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 13,
+      "runId": "T05-r1-with-skill",
+      "taskId": "T05",
+      "repetition": 1,
+      "condition": "with-skill",
+      "orderKeySha256": "7ecf3a72484bc53385216fe058ec3d7afe3761fe5d050d98ad7507247c8fdac7",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 14,
+      "runId": "T04-r3-without-skill",
+      "taskId": "T04",
+      "repetition": 3,
+      "condition": "without-skill",
+      "orderKeySha256": "8bbe00117aa44e38ee1e7eaef82decae575f5cf8aeddf869b0447472136ceeee",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 15,
+      "runId": "T02-r1-without-skill",
+      "taskId": "T02",
+      "repetition": 1,
+      "condition": "without-skill",
+      "orderKeySha256": "9ba482b73449406187e34ba3b6cbfd92ad5a41c7292bdd7e5b13d8be553ba969",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 16,
+      "runId": "T01-r2-without-skill",
+      "taskId": "T01",
+      "repetition": 2,
+      "condition": "without-skill",
+      "orderKeySha256": "9f157850709a7ef330d90df90aa4ba44729fb7d56cf445a8b3f763107e4da377",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 17,
+      "runId": "T04-r1-without-skill",
+      "taskId": "T04",
+      "repetition": 1,
+      "condition": "without-skill",
+      "orderKeySha256": "a5b7068cda5a86b22b2630a1324db02dff36cd08e847e35279fdc2f209065ed7",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 18,
+      "runId": "T05-r3-without-skill",
+      "taskId": "T05",
+      "repetition": 3,
+      "condition": "without-skill",
+      "orderKeySha256": "a77bb2a3119ea53dc8bb86645efc1df8fc752afb026134ba34510c3be3ee64d5",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 19,
+      "runId": "T05-r3-with-skill",
+      "taskId": "T05",
+      "repetition": 3,
+      "condition": "with-skill",
+      "orderKeySha256": "aa2f32b7faafc767a3768e04d4afa980f957d6e9fdd47a1d96e3050f16c1af66",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 20,
+      "runId": "T05-r2-with-skill",
+      "taskId": "T05",
+      "repetition": 2,
+      "condition": "with-skill",
+      "orderKeySha256": "adabde828b766ed1375bbd33d060e1a2f1f1c963beb34c41ca78f432efbaf09b",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 21,
+      "runId": "T02-r2-without-skill",
+      "taskId": "T02",
+      "repetition": 2,
+      "condition": "without-skill",
+      "orderKeySha256": "b2e15d31ec7628323a799fb71e7cbbb037285991252074d59b8473259e1a4957",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 22,
+      "runId": "T01-r3-without-skill",
+      "taskId": "T01",
+      "repetition": 3,
+      "condition": "without-skill",
+      "orderKeySha256": "b32936a9e8251254326c68ce9dc8ed608fce5d2381620115529bb3ca9d0174fc",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 23,
+      "runId": "T02-r3-with-skill",
+      "taskId": "T02",
+      "repetition": 3,
+      "condition": "with-skill",
+      "orderKeySha256": "b4b19f31153b1bddf2a7c6ccfb1598be3ff95b8f90a47b26e1fe838ae7c3e18a",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 24,
+      "runId": "T03-r3-without-skill",
+      "taskId": "T03",
+      "repetition": 3,
+      "condition": "without-skill",
+      "orderKeySha256": "cebcecdfbf64f9567174f5569cac2aa19eb60e7755450ea2faa807fffbb17a74",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 25,
+      "runId": "T01-r1-without-skill",
+      "taskId": "T01",
+      "repetition": 1,
+      "condition": "without-skill",
+      "orderKeySha256": "cfd989f617781166c6db0031737bb6d0706e85753922bc116038af1272168c04",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 26,
+      "runId": "T01-r3-with-skill",
+      "taskId": "T01",
+      "repetition": 3,
+      "condition": "with-skill",
+      "orderKeySha256": "cfdc81e62d73d53bec65dfab14d4143aafdbbee1f06bc67d39b5a370461111e6",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 27,
+      "runId": "T02-r1-with-skill",
+      "taskId": "T02",
+      "repetition": 1,
+      "condition": "with-skill",
+      "orderKeySha256": "d831b3ec3d7de2aecd4f2e1dbc1d8cdf7f20646470cffe781646d68b5d9f476b",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 28,
+      "runId": "T04-r2-with-skill",
+      "taskId": "T04",
+      "repetition": 2,
+      "condition": "with-skill",
+      "orderKeySha256": "e74a157fb542baaf7cbe886135f13d6727ed514ff427cee9a26dcee005cc2d44",
+      "wallTimeSeconds": 1200,
+      "requiredSuites": [
+        "takenlecture-unit",
+        "takenlecture-integration"
+      ]
+    },
+    {
+      "orderIndex": 29,
+      "runId": "T03-r2-with-skill",
+      "taskId": "T03",
+      "repetition": 2,
+      "condition": "with-skill",
+      "orderKeySha256": "eb23544a33939226494e9a6eae48aa307be6a13183b9968cbc5f8e5508b78613",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    },
+    {
+      "orderIndex": 30,
+      "runId": "T02-r2-with-skill",
+      "taskId": "T02",
+      "repetition": 2,
+      "condition": "with-skill",
+      "orderKeySha256": "fdd5c41d5b4d50193020492b9a31e7ba001085936fcf3668dab462c0505ca238",
+      "wallTimeSeconds": 900,
+      "requiredSuites": [
+        "takenlecture-unit"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T04",
+  "pilotId": "T04-v1",
+  "evidenceDirectory": "build/agent-harness/dev122-t04-pilot-v1",
+  "sourceResultSha256": "1c360a53ed2253b550112eedd8ff4c42f8ed24cb6996d7df5e4e41da79f2fcde",
+  "sourcePreservationSha256": "fda74f598b26fbf8ce297bd508c566bbcf4ca52189b4a7a340a824c20101a798",
+  "note": "Trusted repository anchor kept outside the source evidence and reviewer packet; no scoring or execution authorization"
+}

@@ -1,0 +1,21 @@
+# Task-local credential and image wrapper. No product source or network allow.
+# Entrypoint is a shell: creating or attaching never starts a model by default.
+schemaVersion: "2"
+kind: sandbox
+name: dev122-codex-oauth
+displayName: DEV-122 isolated Codex OAuth
+description: Pinned local VM with host-managed OpenAI OAuth and no kit egress allowances
+sandbox:
+  image: docker.io/docker/sandbox-templates:codex-docker@sha256:982f4518e7e5544e92a23e7fb7eaca9cd5ce9c7178782155a628c92ed723d9de
+  entrypoint: [/bin/bash]
+credentials:
+  - service: openai
+    oauth:
+      tokenEndpoint:
+        host: auth.openai.com
+        path: /oauth/token
+      resourceHosts: [chatgpt.com]
+      sentinels:
+        accessToken: oai-oat01-proxy-managed
+        refreshToken: oai-ort01-proxy-managed
+      passthrough: false

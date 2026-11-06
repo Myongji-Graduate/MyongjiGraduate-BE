@@ -1,0 +1,51 @@
+name: Agent Harness
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'tools/agent-harness/**'
+      - '.agents/skills/mju-verify/**'
+      - '.github/workflows/agent-harness.yml'
+      - 'build.gradle'
+      - 'gradle/**'
+      - 'src/main/java/com/plzgraduate/myongjigraduatebe/takenlecture/**'
+      - 'src/test/java/com/plzgraduate/myongjigraduatebe/takenlecture/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: tools/agent-harness/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - name: Install CLI development dependencies
+        run: npm ci --prefix tools/agent-harness --ignore-scripts
+      - name: Build and test the harness
+        run: npm test --prefix tools/agent-harness
+      - name: Test model-free evaluation guards
+        run: python3 -B -m unittest discover -s tools/agent-harness/eval -p 'test_*.py'
+      - name: Test daily change review bundles
+        run: python3 -B -m unittest discover -s tools/agent-harness/review -p 'test_*.py'
+      - name: Verify the selected backend unit contracts
+        run: node tools/agent-harness/dist/cli.js verify takenlecture-unit
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-harness-evidence
+          path: build/agent-harness/
+          if-no-files-found: warn

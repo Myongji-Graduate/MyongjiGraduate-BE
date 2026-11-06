@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "status": "service-unit-test-improvement-verified-and-reviewed",
+  "report": "docs/DEV-122_SERVICE_VERIFICATION_REPORT.md",
+  "artifactRoot": "build/agent-harness/dev122-service-verification",
+  "unit": {
+    "suite": "takenlecture-unit",
+    "totals": {
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "classes": [
+      {
+        "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.delete.DeleteTakenLectureServiceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.find.FindTakenLectureServiceTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "com.plzgraduate.myongjigraduatebe.takenlecture.application.service.save.GenerateTakenLectureServiceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "com.plzgraduate.myongjigraduatebe.takenlecture.infrastructure.adapter.cache.TakenLectureCacheTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "selectedSnapshotStableDuringExecution": true,
+    "trackedReportMatchesReviewSnapshot": true,
+    "independentReexecution": false
+  },
+  "localWorkflowChecks": {
+    "harness-tests": {
+      "testsPassed": 23,
+      "exitCode": 0,
+      "logSha256": "0a919e992fad1b8dfd5e7e0dcc0f41c1fffe2437fb41ff91b23be6c3dfd6ab4e"
+    },
+    "evaluation-guards": {
+      "testsPassed": 46,
+      "exitCode": 0,
+      "logSha256": "885fd886c3f3b2755ba2d333d0837e1235ee935d2a0fca7b07b7012fcbd2a1a3"
+    },
+    "review-guards": {
+      "testsPassed": 12,
+      "exitCode": 0,
+      "logSha256": "bb5e32f668635fed5adf90b0590cb754127374d26badfb2f42d62c230e704355"
+    }
+  },
+  "remoteCiExecuted": false,
+  "skillStaticValidationPassed": true,
+  "review": {
+    "selectedFiles": 12,
+    "passes": 1,
+    "packetId": "b0f2dd902c06ac76f6f139b85bf3487663fffd4d1f5a8e10214d01f6a828f6fe",
+    "modelId": null,
+    "findings": 0,
+    "validation": {
+      "status": "development-model-review-valid",
+      "findings": 0,
+      "humanReviewCompleted": false,
+      "judgmentCorrectnessVerified": false,
+      "sourceResultsUpdated": false
+    },
+    "currentState": {
+      "status": "development-review-state-current",
+      "selectedSnapshotMatches": true,
+      "globalTrackedStateMatches": true,
+      "wholeRepositoryReviewed": false
+    },
+    "osSandboxEnforced": false
+  },
+  "productionJavaChanged": false,
+  "newFailurePathTests": 3,
+  "previousT04FilesUnchanged": 242,
+  "newDatabaseIntegrationHttpUiRun": false,
+  "newCodingPilotRuns": 0,
+  "skillEffectiveness": null,
+  "userFeedbackCollected": false,
+  "committed": false,
+  "pushed": false,
+  "deployed": false
+}
